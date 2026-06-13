@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Generation Test</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .test-content {
+      width: 800px;
+      background: white;
+      padding: 40px;
+      margin: 0 auto;
+    }
+    .page-break { page-break-before: always; }
+    .pdf-section { margin-bottom: 20px; }
+    .pdf-section h2 { color: #04aa6d; border-bottom: 2px solid #04aa6d; padding-bottom: 8px; }
+    .pdf-section p { line-height: 1.6; }
+    .test-topic { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; }
+    pre { background: #f5f5f5; padding: 12px; border-radius: 4px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    .controls { text-align: center; margin: 20px 0; }
+    button { padding: 12px 24px; font-size: 16px; cursor: pointer; background: #04aa6d; color: white; border: none; border-radius: 6px; }
+    button:hover { background: #059862; }
+    #status { text-align: center; margin: 10px; font-weight: bold; color: #04aa6d; }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <h1>PDF Generation Test Page</h1>
+    <p>This page tests html2pdf.js with multi-page content using different configurations.</p>
+    <button onclick="testPDF()">Generate Test PDF</button>
+    <button onclick="testPDFWithPagebreak()">Generate PDF with Page Breaks</button>
+    <button onclick="testPDFAutoPaging()">Generate PDF with Auto Paging</button>
+    <div id="status"></div>
+  </div>
+
+  <div id="test-target" class="test-content">
+    <div class="pdf-section">
+      <h1>Multimodal Machine Learning - Unit 1 Notes</h1>
+      <p><strong>Subject Code:</strong> 21AIE541T</p>
+      <p><strong>Generated:</strong> <span id="date"></span></p>
+    </div>
+
+    <div class="test-topic">
+      <h2>Topic 1: Introduction to Multimodal Learning</h2>
+      <p>Multimodal machine learning is the study of computer algorithms that learn from multiple modalities of data. These modalities can include text, images, audio, video, and sensor data. The goal is to build models that can understand and reason across these different types of data simultaneously.</p>
+      <p>Key challenges in multimodal learning include:</p>
+      <ul>
+        <li>Representation: How to represent data from different modalities in a shared space</li>
+        <li>Alignment: How to align information across modalities</li>
+        <li>Fusion: How to combine information from multiple sources effectively</li>
+        <li>Translation: How to translate between modalities</li>
+      </ul>
+      <pre><code>import torch
+from torch import nn
+
+class MultimodalEncoder(nn.Module):
+    def __init__(self, text_dim, image_dim, output_dim):
+        super().__init__()
+        self.text_encoder = nn.Linear(text_dim, 256)
+        self.image_encoder = nn.Linear(image_dim, 256)
+        self.fusion = nn.Linear(512, output_dim)
+    
+    def forward(self, text, image):
+        t = self.text_encoder(text)
+        i = self.image_encoder(image)
+        fused = torch.cat([t, i], dim=-1)
+        return self.fusion(fused)</code></pre>
+      <p><strong>Note:</strong> Early fusion strategies combine raw features before processing, while late fusion strategies process each modality independently before combining.</p>
+    </div>
+
+    <div class="test-topic page-break">
+      <h2>Topic 2: Feature Extraction and Representation</h2>
+      <p>Feature extraction is the process of transforming raw data into a set of meaningful features that can be used by machine learning algorithms. In multimodal settings, each modality requires different feature extraction techniques.</p>
+      <table>
+        <tr><th>Modality</th><th>Common Features</th><th>Techniques</th></tr>
+        <tr><td>Text</td><td>TF-IDF, Word Embeddings</td><td>BERT, GPT, Word2Vec</td></tr>
+        <tr><td>Image</td><td>Color Histograms, Edges</td><td>CNN, ResNet, ViT</td></tr>
+        <tr><td>Audio</td><td>MFCC, Spectrogram</td><td>CNN, RNN</td></tr>
+        <tr><td>Video</td><td>Frame Features, Motion</td><td>3D CNN, I3D</td></tr>
+      </table>
+      <pre><code>from transformers import BertTokenizer, BertModel
+
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+model = BertModel.from_pretrained('bert-base-uncased')
+
+text = "This is a sample text for feature extraction."
+inputs = tokenizer(text, return_tensors="pt", padding=True)
+outputs = model(**inputs)
+features = outputs.last_hidden_state.mean(dim=1)</code></pre>
+    </div>
+
+    <div class="test-topic page-break">
+      <h2>Topic 3: Modality Alignment Strategies</h2>
+      <p>Alignment refers to the process of mapping data from different modalities into a common representation space. This is crucial for tasks like cross-modal retrieval and multimodal fusion.</p>
+      <p>Common alignment approaches include:</p>
+      <ul>
+        <li><strong>Linear Projection:</strong> Simple matrix multiplication to project features</li>
+        <li><strong>Attention Mechanisms:</strong> Learn which parts of each modality to attend to</li>
+        <li><strong>Contrastive Learning:</strong> Pull matching samples closer, push non-matching apart</li>
+        <li><strong>CCA (Canonical Correlation Analysis):</strong> Statistical method for finding correlations</li>
+      </ul>
+      <pre><code>def contrastive_loss(anchor, positive, negative, margin=1.0):
+    d_pos = torch.dist(anchor, positive, p=2)
+    d_neg = torch.dist(anchor, negative, p=2)
+    loss = torch.relu(d_pos - d_neg + margin)
+    return loss.mean()</code></pre>
+      <p><strong>Output:</strong> The model learns to minimize distance between aligned pairs and maximize distance between non-aligned pairs.</p>
+    </div>
+
+    <div class="test-topic page-break">
+      <h2>Topic 4: Fusion Techniques</h2>
+      <p>Fusion is the process of combining information from multiple modalities. The choice of fusion strategy depends on the task and the nature of the data.</p>
+      <table>
+        <tr><th>Fusion Type</th><th>Description</th><th>When to Use</th></tr>
+        <tr><td>Early Fusion</td><td>Combine raw features before processing</td><td>When modalities are naturally aligned</td></tr>
+        <tr><td>Late Fusion</td><td>Process separately, combine decisions</td><td>When modalities need independent processing</td></tr>
+        <tr><td>Intermediate Fusion</td><td>Combine at hidden layer levels</td><td>For complex multimodal interactions</td></tr>
+        <tr><td>Hybrid Fusion</td><td>Mix of early and late fusion</td><td>When different parts need different strategies</td></tr>
+      </table>
+      <pre><code>class EarlyFusion(nn.Module):
+    def __init__(self, input_dims, hidden_dim):
+        super().__init__()
+        total_dim = sum(input_dims)
+        self.fc = nn.Sequential(
+            nn.Linear(total_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim)
+        )
+    
+    def forward(self, *modality_inputs):
+        concatenated = torch.cat(modality_inputs, dim=-1)
+        return self.fc(concatenated)</code></pre>
+    </div>
+
+    <div class="test-topic page-break">
+      <h2>Topic 5: Cross-Modal Retrieval</h2>
+      <p>Cross-modal retrieval involves searching for data in one modality using a query from another modality. For example, searching for images using text descriptions.</p>
+      <p>Key applications include:</p>
+      <ul>
+        <li>Image-to-Text Captioning</li>
+        <li>Text-to-Image Search</li>
+        <li>Audio-Visual Scene Understanding</li>
+        <li>Multimodal Recommendation Systems</li>
+      </ul>
+      <p>The architecture typically involves:</p>
+      <ol>
+        <li>Separate encoders for each modality</li>
+        <li>A shared embedding space</li>
+        <li>Similarity scoring mechanism</li>
+        <li>Ranking and retrieval pipeline</li>
+      </ol>
+      <pre><code>def retrieve_images(text_query, image_embeddings, model, k=5):
+    text_embedding = model.encode_text(text_query)
+    similarities = cosine_similarity(
+        text_embedding.unsqueeze(0),
+        image_embeddings
+    )
+    top_k = similarities.topk(k)
+    return top_k.indices, top_k.values</code></pre>
+    </div>
+
+    <div class="test-topic page-break">
+      <h2>Topic 6: Evaluation Metrics</h2>
+      <p>Evaluating multimodal systems requires specialized metrics that account for the cross-modal nature of the task.</p>
+      <table>
+        <tr><th>Metric</th><th>Use Case</th><th>Formula / Description</th></tr>
+        <tr><td>Recall@K</td><td>Retrieval</td><td>Proportion of relevant items in top K</td></tr>
+        <tr><td>Mean Rank</td><td>Retrieval</td><td>Average rank of correct items</td></tr>
+        <tr><td>BLEU</td><td>Captioning</td><td>N-gram precision with brevity penalty</td></tr>
+        <tr><td>METEOR</td><td>Captioning</td><td>Considers synonyms and stemming</td></tr>
+        <tr><td>CIDEr</td><td>Captioning</td><td>TF-IDF weighted n-gram similarity</td></tr>
+      </table>
+      <p><strong>Note:</strong> For cross-modal retrieval, Recall@K is the most commonly reported metric. Lower Mean Rank indicates better performance.</p>
+    </div>
+
+    <div class="test-topic page-break">
+      <h2>Topic 7: Recent Advances and Future Directions</h2>
+      <p>The field of multimodal learning has seen rapid progress with the advent of large-scale pre-trained models.</p>
+      <p>Recent developments include:</p>
+      <ul>
+        <li><strong>CLIP (OpenAI):</strong> Contrastive language-image pre-training</li>
+        <li><strong>DALL-E:</strong> Text-to-image generation</li>
+        <li><strong>Flamingo:</strong> Few-shot learning with visual language models</li>
+        <li><strong>BLIP:</strong> Bootstrapping language-image pre-training</li>
+        <li><strong>GPT-4V:</strong> Vision-enabled language models</li>
+      </ul>
+      <pre><code>from transformers import CLIPProcessor, CLIPModel
+
+model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+
+# Image and text processing
+inputs = processor(
+    text=["a photo of a cat", "a photo of a dog"],
+    images=[image],
+    return_tensors="pt",
+    padding=True
+)
+
+outputs = model(**inputs)
+logits_per_image = outputs.logits_per_image</code></pre>
+      <p><strong>Future Directions:</strong> Unified multimodal architectures, efficient training methods, real-time processing, and ethical considerations in multimodal AI.</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('date').textContent = new Date().toLocaleDateString();
+
+    function setStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    function testPDF() {
+      setStatus('Generating basic PDF...');
+      const element = document.getElementById('test-target');
+      const opt = {
+        margin: 10,
+        filename: 'test_basic.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save().then(() => {
+        setStatus('✅ Basic PDF generated successfully!');
+      }).catch(err => {
+        setStatus('❌ Error: ' + err.message);
+        console.error(err);
+      });
+    }
+
+    function testPDFWithPagebreak() {
+      setStatus('Generating PDF with pagebreaks...');
+      const element = document.getElementById('test-target');
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: 'test_pagebreaks.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: true, windowWidth: 800 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: {
+          mode: ['css', 'legacy'],
+          before: '.page-break',
+          avoid: ['pre', 'code', 'table']
+        }
+      };
+      html2pdf().set(opt).from(element).save().then(() => {
+        setStatus('✅ PDF with pagebreaks generated successfully!');
+      }).catch(err => {
+        setStatus('❌ Error: ' + err.message);
+        console.error(err);
+      });
+    }
+
+    function testPDFAutoPaging() {
+      setStatus('Generating PDF with auto paging (no pagebreak classes)...');
+      const element = document.getElementById('test-target');
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: 'test_auto_paging.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          logging: true,
+          windowWidth: 800,
+          backgroundColor: '#ffffff'
+        },
+        jsPDF: {
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait'
+        },
+        pagebreak: {
+          mode: ['css', 'legacy'],
+          avoid: ['pre', 'code', 'table']
+        }
+      };
+      html2pdf().set(opt).from(element).save().then(() => {
+        setStatus('✅ PDF with auto paging generated successfully!');
+      }).catch(err => {
+        setStatus('❌ Error: ' + err.message);
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>

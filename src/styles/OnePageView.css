@@ -1,0 +1,683 @@
+/* ===== OnePageView Specific Styles ===== */
+
+/* One Page Overlay */
+.one-page-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.one-page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.toolbar-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  flex: 1;
+  padding: 0 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.toolbar-btn:hover {
+  background: var(--accent-color);
+  color: var(--btn-text);
+  border-color: var(--accent-color);
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toolbar-btn-primary {
+  background: var(--accent-color);
+  color: var(--btn-text);
+  border-color: var(--accent-color);
+}
+
+.toolbar-btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.one-page-scroll {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg-secondary);
+}
+
+.one-page-preview {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--bg-primary);
+  padding: 60px 60px 80px;
+  min-height: 100%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* PDF Preview Content (visible in overlay) */
+.pdf-cover {
+  text-align: center;
+  padding: 80px 40px;
+  border-bottom: 4px solid var(--accent-color);
+  margin-bottom: 40px;
+}
+
+.pdf-cover-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.pdf-cover-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.pdf-cover-code {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-bottom: 16px;
+}
+
+.pdf-cover-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.pdf-toc {
+  margin-bottom: 40px;
+}
+
+.pdf-toc h2 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+.pdf-toc ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pdf-toc li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.toc-number {
+  font-weight: 600;
+  color: var(--accent-color);
+  min-width: 30px;
+}
+
+.toc-title {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.toc-unit {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.pdf-topic {
+  margin-bottom: 50px;
+  page-break-before: always;
+}
+
+.pdf-topic:first-of-type {
+  page-break-before: auto;
+}
+
+.pdf-unit-header {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.pdf-topic-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+.pdf-topic-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.pdf-section {
+  margin-bottom: 24px;
+}
+
+.pdf-section h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.pdf-section h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.pdf-section p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.pdf-section ul {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+
+.pdf-section li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.95rem;
+}
+
+.pdf-table th,
+.pdf-table td {
+  border: 1px solid var(--border-color);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.pdf-table th {
+  background: var(--table-header-bg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pdf-example {
+  background: var(--bg-example);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+.pdf-example pre {
+  background: var(--bg-code);
+  padding: 14px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+
+.pdf-example code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.pdf-example-output {
+  background: var(--bg-example);
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.pdf-note {
+  background: var(--bg-note);
+  border-left: 3px solid var(--accent-color);
+  padding: 14px 18px;
+  margin: 16px 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* ===== Hidden PDF Export Target ===== */
+/* This element is rendered via portal to document.body, outside the fixed overlay.
+   It uses visibility:hidden (not display:none or off-screen) so html2pdf.js
+   can properly measure it for multi-page rendering. */
+.pdf-export-target {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 210mm; /* A4 width */
+  visibility: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.pdf-export-inner {
+  padding: 20mm 15mm;
+  background: #ffffff;
+  color: #1a1a1a;
+  /* Force light theme for PDF - always white background for print */
+}
+
+.pdf-export-cover {
+  text-align: center;
+  padding: 40mm 20mm;
+  border-bottom: 3px solid #04aa6d;
+  margin-bottom: 20mm;
+}
+
+.pdf-export-cover h1 {
+  font-size: 24pt;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8pt;
+  line-height: 1.3;
+}
+
+.pdf-export-subtitle {
+  font-size: 14pt;
+  color: #555;
+  margin-bottom: 4pt;
+}
+
+.pdf-export-code {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #04aa6d;
+  margin-bottom: 12pt;
+}
+
+.pdf-export-meta {
+  font-size: 10pt;
+  color: #888;
+}
+
+.pdf-export-toc {
+  margin-bottom: 20mm;
+  page-break-after: always;
+}
+
+.pdf-export-toc h2 {
+  font-size: 16pt;
+  color: #1a1a1a;
+  margin-bottom: 12pt;
+  padding-bottom: 6pt;
+  border-bottom: 2px solid #04aa6d;
+}
+
+.pdf-export-toc ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pdf-export-toc li {
+  padding: 6pt 0;
+  border-bottom: 0.5pt solid #eee;
+  color: #333;
+  font-size: 11pt;
+}
+
+.pdf-export-toc-num {
+  font-weight: 600;
+  color: #04aa6d;
+  margin-right: 6pt;
+}
+
+.pdf-export-toc-unit {
+  font-size: 9pt;
+  color: #888;
+  font-style: italic;
+  margin-left: 4pt;
+}
+
+.pdf-export-topic {
+  margin-bottom: 20mm;
+  page-break-before: always;
+}
+
+.pdf-export-topic:first-of-type {
+  page-break-before: auto;
+}
+
+.pdf-export-unit-label {
+  font-size: 9pt;
+  font-weight: 600;
+  color: #04aa6d;
+  text-transform: uppercase;
+  letter-spacing: 1pt;
+  margin-bottom: 4pt;
+}
+
+.pdf-export-topic h2 {
+  font-size: 16pt;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 6pt;
+  padding-bottom: 6pt;
+  border-bottom: 1.5pt solid #04aa6d;
+  page-break-after: avoid;
+}
+
+.pdf-export-topic-sub {
+  font-size: 11pt;
+  color: #555;
+  margin-bottom: 12pt;
+}
+
+.pdf-export-section {
+  margin-bottom: 10pt;
+}
+
+.pdf-export-section h3 {
+  font-size: 13pt;
+  font-weight: 600;
+  color: #333;
+  margin-top: 14pt;
+  margin-bottom: 8pt;
+  page-break-after: avoid;
+}
+
+.pdf-export-section h4 {
+  font-size: 11pt;
+  font-weight: 600;
+  color: #04aa6d;
+  margin-top: 10pt;
+  margin-bottom: 5pt;
+  page-break-after: avoid;
+}
+
+.pdf-export-section p {
+  font-size: 10pt;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 8pt;
+}
+
+.pdf-export-section ul {
+  padding-left: 20pt;
+  margin-bottom: 10pt;
+}
+
+.pdf-export-section li {
+  margin-bottom: 4pt;
+  line-height: 1.5;
+  color: #444;
+  font-size: 10pt;
+}
+
+.pdf-export-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10pt 0;
+  font-size: 9pt;
+  page-break-inside: auto;
+}
+
+.pdf-export-table thead {
+  display: table-header-group;
+}
+
+.pdf-export-table tr {
+  page-break-inside: avoid;
+}
+
+.pdf-export-table th,
+.pdf-export-table td {
+  border: 0.5pt solid #ccc;
+  padding: 5pt 7pt;
+  text-align: left;
+}
+
+.pdf-export-table th {
+  background: #f0f0f0;
+  font-weight: 600;
+  color: #333;
+}
+
+.pdf-export-example {
+  background: #f8f9fa;
+  border: 0.5pt solid #e9ecef;
+  border-radius: 3pt;
+  padding: 10pt 12pt;
+  margin: 10pt 0;
+  page-break-inside: avoid;
+}
+
+.pdf-export-example h4 {
+  font-size: 10pt;
+  color: #04aa6d;
+  margin-bottom: 5pt;
+}
+
+.pdf-export-example pre {
+  background: #f5f5f5;
+  padding: 8pt;
+  border-radius: 2pt;
+  overflow-x: auto;
+  margin: 5pt 0;
+  font-size: 8pt;
+  line-height: 1.3;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.pdf-export-example code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 8pt;
+  line-height: 1.3;
+  color: #333;
+}
+
+.pdf-export-output {
+  background: #fff3cd;
+  padding: 5pt 8pt;
+  border-radius: 2pt;
+  margin-top: 5pt;
+  font-size: 9pt;
+}
+
+.pdf-export-note {
+  background: #e3f2fd;
+  border-left: 2pt solid #04aa6d;
+  padding: 8pt 12pt;
+  margin: 10pt 0;
+  border-radius: 0 3pt 3pt 0;
+  font-size: 9pt;
+  page-break-inside: avoid;
+}
+
+/* Spin animation for loader */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Dark Theme for One Page Preview */
+.dark-theme .one-page-overlay {
+  background: var(--bg-primary);
+}
+
+.dark-theme .one-page-preview {
+  background: var(--bg-primary);
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.dark-theme .pdf-cover {
+  border-bottom-color: var(--accent-color);
+}
+
+.dark-theme .pdf-cover-title {
+  color: var(--text-primary);
+}
+
+.dark-theme .pdf-cover-subtitle {
+  color: var(--text-secondary);
+}
+
+.dark-theme .pdf-cover-code {
+  color: var(--accent-color);
+}
+
+.dark-theme .pdf-cover-meta {
+  color: var(--text-muted);
+}
+
+.dark-theme .pdf-toc h2 {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-color);
+}
+
+.dark-theme .pdf-toc li {
+  border-bottom-color: var(--border-color);
+}
+
+.dark-theme .toc-title {
+  color: var(--text-primary);
+}
+
+.dark-theme .toc-unit {
+  color: var(--text-muted);
+}
+
+.dark-theme .pdf-topic-title {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-color);
+}
+
+.dark-theme .pdf-topic-subtitle {
+  color: var(--text-secondary);
+}
+
+.dark-theme .pdf-section h3 {
+  color: var(--text-primary);
+}
+
+.dark-theme .pdf-section p {
+  color: var(--text-secondary);
+}
+
+.dark-theme .pdf-section li {
+  color: var(--text-secondary);
+}
+
+.dark-theme .pdf-table th,
+.dark-theme .pdf-table td {
+  border-color: var(--border-color);
+}
+
+.dark-theme .pdf-table th {
+  background: var(--table-header-bg);
+  color: var(--text-primary);
+}
+
+.dark-theme .pdf-example {
+  background: var(--bg-example);
+  border-color: var(--border-color);
+}
+
+.dark-theme .pdf-example code {
+  color: var(--text-primary);
+}
+
+.dark-theme .pdf-note {
+  background: var(--bg-note);
+  border-left-color: var(--accent-color);
+  color: var(--text-secondary);
+}
+
+/* Print styles */
+@media print {
+  .pdf-export-target {
+    visibility: visible !important;
+    position: static !important;
+    left: 0 !important;
+  }
+  .one-page-overlay,
+  .one-page-overlay * {
+    visibility: visible;
+  }
+  .one-page-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .one-page-toolbar {
+    display: none !important;
+  }
+  .one-page-preview {
+    box-shadow: none;
+    padding: 20px;
+    background: white !important;
+    color: black !important;
+  }
+  .pdf-cover,
+  .pdf-toc,
+  .pdf-topic,
+  .pdf-section {
+    page-break-inside: avoid;
+  }
+}
