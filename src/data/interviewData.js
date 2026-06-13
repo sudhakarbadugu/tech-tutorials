@@ -2,9 +2,12 @@
 // Organized by subject with questions, answers, difficulty, and tags
 
 import { javaQuestions } from './interviewQuestionsJava.js'
+import { javaRealQuestions } from './interviewQuestionsJavaReal.js'
 import { springQuestions } from './interviewQuestionsSpring.js'
 import { pythonQuestions } from './interviewQuestionsPython.js'
+import { pythonRealQuestions } from './interviewQuestionsPythonReal.js'
 import { javascriptQuestions } from './interviewQuestionsJS.js'
+import { javascriptRealQuestions } from './interviewQuestionsJSReal.js'
 import { reactQuestions } from './interviewQuestionsReact.js'
 import { angularQuestions } from './interviewQuestionsAngular.js'
 import { sqlQuestions } from './interviewQuestionsSQL.js'
@@ -21,8 +24,20 @@ import { awsQuestions } from './interviewQuestionsAWS.js'
 import { gitQuestions } from './interviewQuestionsGit.js'
 import { systemDesignQuestions } from './interviewQuestionsSystemDesign.js'
 import { systemDesignExtraQuestions } from './interviewQuestionsSystemDesignExtra.js'
+import { systemDesignRealQuestions } from './interviewQuestionsSystemDesignReal.js'
 import { codingQuestions } from './interviewQuestionsCoding.js'
 import { codingExtraQuestions } from './interviewQuestionsCodingExtra.js'
+import { codingRealQuestionsA } from './interviewQuestionsCodingRealA.js'
+import { codingRealQuestionsB } from './interviewQuestionsCodingRealB.js'
+import { typescriptRealQuestions } from './interviewQuestionsTypeScriptReal.js'
+import { angularRealQuestions } from './interviewQuestionsAngularReal.js'
+import { htmlRealQuestions } from './interviewQuestionsHTMLReal.js'
+import { cssRealQuestions } from './interviewQuestionsCSSReal.js'
+import { reactRealQuestions } from './interviewQuestionsReactReal.js'
+import { devopsCloudRealQuestionsA } from './interviewQuestionsDevopsCloudRealA.js'
+import { devopsCloudRealQuestionsB } from './interviewQuestionsDevopsCloudRealB.js'
+import { aiEngineerRealQuestionsA } from './interviewQuestionsAIEngineerRealA.js'
+import { aiEngineerRealQuestionsB } from './interviewQuestionsAIEngineerRealB.js'
 import { microservicesQuestions } from './interviewQuestionsMicroservices.js'
 
 export const interviewCategories = {
@@ -44,11 +59,15 @@ export const interviewCategories = {
   },
   devops: {
     title: 'DevOps & Cloud',
-    subjects: ['docker', 'aws', 'git']
+    subjects: ['docker', 'aws', 'git', 'devops-cloud']
   },
   fundamentals: {
     title: 'CS Fundamentals',
     subjects: ['dsa', 'system-design', 'coding']
+  },
+  ai: {
+    title: 'AI & Machine Learning',
+    subjects: ['ai-engineer']
   }
 }
 
@@ -172,16 +191,48 @@ const interviewSubjectMeta = {
     icon: '💻',
     description: 'Arrays, strings, linked lists, sorting, hashing, and common LeetCode-style problems with solutions.',
     topics: ['Arrays', 'Strings', 'Linked Lists', 'Sorting', 'Hashing', 'Sliding Window', 'Stack']
+  },
+  'devops-cloud': {
+    title: 'DevOps & Cloud Interview Questions',
+    icon: '☁️',
+    description: 'CI/CD, Docker, Kubernetes, AWS, Azure, GCP, infrastructure as code, monitoring, and cloud architecture.',
+    topics: ['CI/CD', 'Docker', 'Kubernetes', 'AWS', 'Infrastructure as Code', 'Monitoring', 'Microservices']
+  },
+  'ai-engineer': {
+    title: 'AI Engineer Interview Questions',
+    icon: '🤖',
+    description: 'Machine learning, deep learning, LLMs, MLOps, NLP, computer vision, and AI system design.',
+    topics: ['LLMs', 'MLOps', 'Deep Learning', 'NLP', 'Computer Vision', 'System Design', 'Statistics']
   }
 }
 
 export const interviewQuestions = {
-  java: { questions: javaQuestions.questions },
+  java: { questions: [...javaQuestions.questions, ...javaRealQuestions.questions] },
   'spring-boot': { questions: springQuestions.questions },
-  python: { questions: pythonQuestions.questions },
-  javascript: { questions: javascriptQuestions.questions },
-  react: { questions: reactQuestions.questions },
-  angular: { questions: angularQuestions.questions },
+  python: {
+    questions: [
+      ...pythonQuestions.questions,
+      ...pythonRealQuestions.questions,
+    ],
+  },
+  javascript: {
+    questions: [
+      ...javascriptQuestions.questions,
+      ...javascriptRealQuestions.questions,
+    ],
+  },
+  react: {
+    questions: [
+      ...reactQuestions.questions,
+      ...reactRealQuestions.questions,
+    ],
+  },
+  angular: {
+    questions: [
+      ...angularQuestions.questions,
+      ...angularRealQuestions.questions,
+    ],
+  },
   sql: { questions: sqlQuestions.questions },
   dsa: {
     questions: [
@@ -194,22 +245,52 @@ export const interviewQuestions = {
     questions: [
       ...systemDesignQuestions.questions,
       ...systemDesignExtraQuestions.questions,
+      ...systemDesignRealQuestions.questions,
     ],
   },
   coding: {
     questions: [
       ...codingQuestions.questions,
       ...codingExtraQuestions.questions,
+      ...codingRealQuestionsA.questions,
+      ...codingRealQuestionsB.questions,
     ],
   },
-  html: { questions: htmlQuestions.questions },
-  css: { questions: cssQuestions.questions },
-  typescript: { questions: typescriptQuestions.questions },
+  html: {
+    questions: [
+      ...htmlQuestions.questions,
+      ...htmlRealQuestions.questions,
+    ],
+  },
+  css: {
+    questions: [
+      ...cssQuestions.questions,
+      ...cssRealQuestions.questions,
+    ],
+  },
+  typescript: {
+    questions: [
+      ...typescriptQuestions.questions,
+      ...typescriptRealQuestions.questions,
+    ],
+  },
   'react-native': { questions: reactNativeQuestions.questions },
   nosql: { questions: nosqlQuestions.questions },
   docker: { questions: dockerQuestions.questions },
   aws: { questions: awsQuestions.questions },
   git: { questions: gitQuestions.questions },
+  'devops-cloud': {
+    questions: [
+      ...devopsCloudRealQuestionsA.questions,
+      ...devopsCloudRealQuestionsB.questions,
+    ],
+  },
+  'ai-engineer': {
+    questions: [
+      ...aiEngineerRealQuestionsA.questions,
+      ...aiEngineerRealQuestionsB.questions,
+    ],
+  },
   microservices: { questions: microservicesQuestions.questions }
 }
 

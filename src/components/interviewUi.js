@@ -5,7 +5,8 @@ export const categoryGradients = {
   mobile: 'linear-gradient(135deg, #db2777 0%, #f472b6 100%)',
   devops: 'linear-gradient(135deg, #4f46e5 0%, #818cf8 100%)',
   fundamentals: 'linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%)',
-  frameworks: 'linear-gradient(135deg, #0d9488 0%, #14b8a6 100%)'
+  frameworks: 'linear-gradient(135deg, #0d9488 0%, #14b8a6 100%)',
+  ai: 'linear-gradient(135deg, #db2777 0%, #f472b6 100%)'
 }
 
 export const categoryColors = {
@@ -15,7 +16,8 @@ export const categoryColors = {
   mobile: '#db2777',
   devops: '#4f46e5',
   fundamentals: '#7c3aed',
-  frameworks: '#0d9488'
+  frameworks: '#0d9488',
+  ai: '#db2777'
 }
 
 export const categoryBgColors = {
@@ -25,7 +27,8 @@ export const categoryBgColors = {
   mobile: '#fce7f3',
   devops: '#e0e7ff',
   fundamentals: '#f3e8ff',
-  frameworks: '#ccfbf1'
+  frameworks: '#ccfbf1',
+  ai: '#fce7f3'
 }
 
 export const difficultyConfig = {
