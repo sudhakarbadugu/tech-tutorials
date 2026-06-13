@@ -917,7 +917,7 @@ subject.subscribe(x => console.log(x));//console op: 1
                 <li>
                   Binding data with a variable in html called data binding. Here name is binded to
                   input tag value attribute.
-                  <code>&lt;input [value]="name"/></code>
+                  <code>&lt;input [value]="name"/&gt;</code>
                 </li>
                 <li>
                   Databinding are mainly 2 types.
@@ -926,11 +926,11 @@ subject.subscribe(x => console.log(x));//console op: 1
                       One way Databinding: Only Ts file changes will reflect in the html but html
                       changes will not reflect in the ts fie.
 
-                      <code class="d-block">&lt;input [value]="name"/></code>
+                      <code class="d-block">&lt;input [value]="name"/&gt;</code>
                     </li>
                     <li>
                       Two way Databinding: value change will be reflect in both html and ts files.
-                      <code class="d-block">&lt;input [(ngModel)]="name"/></code>
+                      <code class="d-block">&lt;input [(ngModel)]="name"/&gt;</code>
                     </li>
                   </ol>
                 </li>
@@ -1037,7 +1037,7 @@ subject.subscribe(x => console.log(x));//console op: 1
                   The @ViewChild decorator is used to query a single DOM element from the DOM
                   tree and lets you manipulate it.
                   <code class="d-block">
-                    <button #myButton>Test</button> @ViewChild("myButton", {
+                    &lt;button #myButton&gt;Test&lt;/button&gt; @ViewChild("myButton", {
                     static: false }) myButton: ElementRef;
                   </code>
                 </li>
@@ -1521,10 +1521,10 @@ profileForm = new FormGroup({
         </code></pre>
                   In the template:
                   <pre><code>
-<form [formGroup]="profileForm">
-  &lt;input formControlName="firstName">
-  &lt;input formControlName="lastName">
-</form>
+&lt;form [formGroup]="profileForm"&gt;
+  &lt;input formControlName="firstName"&gt;
+  &lt;input formControlName="lastName"&gt;
+&lt;/form&gt;
         </code></pre>
                 </li>
               </ol>`,

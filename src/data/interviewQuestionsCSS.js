@@ -632,9 +632,9 @@ export const cssQuestions = {
                   Eg:
                   <br>
                   <code>
-                    &lt;head>
+                    &lt;head&gt;
                     <br>
-                    &lt;link rel="stylesheet" href="mystyle.css">
+                    &lt;link rel="stylesheet" href="mystyle.css"&gt;
                     <br>
                     &lt;/head>
                     <br>
@@ -662,9 +662,9 @@ export const cssQuestions = {
                   href is path of the stylesheet.
                   <br>
                   <code>
-                    &lt;head>
+                    &lt;head&gt;
                     <br>
-                    &lt;link rel="stylesheet" href="mystyle.css">
+                    &lt;link rel="stylesheet" href="mystyle.css"&gt;
                     <br>
                     &lt;/head>
                     <br>
@@ -999,18 +999,18 @@ export const cssQuestions = {
                 <li>
                   <b>Example implementation:</b>
                   <code class="d-block">
-                    <head>
+                    &lt;head&gt;
                     <br>
-                    &nbsp;&nbsp;<style>
+                    &nbsp;&nbsp;&lt;style&gt;
                     <br>
                     &nbsp;&nbsp;&nbsp;&nbsp;/* Critical CSS inlined here */
                     <br>
-                    &nbsp;&nbsp;</style>
+                    &nbsp;&nbsp;&lt;/style&gt;
                     <br>
                     &nbsp;&nbsp;&lt;link rel="preload" href="non-critical.css" as="style"
-                    onload="this.onload=null;this.rel='stylesheet'">
+                    onload="this.onload=null;this.rel='stylesheet'"&gt;
                     <br>
-                    &lt;/head>
+                    &lt;/head&gt;
                   </code>
                 </li>
               </ol>`,

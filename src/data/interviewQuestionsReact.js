@@ -954,8 +954,8 @@ export const reactQuestions = {
             <pre ngnonbindable=""><code>
 const [count, setCount] = useState(0);
 
-<button onClick={{ '{{' }} () => setCount(count + 1) {{ '}}' }}>Increment</button>
-<p>Count: {{ '{{' }}count{{ '}}' }}</p>
+&lt;button onClick={{ '{{' }} () => setCount(count + 1) {{ '}}' }}&gt;Increment&lt;/button&gt;
+&lt;p&gt;Count: {{ '{{' }}count{{ '}}' }}&lt;/p&gt;
   </code></pre>`,
       difficulty: 'Intermediate',
       tags: [
@@ -1550,22 +1550,22 @@ MyComponent.propTypes = {{
                   1. React events are named as camelCase instead of lowercase.
                   <br>
                   <div>
-                    <code><button onclick="showMessage()"> Hello React </button</code>
+                    <code>&lt;button onclick="showMessage()"&gt; Hello React &lt;/button&gt;</code>
                   </div>
                   2. With JSX, a function is passed as the event handler instead of a string. For
                   example:
                   <br>
                   <div>
                     <code>
-                      <button onClick={showMessage}> Hello React </button>
+                      &lt;button onClick={showMessage}&gt; Hello React &lt;/button&gt;
                     </code>
                   </div>
                   3. In react, we cannot return false to prevent the default behavior. We must call
                   preventDefault event explicitly to prevent the default behavior. For example:
                   <div>
                     <code>
-                      <a href="" onClick={(e) => {e.preventDefault()}}>
-                      Hello React </a>
+                      &lt;a href="" onClick={(e) => {e.preventDefault()}}&gt;
+                      Hello React &lt;/a&gt;
                     </code>
                   </div>
                 </li>

@@ -6,9 +6,9 @@ export const htmlQuestions = {
     {
       question: 'What is a tag?',
       answer: `<ol>
-                <li>A tag is an element which is defined using the angel (<>) brackets.</li>
+                <li>A tag is an element which is defined using the angle (&lt;&gt;) brackets.</li>
                 <li>
-                  <code><span></span></code>
+                  <code>&lt;span&gt;&lt;/span&gt;</code>
                   Here span is a tag. span is defined in between the angle brackets.
                 </li>
               </ol>`,
@@ -22,15 +22,15 @@ export const htmlQuestions = {
       answer: `<ol>
                 <li>Tags which don't have the ending tags are called empty tags or void tags.</li>
                 <li>
-                  The below are some of the tags with no ending tags
-                  <ol>
-                    <li><br></li>
-                    <li><hr></li>
-                    <li><img></li>
-                    <li>&lt;input></li>
-                    <li>&lt;link></li>
-                    <li>&lt;meta></li>
-                  </ol>
+                  The below are some of the tags with no ending tags:
+                  <ul>
+                    <li><code>&lt;br&gt;</code></li>
+                    <li><code>&lt;hr&gt;</code></li>
+                    <li><code>&lt;img&gt;</code></li>
+                    <li><code>&lt;input&gt;</code></li>
+                    <li><code>&lt;link&gt;</code></li>
+                    <li><code>&lt;meta&gt;</code></li>
+                  </ul>
                 </li>
               </ol>`,
       difficulty: 'Beginner',
@@ -65,50 +65,49 @@ export const htmlQuestions = {
       question: 'What is meta tag? What is the use of it?',
       answer: `<ol>
                 <li>
-                  The &lt;meta> tag provides metadata about the HTML document that is not
+                  The &lt;meta&gt; tag provides metadata about the HTML document that is not
                   displayed on the page but is used by browsers, search engines, and other web
                   services.
                 </li>
                 <li>
-                  &lt;meta> tags always go inside the <head> element and are self-closing.
+                  &lt;meta&gt; tags always go inside the &lt;head&gt; element and are self-closing.
                 </li>
                 <li>
                   <b>SEO Meta Tags:</b>
                   <code class="d-block">
-                    &lt;meta name="description" content="Trinits is a product based company
-                    providing web solutions.">
+                    &lt;meta name="description" content="My site providing web solutions."&gt;
                     <br>
-                    &lt;meta name="keywords" content="web development, training, software">
+                    &lt;meta name="keywords" content="web development, training, software"&gt;
                     <br>
-                    &lt;meta name="author" content="Trinits Technologies">
+                    &lt;meta name="author" content="My Company"&gt;
                   </code>
                 </li>
                 <li>
                   <b>Viewport Meta Tag (Responsive Design):</b>
                   <code class="d-block">
-                    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
                   </code>
                 </li>
                 <li>
                   <b>Character Encoding:</b>
-                  <code class="d-block">&lt;meta charset="UTF-8"></code>
+                  <code class="d-block">&lt;meta charset="UTF-8"&gt;</code>
                 </li>
                 <li>
                   <b>Social Media Meta Tags (Open Graph):</b>
                   <code class="d-block">
-                    &lt;meta property="og:title" content="Page Title">
+                    &lt;meta property="og:title" content="Page Title"&gt;
                     <br>
-                    &lt;meta property="og:description" content="Page description">
+                    &lt;meta property="og:description" content="Page description"&gt;
                     <br>
-                    &lt;meta property="og:image" content="image-url.jpg">
+                    &lt;meta property="og:image" content="image-url.jpg"&gt;
                   </code>
                 </li>
                 <li>
                   <b>HTTP Equivalent Meta Tags:</b>
                   <code class="d-block">
-                    &lt;meta http-equiv="refresh" content="30">
+                    &lt;meta http-equiv="refresh" content="30"&gt;
                     <br>
-                    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
                   </code>
                 </li>
               </ol>`,
@@ -122,9 +121,9 @@ export const htmlQuestions = {
       answer: `<ol>
                 <li>
                   The
-                  <code>&lt;datalist></code>
+                  <code>&lt;datalist&gt;</code>
                   element provides a list of predefined options for an
-                  <code>&lt;input></code>
+                  <code>&lt;input&gt;</code>
                   element, creating an autocomplete dropdown that enhances user experience.
                 </li>
                 <li>
@@ -146,16 +145,16 @@ export const htmlQuestions = {
                 </li>
                 <li>
                   <b>Browser Autocomplete Example:</b>
-                  <pre><code><label for="browser">Choose your browser:</label>
-<input list="browsers" name="browser" id="browser" placeholder="Type to search...">
+                  <pre><code>&lt;label for="browser"&gt;Choose your browser:&lt;/label&gt;
+&lt;input list="browsers" name="browser" id="browser" placeholder="Type to search..."&gt;
 
-<datalist id="browsers">
-  <option value="Chrome">Google Chrome</option>
-  <option value="Firefox">Mozilla Firefox</option>
-  <option value="Safari">Apple Safari</option>
-  <option value="Edge">Microsoft Edge</option>
-  <option value="Opera">Opera Browser</option>
-</datalist></code></pre>
+&lt;datalist id="browsers"&gt;
+  &lt;option value="Chrome"&gt;Google Chrome&lt;/option&gt;
+  &lt;option value="Firefox"&gt;Mozilla Firefox&lt;/option&gt;
+  &lt;option value="Safari"&gt;Apple Safari&lt;/option&gt;
+  &lt;option value="Edge"&gt;Microsoft Edge&lt;/option&gt;
+  &lt;option value="Opera"&gt;Opera Browser&lt;/option&gt;
+&lt;/datalist&gt;</code></pre>
                 </li>
                 <li>
                   <b>Practical Use Cases:</b>
@@ -177,22 +176,22 @@ export const htmlQuestions = {
       ]
     },
     {
-      question: 'What is block level element?',
+      question: 'What is a block-level element?',
       answer: `<ol>
-                <li>Block level elements always starts in a new line.</li>
-                <li>It will occupy the full width.</li>
-                <li>Margin and top and bottom are applicable.</li>
-                <li>Next items will be placed at the bottom.</li>
-                <li>Width and height are applicable for the block level elements.</li>
-                <li>Example block level Elements</li>
+                <li>Block-level elements always start on a new line.</li>
+                <li>They occupy the full width available.</li>
+                <li>Top and bottom margins apply.</li>
+                <li>The next element appears below it.</li>
+                <li>Width and height can be set.</li>
+                <li>Examples of block-level elements:</li>
                 <code>
-                  &lt;h1>,&lt;h2>, &lt;h3>, &lt;h4>, &lt;h5>, &lt;h6>
+                  &lt;h1&gt;, &lt;h2&gt;, &lt;h3&gt;, &lt;h4&gt;, &lt;h5&gt;, &lt;h6&gt;
                   <br>
-                  <p>
+                  &lt;p&gt;
                   <br>
-                  <div>
+                  &lt;div&gt;
                   <br>
-                  <ol><ul><dl><li>
+                  &lt;ol&gt;, &lt;ul&gt;, &lt;dl&gt;, &lt;li&gt;
                   <br>
                 </code>
               </ol>`,
@@ -202,22 +201,22 @@ export const htmlQuestions = {
       ]
     },
     {
-      question: 'What is inline level element?',
+      question: 'What is an inline-level element?',
       answer: `<ol>
-                <li>Inline elements are always starts in a same line.</li>
-                <li>It will occupy only required width.</li>
-                <li>margin top and bottom are not applicable.</li>
-                <li>Next items will be placed at the same line.</li>
-                <li>width and height are not applicable.</li>
-                <li>Example block level Elements</li>
+                <li>Inline elements always start on the same line.</li>
+                <li>They occupy only the required width.</li>
+                <li>Top and bottom margins do not apply.</li>
+                <li>The next element appears on the same line.</li>
+                <li>Width and height cannot be set.</li>
+                <li>Examples of inline-level elements:</li>
                 <code>
-                  <a>
+                  &lt;a&gt;
                   <br>
-                  &lt;button>
+                  &lt;button&gt;
                   <br>
-                  <span>
+                  &lt;span&gt;
                   <br>
-                  &lt;label>
+                  &lt;label&gt;
                   <br>
                 </code>
               </ol>`,
@@ -246,13 +245,14 @@ export const htmlQuestions = {
                   <tr>
                     <td>
                       <b>Examples:</b>
-                      &lt;header>, &lt;nav>, &lt;main>, &lt;article>, &lt;section>,
-                      &lt;aside>, &lt;footer>, &lt;form>, <table>, &lt;figure>,
-                      &lt;figcaption>, &lt;time>, &lt;mark>
+                      &lt;header&gt;, &lt;nav&gt;, &lt;main&gt;, &lt;article&gt;,
+                      &lt;section&gt;, &lt;aside&gt;, &lt;footer&gt;, &lt;form&gt;,
+                      &lt;table&gt;, &lt;figure&gt;, &lt;figcaption&gt;, &lt;time&gt;,
+                      &lt;mark&gt;
                     </td>
                     <td>
                       <b>Examples:</b>
-                      <div>, <span> - Generic containers that don't convey meaning
+                      &lt;div&gt;, &lt;span&gt; - Generic containers that don't convey meaning
                     </td>
                   </tr>
                   <tr>
@@ -349,37 +349,37 @@ export const htmlQuestions = {
                   <b>Semantic HTML5 Elements:</b>
                   <ul>
                     <li>
-                      <code>&lt;header></code>
+                      <code>&lt;header&gt;</code>
                       - Page/section header
                     </li>
                     <li>
-                      <code>&lt;nav></code>
+                      <code>&lt;nav&gt;</code>
                       - Navigation links
                     </li>
                     <li>
-                      <code>&lt;main></code>
+                      <code>&lt;main&gt;</code>
                       - Main content area
                     </li>
                     <li>
-                      <code>&lt;article></code>
+                      <code>&lt;article&gt;</code>
                       - Standalone content
                     </li>
                     <li>
-                      <code>&lt;section></code>
+                      <code>&lt;section&gt;</code>
                       - Thematic grouping
                     </li>
                     <li>
-                      <code>&lt;aside></code>
+                      <code>&lt;aside&gt;</code>
                       - Sidebar content
                     </li>
                     <li>
-                      <code>&lt;footer></code>
+                      <code>&lt;footer&gt;</code>
                       - Page/section footer
                     </li>
                     <li>
-                      <code>&lt;figure></code>
+                      <code>&lt;figure&gt;</code>
                       &
-                      <code>&lt;figcaption></code>
+                      <code>&lt;figcaption&gt;</code>
                       - Media with captions
                     </li>
                   </ul>
@@ -388,19 +388,19 @@ export const htmlQuestions = {
                   <b>Multimedia Elements:</b>
                   <ul>
                     <li>
-                      <code>&lt;video></code>
+                      <code>&lt;video&gt;</code>
                       with controls, autoplay, loop attributes
                     </li>
                     <li>
-                      <code>&lt;audio></code>
+                      <code>&lt;audio&gt;</code>
                       for sound content
                     </li>
                     <li>
-                      <code>&lt;canvas></code>
+                      <code>&lt;canvas&gt;</code>
                       for 2D/3D graphics
                     </li>
                     <li>
-                      <code>&lt;svg></code>
+                      <code>&lt;svg&gt;</code>
                       for scalable vector graphics
                     </li>
                   </ul>
@@ -411,11 +411,11 @@ export const htmlQuestions = {
                     <li>Input types: email, url, tel, number, date, color, range</li>
                     <li>Attributes: required, pattern, placeholder, autofocus</li>
                     <li>
-                      <code>&lt;datalist></code>
+                      <code>&lt;datalist&gt;</code>
                       for autocomplete options
                     </li>
                     <li>
-                      <code>&lt;output></code>
+                      <code>&lt;output&gt;</code>
                       for calculation results
                     </li>
                   </ul>
@@ -424,19 +424,19 @@ export const htmlQuestions = {
                   <b>Interactive Elements:</b>
                   <ul>
                     <li>
-                      <code>&lt;details></code>
+                      <code>&lt;details&gt;</code>
                       &
-                      <code>&lt;summary></code>
+                      <code>&lt;summary&gt;</code>
                       - Collapsible content
                     </li>
                     <li>
-                      <code>&lt;dialog></code>
+                      <code>&lt;dialog&gt;</code>
                       - Modal dialogs
                     </li>
                     <li>
-                      <code>&lt;progress></code>
+                      <code>&lt;progress&gt;</code>
                       &
-                      <code>&lt;meter></code>
+                      <code>&lt;meter&gt;</code>
                       - Progress indicators
                     </li>
                   </ul>
@@ -473,7 +473,7 @@ export const htmlQuestions = {
       answer: `<ol>
                 <li>
                   The HTML
-                  <code>&lt;canvas></code>
+                  <code>&lt;canvas&gt;</code>
                   element provides a 2D drawing surface that can be manipulated using JavaScript for
                   creating graphics, animations, and interactive visualizations.
                 </li>
@@ -497,13 +497,13 @@ export const htmlQuestions = {
                 </li>
                 <li>
                   <b>Basic Example:</b>
-                  <pre><code><canvas id="myCanvas" width="200" height="100"></canvas>
-<script>
+                  <pre><code>&lt;canvas id="myCanvas" width="200" height="100"&gt;&lt;/canvas&gt;
+&lt;script&gt;
   const canvas = document.getElementById('myCanvas');
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = '#FF0000';
   ctx.fillRect(0, 0, 150, 75);
-</script></code></pre>
+&lt;/script&gt;</code></pre>
                 </li>
                 <li>
                   <b>Performance:</b>
@@ -566,9 +566,9 @@ export const htmlQuestions = {
               <ol>
                 <li>
                   <b>SVG Example:</b>
-                  <pre><code><svg width="100" height="100">
-  <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
-</svg></code></pre>
+                  <pre><code>&lt;svg width="100" height="100"&gt;
+  &lt;circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" /&gt;
+&lt;/svg&gt;</code></pre>
                 </li>
               </ol>`,
       difficulty: 'Intermediate',
@@ -607,7 +607,7 @@ export const htmlQuestions = {
                   </tr>
                   <tr>
                     <td>
-                      <code>&lt;a href="login.html" target="_blank">Login&lt;/a></code>
+                      <code>&lt;a href="login.html" target="_blank"&gt;Login&lt;/a></code>
                       <br>
                       Here
                       <b>href</b>
@@ -762,7 +762,7 @@ export const htmlQuestions = {
       question: 'Tell me important tags and attributes in HTML forms?',
       answer: `<ol>
                 <li>
-                  <b><code>&lt;form></code></b>
+                  <b><code>&lt;form&gt;</code></b>
                   - Container for form elements to collect user input.
                 </li>
                 <li>
@@ -777,23 +777,23 @@ export const htmlQuestions = {
                   <b>Input Elements:</b>
                   <ul>
                     <li>
-                      <code>&lt;input type="text" name="username" required></code>
+                      <code>&lt;input type="text" name="username" required&gt;</code>
                       - Text input with validation
                     </li>
                     <li>
-                      <code>&lt;input type="email" name="email"></code>
+                      <code>&lt;input type="email" name="email"&gt;</code>
                       - Email validation
                     </li>
                     <li>
-                      <code>&lt;input type="password" name="pwd"></code>
+                      <code>&lt;input type="password" name="pwd"&gt;</code>
                       - Password field
                     </li>
                     <li>
-                      <code>&lt;input type="number" min="1" max="100"></code>
+                      <code>&lt;input type="number" min="1" max="100"&gt;</code>
                       - Number with range
                     </li>
                     <li>
-                      <code>&lt;input type="file" accept="image/*"></code>
+                      <code>&lt;input type="file" accept="image/*"&gt;</code>
                       - File upload
                     </li>
                   </ul>
@@ -802,15 +802,15 @@ export const htmlQuestions = {
                   <b>Form Controls:</b>
                   <ul>
                     <li>
-                      <code>&lt;textarea rows="4" cols="50"></code>
+                      <code>&lt;textarea rows="4" cols="50"&gt;</code>
                       - Multi-line text
                     </li>
                     <li>
-                      <code>&lt;select>&lt;option></code>
+                      <code>&lt;select&gt;&lt;option&gt;</code>
                       - Dropdown selection
                     </li>
                     <li>
-                      <code>&lt;button type="submit"></code>
+                      <code>&lt;button type="submit"&gt;</code>
                       - Submit button
                     </li>
                   </ul>
@@ -819,11 +819,11 @@ export const htmlQuestions = {
                   <b>Accessibility & Labels:</b>
                   <ul>
                     <li>
-                      <code>&lt;label for="username"></code>
+                      <code>&lt;label for="username"&gt;</code>
                       - Associates label with input
                     </li>
                     <li>
-                      <code>&lt;fieldset>&lt;legend></code>
+                      <code>&lt;fieldset&gt;&lt;legend&gt;</code>
                       - Groups related form elements
                     </li>
                   </ul>
@@ -1009,7 +1009,7 @@ export const htmlQuestions = {
                   <b>Title Tag:</b>
                   Unique, descriptive titles (50-60 characters)
                   <code class="d-block">
-                    &lt;title>Best Web Development Training | Trinits&lt;/title>
+                    &lt;title&gt;Best Web Development Training | My site&lt;/title>
                   </code>
                 </li>
                 <li>
@@ -1017,14 +1017,14 @@ export const htmlQuestions = {
                   Compelling summaries (150-160 characters)
                   <code class="d-block">
                     &lt;meta name="description" content="Learn web development with expert
-                    trainers...">
+                    trainers..."&gt;
                   </code>
                 </li>
                 <li>
                   <b>Heading Structure:</b>
                   Logical hierarchy with one H1 per page
                   <code class="d-block">
-                    &lt;h1>Main Topic&lt;/h1>&lt;h2>Subtopic&lt;/h2>
+                    &lt;h1&gt;Main Topic&lt;/h1>&lt;h2&gt;Subtopic&lt;/h2>
                   </code>
                 </li>
                 <li>
@@ -1039,7 +1039,7 @@ export const htmlQuestions = {
                   <b>Structured Data:</b>
                   Schema.org markup for rich snippets
                   <code class="d-block">
-                    &lt;script type="application/ld+json">...&lt;/script>
+                    &lt;script type="application/ld+json"&gt;...&lt;/script>
                   </code>
                 </li>
                 <li>
@@ -1066,16 +1066,16 @@ export const htmlQuestions = {
                 </li>
                 <li>
                   <b>Web App Manifest:</b>
-                  <code class="d-block">&lt;link rel="manifest" href="/manifest.json"></code>
+                  <code class="d-block">&lt;link rel="manifest" href="/manifest.json"&gt;</code>
                   Defines app metadata, icons, and display options.
                 </li>
                 <li>
                   <b>Service Worker Registration:</b>
-                  <pre><code><script>
+                  <pre><code>&lt;script&gt;
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js');
 }
-</script></code></pre>
+&lt;/script&gt;</code></pre>
                 </li>
                 <li>
                   <b>Key PWA Features:</b>
@@ -1089,9 +1089,9 @@ if ('serviceWorker' in navigator) {
                 <li>
                   <b>Meta Tags for PWA:</b>
                   <code class="d-block">
-                    &lt;meta name="theme-color" content="#000000">
+                    &lt;meta name="theme-color" content="#000000"&gt;
                     <br>
-                    &lt;meta name="apple-mobile-web-app-capable" content="yes">
+                    &lt;meta name="apple-mobile-web-app-capable" content="yes"&gt;
                   </code>
                 </li>
               </ol>`,
@@ -1121,7 +1121,7 @@ if ('serviceWorker' in navigator) {
                     </li>
                     <li>
                       <b>HTML Templates:</b>
-                      Reusable markup with &lt;template>
+                      Reusable markup with &lt;template&gt;
                     </li>
                     <li>
                       <b>ES Modules:</b>
@@ -1131,15 +1131,15 @@ if ('serviceWorker' in navigator) {
                 </li>
                 <li>
                   <b>Custom Element Example:</b>
-                  <pre><code><script>
+                  <pre><code>&lt;script&gt;
 class MyButton extends HTMLElement {
   connectedCallback() {
-    this.innerHTML = '<button>Click me</button>';
+    this.innerHTML = '&lt;button&gt;Click me&lt;/button&gt;';
   }
 }
 customElements.define('my-button', MyButton);
-</script>
-<my-button></my-button></code></pre>
+&lt;/script&gt;
+&lt;my-button&gt;&lt;/my-button&gt;</code></pre>
                 </li>
                 <li>
                   <b>Benefits:</b>
@@ -1221,15 +1221,15 @@ customElements.define('my-button', MyButton);
                   <b>Resource Hints:</b>
                   <ul>
                     <li>
-                      <code>&lt;link rel="preload" href="critical.css" as="style"></code>
+                      <code>&lt;link rel="preload" href="critical.css" as="style"&gt;</code>
                       - Preload critical resources
                     </li>
                     <li>
-                      <code>&lt;link rel="prefetch" href="next-page.html"></code>
+                      <code>&lt;link rel="prefetch" href="next-page.html"&gt;</code>
                       - Prefetch future resources
                     </li>
                     <li>
-                      <code>&lt;link rel="dns-prefetch" href="//example.com"></code>
+                      <code>&lt;link rel="dns-prefetch" href="//example.com"&gt;</code>
                       - DNS resolution
                     </li>
                   </ul>
@@ -1239,7 +1239,7 @@ customElements.define('my-button', MyButton);
                   Inline critical styles and defer non-critical CSS
                   <code class="d-block">
                     &lt;link rel="stylesheet" href="styles.css" media="print"
-                    onload="this.media='all'">
+                    onload="this.media='all'"&gt;
                   </code>
                 </li>
                 <li>
@@ -1257,11 +1257,11 @@ customElements.define('my-button', MyButton);
                   <b>Script Optimization:</b>
                   <ul>
                     <li>
-                      <code>&lt;script defer></code>
+                      <code>&lt;script defer&gt;</code>
                       for non-critical scripts
                     </li>
                     <li>
-                      <code>&lt;script async></code>
+                      <code>&lt;script async&gt;</code>
                       for independent scripts
                     </li>
                     <li>Place scripts at the end of body</li>
@@ -1353,15 +1353,15 @@ customElements.define('my-button', MyButton);
                   <b>Resource Loading Strategies:</b>
                   <ul>
                     <li>
-                      <code>&lt;link rel="preload"></code>
+                      <code>&lt;link rel="preload"&gt;</code>
                       - High priority resources
                     </li>
                     <li>
-                      <code>&lt;link rel="modulepreload"></code>
+                      <code>&lt;link rel="modulepreload"&gt;</code>
                       - ES modules
                     </li>
                     <li>
-                      <code>&lt;script type="module"></code>
+                      <code>&lt;script type="module"&gt;</code>
                       - Modern JavaScript
                     </li>
                   </ul>
@@ -1411,7 +1411,7 @@ if (CSS.supports('display', 'grid')) {
                   <ul>
                     <li>Use polyfills for missing APIs</li>
                     <li>Provide CSS fallbacks for newer properties</li>
-                    <li>Alternative image formats with &lt;picture> element</li>
+                    <li>Alternative image formats with &lt;picture&gt; element</li>
                   </ul>
                 </li>
                 <li>
@@ -1443,7 +1443,7 @@ if (CSS.supports('display', 'grid')) {
                   HTTP header that prevents XSS attacks
                   <code class="d-block">
                     &lt;meta http-equiv="Content-Security-Policy" content="default-src 'self';
-                    script-src 'self'">
+                    script-src 'self'"&gt;
                   </code>
                 </li>
                 <li>
@@ -1463,7 +1463,7 @@ if (CSS.supports('display', 'grid')) {
                       Upgrade insecure requests:
                       <code>
                         &lt;meta http-equiv="Content-Security-Policy"
-                        content="upgrade-insecure-requests">
+                        content="upgrade-insecure-requests"&gt;
                       </code>
                     </li>
                   </ul>
@@ -1496,7 +1496,7 @@ if (CSS.supports('display', 'grid')) {
                   Use sandbox attribute to restrict iframe capabilities
                   <code class="d-block">
                     &lt;iframe src="content.html" sandbox="allow-scripts
-                    allow-same-origin">&lt;/iframe>
+                    allow-same-origin"&gt;&lt;/iframe>
                   </code>
                 </li>
               </ol>`,
