@@ -73,7 +73,8 @@ async function main() {
     if (interviewSubject === 'java' || interviewSubject === 'spring-boot') {
       return tutorialSubject === 'java'
     }
-    return true
+    // Avoid mapping interview questions to unrelated tutorial subjects.
+    return false
   }
 
   for (const [subject, data] of Object.entries(interviewQuestions)) {
