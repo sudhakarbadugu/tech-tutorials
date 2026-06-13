@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { interviewSubjects, interviewCategories } from '../data/interviewData'
 import { APP_NAME } from '../constants/brand'
+import { VERSION } from '../constants/version'
 import {
   getInterviewStats,
   getPopularInterviewSubjects,
@@ -383,7 +384,7 @@ function InterviewFooter({
               <span className={styles.footerCreditsText}>
                 Made with <Heart size={12} className={styles.footerCreditsHeart} /> for learners
               </span>
-              <span className={styles.footerCreditsVersion}>v2.18.0</span>
+              <span className={styles.footerCreditsVersion}>v{VERSION}</span>
             </div>
           </div>
         </div>

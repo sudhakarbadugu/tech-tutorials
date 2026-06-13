@@ -1,12 +1,12 @@
 {
   "name": "tech-tutorials",
   "private": true,
-  "version": "2.18.0",
+  "version": "2.18.2",
   "type": "module",
   "homepage": "https://sudhakarbadugu.github.io/tech-tutorials/",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/bump-build.js && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",

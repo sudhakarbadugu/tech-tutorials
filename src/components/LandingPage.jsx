@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { APP_NAME } from '../constants/brand'
+import { VERSION } from '../constants/version'
 import {
   BookOpen,
   Brain,
@@ -1125,7 +1126,7 @@ function LandingPage({
                 <span className={styles['footer-credits-text']}>
                   Made with <Heart size={12} className={styles['footer-credits-heart']} /> for learners
                 </span>
-                <span className={styles['footer-credits-version']}>v2.18.0</span>
+                <span className={styles['footer-credits-version']}>v{VERSION}</span>
               </div>
             </div>
           </div>

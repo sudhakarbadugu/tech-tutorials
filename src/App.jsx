@@ -15,12 +15,11 @@ import { tutorialData, loadSubjectContent, markTopicViewed } from './data/tutori
 import { interviewSubjects, interviewCategories } from './data/interviewData'
 import { addTutorialContentToIndex, buildStaticSearchIndex } from './data/searchIndex'
 import { APP_NAME } from './constants/brand'
+import { VERSION } from './constants/version'
 import GlobalSearch from './components/GlobalSearch'
 import './styles/App.css'
 
 buildStaticSearchIndex()
-
-const VERSION = '2.18.0'
 
 const tutorialCategories = [
   {

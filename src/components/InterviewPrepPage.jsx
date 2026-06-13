@@ -7,6 +7,7 @@ import RevisionDeck from './RevisionDeck'
 import StudyPathView from './StudyPathView'
 import { interviewSubjects, interviewCategories } from '../data/interviewData'
 import { APP_NAME } from '../constants/brand'
+import { VERSION } from '../constants/version'
 
 export default function InterviewPrepPage({ mode, theme: themeProp, toggleTheme: toggleThemeProp }) {
   const navigate = useNavigate()
@@ -39,7 +40,7 @@ export default function InterviewPrepPage({ mode, theme: themeProp, toggleTheme:
       <Header
         theme={theme}
         toggleTheme={toggleTheme}
-        version="2.18.0"
+        version={VERSION}
         sidebarOpen={false}
         setSidebarOpen={() => {}}
         subjects={interviewSubjects}
