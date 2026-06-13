@@ -3,16 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://sudhakarbadugu.github.io/tech-tutorials/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:run": "vitest run",
-    "build:tutorials": "node scripts/convert-trinits-tutorials.js",
-    "build:interviews": "node scripts/convert-trinits-interviews.js",
-    "build:content": "npm run build:tutorials && npm run build:interviews"
+    "test:run": "vitest run"
   },
   "dependencies": {
     "html2pdf.js": "^0.14.0",
