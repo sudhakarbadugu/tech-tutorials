@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { APP_NAME } from '../constants/brand'
 import {
   BookOpen,
@@ -36,7 +37,15 @@ import {
   Smartphone,
   Database,
   Server,
-  Cloud
+  Cloud,
+  Code,
+  Heart,
+  ExternalLink,
+  FlaskConical,
+  BookMarked,
+  Award,
+
+  Star
 } from 'lucide-react'
 import { interviewSubjects, interviewCategories } from '../data/interviewData'
 import { getSubjectProgress } from '../data/tutorialDataLoader'
@@ -112,8 +121,9 @@ const interviewCategoryIcons = {
 
 const FALLBACK_RECOMMENDED = ['multimodal', 'python', 'javascript']
 
-const FOOTER_COURSES = ['multimodal', 'ai', 'python', 'react', 'java', 'javascript']
-const FOOTER_INTERVIEW = ['react', 'java', 'javascript', 'dsa', 'spring-boot', 'sql']
+const REPO_URL = 'https://github.com/sudhakarbadugu/tech-tutorials'
+const ISSUES_URL = `${REPO_URL}/issues`
+const SUGGEST_URL = `${REPO_URL}/issues/new`
 
 function LandingPage({
   subjects,
@@ -124,6 +134,7 @@ function LandingPage({
   theme,
   toggleTheme
 }) {
+  const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
   const [hoveredCard, setHoveredCard] = useState(null)
   const [activeCategory, setActiveCategory] = useState('all')
@@ -244,26 +255,52 @@ function LandingPage({
 
   const hasHistory = recentlyViewed.length > 0
 
-  const footerCourses = useMemo(() => {
-    return FOOTER_COURSES
-      .filter(key => subjects[key])
-      .map(key => ({ key, title: subjects[key].title }))
-  }, [subjects])
-
-  const footerInterview = useMemo(() => {
-    return FOOTER_INTERVIEW
-      .filter(id => interviewSubjects[id]?.totalQuestions > 0)
-      .map(id => ({
-        id,
-        title: interviewSubjects[id].title.replace(' Interview Questions', '')
-      }))
-  }, [])
-
-  const footerCategories = useMemo(() => {
+  const courseGroups = useMemo(() => {
     return Object.entries(categories)
       .filter(([key]) => key !== 'all')
-      .map(([key, cat]) => ({ key, title: cat.title }))
+      .map(([key, cat]) => {
+        const items = (cat.subjects || [])
+          .filter(subjectKey => subjects[subjectKey])
+          .map(subjectKey => {
+            const topicCount = Object.values(subjects[subjectKey].structure || {}).reduce(
+              (sum, unit) => sum + (unit.topics?.length || 0),
+              0
+            )
+            return {
+              key: subjectKey,
+              title: subjects[subjectKey].title,
+              topicCount
+            }
+          })
+        return { key, title: cat.title, icon: cat.icon, items }
+      })
+      .filter(group => group.items.length > 0)
+  }, [subjects])
+
+  const interviewGroups = useMemo(() => {
+    return Object.entries(interviewCategories)
+      .map(([key, cat]) => {
+        const items = (cat.subjects || [])
+          .filter(id => interviewSubjects[id]?.totalQuestions > 0)
+          .map(id => ({
+            id,
+            title: interviewSubjects[id].title.replace(' Interview Questions', ''),
+            count: interviewSubjects[id].totalQuestions
+          }))
+        return { key, title: cat.title, items }
+      })
+      .filter(group => group.items.length > 0)
   }, [])
+
+  const openInterviewSubject = (id) => {
+    if (onSelectInterviewSubject) onSelectInterviewSubject(id)
+    else onInterviewClick?.()
+  }
+
+  const goToInterviewMode = (path) => {
+    onInterviewClick?.()
+    navigate(path)
+  }
 
   const scrollTo = (ref, sectionId) => {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -277,12 +314,6 @@ function LandingPage({
   const clearSearch = () => {
     setSearchQuery('')
     setActiveCategory('all')
-  }
-
-  const jumpToCategory = (categoryKey) => {
-    setActiveCategory(categoryKey)
-    setSearchQuery('')
-    scrollTo(coursesRef, 'courses')
   }
 
   const scrollToTop = () => {
@@ -830,69 +861,181 @@ function LandingPage({
 
       {/* Footer */}
       <footer className={styles['landing-footer']}>
+        <div className={styles['footer-cta-strip']}>
+          <div className={styles['footer-cta-inner']}>
+            <div className={styles['footer-cta-text']}>
+              <div className={styles['footer-cta-icon']}>
+                <Sparkles size={18} />
+              </div>
+              <div>
+                <strong>Open-source learning, free forever</strong>
+                <span>All tutorials and interview prep — built for students, researchers, and engineers.</span>
+              </div>
+            </div>
+            <div className={styles['footer-cta-actions']}>
+              <a
+                className={styles['footer-cta-btn']}
+                href={REPO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Star size={16} />
+                Star on GitHub
+                <ExternalLink size={12} />
+              </a>
+              <button
+                className={styles['footer-cta-btn-secondary']}
+                onClick={() => scrollTo(coursesRef, 'courses')}
+              >
+                Start learning
+                <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className={styles['landing-footer-inner']}>
           <div className={styles['footer-grid']}>
             <div className={styles['footer-brand-col']}>
-              <div className={styles['landing-footer-brand']}>
+              <button
+                type="button"
+                className={styles['landing-footer-brand']}
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                aria-label="Back to top"
+              >
                 <BookOpen size={22} className={styles['landing-footer-logo']} />
                 <span>{APP_NAME}</span>
-              </div>
+              </button>
               <p className={styles['footer-tagline']}>
-                {subjectEntries.length} courses, {totalModules} modules, {totalTopics} topics,
-                and {totalInterviewQuestions}+ interview questions — all free to browse.
+                A modern, responsive learning platform covering AI, machine learning, programming,
+                and interview preparation — all in one place, free to browse.
               </p>
               <div className={styles['footer-stats']}>
                 <span><BookOpen size={14} /> {subjectEntries.length} courses</span>
                 <span><LayoutGrid size={14} /> {totalModules} modules</span>
+                <span><Zap size={14} /> {totalTopics}+ topics</span>
                 <span><MessageSquare size={14} /> {totalInterviewQuestions}+ Q&amp;A</span>
+              </div>
+              <div className={styles['footer-tech']}>
+                <span className={styles['footer-tech-label']}>Built with</span>
+                <span className={styles['footer-tech-pill']}>React 19</span>
+                <span className={styles['footer-tech-pill']}>Vite 8</span>
+                <span className={styles['footer-tech-pill']}>Mermaid</span>
+                <span className={styles['footer-tech-pill']}>Shiki</span>
               </div>
             </div>
 
             <div className={styles['footer-col']}>
-              <h4 className={styles['footer-col-title']}>Popular courses</h4>
-              <ul className={styles['footer-link-list']}>
-                {footerCourses.map(({ key, title }) => (
-                  <li key={key}>
-                    <button className={styles['footer-link']} onClick={() => handleSubjectClick(key)}>
-                      {title}
-                    </button>
-                  </li>
+              <h4 className={styles['footer-col-title']}>
+                <BookOpen size={14} />
+                All courses
+              </h4>
+              <div className={styles['footer-subgroups']}>
+                {courseGroups.map(group => (
+                  <div key={group.key} className={styles['footer-subgroup']}>
+                    <h5 className={styles['footer-subgroup-title']}>{group.title}</h5>
+                    <ul className={styles['footer-link-list']}>
+                      {group.items.map(item => (
+                        <li key={item.key}>
+                          <button
+                            className={styles['footer-link']}
+                            onClick={() => handleSubjectClick(item.key)}
+                          >
+                            {item.title}
+                            <span className={styles['footer-link-meta']}>
+                              {item.topicCount} topics
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             <div className={styles['footer-col']}>
-              <h4 className={styles['footer-col-title']}>Interview topics</h4>
-              <ul className={styles['footer-link-list']}>
-                {footerInterview.map(({ id, title }) => (
-                  <li key={id}>
-                    <button
-                      className={styles['footer-link']}
-                      onClick={() => onSelectInterviewSubject?.(id) ?? onInterviewClick()}
-                    >
-                      {title}
-                    </button>
-                  </li>
+              <h4 className={styles['footer-col-title']}>
+                <Target size={14} />
+                Interview prep
+              </h4>
+              <div className={styles['footer-subgroups']}>
+                {interviewGroups.map(group => (
+                  <div key={group.key} className={styles['footer-subgroup']}>
+                    <h5 className={styles['footer-subgroup-title']}>{group.title}</h5>
+                    <ul className={styles['footer-link-list']}>
+                      {group.items.map(item => (
+                        <li key={item.id}>
+                          <button
+                            className={styles['footer-link']}
+                            onClick={() => openInterviewSubject(item.id)}
+                          >
+                            {item.title}
+                            <span className={styles['footer-link-meta']}>
+                              {item.count} Q&amp;A
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
+              </div>
+              <button
+                className={styles['footer-link-accent']}
+                onClick={onInterviewClick}
+              >
+                Browse all interview subjects
+                <ArrowRight size={14} />
+              </button>
+            </div>
+
+            <div className={styles['footer-col']}>
+              <h4 className={styles['footer-col-title']}>
+                <Zap size={14} />
+                Practice &amp; tools
+              </h4>
+              <ul className={styles['footer-link-list']}>
                 <li>
-                  <button className={styles['footer-link-accent']} onClick={onInterviewClick}>
-                    Browse all subjects
-                    <ArrowRight size={14} />
+                  <button
+                    className={`${styles['footer-link']} ${styles['footer-link-with-icon']}`}
+                    onClick={() => goToInterviewMode('/interview/mock')}
+                  >
+                    <FlaskConical size={14} className={styles['footer-link-icon']} />
+                    <span className={styles['footer-link-label']}>Mock Interview</span>
+                    <span className={styles['footer-link-meta']}>Timed practice</span>
                   </button>
                 </li>
-              </ul>
-            </div>
-
-            <div className={styles['footer-col']}>
-              <h4 className={styles['footer-col-title']}>Browse by area</h4>
-              <ul className={styles['footer-link-list']}>
-                {footerCategories.map(({ key, title }) => (
-                  <li key={key}>
-                    <button className={styles['footer-link']} onClick={() => jumpToCategory(key)}>
-                      {title}
-                    </button>
-                  </li>
-                ))}
+                <li>
+                  <button
+                    className={`${styles['footer-link']} ${styles['footer-link-with-icon']}`}
+                    onClick={() => goToInterviewMode('/interview/revision')}
+                  >
+                    <BookMarked size={14} className={styles['footer-link-icon']} />
+                    <span className={styles['footer-link-label']}>Revision Deck</span>
+                    <span className={styles['footer-link-meta']}>Quick recall</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`${styles['footer-link']} ${styles['footer-link-with-icon']}`}
+                    onClick={() => goToInterviewMode('/interview/paths')}
+                  >
+                    <Compass size={14} className={styles['footer-link-icon']} />
+                    <span className={styles['footer-link-label']}>Study Paths</span>
+                    <span className={styles['footer-link-meta']}>Curated tracks</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`${styles['footer-link']} ${styles['footer-link-with-icon']}`}
+                    onClick={() => scrollTo(coursesRef, 'courses')}
+                  >
+                    <Search size={14} className={styles['footer-link-icon']} />
+                    <span className={styles['footer-link-label']}>Global Search</span>
+                    <span className={styles['footer-link-meta']}>Find any topic</span>
+                  </button>
+                </li>
               </ul>
 
               {hasHistory && (
@@ -924,14 +1067,96 @@ function LandingPage({
                 </>
               )}
             </div>
+
+            <div className={styles['footer-col']}>
+              <h4 className={styles['footer-col-title']}>
+                <Globe size={14} />
+                Connect
+              </h4>
+              <ul className={styles['footer-link-list']}>
+                <li>
+                  <a
+                    className={`${styles['footer-link']} ${styles['footer-link-inline']}`}
+                    href={REPO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Code size={14} className={styles['footer-link-icon']} />
+                    <span>GitHub repository</span>
+                    <ExternalLink size={11} className={styles['footer-link-external']} />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className={`${styles['footer-link']} ${styles['footer-link-inline']}`}
+                    href={ISSUES_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <MessageSquare size={14} className={styles['footer-link-icon']} />
+                    <span>Report an issue</span>
+                    <ExternalLink size={11} className={styles['footer-link-external']} />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className={`${styles['footer-link']} ${styles['footer-link-inline']}`}
+                    href={SUGGEST_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Award size={14} className={styles['footer-link-icon']} />
+                    <span>Suggest a topic</span>
+                    <ExternalLink size={11} className={styles['footer-link-external']} />
+                  </a>
+                </li>
+                <li>
+                  <button
+                    className={`${styles['footer-link']} ${styles['footer-link-inline']}`}
+                    onClick={onInterviewClick}
+                  >
+                    <GraduationCap size={14} className={styles['footer-link-icon']} />
+                    <span>All interview subjects</span>
+                  </button>
+                </li>
+              </ul>
+
+              <div className={styles['footer-credits']}>
+                <span className={styles['footer-credits-text']}>
+                  Made with <Heart size={12} className={styles['footer-credits-heart']} /> for learners
+                </span>
+                <span className={styles['footer-credits-version']}>v2.18.0</span>
+              </div>
+            </div>
           </div>
 
           <div className={styles['landing-footer-bottom']}>
-            <span>© {new Date().getFullYear()} {APP_NAME}</span>
-            <button className={styles['footer-back-top']} onClick={scrollToTop}>
-              Back to top
-              <ChevronRight size={14} style={{ transform: 'rotate(-90deg)' }} />
-            </button>
+            <span className={styles['footer-bottom-text']}>
+              © {new Date().getFullYear()} {APP_NAME} · Released under the MIT License
+            </span>
+            <div className={styles['footer-bottom-actions']}>
+              <a
+                className={styles['footer-bottom-link']}
+                href={REPO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Code size={14} />
+                Source
+              </a>
+              <a
+                className={styles['footer-bottom-link']}
+                href={ISSUES_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Support
+              </a>
+              <button className={styles['footer-back-top']} onClick={scrollToTop}>
+                Back to top
+                <ChevronRight size={14} style={{ transform: 'rotate(-90deg)' }} />
+              </button>
+            </div>
           </div>
         </div>
       </footer>

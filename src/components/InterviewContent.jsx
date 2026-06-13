@@ -447,6 +447,9 @@ function InterviewContent({
           onBackToHome={onBackToHome ?? onBack}
           onSelectSubject={onSelectSubject}
           onBackToAllInterview={onBack}
+          onMockInterview={onMockInterview}
+          onRevisionDeck={onRevisionDeck}
+          onStudyPaths={onStudyPaths}
         />
       </div>
     )
@@ -710,6 +713,9 @@ function InterviewContent({
         onBackToHome={onBackToHome ?? onBack}
         onSelectSubject={onSelectSubject}
         onBackToAllInterview={onBack}
+        onMockInterview={onMockInterview}
+        onRevisionDeck={onRevisionDeck}
+        onStudyPaths={onStudyPaths}
       />
     </div>
   )

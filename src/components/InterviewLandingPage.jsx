@@ -620,6 +620,9 @@ function InterviewLandingPage({
         onBackToHome={onBack}
         onSelectSubject={onSelectSubject}
         onScrollToCategory={scrollToCategory}
+        onMockInterview={onMockInterview}
+        onRevisionDeck={onRevisionDeck}
+        onStudyPaths={onStudyPaths}
       />
     </div>
   )

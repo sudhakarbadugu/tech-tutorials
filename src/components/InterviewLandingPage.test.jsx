@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import InterviewLandingPage from './InterviewLandingPage'
 import { BOOKMARKS_KEY } from './interviewUi'
@@ -29,10 +29,11 @@ describe('InterviewLandingPage', () => {
   it('renders interview prep tool cards', () => {
     render(<InterviewLandingPage {...defaultProps} />)
 
-    expect(screen.getByRole('heading', { name: 'Interview prep tools' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /mock interview/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /revision deck/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /study paths/i })).toBeInTheDocument()
+    const prepTools = screen.getByRole('heading', { name: 'Interview prep tools' }).closest('section')
+    expect(prepTools).toBeInTheDocument()
+    expect(within(prepTools).getByRole('button', { name: /mock interview/i })).toBeInTheDocument()
+    expect(within(prepTools).getByRole('button', { name: /revision deck/i })).toBeInTheDocument()
+    expect(within(prepTools).getByRole('button', { name: /study paths/i })).toBeInTheDocument()
     expect(screen.getByText(new RegExp(`${studyPaths.length} curated plans`, 'i'))).toBeInTheDocument()
   })
 
@@ -40,7 +41,8 @@ describe('InterviewLandingPage', () => {
     const user = userEvent.setup()
     render(<InterviewLandingPage {...defaultProps} />)
 
-    await user.click(screen.getByRole('button', { name: /mock interview/i }))
+    const prepTools = screen.getByRole('heading', { name: 'Interview prep tools' }).closest('section')
+    await user.click(within(prepTools).getByRole('button', { name: /mock interview/i }))
 
     expect(onMockInterview).toHaveBeenCalledTimes(1)
   })
@@ -49,7 +51,8 @@ describe('InterviewLandingPage', () => {
     const user = userEvent.setup()
     render(<InterviewLandingPage {...defaultProps} />)
 
-    await user.click(screen.getByRole('button', { name: /revision deck/i }))
+    const prepTools = screen.getByRole('heading', { name: 'Interview prep tools' }).closest('section')
+    await user.click(within(prepTools).getByRole('button', { name: /revision deck/i }))
 
     expect(onRevisionDeck).toHaveBeenCalledTimes(1)
   })
@@ -58,7 +61,8 @@ describe('InterviewLandingPage', () => {
     const user = userEvent.setup()
     render(<InterviewLandingPage {...defaultProps} />)
 
-    await user.click(screen.getByRole('button', { name: /study paths/i }))
+    const prepTools = screen.getByRole('heading', { name: 'Interview prep tools' }).closest('section')
+    await user.click(within(prepTools).getByRole('button', { name: /study paths/i }))
 
     expect(onStudyPaths).toHaveBeenCalledTimes(1)
   })
