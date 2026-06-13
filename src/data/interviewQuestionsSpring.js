@@ -1314,19 +1314,6 @@ export const springQuestions = {
       ]
     },
     {
-      question: 'What is Spring Data JPA?',
-      answer: `Spring Data JPA simplifies JPA-based data access through repository interfaces like
-            <code>JpaRepository</code>
-            . It eliminates boilerplate code, supports method-name queries, and allows custom
-            queries using
-            <code>@Query</code>
-            . It integrates seamlessly with Spring Boot for efficient persistence.`,
-      difficulty: 'Beginner',
-      tags: [
-        'Spring Boot'
-      ]
-    },
-    {
       question: 'What is @SpringBootApplication?',
       answer: `This is a convenience annotation that includes
             <code>@Configuration</code>
@@ -1973,6 +1960,753 @@ export const springQuestions = {
       difficulty: 'Advanced',
       tags: [
         'Spring Boot'
+      ]
+    },
+    {
+      question: 'What happens internally when you add spring-boot-starter-web?',
+      answer: `<p>Adding <code>spring-boot-starter-web</code> triggers a cascade of auto-configuration.</p>
+<p><b>Step-by-step:</b></p>
+<ol>
+  <li><b>Starter pulls dependencies</b> — Spring MVC, Jackson, Tomcat, and validation API are added to the classpath.</li>
+  <li><b>@EnableAutoConfiguration scans <code>META-INF/spring.factories</code></b> (or <code>AutoConfiguration.imports</code> in Spring Boot 3.x) and finds <code>ServletWebServerFactoryAutoConfiguration</code>, <code>WebMvcAutoConfiguration</code>, <code>JacksonAutoConfiguration</code>, etc.</li>
+  <li><b>ServletWebServerFactoryAutoConfiguration</b> detects Tomcat on the classpath and registers an embedded <code>TomcatServletWebServerFactory</code> bean.</li>
+  <li><b>WebMvcAutoConfiguration</b> configures DispatcherServlet, ViewResolver, MessageConverters (JSON via Jackson), and static resource handling.</li>
+  <li><b>JacksonAutoConfiguration</b> configures the ObjectMapper bean with sensible defaults.</li>
+  <li><b>Tomcat starts on port 8080</b> (or <code>server.port</code> from properties).</li>
+</ol>
+<pre><code>// spring-boot-starter-web includes:
+//   spring-boot-starter-tomcat (embedded Tomcat)
+//   spring-webmvc (DispatcherServlet, @Controller, etc.)
+//   spring-web (core web utilities)
+//   jackson-databind (JSON serialization)
+//   spring-boot-starter-validation
+</code></pre>
+<p><b>Key point:</b> Each <code>@ConditionalOnClass</code> / <code>@ConditionalOnMissingBean</code> annotation ensures configuration only applies if the dependency is present and no user-defined bean exists.</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Auto-Configuration', 'Web'
+      ]
+    },
+    {
+      question: 'Why does Spring Boot prefer convention over configuration?',
+      answer: `<p><b>Convention over configuration (CoC)</b> means the framework provides sensible defaults so you only override what you need. Spring Boot applies this philosophy everywhere.</p>
+<p><b>Examples of conventions:</b></p>
+<ul>
+  <li><b>Embedded server</b> — Tomcat on port 8080 by default. No web.xml, no server setup.</li>
+  <li><b>Bean names</b> — A class annotated @Service or @Repository is registered with a camelCase name derived from the class.</li>
+  <li><b>Configuration files</b> — application.properties or application.yml in src/main/resources/ are auto-detected.</li>
+  <li><b>Database</b> — If H2 is on the classpath, Spring Boot auto-configures an in-memory DataSource.</li>
+  <li><b>Error handling</b> — /error maps to a whitelabel error page automatically.</li>
+  <li><b>Static resources</b> — Served from /static, /public, /resources, or /META-INF/resources.</li>
+</ul>
+<p><b>Why it matters:</b></p>
+<ol>
+  <li><b>Faster development</b> — less boilerplate, quicker prototyping.</li>
+  <li><b>Consistency</b> — all projects follow the same structure.</li>
+  <li><b>Override when needed</b> — define your own bean or set a property and auto-configuration backs off.</li>
+</ol>
+<pre><code>// Override a convention:
+// Default: embedded Tomcat on 8080
+// Override: switch to Undertow and port 9090
+// pom.xml: exclude tomcat, add undertow
+// application.yml:
+server:
+  port: 9090
+// Spring Boot sees Undertow on classpath, uses it instead.
+</code></pre>`,
+      difficulty: 'Beginner',
+      tags: [
+        'Spring Boot', 'Design Philosophy', 'Convention'
+      ]
+    },
+    {
+      question: 'Difference between @ComponentScan and @SpringBootApplication?',
+      answer: `<p>@SpringBootApplication is a <b>composite annotation</b> that bundles three annotations together. @ComponentScan is just one of them.</p>
+<table>
+  <tr><th>Annotation</th><th>Purpose</th><th>Key Feature</th></tr>
+  <tr><td>@SpringBootApplication</td><td>Enables entire Spring Boot app</td><td>Combines 3 annotations</td></tr>
+  <tr><td>@ComponentScan</td><td>Discovers beans in a package</td><td>Only scans and registers components</td></tr>
+</table>
+<p><b>@SpringBootApplication is equivalent to:</b></p>
+<pre><code>@SpringBootApplication  // this one annotation
+// is equivalent to these three:
+@SpringBootConfiguration   // marks class as a configuration class
+@EnableAutoConfiguration   // triggers auto-configuration
+@ComponentScan              // scans for @Component, @Service, @Repository, @Controller
+</code></pre>
+<p><b>When to use each:</b></p>
+<ul>
+  <li><b>@SpringBootApplication</b> — Use on your main class. Covers 99% of cases.</li>
+  <li><b>@ComponentScan</b> — Use alone when you want component scanning <i>without</i> auto-configuration (rare). Or use @ComponentScan(basePackages) to scan outside the default package.</li>
+</ul>
+<pre><code>// Typical usage
+@SpringBootApplication
+public class MyApp {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApp.class, args);
+    }
+}
+
+// Custom scan path
+@SpringBootApplication
+@ComponentScan(basePackages = {"com.example.service", "com.example.external"})
+public class MyApp { ... }
+</code></pre>
+<p><b>Interview tip:</b> If asked what @SpringBootApplication does, break it into the three annotations and explain each.</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Annotations', 'ComponentScan'
+      ]
+    },
+    {
+      question: 'How does Spring Boot detect embedded Tomcat and configure it?',
+      answer: `<p>Spring Boot uses <b>conditional annotations</b> to detect Tomcat on the classpath and auto-configure it.</p>
+<p><b>Step-by-step:</b></p>
+<ol>
+  <li>spring-boot-starter-web brings in spring-boot-starter-tomcat.</li>
+  <li>ServletWebServerFactoryAutoConfiguration is loaded via spring.factories.</li>
+  <li>EmbeddedTomcat is annotated with @ConditionalOnClass({ Servlet.class, Tomcat.class }) — only activates if Tomcat classes are present.</li>
+  <li>A TomcatServletWebServerFactory bean is created, which starts an embedded Tomcat instance.</li>
+  <li>ServerProperties (bound to server.* properties) configure port, session timeout, SSL, etc.</li>
+</ol>
+<pre><code>// Simplified auto-configuration logic
+@Configuration
+@ConditionalOnClass(Servlet.class)
+public class ServletWebServerFactoryAutoConfiguration {
+    @Configuration
+    @ConditionalOnClass(Tomcat.class)
+    public static class EmbeddedTomcat {
+        @Bean
+        @ConditionalOnMissingBean
+        public TomcatServletWebServerFactory tomcatFactory() {
+            return new TomcatServletWebServerFactory();
+        }
+    }
+    @Configuration
+    @ConditionalOnClass(Undertow.class)
+    public static class EmbeddedUndertow { ... }
+}
+</code></pre>
+<p><b>Switching servers:</b> Exclude Tomcat and add Jetty or Undertow in pom.xml.</p>
+<p><b>Interview tip:</b> The key mechanism is @ConditionalOnClass + @ConditionalOnMissingBean. The former detects the dependency; the latter allows user override.</p>`,
+      difficulty: 'Advanced',
+      tags: [
+        'Spring Boot', 'Tomcat', 'Auto-Configuration', 'Embedded Server'
+      ]
+    },
+    {
+      question: 'What happens if two beans of same type exist and no @Qualifier?',
+      answer: `<p>Spring throws a <code>NoUniqueBeanDefinitionException</code> at startup because it cannot decide which bean to inject.</p>
+<pre><code>@Service
+public class EmailService implements NotificationService { ... }
+
+@Service
+public class SmsService implements NotificationService { ... }
+
+@Service
+public class UserService {
+    @Autowired
+    private NotificationService notificationService; // NoUniqueBeanDefinitionException!
+}
+</code></pre>
+<p><b>Ways to resolve:</b></p>
+<ol>
+  <li><b>@Qualifier</b> — specify the bean name explicitly:
+    <pre><code>@Autowired
+@Qualifier("emailService")
+private NotificationService notificationService;</code></pre></li>
+  <li><b>@Primary</b> — mark one as the default:
+    <pre><code>@Service @Primary
+public class EmailService implements NotificationService { ... }</code></pre></li>
+  <li><b>Field name matches bean name</b> — Spring uses the field name as a qualifier:
+    <pre><code>@Autowired
+private NotificationService emailService; // matches "emailService" bean</code></pre></li>
+  <li><b>Use a specific type</b> — inject the concrete class instead of the interface.</li>
+</ol>
+<p><b>Priority:</b> @Primary → @Qualifier → field name matching. If none resolves the ambiguity, Spring fails at startup.</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Dependency Injection', 'Beans'
+      ]
+    },
+    {
+      question: 'What is the role of SpringFactoriesLoader?',
+      answer: `<p>SpringFactoriesLoader is the mechanism Spring Boot uses to <b>discover and load auto-configuration classes</b> from the classpath without compile-time dependencies.</p>
+<p><b>How it works:</b></p>
+<ol>
+  <li>Each starter JAR contains META-INF/spring.factories listing fully-qualified class names under specific keys.</li>
+  <li>SpringFactoriesLoader reads all spring.factories files on the classpath and loads the listed classes.</li>
+  <li>Each loaded class is evaluated for its @ConditionalOn* annotations to decide whether to apply.</li>
+</ol>
+<pre><code># META-INF/spring.factories (Spring Boot 2.x)
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=  org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration,  org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+</code></pre>
+<p><b>Spring Boot 3.x change:</b> Replaced by META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports — one class per line, no escaping needed.</p>
+<p><b>Why it matters:</b> This is how Spring Boot achieves plug-and-play — adding a JAR to the classpath automatically enables its configuration.</p>`,
+      difficulty: 'Advanced',
+      tags: [
+        'Spring Boot', 'Auto-Configuration', 'SpringFactoriesLoader'
+      ]
+    },
+    {
+      question: 'How does Spring Boot reduce XML configuration completely?',
+      answer: `<p>Spring Boot eliminates XML through <b>auto-configuration, annotation-driven development, and sensible defaults</b>.</p>
+<p><b>Key mechanisms:</b></p>
+<ol>
+  <li><b>Auto-configuration</b> — @EnableAutoConfiguration detects dependencies and configures beans automatically.</li>
+  <li><b>Annotation-based config</b> — @Configuration + @Bean replaces XML bean declarations:
+    <pre><code>@Configuration
+public class AppConfig {
+    @Bean
+    public RestTemplate restTemplate() { return new RestTemplate(); }
+}</code></pre></li>
+  <li><b>Properties files</b> — application.yml replaces XML property placeholders.</li>
+  <li><b>Component scanning</b> — @ComponentScan replaces manual bean wiring.</li>
+  <li><b>Starter POMs</b> — Curated dependency lists replace manual dependency management.</li>
+  <li><b>Embedded servers</b> — No need to configure Tomcat/Jetty externally.</li>
+</ol>
+<p><b>Before Spring Boot:</b> 20+ lines of XML for a DataSource. <b>After:</b> Just add spring-boot-starter-data-jpa + set properties. DataSource auto-configured!</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Configuration', 'XML-Free'
+      ]
+    },
+    {
+      question: 'How does Spring Boot manage dependency versions automatically?',
+      answer: `<p>Spring Boot uses a <b>BOM (Bill of Materials)</b> called spring-boot-dependencies to manage all dependency versions centrally.</p>
+<p><b>How it works:</b></p>
+<ol>
+  <li>The spring-boot-starter-parent POM declares versions for 300+ curated dependencies.</li>
+  <li>When you declare a starter, you dont specify a version — the BOM provides it.</li>
+  <li>All versions are tested together, guaranteeing compatibility.</li>
+</ol>
+<pre><code>&lt;parent&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+  &lt;version&gt;3.3.0&lt;/version&gt;
+&lt;/parent&gt;
+&lt;!-- No version needed! BOM provides it --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p><b>Overriding a version:</b></p>
+<pre><code>&lt;properties&gt;
+  &lt;jackson-bom.version&gt;2.16.0&lt;/jackson-bom.version&gt;
+&lt;/properties&gt;
+</code></pre>
+<p><b>Interview key point:</b> The parent POM also configures plugin versions, Java version, resource filtering, and encoding defaults. You can use just the BOM (spring-boot-dependencies) without the parent if you need a different parent POM.</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Dependencies', 'Maven', 'BOM'
+      ]
+    },
+    {
+      question: 'What is the lifecycle of a Spring Bean in Spring Boot?',
+      answer: `<p>A Spring Bean goes through <b>7 phases</b> from instantiation to destruction.</p>
+<ol>
+  <li><b>Instantiation</b> — Spring creates the bean instance via constructor.</li>
+  <li><b>Populate properties</b> — @Autowired, @Value injections happen.</li>
+  <li><b>Awareness callbacks</b> — BeanNameAware.setBeanName(), BeanFactoryAware.setBeanFactory() called.</li>
+  <li><b>Pre-initialization</b> — BeanPostProcessor.postProcessBeforeInitialization() (@PostConstruct processing).</li>
+  <li><b>Initialization</b> — @PostConstruct, InitializingBean.afterPropertiesSet(), custom init-method run.</li>
+  <li><b>Bean is ready</b> — Available for use in the application.</li>
+  <li><b>Destruction</b> — @PreDestroy, DisposableBean.destroy(), custom destroy-method.</li>
+</ol>
+<pre><code>@Component
+public class LifecycleDemo implements InitializingBean, DisposableBean,
+        BeanNameAware, BeanFactoryAware {
+    public LifecycleDemo() { System.out.println("1. Constructor"); }
+    @Autowired
+    public void setDependency(SomeService svc) { System.out.println("2. Injection"); }
+    @Override
+    public void setBeanName(String name) { System.out.println("3. BeanNameAware"); }
+    @Override
+    public void setBeanFactory(BeanFactory f) { System.out.println("4. BeanFactoryAware"); }
+    @PostConstruct
+    public void postConstruct() { System.out.println("5. @PostConstruct"); }
+    @Override
+    public void afterPropertiesSet() { System.out.println("6. afterPropertiesSet()"); }
+    @PreDestroy
+    public void preDestroy() { System.out.println("7. @PreDestroy"); }
+    @Override
+    public void destroy() { System.out.println("8. destroy()"); }
+}
+</code></pre>
+<p><b>Interview tip:</b> Constructor → Injection → Aware callbacks → @PostConstruct → afterPropertiesSet() → Ready → @PreDestroy → destroy().</p>`,
+      difficulty: 'Advanced',
+      tags: [
+        'Spring Boot', 'Bean Lifecycle', 'IoC'
+      ]
+    },
+    {
+      question: 'What happens if application.yml and application.properties both exist?',
+      answer: `<p>Spring Boot loads <b>both files</b>, but <b>application.properties wins</b> when the same key appears in both.</p>
+<p><b>Loading order (later overrides earlier):</b></p>
+<ol>
+  <li>application.yml is loaded first</li>
+  <li>application.properties is loaded second and <b>overrides duplicate keys</b></li>
+</ol>
+<pre><code># application.yml
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+
+# application.properties
+server.port=9090
+# Result: port=9090 (properties wins), context-path=/api (from yml only)
+</code></pre>
+<p><b>Full priority order (highest wins):</b></p>
+<ol>
+  <li>Command-line arguments</li>
+  <li>JNDI attributes</li>
+  <li>Java System properties</li>
+  <li>OS environment variables</li>
+  <li>Profile-specific properties/yml</li>
+  <li>application.properties/yml (properties overrides yml)</li>
+  <li>@PropertySource</li>
+  <li>Default properties</li>
+</ol>
+<p><b>Best practice:</b> Pick one format and stick with it. Mixing both is confusing. YAML is preferred for nested config; properties for flat key-value pairs.</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Configuration', 'Properties', 'YAML'
+      ]
+    },
+    {
+      question: 'Difference between @Configuration and normal class?',
+      answer: `<p>A @Configuration class is a specialized @Component that can declare @Bean methods with full proxy support. A normal class is just a POJO Spring knows nothing about.</p>
+<table>
+  <tr><th>Aspect</th><th>@Configuration</th><th>Normal class</th></tr>
+  <tr><td>Scanned by Spring?</td><td>Yes</td><td>No (unless annotated)</td></tr>
+  <tr><td>Can declare @Bean methods?</td><td>Yes — beans are managed</td><td>Only with @Import or @Component</td></tr>
+  <tr><td>Proxy mode</td><td>CGLIB proxy by default</td><td>No proxy</td></tr>
+  <tr><td>Bean inter-dependencies</td><td>Resolved correctly via proxy</td><td>Each call creates new instance</td></tr>
+</table>
+<p><b>Why the proxy matters:</b></p>
+<pre><code>@Configuration
+public class AppConfig {
+    @Bean
+    public ServiceA serviceA() {
+        return new ServiceA(serviceB()); // CGLIB proxy intercepts this
+    }
+    @Bean
+    public ServiceB serviceB() {
+        return new ServiceB();
+    }
+}
+// serviceB() called from serviceA() returns the SAME singleton bean.
+
+// Without @Configuration (plain @Component):
+// serviceB() called from serviceA() creates a NEW instance!
+// Use @Configuration for full-mode, @Component for lite-mode
+</code></pre>
+<p><b>Interview tip:</b> Use @Configuration (full mode) when beans reference each other. Use @Component with @Bean (lite mode) only for standalone beans with no inter-dependencies.</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Configuration', 'Beans', 'Annotations'
+      ]
+    },
+    {
+      question: 'How does Spring Boot create DataSource automatically?',
+      answer: `<p>When Spring Boot detects a database driver and connection properties on the classpath, DataSourceAutoConfiguration creates a DataSource bean automatically.</p>
+<p><b>Step-by-step:</b></p>
+<ol>
+  <li>DataSourceAutoConfiguration is listed in spring.factories.</li>
+  <li>It checks for DataSource.class on the classpath (@ConditionalOnClass).</li>
+  <li>If H2 is on the classpath and no URL is configured, it creates an in-memory H2 DataSource.</li>
+  <li>If spring.datasource.url is set, it creates a connection pool (HikariCP by default).</li>
+  <li>If you define your own DataSource @Bean, auto-configuration backs off (@ConditionalOnMissingBean).</li>
+</ol>
+<pre><code># Minimal configuration for auto DataSource
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydb
+    username: root
+    password: secret
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# HikariCP pool is auto-configured with these settings
+
+# To switch pool type
+spring.datasource.type: org.apache.commons.dbcp2.BasicDataSource
+</code></pre>
+<p><b>HikariCP defaults:</b> max-pool-size=10, connection-timeout=30s, idle-timeout=10min.</p>
+<p><b>Key point:</b> If you see HikariPool-1 in logs, Spring Boot auto-configured your DataSource. Override by defining your own @Bean DataSource.</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'DataSource', 'Auto-Configuration', 'Database'
+      ]
+    },
+    {
+      question: 'What is the real use of CommandLineRunner?',
+      answer: `<p>CommandLineRunner is a functional interface that runs code <b>after the Spring ApplicationContext is fully initialized</b> and before the application starts accepting requests.</p>
+<pre><code>@Component
+public class StartupRunner implements CommandLineRunner {
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("Application started with args: " + Arrays.toString(args));
+    }
+}
+</code></pre>
+<p><b>Common use cases:</b></p>
+<ol>
+  <li><b>Seed data</b> — populate the database on startup</li>
+  <li><b>Cache warming</b> — pre-load reference data</li>
+  <li><b>Health checks</b> — verify external service connectivity</li>
+  <li><b>Notification</b> — send startup alerts</li>
+</ol>
+<p><b>CommandLineRunner vs ApplicationRunner:</b></p>
+<table>
+  <tr><th>Aspect</th><th>CommandLineRunner</th><th>ApplicationRunner</th></tr>
+  <tr><td>Parameter type</td><td>String... args (raw)</td><td>ApplicationArguments (parsed)</td></tr>
+  <tr><td>Parsed options</td><td>No</td><td>Yes — args.getOptionValues("key")</td></tr>
+  <tr><td>Use when</td><td>Simple positional args</td><td>Need --key=value parsing</td></tr>
+</table>
+<p><b>Ordering multiple runners:</b></p>
+<pre><code>@Component @Order(1)
+public class CacheWarmer implements CommandLineRunner { ... }
+
+@Component @Order(2)
+public class DataSeeder implements CommandLineRunner { ... }
+</code></pre>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'CommandLineRunner', 'Startup'
+      ]
+    },
+    {
+      question: 'How does Spring Boot handle exception translation?',
+      answer: `<p>Spring Boot provides automatic exception translation through <b>@RestControllerAdvice</b> and the DataAccessException hierarchy.</p>
+<p><b>1. Data access exception translation:</b> Spring wraps vendor-specific exceptions (SQLException) into unchecked DataAccessException via @Repository annotation.</p>
+<pre><code>@Repository  // enables exception translation
+public class UserDaoImpl implements UserDao {
+    // SQLException → DataIntegrityViolationException
+    // LockAcquisitionException → PessimisticLockingFailureException
+}
+</code></pre>
+<p><b>2. REST exception translation with @RestControllerAdvice:</b></p>
+<pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFound(EntityNotFoundException ex) {
+        return new ErrorResponse("NOT_FOUND", ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidation(MethodArgumentNotValidException ex) {
+        List&lt;String&gt; errors = ex.getBindingResult().getFieldErrors().stream()
+            .map(e -> e.getField() + ": " + e.getDefaultMessage())
+            .collect(Collectors.toList());
+        return new ErrorResponse("VALIDATION_FAILED", errors);
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleGeneral(Exception ex) {
+        return new ErrorResponse("INTERNAL_ERROR", ex.getMessage());
+    }
+}
+</code></pre>
+<p><b>3. Default error handling:</b> When no handler catches an exception, BasicErrorController renders /error whitelabel page (browser) or JSON (API clients).</p>`,
+      difficulty: 'Advanced',
+      tags: [
+        'Spring Boot', 'Exception Handling', 'REST', 'Data Access'
+      ]
+    },
+    {
+      question: 'Difference between @EnableAutoConfiguration and @Import?',
+      answer: `<table>
+  <tr><th>Aspect</th><th>@EnableAutoConfiguration</th><th>@Import</th></tr>
+  <tr><td>Purpose</td><td>Trigger classpath-based auto-configuration</td><td>Manually import specific config classes</td></tr>
+  <tr><td>Discovery</td><td>Scans spring.factories / AutoConfiguration.imports</td><td>Only imports the listed classes</td></tr>
+  <tr><td>Conditional</td><td>Each config has @ConditionalOn* checks</td><td>Imports unconditionally — always loaded</td></tr>
+  <tr><td>Scope</td><td>Potentially hundreds of configurations</td><td>Specific, targeted configurations</td></tr>
+</table>
+<pre><code>// @EnableAutoConfiguration — scans classpath, conditionally applies configs
+@SpringBootApplication  // includes @EnableAutoConfiguration
+public class MyApp { ... }
+
+// @Import — manually load specific configuration
+@Import(DataSourceConfig.class)
+public class MyApp { ... }  // always loaded, no conditions
+
+// They can be combined
+@SpringBootApplication
+@Import(SecurityConfig.class)  // always load this one
+public class MyApp { ... }
+</code></pre>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Auto-Configuration', 'Annotations'
+      ]
+    },
+    {
+      question: 'How does Spring Boot support microservices so easily?',
+      answer: `<p>Spring Boot provides the foundation, and <b>Spring Cloud</b> adds microservices patterns on top.</p>
+<p><b>Key building blocks:</b></p>
+<ol>
+  <li><b>Service Registration & Discovery</b> — Eureka or Consul. Services register and discover without hardcoding URLs.</li>
+  <li><b>API Gateway</b> — Spring Cloud Gateway. Single entry point for routing, rate limiting, auth.</li>
+  <li><b>Circuit Breaker</b> — Resilience4j. Prevents cascading failures.</li>
+  <li><b>Config Server</b> — Spring Cloud Config. Centralized configuration for all services.</li>
+  <li><b>Load Balancing</b> — Spring Cloud LoadBalancer. Client-side load balancing.</li>
+  <li><b>Distributed Tracing</b> — Micrometer + Zipkin/Jaeger. Follow requests across services.</li>
+  <li><b>Health Monitoring</b> — Actuator endpoints for health checks and metrics.</li>
+</ol>
+<pre><code>// Service registration with Eureka
+@SpringBootApplication
+@EnableDiscoveryClient
+public class OrderService {
+    public static void main(String[] args) {
+        SpringApplication.run(OrderService.class, args);
+    }
+}
+
+// application.yml
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+</code></pre>
+<p><b>Why Spring Boot makes microservices easy:</b></p>
+<ul>
+  <li><b>Embedded servers</b> — each service is a self-contained JAR</li>
+  <li><b>Auto-configuration</b> — minimal boilerplate</li>
+  <li><b>Actuator</b> — production-ready endpoints out of the box</li>
+  <li><b>Fat JARs</b> — java -jar service.jar is all you need</li>
+</ul>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Microservices', 'Spring Cloud'
+      ]
+    },
+    {
+      question: 'What is the difference between fat jar and normal jar?',
+      answer: `<table>
+  <tr><th>Aspect</th><th>Fat JAR (Spring Boot)</th><th>Normal JAR</th></tr>
+  <tr><td>Contains dependencies?</td><td>Yes — all libs bundled inside</td><td>No — only your classes</td></tr>
+  <tr><td>Runs with</td><td>java -jar app.jar</td><td>java -cp app.jar:lib/* com.Main</td></tr>
+  <tr><td>Classpath</td><td>Self-contained</td><td>Must be set manually</td></tr>
+  <tr><td>Size</td><td>Large (20-60 MB+)</td><td>Small (few KB to MB)</td></tr>
+  <tr><td>Deployment</td><td>Single file, zero config</td><td>Needs dependency management</td></tr>
+  <tr><td>Docker-friendly</td><td>Very — just COPY app.jar /</td><td>Need to copy all deps too</td></tr>
+</table>
+<p><b>Spring Boot fat JAR structure:</b></p>
+<pre><code>my-app.jar
+├── BOOT-INF/
+│   ├── classes/          your compiled code
+│   └── lib/              all dependency JARs
+├── META-INF/
+│   ├── MANIFEST.MF      Main-Class: JarLauncher
+│   └── spring.factories
+└── org/springframework/boot/loader/  Spring Boot launcher
+</code></pre>
+<p><b>Building it:</b></p>
+<pre><code>&lt;build&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/build&gt;
+// mvn package → creates fat JAR
+// java -jar target/my-app.jar → runs the application
+</code></pre>
+<p><b>Layered JARs (Spring Boot 2.3+):</b> Extract layers for Docker so dependency layers are cached independently.</p>`,
+      difficulty: 'Beginner',
+      tags: [
+        'Spring Boot', 'Build', 'Deployment', 'JAR'
+      ]
+    },
+    {
+      question: 'How does Spring Boot handle logging by default?',
+      answer: `<p>Spring Boot uses <b>SLF4J</b> as the logging facade with <b>Logback</b> as the default implementation. No additional configuration needed.</p>
+<p><b>Default behavior:</b></p>
+<ul>
+  <li>Logs to STDOUT at INFO level</li>
+  <li>Log format: timestamp level PID thread logger: message</li>
+  <li>Color-coded output in terminals</li>
+</ul>
+<pre><code># Default log output:
+# 2024-06-13 10:45:00.123 INFO 12345 --- [main] c.e.MyApp : Started MyApp in 2.3s
+</code></pre>
+<p><b>Customizing log levels:</b></p>
+<pre><code># application.properties
+logging.level.root=WARN
+logging.level.org.springframework.web=DEBUG
+logging.level.com.example=TRACE
+logging.file.name=logs/app.log
+logging.file.max-size=10MB
+logging.file.max-history=30
+</code></pre>
+<p><b>Switching to Log4j2:</b> Exclude spring-boot-starter-logging and add spring-boot-starter-log4j2.</p>
+<p><b>Interview key points:</b></p>
+<ul>
+  <li>Spring Boot converts Commons Logging, Log4j2, and JUL calls to SLF4J — all logging goes through one framework.</li>
+  <li>spring-boot-starter-logging is a transitive dependency of every starter.</li>
+  <li>Custom Logback config: place logback-spring.xml in src/main/resources/.</li>
+</ul>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Logging', 'Logback', 'SLF4J'
+      ]
+    },
+    {
+      question: 'How does Spring Boot decide server port priority?',
+      answer: `<p>Spring Boot resolves the server port using a <b>priority chain</b> — highest wins.</p>
+<p><b>Priority order (highest to lowest):</b></p>
+<ol>
+  <li><b>Command-line argument</b> — java -jar app.jar --server.port=9090</li>
+  <li><b>Environment variable</b> — SERVER_PORT=9090</li>
+  <li><b>Profile-specific properties</b> — application-prod.properties with server.port=9090</li>
+  <li><b>Default properties file</b> — application.properties or application.yml</li>
+  <li><b>Hardcoded default</b> — port 8080</li>
+</ol>
+<pre><code># application.yml (priority 4)
+server:
+  port: 8081
+
+# application-prod.yml (priority 3 — overrides when prod profile active)
+server:
+  port: 8082
+
+# Command-line (priority 1 — wins)
+java -jar app.jar --server.port=9090
+# Result: 9090
+
+# Environment variable (priority 2)
+SERVER_PORT=7070 java -jar app.jar
+# Result: 7070 (env var beats properties file)
+
+# Random port for testing
+server.port=0  # Spring Boot picks a random available port
+</code></pre>
+<p><b>Interview tip:</b> The full property resolution order is the same for ALL Spring Boot properties. Mnemonic: <b>Command line > Env vars > Profile properties > Default properties > Hardcoded defaults</b>.</p>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Configuration', 'Server', 'Properties'
+      ]
+    },
+    {
+      question: 'What happens internally when you hit a REST endpoint?',
+      answer: `<p>A request flows through the <b>DispatcherServlet</b> and interceptors before reaching your controller.</p>
+<p><b>Request flow:</b></p>
+<ol>
+  <li><b>Client sends HTTP request</b></li>
+  <li><b>Embedded Tomcat</b> passes request to DispatcherServlet.</li>
+  <li><b>DispatcherServlet</b> consults HandlerMapping to find the controller method (URL path + HTTP method).</li>
+  <li><b>Filters</b> execute (Security, CORS, etc.).</li>
+  <li><b>HandlerAdapter</b> invokes the controller method.</li>
+  <li><b>MethodArgumentResolver</b> converts request data to method parameters (@PathVariable, @RequestBody, @RequestParam).</li>
+  <li><b>Controller method executes</b> — business logic runs.</li>
+  <li><b>HttpMessageConverter</b> (Jackson) serializes the return object to JSON.</li>
+  <li><b>Response</b> flows back through filters to the client.</li>
+</ol>
+<pre><code>@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/{id}")              // Step 3: mapped by HandlerMapping
+    public User getUser(
+            @PathVariable Long id) {   // Step 6: extracted by resolver
+        return userService.findById(id); // Step 7: business logic
+        // Step 8: Jackson converts User to JSON
+    }
+}
+// GET /api/users/1
+// Tomcat → DispatcherServlet → HandlerMapping → Filters → Controller → JSON
+</code></pre>
+<p><b>Exception path:</b> If controller throws, DispatcherServlet looks for @ExceptionHandler or global @RestControllerAdvice. If none found, default error handling kicks in.</p>`,
+      difficulty: 'Advanced',
+      tags: [
+        'Spring Boot', 'REST', 'DispatcherServlet', 'Request Flow'
+      ]
+    },
+    {
+      question: 'Why is Spring Boot preferred for cloud-native apps?',
+      answer: `<p>Spring Boot aligns with <b>12-factor app</b> principles and provides cloud-ready features out of the box.</p>
+<p><b>Key reasons:</b></p>
+<ol>
+  <li><b>Externalized configuration</b> — application.yml, env vars, config server. Config never hardcoded.</li>
+  <li><b>Fat JAR deployment</b> — Self-contained executable, perfect for containers.</li>
+  <li><b>Health & metrics</b> — Actuator endpoints (/actuator/health, /actuator/prometheus) integrate with Kubernetes probes.</li>
+  <li><b>Graceful shutdown</b> — server.shutdown=graceful lets in-flight requests complete before terminating.</li>
+  <li><b>Distributed tracing</b> — Micrometer + Zipkin/Jaeger for request tracing across services.</li>
+  <li><b>Embedded server</b> — Each pod runs its own Tomcat; no external app server needed.</li>
+  <li><b>Spring Cloud integration</b> — Service discovery, config management, circuit breakers, API gateways.</li>
+  <li><b>Containerization support</b> — Layered JARs + Buildpacks for efficient Docker images.</li>
+</ol>
+<pre><code># Dockerfile (Spring Boot fat JAR)
+FROM eclipse-temurin:17-jre
+COPY target/my-app.jar /app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+
+# Or use Spring Boot Buildpacks (no Dockerfile needed)
+./mvnw spring-boot:build-image
+</code></pre>
+<p><b>Kubernetes integration:</b></p>
+<pre><code>server:
+  port: 8080
+  shutdown: graceful
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+</code></pre>`,
+      difficulty: 'Intermediate',
+      tags: [
+        'Spring Boot', 'Cloud', 'Microservices', 'Kubernetes'
+      ]
+    },
+    {
+      question: 'What are the most common Spring Boot performance mistakes?',
+      answer: `<p>Top performance pitfalls in Spring Boot applications:</p>
+<ol>
+  <li><b>Not using connection pooling</b> — HikariCP is default, but overriding with misconfigured pool kills DB performance.
+    <pre><code>spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.idle-timeout=30000</code></pre></li>
+  <li><b>N+1 query problem with JPA</b> — Lazy-loading in a loop causes hundreds of queries.
+    <pre><code>// BAD: N+1 queries
+List&lt;Order&gt; orders = orderRepo.findAll();
+for (Order o : orders) { o.getItems().size(); } // 1 query per order!
+
+// GOOD: JOIN FETCH
+@Query("SELECT o FROM Order o JOIN FETCH o.items")
+List&lt;Order&gt; findAllWithItems();</code></pre></li>
+  <li><b>Not enabling lazy initialization</b> — All beans created at startup even if unused.
+    <pre><code>spring.main.lazy-initialization=true</code></pre></li>
+  <li><b>Synchronous blocking I/O</b> — RestTemplate blocks threads. Use WebClient for non-blocking.</li>
+  <li><b>Over-scanning components</b> — Broad @ComponentScan packages slow startup.</li>
+  <li><b>Not caching expensive operations</b> — Use @Cacheable for repeated lookups.
+    <pre><code>@Cacheable("users")
+public User findById(Long id) { ... }</code></pre></li>
+  <li><b>Excessive logging</b> — DEBUG/TRACE in production adds significant overhead.</li>
+  <li><b>Not tuning JVM</b> — Default heap is often too small.
+    <pre><code>java -Xms512m -Xmx2g -jar app.jar</code></pre></li>
+  <li><b>Serializing too much data</b> — Returning full entities instead of DTOs causes large payloads.</li>
+  <li><b>Ignoring Actuator overhead</b> — Exposing all endpoints adds processing. Be selective.</li>
+</ol>
+<p><b>Quick wins:</b> HikariCP with tuned pools, JOIN FETCH for JPA, lazy init, DTOs in API responses, production log levels, JVM heap tuning.</p>`,
+      difficulty: 'Advanced',
+      tags: [
+        'Spring Boot', 'Performance', 'Best Practices'
       ]
     }
   ]

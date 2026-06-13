@@ -1041,6 +1041,767 @@ void shouldHandleConcurrentUserCreation() throws InterruptedException {{ '{' }}
       tags: [
         'SQL'
       ]
+    },
+    {
+      question: 'Explain different types of JOINs with examples',
+      answer: `<p>JOINs combine rows from two or more tables based on a related column.</p>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr><th>JOIN Type</th><th>Returns</th><th>When to Use</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>INNER JOIN</strong></td><td>Only matching rows from both tables</td><td>Default choice — need data from both</td></tr>
+    <tr><td><strong>LEFT JOIN</strong></td><td>All rows from left + matching from right</td><td>Want all left rows, even without matches</td></tr>
+    <tr><td><strong>RIGHT JOIN</strong></td><td>All rows from right + matching from left</td><td>Rare — usually rewrite as LEFT JOIN</td></tr>
+    <tr><td><strong>FULL OUTER JOIN</strong></td><td>All rows from both tables</td><td>Find unmatched rows in either table</td></tr>
+    <tr><td><strong>CROSS JOIN</strong></td><td>Cartesian product (every combo)</td><td>Generate combinations, rarely needed</td></tr>
+    <tr><td><strong>SELF JOIN</strong></td><td>Table joined with itself</td><td>Hierarchies (manager-employee)</td></tr>
+  </tbody>
+</table>
+
+<pre ngnonbindable=""><code>-- INNER JOIN: Get orders with customer names
+SELECT o.order_id, c.name, o.total
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.id;
+
+-- LEFT JOIN: All customers, even those without orders
+SELECT c.name, COUNT(o.order_id) AS order_count
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id
+GROUP BY c.id;
+
+-- SELF JOIN: Find employees and their managers
+SELECT e.name AS employee, m.name AS manager
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.id;
+
+-- FULL OUTER JOIN: Find unmatched rows in either table
+SELECT c.name, o.order_id
+FROM customers c
+FULL OUTER JOIN orders o ON c.id = o.customer_id
+WHERE c.id IS NULL OR o.customer_id IS NULL;</code></pre>
+
+<p><strong>Interview Tip:</strong> LEFT JOIN is the most common after INNER JOIN. RIGHT JOIN can always be rewritten as LEFT JOIN by swapping tables. FULL OUTER JOIN is not supported in MySQL — use UNION of LEFT JOIN + RIGHT JOIN.</p>`,
+      difficulty: 'Beginner',
+      tags: ['SQL', 'JOINs', 'Queries']
+    },
+    {
+      question: 'What are database indexes and how do they affect performance?',
+      answer: `<p>An <strong>index</strong> is a data structure (usually B-Tree) that speeds up data retrieval at the cost of additional storage and slower writes.</p>
+
+<h4>Types of Indexes</h4>
+<ul>
+  <li><strong>B-Tree Index</strong> — Default in most databases. Good for equality, range, and ORDER BY queries.</li>
+  <li><strong>Hash Index</strong> — O(1) for exact matches only. No range queries. PostgreSQL hash indexes.</li>
+  <li><strong>Composite Index</strong> — Index on multiple columns. Follows leftmost prefix rule.</li>
+  <li><strong>Covering Index</strong> — Includes all columns needed by the query, so no table lookup needed.</li>
+  <li><strong>Partial/Filtered Index</strong> — Index only rows matching a WHERE clause.</li>
+  <li><strong>Unique Index</strong> — Enforces uniqueness. Automatically created for PRIMARY KEY and UNIQUE constraints.</li>
+</ul>
+
+<pre ngnonbindable=""><code>-- Create indexes
+CREATE INDEX idx_users_email ON users(email);                -- B-Tree
+CREATE INDEX idx_orders_comp ON orders(customer_id, order_date); -- Composite
+CREATE UNIQUE INDEX idx_users_email_uniq ON users(email);   -- Unique
+
+-- Covering index (PostgreSQL)
+CREATE INDEX idx_orders_covering ON orders(customer_id, order_date) INCLUDE (total);
+
+-- Partial index
+CREATE INDEX idx_active_users ON users(email) WHERE active = true;
+
+-- Check if index is being used
+EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'alice@example.com';</code></pre>
+
+<h4>When to Index</h4>
+<ul>
+  <li>Columns in WHERE, JOIN, ORDER BY, GROUP BY clauses</li>
+  <li>High-cardinality columns (many distinct values)</li>
+  <li>Columns queried frequently</li>
+</ul>
+
+<h4>When NOT to Index</h4>
+<ul>
+  <li>Small tables (sequential scan is faster than index lookup)</li>
+  <li>Columns with low cardinality (e.g., boolean, gender)</li>
+  <li>Tables with heavy INSERT/UPDATE — each write updates all indexes</li>
+  <li>Columns rarely used in queries</li>
+</ul>
+
+<p><strong>Rule of Thumb:</strong> A query that returns &lt;5% of rows typically benefits from an index. Above 5%, a full scan is often faster.</p>`,
+      difficulty: 'Intermediate',
+      tags: ['SQL', 'Indexes', 'Performance']
+    },
+    {
+      question: 'Explain SQL transaction isolation levels with examples',
+      answer: `<p>Isolation levels control how visible changes made by one transaction are to other concurrent transactions. Lower isolation = better performance but more anomalies.</p>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr><th>Isolation Level</th><th>Dirty Read</th><th>Non-Repeatable Read</th><th>Phantom Read</th><th>Performance</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>READ UNCOMMITTED</strong></td><td>✅ Possible</td><td>✅ Possible</td><td>✅ Possible</td><td>⚡ Fastest</td></tr>
+    <tr><td><strong>READ COMMITTED</strong></td><td>❌ Prevented</td><td>✅ Possible</td><td>✅ Possible</td><td>🟢 Default (PostgreSQL, Oracle)</td></tr>
+    <tr><td><strong>REPEATABLE READ</strong></td><td>❌ Prevented</td><td>❌ Prevented</td><td>✅ Possible*</td><td>🟡 Default (MySQL InnoDB)</td></tr>
+    <tr><td><strong>SERIALIZABLE</strong></td><td>❌ Prevented</td><td>❌ Prevented</td><td>❌ Prevented</td><td>🐢 Slowest</td></tr>
+  </tbody>
+</table>
+
+<p>*MySQL InnoDB prevents phantom reads at REPEATABLE READ using Next-Key Locking.</p>
+
+<h4>Anomalies Explained</h4>
+<ul>
+  <li><strong>Dirty Read</strong> — Reading uncommitted data from another transaction that may roll back.</li>
+  <li><strong>Non-Repeatable Read</strong> — Same query returns different results because another transaction committed an update between reads.</li>
+  <li><strong>Phantom Read</strong> — Same query returns different rows because another transaction inserted/deleted rows between reads.</li>
+</ul>
+
+<pre ngnonbindable=""><code>-- Set isolation level (PostgreSQL)
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+-- MySQL
+SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+-- Spring Boot @Transactional
+@Transactional(isolation = Isolation.READ_COMMITTED)
+public void transferMoney(Long fromId, Long toId, BigDecimal amount) {
+    accountRepository.withdraw(fromId, amount);
+    accountRepository.deposit(toId, amount);
+}</code></pre>
+
+<p><strong>Interview Tip:</strong> Most production apps use READ COMMITTED. Use SERIALIZABLE only when absolute consistency is required (e.g., financial transfers). Use optimistic locking (version column) instead of SERIALIZABLE for better throughput.</p>`,
+      difficulty: 'Advanced',
+      tags: ['SQL', 'Transactions', 'Isolation Levels']
+    },
+    {
+      question: 'What is the difference between WHERE and HAVING?',
+      answer: `<p><strong>WHERE</strong> filters rows before grouping. <strong>HAVING</strong> filters groups after aggregation.</p>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr><th>Aspect</th><th>WHERE</th><th>HAVING</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>When applied</td><td>Before GROUP BY</td><td>After GROUP BY</td></tr>
+    <tr><td>Can use aggregates</td><td>No (COUNT, SUM not available)</td><td>Yes</td></tr>
+    <tr><td>Filters</td><td>Individual rows</td><td>Groups/aggregates</td></tr>
+    <tr><td>Performance</td><td>Faster (fewer rows processed)</td><td>Slower (processes grouped data)</td></tr>
+  </tbody>
+</table>
+
+<pre ngnonbindable=""><code>-- WHERE: Filter before grouping
+SELECT department, COUNT(*) AS emp_count
+FROM employees
+WHERE salary > 50000   -- Filter individual rows first
+GROUP BY department;
+
+-- HAVING: Filter after grouping
+SELECT department, COUNT(*) AS emp_count
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 5;    -- Filter groups
+
+-- Both together (most common pattern)
+SELECT department, AVG(salary) AS avg_salary
+FROM employees
+WHERE status = 'ACTIVE'  -- Only active employees
+GROUP BY department
+HAVING AVG(salary) > 60000;  -- Only departments with high avg salary</code></pre>
+
+<p><strong>SQL Execution Order:</strong> FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</p>
+
+<p><strong>Common Mistake:</strong> Using HAVING for non-aggregate conditions that should be in WHERE. This is slower because HAVING processes more rows.</p>`,
+      difficulty: 'Beginner',
+      tags: ['SQL', 'WHERE', 'HAVING', 'Aggregation']
+    },
+    {
+      question: 'What is the difference between UNION and UNION ALL?',
+      answer: `<p>Both combine result sets of two or more SELECT statements, but handle duplicates differently.</p>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr><th>Aspect</th><th>UNION</th><th>UNION ALL</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Duplicates</td><td>Removes duplicates</td><td>Keeps all rows</td></tr>
+    <tr><td>Performance</td><td>Slower (sorts to deduplicate)</td><td>Faster (no dedup step)</td></tr>
+    <tr><td>Use When</td><td>Need unique rows</td><td>Duplicates don't matter or are impossible</td></tr>
+  </tbody>
+</table>
+
+<pre ngnonbindable=""><code>-- UNION: Unique customers from both tables
+SELECT name FROM customers_us
+UNION
+SELECT name FROM customers_eu;
+
+-- UNION ALL: All customers including duplicates
+SELECT name FROM customers_us
+UNION ALL
+SELECT name FROM customers_eu;
+
+-- Common pattern: Combine with a source column
+SELECT id, name, 'US' AS region FROM customers_us
+UNION ALL
+SELECT id, name, 'EU' AS region FROM customers_eu;</code></pre>
+
+<p><strong>Rules:</strong> Both SELECT statements must have the same number of columns, compatible data types, and same column order. Column names come from the first SELECT.</p>
+
+<p><strong>Interview Tip:</strong> Always prefer UNION ALL unless you specifically need deduplication. UNION's implicit DISTINCT can cause unexpected performance issues on large datasets.</p>`,
+      difficulty: 'Beginner',
+      tags: ['SQL', 'UNION', 'Set Operations']
+    },
+    {
+      question: 'What are Common Table Expressions (CTEs) and when to use them?',
+      answer: `<p>A <strong>CTE (Common Table Expression)</strong> is a named temporary result set defined within a SELECT, INSERT, UPDATE, or DELETE statement. It improves readability and enables recursive queries.</p>
+
+<h4>Simple CTE</h4>
+<pre ngnonbindable=""><code>-- Find departments with above-average salary
+WITH dept_avg AS (
+    SELECT department, AVG(salary) AS avg_salary
+    FROM employees
+    GROUP BY department
+)
+SELECT e.name, e.salary, d.avg_salary
+FROM employees e
+JOIN dept_avg d ON e.department = d.department
+WHERE e.salary > d.avg_salary;</code></pre>
+
+<h4>Recursive CTE (Hierarchy)</h4>
+<pre ngnonbindable=""><code>-- Employee hierarchy with manager chain
+WITH RECURSIVE org_chart AS (
+    -- Anchor: Top-level managers
+    SELECT id, name, manager_id, 1 AS level, CAST(name AS VARCHAR(1000)) AS path
+    FROM employees
+    WHERE manager_id IS NULL
+
+    UNION ALL
+
+    -- Recursive: Find subordinates
+    SELECT e.id, e.name, e.manager_id, oc.level + 1,
+           CONCAT(oc.path, ' → ', e.name)
+    FROM employees e
+    JOIN org_chart oc ON e.manager_id = oc.id
+)
+SELECT * FROM org_chart ORDER BY level, path;</code></pre>
+
+<h4>CTE vs Subquery vs Temp Table</h4>
+<table class="table table-striped table-bordered">
+  <thead><tr><th>Aspect</th><th>CTE</th><th>Subquery</th><th>Temp Table</th></tr></thead>
+  <tbody>
+    <tr><td>Readability</td><td>✅ Excellent</td><td>❌ Poor (nested)</td><td>🟡 Moderate</td></tr>
+    <tr><td>Reusability</td><td>Within same query</td><td>No</td><td>Across queries</td></tr>
+    <tr><td>Performance</td><td>Same as subquery*</td><td>Same as CTE*</td><td>Indexed, persistent</td></tr>
+    <tr><td>Scope</td><td>Single statement</td><td>Single expression</td><td>Session</td></tr>
+  </tbody>
+</table>
+<p>*Most optimizers inline CTEs. PostgreSQL materializes them with MATERIALIZED hint.</p>
+
+<p><strong>Interview Tip:</strong> Always prefer CTEs over nested subqueries for readability. Use recursive CTEs for tree/hierarchy traversal (org charts, category trees, BOM explosions).</p>`,
+      difficulty: 'Intermediate',
+      tags: ['SQL', 'CTE', 'Recursive Queries']
+    },
+    {
+      question: 'How do you use EXPLAIN to analyze and optimize queries?',
+      answer: `<p><strong>EXPLAIN</strong> shows the query execution plan — how the database retrieves data. <strong>EXPLAIN ANALYZE</strong> actually runs the query and shows real timing.</p>
+
+<h4>Key Things to Look For</h4>
+<ul>
+  <li><strong>Seq Scan</strong> — Full table scan (bad for large tables, might need an index)</li>
+  <li><strong>Index Scan</strong> — Using an index (good)</li>
+  <li><strong>Index Only Scan</strong> — Covering index, no table lookup (best)</li>
+  <li><strong>Nested Loop</strong> — For each row in outer table, scan inner table (OK for small datasets)</li>
+  <li><strong>Hash Join</strong> — Build hash table on smaller table, probe with larger (good for large joins)</li>
+  <li><strong>Merge Join</strong> — Both inputs sorted, merge them (good for already-sorted data)</li>
+  <li><strong>Sort</strong> — Explicit sort (consider an index with the right ORDER BY)</li>
+  <li><strong>Filter</strong> — Rows removed after scan (push filters into WHERE earlier)</li>
+</ul>
+
+<pre ngnonbindable=""><code>-- PostgreSQL
+EXPLAIN ANALYZE SELECT * FROM orders WHERE customer_id = 123;
+
+-- MySQL
+EXPLAIN SELECT * FROM orders WHERE customer_id = 123;
+
+-- Common output analysis:
+-- "Seq Scan on orders" → Missing index on customer_id
+-- "Index Scan using idx_customer_id" → Index is being used ✅
+-- "Filter: (total > 1000)" → Consider composite index on (customer_id, total)</code></pre>
+
+<h4>Optimization Checklist</h4>
+<ol>
+  <li>Add indexes on WHERE/JOIN/GROUP BY/ORDER BY columns</li>
+  <li>Use covering indexes (INCLUDE clause) to avoid table lookups</li>
+  <li>Limit SELECT * — only fetch columns you need</li>
+  <li>Replace subqueries with JOINs or CTEs where possible</li>
+  <li>Use LIMIT for pagination instead of fetching all rows</li>
+  <li>Check for implicit type conversions that prevent index usage</li>
+  <li>Run ANALYZE/VACUUM to keep statistics up to date</li>
+</ol>
+
+<p><strong>Gotcha:</strong> Using functions on indexed columns prevents index usage. <code>WHERE LOWER(email) = 'alice'</code> won't use the index on email. Use a functional index or store normalized values.</p>`,
+      difficulty: 'Intermediate',
+      tags: ['SQL', 'EXPLAIN', 'Query Optimization', 'Performance']
+    },
+    {
+      question: 'What is the difference between DELETE, TRUNCATE, and DROP?',
+      answer: `<table class="table table-striped table-bordered">
+  <thead>
+    <tr><th>Aspect</th><th>DELETE</th><th>TRUNCATE</th><th>DROP</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>What it removes</strong></td><td>Specific rows (WHERE)</td><td>All rows</td><td>Table + data + structure</td></tr>
+    <tr><td><strong>WHERE clause</strong></td><td>✅ Supported</td><td>❌ Not supported</td><td>N/A</td></tr>
+    <tr><td><strong>Transaction safe</strong></td><td>✅ Can rollback</td><td>🟡 DB-dependent*</td><td>❌ Cannot rollback</td></tr>
+    <tr><td><strong>Triggers fire</strong></td><td>✅ Yes</td><td>❌ No</td><td>N/A</td></tr>
+    <tr><td><strong>Auto-increment reset</strong></td><td>No</td><td>Yes</td><td>N/A</td></tr>
+    <tr><td><strong>Speed</strong></td><td>Slow (row by row)</td><td>Fast (deallocates pages)</td><td>Fast</td></tr>
+    <tr><td><strong>Foreign keys</strong></td><td>Can delete referenced rows</td><td>Must drop FK first</td><td>Cascades</td></tr>
+  </tbody>
+</table>
+
+<p>*PostgreSQL: TRUNCATE is transactional. MySQL InnoDB: TRUNCATE is NOT transactional (implicit commit).</p>
+
+<pre ngnonbindable=""><code>-- DELETE specific rows (slow, logged, rollbackable)
+DELETE FROM orders WHERE status = 'CANCELLED';
+
+-- TRUNCATE all rows (fast, minimal logging)
+TRUNCATE TABLE orders;
+
+-- TRUNCATE with CASCADE (also truncates referencing tables)
+TRUNCATE TABLE customers CASCADE;
+
+-- DROP entire table (structure + data)
+DROP TABLE orders;</code></pre>
+
+<p><strong>Interview Tip:</strong> Use DELETE for targeted removal with WHERE. Use TRUNCATE for wiping all data (e.g., staging tables, test data). Use DROP only when the table itself is no longer needed.</p>`,
+      difficulty: 'Beginner',
+      tags: ['SQL', 'DELETE', 'TRUNCATE', 'DROP']
+    },
+    {
+      question: 'Explain subqueries vs correlated subqueries with examples',
+      answer: `<p>A <strong>subquery</strong> runs independently. A <strong>correlated subquery</strong> depends on the outer query and runs once per row.</p>
+
+<h4>Simple Subquery (Independent)</h4>
+<pre ngnonbindable=""><code>-- Find employees earning above average salary
+-- Inner query runs ONCE, result is reused
+SELECT name, salary
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);</code></pre>
+
+<h4>Correlated Subquery (Dependent)</h4>
+<pre ngnonbindable=""><code>-- Find employees earning above their department's average
+-- Inner query runs for EACH row in outer query
+SELECT name, salary, department
+FROM employees e
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+    WHERE department = e.department  -- Correlates with outer row
+);</code></pre>
+
+<h4>Performance Comparison</h4>
+<table class="table table-striped table-bordered">
+  <thead><tr><th>Aspect</th><th>Simple Subquery</th><th>Correlated Subquery</th></tr></thead>
+  <tbody>
+    <tr><td>Execution</td><td>Once</td><td>Once per outer row</td></tr>
+    <tr><td>Performance</td><td>Generally fast</td><td>Can be slow on large tables</td></tr>
+    <tr><td>Optimization</td><td>Auto by optimizer</td><td>Rewrite as JOIN or window function</td></tr>
+  </tbody>
+</table>
+
+<h4>Rewrite Correlated Subquery as Window Function (Better Performance)</h4>
+<pre ngnonbindable=""><code>-- SAME result, MUCH faster on large datasets
+SELECT name, salary, department
+FROM (
+    SELECT name, salary, department,
+           AVG(salary) OVER (PARTITION BY department) AS dept_avg
+    FROM employees
+) sub
+WHERE salary > dept_avg;</code></pre>
+
+<p><strong>Interview Tip:</strong> Correlated subqueries are a code smell. Always consider rewriting as a JOIN or window function for better performance.</p>`,
+      difficulty: 'Intermediate',
+      tags: ['SQL', 'Subqueries', 'Correlated Subquery', 'Performance']
+    },
+    {
+      question: 'What are SQL window functions and how do they differ from GROUP BY?',
+      answer: `<p><strong>Window functions</strong> perform calculations across rows related to the current row, <strong>without collapsing rows</strong> like GROUP BY does.</p>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr><th>Aspect</th><th>GROUP BY</th><th>Window Functions</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Output rows</td><td>One per group</td><td>Same as input rows</td></tr>
+    <tr><td>Access to individual rows</td><td>No (only aggregates)</td><td>Yes (row + aggregate)</td></tr>
+    <tr><td>Use case</td><td>Aggregation reports</td><td>Ranking, running totals, comparisons</td></tr>
+  </tbody>
+</table>
+
+<pre ngnonbindable=""><code>-- GROUP BY: One row per department
+SELECT department, AVG(salary) FROM employees GROUP BY department;
+
+-- Window Function: ALL rows with department average
+SELECT name, department, salary,
+       AVG(salary) OVER (PARTITION BY department) AS dept_avg
+FROM employees;
+
+-- Common window functions
+SELECT name, department, salary,
+    ROW_NUMBER() OVER (PARTITION BY dept ORDER BY salary DESC) AS row_num,
+    RANK()       OVER (PARTITION BY dept ORDER BY salary DESC) AS rank_val,
+    DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC) AS dense_rank_val,
+    LAG(salary, 1) OVER (PARTITION BY dept ORDER BY salary) AS prev_salary,
+    LEAD(salary, 1) OVER (PARTITION BY dept ORDER BY salary) AS next_salary,
+    SUM(salary) OVER (PARTITION BY dept ORDER BY hire_date
+                      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total
+FROM employees;</code></pre>
+
+<h4>ROW_NUMBER vs RANK vs DENSE_RANK</h4>
+<table class="table table-striped table-bordered">
+  <thead><tr><th>Salary</th><th>ROW_NUMBER</th><th>RANK</th><th>DENSE_RANK</th></tr></thead>
+  <tbody>
+    <tr><td>100K</td><td>1</td><td>1</td><td>1</td></tr>
+    <tr><td>90K</td><td>2</td><td>2</td><td>2</td></tr>
+    <tr><td>90K</td><td>3</td><td>2</td><td>2</td></tr>
+    <tr><td>80K</td><td>4</td><td>4</td><td>3</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Interview Tip:</strong> Window functions are one of the most-tested SQL topics. Practice ranking, running totals, and year-over-year comparisons.</p>`,
+      difficulty: 'Intermediate',
+      tags: ['SQL', 'Window Functions', 'Analytics']
+    },
+    {
+      question: 'How do you handle deadlocks and what causes them?',
+      answer: `<p>A <strong>deadlock</strong> occurs when two transactions hold locks on resources that the other transaction needs, creating a circular dependency.</p>
+
+<h4>Classic Deadlock Scenario</h4>
+<pre ngnonbindable=""><code>-- Transaction A                -- Transaction B
+BEGIN;                          BEGIN;
+UPDATE accounts                 UPDATE accounts
+  SET balance = balance - 100    SET balance = balance - 50
+  WHERE id = 1;                  WHERE id = 2;
+                                -- A holds lock on id=1, needs id=2
+UPDATE accounts                 UPDATE accounts
+  SET balance = balance + 100    SET balance = balance + 50
+  WHERE id = 2;  -- BLOCKED!      WHERE id = 1;  -- BLOCKED!
+                                -- B holds lock on id=2, needs id=1
+-- DEADLOCK! Database detects and kills one transaction</code></pre>
+
+<h4>Prevention Strategies</h4>
+<ul>
+  <li><strong>Consistent lock ordering</strong> — Always lock resources in the same order (e.g., always lock lower ID first)</li>
+  <li><strong>Keep transactions short</strong> — Shorter transactions hold locks for less time</li>
+  <li><strong>Use optimistic locking</strong> — Version columns instead of row locks</li>
+  <li><strong>Set lock timeouts</strong> — <code>SET LOCK_TIMEOUT 5000</code> (PostgreSQL)</li>
+  <li><strong>Reduce isolation level</strong> — READ COMMITTED has fewer locks than SERIALIZABLE</li>
+  <li><strong>Access least rows first</strong> — Apply filters before locking</li>
+</ul>
+
+<h4>Spring Boot Retry on Deadlock</h4>
+<pre ngnonbindable=""><code>@Retryable(value = {DeadlockLoserDataAccessException.class},
+           maxAttempts = 3,
+           backoff = @Backoff(delay = 100, multiplier = 2))
+@Transactional
+public void transferMoney(Long fromId, Long toId, BigDecimal amount) {
+    // Always lock in consistent order (lower ID first)
+    Long first = Math.min(fromId, toId);
+    Long second = Math.max(fromId, toId);
+    
+    Account acc1 = accountRepository.findById(first).orElseThrow();
+    Account acc2 = accountRepository.findById(second).orElseThrow();
+    
+    acc1.setBalance(acc1.getBalance().subtract(amount));
+    acc2.setBalance(acc2.getBalance().add(amount));
+}</code></pre>
+
+<p><strong>MySQL:</strong> <code>SHOW ENGINE INNODB STATUS</code> shows last deadlock. <strong>PostgreSQL:</strong> Check <code>pg_stat_activity</code> for blocked queries.</p>`,
+      difficulty: 'Advanced',
+      tags: ['SQL', 'Deadlocks', 'Transactions', 'Spring Boot']
+    },
+    {
+      question: 'What are the different types of SQL keys (Primary, Foreign, Unique, Composite)?',
+      answer: `<table class="table table-striped table-bordered">
+  <thead>
+    <tr><th>Key Type</th><th>Purpose</th><th>NULLs Allowed</th><th>Duplicates</th><th>Example</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Primary Key</strong></td><td>Uniquely identify each row</td><td>No</td><td>No</td><td><code>id INT PRIMARY KEY</code></td></tr>
+    <tr><td><strong>Foreign Key</strong></td><td>Reference another table's PK</td><td>Yes*</td><td>Yes</td><td><code>FOREIGN KEY (user_id) REFERENCES users(id)</code></td></tr>
+    <tr><td><strong>Unique Key</strong></td><td>Ensure column values are distinct</td><td>Yes (1 NULL in MySQL, many in PostgreSQL)</td><td>No</td><td><code>email VARCHAR(255) UNIQUE</code></td></tr>
+    <tr><td><strong>Composite Key</strong></td><td>PK/Unique across multiple columns</td><td>No (if PK)</td><td>No</td><td><code>PRIMARY KEY (order_id, product_id)</code></td></tr>
+    <tr><td><strong>Surrogate Key</strong></td><td>Artificial key (auto-increment/UUID)</td><td>No</td><td>No</td><td><code>id BIGINT AUTO_INCREMENT</code></td></tr>
+    <tr><td><strong>Natural Key</strong></td><td>Business-meaningful key</td><td>No</td><td>No</td><td><code>isbn VARCHAR(13) PRIMARY KEY</code></td></tr>
+  </tbody>
+</table>
+
+<pre ngnonbindable=""><code>-- Composite primary key (junction table for many-to-many)
+CREATE TABLE order_items (
+    order_id   INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity   INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (order_id, product_id),  -- Composite key
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+-- Surrogate vs Natural key
+-- Surrogate: Auto-generated, never changes
+CREATE TABLE users (
+    id    BIGSERIAL PRIMARY KEY,     -- Surrogate key
+    email VARCHAR(255) UNIQUE NOT NULL -- Natural key candidate
+);</code></pre>
+
+<p><strong>Foreign Key NULLs:</strong> A nullable FK means the relationship is optional. E.g., <code>manager_id INT REFERENCES employees(id)</code> — NULL means no manager (CEO).</p>
+
+<p><strong>Interview Tip:</strong> Prefer surrogate keys (auto-increment/UUID) for primary keys. Natural keys change, causing cascading updates across all foreign key references.</p>`,
+      difficulty: 'Beginner',
+      tags: ['SQL', 'Keys', 'Constraints', 'Schema Design']
+    },
+    {
+      question: 'How do you implement pagination in SQL and what are the pitfalls?',
+      answer: `<p>Pagination retrieves data in chunks instead of loading entire result sets. Two main approaches: <strong>OFFSET</strong> and <strong>Keyset (cursor)</strong>.</p>
+
+<h4>OFFSET-based Pagination (Simple but Slow)</h4>
+<pre ngnonbindable=""><code>-- Page 1 (rows 1-20)
+SELECT * FROM orders ORDER BY id LIMIT 20 OFFSET 0;
+
+-- Page 2 (rows 21-40)
+SELECT * FROM orders ORDER BY id LIMIT 20 OFFSET 20;
+
+-- Spring Data JPA
+Page<Order> findAll(Pageable ofSize(20).withPage(pageNum));</code></pre>
+
+<h4>Keyset Pagination (Fast, No OFFSET)</h4>
+<pre ngnonbindable=""><code>-- First page
+SELECT * FROM orders ORDER BY id LIMIT 20;
+
+-- Next page (using last seen ID)
+SELECT * FROM orders WHERE id > :last_seen_id ORDER BY id LIMIT 20;
+
+-- With composite sort (created_at + id for uniqueness)
+SELECT * FROM orders
+WHERE (created_at, id) > (:last_created_at, :last_id)
+ORDER BY created_at, id
+LIMIT 20;</code></pre>
+
+<h4>Performance Comparison</h4>
+<table class="table table-striped table-bordered">
+  <thead><tr><th>Aspect</th><th>OFFSET Pagination</th><th>Keyset Pagination</th></tr></thead>
+  <tbody>
+    <tr><td>Page 1 speed</td><td>Fast</td><td>Fast</td></tr>
+    <tr><td>Page 10000 speed</td><td>🐢 Very slow (scips 200K rows)</td><td>⚡ Fast (indexed lookup)</td></tr>
+    <tr><td>Total count needed</td><td>Yes (for "Page X of Y")</td><td>No</td></tr>
+    <tr><td>Handles inserts</td><td>🟡 May skip/duplicate rows</td><td>✅ Consistent</td></tr>
+    <tr><td>Random page access</td><td>✅ Jump to any page</td><td>❌ Sequential only</td></tr>
+  </tbody>
+</table>
+
+<p><strong>OFFSET Problem:</strong> <code>OFFSET 100000</code> means the database still reads and discards 100,000 rows. This gets exponentially slower.</p>
+
+<p><strong>Interview Tip:</strong> Use keyset pagination for infinite scroll / feed-style UIs. Use OFFSET only when you need "Page X of Y" navigation with small page ranges.</p>`,
+      difficulty: 'Intermediate',
+      tags: ['SQL', 'Pagination', 'Performance', 'Spring Data']
+    },
+    {
+      question: 'What is the difference between clustered and non-clustered indexes?',
+      answer: `<table class="table table-striped table-bordered">
+  <thead>
+    <tr><th>Aspect</th><th>Clustered Index</th><th>Non-Clustered Index</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Storage</strong></td><td>Table data IS the index (leaf nodes = data pages)</td><td>Index + pointer to data row</td></tr>
+    <tr><td><strong>Per table</strong></td><td>Only ONE (data can only be sorted one way)</td><td>Multiple (up to 999 in SQL Server)</td></tr>
+    <tr><td><strong>Speed</strong></td><td>Faster for range queries (data is sorted)</td><td>Faster for point lookups</td></tr>
+    <tr><td><strong>Lookup</strong></td><td>Direct (no extra step)</td><td>Indirect (bookmark/key lookup)</td></tr>
+    <tr><td><strong>Example</strong></td><td>PRIMARY KEY in InnoDB (MySQL)</td><td>CREATE INDEX idx_email ON users(email)</td></tr>
+  </tbody>
+</table>
+
+<pre ngnonbindable=""><code>-- MySQL InnoDB: PRIMARY KEY is the clustered index
+-- Data is physically ordered by id
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,  -- Clustered
+    email VARCHAR(255),
+    name VARCHAR(100),
+    INDEX idx_email (email)  -- Non-clustered (secondary)
+);
+
+-- When you query:
+-- SELECT * FROM users WHERE id = 5;
+--   → Clustered: Direct lookup (1 I/O)
+
+-- SELECT * FROM users WHERE email = 'alice@example.com';
+--   → Non-clustered: Find in index → get PK → lookup in clustered (2 I/Os)
+
+-- Covering index avoids the second lookup:
+CREATE INDEX idx_email_name ON users(email, name);
+-- Now SELECT name FROM users WHERE email = 'alice@example.com';
+-- Only reads the index, no table lookup!</code></pre>
+
+<p><strong>PostgreSQL:</strong> Uses heap tables (no clustered index by default). <code>CLUSTER</code> command reorders data once but doesn't maintain order on inserts.</p>
+
+<p><strong>SQL Server:</strong> You explicitly choose clustered vs non-clustered. Default PK is clustered.</p>`,
+      difficulty: 'Intermediate',
+      tags: ['SQL', 'Indexes', 'Clustered', 'Performance']
+    },
+    {
+      question: 'How do you perform UPSERT (INSERT or UPDATE) in different databases?',
+      answer: `<p>UPSERT = insert a row, or update it if it already exists. Each database has different syntax.</p>
+
+<pre ngnonbindable=""><code>-- MySQL: INSERT ... ON DUPLICATE KEY UPDATE
+INSERT INTO users (id, name, email)
+VALUES (1, 'Alice', 'alice@example.com')
+ON DUPLICATE KEY UPDATE
+    name = VALUES(name),
+    email = VALUES(email);
+
+-- PostgreSQL: INSERT ... ON CONFLICT (upsert)
+INSERT INTO users (id, name, email)
+VALUES (1, 'Alice', 'alice@example.com')
+ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    email = EXCLUDED.email;
+
+-- SQLite: INSERT OR REPLACE
+INSERT OR REPLACE INTO users (id, name, email)
+VALUES (1, 'Alice', 'alice@example.com');
+
+-- SQL Server: MERGE
+MERGE INTO users AS target
+USING (VALUES (1, 'Alice', 'alice@example.com')) AS source (id, name, email)
+ON target.id = source.id
+WHEN MATCHED THEN UPDATE SET name = source.name, email = source.email
+WHEN NOT MATCHED THEN INSERT (id, name, email) VALUES (source.id, source.name, source.email);
+
+-- Oracle: MERGE
+MERGE INTO users target
+USING (SELECT 1 AS id, 'Alice' AS name, 'alice@example.com' AS email FROM dual) source
+ON (target.id = source.id)
+WHEN MATCHED THEN UPDATE SET target.name = source.name, target.email = source.email
+WHEN NOT MATCHED THEN INSERT (id, name, email) VALUES (source.id, source.name, source.email);</code></pre>
+
+<h4>Spring Data JPA (Database-Agnostic)</h4>
+<pre ngnonbindable=""><code>// Spring Data JPA uses merge() for upsert
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    @Query("SELECT u FROM User u WHERE u.email = :email")
+    Optional<User> findByEmail(@Param("email") String email);
+}
+
+// Usage:
+User user = userRepository.findByEmail(email)
+    .map(existing -> existing.updateName(name))  // Update
+    .orElse(new User(name, email));               // Insert
+userRepository.save(user);</code></pre>
+
+<p><strong>Interview Tip:</strong> PostgreSQL's <code>ON CONFLICT</code> is the cleanest syntax. MySQL's <code>ON DUPLICATE KEY UPDATE</code> is most commonly asked. Know the difference between <code>VALUES(col)</code> (MySQL) and <code>EXCLUDED.col</code> (PostgreSQL) for referencing the new values.</p>`,
+      difficulty: 'Intermediate',
+      tags: ['SQL', 'UPSERT', 'MySQL', 'PostgreSQL', 'Spring Data']
+    },
+    {
+      question: 'How do you prevent SQL injection and what are prepared statements?',
+      answer: `<p><strong>SQL Injection</strong> occurs when untrusted input is concatenated directly into SQL queries, allowing attackers to execute arbitrary SQL.</p>
+
+<h4>Vulnerable Code (NEVER do this)</h4>
+<pre ngnonbindable=""><code>// Java — VULNERABLE
+String sql = "SELECT * FROM users WHERE email = '" + email + "'";
+// Input: ' OR '1'='1  →  SELECT * FROM users WHERE email = '' OR '1'='1'
+
+// Python — VULNERABLE
+cursor.execute(f"SELECT * FROM users WHERE email = '{email}'")</code></pre>
+
+<h4>Safe: Parameterized Queries (Prepared Statements)</h4>
+<pre ngnonbindable=""><code>// Java — JDBC
+PreparedStatement stmt = conn.prepareStatement(
+    "SELECT * FROM users WHERE email = ? AND status = ?");
+stmt.setString(1, email);   // Automatically escaped
+stmt.setString(2, "ACTIVE");
+ResultSet rs = stmt.executeQuery();
+
+// Spring Data JPA — Safe by design
+@Query("SELECT u FROM User u WHERE u.email = :email")
+Optional<User> findByEmail(@Param("email") String email);
+
+// Python — psycopg2
+cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+
+// Python — SQLAlchemy ORM
+user = session.query(User).filter(User.email == email).first()</code></pre>
+
+<h4>Other Prevention Methods</h4>
+<ul>
+  <li><strong>ORM/JPA</strong> — Uses prepared statements automatically</li>
+  <li><strong>Input Validation</strong> — Whitelist allowed characters (regex for email, numeric IDs)</li>
+  <li><strong>Least Privilege</strong> — Application DB user should NOT have DROP, ALTER, or GRANT permissions</li>
+  <li><strong>Stored Procedures</strong> — Parameterized by default, but don't dynamically build SQL inside them</li>
+  <li><strong>WAF</strong> — Web Application Firewall (Cloudflare, AWS WAF) as defense-in-depth</li>
+</ul>
+
+<p><strong>Interview Tip:</strong> The #1 answer is always <strong>parameterized queries/prepared statements</strong>. ORMs like Hibernate use them by default. The danger is when developers use string concatenation for dynamic queries — always use named parameters instead.</p>`,
+      difficulty: 'Beginner',
+      tags: ['SQL', 'Security', 'SQL Injection', 'Prepared Statements']
+    },
+    {
+      question: 'What is the N+1 query problem and how do you solve it in SQL and JPA?',
+      answer: `<p>The <strong>N+1 problem</strong> occurs when you execute 1 query to fetch N parent records, then N additional queries to fetch each parent's related records.</p>
+
+<h4>Example: N+1 Problem</h4>
+<pre ngnonbindable=""><code>-- 1 query: Get all departments
+SELECT * FROM departments;  -- Returns 10 departments
+
+-- N queries: Get employees for EACH department
+SELECT * FROM employees WHERE dept_id = 1;   -- Query 1
+SELECT * FROM employees WHERE dept_id = 2;   -- Query 2
+...
+SELECT * FROM employees WHERE dept_id = 10;  -- Query 10
+-- Total: 1 + 10 = 11 queries!</code></pre>
+
+<h4>Solution 1: JOIN FETCH (SQL + JPA)</h4>
+<pre ngnonbindable=""><code>-- SQL: Single query with JOIN
+SELECT d.*, e.*
+FROM departments d
+LEFT JOIN employees e ON d.id = e.dept_id;
+
+-- JPA: @EntityGraph or JOIN FETCH
+@Query("SELECT d FROM Department d JOIN FETCH d.employees")
+List<Department> findAllWithEmployees();
+
+-- Spring Data JPA EntityGraph
+@EntityGraph(attributePaths = {"employees"})
+List<Department> findAll();</code></pre>
+
+<h4>Solution 2: Batch Fetching (JPA/Hibernate)</h4>
+<pre ngnonbindable=""><code>-- In application.properties
+spring.jpa.properties.hibernate.default_batch_fetch_size=100
+
+-- Or per collection with @BatchSize
+@Entity
+public class Department {
+    @OneToMany(mappedBy = "department")
+    @BatchSize(size = 50)  -- Fetch 50 departments' employees at once
+    private List<Employee> employees;
+}</code></pre>
+
+<h4>Solution 3: IN Clause (Batch)</h4>
+<pre ngnonbindable=""><code>-- Get all department IDs first, then fetch all employees in one query
+SELECT * FROM employees WHERE dept_id IN (1, 2, 3, ..., 10);</code></pre>
+
+<table class="table table-striped table-bordered">
+  <thead><tr><th>Approach</th><th>Queries</th><th>Best For</th></tr></thead>
+  <tbody>
+    <tr><td>JOIN FETCH</td><td>1</td><td>Need all related data immediately</td></tr>
+    <tr><td>@BatchSize</td><td>N/50 + 1</td><td>Lazy loading with fewer round trips</td></tr>
+    <tr><td>IN clause</td><td>2</td><td>Custom batch queries</td></tr>
+  </tbody>
+</table>
+
+<p><strong>How to detect N+1:</strong> Enable SQL logging with <code>spring.jpa.show-sql=true</code> and <code>spring.jpa.properties.hibernate.format_sql=true</code>. Watch for repeated similar queries.</p>`,
+      difficulty: 'Advanced',
+      tags: ['SQL', 'N+1', 'JPA', 'Hibernate', 'Performance']
     }
   ]
 };

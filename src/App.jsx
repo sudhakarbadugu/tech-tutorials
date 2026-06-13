@@ -7,6 +7,7 @@ import Content from './components/Content'
 import LandingPage from './components/LandingPage'
 import InterviewLandingPage from './components/InterviewLandingPage'
 import InterviewContent from './components/InterviewContent'
+import ScrollToTop from './components/ScrollToTop'
 
 const OnePageView = lazy(() => import('./components/OnePageView'))
 import { tutorialData, loadSubjectContent, markTopicViewed } from './data/tutorialDataLoader'
@@ -14,7 +15,7 @@ import { interviewSubjects, interviewCategories } from './data/interviewData'
 import { APP_NAME } from './constants/brand'
 import './styles/App.css'
 
-const VERSION = '2.17.1'
+const VERSION = '2.17.2'
 
 const tutorialCategories = [
   {
@@ -182,6 +183,7 @@ function TutorialView() {
           />
         </Suspense>
       )}
+      <ScrollToTop />
     </div>
   )
 }
@@ -242,6 +244,7 @@ function InterviewView() {
           theme={theme}
         />
       )}
+      <ScrollToTop />
     </div>
   )
 }
@@ -292,6 +295,7 @@ function HomeView() {
         theme={theme}
         toggleTheme={toggleTheme}
       />
+      <ScrollToTop />
     </div>
   )
 }

@@ -632,11 +632,11 @@ export const cssQuestions = {
                   Eg:
                   <br>
                   <code>
-                    <head>
+                    &lt;head>
                     <br>
-                    <link rel="stylesheet" href="mystyle.css">
+                    &lt;link rel="stylesheet" href="mystyle.css">
                     <br>
-                    </head>
+                    &lt;/head>
                     <br>
                   </code>
                 </li>
@@ -662,11 +662,11 @@ export const cssQuestions = {
                   href is path of the stylesheet.
                   <br>
                   <code>
-                    <head>
+                    &lt;head>
                     <br>
-                    <link rel="stylesheet" href="mystyle.css">
+                    &lt;link rel="stylesheet" href="mystyle.css">
                     <br>
-                    </head>
+                    &lt;/head>
                     <br>
                   </code>
                 </li>
@@ -1007,10 +1007,10 @@ export const cssQuestions = {
                     <br>
                     &nbsp;&nbsp;</style>
                     <br>
-                    &nbsp;&nbsp;<link rel="preload" href="non-critical.css" as="style"
+                    &nbsp;&nbsp;&lt;link rel="preload" href="non-critical.css" as="style"
                     onload="this.onload=null;this.rel='stylesheet'">
                     <br>
-                    </head>
+                    &lt;/head>
                   </code>
                 </li>
               </ol>`,

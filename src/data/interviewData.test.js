@@ -93,9 +93,9 @@ describe('interviewData', () => {
       expect(first.answer).toMatch(/<(?:ul|ol|p|pre|table|code|div|strong|li)\b/i)
     })
 
-    it('keeps microservices empty until content is added', () => {
-      expect(interviewSubjects.microservices.totalQuestions).toBe(0)
-      expect(interviewQuestions.microservices).toBeUndefined()
+    it('has microservices content populated', () => {
+      expect(interviewSubjects.microservices.totalQuestions).toBeGreaterThan(0)
+      expect(interviewQuestions.microservices?.questions?.length).toBeGreaterThan(0)
     })
   })
 

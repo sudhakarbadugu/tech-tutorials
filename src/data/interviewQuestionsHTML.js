@@ -27,9 +27,9 @@ export const htmlQuestions = {
                     <li><br></li>
                     <li><hr></li>
                     <li><img></li>
-                    <li><input></li>
-                    <li><link></li>
-                    <li><meta></li>
+                    <li>&lt;input></li>
+                    <li>&lt;link></li>
+                    <li>&lt;meta></li>
                   </ol>
                 </li>
               </ol>`,
@@ -65,50 +65,50 @@ export const htmlQuestions = {
       question: 'What is meta tag? What is the use of it?',
       answer: `<ol>
                 <li>
-                  The <meta> tag provides metadata about the HTML document that is not
+                  The &lt;meta> tag provides metadata about the HTML document that is not
                   displayed on the page but is used by browsers, search engines, and other web
                   services.
                 </li>
                 <li>
-                  <meta> tags always go inside the <head> element and are self-closing.
+                  &lt;meta> tags always go inside the <head> element and are self-closing.
                 </li>
                 <li>
                   <b>SEO Meta Tags:</b>
                   <code class="d-block">
-                    <meta name="description" content="Trinits is a product based company
+                    &lt;meta name="description" content="Trinits is a product based company
                     providing web solutions.">
                     <br>
-                    <meta name="keywords" content="web development, training, software">
+                    &lt;meta name="keywords" content="web development, training, software">
                     <br>
-                    <meta name="author" content="Trinits Technologies">
+                    &lt;meta name="author" content="Trinits Technologies">
                   </code>
                 </li>
                 <li>
                   <b>Viewport Meta Tag (Responsive Design):</b>
                   <code class="d-block">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
                   </code>
                 </li>
                 <li>
                   <b>Character Encoding:</b>
-                  <code class="d-block"><meta charset="UTF-8"></code>
+                  <code class="d-block">&lt;meta charset="UTF-8"></code>
                 </li>
                 <li>
                   <b>Social Media Meta Tags (Open Graph):</b>
                   <code class="d-block">
-                    <meta property="og:title" content="Page Title">
+                    &lt;meta property="og:title" content="Page Title">
                     <br>
-                    <meta property="og:description" content="Page description">
+                    &lt;meta property="og:description" content="Page description">
                     <br>
-                    <meta property="og:image" content="image-url.jpg">
+                    &lt;meta property="og:image" content="image-url.jpg">
                   </code>
                 </li>
                 <li>
                   <b>HTTP Equivalent Meta Tags:</b>
                   <code class="d-block">
-                    <meta http-equiv="refresh" content="30">
+                    &lt;meta http-equiv="refresh" content="30">
                     <br>
-                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
                   </code>
                 </li>
               </ol>`,
@@ -122,9 +122,9 @@ export const htmlQuestions = {
       answer: `<ol>
                 <li>
                   The
-                  <code><datalist></code>
+                  <code>&lt;datalist></code>
                   element provides a list of predefined options for an
-                  <code><input></code>
+                  <code>&lt;input></code>
                   element, creating an autocomplete dropdown that enhances user experience.
                 </li>
                 <li>
@@ -186,7 +186,7 @@ export const htmlQuestions = {
                 <li>Width and height are applicable for the block level elements.</li>
                 <li>Example block level Elements</li>
                 <code>
-                  <h1>,<h2>, <h3>, <h4>, <h5>, <h6>
+                  &lt;h1>,&lt;h2>, &lt;h3>, &lt;h4>, &lt;h5>, &lt;h6>
                   <br>
                   <p>
                   <br>
@@ -213,11 +213,11 @@ export const htmlQuestions = {
                 <code>
                   <a>
                   <br>
-                  <button>
+                  &lt;button>
                   <br>
                   <span>
                   <br>
-                  <label>
+                  &lt;label>
                   <br>
                 </code>
               </ol>`,
@@ -246,9 +246,9 @@ export const htmlQuestions = {
                   <tr>
                     <td>
                       <b>Examples:</b>
-                      <header>, <nav>, <main>, <article>, <section>,
-                      <aside>, <footer>, <form>, <table>, <figure>,
-                      <figcaption>, <time>, <mark>
+                      &lt;header>, &lt;nav>, &lt;main>, &lt;article>, &lt;section>,
+                      &lt;aside>, &lt;footer>, &lt;form>, <table>, &lt;figure>,
+                      &lt;figcaption>, &lt;time>, &lt;mark>
                     </td>
                     <td>
                       <b>Examples:</b>
@@ -349,37 +349,37 @@ export const htmlQuestions = {
                   <b>Semantic HTML5 Elements:</b>
                   <ul>
                     <li>
-                      <code><header></code>
+                      <code>&lt;header></code>
                       - Page/section header
                     </li>
                     <li>
-                      <code><nav></code>
+                      <code>&lt;nav></code>
                       - Navigation links
                     </li>
                     <li>
-                      <code><main></code>
+                      <code>&lt;main></code>
                       - Main content area
                     </li>
                     <li>
-                      <code><article></code>
+                      <code>&lt;article></code>
                       - Standalone content
                     </li>
                     <li>
-                      <code><section></code>
+                      <code>&lt;section></code>
                       - Thematic grouping
                     </li>
                     <li>
-                      <code><aside></code>
+                      <code>&lt;aside></code>
                       - Sidebar content
                     </li>
                     <li>
-                      <code><footer></code>
+                      <code>&lt;footer></code>
                       - Page/section footer
                     </li>
                     <li>
-                      <code><figure></code>
+                      <code>&lt;figure></code>
                       &
-                      <code><figcaption></code>
+                      <code>&lt;figcaption></code>
                       - Media with captions
                     </li>
                   </ul>
@@ -388,19 +388,19 @@ export const htmlQuestions = {
                   <b>Multimedia Elements:</b>
                   <ul>
                     <li>
-                      <code><video></code>
+                      <code>&lt;video></code>
                       with controls, autoplay, loop attributes
                     </li>
                     <li>
-                      <code><audio></code>
+                      <code>&lt;audio></code>
                       for sound content
                     </li>
                     <li>
-                      <code><canvas></code>
+                      <code>&lt;canvas></code>
                       for 2D/3D graphics
                     </li>
                     <li>
-                      <code><svg></code>
+                      <code>&lt;svg></code>
                       for scalable vector graphics
                     </li>
                   </ul>
@@ -411,11 +411,11 @@ export const htmlQuestions = {
                     <li>Input types: email, url, tel, number, date, color, range</li>
                     <li>Attributes: required, pattern, placeholder, autofocus</li>
                     <li>
-                      <code><datalist></code>
+                      <code>&lt;datalist></code>
                       for autocomplete options
                     </li>
                     <li>
-                      <code><output></code>
+                      <code>&lt;output></code>
                       for calculation results
                     </li>
                   </ul>
@@ -424,19 +424,19 @@ export const htmlQuestions = {
                   <b>Interactive Elements:</b>
                   <ul>
                     <li>
-                      <code><details></code>
+                      <code>&lt;details></code>
                       &
-                      <code><summary></code>
+                      <code>&lt;summary></code>
                       - Collapsible content
                     </li>
                     <li>
-                      <code><dialog></code>
+                      <code>&lt;dialog></code>
                       - Modal dialogs
                     </li>
                     <li>
-                      <code><progress></code>
+                      <code>&lt;progress></code>
                       &
-                      <code><meter></code>
+                      <code>&lt;meter></code>
                       - Progress indicators
                     </li>
                   </ul>
@@ -473,7 +473,7 @@ export const htmlQuestions = {
       answer: `<ol>
                 <li>
                   The HTML
-                  <code><canvas></code>
+                  <code>&lt;canvas></code>
                   element provides a 2D drawing surface that can be manipulated using JavaScript for
                   creating graphics, animations, and interactive visualizations.
                 </li>
@@ -607,7 +607,7 @@ export const htmlQuestions = {
                   </tr>
                   <tr>
                     <td>
-                      <code><a href="login.html" target="_blank">Login</a> <</code>
+                      <code>&lt;a href="login.html" target="_blank">Login&lt;/a></code>
                       <br>
                       Here
                       <b>href</b>
@@ -625,16 +625,47 @@ export const htmlQuestions = {
       ]
     },
     {
-      question: `What is called idempotent , have you used in your project ? What it's uses?`,
+      question: 'What is meant by idempotent in HTTP and where does it apply?',
       answer: `<ol>
                 <li>
-                  idempotent means Will return the same response for same query/request. Eg: HTTP
-                  GET call is idempotent.
+                  <strong>Idempotent</strong> means the same request produces the same result
+                  regardless of how many times you call it. The server state is the same after
+                  1 call or 100 calls.
+                </li>
+                <li>
+                  <b>Idempotent HTTP Methods:</b>
+                  <ul>
+                    <li><code>GET</code> — Retrieve a resource (idempotent: multiple calls return same data)</li>
+                    <li><code>HEAD</code> — Same as GET but headers only (idempotent)</li>
+                    <li><code>PUT</code> — Replace a resource at a specific URI (idempotent: same result on repeat)</li>
+                    <li><code>DELETE</code> — Remove a resource (idempotent: deleting twice has same effect as once)</li>
+                    <li><code>OPTIONS</code> — Describe communication options (idempotent)</li>
+                  </ul>
+                </li>
+                <li>
+                  <b>Non-Idempotent HTTP Methods:</b>
+                  <ul>
+                    <li><code>POST</code> — Create a new resource (NOT idempotent: each call creates new resource)</li>
+                    <li><code>PATCH</code> — Apply partial modifications (NOT idempotent: depends on current state)</li>
+                  </ul>
+                </li>
+                <li>
+                  <b>Why it matters in HTML forms:</b>
+                  <ul>
+                    <li>Browsers can safely retry <code>GET</code> requests if a user clicks back/forward</li>
+                    <li><code>POST</code> requests may show a "resubmit form?" dialog because they create resources</li>
+                    <li>Idempotency keys help APIs safely retry <code>POST</code> requests (e.g., payment processing)</li>
+                  </ul>
+                </li>
+                <li>
+                  <b>Real-world example:</b>
+                  A <code>DELETE /users/123</code> call removes user 123. Calling it 10 times still
+                  results in "user 123 doesn't exist" — the end state is the same, so it's idempotent.
                 </li>
               </ol>`,
       difficulty: 'Intermediate',
       tags: [
-        'HTML'
+        'HTML', 'HTTP', 'Forms'
       ]
     },
     {
@@ -731,7 +762,7 @@ export const htmlQuestions = {
       question: 'Tell me important tags and attributes in HTML forms?',
       answer: `<ol>
                 <li>
-                  <b><code><form></code></b>
+                  <b><code>&lt;form></code></b>
                   - Container for form elements to collect user input.
                 </li>
                 <li>
@@ -746,23 +777,23 @@ export const htmlQuestions = {
                   <b>Input Elements:</b>
                   <ul>
                     <li>
-                      <code><input type="text" name="username" required></code>
+                      <code>&lt;input type="text" name="username" required></code>
                       - Text input with validation
                     </li>
                     <li>
-                      <code><input type="email" name="email"></code>
+                      <code>&lt;input type="email" name="email"></code>
                       - Email validation
                     </li>
                     <li>
-                      <code><input type="password" name="pwd"></code>
+                      <code>&lt;input type="password" name="pwd"></code>
                       - Password field
                     </li>
                     <li>
-                      <code><input type="number" min="1" max="100"></code>
+                      <code>&lt;input type="number" min="1" max="100"></code>
                       - Number with range
                     </li>
                     <li>
-                      <code><input type="file" accept="image/*"></code>
+                      <code>&lt;input type="file" accept="image/*"></code>
                       - File upload
                     </li>
                   </ul>
@@ -771,15 +802,15 @@ export const htmlQuestions = {
                   <b>Form Controls:</b>
                   <ul>
                     <li>
-                      <code><textarea rows="4" cols="50"></code>
+                      <code>&lt;textarea rows="4" cols="50"></code>
                       - Multi-line text
                     </li>
                     <li>
-                      <code><select><option></code>
+                      <code>&lt;select>&lt;option></code>
                       - Dropdown selection
                     </li>
                     <li>
-                      <code><button type="submit"></code>
+                      <code>&lt;button type="submit"></code>
                       - Submit button
                     </li>
                   </ul>
@@ -788,11 +819,11 @@ export const htmlQuestions = {
                   <b>Accessibility & Labels:</b>
                   <ul>
                     <li>
-                      <code><label for="username"></code>
+                      <code>&lt;label for="username"></code>
                       - Associates label with input
                     </li>
                     <li>
-                      <code><fieldset><legend></code>
+                      <code>&lt;fieldset>&lt;legend></code>
                       - Groups related form elements
                     </li>
                   </ul>
@@ -978,14 +1009,14 @@ export const htmlQuestions = {
                   <b>Title Tag:</b>
                   Unique, descriptive titles (50-60 characters)
                   <code class="d-block">
-                    <title>Best Web Development Training | Trinits</title>
+                    &lt;title>Best Web Development Training | Trinits&lt;/title>
                   </code>
                 </li>
                 <li>
                   <b>Meta Description:</b>
                   Compelling summaries (150-160 characters)
                   <code class="d-block">
-                    <meta name="description" content="Learn web development with expert
+                    &lt;meta name="description" content="Learn web development with expert
                     trainers...">
                   </code>
                 </li>
@@ -993,7 +1024,7 @@ export const htmlQuestions = {
                   <b>Heading Structure:</b>
                   Logical hierarchy with one H1 per page
                   <code class="d-block">
-                    <h1>Main Topic</h1><h2>Subtopic</h2>
+                    &lt;h1>Main Topic&lt;/h1>&lt;h2>Subtopic&lt;/h2>
                   </code>
                 </li>
                 <li>
@@ -1008,7 +1039,7 @@ export const htmlQuestions = {
                   <b>Structured Data:</b>
                   Schema.org markup for rich snippets
                   <code class="d-block">
-                    <script type="application/ld+json">...</script>
+                    &lt;script type="application/ld+json">...&lt;/script>
                   </code>
                 </li>
                 <li>
@@ -1035,7 +1066,7 @@ export const htmlQuestions = {
                 </li>
                 <li>
                   <b>Web App Manifest:</b>
-                  <code class="d-block"><link rel="manifest" href="/manifest.json"></code>
+                  <code class="d-block">&lt;link rel="manifest" href="/manifest.json"></code>
                   Defines app metadata, icons, and display options.
                 </li>
                 <li>
@@ -1058,9 +1089,9 @@ if ('serviceWorker' in navigator) {
                 <li>
                   <b>Meta Tags for PWA:</b>
                   <code class="d-block">
-                    <meta name="theme-color" content="#000000">
+                    &lt;meta name="theme-color" content="#000000">
                     <br>
-                    <meta name="apple-mobile-web-app-capable" content="yes">
+                    &lt;meta name="apple-mobile-web-app-capable" content="yes">
                   </code>
                 </li>
               </ol>`,
@@ -1090,7 +1121,7 @@ if ('serviceWorker' in navigator) {
                     </li>
                     <li>
                       <b>HTML Templates:</b>
-                      Reusable markup with <template>
+                      Reusable markup with &lt;template>
                     </li>
                     <li>
                       <b>ES Modules:</b>
@@ -1190,15 +1221,15 @@ customElements.define('my-button', MyButton);
                   <b>Resource Hints:</b>
                   <ul>
                     <li>
-                      <code><link rel="preload" href="critical.css" as="style"></code>
+                      <code>&lt;link rel="preload" href="critical.css" as="style"></code>
                       - Preload critical resources
                     </li>
                     <li>
-                      <code><link rel="prefetch" href="next-page.html"></code>
+                      <code>&lt;link rel="prefetch" href="next-page.html"></code>
                       - Prefetch future resources
                     </li>
                     <li>
-                      <code><link rel="dns-prefetch" href="//example.com"></code>
+                      <code>&lt;link rel="dns-prefetch" href="//example.com"></code>
                       - DNS resolution
                     </li>
                   </ul>
@@ -1207,7 +1238,7 @@ customElements.define('my-button', MyButton);
                   <b>Critical CSS:</b>
                   Inline critical styles and defer non-critical CSS
                   <code class="d-block">
-                    <link rel="stylesheet" href="styles.css" media="print"
+                    &lt;link rel="stylesheet" href="styles.css" media="print"
                     onload="this.media='all'">
                   </code>
                 </li>
@@ -1226,11 +1257,11 @@ customElements.define('my-button', MyButton);
                   <b>Script Optimization:</b>
                   <ul>
                     <li>
-                      <code><script defer></code>
+                      <code>&lt;script defer></code>
                       for non-critical scripts
                     </li>
                     <li>
-                      <code><script async></code>
+                      <code>&lt;script async></code>
                       for independent scripts
                     </li>
                     <li>Place scripts at the end of body</li>
@@ -1322,15 +1353,15 @@ customElements.define('my-button', MyButton);
                   <b>Resource Loading Strategies:</b>
                   <ul>
                     <li>
-                      <code><link rel="preload"></code>
+                      <code>&lt;link rel="preload"></code>
                       - High priority resources
                     </li>
                     <li>
-                      <code><link rel="modulepreload"></code>
+                      <code>&lt;link rel="modulepreload"></code>
                       - ES modules
                     </li>
                     <li>
-                      <code><script type="module"></code>
+                      <code>&lt;script type="module"></code>
                       - Modern JavaScript
                     </li>
                   </ul>
@@ -1380,7 +1411,7 @@ if (CSS.supports('display', 'grid')) {
                   <ul>
                     <li>Use polyfills for missing APIs</li>
                     <li>Provide CSS fallbacks for newer properties</li>
-                    <li>Alternative image formats with <picture> element</li>
+                    <li>Alternative image formats with &lt;picture> element</li>
                   </ul>
                 </li>
                 <li>
@@ -1411,7 +1442,7 @@ if (CSS.supports('display', 'grid')) {
                   <b>Content Security Policy (CSP):</b>
                   HTTP header that prevents XSS attacks
                   <code class="d-block">
-                    <meta http-equiv="Content-Security-Policy" content="default-src 'self';
+                    &lt;meta http-equiv="Content-Security-Policy" content="default-src 'self';
                     script-src 'self'">
                   </code>
                 </li>
@@ -1431,7 +1462,7 @@ if (CSS.supports('display', 'grid')) {
                     <li>
                       Upgrade insecure requests:
                       <code>
-                        <meta http-equiv="Content-Security-Policy"
+                        &lt;meta http-equiv="Content-Security-Policy"
                         content="upgrade-insecure-requests">
                       </code>
                     </li>
@@ -1464,8 +1495,8 @@ if (CSS.supports('display', 'grid')) {
                   <b>Iframe Security:</b>
                   Use sandbox attribute to restrict iframe capabilities
                   <code class="d-block">
-                    <iframe src="content.html" sandbox="allow-scripts
-                    allow-same-origin"></iframe>
+                    &lt;iframe src="content.html" sandbox="allow-scripts
+                    allow-same-origin">&lt;/iframe>
                   </code>
                 </li>
               </ol>`,

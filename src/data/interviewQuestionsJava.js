@@ -1942,28 +1942,6 @@ public CustomException(String message) {
       ]
     },
     {
-      question: 'What is aggregation and composition?',
-      answer: `<ol>
-                <li>
-                  <strong>Aggregation:</strong>
-                  Weak “has-a” relationship. Child can live independently (e.g., Department &
-                  Student).
-                </li>
-                <li>
-                  <strong>Composition:</strong>
-                  Strong “has-a” relationship. Child’s lifecycle bound to parent (e.g., House &
-                  Room).
-                </li>
-                <li>Composition implies ownership; aggregation implies association.</li>
-                <li>Composition uses containment; aggregation uses references.</li>
-                <li>Aggregation allows reuse; composition creates tight coupling.</li>
-              </ol>`,
-      difficulty: 'Advanced',
-      tags: [
-        'Java'
-      ]
-    },
-    {
       question: 'What is List, Set, and Map?',
       answer: `<ol>
                 <li>

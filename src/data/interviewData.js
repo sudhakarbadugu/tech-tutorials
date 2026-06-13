@@ -19,6 +19,8 @@ import { dockerQuestions } from './interviewQuestionsDocker.js'
 import { awsQuestions } from './interviewQuestionsAWS.js'
 import { gitQuestions } from './interviewQuestionsGit.js'
 import { systemDesignQuestions } from './interviewQuestionsSystemDesign.js'
+import { codingQuestions } from './interviewQuestionsCoding.js'
+import { microservicesQuestions } from './interviewQuestionsMicroservices.js'
 
 export const interviewCategories = {
   backend: {
@@ -43,7 +45,7 @@ export const interviewCategories = {
   },
   fundamentals: {
     title: 'CS Fundamentals',
-    subjects: ['dsa', 'system-design']
+    subjects: ['dsa', 'system-design', 'coding']
   }
 }
 
@@ -69,8 +71,8 @@ const interviewSubjectMeta = {
   microservices: {
     title: 'Microservices Interview Questions',
     icon: '🔗',
-    description: 'Architecture patterns, service communication, resilience, and best practices.',
-    topics: []
+    description: 'Service architecture, Spring Boot, Python (FastAPI), service discovery, resilience, Docker, and event-driven patterns.',
+    topics: ['Service Discovery', 'API Gateway', 'Circuit Breaker', 'Docker', 'Spring Cloud', 'FastAPI', 'Saga', 'Kafka']
   },
   'design-patterns': {
     title: 'Design Patterns Interview Questions',
@@ -123,8 +125,8 @@ const interviewSubjectMeta = {
   sql: {
     title: 'SQL Interview Questions',
     icon: '🗃️',
-    description: 'Queries, joins, indexes, transactions, normalization, and optimization.',
-    topics: ['Queries', 'Joins', 'Indexes', 'Normalization', 'Transactions']
+    description: 'Queries, JOINs, indexes, transactions, isolation levels, window functions, CTEs, and optimization.',
+    topics: ['JOINs', 'Indexes', 'Transactions', 'Isolation Levels', 'Window Functions', 'CTEs', 'EXPLAIN', 'Pagination', 'UPSERT', 'SQL Injection']
   },
   nosql: {
     title: 'NoSQL Interview Questions',
@@ -161,6 +163,12 @@ const interviewSubjectMeta = {
     icon: '🏛️',
     description: 'Scalability, distributed systems, caching, load balancing, and databases.',
     topics: ['Scalability', 'Caching', 'Load Balancing', 'Databases', 'Microservices']
+  },
+  coding: {
+    title: 'Coding Interview Problems',
+    icon: '💻',
+    description: 'Arrays, strings, linked lists, sorting, hashing, and common LeetCode-style problems with solutions.',
+    topics: ['Arrays', 'Strings', 'Linked Lists', 'Sorting', 'Hashing', 'Sliding Window', 'Stack']
   }
 }
 
@@ -182,7 +190,9 @@ export const interviewQuestions = {
   docker: { questions: dockerQuestions.questions },
   aws: { questions: awsQuestions.questions },
   git: { questions: gitQuestions.questions },
-  'system-design': { questions: systemDesignQuestions.questions }
+  'system-design': { questions: systemDesignQuestions.questions },
+  coding: { questions: codingQuestions.questions },
+  microservices: { questions: microservicesQuestions.questions }
 }
 
 export const interviewSubjects = Object.fromEntries(
