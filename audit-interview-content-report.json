@@ -1,0 +1,619 @@
+{
+  "summary": {
+    "total": 75,
+    "byType": {
+      "grammar": 0,
+      "html-escaping": 75
+    },
+    "bySubject": {
+      "javascript": 36,
+      "react": 4,
+      "angular": 10,
+      "dsa": 4,
+      "html": 3,
+      "css": 18
+    }
+  },
+  "findings": [
+    {
+      "subject": "javascript",
+      "index": 7,
+      "label": "javascript[7]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 7,
+      "label": "javascript[7]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 8,
+      "label": "javascript[8]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 21,
+      "label": "javascript[21]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 22,
+      "label": "javascript[22]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 22,
+      "label": "javascript[22]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 24,
+      "label": "javascript[24]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 24,
+      "label": "javascript[24]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 24,
+      "label": "javascript[24]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 24,
+      "label": "javascript[24]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 24,
+      "label": "javascript[24]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 31,
+      "label": "javascript[31]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 34,
+      "label": "javascript[34]",
+      "type": "html-escaping",
+      "issue": "Unescaped <a> tag in answer",
+      "snippet": "<a>"
+    },
+    {
+      "subject": "javascript",
+      "index": 35,
+      "label": "javascript[35]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "react",
+      "index": 74,
+      "label": "react[74]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "react",
+      "index": 74,
+      "label": "react[74]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "react",
+      "index": 74,
+      "label": "react[74]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "react",
+      "index": 75,
+      "label": "react[75]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "angular",
+      "index": 8,
+      "label": "angular[8]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "angular",
+      "index": 8,
+      "label": "angular[8]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div class=\"mt-2\">"
+    },
+    {
+      "subject": "angular",
+      "index": 12,
+      "label": "angular[12]",
+      "type": "html-escaping",
+      "issue": "Unescaped <span> tag in answer",
+      "snippet": "<span class=\"fw-bold\">"
+    },
+    {
+      "subject": "angular",
+      "index": 12,
+      "label": "angular[12]",
+      "type": "html-escaping",
+      "issue": "Unescaped <span> tag in answer",
+      "snippet": "<span class=\"fw-bold\">"
+    },
+    {
+      "subject": "angular",
+      "index": 12,
+      "label": "angular[12]",
+      "type": "html-escaping",
+      "issue": "Unescaped <span> tag in answer",
+      "snippet": "<span class=\"fw-bold\">"
+    },
+    {
+      "subject": "angular",
+      "index": 14,
+      "label": "angular[14]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div class=\"mt-2\">"
+    },
+    {
+      "subject": "angular",
+      "index": 14,
+      "label": "angular[14]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "angular",
+      "index": 14,
+      "label": "angular[14]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "angular",
+      "index": 14,
+      "label": "angular[14]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "angular",
+      "index": 17,
+      "label": "angular[17]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "dsa",
+      "index": 0,
+      "label": "dsa[0]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div class=\"card mt-2\">"
+    },
+    {
+      "subject": "dsa",
+      "index": 0,
+      "label": "dsa[0]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div class=\"card-body\">"
+    },
+    {
+      "subject": "dsa",
+      "index": 1,
+      "label": "dsa[1]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div class=\"card mt-2\">"
+    },
+    {
+      "subject": "dsa",
+      "index": 1,
+      "label": "dsa[1]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div class=\"card-body\">"
+    },
+    {
+      "subject": "html",
+      "index": 15,
+      "label": "html[15]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div class=\"text-primary font-weight-bold\">"
+    },
+    {
+      "subject": "html",
+      "index": 15,
+      "label": "html[15]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div class=\"text-primary font-weight-bold\">"
+    },
+    {
+      "subject": "html",
+      "index": 15,
+      "label": "html[15]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 0,
+      "label": "css[0]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 1,
+      "label": "css[1]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 1,
+      "label": "css[1]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 1,
+      "label": "css[1]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 1,
+      "label": "css[1]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 3,
+      "label": "css[3]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 5,
+      "label": "css[5]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 5,
+      "label": "css[5]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 7,
+      "label": "css[7]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 7,
+      "label": "css[7]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div id=\"parent\" style=\"display:none;\">"
+    },
+    {
+      "subject": "css",
+      "index": 7,
+      "label": "css[7]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div id=\"child\" style=\"display:block;\"\">"
+    },
+    {
+      "subject": "css",
+      "index": 7,
+      "label": "css[7]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 7,
+      "label": "css[7]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div id=\"parent\" style=\"visibility:hidden;\"<\n              …"
+    },
+    {
+      "subject": "css",
+      "index": 7,
+      "label": "css[7]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div id=\"child\" style=\"visibility:visible;\">"
+    },
+    {
+      "subject": "css",
+      "index": 16,
+      "label": "css[16]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 16,
+      "label": "css[16]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 16,
+      "label": "css[16]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    },
+    {
+      "subject": "css",
+      "index": 17,
+      "label": "css[17]",
+      "type": "html-escaping",
+      "issue": "Unescaped <div> tag in answer",
+      "snippet": "<div>"
+    }
+  ]
+}

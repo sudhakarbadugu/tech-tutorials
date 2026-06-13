@@ -97,6 +97,14 @@ describe('interviewData', () => {
       expect(interviewSubjects.microservices.totalQuestions).toBeGreaterThan(0)
       expect(interviewQuestions.microservices?.questions?.length).toBeGreaterThan(0)
     })
+
+    it('has coding and typescript subjects populated for fundamentals prep', () => {
+      expect(interviewSubjects.coding.totalQuestions).toBeGreaterThan(0)
+      expect(interviewSubjects.typescript.totalQuestions).toBeGreaterThan(0)
+      expect(interviewCategories.fundamentals.subjects).toEqual(
+        expect.arrayContaining(['coding', 'system-design', 'dsa'])
+      )
+    })
   })
 
   describe('interviewCategories', () => {

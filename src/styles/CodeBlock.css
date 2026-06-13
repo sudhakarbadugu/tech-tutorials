@@ -1,0 +1,179 @@
+/* ===========================================================
+   CodeBlock - syntax-highlighted code (Shiki)
+   =========================================================== */
+
+.code-block {
+  --cb-radius: 8px;
+  --cb-bg: #f6f8fa;
+  --cb-fg: #1f2328;
+  --cb-header-bg: #eaeef2;
+  --cb-header-fg: #57606a;
+  --cb-border: #d0d7de;
+  --cb-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+
+  position: relative;
+  margin: 16px 0;
+  border-radius: var(--cb-radius);
+  overflow: hidden;
+  background: var(--cb-bg);
+  color: var(--cb-fg);
+  border: 1px solid var(--cb-border);
+  box-shadow: var(--cb-shadow);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+[data-theme="dark"] .code-block {
+  --cb-bg: #0d1117;
+  --cb-fg: #e6edf3;
+  --cb-header-bg: #161b22;
+  --cb-header-fg: #8b949e;
+  --cb-border: #30363d;
+  --cb-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* ----- Header bar ----- */
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--cb-header-bg);
+  color: var(--cb-header-fg);
+  border-bottom: 1px solid var(--cb-border);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.code-block-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-block-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid var(--cb-border);
+  color: var(--cb-header-fg);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.code-block-copy:hover {
+  background: var(--accent-color);
+  color: #fff;
+  border-color: var(--accent-color);
+}
+
+.code-block-copy:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* ----- Body / highlighted area ----- */
+.code-block-body {
+  position: relative;
+  overflow-x: auto;
+  background: var(--cb-bg);
+}
+
+.code-block-body::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block-body::-webkit-scrollbar-thumb {
+  background: var(--cb-border);
+  border-radius: 4px;
+}
+
+.code-block-highlighted pre,
+.code-block-plain {
+  margin: 0;
+  padding: 14px 16px;
+  background: var(--cb-bg) !important;
+  color: var(--cb-fg);
+  font-family: 'Fira Code', 'JetBrains Mono', 'SFMono-Regular', Consolas,
+    'Liberation Mono', Menlo, monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.code-block-highlighted code,
+.code-block-plain code {
+  font-family: inherit;
+  font-size: inherit;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+/* Shiki emits inline color styles on spans; let the theme drive colors. */
+.code-block-highlighted pre.shiki,
+.code-block-highlighted .shiki {
+  background-color: var(--cb-bg) !important;
+  color: var(--cb-fg);
+}
+
+.code-block-highlighted .shiki span {
+  /* Keep shiki inline styles; only the container adopts theme bg/fg. */
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
+}
+
+/* Optional line numbers */
+.code-block-body.with-line-numbers .code-block-highlighted pre,
+.code-block-body.with-line-numbers .code-block-plain {
+  counter-reset: cb-line;
+  padding-left: 3.5rem;
+}
+
+.code-block-body.with-line-numbers .code-block-highlighted pre > code > .line,
+.code-block-body.with-line-numbers .code-block-plain code > .line {
+  counter-increment: cb-line;
+  display: inline-block;
+  width: 100%;
+  position: relative;
+}
+
+.code-block-body.with-line-numbers .code-block-highlighted pre > code > .line::before,
+.code-block-body.with-line-numbers .code-block-plain code > .line::before {
+  content: counter(cb-line);
+  position: absolute;
+  left: -2.75rem;
+  width: 2rem;
+  text-align: right;
+  color: var(--cb-header-fg);
+  opacity: 0.55;
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----- Print friendly ----- */
+@media print {
+  .code-block {
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+  .code-block-copy,
+  .code-block-header {
+    display: none;
+  }
+}
+
+/* ----- Reduced motion ----- */
+@media (prefers-reduced-motion: reduce) {
+  .code-block-copy {
+    transition: none;
+  }
+}

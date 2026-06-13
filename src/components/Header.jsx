@@ -16,11 +16,12 @@ import {
   Cloud,
   Cpu,
   Target,
-  MessageSquare,
-  ChevronRight
+  ChevronRight,
+  Search
 } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { APP_NAME } from '../constants/brand'
+import ProgressMenu from './ProgressMenu'
 
 const categoryIcons = {
   aiml: Brain,
@@ -71,10 +72,22 @@ function Header({
   showBackButton,
   showMenuButton = true,
   mode = 'tutorials',
-  categories = []
+  categories = [],
+  onOpenSearch
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        onOpenSearch?.()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onOpenSearch])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -243,6 +256,19 @@ function Header({
 
       <div className="header-right">
         <span className="version-badge">v{version}</span>
+        {onOpenSearch && (
+          <button
+            type="button"
+            className="search-trigger"
+            onClick={onOpenSearch}
+            title="Search (Ctrl+K)"
+            aria-label="Open search"
+          >
+            <Search size={18} />
+            <span className="search-shortcut">Ctrl K</span>
+          </button>
+        )}
+        <ProgressMenu />
         <button
           className="theme-toggle"
           onClick={toggleTheme}

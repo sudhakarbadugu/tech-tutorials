@@ -1,5 +1,5 @@
 // Auto-generated from rewritten modules — do not edit manually
-// Generated: 2026-06-13T02:28:35.876Z
+// Generated: 2026-06-13T18:27:04.381Z
 
 export const aiStructure = {
   module1: {
@@ -1094,6 +1094,10 @@ export const multimodalStructure = {
       {
         id: 'image-captioning',
         title: 'Image Captioning'
+      },
+      {
+        id: 'encoder-decoder-architecture',
+        title: 'Encoder Decoder Architecture'
       },
       {
         id: 'attention-mechanism',

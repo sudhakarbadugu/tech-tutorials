@@ -1,5 +1,5 @@
 // Auto-generated from rewritten modules
-// Generated: 2026-06-13T02:28:35.863Z
+// Generated: 2026-06-13T18:27:04.366Z
 
 export const aiStructure = {
   module1: {
@@ -3511,11 +3511,11 @@ Risk-Seeking (Convex):
   U(w) = w²
   EU of gamble > U of expected value
 
-Example: Gamble G = {0.5: \$0, 0.5: \$100}
-  Expected value = \$50
+Example: Gamble G = {0.5: $0, 0.5: $100}
+  Expected value = $50
 
   Risk-averse: EU = 0.5×√0 + 0.5×√100 = 5
-    U(50) = √50 ≈ 7.07 > 5 → prefers \$50 for sure
+    U(50) = √50 ≈ 7.07 > 5 → prefers $50 for sure
 
   Risk-neutral: EU = 0.5×0 + 0.5×100 = 50
     U(50) = 50 → indifferent
@@ -3934,7 +3934,7 @@ Ans: Nash equilibrium is about stability (no one wants to deviate); Pareto optim
           example: {
             title: 'VCG Mechanism Example (Public Project)',
             code: `Setting: Decide whether to build a bridge.
-  Cost = \$90. Three agents report valuations.
+  Cost = $90. Three agents report valuations.
 
 True valuations:
   v1 = 40, v2 = 30, v3 = 20
@@ -20627,12 +20627,12 @@ Ans: When the task requires understanding and classification of existing text (s
             title: 'Fine-Tuning vs. From-Scratch',
             code: `Train from scratch:
   Data: 1B+ tokens
-  Cost: \$100,000+
+  Cost: $100,000+
   Time: Weeks on GPU clusters
 
 Fine-tune BERT-Base:
   Data: 10K labeled examples
-  Cost: ~\$50
+  Cost: ~$50
   Time: Minutes to hours
   Result: 94% accuracy on task`,
             output: 'Fine-tuning is 1000x cheaper and faster while delivering competitive results.',
@@ -20788,8 +20788,8 @@ Engineered prompt:
           example: {
             title: 'CoT for Arithmetic',
             code: `Prompt:
-  "A bat and ball cost \$11.
-   The bat costs \$10 more than the ball.
+  "A bat and ball cost $11.
+   The bat costs $10 more than the ball.
    How much does the ball cost?
 
    Let's solve step by step."
@@ -20802,7 +20802,7 @@ Output:
   2x = 1
   x = 0.5
 
-  The ball costs \$0.50`,
+  The ball costs $0.50`,
             output: 'Without CoT, models often blurt the intuitive but wrong answer ($1).',
             type: 'code'
           }
@@ -21045,17 +21045,17 @@ After RLHF (aligned):
             code: `GPT-3 (175B params):
   Memory: 700 GB (FP32)
   Inference: A100 GPU cluster
-  Cost: \$0.02 / 1K tokens
+  Cost: $0.02 / 1K tokens
 
 Compressed GPT-3 (INT8):
   Memory: 175 GB
   Inference: Single A100
-  Cost: \$0.005 / 1K tokens
+  Cost: $0.005 / 1K tokens
 
 Distilled model (1.5B):
   Memory: 6 GB
   Inference: Consumer GPU / CPU
-  Cost: \$0.0001 / 1K tokens`,
+  Cost: $0.0001 / 1K tokens`,
             output: 'Compression can reduce cost by 100x with modest accuracy trade-offs.',
             type: 'code'
           }
@@ -21703,14 +21703,14 @@ has low PP but is useless.`,
           example: {
             title: 'Example: CoT vs. Direct Prompting',
             code: `Direct Prompt:
-  "A bat and ball cost \$11.
-   The bat costs \$10 more than the ball.
+  "A bat and ball cost $11.
+   The bat costs $10 more than the ball.
    How much does the ball cost?"
-  → Output: "\$1.00" (incorrect — intuitive trap)
+  → Output: "$1.00" (incorrect — intuitive trap)
 
 Chain-of-Thought Prompt:
-  "A bat and ball cost \$11.
-   The bat costs \$10 more than the ball.
+  "A bat and ball cost $11.
+   The bat costs $10 more than the ball.
    How much does the ball cost?
    Let's think step by step."
 
@@ -21722,7 +21722,7 @@ Chain-of-Thought Prompt:
     2x = 1
     x = 0.5
 
-  Answer: \$0.50`,
+  Answer: $0.50`,
             output: 'CoT improves reasoning accuracy by 20–50% on benchmarks like GSM8K and MultiArith.',
             type: 'code'
           }
@@ -22540,7 +22540,7 @@ Stage 3 — RLHF (optional):
   → Requires 2× A100 GPUs
 
 For 1M tokens/day:
-  Compute: ~\$500/day on cloud A100s
+  Compute: ~$500/day on cloud A100s
   Latency: ~50 ms/token
 
 Goal of efficient LLMs:
@@ -26705,6 +26705,10 @@ export const multimodalStructure = {
         title: 'Image Captioning'
       },
       {
+        id: 'encoder-decoder-architecture',
+        title: 'Encoder Decoder Architecture'
+      },
+      {
         id: 'attention-mechanism',
         title: 'Attention Mechanism'
       },
@@ -26951,7 +26955,7 @@ House Price Example:
 
   Price = 0.2(1200) + 15(3) + 5(7) + 100
         = 240 + 45 + 35 + 100
-        = 420 (\$420,000)`,
+        = 420 ($420,000)`,
             output: 'Each coefficient is directly interpretable: each additional square foot adds $200.',
             type: 'code'
           }
@@ -30469,80 +30473,85 @@ Ans: It limits backpropagation to k steps, reducing memory and computation but c
       ]
     },
     'encoder-decoder': {
-      title: 'Encoder-Decoder Architecture',
-      subtitle: 'Sequence-to-sequence learning for translation and generation',
+      title: 'Encoder-Decoder Models',
+      subtitle: 'Sequence-to-sequence learning for translation, summarization, and beyond',
       sections: [
         {
-          heading: 'What is Encoder-Decoder?',
-          text: 'The <strong>Encoder-Decoder</strong> (or Seq2Seq) architecture is the foundational framework for machine translation, text summarization, and speech recognition. The <strong>encoder</strong> reads the input sequence and compresses it into a fixed-length context vector; the <strong>decoder</strong> generates the output sequence one token at a time conditioned on this vector.',
+          heading: 'What is an Encoder-Decoder Model?',
+          text: 'An <strong>encoder-decoder</strong> (or seq2seq) model consists of two neural networks: an <strong>encoder</strong> that reads the input sequence and compresses it into a context vector, and a <strong>decoder</strong> that generates the output sequence from this vector. It is the foundational architecture for machine translation, summarization, and speech-to-text.',
           list: [
-            'Encoder: processes input tokens sequentially, building a representation',
-            'Context vector: fixed-size summary of the entire input sequence',
-            'Decoder: generates output tokens autoregressively (one by one)',
-            'Training: teacher forcing — feed ground-truth previous tokens as decoder inputs'
+            'Encoder processes the input sequence and produces a fixed-length context vector',
+            'Decoder generates the output sequence autoregressively, one token at a time',
+            'Can handle different input and output lengths (unlike fixed-size classifiers)',
+            'Attention allows the decoder to focus on relevant encoder states per output token'
           ]
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'The decoder outputs a probability distribution over the vocabulary at each step, conditioned on the context vector and all previously generated tokens.',
+          text: 'Without attention, the decoder conditions solely on the final encoder hidden state. With attention, it conditions on a weighted sum of all encoder states.',
           example: {
-            title: 'Example: Machine translation step',
-            code: `Input (English): "She is happy"
+            title: 'Example: Encoder-decoder with attention for translation',
+            code: `English input: "The cat sat"
 
-Encoder:
-  h_1 = RNN(emb("She"), h_0)
-  h_2 = RNN(emb("is"), h_1)
-  h_3 = RNN(emb("happy"), h_2)
-  Context vector c = h_3
+Encoder (BiLSTM):
+  h1 = encode("The")
+  h2 = encode("cat")
+  h3 = encode("sat")
 
-Decoder:
-  Step 1: P("Ella" | c, <sos>) = 0.85
-  Step 2: P("está" | c, "Ella") = 0.78
-  Step 3: P("feliz" | c, "Ella está") = 0.91
-  Step 4: P(</eos> | ...) = 0.95`,
-            output: 'The decoder generates the Spanish translation token by token, each conditioned on the context vector and previous outputs.',
+Decoder generating French "Le chat était assis":
+
+For output word "chat":
+  attention weights:
+    α(The)  = 0.05
+    α(cat)  = 0.88  ← HIGH
+    α(sat)  = 0.07
+
+  context = 0.05·h1 + 0.88·h2 + 0.07·h3
+
+  P("chat" | context, previous_outputs) = high`,
+            output: 'Attention tells the decoder which input word to focus on for each output word.',
             type: 'code'
           }
         },
         {
           heading: 'Important Differences',
-          text: 'Encoder-decoder variants and their trade-offs.',
+          text: 'Comparing encoder-decoder variants and their attention mechanisms.',
           table: {
             headers: [
               'Variant',
-              'Encoder',
-              'Decoder',
-              'Best For',
-              'Limitation'
+              'Context Vector',
+              'Alignment',
+              'Strength',
+              'Weakness'
             ],
             rows: [
               [
                 'Vanilla Seq2Seq',
-                'RNN',
-                'RNN',
-                'Short sequences',
+                'Final encoder state only',
+                'None',
+                'Simple',
                 'Bottleneck on long inputs'
               ],
               [
                 'Seq2Seq + Attention',
-                'RNN / CNN',
-                'RNN + attention',
-                'Long sequences',
-                'Sequential decoding is slow'
+                'Weighted sum of all states',
+                'Learned per output',
+                'No bottleneck',
+                'Slower, more compute'
               ],
               [
                 'Transformer',
-                'Self-attention stack',
-                'Self + cross-attention',
-                'Parallel training',
-                'Quadratic memory cost'
+                'Self-attention + cross-attention',
+                'Multi-head parallel',
+                'Best quality, parallelizable',
+                'Quadratic memory'
               ],
               [
-                'T5',
-                'Transformer encoder',
-                'Transformer decoder',
-                'Unified text-to-text',
-                'Heavy compute'
+                'Pointer-Generator',
+                'Attention + copy mechanism',
+                'Can copy from input',
+                'Handles OOV words',
+                'More complex training'
               ]
             ]
           }
@@ -30550,42 +30559,42 @@ Decoder:
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using a fixed-size context vector for very long inputs (fix: attention mechanisms replace the single vector with a dynamic weighted combination of all encoder states, eliminating the bottleneck)',
-            `Mistake 2: Forgetting teacher forcing during training but not at inference (fix: train with teacher forcing (feed ground truth as decoder input), but at inference use the model's own outputs — this train/test mismatch can hurt performance if not handled with scheduled sampling)`,
-            'Mistake 3: Ignoring the exposure bias problem (fix: the decoder never sees its own errors during training; use scheduled sampling or reinforcement learning to expose it to realistic inference-time inputs)',
-            'Mistake 4: Using identical architectures for encoder and decoder (fix: the encoder needs to capture meaning, the decoder needs to generate fluent text; use bidirectional encoder + unidirectional decoder, and often different layer depths)'
+            'Mistake 1: Using encoder-decoder without attention for long sequences (fix: the fixed context vector is a severe bottleneck; always add attention for sequences longer than ~15 tokens)',
+            'Mistake 2: Teacher-forcing the decoder 100% of the time during training (fix: at inference the decoder sees its own previous outputs, not ground truth; use scheduled sampling or curriculum learning to bridge the exposure gap)',
+            'Mistake 3: Forgetting to reverse the input sequence for vanilla LSTM encoders (fix: reversing the input brings the first and last words closer in the hidden state, improving translation quality — a historical trick still useful for simple models)',
+            'Mistake 4: Using the same vocabulary for source and target in multilingual systems (fix: shared vocabularies force unrelated languages to share tokens; use separate or jointly learned subword vocabularies like SentencePiece)'
           ]
         },
         {
           heading: 'Real-World Application',
-          text: 'Encoder-decoder architectures power virtually all sequence generation systems.',
+          text: 'Encoder-decoder architectures are at the heart of modern language technology.',
           list: [
-            `Machine translation: Google Translate's original NMT system used a deep LSTM encoder-decoder with attention`,
-            'Text summarization: encoder reads a news article, decoder generates a headline or abstract (e.g., T5, BART)',
-            'Speech recognition: encoder processes audio features, decoder outputs text transcripts (Listen, Attend and Spell)',
-            'Image captioning: CNN encoder extracts image features, RNN/Transformer decoder generates descriptive sentences'
+            `Machine translation: Google Translate, DeepL, and OpenAI's translation API all use attention-based encoder-decoder or transformer architectures`,
+            'Text summarization: news article summarizers encode the full article and decode a concise headline or abstract',
+            'Speech recognition: Whisper encodes audio spectrograms and decodes text transcripts in a single encoder-decoder pass',
+            'Code generation: GitHub Copilot encodes surrounding code context and decodes the next lines of code autoregressively'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Encoder-decoder = encoder compresses input + decoder generates output',
-            'Fixed context vector creates a bottleneck for long sequences',
-            'Attention solves the bottleneck by letting the decoder focus on relevant encoder states',
-            'Teacher forcing accelerates training but creates exposure bias at inference',
-            'Transformers replaced RNN encoders/decoders for parallelizable, large-scale training'
+            'Encoder-decoder = encoder (compress input) + decoder (generate output)',
+            'Can handle variable-length input and output sequences',
+            'Attention removes the bottleneck of a fixed context vector',
+            'Teacher forcing during training creates an exposure bias — mitigate with scheduled sampling',
+            'Transformers are the modern evolution, replacing recurrence with full self-attention'
           ]
         },
         {
           heading: 'Practice Questions',
           text: 'Test your understanding.',
           list: [
-            `Q1: What is the bottleneck problem in vanilla encoder-decoder models?
-Ans: The encoder compresses the entire input into a single fixed-length context vector, making it hard to preserve information from long inputs.`,
-            `Q2: What is teacher forcing and why is it used during training?
-Ans: Teacher forcing feeds the ground-truth previous token as the decoder's next input, which speeds up convergence by avoiding error accumulation during training.`,
-            `Q3: How does attention improve the encoder-decoder architecture?
-Ans: Instead of a single context vector, attention lets the decoder dynamically focus on different parts of the input at each generation step, preserving information from long sequences.`
+            `Q1: What is the "bottleneck problem" in vanilla encoder-decoder models?
+Ans: The entire input sequence must be compressed into a single fixed-size vector, losing information for long sequences.`,
+            `Q2: How does attention solve the bottleneck problem?
+Ans: The decoder accesses all encoder hidden states via a weighted sum, dynamically focusing on relevant input tokens per output token.`,
+            `Q3: What is "exposure bias" and why does it matter?
+Ans: The decoder is trained on ground-truth inputs but tested on its own predictions, causing error accumulation at inference.`
           ]
         }
       ]
@@ -30707,6 +30716,128 @@ Ans: It allows the decoder to focus on specific image regions when generating ea
 Ans: BLEU measures n-gram overlap with reference captions but ignores semantic equivalence — two valid but differently worded captions score poorly.`,
             `Q3: How does the "generic caption" problem arise and how can it be addressed?
 Ans: Training data biases lead models to safe, vague captions; diverse beam search or reinforcement learning with specificity rewards encourages richer descriptions.`
+          ]
+        }
+      ]
+    },
+    'encoder-decoder-architecture': {
+      title: 'Encoder-Decoder Architecture',
+      subtitle: 'Sequence-to-sequence learning for translation and generation',
+      sections: [
+        {
+          heading: 'What is Encoder-Decoder?',
+          text: 'The <strong>Encoder-Decoder</strong> (or Seq2Seq) architecture is the foundational framework for machine translation, text summarization, and speech recognition. The <strong>encoder</strong> reads the input sequence and compresses it into a fixed-length context vector; the <strong>decoder</strong> generates the output sequence one token at a time conditioned on this vector.',
+          list: [
+            'Encoder: processes input tokens sequentially, building a representation',
+            'Context vector: fixed-size summary of the entire input sequence',
+            'Decoder: generates output tokens autoregressively (one by one)',
+            'Training: teacher forcing — feed ground-truth previous tokens as decoder inputs'
+          ]
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'The decoder outputs a probability distribution over the vocabulary at each step, conditioned on the context vector and all previously generated tokens.',
+          example: {
+            title: 'Example: Machine translation step',
+            code: `Input (English): "She is happy"
+
+Encoder:
+  h_1 = RNN(emb("She"), h_0)
+  h_2 = RNN(emb("is"), h_1)
+  h_3 = RNN(emb("happy"), h_2)
+  Context vector c = h_3
+
+Decoder:
+  Step 1: P("Ella" | c, <sos>) = 0.85
+  Step 2: P("está" | c, "Ella") = 0.78
+  Step 3: P("feliz" | c, "Ella está") = 0.91
+  Step 4: P(</eos> | ...) = 0.95`,
+            output: 'The decoder generates the Spanish translation token by token, each conditioned on the context vector and previous outputs.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Encoder-decoder variants and their trade-offs.',
+          table: {
+            headers: [
+              'Variant',
+              'Encoder',
+              'Decoder',
+              'Best For',
+              'Limitation'
+            ],
+            rows: [
+              [
+                'Vanilla Seq2Seq',
+                'RNN',
+                'RNN',
+                'Short sequences',
+                'Bottleneck on long inputs'
+              ],
+              [
+                'Seq2Seq + Attention',
+                'RNN / CNN',
+                'RNN + attention',
+                'Long sequences',
+                'Sequential decoding is slow'
+              ],
+              [
+                'Transformer',
+                'Self-attention stack',
+                'Self + cross-attention',
+                'Parallel training',
+                'Quadratic memory cost'
+              ],
+              [
+                'T5',
+                'Transformer encoder',
+                'Transformer decoder',
+                'Unified text-to-text',
+                'Heavy compute'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Using a fixed-size context vector for very long inputs (fix: attention mechanisms replace the single vector with a dynamic weighted combination of all encoder states, eliminating the bottleneck)',
+            `Mistake 2: Forgetting teacher forcing during training but not at inference (fix: train with teacher forcing (feed ground truth as decoder input), but at inference use the model's own outputs — this train/test mismatch can hurt performance if not handled with scheduled sampling)`,
+            'Mistake 3: Ignoring the exposure bias problem (fix: the decoder never sees its own errors during training; use scheduled sampling or reinforcement learning to expose it to realistic inference-time inputs)',
+            'Mistake 4: Using identical architectures for encoder and decoder (fix: the encoder needs to capture meaning, the decoder needs to generate fluent text; use bidirectional encoder + unidirectional decoder, and often different layer depths)'
+          ]
+        },
+        {
+          heading: 'Real-World Application',
+          text: 'Encoder-decoder architectures power virtually all sequence generation systems.',
+          list: [
+            `Machine translation: Google Translate's original NMT system used a deep LSTM encoder-decoder with attention`,
+            'Text summarization: encoder reads a news article, decoder generates a headline or abstract (e.g., T5, BART)',
+            'Speech recognition: encoder processes audio features, decoder outputs text transcripts (Listen, Attend and Spell)',
+            'Image captioning: CNN encoder extracts image features, RNN/Transformer decoder generates descriptive sentences'
+          ]
+        },
+        {
+          heading: 'Quick Recap',
+          list: [
+            'Encoder-decoder = encoder compresses input + decoder generates output',
+            'Fixed context vector creates a bottleneck for long sequences',
+            'Attention solves the bottleneck by letting the decoder focus on relevant encoder states',
+            'Teacher forcing accelerates training but creates exposure bias at inference',
+            'Transformers replaced RNN encoders/decoders for parallelizable, large-scale training'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          text: 'Test your understanding.',
+          list: [
+            `Q1: What is the bottleneck problem in vanilla encoder-decoder models?
+Ans: The encoder compresses the entire input into a single fixed-length context vector, making it hard to preserve information from long inputs.`,
+            `Q2: What is teacher forcing and why is it used during training?
+Ans: Teacher forcing feeds the ground-truth previous token as the decoder's next input, which speeds up convergence by avoiding error accumulation during training.`,
+            `Q3: How does attention improve the encoder-decoder architecture?
+Ans: Instead of a single context vector, attention lets the decoder dynamically focus on different parts of the input at each generation step, preserving information from long sequences.`
           ]
         }
       ]
@@ -35928,8 +36059,8 @@ A:
           example: {
             title: 'Chain-of-Thought Prompting',
             code: `Prompt:
-  "A bat and ball cost \$11 total.
-   The bat costs \$10 more than the ball.
+  "A bat and ball cost $11 total.
+   The bat costs $10 more than the ball.
    How much does the ball cost?
    
    Let's think step by step."
@@ -35942,10 +36073,10 @@ Output:
   2x = 1
   x = 0.5
 
-Answer: \$0.50
+Answer: $0.50
 
 Without CoT:
-  Model often answers \$1 (intuitive but wrong)
+  Model often answers $1 (intuitive but wrong)
 
 With CoT:
   Accuracy improves 20-50% on reasoning tasks.`,
@@ -36082,7 +36213,7 @@ Why it works:
   Update: W (d × d matrix)
   Parameters: 175B
   GPU memory: ~1TB
-  Cost: \$10,000+
+  Cost: $10,000+
 
 LoRA:
   h = Wx + BAx
@@ -41388,13 +41519,13 @@ export const statsContent = {
             code: `Dataset: 10,000 customer transactions
 
 Descriptive analysis:
-  - Average spend = \$120
+  - Average spend = $120
   - Most frequent category = Electronics
-  - Spread (SD) = \$45
+  - Spread (SD) = $45
 
 Inferential analysis:
   - Sample of 200 customers
-  - 95% CI for average spend: (\$115, \$125)
+  - 95% CI for average spend: ($115, $125)
   - Hypothesis test: Are male and female
     spending patterns different?
     p-value = 0.03 → Significant`,
@@ -44279,7 +44410,7 @@ Interpretation:
   ŷ = β₀ + β₁x
 
 Example — House Prices:
-  Size (sq ft) | Price (\$K)
+  Size (sq ft) | Price ($K)
   1000         | 150
   1200         | 180
   1500         | 220
@@ -44380,7 +44511,7 @@ Model Fit:
 Interpretation:
   - Size is highly significant (p < 0.001)
   - Model explains 93.2% of price variation
-  - Typical prediction error: ±\$12,300`,
+  - Typical prediction error: ±$12,300`,
             output: 'Both coefficients and model fit statistics are needed for complete interpretation.',
             type: 'code'
           }
@@ -44631,10 +44762,10 @@ Fitted coefficients:
           - 2.5(Age) + 25(Location)
 
 Interpretation (holding others constant):
-  - Each sq ft adds \$180
-  - Each bedroom adds \$12,000
-  - Each year of age reduces \$2,500
-  - Premium location adds \$25,000`,
+  - Each sq ft adds $180
+  - Each bedroom adds $12,000
+  - Each year of age reduces $2,500
+  - Premium location adds $25,000`,
             output: 'Multiple regression isolates the effect of each variable while controlling for all others.',
             type: 'code'
           }
@@ -44790,9 +44921,9 @@ Education     8,200        1,500      5.47    <0.001   2.1
 Gender(M)     500        2,100      0.24    0.812    1.5
 
 Interpretation:
-  - Each year of experience adds \$3,500
+  - Each year of experience adds $3,500
     (significant, p < 0.001)
-  - Each degree level adds \$8,200
+  - Each degree level adds $8,200
     (significant)
   - Gender coefficient is NOT significant
     (p = 0.812) → no evidence of
@@ -48614,68 +48745,57 @@ export const tutorialData = {
   ai: {
     structure: aiStructure,
     content: aiContent,
-    title: 'Fundamentals of Artificial Intelligence',
-    code: '21CSC569J'
+    title: 'Fundamentals of Artificial Intelligence'
   },
   cv: {
     structure: cvStructure,
     content: cvContent,
-    title: 'Computer Vision Techniques',
-    code: '21CSE524T'
+    title: 'Computer Vision Techniques'
   },
   dl: {
     structure: dlStructure,
     content: dlContent,
-    title: 'Deep Learning Approaches',
-    code: '21CSC558J'
+    title: 'Deep Learning Approaches'
   },
   imaging: {
     structure: imagingStructure,
     content: imagingContent,
-    title: 'Applied ML in Imaging Systems',
-    code: '21ECO550T'
+    title: 'Applied ML in Imaging Systems'
   },
   llm: {
     structure: llmStructure,
     content: llmContent,
-    title: 'Large Language Models',
-    code: '21CSE658T'
+    title: 'Large Language Models'
   },
   mlalgo: {
     structure: mlalgoStructure,
     content: mlalgoContent,
-    title: 'Machine Learning Algorithms',
-    code: '21CSC555J'
+    title: 'Machine Learning Algorithms'
   },
   multimodal: {
     structure: multimodalStructure,
     content: multimodalContent,
-    title: 'Multimodal Machine Learning',
-    code: '21AIE541T'
+    title: 'Multimodal Machine Learning'
   },
   nlp: {
     structure: nlpStructure,
     content: nlpContent,
-    title: 'Natural Language Processing',
-    code: '21CSE583T'
+    title: 'Natural Language Processing'
   },
   rl: {
     structure: rlStructure,
     content: rlContent,
-    title: 'Reinforcement Learning Algorithms',
-    code: '21CSC571J'
+    title: 'Reinforcement Learning Algorithms'
   },
   stats: {
     structure: statsStructure,
     content: statsContent,
-    title: 'Inferential Statistics',
-    code: '21CSC529T'
+    title: 'Inferential Statistics'
   },
   timeseries: {
     structure: timeseriesStructure,
     content: timeseriesContent,
-    title: 'Time Series Analysis',
-    code: '21CSC530T'
+    title: 'Time Series Analysis'
   },
 };
 

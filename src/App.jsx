@@ -7,15 +7,20 @@ import Content from './components/Content'
 import LandingPage from './components/LandingPage'
 import InterviewLandingPage from './components/InterviewLandingPage'
 import InterviewContent from './components/InterviewContent'
+import InterviewPrepPage from './components/InterviewPrepPage'
 import ScrollToTop from './components/ScrollToTop'
 
 const OnePageView = lazy(() => import('./components/OnePageView'))
 import { tutorialData, loadSubjectContent, markTopicViewed } from './data/tutorialDataLoader'
 import { interviewSubjects, interviewCategories } from './data/interviewData'
+import { addTutorialContentToIndex, buildStaticSearchIndex } from './data/searchIndex'
 import { APP_NAME } from './constants/brand'
+import GlobalSearch from './components/GlobalSearch'
 import './styles/App.css'
 
-const VERSION = '2.17.2'
+buildStaticSearchIndex()
+
+const VERSION = '2.18.0'
 
 const tutorialCategories = [
   {
@@ -52,6 +57,8 @@ function TutorialView() {
   const [onePageView, setOnePageView] = useState(null)
   const [subjectContent, setSubjectContent] = useState(null)
   const [contentLoading, setContentLoading] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [readingMode, setReadingMode] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -60,6 +67,7 @@ function TutorialView() {
       const content = await loadSubjectContent(subject)
       if (!cancelled) {
         setSubjectContent(content)
+        addTutorialContentToIndex(subject, content)
         setContentLoading(false)
       }
     }
@@ -107,6 +115,10 @@ function TutorialView() {
     setTheme(prev => prev === 'light' ? 'dark' : 'light')
   }
 
+  const toggleReadingMode = () => {
+    setReadingMode(prev => !prev)
+  }
+
   const handleTopicSelect = (unit, topic) => {
     navigate(`/tutorials/${subject}/${unit}/${topic}`)
   }
@@ -135,7 +147,7 @@ function TutorialView() {
   }
 
   return (
-    <div className={`app ${theme}`}>
+    <div className={`app ${theme}${readingMode ? ' reading-mode' : ''}`}>
       <a href="#content-title" className="skip-link">Skip to main content</a>
       <Header
         theme={theme}
@@ -150,6 +162,7 @@ function TutorialView() {
         showBackButton={true}
         mode="tutorials"
         categories={tutorialCategories}
+        onOpenSearch={() => setSearchOpen(true)}
       />
       <div className="main-container">
         <Sidebar
@@ -170,6 +183,8 @@ function TutorialView() {
           onOnePageView={openOnePageView}
           subjectContent={subjectContent}
           loading={contentLoading}
+          readingMode={readingMode}
+          toggleReadingMode={toggleReadingMode}
         />
       </div>
       {onePageView && (
@@ -183,6 +198,7 @@ function TutorialView() {
           />
         </Suspense>
       )}
+      <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
       <ScrollToTop />
     </div>
   )
@@ -192,6 +208,7 @@ function InterviewView() {
   const { subject } = useParams()
   const navigate = useNavigate()
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light')
+  const [searchOpen, setSearchOpen] = useState(false)
   useEffect(() => {
     localStorage.setItem('theme', theme)
     document.documentElement.setAttribute('data-theme', theme)
@@ -227,6 +244,7 @@ function InterviewView() {
         showMenuButton={false}
         mode="interview"
         categories={interviewCategories}
+        onOpenSearch={() => setSearchOpen(true)}
       />
       {subject ? (
         <InterviewContent
@@ -235,15 +253,22 @@ function InterviewView() {
           onBack={() => navigate('/interview')}
           onBackToHome={() => navigate('/')}
           onSelectSubject={(s) => navigate(`/interview/${s}`)}
+          onMockInterview={() => navigate(`/interview/mock?subject=${subject}`)}
+          onRevisionDeck={() => navigate('/interview/revision')}
+          onStudyPaths={() => navigate('/interview/paths')}
           theme={theme}
         />
       ) : (
         <InterviewLandingPage
           onSelectSubject={(s) => navigate(`/interview/${s}`)}
           onBack={() => navigate('/')}
+          onMockInterview={() => navigate('/interview/mock')}
+          onRevisionDeck={() => navigate('/interview/revision')}
+          onStudyPaths={() => navigate('/interview/paths')}
           theme={theme}
         />
       )}
+      <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
       <ScrollToTop />
     </div>
   )
@@ -305,6 +330,10 @@ function App() {
     <Routes>
       <Route path="/" element={<HomeView />} />
       <Route path="/tutorials/:subject/:unit?/:topic?" element={<TutorialView />} />
+      <Route path="/interview/mock" element={<InterviewPrepPage mode="mock" />} />
+      <Route path="/interview/revision" element={<InterviewPrepPage mode="revision" />} />
+      <Route path="/interview/paths" element={<InterviewPrepPage mode="paths" />} />
+      <Route path="/interview/path/:pathId" element={<InterviewPrepPage mode="path" />} />
       <Route path="/interview/:subject?" element={<InterviewView />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

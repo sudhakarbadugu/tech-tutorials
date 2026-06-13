@@ -25,10 +25,18 @@ export default defineConfig({
           if (id.includes('node_modules/mermaid')) {
             return 'vendor-mermaid'
           }
+          // Shiki + all of its sub-packages belong to the same chunk so that
+          // a single lazy import can load the whole highlighter.
+          if (
+            id.includes('node_modules/shiki') ||
+            id.includes('node_modules/@shikijs')
+          ) {
+            return 'vendor-shiki'
+          }
         }
       }
     },
-    chunkSizeWarningLimit: 600
+    chunkSizeWarningLimit: 1500
   },
   test: {
     globals: true,

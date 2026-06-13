@@ -9,6 +9,7 @@ import { reactQuestions } from './interviewQuestionsReact.js'
 import { angularQuestions } from './interviewQuestionsAngular.js'
 import { sqlQuestions } from './interviewQuestionsSQL.js'
 import { dsaQuestions } from './interviewQuestionsDSA.js'
+import { dsaExtraQuestions } from './interviewQuestionsDSAExtra.js'
 import { designPatternsQuestions } from './interviewQuestionsDesignPatterns.js'
 import { htmlQuestions } from './interviewQuestionsHTML.js'
 import { cssQuestions } from './interviewQuestionsCSS.js'
@@ -19,7 +20,9 @@ import { dockerQuestions } from './interviewQuestionsDocker.js'
 import { awsQuestions } from './interviewQuestionsAWS.js'
 import { gitQuestions } from './interviewQuestionsGit.js'
 import { systemDesignQuestions } from './interviewQuestionsSystemDesign.js'
+import { systemDesignExtraQuestions } from './interviewQuestionsSystemDesignExtra.js'
 import { codingQuestions } from './interviewQuestionsCoding.js'
+import { codingExtraQuestions } from './interviewQuestionsCodingExtra.js'
 import { microservicesQuestions } from './interviewQuestionsMicroservices.js'
 
 export const interviewCategories = {
@@ -180,8 +183,25 @@ export const interviewQuestions = {
   react: { questions: reactQuestions.questions },
   angular: { questions: angularQuestions.questions },
   sql: { questions: sqlQuestions.questions },
-  dsa: { questions: dsaQuestions.questions },
+  dsa: {
+    questions: [
+      ...dsaQuestions.questions,
+      ...dsaExtraQuestions.questions,
+    ],
+  },
   'design-patterns': { questions: designPatternsQuestions.questions },
+  'system-design': {
+    questions: [
+      ...systemDesignQuestions.questions,
+      ...systemDesignExtraQuestions.questions,
+    ],
+  },
+  coding: {
+    questions: [
+      ...codingQuestions.questions,
+      ...codingExtraQuestions.questions,
+    ],
+  },
   html: { questions: htmlQuestions.questions },
   css: { questions: cssQuestions.questions },
   typescript: { questions: typescriptQuestions.questions },
@@ -190,8 +210,6 @@ export const interviewQuestions = {
   docker: { questions: dockerQuestions.questions },
   aws: { questions: awsQuestions.questions },
   git: { questions: gitQuestions.questions },
-  'system-design': { questions: systemDesignQuestions.questions },
-  coding: { questions: codingQuestions.questions },
   microservices: { questions: microservicesQuestions.questions }
 }
 

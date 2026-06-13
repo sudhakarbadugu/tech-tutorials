@@ -33,4 +33,13 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  // Data/content files contain user-facing strings (regex snippets, code
+  // examples, paths) where backslash handling is intentional display content,
+  // so the blanket no-useless-escape rule creates false positives there.
+  {
+    files: ['src/data/**/*.js'],
+    rules: {
+      'no-useless-escape': 'off',
+    },
+  },
 ])

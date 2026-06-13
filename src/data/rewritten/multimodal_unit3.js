@@ -702,7 +702,7 @@ export const multimodalUnit3Content = {
         }
       ]
     },
-    'encoder-decoder': {
+    'encoder-decoder-architecture': {
       title: 'Encoder-Decoder Architecture',
       subtitle: 'Sequence-to-sequence learning for translation and generation',
       sections: [

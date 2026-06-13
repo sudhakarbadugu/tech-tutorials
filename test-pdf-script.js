@@ -34,7 +34,7 @@ async function testPDFGeneration() {
 
     // Set up download listener
     const downloadPromise = new Promise((resolve, reject) => {
-      context.on('page', async (newPage) => {
+      context.on('page', async () => {
         // Handle download
       });
       

@@ -4,6 +4,7 @@ import html2pdf from 'html2pdf.js'
 import { Download, ArrowLeft, Printer, Loader } from 'lucide-react'
 import { getSubjectStructure, subjectMeta } from '../data/tutorialDataLoader'
 import { APP_NAME } from '../constants/brand'
+import CodeBlock from './CodeBlock'
 import '../styles/OnePageView.css'
 
 function OnePageView({ subject, unit, onClose, theme, subjectContent }) {
@@ -50,7 +51,7 @@ function OnePageView({ subject, unit, onClose, theme, subjectContent }) {
 
     const filename = isFullSubject
       ? `${subject}_${subjectTitle.replace(/\s+/g, '_')}_Complete.pdf`
-      : `${subject}_${topics[0]?.unitTitle?.replace(/\s+/g, '_').replace(/[:\/]/g, '') || unit}.pdf`
+      : `${subject}_${topics[0]?.unitTitle?.replace(/\s+/g, '_').replace(/[:/]/g, '') || unit}.pdf`
 
     const element = previewRef.current
 
@@ -181,7 +182,11 @@ function OnePageView({ subject, unit, onClose, theme, subjectContent }) {
                   <div className="pdf-export-example">
                     <h4>{section.example.title}</h4>
                     {section.example.code && (
-                      <pre><code>{section.example.code}</code></pre>
+                      <CodeBlock
+                        code={section.example.code}
+                        language={section.example.language}
+                        showCopy={false}
+                      />
                     )}
                     {section.example.output && (
                       <p className="pdf-export-output"><strong>Output:</strong> {section.example.output}</p>
@@ -300,7 +305,11 @@ function OnePageView({ subject, unit, onClose, theme, subjectContent }) {
                       <div className="pdf-example">
                         <h4>{section.example.title}</h4>
                         {section.example.code && (
-                          <pre><code>{section.example.code}</code></pre>
+                          <CodeBlock
+                              code={section.example.code}
+                              language={section.example.language}
+                              showCopy={false}
+                            />
                         )}
                         {section.example.output && (
                           <p className="pdf-example-output"><strong>Output:</strong> {section.example.output}</p>

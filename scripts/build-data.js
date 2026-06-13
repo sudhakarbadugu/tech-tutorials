@@ -20,7 +20,7 @@ function serializeValue(val, indent = 2) {
   if (typeof val === 'string') {
     // Use backticks if string contains newlines or single quotes that would need escaping
     if (val.includes('\n') || val.includes("'")) {
-      return `\`${val.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$')}\``;
+      return `\`${val.replace(/\\/g, '\\\\').replace(/\${/g, '\\$\\{').replace(/`/g, '\\`')}\``;
     }
     return `'${val}'`;
   }

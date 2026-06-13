@@ -13,9 +13,13 @@ import {
   LayoutGrid,
   Layers,
   Play,
-  TrendingUp
+  TrendingUp,
+  Bookmark,
+  Map
 } from 'lucide-react'
-import { interviewSubjects, interviewCategories } from '../data/interviewData'
+import { interviewSubjects, interviewCategories, interviewQuestions } from '../data/interviewData'
+import { getBookmarkedQuestions } from './interviewPrepUtils'
+import { studyPaths } from '../data/interviewStudyPaths'
 import {
   categoryGradients,
   categoryColors,
@@ -26,7 +30,14 @@ import {
 import InterviewFooter from './InterviewFooter'
 import styles from './Interview.module.css'
 
-function InterviewLandingPage({ onSelectSubject, theme, onBack }) {
+function InterviewLandingPage({
+  onSelectSubject,
+  theme,
+  onBack,
+  onMockInterview,
+  onRevisionDeck,
+  onStudyPaths
+}) {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeDifficulty, setActiveDifficulty] = useState(null)
   const [activeCategory, setActiveCategory] = useState('all')
@@ -159,6 +170,11 @@ function InterviewLandingPage({ onSelectSubject, theme, onBack }) {
   }
 
   const hasActiveFilters = searchQuery || activeDifficulty || activeCategory !== 'all'
+
+  const bookmarkCount = useMemo(
+    () => getBookmarkedQuestions(interviewQuestions, interviewSubjects).length,
+    []
+  )
 
   const scrollToCategory = (catId) => {
     setActiveCategory('all')
@@ -454,6 +470,50 @@ function InterviewLandingPage({ onSelectSubject, theme, onBack }) {
         </aside>
 
         <main className={styles.main}>
+          {!hasActiveFilters && (
+            <section className={styles.prepToolsSection}>
+              <div className={styles.sectionHeader}>
+                <Zap size={18} style={{ color: 'var(--accent-color)' }} />
+                <h2>Interview prep tools</h2>
+              </div>
+              <div className={styles.prepToolsGrid}>
+                <button type="button" className={styles.prepToolCard} onClick={onMockInterview}>
+                  <div className={styles.prepToolIcon} data-variant="mock">
+                    <Target size={22} />
+                  </div>
+                  <div>
+                    <h3>Mock Interview</h3>
+                    <p>Random questions with a per-question timer. Think, reveal, and move on.</p>
+                  </div>
+                  <ChevronRight size={18} />
+                </button>
+                <button type="button" className={styles.prepToolCard} onClick={onRevisionDeck}>
+                  <div className={styles.prepToolIcon} data-variant="revision">
+                    <Bookmark size={22} />
+                  </div>
+                  <div>
+                    <h3>Revision Deck</h3>
+                    <p>
+                      Review bookmarked questions
+                      {bookmarkCount > 0 ? ` (${bookmarkCount})` : ''} in flashcard-style study mode.
+                    </p>
+                  </div>
+                  <ChevronRight size={18} />
+                </button>
+                <button type="button" className={styles.prepToolCard} onClick={onStudyPaths}>
+                  <div className={styles.prepToolIcon} data-variant="paths">
+                    <Map size={22} />
+                  </div>
+                  <div>
+                    <h3>Study Paths</h3>
+                    <p>{studyPaths.length} curated plans — e.g. 2-week React prep with daily difficulty curves.</p>
+                  </div>
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            </section>
+          )}
+
           {!hasActiveFilters && recentSubject && (
             <div className={styles.continueCard}>
               <div className={styles.continueIcon}>

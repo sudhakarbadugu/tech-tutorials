@@ -7,6 +7,8 @@ import {
   ChevronLeft,
   ChevronUp,
   ChevronRight,
+  Eye,
+  EyeOff,
   Layers,
   LayoutGrid,
   MessageSquare,
@@ -14,10 +16,15 @@ import {
   RotateCcw,
   Search,
   SlidersHorizontal,
+  Target,
+  Map,
   X
 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { interviewQuestions, interviewSubjects, interviewCategories } from '../data/interviewData'
+import { interviewRelatedTutorials } from '../data/interviewRelatedTutorials'
 import { difficultyConfig, PROGRESS_KEY, BOOKMARKS_KEY } from './interviewUi'
+import InterviewAnswer from './InterviewAnswer'
 import InterviewFooter from './InterviewFooter'
 import styles from './Interview.module.css'
 
@@ -42,17 +49,6 @@ function readStoredProgress(subject) {
   } catch {
     return { viewed: [], bookmarks: [] }
   }
-}
-
-function flattenDetails(html) {
-  if (!html) return html
-  // Replace collapsible <details>/<summary> blocks with always-visible styled divs
-  // so answers can be read continuously without extra clicks.
-  return html
-    .replace(/<details[^>]*>/gi, '<div class="answer-detail">')
-    .replace(/<\/details>/gi, '</div>')
-    .replace(/<summary>/gi, '<div class="answer-summary">')
-    .replace(/<\/summary>/gi, '</div>')
 }
 
 function useInterviewStorage(subject) {
@@ -93,6 +89,7 @@ function useInterviewStorage(subject) {
   return { progress, markViewed, toggleBookmark }
 }
 
+
 function InterviewQuestion({
   q,
   globalIndex,
@@ -101,7 +98,12 @@ function InterviewQuestion({
   diff,
   markViewed,
   toggleBookmark,
-  setTopicFilter
+  setTopicFilter,
+  flashcardMode,
+  isRevealed,
+  onReveal,
+  relatedTutorials = [],
+  useLanguageTabs = false
 }) {
   const ref = useRef(null)
 
@@ -163,10 +165,49 @@ function InterviewQuestion({
       </div>
 
             <div className={styles.questionBody}>
-        <div
-          className={styles.answerContent}
-          dangerouslySetInnerHTML={{ __html: flattenDetails(q.answer) }}
-        />
+        {flashcardMode && !isRevealed ? (
+          <div className={styles.flashcardHidden}>
+            <button
+              type="button"
+              className={styles.flashcardRevealBtn}
+              onClick={() => onReveal(globalIndex)}
+              aria-label="Reveal answer"
+            >
+              <Eye size={18} />
+              Show Answer
+            </button>
+          </div>
+        ) : (
+          <>
+            {q.keyPoints && q.keyPoints.length > 0 && (
+              <div className={styles.keyPoints}>
+                <div className={styles.keyPointsTitle}>Key points</div>
+                <ul>
+                  {q.keyPoints.map((kp, idx) => (
+                    <li key={idx}>{kp}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <InterviewAnswer html={q.answer} useLanguageTabs={useLanguageTabs} />
+          </>
+        )}
+        {relatedTutorials.length > 0 && (
+          <div className={styles.relatedTutorials}>
+            <span className={styles.relatedTutorialsLabel}>Related tutorials</span>
+            <div className={styles.relatedTutorialsList}>
+              {relatedTutorials.map((t) => (
+                <Link
+                  key={`${t.subject}-${t.unit}-${t.topic}`}
+                  to={`/tutorials/${t.subject}/${t.unit}/${t.topic}`}
+                  className={styles.relatedTutorialChip}
+                >
+                  {t.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
         {q.tags && q.tags.length > 0 && (
           <div className={styles.questionTags}>
             {q.tags.map(tag => (
@@ -186,7 +227,16 @@ function InterviewQuestion({
   )
 }
 
-function InterviewContent({ subject, onBack, onBackToHome, theme, onSelectSubject }) {
+function InterviewContent({
+  subject,
+  onBack,
+  onBackToHome,
+  theme,
+  onSelectSubject,
+  onMockInterview,
+  onRevisionDeck,
+  onStudyPaths
+}) {
   const [searchQuery, setSearchQuery] = useState('')
   const [difficultyFilter, setDifficultyFilter] = useState('all')
   const [topicFilter, setTopicFilter] = useState('all')
@@ -194,6 +244,8 @@ function InterviewContent({ subject, onBack, onBackToHome, theme, onSelectSubjec
   const [sidebarCollapsed, setSidebarCollapsed] = useState(readSidebarCollapsed)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [flashcardMode, setFlashcardMode] = useState(false)
+  const [revealed, setRevealed] = useState(new Set())
 
   const subjectData = interviewQuestions[subject]
   const meta = interviewSubjects[subject]
@@ -248,6 +300,29 @@ function InterviewContent({ subject, onBack, onBackToHome, theme, onSelectSubjec
 
   const activeFilters = searchQuery || difficultyFilter !== 'all' || topicFilter !== 'all'
   const panelFiltersActive = difficultyFilter !== 'all' || topicFilter !== 'all'
+
+  const revealAnswer = (index) => {
+    setRevealed(prev => new Set([...prev, index]))
+  }
+
+  const toggleFlashcardMode = () => {
+    setFlashcardMode(prev => {
+      const next = !prev
+      if (next) setRevealed(new Set())
+      return next
+    })
+  }
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.target?.tagName === 'INPUT' || event.target?.tagName === 'TEXTAREA') return
+      if (event.key.toLowerCase() === 'f') {
+        toggleFlashcardMode()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   const toggleSidebarCollapsed = () => {
     setSidebarCollapsed(prev => {
@@ -406,16 +481,43 @@ function InterviewContent({ subject, onBack, onBackToHome, theme, onSelectSubjec
                 <span>{progressPercent}%</span>
               </div>
             </div>
-            <button
-              type="button"
-              className={styles.printBtn}
-              onClick={() => window.print()}
-              title="Print questions"
-              aria-label="Print questions"
-            >
-              <Printer size={16} />
-              <span className={styles.printBtnLabel}>Print</span>
-            </button>
+            <div className={styles.subjectBarActions}>
+              <button
+                type="button"
+                className={styles.subjectPrepBtn}
+                onClick={onMockInterview}
+                title="Mock interview"
+              >
+                <Target size={15} />
+                <span className={styles.printBtnLabel}>Mock</span>
+              </button>
+              <button
+                type="button"
+                className={styles.subjectPrepBtn}
+                onClick={onRevisionDeck}
+                title="Revision deck"
+              >
+                <Bookmark size={15} />
+              </button>
+              <button
+                type="button"
+                className={styles.subjectPrepBtn}
+                onClick={onStudyPaths}
+                title="Study paths"
+              >
+                <Map size={15} />
+              </button>
+              <button
+                type="button"
+                className={styles.printBtn}
+                onClick={() => window.print()}
+                title="Print questions"
+                aria-label="Print questions"
+              >
+                <Printer size={16} />
+                <span className={styles.printBtnLabel}>Print</span>
+              </button>
+            </div>
             <button
               type="button"
               className={styles.menuToggle}
@@ -505,6 +607,15 @@ function InterviewContent({ subject, onBack, onBackToHome, theme, onSelectSubjec
                   <div className={styles.toolbarActions}>
                     <button
                       type="button"
+                      className={`${styles.actionBtn} ${flashcardMode ? styles.actionBtnActive : ''}`}
+                      onClick={toggleFlashcardMode}
+                      title="Flashcard mode (F)"
+                    >
+                      {flashcardMode ? <EyeOff size={13} /> : <Eye size={13} />}
+                      Flashcards
+                    </button>
+                    <button
+                      type="button"
                       className={`${styles.actionBtn} ${groupByTopic ? styles.actionBtnActive : ''}`}
                       onClick={() => setGroupByTopic(!groupByTopic)}
                     >
@@ -562,6 +673,7 @@ function InterviewContent({ subject, onBack, onBackToHome, theme, onSelectSubjec
                       const isBookmarked = progress.bookmarks.includes(globalIndex)
                       const diff = difficultyConfig[q.difficulty] || difficultyConfig.Beginner
                       const isViewed = progress.viewed.includes(globalIndex)
+                      const relatedTutorials = (interviewRelatedTutorials[subject] || {})[globalIndex] || []
 
                       return (
                         <InterviewQuestion
@@ -574,6 +686,11 @@ function InterviewContent({ subject, onBack, onBackToHome, theme, onSelectSubjec
                           markViewed={markViewed}
                           toggleBookmark={toggleBookmark}
                           setTopicFilter={setTopicFilter}
+                          flashcardMode={flashcardMode}
+                          isRevealed={revealed.has(globalIndex)}
+                          onReveal={revealAnswer}
+                          relatedTutorials={relatedTutorials}
+                          useLanguageTabs={subject === 'coding'}
                         />
                       )
                     })}

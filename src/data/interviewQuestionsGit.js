@@ -1,100 +1,227 @@
+// Auto-generated interview questions with key-points summaries
+// Generated: 2026-06-13T18:03:17.486Z
+
 export const gitQuestions = {
   "questions": [
     {
       "question": "What is Git and how does it differ from other version control systems?",
       "answer": "<p><strong>Git</strong> is a distributed version control system (DVCS) where every developer has a full copy of the repository.</p><h4>Git vs SVN/CVS (Centralized)</h4><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Feature</th><th style='padding:8px;border:1px solid #ddd;'>Git (DVCS)</th><th style='padding:8px;border:1px solid #ddd;'>SVN (CVCS)</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Repository</td><td style='padding:8px;border:1px solid #ddd;'>Full copy on every machine</td><td style='padding:8px;border:1px solid #ddd;'>Single central repository</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Commits</td><td style='padding:8px;border:1px solid #ddd;'>Local, then push</td><td style='padding:8px;border:1px solid #ddd;'>Direct to server</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Branching</td><td style='padding:8px;border:1px solid #ddd;'>Lightweight, cheap</td><td style='padding:8px;border:1px solid #ddd;'>Directory copy, expensive</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Offline work</td><td style='padding:8px;border:1px solid #ddd;'>Full history available</td><td style='padding:8px;border:1px solid #ddd;'>Limited</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Speed</td><td style='padding:8px;border:1px solid #ddd;'>Fast (local operations)</td><td style='padding:8px;border:1px solid #ddd;'>Network-dependent</td></tr></table><p>Git stores data as snapshots of the project over time, not as differences (deltas) from one version to another.</p>",
-      "difficulty" : "Beginner",
-      "tags": ["Git", "Version Control"]
+      "difficulty": "Beginner",
+      "tags": [
+        "Git",
+        "Version Control"
+      ],
+      "keyPoints": [
+        "Git is a distributed version control system (DVCS) where every developer has a full copy of the repository."
+      ]
     },
     {
       "question": "Explain Git's staging area, working directory, and repository.",
-      "answer": "<p>Git has three main areas where files live:</p><h4>1. Working Directory</h4><p>Your local file system where you edit files. Untracked and modified files live here.</p><h4>2. Staging Area (Index)</h4><p>A file that stores information about what will go into the next commit. You stage changes with <code>git add</code>.</p><h4>3. Repository (.git directory)</h4><p>Where Git stores the metadata and object database. Commits are snapshots stored here.</p><pre><code>Working Directory          Staging Area             Repository\n     │                          │                        │\n     │  git add                 │    git commit           │\n     │  ──────────────────────>  │   ────────────────────>  │\n     │                          │                        │\n  [modified]                [staged]                 [committed]\n     │                          │                        │\n     │  edit files              │    ready to snapshot    │    permanent history\n\n// Check status of all three areas\ngit status\n\n// View staged changes\ngit diff --cached  # or --staged\n\n// View unstaged changes\ngit diff\n\n// Remove from staging\ngit restore --staged file.txt\ngit reset HEAD file.txt  # older syntax</code></pre>",
-      "difficulty" : "Beginner",
-      "tags": ["Git", "Basics"]
+      "answer": "<p>Git has three main areas where files live:</p><h4>1. Working Directory</h4><p>Your local file system where you edit files. Untracked and modified files live here.</p><h4>2. Staging Area (Index)</h4><p>A file that stores information about what will go into the next commit. You stage changes with <code>git add</code>.</p><h4>3. Repository (.git directory)</h4><p>Where Git stores the metadata and object database. Commits are snapshots stored here.</p><pre><code>Working Directory          Staging Area             Repository\n     │                          │                        │\n     │  git add                 │    git commit           │\n     │  ──────────────────────&gt;  │   ────────────────────&gt;  │\n     │                          │                        │\n  [modified]                [staged]                 [committed]\n     │                          │                        │\n     │  edit files              │    ready to snapshot    │    permanent history\n\n// Check status of all three areas\ngit status\n\n// View staged changes\ngit diff --cached  # or --staged\n\n// View unstaged changes\ngit diff\n\n// Remove from staging\ngit restore --staged file.txt\ngit reset HEAD file.txt  # older syntax</code></pre>",
+      "difficulty": "Beginner",
+      "tags": [
+        "Git",
+        "Basics"
+      ],
+      "keyPoints": [
+        "Git has three main areas where files live: 1.",
+        "Working Directory Your local file system where you edit files."
+      ]
     },
     {
       "question": "What is the difference between git pull and git fetch?",
       "answer": "<p><code>git fetch</code> and <code>git pull</code> both download from remote, but differ in what they do with the data.</p><h4>git fetch</h4><p>Downloads remote changes to your local repository but does <strong>not merge</strong> them into your working branch.</p><pre><code>git fetch origin          # Fetch all branches from origin\ngit fetch origin main     # Fetch specific branch\ngit log origin/main -3    # See what was fetched without merging\n\n# Compare local vs remote\ngit diff main origin/main\n</code></pre><h4>git pull</h4><p><code>git pull = git fetch + git merge</code></p><pre><code>git pull origin main      # Fetch and merge main\ngit pull --rebase origin main  # Fetch and rebase instead of merge\n</code></pre><h4>When to use each</h4><ul><li><strong>fetch:</strong> Review changes before integrating, work on sensitive code</li><li><strong>pull:</strong> Quick sync when you're confident, already on a feature branch</li></ul><p>Best practice: <code>fetch</code> frequently, <code>pull</code> when ready.</p>",
-      "difficulty" : "Beginner",
-      "tags": ["Git", "Remote"]
+      "difficulty": "Beginner",
+      "tags": [
+        "Git",
+        "Remote"
+      ],
+      "keyPoints": [
+        "fetch: Review changes before integrating, work on sensitive code",
+        "pull: Quick sync when you're confident, already on a feature branch"
+      ]
     },
     {
       "question": "Explain git merge vs git rebase.",
-      "answer": "<p>Both integrate changes from one branch into another, but with different approaches.</p><h4>git merge</h4><p>Creates a <strong>merge commit</strong> that combines two branches, preserving history.</p><pre><code>git checkout main\ngit merge feature\n\n# Result:\n#   main: A---B---C---M (merge commit)\n#              \      /\n# feature:      D---E</code></pre><p><strong>Pros:</strong> Preserves complete history, records when integration happened<br><strong>Cons:</strong> Can create complex history (\"diamond\" patterns)</p><h4>git rebase</h4><p><strong>Rewrites history</strong> by moving commits to the tip of another branch.</p><pre><code>git checkout feature\ngit rebase main\n\n# Result:\n#   main: A---B---C\n# feature:          D'---E' (replayed commits)\n\n# Interactive rebase (squash, edit, reorder)\ngit rebase -i HEAD~5  # Last 5 commits</code></pre><p><strong>Pros:</strong> Linear history, cleaner log<br><strong>Cons:</strong> Rewrites public history (never rebase shared branches!)</p><h4>Golden Rule</h4><p>Never rebase commits that have been pushed to a shared/public branch.</p>",
-      "difficulty" : "Beginner",
-      "tags": ["Git", "Branching"]
+      "answer": "<p>Both integrate changes from one branch into another, but with different approaches.</p><h4>git merge</h4><p>Creates a <strong>merge commit</strong> that combines two branches, preserving history.</p><pre><code>git checkout main\ngit merge feature\n\n# Result:\n#   main: A---B---C---M (merge commit)\n#                    /\n# feature:      D---E</code></pre><p><strong>Pros:</strong> Preserves complete history, records when integration happened<br><strong>Cons:</strong> Can create complex history (\"diamond\" patterns)</p><h4>git rebase</h4><p><strong>Rewrites history</strong> by moving commits to the tip of another branch.</p><pre><code>git checkout feature\ngit rebase main\n\n# Result:\n#   main: A---B---C\n# feature:          D'---E' (replayed commits)\n\n# Interactive rebase (squash, edit, reorder)\ngit rebase -i HEAD~5  # Last 5 commits</code></pre><p><strong>Pros:</strong> Linear history, cleaner log<br><strong>Cons:</strong> Rewrites public history (never rebase shared branches!)</p><h4>Golden Rule</h4><p>Never rebase commits that have been pushed to a shared/public branch.</p>",
+      "difficulty": "Beginner",
+      "tags": [
+        "Git",
+        "Branching"
+      ],
+      "keyPoints": [
+        "Both integrate changes from one branch into another, but with different approaches.",
+        "git merge Creates a merge commit that combines two branches, preserving history."
+      ]
     },
     {
       "question": "What is a Git branch and how does branching work?",
       "answer": "<p>A <strong>branch</strong> in Git is a lightweight movable pointer to a commit. The default branch is <code>main</code> (or <code>master</code> in older repos).</p><pre><code>// Create and switch to new branch\ngit checkout -b feature-login\n# or\ngit switch -c feature-login  # newer, clearer syntax\n\n// List branches\ngit branch          # local\ngit branch -a       # all (local + remote)\ngit branch -vv      # with tracking info\n\n// Switch branches\ngit switch main\ngit checkout main\n\n// Rename branch\ngit branch -m old-name new-name\n\n// Delete branch\ngit branch -d feature-login     # merged only\ngit branch -D feature-login     # force delete\n\n// Push branch to remote\ngit push -u origin feature-login\n</code></pre><h4>How Branching Works</h4><p>Branches are stored as files in <code>.git/refs/heads/</code> containing a 40-character SHA-1 hash. Creating a branch is just writing 41 bytes to disk — extremely fast.</p><pre><code>A---B---C (main)\n     \\n      D---E (feature)\n\n// Branches are just pointers:\n// main → C\n// feature → E\n</code></pre>",
-      "difficulty" : "Beginner",
-      "tags": ["Git", "Branching"]
+      "difficulty": "Beginner",
+      "tags": [
+        "Git",
+        "Branching"
+      ],
+      "keyPoints": [
+        "A branch in Git is a lightweight movable pointer to a commit.",
+        "The default branch is main (or master in older repos)."
+      ]
     },
     {
       "question": "Explain git stash and when to use it.",
       "answer": "<p><strong>git stash</strong> temporarily shelves changes so you can work on something else.</p><pre><code>// Stash current changes\ngit stash push -m \"WIP: login feature\"\n\n// Stash only staged changes\ngit stash --staged\n\n// Stash untracked files too\ngit stash -u\n\n// List stashes\ngit stash list\n# stash@{0}: On main: WIP: login feature\n# stash@{1}: On main: WIP: dashboard fix\n\n// Apply stash (keeps it in list)\ngit stash apply stash@{0}\n\n// Pop stash (applies and removes)\ngit stash pop stash@{0}\n\n// Apply to new branch\ngit stash branch new-branch stash@{0}\n\n// Drop a stash\ngit stash drop stash@{0}\n\n// Clear all stashes\ngit stash clear\n</code></pre><h4>When to Stash</h4><ul><li>Switch branches when work isn't ready to commit</li><li>Pull latest changes without losing in-progress work</li><li>Test a quick fix on another branch</li><li>Code review — check out PR without losing current work</li></ul>",
-      "difficulty" : "Beginner",
-      "tags": ["Git", "Stash"]
+      "difficulty": "Beginner",
+      "tags": [
+        "Git",
+        "Stash"
+      ],
+      "keyPoints": [
+        "Switch branches when work isn't ready to commit",
+        "Pull latest changes without losing in-progress work",
+        "Test a quick fix on another branch"
+      ]
     },
     {
       "question": "What is the difference between git reset --soft, --mixed, and --hard?",
       "answer": "<p><code>git reset</code> moves the HEAD pointer and optionally changes the staging area and working directory.</p><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Mode</th><th style='padding:8px;border:1px solid #ddd;'>HEAD</th><th style='padding:8px;border:1px solid #ddd;'>Staging</th><th style='padding:8px;border:1px solid #ddd;'>Working Dir</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'><code>--soft</code></td><td style='padding:8px;border:1px solid #ddd;'>Moves</td><td style='padding:8px;border:1px solid #ddd;'>Stays (changes staged)</td><td style='padding:8px;border:1px solid #ddd;'>Stays</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'><code>--mixed</code> (default)</td><td style='padding:8px;border:1px solid #ddd;'>Moves</td><td style='padding:8px;border:1px solid #ddd;'>Cleared (changes unstaged)</td><td style='padding:8px;border:1px solid #ddd;'>Stays</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'><code>--hard</code></td><td style='padding:8px;border:1px solid #ddd;'>Moves</td><td style='padding:8px;border:1px solid #ddd;'>Cleared</td><td style='padding:8px;border:1px solid #ddd;'>Reset to match HEAD</td></tr></table><pre><code>// Undo last commit, keep changes staged\ngit reset --soft HEAD~1\n\n// Undo last commit, keep changes in working directory\ngit reset --mixed HEAD~1\n\n// ⚠️ DESTRUCTIVE: Undo last commit and discard all changes\ngit reset --hard HEAD~1\n\n// Recover from hard reset (if within 30 days)\ngit reflog\ngit reset --hard HEAD@{2}\n</code></pre><p><strong>Warning:</strong> <code>--hard</code> permanently discards uncommitted changes. Always stash first if unsure.</p>",
-      "difficulty" : "Intermediate",
-      "tags": ["Git", "Reset"]
+      "difficulty": "Intermediate",
+      "tags": [
+        "Git",
+        "Reset"
+      ],
+      "keyPoints": [
+        "git reset moves the HEAD pointer and optionally changes the staging area and working directory."
+      ]
     },
     {
       "question": "Explain git cherry-pick and git revert.",
       "answer": "<p>Both work with specific commits but serve different purposes.</p><h4>git cherry-pick</h4><p>Apply changes from a specific commit onto current branch.</p><pre><code>// Cherry-pick single commit\ngit cherry-pick abc1234\n\n// Cherry-pick range\ngit cherry-pick abc1234..def5678\n\n// Cherry-pick without committing\ngit cherry-pick -n abc1234\n\n// Cherry-pick with original commit message\ngit cherry-pick -x abc1234\n</code></pre><p><strong>Use case:</strong> Port a bug fix from <code>main</code> to a release branch without merging everything.</p><h4>git revert</h4><p>Create a <strong>new commit</strong> that undoes changes from a specific commit. Safe for public branches.</p><pre><code>// Revert single commit\ngit revert abc1234\n\n// Revert without auto-commit\ngit revert -n abc1234\n\n// Revert merge commit (must specify parent)\ngit revert -m 1 abc1234  # 1 = first parent (main branch)\n</code></pre><p><strong>Use case:</strong> Undo a problematic commit that has already been pushed to shared history.</p><h4>Comparison</h4><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'></th><th style='padding:8px;border:1px solid #ddd;'>cherry-pick</th><th style='padding:8px;border:1px solid #ddd;'>revert</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Effect</td><td style='padding:8px;border:1px solid #ddd;'>Applies commit's changes</td><td style='padding:8px;border:1px solid #ddd;'>Undoes commit's changes</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>History</td><td style='padding:8px;border:1px solid #ddd;'>New commit with same changes</td><td style='padding:8px;border:1px solid #ddd;'>New commit that negates changes</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Safe for public</td><td style='padding:8px;border:1px solid #ddd;'>Yes</td><td style='padding:8px;border:1px solid #ddd;'>Yes</td></tr></table>",
-      "difficulty" : "Intermediate",
-      "tags": ["Git", "Cherry-pick", "Revert"]
+      "difficulty": "Intermediate",
+      "tags": [
+        "Git",
+        "Cherry-pick",
+        "Revert"
+      ],
+      "keyPoints": [
+        "Both work with specific commits but serve different purposes.",
+        "git cherry-pick Apply changes from a specific commit onto current branch."
+      ]
     },
     {
       "question": "What is git reflog and how does it help recovery?",
       "answer": "<p><strong>git reflog</strong> records every change to branch tips and HEAD in your local repository — a safety net for recovery.</p><pre><code>// View reflog\ngit reflog\n\n# Output:\n# abc1234 HEAD@{0}: commit: fix login bug\n# def5678 HEAD@{1}: checkout: moving from feature to main\n# 789abcd HEAD@{2}: commit: add dashboard\n# ...\n\n// Recover deleted branch\ngit reflog | grep \"feature-branch\"\ngit checkout -b feature-branch abc1234\n\n// Recover from hard reset\ngit reset --hard HEAD@{3}  # Go back 3 actions\n\n// Recover dropped commit\ngit reflog show main\ngit cherry-pick abc1234\n\n// Time-based reflog\ngit reflog --since=\"2 days ago\"\ngit reflog --all\n</code></pre><h4>Reflog Retention</h4><ul><li>Unreachable commits: 30 days</li><li>Reachable commits: 90 days</li><li>Garbage collection (<code>gc</code>) eventually prunes old reflog entries</li></ul><p><strong>Important:</strong> Reflog is <strong>local only</strong> — not pushed to remote. If you delete your local clone, reflog is gone.</p>",
-      "difficulty" : "Intermediate",
-      "tags": ["Git", "Recovery"]
+      "difficulty": "Intermediate",
+      "tags": [
+        "Git",
+        "Recovery"
+      ],
+      "keyPoints": [
+        "Unreachable commits: 30 days",
+        "Reachable commits: 90 days",
+        "Garbage collection ( gc ) eventually prunes old reflog entries"
+      ]
     },
     {
       "question": "Explain Git branching strategies (Git Flow, GitHub Flow, Trunk-Based).",
       "answer": "<p>Different workflows for managing branches in teams:</p><h4>Git Flow</h4><p>Structured workflow with dedicated branches:</p><pre><code>main     ──A───B────────────────────────────\n              │                            \\ndevelop  ─────C───D───E───F───G───H───I───J\n                  │           │\nfeature/foo      F1──F2──F3   │\n                              │\nrelease/1.0                   R1──R2──R3 (tag v1.0)\n                              │\nhotfix/1.0.1                        H1──H2 (tag v1.0.1)\n</code></pre><ul><li><strong>main:</strong> Production releases only</li><li><strong>develop:</strong> Integration branch</li><li><strong>feature/*:</strong> New features (branch from develop)</li><li><strong>release/*:</strong> Prepare release (merge to main + develop)</li><li><strong>hotfix/*:</strong> Emergency fixes (branch from main)</li></ul><h4>GitHub Flow (Simplified)</h4><ul><li>One <code>main</code> branch</li><li>Feature branches with Pull Requests</li><li>Deploy from main after merge</li><li>Simple, ideal for continuous deployment</li></ul><h4>Trunk-Based Development</h4><ul><li>Developers commit directly to <code>main</code> (trunk)</li><li>Short-lived feature branches (&lt; 24 hours)</li><li>Feature flags for incomplete features</li><li>Requires strong CI/CD and testing</li></ul><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Strategy</th><th style='padding:8px;border:1px solid #ddd;'>Complexity</th><th style='padding:8px;border:1px solid #ddd;'>Release Cycle</th><th style='padding:8px;border:1px solid #ddd;'>Best For</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Git Flow</td><td style='padding:8px;border:1px solid #ddd;'>High</td><td style='padding:8px;border:1px solid #ddd;'>Scheduled releases</td><td style='padding:8px;border:1px solid #ddd;'>Enterprise, versioning</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>GitHub Flow</td><td style='padding:8px;border:1px solid #ddd;'>Low</td><td style='padding:8px;border:1px solid #ddd;'>Continuous</td><td style='padding:8px;border:1px solid #ddd;'>Web apps, SaaS</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Trunk-Based</td><td style='padding:8px;border:1px solid #ddd;'>Medium</td><td style='padding:8px;border:1px solid #ddd;'>Continuous</td><td style='padding:8px;border:1px solid #ddd;'>High-velocity teams</td></tr></table>",
-      "difficulty" : "Intermediate",
-      "tags": ["Git", "Workflow", "Branching"]
+      "difficulty": "Intermediate",
+      "tags": [
+        "Git",
+        "Workflow",
+        "Branching"
+      ],
+      "keyPoints": [
+        "main: Production releases only",
+        "develop: Integration branch",
+        "feature/*: New features (branch from develop)"
+      ]
     },
     {
       "question": "How do you resolve merge conflicts in Git?",
       "answer": "<p>Merge conflicts occur when Git can't automatically reconcile differences.</p><h4>Conflict Resolution Steps</h4><pre><code>// 1. Attempt merge\ngit merge feature\n# Auto-merging file.txt\n# CONFLICT (content): Merge conflict in file.txt\n# Automatic merge failed; fix conflicts and commit\n\n// 2. Find conflicted files\ngit status\n# both modified: file.txt\n\n// 3. Open file and resolve markers\n&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD\nOur changes\n=======\nTheir changes\n&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature\n\n// 4. Mark as resolved\ngit add file.txt\n\n// 5. Complete merge\ngit commit  # Pre-filled merge message\n\n// Abort merge if needed\ngit merge --abort\n</code></pre><h4>Tools</h4><pre><code>// Built-in mergetool\ngit mergetool  # Launch configured merge tool\n\n// VS Code\ngit config --global merge.tool vscode\ngit config --global mergetool.vscode.cmd \"code --wait $MERGED\"\n\n// Diff tool\ngit difftool\n</code></pre><h4>Prevention</h4><ul><li>Pull frequently, keep branches short-lived</li><li>Communicate with team about file ownership</li><li>Use <code>.gitattributes</code> for merge strategies (e.g., union for CHANGELOG)</li></ul>",
-      "difficulty" : "Beginner",
-      "tags": ["Git", "Merge", "Conflict"]
+      "difficulty": "Beginner",
+      "tags": [
+        "Git",
+        "Merge",
+        "Conflict"
+      ],
+      "keyPoints": [
+        "Pull frequently, keep branches short-lived",
+        "Communicate with team about file ownership",
+        "Use .gitattributes for merge strategies (e.g., union for CHANGELOG)"
+      ]
     },
     {
       "question": "Explain git hooks and provide examples.",
-      "answer": "<p><strong>Git hooks</strong> are scripts that run automatically at specific points in Git's lifecycle.</p><h4>Client-Side Hooks</h4><ul><li><strong>pre-commit:</strong> Run before commit (linting, tests)</li><li><strong>prepare-commit-msg:</strong> Edit commit message template</li><li><strong>commit-msg:</strong> Validate commit message format</li><li><strong>post-commit:</strong> Notification after commit</li><li><strong>pre-rebase:</strong> Prevent rebase if conditions not met</li><li><strong>post-checkout:</strong> After checkout (e.g., install deps)</li></ul><h4>Server-Side Hooks</h4><ul><li><strong>pre-receive:</strong> Validate incoming push</li><li><strong>update:</strong> Per-ref validation</li><li><strong>post-receive:</strong> Notify after push (CI trigger)</li></ul><pre><code>#!/bin/sh\n# .git/hooks/pre-commit — Run tests before commit\nnpm test\nif [ $? -ne 0 ]; then\n  echo \"Tests failed. Commit aborted.\"\n  exit 1\nfi\n\n#!/bin/sh\n# .git/hooks/commit-msg — Enforce conventional commits\nmsg=$(cat \"$1\")\nif ! echo \"$msg\" | grep -qE \"^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+\"; then\n  echo \"Invalid commit message format.\"\n  exit 1\nfi\n</code></pre><p>Modern alternative: <strong>Husky</strong> + <strong>lint-staged</strong> for Node.js projects.</p>",
-      "difficulty" : "Intermediate",
-      "tags": ["Git", "Hooks", "Automation"]
+      "answer": "<p><strong>Git hooks</strong> are scripts that run automatically at specific points in Git's lifecycle.</p><h4>Client-Side Hooks</h4><ul><li><strong>pre-commit:</strong> Run before commit (linting, tests)</li><li><strong>prepare-commit-msg:</strong> Edit commit message template</li><li><strong>commit-msg:</strong> Validate commit message format</li><li><strong>post-commit:</strong> Notification after commit</li><li><strong>pre-rebase:</strong> Prevent rebase if conditions not met</li><li><strong>post-checkout:</strong> After checkout (e.g., install deps)</li></ul><h4>Server-Side Hooks</h4><ul><li><strong>pre-receive:</strong> Validate incoming push</li><li><strong>update:</strong> Per-ref validation</li><li><strong>post-receive:</strong> Notify after push (CI trigger)</li></ul><pre><code>#!/bin/sh\n# .git/hooks/pre-commit — Run tests before commit\nnpm test\nif [ $? -ne 0 ]; then\n  echo \"Tests failed. Commit aborted.\"\n  exit 1\nfi\n\n#!/bin/sh\n# .git/hooks/commit-msg — Enforce conventional commits\nmsg=$(cat \"$1\")\nif ! echo \"$msg\" | grep -qE \"^(feat|fix|docs|style|refactor|test|chore)((.+))?: .+\"; then\n  echo \"Invalid commit message format.\"\n  exit 1\nfi\n</code></pre><p>Modern alternative: <strong>Husky</strong> + <strong>lint-staged</strong> for Node.js projects.</p>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Git",
+        "Hooks",
+        "Automation"
+      ],
+      "keyPoints": [
+        "pre-commit: Run before commit (linting, tests)",
+        "prepare-commit-msg: Edit commit message template",
+        "commit-msg: Validate commit message format"
+      ]
     },
     {
       "question": "What is git bisect and how do you use it?",
       "answer": "<p><strong>git bisect</strong> performs binary search through commit history to find the commit that introduced a bug.</p><pre><code>// Start bisecting\ngit bisect start\n\n// Mark current (bad) commit\ngit bisect bad\n\n// Mark known good commit\ngit bisect good v1.0\n\n# Git checks out a middle commit\n# Test the code...\n\n// If bug exists here:\ngit bisect bad\n\n# If bug doesn't exist:\ngit bisect good\n\n# Repeat until found...\n\n// When complete:\ngit bisect reset\n\n// Automated bisect with script\ngit bisect start\ngit bisect bad HEAD\ngit bisect good v1.0\ngit bisect run ./test.sh  # Script exits 0 for good, 1-127 for bad\n</code></pre><h4>Example Session</h4><pre><code>$ git bisect start\n$ git bisect bad          # Current commit has bug\n$ git bisect good abc123  # Old commit is clean\nBisecting: 50 revisions left to test\n$ npm test                # Bug present? → git bisect bad\nBisecting: 25 revisions left\n$ npm test                # Bug absent? → git bisect good\n...\nabc4567 is the first bad commit\n$ git bisect reset\n</code></pre><p>Can bisect across ranges, skip untestable commits, and use visual tools.</p>",
-      "difficulty" : "Intermediate",
-      "tags": ["Git", "Bisect", "Debugging"]
+      "difficulty": "Intermediate",
+      "tags": [
+        "Git",
+        "Bisect",
+        "Debugging"
+      ],
+      "keyPoints": [
+        "git bisect performs binary search through commit history to find the commit that introduced a bug.",
+        "// Start bisecting git bisect start // Mark current (bad) commit git bisect bad // Mark known good commit git bisect good v1."
+      ]
     },
     {
       "question": "Explain git submodules and git subtrees.",
       "answer": "<p>Both manage external repositories within a main project.</p><h4>Git Submodules</h4><p>Links to specific commit of another repo.</p><pre><code>// Add submodule\ngit submodule add https://github.com/user/lib.git libs/lib\n\n// Clone with submodules\ngit clone --recurse-submodules https://github.com/user/project.git\n\n// Update submodules\ngit submodule update --init --recursive\n\n// Update to latest\ngit submodule update --remote\n\n// Caveat: collaborators must run submodule commands separately\n</code></pre><h4>Git Subtrees</h4><p>Merges external repo into subdirectory. No special commands for collaborators.</p><pre><code>// Add subtree\ngit subtree add --prefix=libs/lib \\n  https://github.com/user/lib.git main --squash\n\n// Pull updates\ngit subtree pull --prefix=libs/lib \\n  https://github.com/user/lib.git main --squash\n\n// Push changes back to subtree repo\ngit subtree push --prefix=libs/lib \\n  https://github.com/user/lib.git main\n</code></pre><h4>Comparison</h4><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Feature</th><th style='padding:8px;border:1px solid #ddd;'>Submodule</th><th style='padding:8px;border:1px solid #ddd;'>Subtree</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Learning curve</td><td style='padding:8px;border:1px solid #ddd;'>High</td><td style='padding:8px;border:1px solid #ddd;'>Low</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Contributor friction</td><td style='padding:8px;border:1px solid #ddd;'>High</td><td style='padding:8px;border:1px solid #ddd;'>None</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Repo size</td><td style='padding:8px;border:1px solid #ddd;'>Small (references only)</td><td style='padding:8px;border:1px solid #ddd;'>Large (full history)</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Bi-directional sync</td><td style='padding:8px;border:1px solid #ddd;'>Easy</td><td style='padding:8px;border:1px solid #ddd;'>Possible but complex</td></tr></table>",
-      "difficulty" : "Advanced",
-      "tags": ["Git", "Submodule", "Subtree"]
+      "difficulty": "Advanced",
+      "tags": [
+        "Git",
+        "Submodule",
+        "Subtree"
+      ],
+      "keyPoints": [
+        "Both manage external repositories within a main project.",
+        "Git Submodules Links to specific commit of another repo."
+      ]
     },
     {
       "question": "What are signed commits and how do they work?",
       "answer": "<p><strong>GPG-signed commits</strong> cryptographically verify the author's identity.</p><h4>Setup</h4><pre><code>// Generate GPG key\ngpg --full-generate-key\n\n// List keys\ngpg --list-secret-keys --keyid-format=long\n\n// Configure Git\ngit config --global user.signingkey KEY_ID\ngit config --global commit.gpgsign true\n\n// Sign a single commit\ngit commit -S -m \"Signed commit\"\n\n// Verify signature\ngit log --show-signature -1\n\n// Sign tags\ngit tag -s v1.0 -m \"Version 1.0\"\ngit verify-tag v1.0\n</code></pre><h4>Benefits</h4><ul><li>Proof of authorship (non-repudiation)</li><li>Prevents impersonation</li><li>Verified badge on GitHub/GitLab</li></ul><h4>SSH Signing (Git 2.34+)</h4><pre><code>// Simpler alternative to GPG\ngit config --global user.signingkey ~/.ssh/id_ed25519.pub\ngit config --global gpg.format ssh\ngit config --global commit.gpgsign true\n\ngit commit -m \"SSH-signed commit\"\n</code></pre>",
-      "difficulty" : "Advanced",
-      "tags": ["Git", "Security", "GPG"]
+      "difficulty": "Advanced",
+      "tags": [
+        "Git",
+        "Security",
+        "GPG"
+      ],
+      "keyPoints": [
+        "Proof of authorship (non-repudiation)",
+        "Verified badge on GitHub/GitLab"
+      ]
     },
     {
       "question": "Explain git worktrees and their use cases.",
       "answer": "<p><strong>git worktree</strong> allows checking out multiple branches simultaneously in separate directories.</p><pre><code>// Create worktree for feature branch\ngit worktree add ../project-feature feature-branch\n\n// Create worktree for hotfix\ngit worktree add -b hotfix-123 ../project-hotfix main\n\n// List worktrees\ngit worktree list\n\n// Remove worktree\ngit worktree remove ../project-feature\n\n// Prune stale worktrees\ngit worktree prune\n</code></pre><h4>Use Cases</h4><ul><li>Review PRs without stashing current work</li><li>Run long tests on another branch simultaneously</li><li>Compare behavior between branches side-by-side</li><li>Work on multiple features without branch switching overhead</li></ul><h4>Restrictions</h4><ul><li>Can't have two worktrees on same branch</li><li>Worktrees share the same <code>.git</code> object database</li><li>Untracked files aren't shared between worktrees</li></ul>",
-      "difficulty" : "Advanced",
-      "tags": ["Git", "Worktree", "Productivity"]
+      "difficulty": "Advanced",
+      "tags": [
+        "Git",
+        "Worktree",
+        "Productivity"
+      ],
+      "keyPoints": [
+        "Review PRs without stashing current work",
+        "Run long tests on another branch simultaneously",
+        "Compare behavior between branches side-by-side"
+      ]
     }
   ]
-};
+}

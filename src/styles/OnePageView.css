@@ -681,3 +681,15 @@
     page-break-inside: avoid;
   }
 }
+
+/* ===== CodeBlock (highlighted) inside OnePageView / PDF ===== */
+.one-page-preview .code-block,
+.pdf-export-target .code-block {
+  margin: 12px 0;
+  page-break-inside: avoid;
+}
+
+.pdf-export-example .code-block {
+  margin: 8px 0;
+  page-break-inside: avoid;
+}

@@ -1,14 +1,22 @@
 import { Terminal, Eye, Copy, Check } from 'lucide-react'
 import { useState } from 'react'
+import CodeBlock from './CodeBlock'
+import '../styles/CodeBlock.css'
 
-function ExampleBox({ title, code, output, type = 'code' }) {
+function ExampleBox({ title, code, output, type = 'code', language }) {
   const [copied, setCopied] = useState(false)
-  
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(code)
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(code).catch(() => {})
+    }
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
+
+  // Only highlight when this example is actually a code example.
+  // "type === 'demo'" or any non-code type is treated as plain text.
+  const isCodeExample = type === 'code' || type === undefined
 
   return (
     <div className="example-box" role="region" aria-label={`Example: ${title || 'Code example'}`}>
@@ -17,9 +25,9 @@ function ExampleBox({ title, code, output, type = 'code' }) {
           {type === 'code' ? <Terminal size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
           <span>{title || 'Example'}</span>
         </div>
-        <button 
-          className="copy-btn" 
-          onClick={handleCopy} 
+        <button
+          className="copy-btn"
+          onClick={handleCopy}
           title="Copy to clipboard"
           aria-label={copied ? 'Copied!' : 'Copy code to clipboard'}
         >
@@ -27,13 +35,17 @@ function ExampleBox({ title, code, output, type = 'code' }) {
           <span className="sr-only">{copied ? 'Copied!' : 'Copy'}</span>
         </button>
       </div>
-      
+
       {code && (
-        <pre className="example-code" role="code" aria-label="Code example">
-          <code>{code}</code>
-        </pre>
+        isCodeExample ? (
+          <CodeBlock code={code} language={language} title={null} showCopy={false} />
+        ) : (
+          <pre className="example-code" role="code" aria-label="Code example">
+            <code>{code}</code>
+          </pre>
+        )
       )}
-      
+
       {output && (
         <div className="example-output">
           <div className="output-label">Output:</div>

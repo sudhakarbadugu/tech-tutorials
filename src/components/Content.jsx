@@ -1,13 +1,60 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import ExampleBox from './ExampleBox'
 import MermaidDiagram from './MermaidDiagram'
-import { ChevronLeft, ChevronRight, BookOpen, Layers, ChevronDown, Loader } from 'lucide-react'
+import { ChevronLeft, ChevronRight, BookOpen, Layers, ChevronDown, Loader, Focus, Minimize2 } from 'lucide-react'
 import { getSubjectStructure, subjectMeta } from '../data/tutorialDataLoader'
+import { interviewRelatedTutorials } from '../data/interviewRelatedTutorials'
+import { interviewQuestions, interviewSubjects } from '../data/interviewData'
 import { APP_NAME } from '../constants/brand'
 
-function Content({ subject, unit, topic, onNavigate, version, onOnePageView, subjectContent, loading }) {
+function scrollContentPanelToTop(element) {
+  if (!element || typeof element.scrollTo !== 'function') return
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  element.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })
+}
+
+function Content({ subject, unit, topic, onNavigate, version, onOnePageView, subjectContent, loading, readingMode = false, toggleReadingMode }) {
+  const contentRef = useRef(null)
   const [openAccordions, setOpenAccordions] = useState(new Set())
+
+  useEffect(() => {
+    scrollContentPanelToTop(contentRef.current)
+  }, [subject, unit, topic])
+
   const content = subjectContent?.[unit]?.[topic]
+
+  const relatedInterviewQuestions = useMemo(() => {
+    const results = []
+    for (const [interviewSubject, indexes] of Object.entries(interviewRelatedTutorials)) {
+      const subjectData = interviewSubjects[interviewSubject]
+      if (!subjectData) continue
+      for (const [index, tutorials] of Object.entries(indexes)) {
+        const matches = tutorials.some(
+          (t) => t.subject === subject && t.unit === unit && t.topic === topic
+        )
+        if (matches) {
+          const q = interviewQuestions[interviewSubject]?.questions[index]
+          if (q) {
+            results.push({
+              subject: interviewSubject,
+              index: Number(index),
+              title: q.question,
+              subjectTitle: subjectData.title
+            })
+          }
+        }
+      }
+    }
+    return results.slice(0, 8)
+  }, [subject, unit, topic])
+
+  // Reset collapsed accordions when the topic changes.
+  useEffect(() => {
+    // Defer to a microtask to avoid cascading-render warnings while still
+    // running after the topic change has been applied.
+    queueMicrotask(() => setOpenAccordions(new Set()))
+  }, [subject, unit, topic])
   const structure = getSubjectStructure(subject)
   const subjectTitle = subjectMeta[subject]?.title || APP_NAME
   
@@ -31,7 +78,7 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
   
   if (loading) {
     return (
-      <main className="content" role="main" aria-label="Course content">
+      <main ref={contentRef} className="content" role="main" aria-label="Course content">
         <div className="content-placeholder">
           <Loader size={40} className="loading-icon" aria-hidden="true" />
           <p>Loading content...</p>
@@ -42,7 +89,7 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
 
   if (!content) {
     return (
-      <main className="content" role="main" aria-label="Course content">
+      <main ref={contentRef} className="content" role="main" aria-label="Course content">
         <div className="content-placeholder">
           <h2>Welcome to {subjectTitle}</h2>
           <p>Select a topic from the sidebar to begin learning.</p>
@@ -63,10 +110,15 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
     })
   }
 
-  const isPracticeQuestions = (heading) => {
+  const isCollapsibleSection = (heading) => {
     if (!heading) return false
-    const lower = heading.toLowerCase()
-    return lower.includes('practice question') || lower.includes('practice problem')
+    const lower = heading.toLowerCase().trim()
+    if (lower.includes('practice question') || lower.includes('practice problem')) return true
+    return (
+      lower === 'common mistakes' ||
+      lower === 'real-world application' ||
+      lower === 'quick recap'
+    )
   }
 
   const renderSectionBody = (section) => (
@@ -76,11 +128,12 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
         <div key={i} className="section-text" dangerouslySetInnerHTML={{ __html: item }} />
       ))}
       
-      {/* W3Schools-style inline code block */}
+            {/* W3Schools-style inline code block */}
       {section.code && (
-        <ExampleBox 
+        <ExampleBox
           title={section.heading || 'Example'}
           code={section.code}
+          language={section.language}
           type="code"
         />
       )}
@@ -120,11 +173,12 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
         </div>
       )}
       
-      {section.example && (
-        <ExampleBox 
-          title={section.example.title} 
+            {section.example && (
+        <ExampleBox
+          title={section.example.title}
           code={section.example.code}
           output={section.example.output}
+          language={section.example.language}
           type={section.example.type || 'code'}
         />
       )}
@@ -145,7 +199,7 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
   )
 
   const renderSection = (section, idx) => {
-    const isAccordion = isPracticeQuestions(section.heading)
+    const isAccordion = isCollapsibleSection(section.heading)
     const isOpen = openAccordions.has(idx)
 
     if (isAccordion) {
@@ -194,7 +248,7 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
   }
 
   return (
-    <main className="content" role="main" aria-label="Course content">
+    <main ref={contentRef} className="content" role="main" aria-label="Course content">
       <div className="content-header">
         <nav aria-label="Breadcrumb" className="breadcrumb">
           <ol className="breadcrumb-list">
@@ -226,12 +280,49 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
             <BookOpen size={16} aria-hidden="true" />
             <span>View Full Subject</span>
           </button>
+          <button
+            className={`download-btn ${readingMode ? 'download-all' : ''}`}
+            onClick={toggleReadingMode}
+            aria-label={readingMode ? 'Exit reading mode' : 'Enter reading mode'}
+            title={readingMode ? 'Exit reading mode' : 'Enter reading mode'}
+          >
+            {readingMode ? <Minimize2 size={16} aria-hidden="true" /> : <Focus size={16} aria-hidden="true" />}
+            <span>{readingMode ? 'Exit Reading' : 'Reading Mode'}</span>
+          </button>
         </div>
       </div>
       
       <div className="content-body" aria-labelledby="content-title">
+        {readingMode && (
+          <button
+            type="button"
+            className="reading-mode-exit"
+            onClick={toggleReadingMode}
+            aria-label="Exit reading mode"
+            title="Exit reading mode"
+          >
+            <Minimize2 size={16} aria-hidden="true" />
+            <span>Exit Reading</span>
+          </button>
+        )}
         {content.sections.map((section, idx) => renderSection(section, idx))}
-        
+
+        {relatedInterviewQuestions.length > 0 && (
+          <div className="related-interview-questions">
+            <h3>Related Interview Questions</h3>
+            <ul>
+              {relatedInterviewQuestions.map((q) => (
+                <li key={`${q.subject}-${q.index}`}>
+                  <Link to={`/interview/${q.subject}`}>
+                    <span className="related-iq-subject">{q.subjectTitle}</span>
+                    <span className="related-iq-title">{q.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* Next / Previous Navigation */}
         <nav className="topic-nav" aria-label="Topic navigation">
           {prevTopic ? (
