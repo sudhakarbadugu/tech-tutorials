@@ -272,6 +272,112 @@ body {
   }
 }
 
+/* ===== Responsive Subject Dropdown (Tablets) ===== */
+@media (max-width: 980px) and (min-width: 769px) {
+  .subject-menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .subject-menu {
+    padding: 14px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .subject-toggle {
+    max-width: 220px;
+  }
+}
+
+/* ===== Responsive Subject Dropdown (Tablets & Mobiles) ===== */
+@media (max-width: 768px) {
+  /* Constrain the dropdown to the viewport with safe margins */
+  .subject-menu,
+  .subject-dropdown.interview-mode .subject-menu {
+    position: fixed;
+    top: 60px !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    max-height: calc(100vh - 76px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px;
+    border-radius: 10px;
+  }
+  /* Single column on small screens for readability */
+  .subject-menu-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  /* Larger touch targets */
+  .subject-option {
+    padding: 12px 12px;
+    min-height: 44px;
+  }
+  .subject-name {
+    font-size: 0.92rem;
+  }
+  .subject-menu-category-title {
+    font-size: 0.78rem;
+    padding: 10px 6px;
+  }
+  /* Shrink toggle to fit narrow header */
+  .subject-dropdown {
+    margin-left: 8px;
+  }
+  .subject-toggle {
+    max-width: 180px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  /* Hide version badge text on very small screens if cramped */
+  .header-right {
+    gap: 8px;
+    margin-left: 6px;
+  }
+  .version-badge {
+    display: none;
+  }
+  .search-shortcut {
+    display: none;
+  }
+}
+
+/* ===== Responsive Subject Dropdown (Small Mobiles) ===== */
+@media (max-width: 480px) {
+  .subject-menu,
+  .subject-dropdown.interview-mode .subject-menu {
+    left: 4px !important;
+    right: 4px !important;
+    top: 56px !important;
+    padding: 10px;
+    max-height: calc(100vh - 68px);
+  }
+  .subject-menu-grid {
+    gap: 10px;
+  }
+  .subject-toggle {
+    max-width: 140px;
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+  .subject-toggle-label {
+    max-width: 80px;
+  }
+  .subject-option {
+    padding: 14px 12px;
+    min-height: 48px;
+  }
+  .subject-name {
+    font-size: 0.95rem;
+  }
+  .logo-text {
+    font-size: 1rem;
+  }
+}
+
 .subject-menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
