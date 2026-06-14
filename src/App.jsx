@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, Navigate, useParams, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
@@ -206,6 +206,7 @@ function TutorialView() {
 function InterviewView() {
   const { subject } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light')
   const [searchOpen, setSearchOpen] = useState(false)
   useEffect(() => {
@@ -252,9 +253,12 @@ function InterviewView() {
           onBack={() => navigate('/interview')}
           onBackToHome={() => navigate('/')}
           onSelectSubject={(s) => navigate(`/interview/${s}`)}
-          onMockInterview={() => navigate(`/interview/mock?subject=${subject}`)}
-          onRevisionDeck={() => navigate('/interview/revision')}
-          onStudyPaths={() => navigate('/interview/paths')}
+          onMockInterview={() =>
+            navigate(`/interview/mock?subject=${subject}`, { state: { from: location.pathname } })}
+          onRevisionDeck={() =>
+            navigate('/interview/revision', { state: { from: location.pathname } })}
+          onStudyPaths={() =>
+            navigate('/interview/paths', { state: { from: location.pathname } })}
           theme={theme}
         />
       ) : (

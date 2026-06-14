@@ -14,11 +14,13 @@ import { interviewQuestions, interviewSubjects } from '../data/interviewData'
 import { difficultyConfig } from './interviewUi'
 import { getBookmarkedQuestions, shuffleArray } from './interviewPrepUtils'
 import PrepAnswer from './PrepAnswer'
+import usePrepBack from './usePrepBack'
 import styles from './Interview.module.css'
 
 export default function RevisionDeck({ theme }) {
   const navigate = useNavigate()
   const [filterSubject, setFilterSubject] = useState('all')
+  const { path: backPath, label: backLabel } = usePrepBack('/interview', 'Back to interview')
   const [mode, setMode] = useState('list')
   const [current, setCurrent] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
@@ -177,9 +179,9 @@ export default function RevisionDeck({ theme }) {
   return (
     <div className={`${styles.prepPage} ${theme}`}>
       <div className={styles.prepInner}>
-        <button type="button" className={styles.backBtn} onClick={() => navigate('/interview')}>
+        <button type="button" className={styles.backBtn} onClick={() => navigate(backPath)}>
           <ArrowLeft size={16} />
-          Back to interview
+          {backLabel}
         </button>
 
         <div className={styles.prepHero}>

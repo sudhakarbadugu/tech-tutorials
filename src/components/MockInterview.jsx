@@ -15,6 +15,7 @@ import { interviewQuestions, interviewSubjects } from '../data/interviewData'
 import { difficultyConfig } from './interviewUi'
 import { formatTimer, pickRandomQuestions } from './interviewPrepUtils'
 import PrepAnswer from './PrepAnswer'
+import usePrepBack from './usePrepBack'
 import styles from './Interview.module.css'
 
 const QUESTION_COUNTS = [5, 10, 15, 20]
@@ -34,6 +35,7 @@ export default function MockInterview({ theme }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const presetSubject = searchParams.get('subject') || ''
+  const { path: backPath, label: backLabel } = usePrepBack('/interview', 'Back to interview')
 
   const [phase, setPhase] = useState('setup')
   const [subjectId, setSubjectId] = useState(
@@ -115,9 +117,9 @@ export default function MockInterview({ theme }) {
     return (
       <div className={`${styles.prepPage} ${theme}`}>
         <div className={styles.prepInner}>
-          <button type="button" className={styles.backBtn} onClick={() => navigate('/interview')}>
+          <button type="button" className={styles.backBtn} onClick={() => navigate(backPath)}>
             <ArrowLeft size={16} />
-            Back to interview
+            {backLabel}
           </button>
 
           <div className={styles.prepHero}>
@@ -224,8 +226,8 @@ export default function MockInterview({ theme }) {
               <button type="button" className={styles.actionBtn} onClick={() => navigate(`/interview/${subjectId}`)}>
                 Browse all questions
               </button>
-              <button type="button" className={styles.actionBtn} onClick={() => navigate('/interview')}>
-                Back to interview
+              <button type="button" className={styles.actionBtn} onClick={() => navigate(backPath)}>
+                {backLabel}
               </button>
             </div>
           </div>

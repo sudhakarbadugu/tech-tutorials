@@ -3,9 +3,7 @@ import {
   ArrowLeft,
   BookOpen,
   Bookmark,
-  ChevronDown,
   ChevronLeft,
-  ChevronUp,
   ChevronRight,
   Eye,
   EyeOff,
@@ -243,9 +241,11 @@ function InterviewContent({
   const [groupByTopic, setGroupByTopic] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(readSidebarCollapsed)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
-  const [filtersOpen, setFiltersOpen] = useState(false)
+  const [filterSidebarOpen, setFilterSidebarOpen] = useState(false)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
   const [flashcardMode, setFlashcardMode] = useState(false)
   const [revealed, setRevealed] = useState(new Set())
+  const searchInputRef = useRef(null)
 
   const subjectData = interviewQuestions[subject]
   const meta = interviewSubjects[subject]
@@ -315,6 +315,16 @@ function InterviewContent({
 
   useEffect(() => {
     function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        if (searchModalOpen) {
+          setSearchModalOpen(false)
+          return
+        }
+        if (filterSidebarOpen) {
+          setFilterSidebarOpen(false)
+          return
+        }
+      }
       if (event.target?.tagName === 'INPUT' || event.target?.tagName === 'TEXTAREA') return
       if (event.key.toLowerCase() === 'f') {
         toggleFlashcardMode()
@@ -322,7 +332,25 @@ function InterviewContent({
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [filterSidebarOpen, searchModalOpen])
+
+  useEffect(() => {
+    if (!filterSidebarOpen && !searchModalOpen) return undefined
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [filterSidebarOpen, searchModalOpen])
+
+  useEffect(() => {
+    if (!searchModalOpen) return undefined
+    const id = window.requestAnimationFrame(() => {
+      searchInputRef.current?.focus()
+      searchInputRef.current?.select()
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [searchModalOpen])
 
   const toggleSidebarCollapsed = () => {
     setSidebarCollapsed(prev => {
@@ -457,6 +485,182 @@ function InterviewContent({
 
   const shortTitle = meta.title.replace(' Interview Questions', '')
 
+  const renderSearchModal = () => (
+    <>
+      <div
+        className={`${styles.searchModalOverlay} ${searchModalOpen ? styles.searchModalOverlayVisible : ''}`}
+        onClick={() => setSearchModalOpen(false)}
+        aria-hidden="true"
+      />
+      <div
+        id="interview-search-modal"
+        className={`${styles.searchModal} ${searchModalOpen ? styles.searchModalOpen : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search questions"
+        aria-hidden={!searchModalOpen}
+      >
+        <div className={styles.searchModalHeader}>
+          <Search size={18} className={styles.searchModalHeaderIcon} />
+          <input
+            ref={searchInputRef}
+            type="text"
+            className={styles.searchModalInput}
+            placeholder="Search questions, answers, or tags..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setSearchModalOpen(false)
+            }}
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              className={styles.searchModalClear}
+              onClick={() => setSearchQuery('')}
+              aria-label="Clear search"
+            >
+              <X size={16} />
+            </button>
+          )}
+          <button
+            type="button"
+            className={styles.searchModalClose}
+            onClick={() => setSearchModalOpen(false)}
+            aria-label="Close search"
+          >
+            <X size={18} />
+          </button>
+        </div>
+        <div className={styles.searchModalFooter}>
+          <span className={styles.searchModalMeta}>
+            {searchQuery
+              ? `${filteredQuestions.length} matching of ${allQuestions.length} question${allQuestions.length === 1 ? '' : 's'}`
+              : `${allQuestions.length} question${allQuestions.length === 1 ? '' : 's'} available`}
+          </span>
+          <span className={styles.searchModalHint}>
+            Press <kbd>Esc</kbd> to close
+          </span>
+        </div>
+      </div>
+    </>
+  )
+
+  const renderFilterSidebar = () => (
+    <>
+      <div
+        className={`${styles.filterSidebarOverlay} ${filterSidebarOpen ? styles.filterSidebarOverlayVisible : ''}`}
+        onClick={() => setFilterSidebarOpen(false)}
+        aria-hidden="true"
+      />
+      <aside
+        id="interview-filter-sidebar"
+        className={`${styles.filterSidebar} ${filterSidebarOpen ? styles.filterSidebarOpen : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Filter questions"
+        aria-hidden={!filterSidebarOpen}
+      >
+        <div className={styles.filterSidebarHeader}>
+          <div className={styles.filterSidebarTitle}>
+            <SlidersHorizontal size={16} />
+            <span>Filters</span>
+          </div>
+          <button
+            type="button"
+            className={styles.filterSidebarClose}
+            onClick={() => setFilterSidebarOpen(false)}
+            aria-label="Close filters"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className={styles.filterSidebarBody}>
+          <div className={styles.filterSidebarSection}>
+            <div className={styles.filterSidebarLabel}>Level</div>
+            <div className={styles.toolbarPills}>
+              {['all', 'Beginner', 'Intermediate', 'Advanced'].map(level => (
+                <button
+                  key={level}
+                  className={`${styles.toolbarPill} ${difficultyFilter === level ? styles.toolbarPillActive : ''}`}
+                  onClick={() => setDifficultyFilter(level)}
+                >
+                  {level === 'all' ? 'All' : level}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {topics.length > 0 && (
+            <div className={styles.filterSidebarSection}>
+              <div className={styles.filterSidebarLabel}>Topic</div>
+              <div className={styles.filterSidebarTopics}>
+                <button
+                  className={`${styles.toolbarPill} ${topicFilter === 'all' ? styles.toolbarPillActive : ''}`}
+                  onClick={() => setTopicFilter('all')}
+                >
+                  All
+                </button>
+                {topics.map(topic => (
+                  <button
+                    key={topic}
+                    className={`${styles.toolbarPill} ${topicFilter === topic ? styles.toolbarPillActive : ''}`}
+                    onClick={() => setTopicFilter(topicFilter === topic ? 'all' : topic)}
+                  >
+                    {topic}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className={styles.filterSidebarSection}>
+            <div className={styles.filterSidebarLabel}>View options</div>
+            <div className={styles.filterSidebarToggles}>
+              <button
+                type="button"
+                className={`${styles.actionBtn} ${flashcardMode ? styles.actionBtnActive : ''}`}
+                onClick={toggleFlashcardMode}
+                title="Flashcard mode (F)"
+              >
+                {flashcardMode ? <EyeOff size={14} /> : <Eye size={14} />}
+                Flashcards
+              </button>
+              <button
+                type="button"
+                className={`${styles.actionBtn} ${groupByTopic ? styles.actionBtnActive : ''}`}
+                onClick={() => setGroupByTopic(!groupByTopic)}
+              >
+                <Layers size={14} />
+                Group by topic
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.filterSidebarFooter}>
+          <button
+            type="button"
+            className={styles.filterSidebarClear}
+            onClick={clearFilters}
+            disabled={!activeFilters && !flashcardMode && !groupByTopic}
+          >
+            <RotateCcw size={14} />
+            Clear all
+          </button>
+          <button
+            type="button"
+            className={styles.filterSidebarApply}
+            onClick={() => setFilterSidebarOpen(false)}
+          >
+            Show {filteredQuestions.length} question{filteredQuestions.length === 1 ? '' : 's'}
+          </button>
+        </div>
+      </aside>
+    </>
+  )
+
   return (
     <div className={`${styles.contentPage} ${theme}`}>
     <div className={styles.content}>
@@ -512,6 +716,32 @@ function InterviewContent({
               </button>
               <button
                 type="button"
+                className={styles.subjectPrepBtn}
+                onClick={() => setSearchModalOpen(true)}
+                title="Search"
+                aria-label="Open search"
+                aria-expanded={searchModalOpen}
+                aria-controls="interview-search-modal"
+              >
+                <Search size={15} />
+                {searchQuery && <span className={styles.filtersBadge} aria-hidden />}
+              </button>
+              <button
+                type="button"
+                className={styles.subjectPrepBtn}
+                onClick={() => setFilterSidebarOpen(true)}
+                title="Filters"
+                aria-label="Open filters"
+                aria-expanded={filterSidebarOpen}
+                aria-controls="interview-filter-sidebar"
+              >
+                <SlidersHorizontal size={15} />
+                {(panelFiltersActive || flashcardMode || groupByTopic) && (
+                  <span className={styles.filtersBadge} aria-hidden />
+                )}
+              </button>
+              <button
+                type="button"
                 className={styles.printBtn}
                 onClick={() => window.print()}
                 title="Print questions"
@@ -533,109 +763,6 @@ function InterviewContent({
           </div>
 
           <div className={styles.questionsInner}>
-            <div className={styles.stickyToolbar}>
-              <div className={styles.toolbarHeader}>
-                <div className={styles.toolbarSearch}>
-                  <Search size={16} className={styles.searchIcon} />
-                  <input
-                    type="text"
-                    placeholder="Search questions, answers, or tags..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                  {searchQuery && (
-                    <button
-                      className={styles.searchClear}
-                      onClick={() => setSearchQuery('')}
-                      style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)' }}
-                    >
-                      <X size={14} />
-                    </button>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  className={`${styles.filtersToggle} ${filtersOpen ? styles.filtersToggleOpen : ''}`}
-                  onClick={() => setFiltersOpen(prev => !prev)}
-                  aria-expanded={filtersOpen}
-                  aria-controls="interview-filters-panel"
-                >
-                  <SlidersHorizontal size={15} />
-                  <span>Filters</span>
-                  {panelFiltersActive && <span className={styles.filtersBadge} aria-hidden />}
-                  {filtersOpen ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
-                </button>
-              </div>
-
-              {filtersOpen && (
-                <div id="interview-filters-panel" className={styles.filtersPanel}>
-                  <div className={styles.toolbarFilters}>
-                    <span className={styles.toolbarLabel}>Level</span>
-                    <div className={styles.toolbarPills}>
-                      {['all', 'Beginner', 'Intermediate', 'Advanced'].map(level => (
-                        <button
-                          key={level}
-                          className={`${styles.toolbarPill} ${difficultyFilter === level ? styles.toolbarPillActive : ''}`}
-                          onClick={() => setDifficultyFilter(level)}
-                        >
-                          {level === 'all' ? 'All' : level}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {topics.length > 0 && (
-                    <div className={styles.toolbarFilters}>
-                      <span className={styles.toolbarLabel}>Topic</span>
-                      <div className={styles.toolbarPills}>
-                        <button
-                          className={`${styles.toolbarPill} ${topicFilter === 'all' ? styles.toolbarPillActive : ''}`}
-                          onClick={() => setTopicFilter('all')}
-                        >
-                          All
-                        </button>
-                        {topics.map(topic => (
-                          <button
-                            key={topic}
-                            className={`${styles.toolbarPill} ${topicFilter === topic ? styles.toolbarPillActive : ''}`}
-                            onClick={() => setTopicFilter(topicFilter === topic ? 'all' : topic)}
-                          >
-                            {topic}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className={styles.toolbarActions}>
-                    <button
-                      type="button"
-                      className={`${styles.actionBtn} ${flashcardMode ? styles.actionBtnActive : ''}`}
-                      onClick={toggleFlashcardMode}
-                      title="Flashcard mode (F)"
-                    >
-                      {flashcardMode ? <EyeOff size={13} /> : <Eye size={13} />}
-                      Flashcards
-                    </button>
-                    <button
-                      type="button"
-                      className={`${styles.actionBtn} ${groupByTopic ? styles.actionBtnActive : ''}`}
-                      onClick={() => setGroupByTopic(!groupByTopic)}
-                    >
-                      <Layers size={13} />
-                      Group by topic
-                    </button>
-                    {activeFilters && (
-                      <button type="button" className={styles.actionBtn} onClick={clearFilters}>
-                        <RotateCcw size={13} />
-                        Clear filters
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-
             {!activeFilters && progress.viewed.length < allQuestions.length && (
               <div className={styles.quickJump}>
                 <span>
@@ -706,6 +833,9 @@ function InterviewContent({
         </div>
       </div>
     </div>
+
+    {renderFilterSidebar()}
+    {renderSearchModal()}
 
       <InterviewFooter
         variant="subject"

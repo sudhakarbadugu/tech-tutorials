@@ -21,12 +21,14 @@ import {
   readPathProgress
 } from './interviewPrepUtils'
 import PrepAnswer from './PrepAnswer'
+import usePrepBack from './usePrepBack'
 import styles from './Interview.module.css'
 
 export default function StudyPathView({ theme }) {
   const navigate = useNavigate()
   const { pathId } = useParams()
   const path = pathId ? getStudyPath(pathId) : null
+  const { path: backPath, label: backLabel } = usePrepBack('/interview', 'Back to interview')
 
   const [activeDay, setActiveDay] = useState(null)
   const [dayQuestions, setDayQuestions] = useState([])
@@ -83,9 +85,9 @@ export default function StudyPathView({ theme }) {
     return (
       <div className={`${styles.prepPage} ${theme}`}>
         <div className={styles.prepInner}>
-          <button type="button" className={styles.backBtn} onClick={() => navigate('/interview')}>
+          <button type="button" className={styles.backBtn} onClick={() => navigate(backPath)}>
             <ArrowLeft size={16} />
-            Back to interview
+            {backLabel}
           </button>
           <div className={styles.prepHero}>
             <div className={styles.prepHeroIcon}>

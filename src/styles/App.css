@@ -30,6 +30,7 @@
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
+  --header-height: 56px;
 }
 
 [data-theme="dark"] {
@@ -2000,6 +2001,10 @@ table tr:hover {
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
+  :root {
+    --header-height: 52px;
+  }
+
   .sidebar {
     position: fixed;
     left: 0;
