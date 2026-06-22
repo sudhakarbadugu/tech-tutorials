@@ -73,6 +73,16 @@ server {
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
+
+    # Never cache index.html — it references the hashed bundles and must
+    # always revalidate so users get the latest version after a deploy.
+    # This is what fixes the "I still see the old version" problem in
+    # Telegram's in-app browser and other aggressive WebView caches.
+    location = /index.html {
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Pragma "no-cache" always;
+        add_header Expires "0" always;
+    }
 }
 EOF
 

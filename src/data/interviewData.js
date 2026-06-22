@@ -38,6 +38,7 @@ import { devopsCloudRealQuestionsA } from './interviewQuestionsDevopsCloudRealA.
 import { devopsCloudRealQuestionsB } from './interviewQuestionsDevopsCloudRealB.js'
 import { aiEngineerRealQuestionsA } from './interviewQuestionsAIEngineerRealA.js'
 import { aiEngineerRealQuestionsB } from './interviewQuestionsAIEngineerRealB.js'
+import { ragQuestions } from './interviewQuestionsRAG.js'
 import { microservicesQuestions } from './interviewQuestionsMicroservices.js'
 
 export const interviewCategories = {
@@ -201,8 +202,8 @@ const interviewSubjectMeta = {
   'ai-engineer': {
     title: 'AI Engineer Interview Questions',
     icon: '🤖',
-    description: 'Machine learning, deep learning, LLMs, MLOps, NLP, computer vision, and AI system design.',
-    topics: ['LLMs', 'MLOps', 'Deep Learning', 'NLP', 'Computer Vision', 'System Design', 'Statistics']
+    description: 'Machine learning, deep learning, LLMs, MLOps, NLP, computer vision, RAG systems, and AI system design.',
+    topics: ['LLMs', 'MLOps', 'Deep Learning', 'NLP', 'Computer Vision', 'RAG', 'System Design', 'Statistics']
   }
 }
 
@@ -289,6 +290,7 @@ export const interviewQuestions = {
     questions: [
       ...aiEngineerRealQuestionsA.questions,
       ...aiEngineerRealQuestionsB.questions,
+      ...ragQuestions.questions,
     ],
   },
   microservices: { questions: microservicesQuestions.questions }
