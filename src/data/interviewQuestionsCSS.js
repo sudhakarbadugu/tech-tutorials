@@ -1,5 +1,5 @@
 // Auto-generated interview questions with key-points summaries
-// Generated: 2026-06-13T18:03:17.480Z
+// Generated: 2026-06-23T20:56:00.000Z
 
 export const cssQuestions = {
   "questions": [
@@ -11,9 +11,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "External CSS: If styles are common for multiple pages, then we should use the external styles.",
-        "Internal CSS: If styles are used multiple times within the page, then we should be internal styles.",
-        "Inline CSS: If style is going to use only once then we can use internal css."
+        "External CSS: shared styles across multiple pages via <link> tag.",
+        "Internal CSS: styles used within a single page via <style> block.",
+        "Inline CSS: style attribute for single-element, one-off styling."
       ]
     },
     {
@@ -37,9 +37,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "static HTML elements are positioned static by default.",
-        "Static positioned elements are not affected by the top, bottom, left, and right properties.",
-        "relative An element with position: relative; is positioned relative to its normal position."
+        "static: default position, not affected by top/bottom/left/right.",
+        "relative: positioned relative to its normal position in the flow.",
+        "absolute: positioned relative to nearest positioned ancestor; removed from flow."
       ]
     },
     {
@@ -88,8 +88,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "padding margin Padding is available inside the border and around the content box.",
-        "Margin is available outside of the border."
+        "Padding is inside the border, around the content.",
+        "Margin is outside the border, between elements.",
+        "Use padding for space inside an element, margin for space between elements."
       ]
     },
     {
@@ -100,8 +101,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "Display:none Visibility:hidden It will remove the element from the DOM An element will be hidden.",
-        "Even though component is hidden, It will occupy the same space in the page."
+        "display:none removes element from DOM flow — no space occupied.",
+        "visibility:hidden hides element but it still occupies space.",
+        "Child of display:none parent is also hidden; child of visibility:hidden can be visible."
       ]
     },
     {
@@ -112,8 +114,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "relative absolute An element with position: relative; is positioned relative to its normal position.",
-        "Other content will not be adjusted to fit into any gap left by the element."
+        "relative: stays in normal flow, adjusts from normal position.",
+        "absolute: removed from flow, positioned relative to nearest positioned ancestor.",
+        "relative elements don't overlap; absolute elements can overlap others."
       ]
     },
     {
@@ -124,8 +127,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "Sticky Fixed An element with position: sticky; is positioned based on the user's scroll position.",
-        "An element with position: fixed; is positioned relative to the viewport, which means it always stays in the same place even if the page is scrolled."
+        "sticky: toggles between relative and fixed based on scroll position.",
+        "fixed: always positioned relative to viewport, stays on scroll.",
+        "sticky needs a threshold (top/bottom) to trigger the stick behavior."
       ]
     },
     {
@@ -136,9 +140,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "Media query is a CSS technique introduced in CSS3. It is used to create a responsive web design.",
-        "It uses the @media rule to include a block of CSS properties only if a certain condition is true.",
-        "Using media queries we can develop web pages differently for each device based on screen or media types."
+        "Media queries enable responsive design via @media rule.",
+        "Can target viewport width, height, orientation, and resolution.",
+        "Common breakpoints: 576px, 768px, 992px, 1200px."
       ]
     },
     {
@@ -149,9 +153,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "Using the Flexible Box Layout, we can design flexible responsive layout structure without using float or positioning.",
-        "The flex container properties are: flex-direction: defines in which direction the container wants to stack the flex items",
-        "flex-wrap: specifies whether the flex items should wrap or not."
+        "Flexbox provides flexible one-dimensional layout without float/position.",
+        "Container props: flex-direction, flex-wrap, justify-content, align-items.",
+        "Item props: flex (grow/shrink/basis), order, align-self."
       ]
     },
     {
@@ -162,7 +166,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "The CSS Grid Layout Module offers a grid-based layout system, with rows and columns, making it easier to design web pages without having to use floats and positioning."
+        "CSS Grid offers a two-dimensional layout system with rows and columns.",
+        "Eliminates need for floats and positioning for page layouts.",
+        "Key properties: grid-template-columns, gap, grid-column, grid-row."
       ]
     },
     {
@@ -173,9 +179,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "bootstrap is open-source css library",
-        "It is responsive css library",
-        "Bootstrap has multiple utility class and components. eg: For padding: p-1, margin: m-1"
+        "Bootstrap is an open-source responsive CSS framework.",
+        "Provides utility classes like p-1, m-1 for spacing.",
+        "Includes pre-built components: navbar, cards, modals, alerts."
       ]
     },
     {
@@ -212,9 +218,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "SASS Sass stands for Syntactically Awesome Stylesheet. Sass is an extension to CSS",
-        "Sass is a CSS pre-processor",
-        "Sass reduces repetition of CSS and therefore saves time"
+        "SASS = Syntactically Awesome Stylesheet, a CSS pre-processor.",
+        "Features: variables, nesting, mixins, inheritance, imports.",
+        "Browsers can't read SASS — it must be transpiled to CSS."
       ]
     },
     {
@@ -260,9 +266,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "CSS custom properties (variables) are entities defined by CSS authors that contain specific values to be reused throughout a document.",
-        "They are set using custom property notation (e.g., --main-color: black;) and are accessed using the var() function.",
-        "Benefits: Reduce repetition and improve maintainability"
+        "CSS custom properties are reusable values set with --name syntax.",
+        "Accessed via var() function, support inheritance and cascading.",
+        "Can be changed dynamically with JavaScript for theming."
       ]
     },
     {
@@ -273,9 +279,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "BEM stands for Block, Element, Modifier - a naming convention for CSS classes.",
-        "Block: Standalone entity that is meaningful on its own (e.g., header, container, menu)",
-        "Element: A part of a block that has no standalone meaning (e.g., menu item, list item, header title)"
+        "BEM = Block, Element, Modifier naming convention.",
+        "Block: standalone entity (.card). Element: part of block (.card__title).",
+        "Modifier: variant flag (.card--featured, .card__button--disabled)."
       ]
     },
     {
@@ -286,9 +292,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "CSS specificity determines which CSS rule is applied when multiple rules target the same element.",
-        "Specificity hierarchy (from highest to lowest): Inline styles (style attribute) - 1000 points",
-        "Classes, attributes, pseudo-classes - 10 points each"
+        "Specificity determines which rule wins: (inline, IDs, classes, elements).",
+        "Inline = 1000, ID = 100, class/attribute = 10, element = 1.",
+        "!important overrides specificity but should be used sparingly."
       ]
     },
     {
@@ -299,9 +305,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "A stacking context is a three-dimensional conceptualization of HTML elements along an imaginary z-axis relative to the user.",
-        "Elements that create a new stacking context: Root element (html)",
-        "Elements with position: absolute/relative and z-index other than auto"
+        "Stacking context is a 3D z-axis layering of elements.",
+        "Created by: positioned elements with z-index, opacity < 1, transform, filter.",
+        "Children stack within their context before stacking as a group."
       ]
     },
     {
@@ -312,9 +318,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "The will-change property hints to browsers about what kind of changes to expect on an element, so they can set up appropriate optimizations.",
-        "Common values: auto (default)",
-        "When to use: Before starting animations or transitions"
+        "will-change hints to browsers about expected element changes.",
+        "Set before animation starts, remove after to avoid memory overhead.",
+        "Don't apply to too many elements — it has a memory cost."
       ]
     },
     {
@@ -325,9 +331,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "CSS transforms allow you to rotate, scale, skew, or translate elements without affecting the document flow.",
-        "Transform functions: translate() - moves element",
-        "rotate() - rotates element"
+        "Transforms (translate, rotate, scale, skew) don't affect document flow.",
+        "Hardware accelerated (GPU) — better performance than position changes.",
+        "Don't trigger layout/reflow, unlike changing top/left properties."
       ]
     },
     {
@@ -338,9 +344,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "Critical CSS refers to the minimum CSS required to render the above-the-fold content of a webpage.",
-        "Purpose: Eliminate render-blocking CSS",
-        "Improve First Contentful Paint (FCP)"
+        "Critical CSS is the minimum CSS needed for above-the-fold content.",
+        "Inline it in <head> to eliminate render-blocking and improve FCP.",
+        "Load non-critical CSS asynchronously with rel=preload."
       ]
     },
     {
@@ -351,9 +357,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "CSS Containment allows developers to isolate parts of the page from the rest, enabling browsers to optimize rendering.",
-        "Contain property values: layout: Element's internal layout doesn't affect external elements",
-        "paint: Element's descendants can't be painted outside its bounds"
+        "CSS Containment isolates page sections for rendering optimization.",
+        "contain: layout, paint, size, style, strict, content.",
+        "Reduces layout calculations — useful for large lists and virtualization."
       ]
     },
     {
@@ -364,9 +370,9 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "CSS Logical Properties provide the ability to control layout through logical, rather than physical, direction and dimension mappings.",
-        "Physical vs Logical properties: Physical Logical margin-left margin-inline-start margin-right margin-inline-end margin-top margin-block-start margin-bottom margin-block-end width inline-size height block-size",
-        "Benefits: Better support for internationalization (RTL languages)"
+        "Logical properties use inline/block axes instead of physical left/right.",
+        "Supports RTL languages and different writing modes automatically.",
+        "margin-inline-start replaces margin-left, width becomes inline-size."
       ]
     },
     {
@@ -377,9 +383,10 @@ export const cssQuestions = {
         "CSS"
       ],
       "keyPoints": [
-        "CSS Transitions CSS Animations Triggered by state changes (hover, focus, etc.",
-        "button { transition: background-color 0."
+        "Transitions: triggered by state changes, simple A-to-B, no looping.",
+        "Animations: run automatically, multi-step keyframes, built-in looping.",
+        "Transitions for UI interactions; animations for complex motion."
       ]
     }
   ]
-}
+};

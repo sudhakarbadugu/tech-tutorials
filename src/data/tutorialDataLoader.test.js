@@ -8,8 +8,10 @@ import {
 const ALL_SUBJECTS = Object.keys(subjectMeta)
 
 const SUBJECTS_WITH_FIVE_MODULES = ALL_SUBJECTS.filter(
-  (subject) => !['java', 'javascript'].includes(subject)
+  (subject) => !['java', 'javascript', 'css'].includes(subject)
 )
+
+const SIX_MODULE_SUBJECTS = ['css']
 
 const LEGACY_FOUR_MODULE_SUBJECTS = ['java', 'javascript']
 
@@ -19,6 +21,9 @@ function expectedModuleKeys(subject) {
   }
   if (LEGACY_FOUR_MODULE_SUBJECTS.includes(subject)) {
     return ['module1', 'module2', 'module3', 'module4']
+  }
+  if (SIX_MODULE_SUBJECTS.includes(subject)) {
+    return ['module1', 'module2', 'module3', 'module4', 'module5', 'module6']
   }
   return ['module1', 'module2', 'module3', 'module4', 'module5']
 }
@@ -87,6 +92,15 @@ describe('tutorialDataLoader', () => {
       (subject) => {
         const structure = getSubjectStructure(subject)
         expect(Object.keys(structure)).toHaveLength(4)
+        expect(Object.keys(structure)).toEqual(expectedModuleKeys(subject))
+      }
+    )
+
+    it.each(SIX_MODULE_SUBJECTS)(
+      '%s has exactly 6 modules',
+      (subject) => {
+        const structure = getSubjectStructure(subject)
+        expect(Object.keys(structure)).toHaveLength(6)
         expect(Object.keys(structure)).toEqual(expectedModuleKeys(subject))
       }
     )

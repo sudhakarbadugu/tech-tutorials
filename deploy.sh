@@ -7,8 +7,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR"
 BUILD_NUM="${1:-$(date +%Y%m%d%H%M)}"
-NGINX_ROOT="/var/www/html/tech-tutorials"
-CLOUDFLARE_TUNNEL_NAME="tech-tutorials"
+ CLOUDFLARE_TUNNEL_NAME="tech-tutorials"
 
 echo "🚀 Tech Tutorials Deployment"
 echo "=================================="
@@ -43,11 +42,19 @@ if ! command -v $NGINX_BIN &> /dev/null; then
     NGINX_BIN="/usr/sbin/nginx"
 fi
 
-# Step 5: Copy build to nginx root
-echo "📁 Step 5: Copying build to nginx..."
-mkdir -p "$NGINX_ROOT"
-rm -rf "$NGINX_ROOT"/*
-cp -r "$PROJECT_DIR/dist"/* "$NGINX_ROOT/"
+# Step 5: Copy build to nginx roots
+# The app is served from two nginx roots that must stay in sync:
+#   /var/www/html/tech-tutorials/  — standalone server block (port 8080)
+#   /var/www/apps/tech-tutorials/  — apps.conf + dev.trinitstechnologies.com.conf (port 80/443)
+# Failing to sync BOTH directories causes the dev URL to show stale content.
+NGINX_ROOTS=("/var/www/html/tech-tutorials" "/var/www/apps/tech-tutorials")
+echo "📁 Step 5: Copying build to nginx roots..."
+for NGINX_ROOT in "${NGINX_ROOTS[@]}"; do
+    mkdir -p "$NGINX_ROOT"
+    rm -rf "$NGINX_ROOT"/*
+    cp -r "$PROJECT_DIR/dist"/* "$NGINX_ROOT/"
+    echo "   ✅ Synced $NGINX_ROOT"
+done
 
 # Step 6: Configure nginx
 echo "⚙️  Step 6: Configuring nginx..."

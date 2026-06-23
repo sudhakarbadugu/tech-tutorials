@@ -102,5 +102,34 @@ export const cssStructure = {
         title: 'Bootstrap'
       }
     ]
+  },
+  module6: {
+    title: 'Module 6: Modern CSS',
+    topics: [
+      {
+        id: 'css-container-queries',
+        title: 'Container Queries'
+      },
+      {
+        id: 'css-has-selector',
+        title: ':has() Selector'
+      },
+      {
+        id: 'css-cascade-layers',
+        title: '@layer Cascade Layers'
+      },
+      {
+        id: 'css-clamp',
+        title: 'clamp(), min(), max()'
+      },
+      {
+        id: 'css-oklch',
+        title: 'oklch() & color-mix()'
+      },
+      {
+        id: 'css-nesting',
+        title: 'Native CSS Nesting'
+      }
+    ]
   }
 };
