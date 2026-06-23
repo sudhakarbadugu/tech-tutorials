@@ -229,5 +229,36 @@ export const systemDesignQuestions = {
         "Rate limiting per user/channel"
       ]
     }
+,
+    {
+          "question": "Design a flash-sale system capable of handling millions of users simultaneously.",
+          "answer": "<p>Flash sale = inventory sold in a few minutes, traffic 100-1000x normal. The bottleneck is <strong>overselling prevention under contention</strong>.</p><h4>Core requirements</h4><ul><li>Strict inventory accuracy (no overselling, no underselling).</li><li>Fair queueing (FIFO, no script advantage beyond allowed).</li><li>Latency budget roughly 200ms p99 for the buy endpoint.</li><li>Spike absorption: 1M users in 60s for 10K items = roughly 166 orders/sec required, but roughly 16K attempts/sec, with a 100:1 over-subscription.</li></ul><h4>Architecture</h4><ol><li><strong>Pre-warm:</strong> load inventory into Redis with <code>SET key 10000</code> per SKU.</li><li><strong>Queue:</strong> requests enter a Kafka/SQS queue, consumed by a worker pool at a controlled rate (consumer-side throttle).</li><li><strong>Atomic decrement:</strong> in Redis with Lua script — check current stock greater than 0, decrement, return success in one atomic op. Single-threaded Redis makes this safe and fast.</li><li><strong>Two-phase commit:</strong> after Redis decrement, write the order to the DB. If DB write fails, increment Redis back (compensating action). Use the outbox pattern for reliable DB writes.</li><li><strong>Idempotency:</strong> client sends an idempotency key; Redis SETNX reserves a slot; retries see it.</li><li><strong>Rate limit + captcha</strong> at the edge: prevent bot-driven inventory hoarding.</li></ol><h4>Capacity math</h4><ul><li>10K items, 1M attempts = 1% success rate. Funnel: 1M landing andrarr; 200K add-to-cart andrarr; 50K checkout attempts andrarr; 10K successful orders.</li><li>Each step needs the right backpressure: cart service can be lenient; checkout needs strict per-user rate limit.</li></ul><h4>Failure modes</h4><ul><li><strong>Redis dies:</strong> circuit-breaker; redirect to a waitlist; do not let overselling happen at the DB without Redis lock.</li><li><strong>DB slow:</strong> outbox + async writes; surface order state as pending until committed; webhook when confirmed.</li><li><strong>Bot attack:</strong> CAPTCHA, per-IP rate limit, account age requirement, device fingerprinting.</li></ul><h4>Observability</h4><ul><li>Per-second: attempts, cart-adds, checkout-starts, orders-confirmed, inventory-remaining.</li><li>Alert on inventory-remaining less than expected success rate (overselling risk).</li><li>End-to-end tracing across queue, Redis, DB.</li></ul><p>Anti-pattern: relying on a relational DB row-level lock for the decrement — 10K items times 1K attempts = 10M lock acquisitions, throughput collapses.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "System Design",
+                "Scalability",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Atomic decrement via Redis Lua script — single-threaded Redis = safe and fast.",
+                "Funnel: landing andrarr; cart andrarr; checkout andrarr; confirmed; backpressure at each step.",
+                "Outbox pattern for reliable DB write; idempotency key for retries; CAPTCHA + rate limit at the edge."
+          ]
+    },
+    {
+          "question": "Design a real-time notification system supporting email, SMS, and push notifications.",
+          "answer": "<p>A notification platform decouples producers from channels, applies user preferences and rate limits, and survives traffic spikes.</p><h4>Core components</h4><ol><li><strong>Producer APIs:</strong> business services call <code>notifications.send(userId, template, data)</code>.</li><li><strong>Notification Service (NS):</strong> resolves the user, looks up preferences, dedupes, builds the notification.</li><li><strong>Channel routers:</strong> email, SMS, push, in-app — separate workers per channel.</li><li><strong>Provider gateways:</strong> SES/SendGrid for email, Twilio for SMS, FCM/APNS for push.</li><li><strong>Tracking:</strong> delivery state, opens, clicks; webhook handlers from each provider.</li></ol><h4>Pipeline (per send)</h4><ol><li>Producer enqueues a notification event (Kafka topic <code>notifications.incoming</code>) with userId, template, channels, priority, dedupe key.</li><li>NS consumer: <strong>resolve user</strong> (with preferences: no SMS between 10pm-8am); <strong>dedupe</strong> (Redis SET NX with template+userId key + TTL); <strong>quiet hours check</strong>; <strong>rate limit per user</strong> (e.g. 5 push / hour).</li><li>NS writes a per-channel envelope to <code>notifications.email</code>, <code>notifications.sms</code>, <code>notifications.push</code> topics.</li><li>Channel workers consume, render template (handlebars/jinja), call provider SDK with retries.</li><li>Provider responses (success/failure/bounce) go to <code>notifications.events</code>; trackers update the user-visible delivery state.</li></ol><h4>Key design decisions</h4><ul><li><strong>Eventual consistency:</strong> do not block the producer. Returns 202 Accepted; user sees the notification when delivered.</li><li><strong>Priority lanes:</strong> separate topics for <code>critical</code> (auth OTP) vs <code>marketing</code>; higher consumption rate for critical.</li><li><strong>Backpressure:</strong> if a channel is degraded, dead-letter the events; alert; user gets notification later (or via fallback channel).</li><li><strong>Idempotency at the provider:</strong> use provider-supplied message-id; retry the same id if unsure.</li><li><strong>Template safety:</strong> templates server-side, never user-input HTML; render in a sandbox.</li></ul><h4>Scaling</h4><ul><li>Throughput: 100K notifications/sec at peak; Kafka handles that easily with right partitioning.</li><li>Sharding by userId within the NS so one user notifications stay ordered.</li><li>Provider limits: most providers enforce a per-second rate; smooth bursts with a token-bucket per provider.</li></ul><h4>Observability</h4><ul><li>Per-channel delivery rate, bounce rate, latency p99, error rate.</li><li>Per-template conversion (open, click).</li><li>End-to-end latency from event creation to provider acceptance.</li></ul><p>For Swiggy-style use, real-time is sub-30s for OTPs, sub-2min for order updates, batch OK for marketing.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "System Design",
+                "Notifications",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Producer andrarr; Kafka topic andrarr; NS (resolve + dedupe + preferences + rate-limit) andrarr; per-channel topics andrarr; provider.",
+                "Separate critical (auth OTP) and marketing lanes for backpressure and SLAs.",
+                "Idempotency at the provider via message-id; token-bucket per provider to smooth bursts."
+          ]
+    }
   ]
 }

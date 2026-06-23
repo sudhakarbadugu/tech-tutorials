@@ -77,13 +77,13 @@ const interviewSubjectMeta = {
     title: 'Java Interview Questions',
     icon: '☕',
     description: 'Core Java, OOP, Collections, Multithreading, JVM, and advanced topics.',
-    topics: ['Core Java', 'Multithreading', 'Java 8+', 'JVM', 'Collections', 'Design Patterns']
+    topics: ['Core Java', 'Multithreading', 'Java 8+', 'JVM', 'Collections', 'Design Patterns', 'Swiggy']
   },
   'spring-boot': {
     title: 'Spring Boot Interview Questions',
     icon: '🍃',
     description: 'Spring Core, Spring Boot, Spring MVC, Spring Data, Security, and microservices.',
-    topics: ['Spring Core', 'Spring Boot', 'Spring MVC', 'Spring Data JPA', 'Spring Security', 'REST API Design']
+    topics: ['Spring Core', 'Spring Boot', 'Spring MVC', 'Spring Data JPA', 'Spring Security', 'REST API Design', 'Swiggy']
   },
   python: {
     title: 'Python Interview Questions',
@@ -149,7 +149,7 @@ const interviewSubjectMeta = {
     title: 'SQL Interview Questions',
     icon: '🗃️',
     description: 'Queries, JOINs, indexes, transactions, isolation levels, window functions, CTEs, and optimization.',
-    topics: ['JOINs', 'Indexes', 'Transactions', 'Isolation Levels', 'Window Functions', 'CTEs', 'EXPLAIN', 'Pagination', 'UPSERT', 'SQL Injection']
+    topics: ['JOINs', 'Indexes', 'Transactions', 'Isolation Levels', 'Window Functions', 'CTEs', 'EXPLAIN', 'Pagination', 'UPSERT', 'SQL Injection', 'Swiggy']
   },
   nosql: {
     title: 'NoSQL Interview Questions',
@@ -179,13 +179,13 @@ const interviewSubjectMeta = {
     title: 'Data Structures & Algorithms',
     icon: '📐',
     description: 'Arrays, trees, graphs, sorting, dynamic programming, and complexity analysis.',
-    topics: ['Arrays', 'Trees', 'Graphs', 'DP', 'Sorting']
+    topics: ['Arrays', 'Trees', 'Graphs', 'DP', 'Sorting', 'Swiggy']
   },
   'system-design': {
     title: 'System Design Interview Questions',
     icon: '🏛️',
     description: 'Scalability, distributed systems, caching, load balancing, and databases.',
-    topics: ['Scalability', 'Caching', 'Load Balancing', 'Databases', 'Microservices']
+    topics: ['Scalability', 'Caching', 'Load Balancing', 'Databases', 'Microservices', 'Swiggy']
   },
   coding: {
     title: 'Coding Interview Problems',

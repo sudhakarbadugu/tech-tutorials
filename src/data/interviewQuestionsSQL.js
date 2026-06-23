@@ -469,5 +469,86 @@ export const sqlQuestions = {
         "SELECT * FROM employees WHERE dept_id = 10; -- Query 10 -- Total: 1 + 10 = 11 queries!"
       ]
     }
+,
+    {
+          "question": "Why can adding an index sometimes make application performance worse?",
+          "answer": "<p>Indexes speed up reads but have a real cost on writes, storage, and the optimizer. The trade-offs show up at scale.</p><h4>Reasons a new index hurts performance</h4><ol><li><strong>Write amplification.</strong> Every INSERT, UPDATE, DELETE must also update the index. On a write-heavy table, a new index can drop throughput by 10-30%.</li><li><strong>Storage and cache pressure.</strong> Indexes consume memory in the buffer pool. PostgreSQL shared_buffers is finite; an index that does not fit is evicted on every read, defeating its purpose. MySQL InnoDB has the same issue with the buffer pool.</li><li><strong>Hot index lock contention.</strong> Auto-incrementing PKs on a high-write table cause index leaf contention in some engines. The wrong secondary index makes it worse — every write locks multiple B-tree pages.</li><li><strong>Wrong index chosen by the optimizer.</strong> The optimizer may pick a new index for queries where a different plan was faster. <code>EXPLAIN ANALYZE</code> before and after.</li><li><strong>Index on a low-cardinality column.</strong> An index on <code>status</code> (5 values) gives almost no selectivity, but the optimizer may still use it. Either drop it, or use a partial / filtered index.</li><li><strong>Index on a function/expression</strong> without matching the query — wastes space and the planner ignores it.</li><li><strong>Index bloat after many updates.</strong> Postgres B-tree indexes bloat over time. A 5-year-old index may be 3x its actual size; rebuild it (<code>REINDEX</code>) before adding more.</li></ol><h4>How to decide</h4><ul><li>Profile read queries — does the new index actually get used? (<code>pg_stat_user_indexes.idx_scan = 0</code> = drop it)</li><li>Measure write impact on a staging clone with production-shaped load.</li><li>Prefer composite indexes over multiple single-column indexes; they cover more queries with one B-tree.</li><li>Use partial indexes (Postgres <code>WHERE status = 'active'</code>) when most queries hit a subset of rows.</li></ul><p>Rule of thumb: an unused index is pure cost. Audit indexes quarterly and drop the ones with <code>idx_scan = 0</code> for a sustained period.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "SQL",
+                "Indexes",
+                "Performance",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Indexes cost write throughput, buffer pool memory, and storage — measure both sides before adding.",
+                "Unused indexes (idx_scan = 0 over weeks) are pure cost; drop them quarterly.",
+                "Prefer partial/composite indexes over many single-column ones; the wrong index can hurt the optimizer plan."
+          ]
+    },
+    {
+          "question": "How would you identify the root cause of a slow query in production?",
+          "answer": "<p>Slow queries are usually plan regressions, missing/wrong indexes, or data-volume growth. Follow a structured path.</p><h4>Step 1: Get the exact query and its stats</h4><ul><li>Enable slow query log (Postgres <code>log_min_duration_statement = 500ms</code>; MySQL <code>slow_query_log</code>).</li><li>Capture the full query with bind variables — not just the skeleton.</li><li>Check execution count, total time, mean, std-dev. A query running 10x/sec at 200ms is 20% CPU; a 1/min query at 5s is barely a blip.</li></ul><h4>Step 2: Run EXPLAIN ANALYZE</h4><ul><li>Postgres: <code>EXPLAIN (ANALYZE, BUFFERS, VERBOSE) query</code>.</li><li>Look for: <strong>Seq Scan</strong> on large tables, <strong>Nested Loop</strong> joining millions of rows, <strong>rows=</strong> estimates wildly off from <code>actual rows=</code>.</li><li>Sort operations spilling to disk (<code>Sort Method: external merge</code> in Postgres) = <code>work_mem</code> too low.</li></ul><h4>Step 3: Check the data environment</h4><ul><li><strong>Statistics freshness:</strong> <code>ANALYZE</code> (Postgres) / <code>ANALYZE TABLE</code> (MySQL). Stale stats andrarr; bad plan choice.</li><li><strong>Table bloat:</strong> dead tuples from many updates; <code>VACUUM</code> not keeping up.</li><li><strong>Index health:</strong> indexes bloated or fragmented; rebuild if needed.</li><li><strong>Parameter sniffing (SQL Server):</strong> plan cached for one parameter value, terrible for another. Use <code>OPTIMIZE FOR UNKNOWN</code> or <code>OPTION (RECOMPILE)</code> if common.</li><li><strong>Lock waits:</strong> <code>pg_stat_activity.wait_event_type = 'Lock'</code> — the query is fine, it is just blocked.</li></ul><h4>Step 4: Compare against the historical plan</h4><ul><li><code>auto_explain</code> (Postgres) or <code>performance_schema</code> (MySQL) to see plan changes over time.</li><li>Did an <code>ANALYZE</code>, a deploy, or a partition move change the plan?</li></ul><h4>Step 5: Common fixes</h4><ul><li>Add or adjust the index that matches the filter + join columns.</li><li>Rewrite: <code>SELECT *</code> andrarr; specific columns; <code>OR</code> andrarr; <code>UNION</code>; correlated subquery andrarr; join.</li><li>Bound the result: pagination with keyset instead of <code>OFFSET</code> past 10K rows.</li><li>Cache: if the result changes slowly, cache for a few seconds (Redis) — orders of magnitude win for the same SQL.</li></ul><p>Before changing schema, prove the fix: capture EXPLAIN ANALYZE before, apply candidate fix, capture after. If the new plan is better under production-shaped load, ship it.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "SQL",
+                "Performance",
+                "Query Optimization",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Enable slow query log + EXPLAIN ANALYZE (with BUFFERS) to find the bad plan.",
+                "Stale statistics, table bloat, and index bloat cause plan regressions even when SQL is unchanged.",
+                "Fix options: better index, rewrite query, keyset pagination, or cache the result for seconds."
+          ]
+    },
+    {
+          "question": "What strategies can be used to avoid database hot spots?",
+          "answer": "<p>A hot spot is one row, one page, or one shard receiving so much traffic that the system bottlenecks there. Common forms: <em>hot row</em> (a single PK getting 90% of writes), <em>hot page</em> (B-tree leaves near a monotonic key), <em>hot shard</em> (poor sharding key).</p><h4>Strategies by layer</h4><h4>1. Hot row</h4><ul><li><strong>Counter table sharding:</strong> instead of one <code>counters(id=42, value=100)</code> row, use 10 rows <code>counter_42_0..9</code>, sum on read. Writes spread across rows.</li><li><strong>Rate-limit the writes:</strong> throttle to N writes/sec, batch the rest.</li><li><strong>Read-side cache:</strong> if the read pattern tolerates staleness, cache the counter in Redis with a write-through on a schedule.</li><li><strong>Append-only log:</strong> writes go to an immutable append log, reads fold the log periodically.</li></ul><h4>2. Hot page (B-tree contention)</h4><ul><li><strong>UUIDs instead of auto-increment:</strong> removes right-edge-of-tree hot page, but breaks range scans and inflates index size.</li><li><strong>Hash sharding of PK:</strong> Postgres 11+ — spread writes across multiple B-trees.</li><li><strong>Page-level batching:</strong> group small writes into larger transactions to reduce lock acquisitions.</li></ul><h4>3. Hot shard (poor sharding key)</h4><ul><li><strong>Re-shard:</strong> pick a sharding key with high cardinality and even distribution (e.g. <code>tenant_id</code> if tenants are large; <code>order_id</code> if not).</li><li><strong>Split hot shards:</strong> detect them (per-shard CPU, row count, request rate) and re-balance manually or with a consistent-hash rebalancer.</li><li><strong>Virtual shards:</strong> store many logical shards per physical node; re-distribute by moving logical shards, not by re-hashing all data.</li></ul><h4>4. Hot index / hot column</h4><ul><li>Covering index that includes the hot column — single index lookup instead of table + index.</li><li>Filtered/partial index on the hot subset of rows.</li></ul><h4>5. Application-level</h4><ul><li>Move state to a more appropriate store: counters andrarr; Redis with INCR; queues andrarr; Kafka; ephemeral session andrarr; in-memory cache.</li><li>De-normalize hot aggregates into a separate read model updated asynchronously.</li></ul><p>Identifying a hot spot: monitor per-shard/per-row write rate, per-page contention (<code>pg_stat_database</code>), and lock-wait time. Fix the worst one, re-measure, repeat.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "SQL",
+                "Scalability",
+                "Sharding",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Counter table sharding spreads one hot row across N rows; sum on read.",
+                "Hash sharding (Postgres 11+) eliminates auto-increment right-edge contention.",
+                "Pick a sharding key with high cardinality + even distribution; re-balance via virtual shards, not full re-hash."
+          ]
+    },
+    {
+          "question": "How would you design pagination for a table containing billions of records?",
+          "answer": "<p>Naive <code>OFFSET 1000000 LIMIT 20</code> becomes O(N) as the offset grows — the database still scans and discards 1M rows. Use keyset pagination instead.</p><h4>Pattern: Keyset (seek) pagination</h4><ul><li>Stable: works even with concurrent inserts.</li><li>O(limit) per page regardless of depth.</li><li>Requires a unique tiebreaker (id) when the sort key has duplicates.</li><li>Index on <code>(tenant_id, created_at DESC, id DESC)</code> makes it an index-only scan.</li></ul><h4>For deeply-paged data</h4><ul><li>Cursor-based with a snapshot of the dataset for stable pagination; or use a single composite cursor that is base64-encoded so it is opaque to clients.</li><li>Encode the sort key + value in the cursor: <code>?cursor=eyJ0IjoxNzAwMDAsImlkIjo5OTk5fQ==</code></li></ul><h4>For analytics / one-off exports</h4><ul><li>Use background jobs + streaming: <code>COPY (SELECT ... FROM events) TO '/tmp/events.tsv';</code> in chunks.</li><li>Or use server-side cursors at the app layer: <code>DECLARE c CURSOR FOR ...; FETCH 1000;</code> in a loop.</li></ul><h4>Approaches that do NOT scale</h4><ul><li><strong>OFFSET pagination:</strong> O(N) at depth; tablescans at very deep pages; problematic for live data.</li><li><strong>Page numbers (1, 2, 3...):</strong> forces OFFSET; same problems.</li><li><strong>Counting total rows:</strong> <code>SELECT COUNT(*)</code> on a billion rows is a full scan — never do it on a hot endpoint. Return <code>has_next: true/false</code> instead.</li></ul><h4>Index design</h4><ul><li>Sort key + tiebreaker: composite B-tree.</li><li>Include partition filter (tenant_id) first in the index — keyset then becomes a contiguous range scan.</li><li>Consider covering the columns returned to keep it an index-only scan.</li></ul><p>For very large datasets, also partition the table by tenant or time (Postgres declarative partitioning, MySQL range partitioning). Pagination within a partition is even faster.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "SQL",
+                "Pagination",
+                "Performance",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Use keyset pagination (WHERE (created_at, id) less than cursor) — O(limit) regardless of depth.",
+                "Never OFFSET on billion-row tables; never SELECT COUNT(*) on hot endpoints.",
+                "Composite index on (partition, sort_key DESC, id DESC) — include returned columns for index-only scan."
+          ]
+    },
+    {
+          "question": "How would you migrate a large database schema with zero downtime?",
+          "answer": "<p>Zero-downtime migrations = expand-and-contract pattern, executed in multiple deploys.</p><h4>Phase 1: Expand (additive, backward compatible)</h4><ol><li>Add the new column/table nullable, no default. Old code keeps working.</li><li>Backfill: write a batched job that fills the new column for existing rows, in chunks of e.g. 10K rows, throttled. Monitor replication lag if you have replicas.</li><li>Add a NOT NULL constraint on the new column in a separate step, after backfill completes. Use <code>CHECK</code> constraints, not blocking table rewrites.</li><li>Deploy the new code that writes to the new column (and reads from the old for safety).</li></ol><h4>Phase 2: Switch (cutover)</h4><ol><li>Make new code read from the new column as the source of truth.</li><li>Run both reads in parallel for a few hours/days, assert they return the same result, alert on divergence.</li><li>Once parity is proven, stop writing to the old column.</li></ol><h4>Phase 3: Contract (cleanup)</h4><ol><li>Remove the old column or table in a later deploy, when you are confident no old code path is using it.</li><li>Add the new column to the appropriate index strategy.</li></ol><h4>Specific patterns</h4><ul><li><strong>Renaming a column:</strong> add new column andrarr; dual-write andrarr; backfill andrarr; switch reads andrarr; drop old column. Cannot do in one <code>ALTER TABLE</code>.</li><li><strong>Changing a column type:</strong> add new column of the new type andrarr; dual-write andrarr; backfill with cast andrarr; switch reads andrarr; drop old. Some engines allow non-blocking type changes for compatible types (int andrarr; bigint, varchar length up).</li><li><strong>Adding a NOT NULL column with a default:</strong> in modern Postgres (<code>DEFAULT NULL</code> first, fill, then <code>SET NOT NULL</code>) or in MySQL 8 (<code>INSTANT</code> add column).</li><li><strong>Adding an index:</strong> use <code>CREATE INDEX CONCURRENTLY</code> (Postgres) or <code>ALTER TABLE ... ADD INDEX</code> with <code>ALGORITHM=INPLACE, LOCK=NONE</code> (MySQL) to avoid blocking writes.</li></ul><h4>Tooling and discipline</h4><ul><li>Migrations are reviewed like code, run forward and backward in staging first.</li><li>Schema migrations run as part of the deploy, in a controlled order with the app code.</li><li>Long backfills run as background jobs with a kill switch.</li><li>Keep an expand-only branch window — at least 1-2 weeks between adding the new column and removing the old one, so a rollback is possible.</li></ul>",
+          "difficulty": "Advanced",
+          "tags": [
+                "SQL",
+                "Migration",
+                "Database",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Expand (additive, nullable) andrarr; backfill in batches andrarr; switch (dual-read) andrarr; contract (drop old).",
+                "Use CREATE INDEX CONCURRENTLY (Postgres) or ALGORITHM=INPLACE, LOCK=NONE (MySQL) to avoid blocking writes.",
+                "Keep an expand-only window of 1-2 weeks so rollback is always possible."
+          ]
+    }
   ]
 }

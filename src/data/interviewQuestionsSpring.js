@@ -1177,5 +1177,101 @@ export const springQuestions = {
         "Over-scanning components — Broad @ComponentScan packages slow startup."
       ]
     }
+,
+    {
+          "question": "How would you implement request deduplication in a Spring Boot API?",
+          "answer": "<p>Request deduplication prevents the same logical request from being processed twice (double-submits from retries, network blips, user rage-clicks).</p><h4>Approach: Idempotency Keys</h4><ol><li>Client generates a unique <strong>Idempotency-Key</strong> per logical request (UUID, or a hash of business fields).</li><li>Sends it in a header: <code>Idempotency-Key: &lt;uuid&gt;</code> (Stripe-style).</li><li>Server stores (key andrarr; response) for a TTL window (24h typical).</li><li>On second request with the same key, return the cached response — do not re-process.</li></ol><h4>Implementation in Spring</h4><ul><li>Spring filter or <code>HandlerInterceptor</code> reads the header.</li><li>Look up the key in Redis (<code>SET key value NX EX 86400</code>) — atomic, expires cleanly.</li><li>For ongoing requests, store a <code>processing</code> marker; concurrent retries see the marker and wait/poll.</li><li>For completed requests, store the serialized response and return it.</li></ul><h4>Edge cases</h4><ul><li><strong>Key collision with different body:</strong> compare the request body hash; reject as 409 if bodies differ.</li><li><strong>Concurrent in-flight:</strong> use a short-lived Redis lock (NX EX 30) to ensure only one worker processes; others poll or 409.</li><li><strong>Partial failure:</strong> only cache the response after successful commit (status 2xx). Failures should be retryable.</li></ul><h4>When NOT needed</h4><ul><li>Read-only GETs are already idempotent by HTTP semantics.</li><li>Idempotent operations that are safe to retry (set state to an absolute value, not a relative change).</li></ul><p>For payments specifically, combine this with an <strong>idempotency key on the order id</strong> at the database level — belt and suspenders.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Spring Boot",
+                "API Design",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Idempotency-Key header (Stripe pattern) + Redis cache of the response for 24h.",
+                "Atomic Redis SET NX EX; on collision, return cached response or wait for in-flight.",
+                "Compare request body hash on the same key; reject with 409 if bodies differ."
+          ]
+    },
+    {
+          "question": "How would you prevent duplicate payment processing during retries?",
+          "answer": "<p>Duplicate payment is the classic <em>retry gone wrong</em>. Three layers of defense.</p><h4>Layer 1: Idempotency key</h4><ul><li>Client sends <code>Idempotency-Key</code> on every charge attempt.</li><li>Gateway (Stripe/Razorpay) deduplicates: same key + same body = same charge.</li><li>Critical: never use a freshly-generated UUID per retry — it defeats the purpose. Use a stable key per business operation (e.g. <code>orderId + \"charge\"</code>).</li></ul><h4>Layer 2: Idempotent state transitions at the DB</h4><ul><li>Order status flow: <code>CREATED andrarr; PAYMENT_PENDING andrarr; PAID</code>.</li><li>Transition guarded: <code>UPDATE orders SET status='PAID' WHERE id=? AND status='PAYMENT_PENDING'</code>. If 0 rows affected, the transition already happened.</li><li>Add a unique constraint on (order_id, payment_attempt_id) for an extra guard.</li></ul><h4>Layer 3: Outbox / saga compensation</h4><ul><li>If the gateway charged but the local DB failed to record it, the next reconciliation will see the mismatch.</li><li>Run a <strong>reconciliation job</strong> every few minutes: pull successful charges from the gateway, match against local orders, fix discrepancies.</li><li>Never auto-refund on a mismatch — investigate first.</li></ul><h4>Retry policy</h4><ul><li>Idempotent retries with exponential backoff + jitter: <code>min(2^n * base, maxDelay) plus or minus jitter</code>.</li><li>Retry only on <strong>5xx, network errors, timeouts</strong> — never on 4xx (the body is the same; retrying will not help).</li><li>Cap total attempts: 3–5 for payments.</li><li>Use a durable retry queue (Spring Retry + Redis/RabbitMQ DLQ) so a process restart does not lose retries.</li></ul><h4>What to never do</h4><ul><li>Auto-retry on HTTP 200 if the response is ambiguous — query the gateway for charge status first.</li><li>Charge based on a non-deterministic input (current timestamp, random nonce).</li></ul>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Spring Boot",
+                "Payments",
+                "Reliability",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Idempotency-Key at the gateway + idempotent state machine at the DB + reconciliation job for mismatches.",
+                "Stable business key (orderId) — never a fresh UUID per retry.",
+                "Retry only on 5xx/network errors with exponential backoff + jitter; cap at 3-5 attempts."
+          ]
+    },
+    {
+          "question": "How do you safely roll out a new API version without breaking existing clients?",
+          "answer": "<p>Three industry-standard patterns, used depending on the breakage risk.</p><h4>1. URL versioning (simple, common)</h4><ul><li><code>/api/v1/orders</code> and <code>/api/v2/orders</code> — separate controllers, same service.</li><li>Clients pin to a version. Old clients never break.</li><li>Downside: code duplication grows fast; v1 maintenance is forever.</li></ul><h4>2. Header versioning (clean, but harder for clients)</h4><ul><li>Single <code>/api/orders</code> URL; <code>Accept: application/vnd.myapi.v2+json</code> header.</li><li>Spring picks the right controller via <code>@GetMapping(produces = \"application/vnd.myapi.v2+json\")</code>.</li><li>Downside: requires clients to send headers; not all do.</li></ul><h4>3. Strangler Fig pattern (production-safe migration)</h4><ol><li>Build v2 alongside v1, same URL prefix.</li><li>Route based on header / query param / client-id.</li><li>Default 100% to v1 initially. Canary v2 to 1% of traffic. Monitor error rate, latency, business KPIs.</li><li>Gradually increase v2 traffic: 1% andrarr; 10% andrarr; 50% andrarr; 100%.</li><li>Keep v1 hot for at least one full release cycle after 100% cutover, then deprecate.</li></ol><h4>Compatibility rules during rollout</h4><ul><li><strong>Additive changes are safe:</strong> new optional fields, new endpoints, new query params.</li><li><strong>Breaking changes require version bump:</strong> removing/renaming fields, changing types, tightening validation, changing status codes.</li><li>Never change the meaning of a field — add a new field with a different name.</li><li>Treat the response shape as a contract; tests pin it (snapshot, contract tests).</li></ul><h4>Communication</h4><ul><li>Publish deprecation timeline; give clients a sunset date at least 6 months out for external APIs.</li><li>Return <code>Deprecation</code> and <code>Sunset</code> HTTP headers on the old version.</li><li>Track client usage by API key or user-agent; nudge heavy users before sunset.</li></ul><p>For internal APIs the same rules apply but with shorter timelines — and yes, internal APIs still need versioning because clients are still humans with their own schedules.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Spring Boot",
+                "REST API Design",
+                "Reliability",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Use Strangler Fig: route traffic, canary v2, ramp up while monitoring, sunset v1 only after a full release cycle.",
+                "Additive changes are safe; breaking changes (removed/renamed fields, type changes) need a version bump.",
+                "Return Deprecation + Sunset headers; publish a sunset date at least 6 months out for external APIs."
+          ]
+    },
+    {
+          "question": "How would you implement tenant isolation in a multi-tenant Spring Boot application?",
+          "answer": "<p>Multi-tenant isolation prevents one tenant from seeing or affecting another's data. Three main strategies, in increasing isolation.</p><h4>1. Shared DB, shared schema (row-level)</h4><ul><li>Every tenant-owned table has a <code>tenant_id</code> column.</li><li>Filter every query with <code>WHERE tenant_id = ?</code>.</li><li>Enforce in code via a Hibernate <code>@Filter</code>, a <code>ThreadLocal</code> set in an interceptor, or a Spring Data <code>Specification</code>.</li><li>Pros: cheap, simple to back up, easy cross-tenant analytics.</li><li>Cons: one bad query leaks data; one runaway tenant can starve others.</li></ul><h4>2. Shared DB, separate schema</h4><ul><li>One schema per tenant; switch the connection's <code>currentSchema</code> per request.</li><li>Pros: stronger isolation; per-tenant migrations possible.</li><li>Cons: harder cross-tenant queries, more moving parts, more storage.</li></ul><h4>3. Database per tenant (hard isolation)</h4><ul><li>Each tenant has its own database. Route the connection at request time via a <code>DataSource</code> router.</li><li>Pros: gold-standard isolation; per-tenant backup/restore, per-tenant scaling.</li><li>Cons: heavy; migrations across N databases; cross-tenant analytics becomes a data-warehouse problem.</li></ul><h4>Implementation in Spring</h4><ul><li><strong>Tenant resolution:</strong> from JWT, subdomain, header, or path. Resolve once per request, store in a <code>TenantContext</code> (ThreadLocal) or a request-scoped bean.</li><li><strong>DataSource routing:</strong> <code>AbstractRoutingDataSource</code> chooses the connection based on <code>TenantContext.get()</code>.</li><li><strong>JPA filter:</strong> <code>@FilterDef</code> + <code>@Filter</code> + enable in an interceptor.</li><li><strong>Connection pool:</strong> HikariCP per-tenant pool, sized down for small tenants; or shared pool with a tenant-id key.</li></ul><h4>Belt-and-suspenders</h4><ul><li>Integration tests that assert tenant A cannot read tenant B's data for every endpoint.</li><li>DB-level: revoke cross-schema grants; row-level security (Postgres RLS) as a backup.</li><li>Audit log every cross-tenant access attempt.</li></ul><p>For Swiggy-scale B2B, shared-DB + tenant_id + JPA filter + integration tests is the typical starting point; migrate to DB-per-tenant when SLA or compliance demands it.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Spring Boot",
+                "Multi-Tenancy",
+                "Architecture",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Pick a strategy: row-level (cheap, leaky), schema-per-tenant, or DB-per-tenant (strongest).",
+                "Resolve tenant from JWT/subdomain once per request, route DataSource and JPA filters.",
+                "Add integration tests asserting tenant A cannot read tenant B data for every endpoint."
+          ]
+    },
+    {
+          "question": "How do filters, interceptors, and API gateways complement each other?",
+          "answer": "<p>Three layers of cross-cutting concerns, ordered by where they sit in the request path.</p><h4>Servlet Filter (earliest, framework-agnostic)</h4><ul><li>Part of the Servlet spec. Runs before Spring's DispatcherServlet.</li><li>Use for: request/response body modification, CORS, request-id injection, gzip, XSS scrubbing, body-size limits.</li><li>Configuration via <code>FilterRegistrationBean</code> or <code>@WebFilter</code>.</li><li>Does not have access to Spring beans by default — needs <code>DelegatingFilterProxy</code> or DI through a config class.</li></ul><h4>Spring HandlerInterceptor (Spring-aware, post-routing)</h4><ul><li>Runs after handler mapping but before handler execution. Has access to <code>HandlerMethod</code>, model, status code.</li><li>Use for: auth (after we know the route), audit logging, rate limiting per endpoint, locale switching, tenant context.</li><li>Three hooks: <code>preHandle</code>, <code>postHandle</code>, <code>afterCompletion</code>.</li></ul><h4>API Gateway (cross-service, infrastructure-level)</h4><ul><li>Out-of-process. Sits in front of one or more microservices (Spring Cloud Gateway, Kong, Envoy).</li><li>Use for: TLS termination, rate limiting, auth, request routing, service discovery, circuit breaking, observability, request transformation.</li><li>Single point for cross-cutting policies that should not live in every service.</li></ul><h4>How they complement</h4><ul><li>TLS termination andrarr; Gateway / load balancer</li><li>Auth (JWT verify) andrarr; Gateway (cheap) or Interceptor (per-route policy)</li><li>Rate limiting (global) andrarr; Gateway (shared counter)</li><li>Rate limiting (per-user, per-route) andrarr; Interceptor (in-process context)</li><li>Request body size limit andrarr; Filter (works on raw request)</li><li>Audit log who did what andrarr; Interceptor (knows the resolved handler)</li><li>CORS preflight andrarr; Filter (specific, framework-agnostic)</li><li>Tenant context propagation andrarr; Interceptor (Spring-aware, sets ThreadLocal)</li></ul><h4>Anti-patterns</h4><ul><li>Doing JWT validation in N services — let the gateway do it once.</li><li>Doing rate limiting in an interceptor that has no shared state — counts reset on every instance.</li><li>Doing business validation in a filter — too early, no Spring context.</li></ul>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Spring Boot",
+                "Architecture",
+                "API Gateway",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Filter = Servlet spec, runs first, framework-agnostic, ideal for body-level concerns.",
+                "Interceptor = Spring-aware, knows the resolved route, ideal for per-endpoint policy and audit.",
+                "Gateway = infrastructure layer for TLS/auth/global rate limit; do not duplicate these in every service."
+          ]
+    },
+    {
+          "question": "How would you handle 50,000 requests per second on a Spring Boot service?",
+          "answer": "<p>50K RPS on a single Spring Boot instance is achievable but requires tuning across the stack.</p><h4>Profile the workload first</h4><ul><li>What is the per-request work? Pure compute? I/O? Mix?</li><li>P50/P99 latency budget — at 50K RPS with a single core handling roughly 50K of pure compute you are already saturated.</li><li>Is the traffic bursty or steady? Bursts require queueing/buffering.</li></ul><h4>JVM and Tomcat</h4><ul><li>Switch to <strong>virtual threads</strong> in Spring Boot 3.2+: <code>spring.threads.virtual.enabled=true</code>. Default platform thread pool becomes a per-task executor.</li><li>Tune Tomcat: <code>server.tomcat.threads.max=400-800</code> for platform, or unlimited for virtual. <code>accept-count</code>, <code>max-connections</code> up.</li><li>Use <code>WebClient</code> for downstream calls (non-blocking) over <code>RestTemplate</code>.</li></ul><h4>Stateless design</h4><ul><li>No in-memory session; use JWT or a shared session store (Redis).</li><li>Cache aggressively — most of the 50K RPS is likely re-reads. Caffeine (local) + Redis (shared).</li><li>Precompute and serve from CDN where possible.</li></ul><h4>Async processing</h4><ul><li>If a request triggers heavy work, return 202 Accepted and process via Kafka / SQS / RabbitMQ.</li><li>Webhooks, email, push notifications, payments reconciliation — all async.</li></ul><h4>Backpressure</h4><ul><li>Rate-limit at the API gateway before traffic hits the JVM.</li><li>Circuit-breaker (Resilience4j) on downstream calls — fail fast instead of queuing.</li><li>Use bulkhead patterns: separate thread pools for read vs. write, critical vs. non-critical.</li></ul><h4>Database and downstream</h4><ul><li>The bottleneck is rarely the JVM — it is the DB. Connection pool (HikariCP) sized carefully: <code>pool-size = cores * 2-4</code>, not 50.</li><li>Read replicas for reads. Cache read-heavy queries. Use <code>@Transactional(readOnly = true)</code> hint to skip flush.</li><li>Batch downstream calls: <code>CompletableFuture</code> + <code>HttpClient</code> for parallel fetches.</li></ul><h4>Observability</h4><ul><li>Micrometer + Prometheus + Grafana: RPS, error rate, latency, JVM metrics, DB pool, downstream latency.</li><li>Continuous profiling in prod (async-profiler) to find the next bottleneck.</li></ul><p>Realistic 50K RPS usually means: 5-10 Spring Boot instances behind a load balancer, each handling 5-10K RPS, with aggressive caching, async for heavy work, and a fast datastore. Single instance 50K RPS is feasible for a read-heavy, low-workload endpoint.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Spring Boot",
+                "Performance",
+                "Scalability",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Enable virtual threads (Spring Boot 3.2+) — they remove the per-request thread cap.",
+                "Push heavy work to async (Kafka/SQS) and cache reads (Caffeine + Redis) — the DB is the real bottleneck.",
+                "Rate-limit at the gateway, use Resilience4j bulkheads, and size HikariCP at cores*2-4, not 50."
+          ]
+    }
   ]
 }

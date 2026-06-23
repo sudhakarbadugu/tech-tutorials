@@ -435,5 +435,55 @@ export const dsaQuestions = {
         "Arrays; public class Main { public static void main(String[] args) { int[] arr = {2, 1, 4, 6}; int val = 1; int[] data = new int[arr."
       ]
     }
+,
+    {
+          "question": "Design a data structure that supports insert, delete, search, and getRandom in O(1).",
+          "answer": "<p>Classic interview problem. Combine a hash map and a dynamic array.</p><h4>Design</h4><ul><li><code>HashMap&lt;Integer, Integer&gt; idx</code> — value to its index in the array.</li><li><code>ArrayList&lt;Integer&gt; arr</code> — stores all values.</li></ul><h4>Operations</h4><ul><li><strong>insert(val):</strong> if <code>idx.containsKey(val)</code> return false. Append to <code>arr</code>; <code>idx.put(val, arr.size()-1)</code>. O(1).</li><li><strong>remove(val):</strong> if <code>!idx.containsKey(val)</code> return false. Swap the element at <code>idx.get(val)</code> with the last element of <code>arr</code>; update <code>idx</code> for the swapped element; remove the last slot; delete <code>idx[val]</code>. O(1).</li><li><strong>search(val):</strong> <code>idx.containsKey(val)</code>. O(1).</li><li><strong>getRandom():</strong> <code>arr.get(ThreadLocalRandom.current().nextInt(arr.size()))</code>. O(1).</li></ul><h4>Why the swap?</h4><p>Removing from the middle of an array list is O(N). The swap-with-last trick keeps it O(1) at the cost of breaking order — fine because we never rely on order.</p><h4>Edge cases</h4><ul><li>Duplicate values: store a <code>HashSet&lt;Integer&gt;</code> of indices for each value, or store <code>Set&lt;Integer&gt;</code> of values and a per-value index set.</li><li>Generic version: same structure, parameterized on <code>T</code> with a <code>HashMap&lt;T, Integer&gt;</code> and <code>List&lt;T&gt;</code>.</li><li>Concurrency: use <code>ConcurrentHashMap</code> for the index map; array remains a contention point (use a lock or copy-on-write).</li></ul><p>Follow-up variants: bounded size (LRU cache with eviction), persistent (immutable past versions), or with a frequency counter (O(1) getRandom weighted by frequency).</p>",
+          "difficulty": "Intermediate",
+          "tags": [
+                "DSA",
+                "Data Structures",
+                "HashMap",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "HashMap for value-to-index + ArrayList for storage; both operations are O(1).",
+                "Swap-with-last trick to remove from the array in O(1).",
+                "Duplicates need a Set of indices per value, not just a single index."
+          ]
+    },
+    {
+          "question": "Design and implement a Time-Based Key Value Store.",
+          "answer": "<p>Like a key-value store where each (key, value) has a timestamp, and <code>get(key, timestamp)</code> returns the value that was set most recently at or before that timestamp.</p><h4>Design</h4><ul><li><code>HashMap&lt;String, TreeMap&lt;Integer, String&gt;&gt; store</code> — for each key, a sorted map of timestamp to value.</li><li>TreeMap gives O(log n) for the <code>floorEntry(timestamp)</code> lookup.</li></ul><h4>Operations</h4><ul><li><strong>set(key, value, timestamp):</strong> <code>store.computeIfAbsent(key, k andrarr; new TreeMap&lt;&gt;()).put(timestamp, value)</code>. O(log n) per insert.</li><li><strong>get(key, timestamp):</strong> <code>Map.Entry&lt;Integer, String&gt; e = store.get(key).floorEntry(timestamp); return e == null ? \"\" : e.getValue();</code>. O(log n).</li></ul><h4>Alternative: binary search on a list</h4><p>If writes are rare and reads heavy, use <code>HashMap&lt;String, List&lt;Pair&lt;Integer, String&gt;&gt;&gt;</code> with a sorted list per key, and binary search for <code>get</code>. Same O(log n) but with less memory overhead and better cache locality.</p><h4>Edge cases</h4><ul><li>Multiple sets with the same timestamp on the same key — define the rule (latest write wins, or reject). The TreeMap approach naturally takes the last put.</li><li>Concurrent writes — synchronize per key with a <code>ConcurrentHashMap&lt;String, Object&gt; locks</code> or use <code>ConcurrentSkipListMap</code> directly.</li><li>Memory growth — expire old entries with a scheduled task if timestamps are bounded.</li></ul><h4>Real-world use</h4><p>Session data, audit logs with point-in-time queries, event sourcing read models, config snapshots per deployment.</p>",
+          "difficulty": "Intermediate",
+          "tags": [
+                "DSA",
+                "Data Structures",
+                "HashMap",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "HashMap with TreeMap for timestamp lookup; floorEntry(timestamp) is O(log n).",
+                "For read-heavy workloads, prefer HashMap with List and binary search.",
+                "Per-key locking or ConcurrentSkipListMap for concurrent writes."
+          ]
+    },
+    {
+          "question": "Given a stream of events, continuously maintain the top K most frequent items.",
+          "answer": "<p>Streaming top-K, often asked as a follow-up to a frequency-count problem.</p><h4>Naive (does not scale)</h4><ul><li>Keep a full <code>HashMap&lt;Item, Long&gt;</code> of frequencies.</li><li>On each event, increment the count.</li><li>On top K query: collect all entries, sort, take K. O(N log N) per query.</li></ul><h4>Better: HashMap + min-heap of size K</h4><ol><li><code>HashMap&lt;Item, Long&gt; freq</code> for the full count.</li><li><code>PriorityQueue&lt;Item&gt; minHeap</code> of size K, ordered by frequency ascending. Top K items are at the root when reading the heap.</li><li>On event: <code>freq.merge(item, 1L, Long::sum)</code>. If heap does not contain the item and heap size is less than K, add it. If heap contains the item, re-heapify (or re-add with updated count).</li><li>On top-K query: <code>minHeap</code> contains the K highest-frequency items in min-heap order. O(K log K) to drain to a list.</li></ol><p>Per-event amortized O(log K), per-query O(K log K). This is the standard pattern.</p><h4>Even better: Count-Min Sketch + heavy hitters</h4><ul><li>Use a <strong>Count-Min Sketch</strong> (probabilistic frequency estimator with bounded error) to track frequencies in O(1) per event with low memory.</li><li>Periodically (every N events) drain the sketch into a heap and discard low-frequency items.</li><li>Use when the universe of items is huge and exact counts are not required.</li></ul><h4>Distributed version</h4><ul><li>Sharded counters: each shard has a local <code>HashMap</code> + heap.</li><li>Coordinator merges the per-shard top-K heaps by streaming the K log K merges — small per-query bandwidth.</li><li>Alternatively: Flink / Spark Streaming with a keyed state backend, doing the heap logic per key group.</li></ul><h4>Edge cases</h4><ul><li>Ties: stable secondary sort (e.g. by item id ascending) so the answer is deterministic.</li><li>Decay: if recency matters, multiply counts by a time-decay factor before insert.</li><li>Memory: with 100M unique items, the HashMap alone is GBs — switch to Count-Min Sketch or HyperLogLog variants.</li></ul>",
+          "difficulty": "Advanced",
+          "tags": [
+                "DSA",
+                "Algorithms",
+                "Heap",
+                "Frequency Count",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "HashMap for full counts + min-heap of size K — O(log K) per event, O(K log K) per query.",
+                "Count-Min Sketch for huge universes; periodically drain into a heap.",
+                "Distributed: per-shard heap, merge by streaming the K log K results."
+          ]
+    }
   ]
 }

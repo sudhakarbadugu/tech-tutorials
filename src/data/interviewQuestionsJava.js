@@ -1153,5 +1153,101 @@ export const javaQuestions = {
         "Produce a non-stream result like a value or side-effect."
       ]
     }
+,
+    {
+          "question": "How would you implement a thread-safe in-memory cache without using third-party libraries?",
+          "answer": "<p>Implement using Java concurrency primitives: <code>ConcurrentHashMap</code> for storage, <code>ReentrantReadWriteLock</code> for read-heavy access, and a separate data structure for eviction.</p><h4>Design</h4><ol><li><strong>Storage:</strong> <code>ConcurrentHashMap&lt;K, CacheEntry&lt;V&gt;&gt;</code> — entry holds value, expiry timestamp, version.</li><li><strong>Eviction:</strong> Use an LRU queue (<code>LinkedHashMap</code> with accessOrder=true wrapped in a synchronized view) or a scheduled cleanup thread.</li><li><strong>TTL:</strong> <code>ScheduledExecutorService</code> sweeps expired entries every N seconds.</li><li><strong>Atomic updates:</strong> <code>compute()</code> or <code>merge()</code> for compound operations (check-then-set).</li></ol><h4>Concurrency considerations</h4><ul><li><strong>Read-mostly:</strong> <code>ReentrantReadWriteLock</code> lets many readers in, blocks during writes.</li><li><strong>Eviction safety:</strong> Never null out values during read; use <code>remove(K, V)</code> (compare-and-delete) to avoid removing an entry that was just refreshed.</li><li><strong>Size limits:</strong> Combine map size with the LRU queue; evict on put when size exceeds max.</li><li><strong>Soft references:</strong> For very large caches, wrap values in <code>SoftReference</code> so the GC can reclaim under memory pressure.</li></ul><h4>Edge cases</h4><ul><li>Cache stampede: <code>computeIfAbsent</code> lets two threads both load a missing key — guard with a per-key <code>Future</code> or a single-flight loader.</li><li>Memory visibility: <code>ConcurrentHashMap</code> handles this; do not mix in plain <code>HashMap</code>.</li></ul><p>For anything serious, prefer Caffeine — it solves all the above for you with eviction, refresh, and stats out of the box.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Java",
+                "Concurrency",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "ConcurrentHashMap for storage + ReentrantReadWriteLock for read-heavy loads.",
+                "LinkedHashMap with accessOrder=true gives cheap LRU; pair with a ScheduledExecutorService for TTL eviction.",
+                "Use compute/computeIfAbsent for atomic check-then-set; avoid the check-then-act race in plain HashMap."
+          ]
+    },
+    {
+          "question": "What problems can occur when using parallel streams in production systems?",
+          "answer": "<p>Parallel streams look free but introduce real production hazards.</p><h4>1. Thread pool surprises</h4><ul><li>Parallel streams use the common <code>ForkJoinPool</code> shared across the JVM.</li><li>If one stream blocks (I/O, lock, <code>sleep</code>), it stalls every other parallel stream in the app.</li><li><strong>Fix:</strong> run blocking work on a dedicated executor; never inside a parallel stream pipeline.</li></ul><h4>2. Order and non-determinism</h4><ul><li><code>forEachOrdered</code> preserves encounter order but kills most of the speedup.</li><li>Operations like <code>findAny</code> return arbitrary elements — tests may pass locally and fail in prod under different load.</li></ul><h4>3. Boxing overhead</h4><ul><li>Using <code>IntStream</code> on a <code>List&lt;Integer&gt;</code> boxes every element, destroying the win.</li><li>For <code>List&lt;Integer&gt;</code> use <code>stream().mapToInt(Integer::intValue)</code> first, then go parallel.</li></ul><h4>4. Stateful lambdas break parallelism</h4><ul><li>Side-effects (mutating shared state, incrementing counters) cause lost updates and non-determinism.</li><li>Stateless, associative, non-interfering functions are required for correctness.</li></ul><h4>5. NQ model is not always faster</h4><ul><li>Parallelism pays only when the per-element work is heavy enough to amortize fork/join + split cost.</li><li>For tiny per-element work (a few arithmetic ops), sequential is faster — measure before adopting.</li></ul><h4>6. Spliterator quality</h4><ul><li>Default spliterator on ArrayList is good; on HashMap / LinkedList it is poor — parallel may be slower than sequential.</li></ul><p>Production rule: profile, then use parallelism only for CPU-bound, large, well-partitioned work — never for I/O.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Java",
+                "Concurrency",
+                "Performance",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Parallel streams share the JVM-wide ForkJoinPool — one blocking call stalls every other stream.",
+                "Boxing can erase the speedup; use primitive streams (mapToInt) for numeric work.",
+                "Lambdas must be stateless; side-effects cause lost updates and non-determinism."
+          ]
+    },
+    {
+          "question": "How does virtual thread scheduling work, and when would you avoid using virtual threads?",
+          "answer": "<p>Virtual threads (Java 21+) are managed lightweight threads scheduled by the JVM onto a small pool of OS carrier threads.</p><h4>Scheduling model</h4><ul><li>The JVM mounts a virtual thread (VThread) on a <strong>carrier</strong> (OS thread) when it has CPU work.</li><li>On a <strong>blocking call</strong> (I/O, <code>sleep</code>, <code>Lock.park</code>, socket read), the JVM captures the stack and <em>unmounts</em> the VThread, freeing the carrier.</li><li>When the blocking call completes, the VThread is re-queued and remounted on (possibly) another carrier.</li><li>Throughput: you can have millions of VThreads because only the active ones occupy carriers (default: <code>Runtime.availableProcessors()</code>).</li></ul><h4>When virtual threads shine</h4><ul><li>High-concurrency blocking I/O (HTTP gateways, JDBC pools, message consumers).</li><li>Replaces reactive/complex-callback code with simple thread-per-request.</li><li>Use <code>Executors.newVirtualThreadPerTaskExecutor()</code> instead of platform thread pools.</li></ul><h4>When to AVOID virtual threads</h4><ol><li><strong>CPU-bound work</strong> — you have N cores; more VThreads just queue. Use a fixed platform-thread pool sized to cores.</li><li><strong>Code that pins the carrier</strong> — <code>synchronized</code> blocks hold the carrier even when blocking inside. Use <code>ReentrantLock</code> instead, or replace <code>synchronized</code> with <code>jdk.internal.misc.VirtualThread.pin</code>-aware alternatives (Java 24+ removed most pinning).</li><li><strong>Native code / JNI that holds the OS thread</strong> — pinning again, plus native libraries rarely know about VThreads.</li><li><strong>ThreadLocals at scale</strong> — millions of VThreads times a 1KB ThreadLocal = GBs of metadata. Prefer scoped values (Java 21+ <code>ScopedValue</code>) for context propagation.</li><li><strong>Long-running pools that expect platform-thread affinity</strong> — schedulers, monitoring agents, JMX threads.</li></ol><p>Production rule: VThreads for blocking I/O at scale; platform threads for CPU work and anything that pins the carrier.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Java",
+                "Concurrency",
+                "Java 21",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "VThreads mount/unmount on carriers on blocking I/O — millions of VThreads on a small carrier pool.",
+                "Avoid for CPU-bound work (no concurrency win) and for synchronized/JNI that pins the carrier.",
+                "Use ScopedValue over ThreadLocal to avoid GB-scale metadata at million-thread scales."
+          ]
+    },
+    {
+          "question": "What are memory visibility issues that still exist even after using ConcurrentHashMap?",
+          "answer": "<p><code>ConcurrentHashMap</code> gives you <strong>atomic put/get/compute</strong> but does <strong>not</strong> give you compound atomicity across multiple operations or visibility into the <em>values</em> stored inside.</p><h4>Issues that remain</h4><ol><li><strong>Compound operations are not atomic.</strong> <code>if (!map.containsKey(k)) map.put(k, v);</code> — two threads can both see absence and both put, overwriting each other or causing duplicate work. Use <code>putIfAbsent</code>, <code>computeIfAbsent</code>, or <code>merge</code>.</li><li><strong>Visibility of mutations to values.</strong> If you store a mutable object (e.g. <code>List</code> or POJO) and mutate it, the change is <strong>not</strong> guaranteed visible to other threads without happens-before. Two threads reading the same list might see different states. Fix: <code>@Volatile</code> fields, immutable objects, or atomic references (<code>AtomicReference</code>).</li><li><strong>Iteration is weakly consistent, not snapshot.</strong> Iterators are designed to be safe (no <code>ConcurrentModificationException</code>) but they do not freeze the map. Aggregations computed during iteration can be off.</li><li><strong>Size and aggregations are estimates.</strong> <code>size()</code>, <code>isEmpty()</code>, <code>mappingCount()</code> are not reliable for control flow — they can change between the check and the action.</li><li><strong>Atomicity inside compute is guaranteed, but the function must be quick.</strong> Long-running compute functions block other operations on the same bin.</li><li><strong>Composites of multiple maps.</strong> If you coordinate state across two <code>ConcurrentHashMap</code>s, you lose atomicity across them. Move to a single map or use external coordination.</li></ol><p>Bottom line: ConcurrentHashMap guarantees atomicity of single-key operations and a happens-before edge across put/get. It does not give you cross-key atomicity or visibility of in-place mutations to stored values.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Java",
+                "Concurrency",
+                "Memory Management",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "ConcurrentHashMap is atomic per key, not across keys — use computeIfAbsent/merge for check-then-act.",
+                "Mutations to a stored mutable value are not visible across threads without volatile/immutability.",
+                "size() and isEmpty() are estimates; never use them for control flow decisions."
+          ]
+    },
+    {
+          "question": "How would you investigate a Java application whose latency suddenly increased after a deployment?",
+          "answer": "<p>Follow a structured approach — start broad, narrow down, then verify root cause.</p><h4>1. Confirm scope and timing</h4><ul><li>Did P50 / P95 / P99 all rise, or just one? P99-only spikes are usually a tail (GC, lock, slow query), not the deployment.</li><li>Is it the new code path, or did traffic mix change? Check if a single endpoint or all endpoints are slow.</li><li>Pull the exact diff between the old and new version. What changed — library, config, JVM args?</li></ul><h4>2. Quick wins (5 minutes)</h4><ul><li><strong>Logs:</strong> look for new exceptions, slow query logs, full GC, thread dumps with locked threads.</li><li><strong>Metrics:</strong> CPU, GC pause, heap, thread count, DB connection pool wait time, downstream service P95.</li><li><strong>Thread dump:</strong> 3 dumps, 5 seconds apart. If many threads are stuck on the same lock or JDBC call, you have your culprit.</li></ul><h4>3. Profiling</h4><ul><li>Attach async-profiler (CPU + allocation flame graphs) — usually identifies the new hot method in seconds.</li><li>Compare allocation rate before/after: a 5x allocation increase hints at autoboxing, logging, or JSON serialization regressions.</li><li>Heap dump if the issue is OOM-shaped (slow leak into old gen after the deploy).</li></ul><h4>4. Common deployment-caused regressions</h4><ul><li>New logging at INFO that walks a large object graph.</li><li>Cache key change causing cache miss storm after restart.</li><li>DB migration not yet applied, or a query plan changed (new index, stats not refreshed).</li><li>Library upgrade with stricter behavior (e.g. TLS, JSON parsing).</li><li>JVM flag change (GC algorithm, heap size) carried in the new JVM args.</li><li>Connection pool size reduced by a config change.</li></ul><h4>5. Mitigation</h4><ul><li>Rollback if SLO is breached and root cause is not yet isolated. You can re-attach profilers to the rolled-back instance to keep investigating.</li><li>Add canary: deploy to 1% of instances first; promote only if SLO holds for 30 min.</li></ul><p>Always correlate: a deploy that correlates with a latency spike is not necessarily caused by it. Check external dependencies first — they deploy too.</p>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Java",
+                "Performance",
+                "Monitoring",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Triangulate with P50/P95/P99 + thread dumps before changing anything.",
+                "Async-profiler flame graphs are the fastest way to find the regression in the new code.",
+                "Roll back first, investigate on a side instance; do not debug in production under live load."
+          ]
+    },
+    {
+          "question": "How do you detect thread contention in a running production system?",
+          "answer": "<p>Thread contention is when threads wait on each other — locks, queues, connection pools, I/O. Detection combines metrics, dumps, and profilers.</p><h4>1. Symptoms first (metrics)</h4><ul><li>Spike in JVM thread count without corresponding throughput increase.</li><li>JMX <code>java.lang.management.ThreadMXBean.getThreadInfo()</code>: threads in <code>BLOCKED</code> or <code>WAITING</code> on monitors/locks.</li><li>High DB connection pool wait time, high Redis client wait time.</li><li>P95 latency rises while CPU is low — classic contention signature.</li></ul><h4>2. Thread dumps (the workhorse)</h4><ul><li>Take 3–5 dumps, 5 seconds apart: <code>jstack &lt;pid&gt; &gt; dump1.txt</code></li><li>Look for the same stack frame repeated across many threads: they are all waiting on the same lock.</li><li>Count threads blocked on the same monitor address — that is your hot lock.</li><li>Tools: <code>fastthread.io</code>, <code>IBM Thread Dump Analyzer</code>, or your APM (Datadog, New Relic, Glowroot).</li></ul><h4>3. Profilers (deeper)</h4><ul><li><strong>async-profiler</strong> in lock mode: <code>-e lock</code> shows which locks consume the most wall-clock time. Cheaper than full CPU profiling.</li><li><strong>JFR (Java Flight Recorder)</strong>: <code>jcmd &lt;pid&gt; JFR.start name=contention settings=profile duration=60s</code> produces a JFR file. Open in JDK Mission Control; the Java Monitor tab shows every contention event.</li></ul><h4>4. Specific contention sources to look for</h4><ul><li><code>HashMap</code> bucket collisions under high concurrency (use <code>ConcurrentHashMap</code>).</li><li>A single shared write lock (<code>ReentrantReadWriteLock</code> in write mode).</li><li>JDBC connection pool exhausted (every thread blocks waiting for a connection).</li><li>String intern pool (implicit locks on intern table).</li><li>Logging with synchronous appenders (log4j2 sync, logback) under load.</li><li><code>Classloading</code> contention on first use of new classes.</li></ul><h4>5. Long-term detection</h4><ul><li>Continuous JFR recording in prod (1% overhead) with alerts on lock-contention rate.</li><li>APM distributed tracing: services waiting on lock acquire spans.</li><li>Dashboards for pool wait times, blocked-thread count, and lock acquisition latency.</li></ul>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Java",
+                "Concurrency",
+                "Monitoring",
+                "Swiggy"
+          ],
+          "keyPoints": [
+                "Repeated stack frame across many threads in 3+ dumps = the hot lock.",
+                "JFR or async-profiler in -e lock mode shows lock time per monitor — cheaper than CPU profiling.",
+                "Continuous JFR in prod (1% overhead) catches contention regressions automatically."
+          ]
+    }
   ]
 }
