@@ -180,6 +180,18 @@ export const javascriptStructure = {
       { id: 'json', title: 'Working with JSON' },
       { id: 'debugging', title: 'Debugging Techniques' }
     ]
+  },
+  module5: {
+    title: 'Module 5: JavaScript in the Real World',
+    topics: [
+      { id: 'working-with-apis', title: 'Working with APIs (REST, endpoints, methods)' },
+      { id: 'async-patterns', title: 'Asynchronous Patterns (callbacks, promises, async/await)' },
+      { id: 'state-management', title: 'State Management Concepts' },
+      { id: 'js-design-patterns', title: 'JavaScript Design Patterns' },
+      { id: 'testing-javascript', title: 'Testing JavaScript (Jest, unit tests, TDD)' },
+      { id: 'build-tools-bundlers', title: 'Build Tools and Bundlers (Webpack, Vite, npm)' },
+      { id: 'js-best-practices', title: 'JavaScript Best Practices (clean code, ESLint)' }
+    ]
   }
 };
 

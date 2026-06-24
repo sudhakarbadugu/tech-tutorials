@@ -3759,9 +3759,12 @@ const obj = {
   }
 };
 
+import { jsModule5Content } from './jsModule5Content.js';
+
 export const javascriptContent = {
   module1: javascriptModule1Content.module1,
   module2: jsModule2Content,
   module3: jsModule3Content,
-  module4: jsModule4Content
+  module4: jsModule4Content,
+  module5: jsModule5Content
 };
