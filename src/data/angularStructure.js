@@ -120,6 +120,18 @@ export const angularStructure = {
       {
         id: 'primeng-table',
         title: 'PrimeNG Table'
+      },
+      {
+        id: 'angular-build',
+        title: 'Build'
+      },
+      {
+        id: 'angular-deployment',
+        title: 'Deployment'
+      },
+      {
+        id: 'angular-cicd-pipeline',
+        title: 'CI/CD Pipeline'
       }
     ]
   }
