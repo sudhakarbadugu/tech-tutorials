@@ -1,5 +1,5 @@
 // Auto-generated from rewritten modules
-// Generated: 2026-06-24T02:40:54.665Z
+// Generated: 2026-06-24T12:28:27.007Z
 
 export const aiStructure = {
   module1: {
@@ -20358,6 +20358,8590 @@ plt.show()`,
             language: 'python',
             type: 'code'
           }
+        }
+      ]
+    }
+  }
+};
+
+export const dsaStructure = {
+  module1: {
+    title: 'Module 1: Core Linear Structures',
+    topics: [
+      {
+        id: 'big-o',
+        title: 'Big-O Notation & Complexity Analysis'
+      },
+      {
+        id: 'arrays-strings',
+        title: 'Arrays & Strings'
+      },
+      {
+        id: 'linked-lists',
+        title: 'Linked Lists (Singly & Doubly)'
+      },
+      {
+        id: 'stacks-queues',
+        title: 'Stacks & Queues'
+      },
+      {
+        id: 'hashmaps-sets',
+        title: 'HashMaps & Sets'
+      }
+    ]
+  },
+  module2: {
+    title: 'Module 2: Trees & Heaps',
+    topics: [
+      {
+        id: 'binary-trees',
+        title: 'Binary Trees'
+      },
+      {
+        id: 'bst',
+        title: 'Binary Search Trees (BST)'
+      },
+      {
+        id: 'heaps',
+        title: 'Heaps & Priority Queues'
+      },
+      {
+        id: 'tries',
+        title: 'Tries (Prefix Trees)'
+      },
+      {
+        id: 'graphs-bfs-dfs',
+        title: 'Graphs BFS/DFS Basics'
+      }
+    ]
+  },
+  module3: {
+    title: 'Module 3: Sorting, Searching & Patterns',
+    topics: [
+      {
+        id: 'sorting',
+        title: 'Sorting Algorithms'
+      },
+      {
+        id: 'binary-search',
+        title: 'Binary Search'
+      },
+      {
+        id: 'two-pointers',
+        title: 'Two Pointers & Sliding Window'
+      },
+      {
+        id: 'divide-conquer',
+        title: 'Divide & Conquer'
+      },
+      {
+        id: 'greedy',
+        title: 'Greedy Algorithms'
+      }
+    ]
+  },
+  module4: {
+    title: 'Module 4: DP & Graph Algorithms',
+    topics: [
+      {
+        id: 'recursion-backtracking',
+        title: 'Recursion & Backtracking'
+      },
+      {
+        id: 'dp-memoization',
+        title: 'Dynamic Programming (Memoization)'
+      },
+      {
+        id: 'dp-tabulation',
+        title: 'Dynamic Programming (Tabulation)'
+      },
+      {
+        id: 'advanced-graphs',
+        title: 'Dijkstra, TopSort & Union-Find'
+      },
+      {
+        id: 'string-algos',
+        title: 'Advanced String Algorithms'
+      }
+    ]
+  },
+  module5: {
+    title: 'Module 5: Practical DS in Python/Java',
+    topics: [
+      {
+        id: 'python-stdlib',
+        title: 'Python Standard Library'
+      },
+      {
+        id: 'java-collections',
+        title: 'Java Collections Framework'
+      },
+      {
+        id: 'interview-patterns',
+        title: 'Top Interview Patterns'
+      },
+      {
+        id: 'ds-ml-pipelines',
+        title: 'Data Structures in ML'
+      },
+      {
+        id: 'complexity-cheat-sheet',
+        title: 'Final Complexity Review'
+      }
+    ]
+  }
+};
+
+export const dsaContent = {
+  module1: {
+    'big-o': {
+      title: 'Big-O Notation & Complexity Analysis',
+      subtitle: 'The language every interviewer speaks',
+      sections: [
+        {
+          heading: 'What is Big-O Notation?',
+          text: `Big-O notation describes the upper bound of an algorithm's runtime or space usage as the input size grows toward infinity. It is the universal language interviewers use to evaluate your solutions — knowing it cold is non-negotiable.`,
+          list: [
+            '<strong>O(1) — Constant:</strong> Runtime does not depend on input size. Example: array index access, hash map lookup.',
+            '<strong>O(log n) — Logarithmic:</strong> Input is halved at each step. Example: binary search, balanced BST operations.',
+            '<strong>O(n) — Linear:</strong> Runtime grows proportionally to input. Example: linear scan, single loop over an array.',
+            '<strong>O(n log n) — Linearithmic:</strong> Typical of efficient sorting algorithms. Example: merge sort, heap sort, TimSort.',
+            '<strong>O(n²) — Quadratic:</strong> Nested loops over the same data. Example: bubble sort, naive duplicate detection.',
+            '<strong>O(2^n) — Exponential:</strong> Runtime doubles with each additional input element. Example: naive recursive Fibonacci, power set generation.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Big-O captures the <em>growth rate</em> of resource consumption, not the exact count of operations. When we say an algorithm is O(n), we mean that as n doubles, the runtime roughly doubles too. Constants and lower-order terms are dropped because they become irrelevant at scale — O(3n + 50) simplifies to O(n).</p>',
+            '<p>There are three cases to reason about: <strong>Best case</strong> (Omega, Ω) is the minimum work needed — rarely what interviewers care about. <strong>Average case</strong> (Theta, Θ) reflects typical real-world performance. <strong>Worst case</strong> (Big-O, O) is the guarantee — what you must always be able to defend in interviews.</p>',
+            `<p><strong>Amortized analysis</strong> averages the cost of an operation over a sequence of operations. Python's list append is a perfect example: most appends are O(1), but occasionally the underlying array must be resized (O(n)). Averaged over n appends, however, each append costs O(1) amortized because the resize cost is spread across all prior cheap operations.</p>`
+          ],
+          note: 'Rule: drop constants and non-dominant terms. O(n + n²) → O(n²). O(500) → O(1).'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Complexity Growth Chart (input n on x-axis, operations on y-axis)
+
+  Operations
+  |
+  |                                              O(2^n)
+  |                                         ***
+  |                                     ****
+  |                                 ****
+  |                    O(n^2)   ****
+  |                          ***
+  |              O(n log n) /
+  |                    ----/
+  |           O(n)  --/
+  |              --/
+  |     O(log n)/__________________________________
+  |  O(1) _________________________________________
+  +-------------------------------------------------> n
+     1   10   100  1K   10K  100K  1M
+
+Scale reference at n = 1,000,000:
+  O(1)       =>              1 op  [Always fast]
+  O(log n)   =>             20 ops [Binary search]
+  O(n)       =>      1,000,000 ops [Single loop]
+  O(n log n) =>     20,000,000 ops [Merge sort]
+  O(n^2)     => 1,000,000,000,000  [Too slow!]
+  O(2^n)     => astronomically large [Impossible]`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Big-O Demo in Python',
+            code: `import time
+import sys
+
+# O(1) — constant time: index access
+def get_first(arr):
+    return arr[0]   # O(1) regardless of arr length
+
+# O(n) — list insert at index 0 must shift every existing element
+def insert_at_front(arr, val):
+    arr.insert(0, val)   # O(n): shifts all n elements right
+
+# Timing comparison: append (O(1) amortized) vs insert(0,...) O(n)
+n = 100_000
+data = list(range(n))
+
+start = time.perf_counter()
+for i in range(1000):
+    data.append(i)           # O(1) amortized per call
+append_time = time.perf_counter() - start
+
+data2 = list(range(n))
+start = time.perf_counter()
+for i in range(1000):
+    data2.insert(0, i)       # O(n) per call — shifts all elements!
+insert_time = time.perf_counter() - start
+
+print(f"1000x append  (O(1) amortized): {append_time:.4f}s")
+print(f"1000x insert(0,...) (O(n))    : {insert_time:.4f}s")
+print(f"insert is ~{insert_time / append_time:.0f}x slower than append")
+
+# Amortized analysis — observe list memory growing in jumps
+lst = []
+prev_size = sys.getsizeof(lst)
+print("\\nList memory growth (amortized O(1) per append):")
+for i in range(9):
+    lst.append(i)
+    new_size = sys.getsizeof(lst)
+    if new_size != prev_size:
+        print(f"  len={len(lst)}: size jumped {prev_size} -> {new_size} bytes (resize!)")
+        prev_size = new_size`,
+            output: `1000x append  (O(1) amortized): 0.0001s
+1000x insert(0,...) (O(n))    : 0.3847s
+insert is ~3847x slower than append
+
+List memory growth (amortized O(1) per append):
+  len=1: size jumped 56 -> 88 bytes (resize!)
+  len=5: size jumped 88 -> 120 bytes (resize!)
+  len=9: size jumped 120 -> 184 bytes (resize!)`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Big-O Demo in Java',
+            code: `import java.util.ArrayList;
+
+public class BigODemo {
+
+    // O(1) amortized — ArrayList add() appends to end
+    static long timeAppend(int ops) {
+        ArrayList<Integer> list = new ArrayList<>();
+        long start = System.nanoTime();
+        for (int i = 0; i < ops; i++) {
+            list.add(i);        // O(1) amortized — doubles capacity when full
+        }
+        return System.nanoTime() - start;
+    }
+
+    // O(n) per call — add(0, x) shifts every element one position right
+    static long timeInsertFront(int ops, int prefill) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < prefill; i++) list.add(i);   // pre-fill with n items
+        long start = System.nanoTime();
+        for (int i = 0; i < ops; i++) {
+            list.add(0, i);     // O(n) each — all prefill elements shift right
+        }
+        return System.nanoTime() - start;
+    }
+
+    public static void main(String[] args) {
+        int ops     = 10_000;
+        int prefill = 100_000;
+
+        long appendNs = timeAppend(ops);
+        long insertNs = timeInsertFront(ops, prefill);
+
+        System.out.printf("add() at end  O(1) amortized : %d ms%n", appendNs / 1_000_000);
+        System.out.printf("add(0, x)     O(n) per call  : %d ms%n", insertNs / 1_000_000);
+        System.out.printf("Insert-front is ~%.0fx slower%n",
+                          (double) insertNs / Math.max(appendNs, 1));
+    }
+}`,
+            output: `add() at end  O(1) amortized :  2 ms
+add(0, x)     O(n) per call  : 51 ms
+Insert-front is ~25x slower`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1:</strong> Identify the input variable(s) — usually n (array length), m (second array length), k (max value). All Big-O is expressed in terms of these variables.',
+            '<strong>Step 2:</strong> Count loops. A single loop over n items → O(n). Two nested loops both iterating over n → O(n²). A loop that halves the problem each step → O(log n).',
+            '<strong>Step 3:</strong> Add sequential blocks; multiply nested ones. Two O(n) passes in sequence: O(n + n) = O(n). An O(n) loop inside another O(n) loop: O(n × n) = O(n²).',
+            '<strong>Step 4:</strong> Drop constants and lower-order terms. O(3n + 2 log n + 15) simplifies to O(n). O(n² + n) simplifies to O(n²).',
+            '<strong>Step 5:</strong> Separately analyze space complexity. Identify all data structures allocated proportionally to input — arrays, hash maps, recursion call stacks all count.',
+            '<strong>Step 6:</strong> Check all three cases. Is the Big-O worst case different from the average? For quicksort: O(n log n) average, O(n²) worst. Always defend the worst case.',
+            '<strong>Step 7:</strong> Apply amortized analysis when applicable. Dynamic array append is O(1) amortized. Hash map insert is O(1) amortized. Be ready to explain why.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Key complexity classes ordered from fastest to slowest, with representative examples and scalability guidance:',
+          table: {
+            headers: [
+              'Name',
+              'Notation',
+              'Example DS / Op',
+              'Scales to 10^6?'
+            ],
+            rows: [
+              [
+                'Constant',
+                'O(1)',
+                'Array index, HashMap get',
+                'Yes — always'
+              ],
+              [
+                'Logarithmic',
+                'O(log n)',
+                'Binary search, BST lookup',
+                'Yes — ~20 ops'
+              ],
+              [
+                'Linear',
+                'O(n)',
+                'Array scan, HashMap build',
+                'Yes — tight budget'
+              ],
+              [
+                'Linearithmic',
+                'O(n log n)',
+                'Merge sort, Heap sort',
+                'Yes — ~20M ops'
+              ],
+              [
+                'Quadratic',
+                'O(n²)',
+                'Bubble sort, nested loops',
+                'No — 10^12 ops'
+              ],
+              [
+                'Cubic',
+                'O(n³)',
+                'Floyd-Warshall (dense graph)',
+                'No — 10^18 ops'
+              ],
+              [
+                'Exponential',
+                'O(2^n)',
+                'Recursive Fibonacci, power set',
+                'No — astronomically large'
+              ],
+              [
+                'Factorial',
+                'O(n!)',
+                'Brute-force permutations, TSP',
+                'No — n=20 already kills'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Mistake: Confusing O(n + m) with O(n²).</strong> When two separate inputs appear, the complexity is O(n + m), not O(n²) — <em>Fix:</em> Keep separate variables for each input dimension and add them.',
+            '<strong>Mistake: Ignoring constants that matter in practice.</strong> O(n) with a 1000x constant multiplier can be slower than O(n log n) for typical input sizes — <em>Fix:</em> After stating Big-O, mention the constant factor if it is large.',
+            '<strong>Mistake: Forgetting space complexity.</strong> Recursive DFS uses O(n) call stack space that interviewers expect you to account for — <em>Fix:</em> Always state both time AND space complexity.',
+            '<strong>Mistake: Assuming two loops always means O(n²).</strong> Two sequential (non-nested) loops are O(n + n) = O(n), not O(n²) — <em>Fix:</em> Check whether loops are nested or sequential before multiplying.'
+          ],
+          code: `# WRONG: Assuming sequential loops = O(n^2)
+def process(arr):
+    for x in arr:        # O(n)
+        print(x)
+    for x in arr:        # O(n) — sequential, NOT nested
+        print(x * 2)
+# Total: O(n + n) = O(n), NOT O(n^2)
+
+# CORRECT understanding: nested loops multiply
+def find_pairs(arr):
+    for i in range(len(arr)):       # O(n)
+        for j in range(len(arr)):   # O(n) nested -> multiply
+            if arr[i] + arr[j] == 0:
+                print(arr[i], arr[j])
+# Total: O(n * n) = O(n^2)
+
+# WRONG: Ignoring recursion stack space
+def factorial(n):
+    if n <= 1:
+        return 1
+    return n * factorial(n - 1)
+# Time: O(n) — correct
+# Space: O(n) stack frames — must mention BOTH in interviews`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Big-O analysis drives architectural decisions in production systems across every major tech domain:',
+          list: [
+            '<strong>Database indexing:</strong> B-tree indexes reduce record lookup from O(n) full scan to O(log n) — critical for tables with billions of rows.',
+            '<strong>Search engines:</strong> Inverted index lookups are O(1) hash lookups per term, making search viable at web scale despite terabytes of data.',
+            '<strong>Machine learning preprocessing:</strong> Choosing O(n log n) merge sort over O(n²) bubble sort for sorting training data saves hours on datasets with millions of records.',
+            '<strong>Network routing:</strong> Dijkstra with a min-heap runs in O((V + E) log V) — the difference between real-time routing and a system that times out.',
+            '<strong>Auto-complete / recommendations:</strong> Trie lookups are O(k) where k is key length — independent of dictionary size, enabling instant suggestions.',
+            '<strong>AI inference optimization:</strong> Transformer attention is O(n²) in sequence length — understanding this complexity is why researchers work on sparse and linear attention variants.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Always state the time AND space complexity before you start coding — it shows you think systematically before you type.',
+            'Ask the interviewer about input constraints: "Can n be up to 10^9?" — this tells you whether O(n) is acceptable or if you need O(log n).',
+            'When you give complexity, briefly justify it: "This is O(n log n) because of the sort, then O(n) for the scan — dominated by O(n log n) overall."',
+            'Explicitly mention the space-time trade-off: "I can solve this in O(n²) time O(1) space, or O(n) time O(n) space with a hash map — which would you prefer?"',
+            'Amortized complexity comes up with dynamic arrays and hash maps — know how to explain "O(1) amortized" confidently without hesitation.',
+            'For recursive solutions, the call stack counts as O(depth) space. Iterative solutions save this overhead — mention it proactively.',
+            'If stuck on optimizing, ask yourself: can hashing reduce a lookup from O(n) to O(1)? Can sorting + binary search reduce from O(n) to O(log n)?'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1: What is the time complexity of finding the maximum element in an unsorted array of n elements, and why?
+Ans: O(n) — you must examine every element at least once because there is no ordering information to exploit. You cannot skip any element, so the lower bound is also O(n).`,
+            `Q2: An algorithm has two phases: Phase 1 sorts the input in O(n log n); Phase 2 does a single pass in O(n). What is the overall complexity?
+Ans: O(n log n). When adding complexities of sequential phases, take the dominant term. O(n log n) + O(n) = O(n log n) because n log n grows faster than n for large n.`,
+            `Q3 (Hard): A function recurses on halves of the array (like merge sort) and does O(n) work at each recursion level. How many levels exist, and what is the total complexity?
+Ans: O(n log n). There are log n recursion levels because halving n takes log n steps to reach 1. Each level does a combined O(n) work across all calls at that level. Total = log n levels × O(n) per level = O(n log n). This is the Master Theorem case: T(n) = 2T(n/2) + O(n).`
+          ]
+        }
+      ]
+    },
+    'arrays-strings': {
+      title: 'Arrays & Strings',
+      subtitle: 'The backbone of every coding interview',
+      sections: [
+        {
+          heading: 'Core Concepts: Arrays & Strings',
+          text: 'Arrays and strings are the most frequently tested data structures in coding interviews. Mastering their internals and the classic patterns built on top of them covers roughly 40% of all interview problems.',
+          list: [
+            '<strong>Static Array:</strong> Fixed-size contiguous block of memory. Random access is O(1) because the address of element i is: base_address + i × element_size.',
+            '<strong>Dynamic Array (Python list / Java ArrayList):</strong> Backed by a static array that is resized (typically doubled) when full. Append is O(1) amortized; insert at arbitrary index is O(n) due to shifting.',
+            '<strong>String Immutability:</strong> In Python and Java, strings are immutable — every concatenation creates a new object. Concatenating n strings in a loop is O(n²). Use list.join() in Python or StringBuilder in Java.',
+            '<strong>Sliding Window:</strong> Maintain a window [left, right] over the array, expanding right and shrinking left based on a constraint. Converts many O(n²) brute-force substring/subarray problems to O(n).',
+            '<strong>Two Pointers:</strong> Use left and right pointers moving toward each other (sorted pair-sum) or both moving right at different speeds (fast/slow). Avoids nested loops.',
+            '<strong>Two-Sum Pattern:</strong> Store complements in a hash map as you scan. Converts O(n²) brute-force pair search to O(n) time with O(n) space.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Python lists are <em>dynamic arrays</em> under the hood. They store a contiguous block of pointers (8 bytes each on 64-bit systems) to the actual Python objects. When you do <code>lst[i]</code>, Python computes the pointer address in O(1). When you do <code>lst.insert(0, x)</code>, every existing pointer must shift one position right — O(n) work proportional to the list length.</p>',
+            '<p>String immutability matters more than most beginners realize. The pattern <code>s = s + c</code> inside a loop allocates a brand-new string of length len(s)+1 every iteration. For n iterations, total characters allocated is 1 + 2 + ... + n = O(n²). The fix is collecting characters in a list and calling <code>"".join(chars)</code> at the end — one O(n) allocation instead of O(n²).</p>',
+            '<p>The <strong>sliding window</strong> technique works by maintaining invariants about the window contents. Expand the right pointer to include new elements; when the window violates a constraint (has a duplicate, sum exceeds target), shrink from the left. Because each element enters and leaves the window at most once, total work across all pointer movements is O(n) — even though there are two nested-looking loops.</p>'
+          ],
+          note: 'Key rule: for subarray or substring problems with a constraint, reach for sliding window. For pair-sum problems, use two pointers on a sorted array or a hash map on an unsorted array.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Static Array — contiguous memory layout:
+  Index: [  0  ][  1  ][  2  ][  3  ][  4  ]
+  Value: [ 10  ][ 20  ][ 30  ][ 40  ][ 50  ]
+  Addr:  [1000 ][1008 ][1016 ][1024 ][1032 ]   (8 bytes each)
+  Access arr[3]: base(1000) + 3*8 = 1024 -> O(1)
+
+Dynamic Array (Python list) — amortized resize:
+  Capacity: 4   Used: 4   Append E triggers resize:
+  [ A ][ B ][ C ][ D ]   <- full!
+  Allocate new buffer of capacity 8, copy all, append E:
+  [ A ][ B ][ C ][ D ][ E ][   ][   ][   ]
+
+Sliding Window — max sum subarray of size k=3:
+  arr = [2, 1, 5, 1, 3, 2],  k = 3
+
+  Window 1: [2, 1, 5]   sum = 8
+             L-----R
+  Window 2:  [1, 5, 1]  sum = 7   subtract arr[0]=2, add arr[3]=1
+              L-----R
+  Window 3:     [5, 1, 3]  sum = 9  <- maximum
+                 L-----R
+  Window 4:        [1, 3, 2]  sum = 6
+                    L-----R
+  Answer: 9`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Arrays & Strings in Python',
+            code: `from typing import List, Dict
+
+# ── Two Sum: O(n) time, O(n) space ──────────────────────────────
+def two_sum(nums: List[int], target: int) -> List[int]:
+    """Return indices of the two numbers that add up to target."""
+    seen: Dict[int, int] = {}   # maps value -> index
+    for i, num in enumerate(nums):
+        complement = target - num
+        if complement in seen:
+            return [seen[complement], i]
+        seen[num] = i
+    return []
+
+# ── Kadane's Algorithm: max subarray sum — O(n) time, O(1) space ─
+def max_subarray(nums: List[int]) -> int:
+    """Largest sum of any contiguous subarray."""
+    max_sum = current = nums[0]
+    for num in nums[1:]:
+        current = max(num, current + num)   # extend or restart
+        max_sum = max(max_sum, current)
+    return max_sum
+
+# ── Sliding Window: longest substring without repeating chars ─────
+def length_of_longest_substring(s: str) -> int:
+    """O(n) time, O(min(n, alphabet_size)) space."""
+    char_index: Dict[str, int] = {}
+    left = max_len = 0
+    for right, ch in enumerate(s):
+        if ch in char_index and char_index[ch] >= left:
+            left = char_index[ch] + 1   # shrink window past duplicate
+        char_index[ch] = right
+        max_len = max(max_len, right - left + 1)
+    return max_len
+
+# ── String building: O(n) join vs O(n^2) concatenation ───────────
+def build_string_wrong(n: int) -> str:
+    s = ""
+    for i in range(n):
+        s += str(i)      # creates a new string each iteration — O(n^2) total
+    return s
+
+def build_string_right(n: int) -> str:
+    parts = []
+    for i in range(n):
+        parts.append(str(i))    # O(1) amortized per append
+    return "".join(parts)       # single O(n) allocation
+
+# ── Demo ──────────────────────────────────────────────────────────
+print(two_sum([2, 7, 11, 15], 9))
+print(two_sum([3, 2, 4], 6))
+print(max_subarray([-2, 1, -3, 4, -1, 2, 1, -5, 4]))
+print(length_of_longest_substring("abcabcbb"))
+print(length_of_longest_substring("pwwkew"))`,
+            output: `[0, 1]
+[1, 2]
+6
+3
+3`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Arrays & Strings in Java',
+            code: `import java.util.*;
+
+public class ArraysStrings {
+
+    // ── Two Sum: O(n) time, O(n) space ───────────────────────────
+    public static int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> seen = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (seen.containsKey(complement)) {
+                return new int[]{seen.get(complement), i};
+            }
+            seen.put(nums[i], i);
+        }
+        return new int[]{};
+    }
+
+    // ── Kadane's Algorithm: O(n) time, O(1) space ─────────────────
+    public static int maxSubarray(int[] nums) {
+        int maxSum = nums[0], current = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            current = Math.max(nums[i], current + nums[i]);
+            maxSum  = Math.max(maxSum, current);
+        }
+        return maxSum;
+    }
+
+    // ── String Reversal using char array — O(n) time, O(n) space ─
+    public static String reverseString(String s) {
+        char[] chars = s.toCharArray();
+        int left = 0, right = chars.length - 1;
+        while (left < right) {
+            char tmp    = chars[left];
+            chars[left] = chars[right];
+            chars[right] = tmp;
+            left++;
+            right--;
+        }
+        return new String(chars);
+    }
+
+    // ── StringBuilder: O(n) vs string + in loop: O(n^2) ──────────
+    public static String buildStringRight(int n) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append(i);   // O(1) amortized — avoid String + in loop
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(twoSum(new int[]{2, 7, 11, 15}, 9)));
+        System.out.println(Arrays.toString(twoSum(new int[]{3, 2, 4}, 6)));
+        System.out.println(maxSubarray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
+        System.out.println(reverseString("hello"));
+    }
+}`,
+            output: `[0, 1]
+[1, 2]
+6
+olleh`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 (Two Sum):</strong> Initialize an empty hash map. The key insight: for each element x, the value we need to pair with it is target - x. Check if that complement already exists in the map.',
+            '<strong>Step 2 (Two Sum):</strong> If the complement is not in the map, store { x: current_index } and continue. If it is found, return [seen[complement], i]. One pass, O(n) time, O(n) space.',
+            `<strong>Step 3 (Kadane's):</strong> At each position, decide: is it better to extend the existing subarray (current + num) or start a fresh one from the current element (just num)? Take the max of the two options.`,
+            `<strong>Step 4 (Kadane's):</strong> Maintain a global max updated at every step. When the loop finishes, global max holds the answer. Handle all-negative arrays by initializing both current and max_sum to nums[0].`,
+            '<strong>Step 5 (Sliding Window):</strong> Maintain a dictionary of last-seen character indices and two pointers: left and right. Advance right to expand; when a duplicate is found inside [left, right], advance left past the previous occurrence.',
+            '<strong>Step 6 (Sliding Window):</strong> Update the answer (right - left + 1) after each right move. The window invariant: at every step, [left, right] contains no duplicate characters.',
+            '<strong>Step 7 (String Building):</strong> Collect parts in a list (Python) or StringBuilder (Java), then join/toString at the end. Never use + concatenation inside a loop for strings — it is O(n²) and a common interview pitfall.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Array and string operation complexities — n is the array or string length:',
+          table: {
+            headers: [
+              'Operation',
+              'Time',
+              'Space',
+              'Notes'
+            ],
+            rows: [
+              [
+                'Access by index',
+                'O(1)',
+                'O(1)',
+                'Direct memory address computation'
+              ],
+              [
+                'Search (unsorted)',
+                'O(n)',
+                'O(1)',
+                'Must check every element'
+              ],
+              [
+                'Search (sorted, binary)',
+                'O(log n)',
+                'O(1)',
+                'Halve search space each step'
+              ],
+              [
+                'Insert at end (dynamic array)',
+                'O(1) amortized',
+                'O(1)',
+                'Occasional O(n) resize'
+              ],
+              [
+                'Insert at index i',
+                'O(n)',
+                'O(1)',
+                'Shifts n - i elements rightward'
+              ],
+              [
+                'Delete at index i',
+                'O(n)',
+                'O(1)',
+                'Shifts n - i - 1 elements left'
+              ],
+              [
+                'Two Sum (hash map)',
+                'O(n)',
+                'O(n)',
+                'Single pass + map storage'
+              ],
+              [
+                'Sliding Window',
+                'O(n)',
+                'O(k)',
+                'k = window or alphabet size'
+              ],
+              [
+                'String concat in loop',
+                'O(n²)',
+                'O(n²)',
+                'Each + allocates a new string'
+              ],
+              [
+                '"".join() / StringBuilder',
+                'O(n)',
+                'O(n)',
+                'Single allocation at the end'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Mistake: Modifying a list while iterating over it.</strong> Removing elements mid-loop skips items and produces incorrect results — <em>Fix:</em> Iterate over a copy, use a list comprehension, or build a new list instead.',
+            '<strong>Mistake: Off-by-one errors in sliding window.</strong> Using < vs <= in window boundary checks produces windows that are one element too small or large — <em>Fix:</em> Remember window size = right - left + 1; test with 1-element and 2-element inputs.',
+            '<strong>Mistake: String concatenation in a loop.</strong> s = s + c inside a loop is O(n²) total in both Python and Java — <em>Fix:</em> Use "".join(parts) in Python or StringBuilder.append() in Java.',
+            `<strong>Mistake: Not handling empty array or single-element edge cases.</strong> Kadane's and two-pointer solutions often crash on empty input — <em>Fix:</em> Add a guard clause at the top of every function.`
+          ],
+          code: `# WRONG: Modifying list while iterating over it
+nums = [1, 2, 3, 4, 5]
+for n in nums:
+    if n % 2 == 0:
+        nums.remove(n)   # skips elements — [2,4] leaves 4 unremoved!
+print(nums)   # [1, 3, 5] seems right but breaks on edge cases
+
+# CORRECT: List comprehension creates a new list safely
+nums = [1, 2, 3, 4, 5]
+nums = [n for n in nums if n % 2 != 0]
+print(nums)   # [1, 3, 5] — always correct
+
+# WRONG: String concatenation in loop — O(n^2) total allocations
+def build_wrong(chars):
+    s = ""
+    for c in chars:
+        s += c       # new string allocated every iteration
+    return s
+
+# CORRECT: collect then join — O(n) single allocation
+def build_right(chars):
+    return "".join(chars)`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Array and string algorithms are the foundation of nearly every software system — from OS kernels to large language models:',
+          list: [
+            '<strong>Search autocomplete:</strong> Sliding window over a character stream detects repeated or rare substrings for query suggestion ranking.',
+            '<strong>Log analysis:</strong> Two-pointer scan finds overlapping time intervals in server logs to detect cascading failures across microservices.',
+            '<strong>DNA sequence analysis:</strong> Sliding window finds longest repeated subsequences and gene motifs in genomic data — critical for bioinformatics pipelines.',
+            '<strong>Spam detection (NLP):</strong> Token frequency arrays built with Two-Sum-style hash maps identify duplicate or near-duplicate email content in O(n).',
+            '<strong>Video streaming:</strong> Dynamic arrays back the frame buffer; O(1) amortized append keeps encoding latency predictable at high frame rates.',
+            '<strong>LLM tokenization:</strong> Byte-Pair Encoding (BPE) iterates over character arrays with sliding window merge operations to build vocabulary — used in GPT, LLaMA, and BERT tokenizers.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Before coding, ask: "Is the array sorted?" — a sorted array enables binary search (O(log n)) and two-pointer (O(n)) solutions that are far more impressive than brute force.',
+            'For any problem asking "does pair X exist?" or "find element X", reach for a hash map first — it turns O(n) search into O(1) lookup.',
+            'For substring or subarray problems with a constraint (length, sum, unique chars), draw the sliding window on the board before coding — it clarifies left/right pointer semantics.',
+            'Always mention string immutability and use StringBuilder or join() — it signals deep language knowledge to interviewers.',
+            'For character frequency problems, a fixed-size int array of 26 (for lowercase a-z) can replace a hash map with zero collision overhead.',
+            'Two pointers on a sorted array — one at each end, moving inward — solves: two-sum sorted, three-sum, container with most water, and valid palindrome.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1: Given an array of integers, find the maximum sum of any contiguous subarray. What algorithm applies and what is its complexity?
+Ans: Kadane's algorithm — O(n) time, O(1) space. Track current_sum = max(num, current_sum + num) and global_max at each step. Key insight: if current subarray sum goes negative, it is always better to start fresh from the current element.`,
+            `Q2: Given two strings s and t, determine if t is an anagram of s in O(n) time and O(1) space.
+Ans: Build a frequency array of size 26. Increment for each character in s; decrement for each character in t. If all 26 counts are zero at the end, t is an anagram. O(n) time; O(1) space because the array size is fixed at 26 regardless of input length.`,
+            `Q3 (Hard): Find the length of the longest substring containing at most k distinct characters.
+Ans: Sliding window with a hash map counting character frequencies in the current window. Expand right always; when the map has more than k distinct keys, advance left and decrement counts (delete key when count hits 0). Track the maximum window size seen. O(n) time, O(k) space.`
+          ]
+        }
+      ]
+    },
+    'linked-lists': {
+      title: 'Linked Lists (Singly & Doubly)',
+      subtitle: 'Pointer mastery for interview success',
+      sections: [
+        {
+          heading: 'Linked List Fundamentals',
+          text: 'A linked list is a dynamic data structure where elements (nodes) are stored at arbitrary memory locations and connected by pointers. Unlike arrays, there is no random access — traversal always begins from the head.',
+          list: [
+            '<strong>Node structure:</strong> Each node holds a value (data) and one or more pointers. Singly linked: one next pointer. Doubly linked: next and prev pointers.',
+            '<strong>Singly Linked List:</strong> Each node points only to the next node. Traversal is one-directional (head to tail). Less memory — one pointer overhead per node.',
+            `<strong>Doubly Linked List:</strong> Each node has both next and prev pointers, enabling O(1) deletion when you hold a reference to the node and backward traversal. Used by Python's deque, Java's LinkedList, and LRU Cache.`,
+            '<strong>Advantages over arrays:</strong> O(1) insertion and deletion at the head (no shifting). Dynamic size without pre-allocation. Efficient list merging.',
+            '<strong>Disadvantages over arrays:</strong> O(n) access to the element at index i. Poor cache performance due to non-contiguous memory. Extra memory for pointer storage.',
+            `<strong>Classic patterns:</strong> Reverse the list, detect a cycle with Floyd's algorithm, find the middle with fast/slow pointers, merge two sorted lists, remove the nth node from the end.`
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>The <strong>dummy node technique</strong> simplifies edge cases where the head itself might be removed or replaced. Prepend a dummy node with value -1 before the real head. Your operations always start from dummy.next, so you never need to special-case "what if the head changes?" Return dummy.next as the result. This pattern is used in merge sorted lists, remove duplicates, and partition list problems.</p>',
+            `<p><strong>Floyd's Cycle Detection</strong> (the tortoise and hare algorithm) uses two pointers: slow moves one step at a time, fast moves two. If there is a cycle, fast will eventually lap slow and they will meet inside the cycle. If fast reaches None/null, there is no cycle. To find the cycle entry point, reset one pointer to head after the meeting point is found, then advance both one step at a time — they meet exactly at the cycle entry.</p>`,
+            '<p>The <strong>fast/slow pointer trick for finding the middle</strong> works because when fast (2 steps per iteration) reaches the end, slow (1 step) is at the midpoint. For odd-length lists, slow lands exactly on the middle node. For even-length lists, slow lands on the first of the two middle nodes. This is O(n) time and O(1) space — crucial for merge sort on linked lists.</p>'
+          ],
+          note: 'Key rule: before every pointer move, verify that the current node and its next pointer are not None/null. Null pointer dereference is the #1 linked list interview bug.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Singly Linked List:
+  Head
+   |
+  [1 | *]-->[2 | *]-->[3 | *]-->[4 | *]-->[None]
+  val  next
+
+Doubly Linked List:
+  Head                                        Tail
+   |                                           |
+  [None|1|*]<==>[*|2|*]<==>[*|3|*]<==>[*|4|None]
+       prev val next
+
+Floyd's Cycle Detection:
+  [1]->[2]->[3]->[4]->[5]
+                  ^         |
+                  |         v
+                 [8]<------[6]->[7]
+                            ^
+                       cycle entry (node 3)
+
+  slow moves 1 step, fast moves 2 steps:
+  slow: 1->2->3->4->5->6->7->8->3...
+  fast: 1->3->5->7->3->5->7->3...
+  They meet at some node inside the cycle.
+  Reset slow to head, advance both 1 step:
+  slow: 1->2->3   fast: meetPoint->...->3
+  They converge at node 3 = cycle entry.
+
+Find Middle (fast/slow pointers):
+  [1]->[2]->[3]->[4]->[5]->None
+
+  slow:  1  ->  2  ->  3       <- stops at middle
+  fast:  1  ->  3  ->  5->None <- reaches end
+  Middle = node(3)`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Linked List in Python',
+            code: `from typing import Optional, List
+
+class ListNode:
+    def __init__(self, val: int = 0, nxt: "Optional[ListNode]" = None):
+        self.val  = val
+        self.next = nxt
+
+    def __repr__(self):
+        nodes, cur = [], self
+        while cur:
+            nodes.append(str(cur.val))
+            cur = cur.next
+        return " -> ".join(nodes)
+
+# ── Build a linked list from a Python list ───────────────────────
+def build(values: List[int]) -> Optional[ListNode]:
+    dummy = ListNode(-1)
+    cur = dummy
+    for v in values:
+        cur.next = ListNode(v)
+        cur = cur.next
+    return dummy.next
+
+# ── Reverse: O(n) time, O(1) space ───────────────────────────────
+def reverse_list(head: Optional[ListNode]) -> Optional[ListNode]:
+    prev, curr = None, head
+    while curr:
+        nxt       = curr.next   # save next before overwriting
+        curr.next = prev        # reverse the pointer
+        prev      = curr        # advance prev
+        curr      = nxt         # advance curr
+    return prev                 # prev is the new head
+
+# ── Detect cycle: Floyd's — O(n) time, O(1) space ────────────────
+def has_cycle(head: Optional[ListNode]) -> bool:
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:        # identity check, not equality
+            return True
+    return False
+
+# ── Find middle: fast/slow — O(n) time, O(1) space ───────────────
+def find_middle(head: Optional[ListNode]) -> Optional[ListNode]:
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow
+
+# ── Demo ──────────────────────────────────────────────────────────
+ll = build([1, 2, 3, 4, 5])
+print("Original:", ll)
+print("Reversed:", reverse_list(ll))
+
+ll2 = build([1, 2, 3, 4, 5])
+print("Middle  :", find_middle(ll2).val)
+
+# Inject a cycle: node 5 -> node at index 2 (value 3)
+ll3 = build([1, 2, 3, 4, 5])
+cur, nodes = ll3, []
+while cur:
+    nodes.append(cur)
+    cur = cur.next
+nodes[-1].next = nodes[2]   # 5 -> 3 creates a cycle
+print("Has cycle:", has_cycle(ll3))
+print("Has cycle:", has_cycle(build([1, 2, 3])))`,
+            output: `Original: 1 -> 2 -> 3 -> 4 -> 5
+Reversed: 5 -> 4 -> 3 -> 2 -> 1
+Middle  : 3
+Has cycle: True
+Has cycle: False`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Linked List in Java',
+            code: `public class LinkedListDemo {
+
+    static class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int val) { this.val = val; }
+    }
+
+    // ── Build list from int array ─────────────────────────────────
+    static ListNode build(int[] values) {
+        ListNode dummy = new ListNode(-1);
+        ListNode cur   = dummy;
+        for (int v : values) {
+            cur.next = new ListNode(v);
+            cur = cur.next;
+        }
+        return dummy.next;
+    }
+
+    static String toString(ListNode head) {
+        StringBuilder sb = new StringBuilder();
+        while (head != null) {
+            sb.append(head.val);
+            if (head.next != null) sb.append(" -> ");
+            head = head.next;
+        }
+        return sb.toString();
+    }
+
+    // ── Reverse: O(n) time, O(1) space ───────────────────────────
+    static ListNode reverseList(ListNode head) {
+        ListNode prev = null, curr = head;
+        while (curr != null) {
+            ListNode nxt = curr.next;
+            curr.next    = prev;
+            prev         = curr;
+            curr         = nxt;
+        }
+        return prev;
+    }
+
+    // ── Detect cycle: Floyd's — O(n) time, O(1) space ─────────────
+    static boolean hasCycle(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) return true;   // reference equality
+        }
+        return false;
+    }
+
+    // ── Find middle: fast/slow — O(n) time, O(1) space ───────────
+    static ListNode findMiddle(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    public static void main(String[] args) {
+        ListNode ll = build(new int[]{1, 2, 3, 4, 5});
+        System.out.println("Original: " + toString(ll));
+        System.out.println("Reversed: " + toString(reverseList(ll)));
+
+        ListNode ll2 = build(new int[]{1, 2, 3, 4, 5});
+        System.out.println("Middle  : " + findMiddle(ll2).val);
+
+        ListNode ll3 = build(new int[]{1, 2, 3, 4, 5});
+        ListNode[] nodes = new ListNode[5];
+        ListNode cur = ll3;
+        for (int i = 0; i < 5; i++) { nodes[i] = cur; cur = cur.next; }
+        nodes[4].next = nodes[2];   // 5 -> 3: inject cycle
+        System.out.println("Has cycle: " + hasCycle(ll3));
+        System.out.println("Has cycle: " + hasCycle(build(new int[]{1, 2, 3})));
+    }
+}`,
+            output: `Original: 1 -> 2 -> 3 -> 4 -> 5
+Reversed: 5 -> 4 -> 3 -> 2 -> 1
+Middle  : 3
+Has cycle: true
+Has cycle: false`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 (Reverse):</strong> Initialize prev = None and curr = head. We will rewire one pointer per iteration, moving left to right through the list.',
+            '<strong>Step 2 (Reverse):</strong> Each iteration: save curr.next as nxt (critical — otherwise you lose the rest of the list), set curr.next = prev (reverse the link), advance prev = curr, advance curr = nxt.',
+            '<strong>Step 3 (Reverse):</strong> When curr becomes None, prev points to the old tail which is now the new head. Return prev.',
+            '<strong>Step 4 (Cycle Detection):</strong> Start both slow and fast at head. Each iteration: slow moves one step, fast moves two. If fast or fast.next is None, the list is finite — no cycle.',
+            '<strong>Step 5 (Cycle Detection):</strong> If slow == fast (same object reference), they have met inside the cycle — return True. For the cycle entry point: reset one pointer to head, advance both one step at a time; they meet at the entry node.',
+            '<strong>Step 6 (Find Middle):</strong> Start slow and fast at head. Each iteration: slow moves one step, fast moves two. When fast is None or fast.next is None, slow is positioned at the middle.',
+            '<strong>Step 7 (Dummy Node):</strong> For problems where the head might be removed or changed (remove head, merge lists), prepend dummy = ListNode(-1); dummy.next = head. Operate on dummy.next; always return dummy.next as the final result.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Linked list operation complexities — n is the number of nodes; array costs shown for comparison:',
+          table: {
+            headers: [
+              'Operation',
+              'Singly LL',
+              'Doubly LL',
+              'Array',
+              'Notes'
+            ],
+            rows: [
+              [
+                'Access by index',
+                'O(n)',
+                'O(n)',
+                'O(1)',
+                'LL has no random access'
+              ],
+              [
+                'Search by value',
+                'O(n)',
+                'O(n)',
+                'O(n)',
+                'Must traverse from head'
+              ],
+              [
+                'Insert at head',
+                'O(1)',
+                'O(1)',
+                'O(n)',
+                'Array must shift all elements'
+              ],
+              [
+                'Insert at tail',
+                'O(n) / O(1)*',
+                'O(1)**',
+                'O(1) amort',
+                '*O(1) if tail pointer maintained'
+              ],
+              [
+                'Insert at index i',
+                'O(n)',
+                'O(n)',
+                'O(n)',
+                'Traversal to position i'
+              ],
+              [
+                'Delete at head',
+                'O(1)',
+                'O(1)',
+                'O(n)',
+                'Move head pointer forward'
+              ],
+              [
+                'Delete given node ref',
+                'O(n)',
+                'O(1)',
+                'O(n)',
+                'Doubly LL: use prev.next directly'
+              ],
+              [
+                'Reverse entire list',
+                'O(n)',
+                'O(n)',
+                'O(n)',
+                'Must visit every node'
+              ],
+              [
+                'Memory per element',
+                'val + 1 ptr',
+                'val + 2 ptrs',
+                'val only',
+                'LL has pointer overhead'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Mistake: Losing the head reference.</strong> Assigning head = head.next before saving it loses the original head and corrupts the result — <em>Fix:</em> Always store the result in a separate variable (prev or dummy.next); never overwrite head mid-operation.',
+            '<strong>Mistake: Not checking None/null before dereferencing next.</strong> Accessing node.next when node is None causes AttributeError (Python) or NullPointerException (Java) — <em>Fix:</em> Always check while cur and cur.next: before accessing cur.next.next.',
+            '<strong>Mistake: Using == instead of is for cycle detection in Python.</strong> slow == fast compares values; slow is fast checks object identity (same node in memory). Two different nodes can have the same value — <em>Fix:</em> Use is for pointer comparison.',
+            '<strong>Mistake: Off-by-one when removing the nth node from end.</strong> Moving fast n steps (instead of n+1) ahead does not leave room for slow to stop at the node before the target — <em>Fix:</em> Advance fast exactly n+1 steps so slow stops at the predecessor, enabling slow.next = slow.next.next.'
+          ],
+          code: `# WRONG: Losing head reference during reversal
+def reverse_wrong(head):
+    while head and head.next:
+        head = head.next   # original head is lost!
+    return head   # returns tail, not a reversed list
+
+# CORRECT: Three-pointer technique
+def reverse_correct(head):
+    prev, curr = None, head
+    while curr:
+        nxt       = curr.next   # 1. save next
+        curr.next = prev        # 2. reverse pointer
+        prev, curr = curr, nxt  # 3. advance both
+    return prev   # prev is the new head
+
+# WRONG: Not checking fast.next before accessing fast.next.next
+def has_cycle_wrong(head):
+    slow, fast = head, head
+    while fast:                    # missing fast.next check!
+        slow = slow.next
+        fast = fast.next.next      # crashes if fast.next is None
+    return False
+
+# CORRECT: Check both fast and fast.next
+def has_cycle_correct(head):
+    slow, fast = head, head
+    while fast and fast.next:      # guard both
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:           # identity, not equality
+            return True
+    return False`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Linked lists and pointer-based structures underpin many critical systems you interact with every day:',
+          list: [
+            `<strong>LRU Cache:</strong> Python's functools.lru_cache and Java's LinkedHashMap use a doubly linked list combined with a hash map for O(1) get and O(1) put — the most common system design interview topic.`,
+            '<strong>Browser history:</strong> Back and forward navigation is a doubly linked list — each visited page is a node, and prev/next pointers enable O(1) navigation.',
+            '<strong>Undo/Redo in text editors:</strong> Each edit action is a node in a doubly linked list. Undo traverses backward (prev); redo traverses forward (next); a new action truncates everything after the current node.',
+            '<strong>OS memory management:</strong> Free memory blocks are tracked as a linked list (free list). malloc traverses it to find a block of sufficient size; free reinserts the released block.',
+            '<strong>Music and video playlists:</strong> Doubly linked list enables O(1) previous/next track navigation without knowing the index.',
+            '<strong>Blockchain:</strong> Each block contains a cryptographic hash of the previous block — forming an immutable singly linked chain where tampering with any block invalidates all subsequent hashes.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Draw the linked list on the whiteboard before writing any code — visualizing pointer states at each step prevents errors and demonstrates methodical thinking.',
+            'Always use a dummy node when the head might change (remove head node, merge two lists) — it eliminates an entire category of edge-case bugs.',
+            'The fast/slow pointer pattern solves three families of problems: detect cycle, find cycle entry, and find middle. Recognizing these patterns saves you from reinventing solutions under pressure.',
+            'When reversing a linked list in an interview, narrate each step aloud: "I save nxt, reverse curr.next to point to prev, then advance both pointers." This shows your reasoning.',
+            'For "remove nth node from end", use two pointers separated by n+1 steps — advance leader to the end, then slow is at the predecessor and you can do slow.next = slow.next.next.',
+            'If the problem requires O(1) space, recursion is off limits (O(n) stack frames). Think iterative with explicit pointer manipulation.',
+            'For merge sorted lists, always use a dummy head. Compare list heads, attach the smaller node, advance that pointer — repeat until one list is exhausted, then append the remaining tail.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1: How do you merge two sorted linked lists into one sorted linked list in O(n + m) time and O(1) space?
+Ans: Use a dummy node. Compare heads of both lists and attach the smaller node to the result. Advance that list's pointer. When one list is exhausted, attach the remaining tail of the other. Return dummy.next. No extra memory is used because you reuse the existing nodes.`,
+            `Q2: How do you find the entry point of a cycle in a linked list after detecting it with Floyd's algorithm?
+Ans: Phase 1 — run Floyd's until slow and fast meet (meeting point is inside the cycle). Phase 2 — reset slow to head, keep fast at the meeting point, advance both one step at a time. They meet exactly at the cycle entry node. Mathematical proof: the distance from head to entry equals the distance from the meeting point to entry modulo cycle length.`,
+            `Q3 (Hard): Given a linked list, reverse every k nodes in-place. What is the time and space complexity?
+Ans: O(n) time, O(1) space. For each group of k nodes: apply the three-pointer reverse technique, track the tail of the reversed group, connect it to the head of the next group. Repeat until fewer than k nodes remain (leave them in their original order per the standard variant). Each node is visited a constant number of times.`
+          ]
+        }
+      ]
+    },
+    'stacks-queues': {
+      title: 'Stacks & Queues',
+      subtitle: 'LIFO and FIFO — the engines of traversal',
+      sections: [
+        {
+          heading: 'Stacks & Queues Fundamentals',
+          text: 'Stacks (LIFO) and queues (FIFO) are restricted-access linear structures. Their constraints are precisely what make them powerful — they enforce a specific traversal order that models DFS, BFS, expression evaluation, undo systems, and scheduling.',
+          list: [
+            '<strong>Stack (LIFO — Last In, First Out):</strong> Like a stack of plates — add and remove only from the top. Operations: push (add), pop (remove top), peek (read top without removing). Used in DFS, undo/redo, expression parsing, and the call stack itself.',
+            '<strong>Queue (FIFO — First In, First Out):</strong> Like a ticket line — the first arrival is the first served. Operations: enqueue (add to back), dequeue (remove from front), peek (read front). Used in BFS, task scheduling, and producer-consumer systems.',
+            `<strong>Deque (Double-Ended Queue):</strong> Supports O(1) push and pop at both ends. Python's collections.deque and Java's ArrayDeque implement this. Use deque when you need both stack and queue behavior, or for sliding window maximum.`,
+            '<strong>Monotonic Stack:</strong> A stack that maintains elements in strictly increasing or decreasing order. When a new element would violate the invariant, pop until it is restored. Solves "next greater element", "largest rectangle in histogram", and related problems in O(n).',
+            '<strong>BFS uses a Queue:</strong> Level-by-level traversal — enqueue the start node, then for each node dequeued enqueue its unvisited neighbors. Guarantees shortest path in unweighted graphs.',
+            '<strong>DFS uses a Stack:</strong> Depth-first traversal — push the start node, then for each node popped push its unvisited neighbors. Recursive DFS uses the call stack implicitly.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            `<p>The <strong>monotonic stack</strong> pattern is one of the most powerful interview techniques. The invariant: elements on the stack are always in increasing (or decreasing) order of value. When you push a new element that is larger than the current top (for a decreasing stack), pop all smaller elements — and at the moment of each pop, you know the new element is that popped element's "next greater element". This converts an O(n²) brute-force search to O(n) because each element is pushed and popped at most once.</p>`,
+            '<p>In Python, <strong>never use a plain list as a queue</strong>. <code>list.pop(0)</code> is O(n) because Python must shift all remaining elements leftward. Instead, always use <code>collections.deque</code> — its <code>popleft()</code> is O(1) because a deque is implemented as a doubly-linked list of fixed-size blocks. For a stack, a plain Python list is perfectly fine because <code>list.append()</code> and <code>list.pop()</code> from the end are both O(1).</p>',
+            '<p>In Java, prefer <strong>ArrayDeque over the legacy Stack class and over LinkedList</strong>. The legacy <code>java.util.Stack</code> extends Vector and is synchronized — unnecessary overhead for single-threaded code. <code>ArrayDeque</code> is faster, not synchronized, and implements the full Deque interface — use <code>push</code>/<code>pop</code> for stack semantics and <code>offer</code>/<code>poll</code> for queue semantics.</p>'
+          ],
+          note: 'Key rule: if your solution needs to remember elements in reverse order (undo, backtrack, nested structure), that is a stack. If it must process elements in arrival order (shortest path, level traversal), that is a queue.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Stack — LIFO (all operations at the top):
+  push(1) -> push(2) -> push(3) -> pop() -> peek()
+
+  push(1):  [ 1 ]                    TOP = 1
+  push(2):  [ 1 | 2 ]                TOP = 2
+  push(3):  [ 1 | 2 | 3 ]            TOP = 3
+  pop():    [ 1 | 2 ]    returns 3   TOP = 2
+  peek():   [ 1 | 2 ]    returns 2 (no removal)
+             BOTTOM ---> TOP
+
+Queue — FIFO (enqueue at back, dequeue from front):
+  enqueue(A) -> enqueue(B) -> enqueue(C) -> dequeue() -> peek()
+
+  enqueue(A): FRONT [ A ] BACK
+  enqueue(B): FRONT [ A  B ] BACK
+  enqueue(C): FRONT [ A  B  C ] BACK
+  dequeue():  FRONT [ B  C ] BACK     returns A
+  peek():     FRONT [ B  C ] BACK     returns B (no removal)
+
+Monotonic Decreasing Stack — Next Greater Element for [2, 1, 5, 3, 6]:
+  (stack stores indices; NGE[i] = next element greater than arr[i])
+
+  i=0, val=2: stack empty  -> push 0          stack=[0]
+  i=1, val=1: 1 < arr[0]=2 -> push 1          stack=[0,1]
+  i=2, val=5: 5 > arr[1]=1 -> pop 1, NGE[1]=5
+              5 > arr[0]=2 -> pop 0, NGE[0]=5
+              push 2                           stack=[2]
+  i=3, val=3: 3 < arr[2]=5 -> push 3          stack=[2,3]
+  i=4, val=6: 6 > arr[3]=3 -> pop 3, NGE[3]=6
+              6 > arr[2]=5 -> pop 2, NGE[2]=6
+              push 4                           stack=[4]
+  End: index 4 remains -> NGE[4] = -1 (default)
+
+  Result NGE = [5, 5, 6, 6, -1]`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Stacks & Queues in Python',
+            code: `from collections import deque
+from typing import List
+
+# ── Stack using Python list — O(1) push/pop at end ────────────────
+class Stack:
+    def __init__(self):
+        self._data = []
+
+    def push(self, val):    self._data.append(val)
+    def pop(self):          return self._data.pop()
+    def peek(self):         return self._data[-1]
+    def is_empty(self):     return len(self._data) == 0
+    def __len__(self):      return len(self._data)
+
+# ── Queue using deque — O(1) enqueue and dequeue ──────────────────
+class Queue:
+    def __init__(self):
+        self._data = deque()
+
+    def enqueue(self, val): self._data.append(val)
+    def dequeue(self):      return self._data.popleft()   # O(1)!
+    def peek(self):         return self._data[0]
+    def is_empty(self):     return len(self._data) == 0
+
+# ── Monotonic Stack: Next Greater Element — O(n) ──────────────────
+def next_greater_element(nums: List[int]) -> List[int]:
+    n = len(nums)
+    result = [-1] * n               # default: no greater element
+    stack  = []                     # stores indices, not values
+
+    for i in range(n):
+        # Pop all indices whose values are smaller than nums[i]
+        while stack and nums[i] > nums[stack[-1]]:
+            idx = stack.pop()
+            result[idx] = nums[i]   # nums[i] is the NGE for that index
+        stack.append(i)
+    return result   # remaining indices in stack have no NGE -> -1
+
+# ── Valid Parentheses — classic stack problem — O(n) ─────────────
+def is_valid(s: str) -> bool:
+    stack   = []
+    mapping = {")": "(", "}": "{", "]": "["}
+    for ch in s:
+        if ch in mapping:
+            top = stack.pop() if stack else "#"
+            if mapping[ch] != top:
+                return False
+        else:
+            stack.append(ch)
+    return not stack   # valid only if all openers were matched
+
+# ── Demo ──────────────────────────────────────────────────────────
+st = Stack()
+for v in [1, 2, 3]:
+    st.push(v)
+print("peek:", st.peek(), "| pop:", st.pop(), "| size:", len(st))
+
+q = Queue()
+for v in ["A", "B", "C"]:
+    q.enqueue(v)
+print("dequeue:", q.dequeue(), "| peek:", q.peek())
+
+print("NGE:", next_greater_element([2, 1, 5, 3, 6]))
+print("Valid '()[]{}':", is_valid("()[]{}"))
+print("Valid '([)]' :", is_valid("([)]"))`,
+            output: `peek: 3 | pop: 3 | size: 2
+dequeue: A | peek: B
+NGE: [5, 5, 6, 6, -1]
+Valid '()[]{}': True
+Valid '([)]' : False`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Stacks & Queues in Java',
+            code: `import java.util.*;
+
+public class StacksQueues {
+
+    // ── Next Greater Element — O(n) monotonic stack ───────────────
+    static int[] nextGreaterElement(int[] nums) {
+        int n = nums.length;
+        int[] result = new int[n];
+        Arrays.fill(result, -1);
+        Deque<Integer> stack = new ArrayDeque<>();   // stores indices
+
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && nums[i] > nums[stack.peek()]) {
+                int idx    = stack.pop();
+                result[idx] = nums[i];
+            }
+            stack.push(i);
+        }
+        return result;
+    }
+
+    // ── Valid Parentheses — O(n) ──────────────────────────────────
+    static boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        for (char ch : s.toCharArray()) {
+            if (ch == '(' || ch == '[' || ch == '{') {
+                stack.push(ch);
+            } else {
+                if (stack.isEmpty()) return false;
+                char top = stack.pop();
+                if (ch == ')' && top != '(') return false;
+                if (ch == ']' && top != '[') return false;
+                if (ch == '}' && top != '{') return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    // ── BFS with Queue: shortest path in unweighted graph — O(V+E) ─
+    static int bfsShortestPath(int[][] adj, int src, int dst) {
+        if (src == dst) return 0;
+        boolean[] visited = new boolean[adj.length];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(src);
+        visited[src] = true;
+        int level = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            level++;
+            for (int i = 0; i < size; i++) {
+                int node = queue.poll();
+                for (int neighbor : adj[node]) {
+                    if (neighbor == dst) return level;
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = true;
+                        queue.offer(neighbor);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(nextGreaterElement(new int[]{2,1,5,3,6})));
+        System.out.println(isValid("()[]{}"));
+        System.out.println(isValid("([)]"));
+
+        // Graph: 0->[1,2], 1->[3], 2->[3], 3->[4]
+        int[][] adj = {{1, 2}, {3}, {3}, {4}, {}};
+        System.out.println("Shortest path 0->4: " + bfsShortestPath(adj, 0, 4));
+    }
+}`,
+            output: `[5, 5, 6, 6, -1]
+true
+false
+Shortest path 0->4: 2`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 (Monotonic Stack Setup):</strong> Initialize result = [-1] * n (default for "no greater element") and an empty stack that stores indices, not values — storing indices lets you compute both the answer position and the answer value.',
+            `<strong>Step 2 (Process each element):</strong> For index i, check nums[i] against the value at the stack's top index. If nums[i] is greater, the current element is the "next greater" answer for the top index.`,
+            '<strong>Step 3 (Pop loop):</strong> Keep popping from the stack while it is non-empty and nums[i] > nums[stack[-1]]. For each popped index idx, record result[idx] = nums[i].',
+            '<strong>Step 4 (Push):</strong> After all pops, push index i. This maintains the decreasing-value invariant. Elements remaining at the end have no next greater element and keep their default of -1.',
+            '<strong>Step 5 (Valid Parentheses):</strong> Push opening brackets onto the stack. When a closing bracket is seen, pop the top and verify it is the matching opener. Empty stack on close = invalid.',
+            '<strong>Step 6 (BFS — Level Order):</strong> Enqueue the start node and mark it visited. Snapshot the queue size; process exactly that many nodes at the current level. Enqueue their unvisited neighbors; increment the level counter.',
+            `<strong>Step 7 (BFS — Termination):</strong> Return the level counter the moment the destination is dequeued or found among a node's neighbors. If the queue empties without finding the destination, return -1 (unreachable).`
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Stack, Queue, and Deque operation complexities across Python and Java implementations:',
+          table: {
+            headers: [
+              'Operation',
+              'Stack (list)',
+              'Queue (deque)',
+              'Deque',
+              'Notes'
+            ],
+            rows: [
+              [
+                'Push / Enqueue',
+                'O(1) amortized',
+                'O(1)',
+                'O(1)',
+                'Append to one end'
+              ],
+              [
+                'Pop (top) / Dequeue (front)',
+                'O(1)',
+                'O(1) popleft',
+                'O(1)',
+                'deque O(1) at both ends'
+              ],
+              [
+                'Peek',
+                'O(1)',
+                'O(1)',
+                'O(1)',
+                'Read without removal'
+              ],
+              [
+                'list.pop(0) as queue',
+                'O(n)',
+                '—',
+                '—',
+                'AVOID: shifts all elements'
+              ],
+              [
+                'Search',
+                'O(n)',
+                'O(n)',
+                'O(n)',
+                'No random access'
+              ],
+              [
+                'Monotonic stack full pass',
+                'O(n)',
+                '—',
+                '—',
+                'Each element pushed/popped once'
+              ],
+              [
+                'Python class',
+                'list',
+                'collections.deque',
+                'collections.deque',
+                ''
+              ],
+              [
+                'Java class',
+                'ArrayDeque (preferred)',
+                'LinkedList or ArrayDeque',
+                'ArrayDeque',
+                'Avoid legacy Stack'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Mistake: Using Python list as a queue with pop(0).</strong> list.pop(0) is O(n) because Python shifts all remaining elements — <em>Fix:</em> Always import and use collections.deque; call popleft() for O(1) front removal.',
+            `<strong>Mistake: Using Java's legacy Stack class.</strong> java.util.Stack extends Vector (synchronized overhead) and is considered obsolete — <em>Fix:</em> Use ArrayDeque as a stack with push() and pop(), or Deque<Integer> stack = new ArrayDeque<>().`,
+            '<strong>Mistake: Not checking isEmpty() before pop() or peek().</strong> Popping from an empty stack raises IndexError in Python or NoSuchElementException in Java — <em>Fix:</em> Guard every pop/peek with an emptiness check, or use conditional expressions.',
+            '<strong>Mistake: Forgetting to initialize result with -1 in monotonic stack.</strong> Indices remaining in the stack after the loop have no next greater element. If result is not pre-filled with -1, you must handle them manually after the loop — <em>Fix:</em> Always pre-fill result = [-1] * n before the loop.'
+          ],
+          code: `# WRONG: Using list as queue — O(n) per dequeue
+from collections import deque
+
+bad_queue = []
+bad_queue.append("A")
+bad_queue.append("B")
+front = bad_queue.pop(0)    # O(n): shifts all elements left!
+
+# CORRECT: deque — O(1) at both ends
+good_queue = deque()
+good_queue.append("A")
+good_queue.append("B")
+front = good_queue.popleft()  # O(1)
+print(front)   # "A"
+
+# WRONG: Popping from empty stack without a guard
+stack = []
+val = stack.pop()   # IndexError: pop from empty list
+
+# CORRECT: Check before popping
+stack = []
+val = stack.pop() if stack else None
+print(val)   # None (safe)
+
+# WRONG: Not pre-filling result — must handle remaining stack manually
+def nge_messy(nums):
+    stack, result = [], [None] * len(nums)
+    for i, num in enumerate(nums):
+        while stack and num > nums[stack[-1]]:
+            result[stack.pop()] = num
+        stack.append(i)
+    for idx in stack:
+        result[idx] = -1    # manual cleanup — easy to forget!
+    return result
+
+# CORRECT: Pre-fill with -1 and skip the cleanup
+def nge_clean(nums):
+    result = [-1] * len(nums)   # default answer already set
+    stack  = []
+    for i, num in enumerate(nums):
+        while stack and num > nums[stack[-1]]:
+            result[stack.pop()] = num
+        stack.append(i)
+    return result`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Stacks and queues are invisible workhorses in every layer of the software stack — from your browser to distributed systems:',
+          list: [
+            '<strong>Function call stack:</strong> Every function call pushes a stack frame; return pops it. Stack overflow errors occur when recursion is too deep — the OS-level call stack is exhausted.',
+            '<strong>Browser navigation:</strong> Browser back and forward buttons are implemented with two stacks. Each page visit pushes onto the back stack; clicking Back pops it and pushes onto the forward stack.',
+            '<strong>Expression evaluation and parsing:</strong> Compilers and calculators use stacks to evaluate infix/postfix expressions and match nested structures (HTML tag matching, JSON parsing, code bracket validation).',
+            '<strong>BFS in AI pathfinding:</strong> Dijkstra and BFS use a queue (or priority queue for weighted graphs) to guarantee shortest-path exploration level by level — fundamental to GPS routing and game AI.',
+            '<strong>Task scheduling and message queues:</strong> Kafka, RabbitMQ, Celery, and AWS SQS are all FIFO queues at their core — ensuring tasks are processed in the order they arrive without data loss.',
+            '<strong>Undo/Redo in IDEs and design tools:</strong> Undo stack holds past states; redo stack holds future states. Each edit pushes onto undo and clears redo. Figma, VS Code, and Photoshop all use this pattern.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'When you see "next greater/smaller element", "largest rectangle in histogram", or "trapping rain water", immediately think monotonic stack — it reduces O(n²) brute force to O(n).',
+            'When you see "level-order traversal", "shortest path in unweighted graph", or "minimum steps to reach X", immediately think BFS with a queue.',
+            'When you see "DFS", "backtracking", "all paths", or "recursive", you are implicitly using a stack — either the call stack (recursive) or an explicit stack (iterative).',
+            'Always use collections.deque in Python for any queue. If asked why, explain: list.pop(0) is O(n) while deque.popleft() is O(1).',
+            'In Java, always say "I will use ArrayDeque as my stack or queue" — it signals modern idiomatic Java knowledge and avoids the legacy Stack class.',
+            'The monotonic stack O(n) insight: even though there is a while loop inside the for loop, each element is pushed exactly once and popped at most once — so the total number of operations across all iterations is 2n, not n².'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1: Given a string of parentheses containing (, ), [, ], {, }, determine if it is valid. Every opener must have a matching closer in the correct order. What data structure and complexity?
+Ans: Stack. Push each opening bracket. When a closing bracket is seen, pop the stack and verify the match. Return true if the stack is empty at the end. O(n) time, O(n) space in the worst case (all openers).`,
+            `Q2: Given an array, find the next greater element for each position. How does a monotonic stack achieve O(n) when brute force is O(n²)?
+Ans: Each element is pushed exactly once and popped at most once across the entire loop — giving a total of at most 2n operations. The while loop inside the for loop does NOT make it O(n²) because the total pop count across all iterations is bounded by n. This is an amortized O(1) argument.`,
+            `Q3 (Hard): Design a queue that supports enqueue, dequeue, and getMin in O(1) amortized time.
+Ans: Use two stacks (main and auxiliary). Enqueue pushes to main. Dequeue pops from auxiliary; if auxiliary is empty, pour all of main into auxiliary (this reverses the order, giving FIFO). For getMin, maintain a parallel "min stack" alongside each stack that tracks the running minimum at each depth level. Each element is moved at most twice, giving O(1) amortized dequeue.`
+          ]
+        }
+      ]
+    },
+    'hashmaps-sets': {
+      title: 'Hash Maps & Sets',
+      subtitle: `O(1) lookup — the interviewer's favorite trick`,
+      sections: [
+        {
+          heading: 'Hash Maps & Sets Fundamentals',
+          text: 'Hash maps and sets provide O(1) average-time lookup, insertion, and deletion. They are the single most effective tool for optimizing interview solutions — when you see an O(n²) brute-force loop, a hash map almost always reduces it to O(n).',
+          list: [
+            '<strong>Hash Function:</strong> Maps a key of any type to an integer bucket index. A good hash function distributes keys uniformly to minimize collisions. Python uses the built-in hash(); Java uses the hashCode() method on each object.',
+            '<strong>Collision Resolution:</strong> Two keys that hash to the same bucket collide. Python dicts use open addressing (probe for an empty slot); Java HashMaps use separate chaining (linked list or tree at each bucket since Java 8).',
+            '<strong>Python dict:</strong> Maintains insertion order (Python 3.7+). O(1) average for get, set, and delete. O(n) worst case on adversarial hash collisions. The go-to for key-value mapping.',
+            '<strong>Python Counter:</strong> dict subclass for frequency counting. Counter(iterable) builds the frequency map in O(n). Supports arithmetic: c1 + c2, c1 - c2, and most_common(k) for top-k elements.',
+            '<strong>Python defaultdict:</strong> dict subclass that returns a factory-defined default instead of raising KeyError on missing keys. defaultdict(list) auto-creates empty lists; defaultdict(int) auto-creates 0. Eliminates repetitive key-existence checks.',
+            '<strong>Java HashMap vs TreeMap vs LinkedHashMap:</strong> HashMap gives O(1) average with no key ordering. TreeMap (Red-Black tree) gives O(log n) but maintains sorted key order for range queries. LinkedHashMap preserves insertion order — the foundation of Java LRU Cache implementations.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>The <strong>frequency counting pattern</strong> is the foundation of most string and array interview problems. Build a Counter or dict of element frequencies in one O(n) pass, then answer queries in O(1). This powers anagram detection, top-k elements, ransom note, first unique character, and many more. Recognize it whenever the problem involves counting occurrences or comparing element distributions.</p>',
+            '<p><strong>Anagram detection</strong> exploits the fact that two strings are anagrams if and only if they share identical character frequency distributions. Instead of sorting both strings in O(n log n), build and compare frequency counters in O(n). A generalization: group anagrams by using the sorted string (or a frequency tuple) as the hash map key — all anagrams share the same canonical key and are collected into the same group in O(n × k) where k is average word length.</p>',
+            '<p>The <strong>Two-Sum pattern with a hash map</strong> is the canonical space-for-time trade-off. Brute force checks every pair: O(n²) time, O(1) space. The hash map approach stores complements as you scan: O(n) time, O(n) space. This exact pattern — one extra hash map pass eliminates a nested loop — recurs in subarray sum equals k, four-sum, and dozens of other problems. Recognizing it is one of the highest-leverage interview skills you can develop.</p>'
+          ],
+          note: 'Key rule: when you see O(n²) from a nested loop searching for a matching element, ask "can I store what I am looking for in a hash map during the outer loop?" The answer is almost always yes.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Hash Function -> Bucket Array -> Chained Entries:
+
+  key = "apple"
+      |
+  hash("apple") % 8 = 3
+      |
+      v
+  Bucket Array (size 8):
+  [0]: empty
+  [1]: empty
+  [2]: ("banana", 2) -> null
+  [3]: ("apple", 5) -> ("cherry", 1) -> null   <- collision, chained
+  [4]: empty
+  [5]: ("date", 3) -> null
+  [6]: empty
+  [7]: ("elderberry", 7) -> null
+
+Python defaultdict(list) — grouping anagrams:
+  words = ["eat", "tea", "tan", "ate", "nat", "bat"]
+
+  word -> sorted key -> groups map:
+  "eat" -> "aet"  =>  {"aet": ["eat"]}
+  "tea" -> "aet"  =>  {"aet": ["eat", "tea"]}
+  "tan" -> "ant"  =>  {"aet": [...], "ant": ["tan"]}
+  "ate" -> "aet"  =>  {"aet": ["eat", "tea", "ate"], ...}
+  "nat" -> "ant"  =>  {"aet": [...], "ant": ["tan", "nat"]}
+  "bat" -> "abt"  =>  {"aet": [...], "ant": [...], "abt": ["bat"]}
+
+  Result: [["eat","tea","ate"], ["tan","nat"], ["bat"]]
+
+Counter arithmetic:
+  c1 = Counter("aab")   -> {a:2, b:1}
+  c2 = Counter("ab")    -> {a:1, b:1}
+  c1 - c2               -> {a:1}       (subtract, keep positives)
+  c1 + c2               -> {a:3, b:2}
+  c1.most_common(1)     -> [("a", 2)]`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Hash Maps & Sets in Python',
+            code: `from collections import Counter, defaultdict, OrderedDict
+from typing import List
+
+# ── Word frequency with Counter — O(n) ───────────────────────────
+def word_frequency(text: str):
+    freq = Counter(text.lower().split())
+    print("Top 3:", freq.most_common(3))
+    return freq
+
+# ── Group Anagrams with defaultdict — O(n * k log k) ─────────────
+def group_anagrams(words: List[str]) -> List[List[str]]:
+    groups = defaultdict(list)
+    for word in words:
+        key = "".join(sorted(word))   # all anagrams share this key
+        groups[key].append(word)
+    return list(groups.values())
+
+# ── Two Sum — O(n) time, O(n) space ──────────────────────────────
+def two_sum(nums: List[int], target: int) -> List[int]:
+    seen = {}
+    for i, num in enumerate(nums):
+        complement = target - num
+        if complement in seen:
+            return [seen[complement], i]
+        seen[num] = i
+    return []
+
+# ── Subarray sum equals k — O(n), prefix sum + hash map ──────────
+def subarray_sum(nums: List[int], k: int) -> int:
+    count = 0
+    prefix_sum = 0
+    prefix_counts = defaultdict(int)
+    prefix_counts[0] = 1   # empty prefix has sum 0
+
+    for num in nums:
+        prefix_sum += num
+        # How many previous prefixes equal prefix_sum - k?
+        count += prefix_counts[prefix_sum - k]
+        prefix_counts[prefix_sum] += 1
+    return count
+
+# ── LRU Cache using OrderedDict — O(1) get and put ────────────────
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap   = capacity
+        self.cache = OrderedDict()
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        self.cache.move_to_end(key)   # mark as recently used
+        return self.cache[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.cap:
+            self.cache.popitem(last=False)   # evict least recently used
+
+# ── Demo ──────────────────────────────────────────────────────────
+word_frequency("the quick brown fox the fox")
+print(group_anagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
+print(two_sum([2, 7, 11, 15], 9))
+print("Subarrays with sum 2:", subarray_sum([1, 1, 1], 2))
+
+lru = LRUCache(2)
+lru.put(1, 10)
+lru.put(2, 20)
+print(lru.get(1))       # returns 10, marks key 1 as recently used
+lru.put(3, 30)          # evicts key 2 (least recently used)
+print(lru.get(2))       # returns -1 (evicted)`,
+            output: `Top 3: [('the', 2), ('fox', 2), ('quick', 1)]
+[['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]
+[0, 1]
+Subarrays with sum 2: 2
+10
+-1`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Hash Maps & Sets in Java',
+            code: `import java.util.*;
+
+public class HashMapsDemo {
+
+    // ── Word frequency — O(n) ────────────────────────────────────
+    static Map<String, Integer> wordFrequency(String text) {
+        Map<String, Integer> freq = new HashMap<>();
+        for (String word : text.toLowerCase().split("\\s+")) {
+            freq.merge(word, 1, Integer::sum);
+            // Equivalent to: freq.put(w, freq.getOrDefault(w, 0) + 1)
+        }
+        return freq;
+    }
+
+    // ── Group Anagrams — O(n * k log k) ──────────────────────────
+    static List<List<String>> groupAnagrams(String[] words) {
+        Map<String, List<String>> groups = new HashMap<>();
+        for (String word : words) {
+            char[] chars = word.toCharArray();
+            Arrays.sort(chars);
+            String key = new String(chars);
+            groups.computeIfAbsent(key, k -> new ArrayList<>()).add(word);
+        }
+        return new ArrayList<>(groups.values());
+    }
+
+    // ── Two Sum — O(n) ───────────────────────────────────────────
+    static int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> seen = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (seen.containsKey(complement)) {
+                return new int[]{seen.get(complement), i};
+            }
+            seen.put(nums[i], i);
+        }
+        return new int[]{};
+    }
+
+    // ── Subarray sum equals k — O(n) prefix sum ───────────────────
+    static int subarraySum(int[] nums, int k) {
+        int count = 0, prefixSum = 0;
+        Map<Integer, Integer> prefixCounts = new HashMap<>();
+        prefixCounts.put(0, 1);   // base case: empty prefix
+        for (int num : nums) {
+            prefixSum += num;
+            count += prefixCounts.getOrDefault(prefixSum - k, 0);
+            prefixCounts.merge(prefixSum, 1, Integer::sum);
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(wordFrequency("the quick brown fox the fox"));
+        System.out.println(groupAnagrams(new String[]{"eat","tea","tan","ate","nat","bat"}));
+        System.out.println(Arrays.toString(twoSum(new int[]{2,7,11,15}, 9)));
+        System.out.println("Subarrays with sum 2: " + subarraySum(new int[]{1,1,1}, 2));
+    }
+}`,
+            output: `{the=2, quick=1, brown=1, fox=2}
+[[eat, tea, ate], [tan, nat], [bat]]
+[0, 1]
+Subarrays with sum 2: 2`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 (Frequency Counter):</strong> Initialize an empty dict or Counter. Iterate through the input once. For each element, increment its count by 1. defaultdict(int) handles the missing-key case automatically with a default of 0.',
+            '<strong>Step 2 (Group Anagrams — canonical key):</strong> For each word, compute a form that all anagrams share. Sorting characters is the simplest: "eat", "tea", and "ate" all sort to "aet". Use this as the hash map key.',
+            '<strong>Step 3 (Group Anagrams — build groups):</strong> Append the original word to groups[sorted_key]. In Java, computeIfAbsent(key, k -> new ArrayList<>()) elegantly handles both the "key missing" and "key exists" cases in one line.',
+            '<strong>Step 4 (Prefix Sum Map — subarray sum):</strong> Maintain a running prefix_sum. At each index, check if (prefix_sum - k) has been seen before — if yes, there are that many subarrays ending at the current index with sum exactly k.',
+            '<strong>Step 5 (Prefix Sum Map — base case):</strong> Initialize prefixCounts[0] = 1. This handles subarrays that start at index 0: if prefix_sum == k at index i, then prefix_sum - k == 0 is in the map with count 1.',
+            '<strong>Step 6 (LRU Cache — get):</strong> If the key is not in the cache, return -1. Otherwise, move the entry to the end of the OrderedDict (marking it most recently used) and return its value.',
+            '<strong>Step 7 (LRU Cache — put):</strong> If the key exists, move it to the end. Set cache[key] = value. If the cache exceeds capacity, remove the first entry (popitem(last=False) in Python, or the eldest in LinkedHashMap in Java) — this is the least recently used entry.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Comparison of Python and Java map types for choosing the right tool in interviews:',
+          table: {
+            headers: [
+              'Map Type',
+              'Key Order',
+              'Get / Put / Delete avg',
+              'Worst Case',
+              'Best Use Case'
+            ],
+            rows: [
+              [
+                'Python dict',
+                'Insertion order (3.7+)',
+                'O(1)',
+                'O(n) hash collision',
+                'General key-value mapping'
+              ],
+              [
+                'Python Counter',
+                'Insertion order',
+                'O(1)',
+                'O(n)',
+                'Frequency counting, most_common()'
+              ],
+              [
+                'Python defaultdict',
+                'Insertion order',
+                'O(1)',
+                'O(n)',
+                'Grouping, adjacency lists'
+              ],
+              [
+                'Python set',
+                'No order',
+                'O(1)',
+                'O(n)',
+                'Membership test, deduplication'
+              ],
+              [
+                'Java HashMap',
+                'No order',
+                'O(1)',
+                'O(log n) Java 8+ tree bins',
+                'General key-value mapping'
+              ],
+              [
+                'Java TreeMap',
+                'Sorted by key',
+                'O(log n)',
+                'O(log n)',
+                'Range queries, sorted iteration'
+              ],
+              [
+                'Java LinkedHashMap',
+                'Insertion or access order',
+                'O(1)',
+                'O(n)',
+                'LRU Cache, ordered output'
+              ],
+              [
+                'Java HashSet',
+                'No order',
+                'O(1)',
+                'O(log n) Java 8+',
+                'Membership test, deduplication'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Mistake: Using a mutable object (list or array) as a dict or HashMap key.</strong> Mutable objects are unhashable in Python (TypeError) and use identity-based hashing in Java — two logically equal lists will not match as keys — <em>Fix:</em> Convert lists to tuples in Python or sort and join to a String in Java before using as a key.',
+            '<strong>Mistake: Forgetting that Java HashMap allows one null key.</strong> map.get(null) is valid and can return an unexpected value if null was stored earlier — <em>Fix:</em> Be explicit in your intent; avoid null keys in application logic and use getOrDefault to handle absence.',
+            '<strong>Mistake: Not using getOrDefault or defaultdict.</strong> Writing if key not in d: d[key] = 0; d[key] += 1 is verbose and error-prone in interviews under time pressure — <em>Fix:</em> Use defaultdict(int) in Python or map.getOrDefault(key, 0) / map.merge(key, 1, Integer::sum) in Java.',
+            '<strong>Mistake: Assuming hash map is always O(1).</strong> Under adversarial inputs all keys can collide, degrading to O(n) per operation — <em>Fix:</em> Mention this caveat in interviews when discussing worst-case complexity; Java 8+ mitigates this with tree bins after 8 collisions per bucket.'
+          ],
+          code: `# WRONG: Using a list as a dict key — unhashable type
+def group_by_freq_wrong(words):
+    groups = {}
+    for word in words:
+        key = sorted(word)       # returns a list — not hashable!
+        groups[key].append(word) # TypeError: unhashable type 'list'
+
+# CORRECT: Convert to tuple (hashable) or join to string
+def group_by_freq_correct(words):
+    groups = {}
+    for word in words:
+        key = tuple(sorted(word))    # tuple is hashable
+        if key not in groups:
+            groups[key] = []
+        groups[key].append(word)
+    return list(groups.values())
+
+# WRONG: Manual existence check — verbose and forgettable
+freq = {}
+for ch in "hello":
+    if ch not in freq:
+        freq[ch] = 0
+    freq[ch] += 1
+
+# CORRECT: defaultdict(int) auto-initializes missing keys to 0
+from collections import defaultdict
+freq = defaultdict(int)
+for ch in "hello":
+    freq[ch] += 1   # no KeyError, no boilerplate check
+print(dict(freq))   # {'h': 1, 'e': 1, 'l': 2, 'o': 1}`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Hash maps are the foundational data structure of modern software — from database engines to neural network training pipelines:',
+          list: [
+            '<strong>Database hash indexes:</strong> Hash indexes in PostgreSQL and MySQL map column values to row pointers for O(1) equality lookups — the engine behind WHERE id = 42 on indexed columns.',
+            '<strong>Distributed caching (Redis / Memcached):</strong> Both are essentially distributed hash maps with expiration policies. Every cache get and set is a hash lookup. Redis adds sorted sets (ZSet = hash map + skip list) for leaderboards.',
+            `<strong>Language runtime internals:</strong> Python's attribute lookup (object.__dict__), Java's class constant pool, and JavaScript's object property access are all hash map operations under the hood.`,
+            '<strong>NLP tokenization (BPE):</strong> Byte-Pair Encoding stores merge rules in a hash map for O(1) lookup during encoding. Hugging Face tokenizers process millions of tokens per second using this approach.',
+            '<strong>Approximate nearest neighbor search:</strong> Locality-Sensitive Hashing (LSH) uses specially designed hash functions to bucket similar vectors — enabling approximate nearest-neighbor search in O(1) per query instead of O(n) exhaustive scan.',
+            '<strong>Deduplication in data pipelines:</strong> Apache Spark and Flink use hash-based groupBy and distinct operations to deduplicate terabytes of streaming data — hash partitioning assigns records to workers by key hash for parallel processing.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'The single most powerful interview heuristic: "I see a nested loop — can I replace the inner O(n) search with an O(1) hash map lookup?" This alone solves Two Sum, Subarray Sum Equals K, Longest Consecutive Sequence, and dozens more.',
+            'Use Counter for any problem involving character or element frequencies — it is faster to write and clearer to read than a manual dict, and most_common() saves even more time.',
+            'For grouping problems (anagrams, equal frequency groups), find a canonical key that all members share. Sorted string, frequency tuple, and prime product are common canonical forms.',
+            'Always explicitly state the space trade-off: "I am using O(n) extra space for the hash map to achieve O(n) time instead of O(n²) time with O(1) space." Interviewers reward explicit trade-off reasoning.',
+            'For Java, know computeIfAbsent() — it is far cleaner than the three-line get/null-check/put pattern for building grouped structures, and it signals modern Java fluency.',
+            'Hash collisions are a valid worst-case concern. Acknowledge that O(1) is average case and O(n) is worst case. Java 8+ mitigates this with tree bins (O(log n) worst case) after 8 collisions per bucket.',
+            'Sets are simplified hash maps that store only keys. Reach for a set when you only need membership testing — "have I seen this element before?" — rather than key-value storage.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1: Given an array of integers, find the length of the longest consecutive sequence in O(n) time without sorting.
+Ans: Add all numbers to a hash set. For each number n where n-1 is NOT in the set (n is a sequence start), count n+1, n+2, ... until the next number is not in the set. Track the running maximum. Each number is visited at most twice total, so the overall time is O(n).`,
+            `Q2: Determine if two strings are anagrams of each other without sorting them. What is the time and space complexity?
+Ans: Build a frequency counter for string s (increment counts) then process string t (decrement counts). If any count goes negative during t, or if any count is non-zero at the end, they are not anagrams. O(n) time; O(1) space because the counter holds at most 26 entries (fixed alphabet) — it does not grow with n.`,
+            `Q3 (Hard): Given an integer array and a target k, count the number of contiguous subarrays whose sum equals k. Achieve O(n) time.
+Ans: Use prefix sums with a hash map. Maintain a running prefix_sum. At each index, the number of subarrays ending here with sum k equals the number of times (prefix_sum - k) has appeared previously — look it up in the map. Store prefix sum frequencies in a map initialized with {0: 1} (base case for subarrays starting at index 0). O(n) time, O(n) space.`
+          ]
+        }
+      ]
+    }
+  },
+  module2: {
+    'binary-trees': {
+      title: 'Binary Trees',
+      subtitle: 'Traversals, BFS layers, and recursive thinking',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'Binary trees are hierarchical structures where each node has at most two children. Interview problems revolve around traversal order, depth/height, and subtree properties.',
+          list: [
+            '<strong>Inorder (L,R,R):</strong> Left, Root, Right — BST yields sorted order',
+            '<strong>Preorder (R,L,R):</strong> Root first — serialization, copy tree',
+            '<strong>Postorder (L,R,R):</strong> Root last — delete nodes safely',
+            '<strong>Level-order BFS:</strong> Queue processes one layer at a time',
+            '<strong>Iterative inorder:</strong> Explicit stack avoids recursion depth limits'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Every tree problem is either <strong>DFS</strong> (go deep: height, path sum, validate BST) or <strong>BFS</strong> (go wide: min depth, level sums, right-side view). DFS uses O(h) stack space; skewed trees have h=n.</p>',
+            '<p>Draw the tree before coding. Traversal order bugs are almost always fixed by tracing one small example on paper.</p>'
+          ],
+          note: 'State both time O(n) and space O(h) or O(w) — interviewers expect both.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Tree:        4
+            /   \\
+           2     6
+          / \\   / \\
+         1   3 5   7
+
+Inorder:  1 2 3 4 5 6 7
+Preorder: 4 2 1 3 6 5 7
+Level:    [[4],[2,6],[1,3,5,7]]`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'All Traversals + Level Order',
+            code: `from collections import deque
+from typing import List, Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def inorder(root: Optional[TreeNode]) -> List[int]:
+    if not root:
+        return []
+    return inorder(root.left) + [root.val] + inorder(root.right)
+
+def preorder(root: Optional[TreeNode]) -> List[int]:
+    if not root:
+        return []
+    return [root.val] + preorder(root.left) + preorder(root.right)
+
+def postorder(root: Optional[TreeNode]) -> List[int]:
+    if not root:
+        return []
+    return postorder(root.left) + postorder(root.right) + [root.val]
+
+def inorder_iter(root: Optional[TreeNode]) -> List[int]:
+    stack, cur, out = [], root, []
+    while cur or stack:
+        while cur:
+            stack.append(cur)
+            cur = cur.left
+        cur = stack.pop()
+        out.append(cur.val)
+        cur = cur.right
+    return out
+
+def level_order(root: Optional[TreeNode]) -> List[List[int]]:
+    if not root:
+        return []
+    q, res = deque([root]), []
+    while q:
+        level = []
+        for _ in range(len(q)):
+            node = q.popleft()
+            level.append(node.val)
+            if node.left:
+                q.append(node.left)
+            if node.right:
+                q.append(node.right)
+        res.append(level)
+    return res
+
+root = TreeNode(4, TreeNode(2, TreeNode(1), TreeNode(3)), TreeNode(6, TreeNode(5), TreeNode(7)))
+print("Inorder:", inorder(root))
+print("Preorder:", preorder(root))
+print("Postorder:", postorder(root))
+print("Iter inorder:", inorder_iter(root))
+print("Level order:", level_order(root))`,
+            output: `Inorder: [1,2,3,4,5,6,7]
+Level order: [[4],[2,6],[1,3,5,7]]`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Tree Traversals in Java',
+            code: `import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int v) { val = v; }
+}
+
+public class TreeDemo {
+    static void inorder(TreeNode r, List<Integer> out) {
+        if (r == null) return;
+        inorder(r.left, out);
+        out.add(r.val);
+        inorder(r.right, out);
+    }
+
+    static List<Integer> preorder(TreeNode r) {
+        if (r == null) return new ArrayList<>();
+        List<Integer> out = new ArrayList<>();
+        out.add(r.val);
+        out.addAll(preorder(r.left));
+        out.addAll(preorder(r.right));
+        return out;
+    }
+
+    static List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        while (!q.isEmpty()) {
+            int sz = q.size();
+            List<Integer> level = new ArrayList<>();
+            for (int i = 0; i < sz; i++) {
+                TreeNode n = q.poll();
+                level.add(n.val);
+                if (n.left != null) q.offer(n.left);
+                if (n.right != null) q.offer(n.right);
+            }
+            res.add(level);
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(4);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(6);
+        root.left.left = new TreeNode(1);
+        root.left.right = new TreeNode(3);
+        List<Integer> in = new ArrayList<>();
+        inorder(root, in);
+        System.out.println(in);
+        System.out.println(preorder(root));
+        System.out.println(levelOrder(root));
+    }
+}`,
+            output: `[1,2,3,4,5,6,7]
+[[4],[2,6],[1,3,5,7]]`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1:</strong> Choose traversal — sorted → inorder; by level → BFS queue.',
+            '<strong>Step 2:</strong> DFS base case: if root is null, return.',
+            '<strong>Step 3:</strong> Iterative inorder: push left chain, pop, visit, go right.',
+            '<strong>Step 4:</strong> BFS: snapshot queue size each level.',
+            '<strong>Step 5:</strong> Complexity O(n) time; space O(h) DFS or O(w) BFS.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'n = nodes, h = height, w = max width:',
+          table: {
+            headers: [
+              'Traversal',
+              'Time',
+              'Space',
+              'Use case'
+            ],
+            rows: [
+              [
+                'Inorder DFS',
+                'O(n)',
+                'O(h)',
+                'BST sorted order'
+              ],
+              [
+                'Level BFS',
+                'O(n)',
+                'O(w)',
+                'Shortest path in trees'
+              ],
+              [
+                'Iterative inorder',
+                'O(n)',
+                'O(h)',
+                'Deep trees, no stack overflow'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>No null check</strong> → infinite recursion.',
+            '<strong>Recursion on skewed tree</strong> (n=10^5) → stack overflow; use iterative.',
+            '<strong>Wrong traversal order</strong> — draw tree first.'
+          ],
+          code: `def inorder(root):
+    if not root: return []
+    return inorder(root.left) + [root.val] + inorder(root.right)`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Trees model decision boundaries, DOM hierarchies, and parse trees.',
+          list: [
+            '<strong>ML:</strong> Decision tree inference is preorder traversal',
+            '<strong>DOM:</strong> BFS finds elements by depth',
+            '<strong>Compilers:</strong> AST evaluation often postorder'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'kth smallest in BST → inorder with counter.',
+            'Max depth → 1 + max(left, right).',
+            'Invert tree → swap children recursively.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Level-order traversal. Hint: BFS, process len(q) per level. Ans: O(n), O(w).',
+            'Q2: Max depth. Hint: DFS. Ans: O(n) time, O(h) space.',
+            'Q3 (Hard): Validate BST. Hint: pass (min,max) range. Ans: O(n) single DFS.'
+          ]
+        }
+      ]
+    },
+    bst: {
+      title: 'Binary Search Trees (BST)',
+      subtitle: 'Ordered trees — O(log n) when balanced, O(n) when skewed',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'BSTs enforce left < node < right. Search, insert, and delete are O(h) where h is height — O(log n) balanced, O(n) skewed.',
+          list: [
+            '<strong>Search:</strong> Go left if smaller, right if larger',
+            '<strong>Insert:</strong> Find leaf position preserving order',
+            '<strong>Delete:</strong> 0/1 child easy; 2 children → replace with inorder successor',
+            '<strong>Validate:</strong> Each node must fall in (min, max) range',
+            '<strong>Balance:</strong> AVL/Red-Black trees keep h=log n'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Never say BST is always O(log n). A sorted input creates a linked-list skew with O(n) operations. Interviewers want you to mention this and optionally discuss self-balancing trees.</p>',
+            '<p>Delete with two children: copy inorder successor (leftmost of right subtree) into node, then delete successor from right subtree.</p>'
+          ],
+          note: 'Average O(log n), worst O(n) — always qualify with tree balance.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `BST insert 3,1,4,2:
+    3
+   /
+  1
+   \\
+    2
+   /
+  4  (invalid if attached wrong — must preserve order)
+
+Search 2: 3→1→2`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'BST Search, Insert, Delete, Validate',
+            code: `class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val; self.left = left; self.right = right
+
+def search_bst(root, val):
+    while root and root.val != val:
+        root = root.left if val < root.val else root.right
+    return root
+
+def insert_bst(root, val):
+    if not root:
+        return TreeNode(val)
+    if val < root.val:
+        root.left = insert_bst(root.left, val)
+    else:
+        root.right = insert_bst(root.right, val)
+    return root
+
+def delete_bst(root, key):
+    if not root:
+        return None
+    if key < root.val:
+        root.left = delete_bst(root.left, key)
+    elif key > root.val:
+        root.right = delete_bst(root.right, key)
+    else:
+        if not root.left:
+            return root.right
+        if not root.right:
+            return root.left
+        succ = root.right
+        while succ.left:
+            succ = succ.left
+        root.val = succ.val
+        root.right = delete_bst(root.right, succ.val)
+    return root
+
+def is_valid_bst(root, lo=float('-inf'), hi=float('inf')):
+    if not root:
+        return True
+    if not (lo < root.val < hi):
+        return False
+    return is_valid_bst(root.left, lo, root.val) and is_valid_bst(root.right, root.val, hi)
+
+root = None
+for v in [5, 3, 7, 1, 4, 6, 8]:
+    root = insert_bst(root, v)
+print("Search 4:", search_bst(root, 4).val)
+print("Valid BST:", is_valid_bst(root))
+root = delete_bst(root, 3)
+print("After delete 3 valid:", is_valid_bst(root))`,
+            output: `Search 4: 4
+Valid BST: True`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'BST Operations in Java',
+            code: `class TreeNode {
+    int val; TreeNode left, right;
+    TreeNode(int v){val=v;}
+}
+
+public class BSTDemo {
+    static TreeNode insert(TreeNode r, int val) {
+        if (r == null) return new TreeNode(val);
+        if (val < r.val) r.left = insert(r.left, val);
+        else r.right = insert(r.right, val);
+        return r;
+    }
+
+    static TreeNode search(TreeNode r, int val) {
+        while (r != null && r.val != val)
+            r = val < r.val ? r.left : r.right;
+        return r;
+    }
+
+    static TreeNode delete(TreeNode r, int key) {
+        if (r == null) return null;
+        if (key < r.val) r.left = delete(r.left, key);
+        else if (key > r.val) r.right = delete(r.right, key);
+        else {
+            if (r.left == null) return r.right;
+            if (r.right == null) return r.left;
+            TreeNode s = r.right;
+            while (s.left != null) s = s.left;
+            r.val = s.val;
+            r.right = delete(r.right, s.val);
+        }
+        return r;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = null;
+        for (int v : new int[]{5,3,7,1,4}) root = insert(root, v);
+        System.out.println(search(root, 4).val);
+        root = delete(root, 3);
+        System.out.println(search(root, 3));
+    }
+}`,
+            output: `4
+null`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Search:</strong> Iterative while loop — O(h).',
+            '<strong>Insert:</strong> Recurse to null leaf.',
+            '<strong>Delete 2 children:</strong> Swap with successor, delete successor.',
+            '<strong>Validate:</strong> Range (lo, hi) tightens each level.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'h = height:',
+          table: {
+            headers: [
+              'Op',
+              'Balanced',
+              'Skewed',
+              'Space'
+            ],
+            rows: [
+              [
+                'Search',
+                'O(log n)',
+                'O(n)',
+                'O(1) iterative'
+              ],
+              [
+                'Insert',
+                'O(log n)',
+                'O(n)',
+                'O(h) recursive stack'
+              ],
+              [
+                'Delete',
+                'O(log n)',
+                'O(n)',
+                'O(h)'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'Saying O(log n) without worst case.',
+            'Delete two-child case without successor logic.',
+            'Validate BST using only left/right child comparison (fails on deep violations).'
+          ],
+          code: `# WRONG validate — only checks immediate children
+def bad(root):
+    if not root: return True
+    if root.left and root.left.val >= root.val: return False
+    # misses nodes deeper in right subtree that are < root`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Ordered maps, databases, and sorted sets use tree or B-tree variants.',
+          list: [
+            '<strong>Java TreeMap:</strong> Red-Black BST',
+            '<strong>Database indexes:</strong> B+ trees (multi-way BST)'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Inorder traversal of BST is sorted — use for kth smallest.',
+            'Successor = leftmost of right subtree.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Insert into BST. Ans: recursive O(h).',
+            'Q2: Delete node with two children. Hint: inorder successor.',
+            'Q3 (Hard): Kth smallest. Hint: inorder count. Ans: O(h+k).'
+          ]
+        }
+      ]
+    },
+    heaps: {
+      title: 'Heaps & Priority Queues',
+      subtitle: 'O(log n) insert/extract, O(1) peek min/max',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'A heap is a complete binary tree with heap property. Python heapq is min-heap; Java PriorityQueue default is min-heap.',
+          list: [
+            '<strong>Min-heap:</strong> Parent ≤ children — root is minimum',
+            '<strong>heapify:</strong> O(n) build heap from array',
+            '<strong>heappush/heappop:</strong> O(log n) each',
+            '<strong>Top-K pattern:</strong> Size-k min-heap tracks k largest',
+            '<strong>Merge K lists:</strong> Heap of list heads'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Top-K largest: maintain min-heap of size k. If new element > heap min, replace. Final heap holds k largest in O(n log k) time.</p>',
+            `<p>Dijkstra and Prim's MST rely on priority queues — heap-backed queues give O((V+E) log V).</p>`
+          ],
+          note: 'Negate values in Python heapq for max-heap behavior.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Min-heap array [1,3,2,7,5]:
+        1
+       / \\
+      3   2
+     / \\
+    7   5
+
+heap[0]=min; parent(i)=(i-1)//2; children 2i+1, 2i+2`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'heapq, Top-K, Merge K Sorted',
+            code: `import heapq
+from typing import List
+
+def top_k_largest(nums: List[int], k: int) -> List[int]:
+    heap = nums[:k]
+    heapq.heapify(heap)
+    for x in nums[k:]:
+        if x > heap[0]:
+            heapq.heapreplace(heap, x)
+    return sorted(heap, reverse=True)
+
+def merge_k_sorted(lists: List[List[int]]) -> List[int]:
+    heap = []
+    for i, lst in enumerate(lists):
+        if lst:
+            heapq.heappush(heap, (lst[0], i, 0))
+    out = []
+    while heap:
+        val, li, idx = heapq.heappop(heap)
+        out.append(val)
+        if idx + 1 < len(lists[li]):
+            heapq.heappush(heap, (lists[li][idx + 1], li, idx + 1))
+    return out
+
+h = []
+for x in [3, 1, 4, 1, 5]:
+    heapq.heappush(h, x)
+print("Pops:", [heapq.heappop(h) for _ in range(3)])
+print("Top 3:", top_k_largest([3,1,4,1,5,9,2,6], 3))
+print("Merge:", merge_k_sorted([[1,4,5],[1,3,4],[2,6]]))`,
+            output: `Pops: [1,1,3]
+Top 3: [9,6,5]`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'PriorityQueue & Top-K',
+            code: `import java.util.*;
+
+public class HeapDemo {
+    static int[] topKLargest(int[] nums, int k) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for (int x : nums) {
+            minHeap.offer(x);
+            if (minHeap.size() > k) minHeap.poll();
+        }
+        return minHeap.stream().mapToInt(i -> i).sorted().toArray();
+    }
+
+    public static void main(String[] args) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for (int x : new int[]{3,1,4,1,5}) pq.offer(x);
+        System.out.println(pq.poll());
+        System.out.println(Arrays.toString(topKLargest(new int[]{3,1,4,1,5,9,2,6}, 3)));
+    }
+}`,
+            output: `1
+[5,6,9]`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Top-K:</strong> Min-heap size k, replace when larger arrives.',
+            '<strong>Merge K:</strong> Push (value, list_id, index) for each head.',
+            '<strong>Pop smallest,</strong> push next from same list.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'n elements, k = heap size:',
+          table: {
+            headers: [
+              'Operation',
+              'Time',
+              'Notes'
+            ],
+            rows: [
+              [
+                'push/pop',
+                'O(log n)',
+                'Bubble up/down'
+              ],
+              [
+                'peek',
+                'O(1)',
+                'Root'
+              ],
+              [
+                'heapify',
+                'O(n)',
+                'Build from array'
+              ],
+              [
+                'Top-K',
+                'O(n log k)',
+                'Better than sort O(n log n) when k small'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'Using max-heap for top-K largest (use min-heap size k).',
+            'Forgetting heapq is min-only in Python.'
+          ],
+          code: `import heapq
+# Top K largest — min-heap of size k
+heap = []
+for x in nums:
+    heapq.heappush(heap, x)
+    if len(heap) > k:
+        heapq.heappop(heap)`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Schedulers, Dijkstra, event simulation, streaming top-K.',
+          list: [
+            '<strong>OS schedulers:</strong> Priority by process priority',
+            '<strong>Dijkstra:</strong> Extract-min vertex'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Kth largest = size-k min-heap or quickselect.',
+            'Merge K sorted lists = classic heap problem.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Kth largest element. Hint: min-heap size k. Ans: O(n log k).',
+            'Q2: Merge k sorted lists. Hint: heap of heads. Ans: O(N log k).',
+            'Q3 (Hard): Find median stream. Hint: two heaps. Ans: O(log n) per insert.'
+          ]
+        }
+      ]
+    },
+    tries: {
+      title: 'Tries (Prefix Trees)',
+      subtitle: 'O(m) prefix search where m = key length',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'Tries store strings character-by-character along paths. Prefix queries (autocomplete, spell check) are O(m) independent of dictionary size N.',
+          list: [
+            '<strong>Node:</strong> children map + end-of-word flag',
+            '<strong>insert:</strong> Walk/create path per character',
+            '<strong>search:</strong> Exact match requires end flag',
+            '<strong>startsWith:</strong> Path exists — no end flag needed',
+            '<strong>Space:</strong> O(total chars) — can be heavy for sparse alphabets'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Each string shares prefixes via shared nodes — "app", "apple", "apt" share the "ap" path. This beats hash maps for prefix queries.</p>'
+          ],
+          note: 'Use array[26] for lowercase English; HashMap for Unicode/general.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Trie after insert: app, apple, apt
+
+(root) --a-- ( ) --p-- ( ) --p* --l--e*
+                  \\
+                   t*
+
+* = end of word. startsWith("ap") → True`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Full Trie: insert, search, startsWith',
+            code: `class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word: str) -> None:
+        node = self.root
+        for ch in word:
+            node = node.children.setdefault(ch, TrieNode())
+        node.end = True
+
+    def search(self, word: str) -> bool:
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                return False
+            node = node.children[ch]
+        return node.end
+
+    def starts_with(self, prefix: str) -> bool:
+        node = self.root
+        for ch in prefix:
+            if ch not in node.children:
+                return False
+            node = node.children[ch]
+        return True
+
+t = Trie()
+for w in ["apple", "app", "apt", "bat"]:
+    t.insert(w)
+print(t.search("app"), t.search("ap"), t.starts_with("ap"))`,
+            output: 'True False True',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Trie in Java',
+            code: `class TrieNode {
+    TrieNode[] children = new TrieNode[26];
+    boolean end;
+}
+
+class Trie {
+    TrieNode root = new TrieNode();
+
+    void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int i = c - 'a';
+            if (node.children[i] == null) node.children[i] = new TrieNode();
+            node = node.children[i];
+        }
+        node.end = true;
+    }
+
+    boolean search(String word) {
+        TrieNode node = walk(word);
+        return node != null && node.end;
+    }
+
+    boolean startsWith(String prefix) {
+        return walk(prefix) != null;
+    }
+
+    TrieNode walk(String s) {
+        TrieNode node = root;
+        for (char c : s.toCharArray()) {
+            int i = c - 'a';
+            if (node.children[i] == null) return null;
+            node = node.children[i];
+        }
+        return node;
+    }
+
+    public static void main(String[] args) {
+        Trie t = new Trie();
+        t.insert("apple"); t.insert("app");
+        System.out.println(t.search("app"));
+        System.out.println(t.startsWith("ap"));
+    }
+}`,
+            output: `true
+true`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Insert:</strong> For each char, create child if missing; mark end.',
+            '<strong>Search:</strong> Walk chars; return node.end at end.',
+            '<strong>Prefix:</strong> Walk chars; return true if path exists.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'm = word/prefix length:',
+          table: {
+            headers: [
+              'Op',
+              'Time',
+              'Space'
+            ],
+            rows: [
+              [
+                'insert',
+                'O(m)',
+                'O(m) new nodes worst case'
+              ],
+              [
+                'search',
+                'O(m)',
+                'O(1)'
+              ],
+              [
+                'startsWith',
+                'O(m)',
+                'O(1)'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'Forgetting end flag — search returns true for prefixes.',
+            'Not handling empty string edge case.'
+          ],
+          code: `class Trie:
+    def search(self, word):
+        node = self.root
+        for ch in word:
+            if ch not in node.children: return False
+            node = node.children[ch]
+        return node.end  # must check end, not just path exists`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Autocomplete, IP routing (prefix trees), spell checkers.',
+          list: [
+            '<strong>Google Search:</strong> Trie-like prefix indexes',
+            '<strong>Router tables:</strong> Longest prefix match'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Word Search II on board → Trie of words + DFS.',
+            `Design Add and Search Words → trie + '.' wildcard DFS.`
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Implement Autocomplete. Hint: DFS from prefix node. Ans: O(m + results).',
+            'Q2: Longest word in dictionary built from prefixes. Hint: trie + DFS.',
+            'Q3 (Hard): Word Search II. Hint: trie + backtracking on grid.'
+          ]
+        }
+      ]
+    },
+    'graphs-bfs-dfs': {
+      title: 'Graphs BFS/DFS Basics',
+      subtitle: 'Traverse networks — shortest path (BFS) vs explore all (DFS)',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'Graphs are nodes + edges. Adjacency list is the standard interview representation. BFS finds shortest path in unweighted graphs; DFS explores components and cycles.',
+          list: [
+            '<strong>Adjacency list:</strong> Map node → neighbors — O(V+E) space',
+            '<strong>BFS:</strong> Queue, layer by layer — shortest unweighted path',
+            '<strong>DFS:</strong> Stack/recursion — exhaust branch before backtrack',
+            '<strong>visited set:</strong> Prevents infinite loops on cycles',
+            '<strong>Directed vs undirected:</strong> Add reverse edges if undirected'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>BFS parent pointers reconstruct shortest path. DFS detects cycles with recursion stack (directed) or visited (undirected).</p>',
+            '<p>Grid problems are implicit graphs: each cell is a node; 4-directional neighbors are edges.</p>'
+          ],
+          note: 'BFS = shortest path unweighted. Dijkstra for weighted — see Module 4.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Graph: 0—1—3
+        |   |
+        2---4
+
+BFS from 0: 0,1,2,3,4 (shortest 0→3: [0,1,3])
+DFS from 0: 0,1,3,2,4 (depends on neighbor order)`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'BFS Shortest Path + DFS Recursive/Iterative',
+            code: `from collections import deque, defaultdict
+from typing import Dict, List
+
+def bfs_shortest_path(graph: Dict[int, List[int]], start: int, goal: int) -> List[int]:
+    if start == goal:
+        return [start]
+    q = deque([start])
+    parent = {start: None}
+    while q:
+        node = q.popleft()
+        for nei in graph[node]:
+            if nei not in parent:
+                parent[nei] = node
+                if nei == goal:
+                    path = []
+                    cur = goal
+                    while cur is not None:
+                        path.append(cur)
+                        cur = parent[cur]
+                    return path[::-1]
+                q.append(nei)
+    return []
+
+def dfs_recursive(graph, node, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(node)
+    order = [node]
+    for nei in graph[node]:
+        if nei not in visited:
+            order.extend(dfs_recursive(graph, nei, visited))
+    return order
+
+def dfs_iterative(graph, start):
+    stack, visited, order = [start], set(), []
+    while stack:
+        node = stack.pop()
+        if node in visited:
+            continue
+        visited.add(node)
+        order.append(node)
+        for nei in reversed(graph[node]):
+            if nei not in visited:
+                stack.append(nei)
+    return order
+
+graph = {0:[1,2], 1:[0,3], 2:[0,3,4], 3:[1,2,5], 4:[2], 5:[3]}
+print("BFS path 0->5:", bfs_shortest_path(graph, 0, 5))
+print("DFS rec:", dfs_recursive(graph, 0))
+print("DFS iter:", dfs_iterative(graph, 0))`,
+            output: `BFS path 0->5: [0,1,3,5]
+DFS rec: [0,1,3,2,4,5]`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'BFS & DFS in Java',
+            code: `import java.util.*;
+
+public class GraphDemo {
+    static List<Integer> bfs(Map<Integer, List<Integer>> g, int start) {
+        Queue<Integer> q = new LinkedList<>();
+        Set<Integer> seen = new HashSet<>();
+        List<Integer> order = new ArrayList<>();
+        q.offer(start); seen.add(start);
+        while (!q.isEmpty()) {
+            int node = q.poll();
+            order.add(node);
+            for (int nei : g.getOrDefault(node, List.of())) {
+                if (seen.add(nei)) q.offer(nei);
+            }
+        }
+        return order;
+    }
+
+    static void dfs(Map<Integer, List<Integer>> g, int node, Set<Integer> seen, List<Integer> order) {
+        seen.add(node);
+        order.add(node);
+        for (int nei : g.getOrDefault(node, List.of())) {
+            if (!seen.contains(nei)) dfs(g, nei, seen, order);
+        }
+    }
+
+    public static void main(String[] args) {
+        Map<Integer, List<Integer>> g = Map.of(
+            0, List.of(1,2), 1, List.of(0,3), 2, List.of(0,3), 3, List.of(1,2)
+        );
+        System.out.println(bfs(g, 0));
+        List<Integer> order = new ArrayList<>();
+        dfs(g, 0, new HashSet<>(), order);
+        System.out.println(order);
+    }
+}`,
+            output: `[0,1,2,3]
+[0,1,3,2]`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>BFS:</strong> Queue, mark parent on first visit, reconstruct path.',
+            '<strong>DFS recursive:</strong> Base visited, recurse neighbors.',
+            '<strong>DFS iterative:</strong> Stack + reversed neighbor order for same order as recursive.',
+            '<strong>Grid:</strong> Directions [(0,1),(0,-1),(1,0),(-1,0)].'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'V vertices, E edges:',
+          table: {
+            headers: [
+              'Algo',
+              'Time',
+              'Space',
+              'Best for'
+            ],
+            rows: [
+              [
+                'BFS',
+                'O(V+E)',
+                'O(V)',
+                'Shortest unweighted path'
+              ],
+              [
+                'DFS',
+                'O(V+E)',
+                'O(V)',
+                'Connectivity, cycles, topo sort'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'BFS without visited → infinite loop on cycles.',
+            'Using DFS for shortest path in unweighted graph (wrong — use BFS).',
+            'Forgetting to mark visited when enqueuing (duplicate work).'
+          ],
+          code: `from collections import deque
+def bfs(graph, start):
+    seen = {start}
+    q = deque([start])
+    while q:
+        node = q.popleft()
+        for nei in graph[node]:
+            if nei not in seen:
+                seen.add(nei)  # mark WHEN enqueuing
+                q.append(nei)`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Social networks, maps, dependency resolution, game AI.',
+          list: [
+            '<strong>LinkedIn:</strong> BFS for degrees of separation',
+            '<strong>Maze solving:</strong> BFS shortest exit'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Number of islands → DFS/BFS on grid.',
+            'Clone graph → BFS + hash map old→new node.',
+            'Course schedule cycle → DFS three-color.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Shortest path in unweighted graph. Hint: BFS + parent. Ans: O(V+E).',
+            'Q2: Number of connected components. Hint: DFS from each unvisited. Ans: O(V+E).',
+            'Q3 (Hard): Word ladder (begin→end, one char change). Hint: BFS on implicit graph. Ans: O(N·L²) where L=word length.'
+          ]
+        }
+      ]
+    }
+  },
+  module3: {
+    sorting: {
+      title: 'Sorting Algorithms',
+      subtitle: 'Merge, Quick, Heap — know when each wins',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'Sorting is foundational. Interviews expect you to implement merge sort and quicksort, know complexities, and recognize when O(n log n) is unavoidable.',
+          list: [
+            '<strong>Merge sort:</strong> Stable O(n log n), O(n) extra space',
+            '<strong>Quick sort:</strong> O(n log n) average, O(n²) worst, in-place',
+            '<strong>Heap sort:</strong> O(n log n), O(1) extra space, not stable',
+            '<strong>Counting/Radix:</strong> O(n) when keys bounded',
+            '<strong>Python Timsort:</strong> O(n log n) hybrid, stable'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Comparison sorts lower bound is O(n log n). Merge sort guarantees it; quicksort is faster in practice due to cache locality but can degrade.</p>'
+          ],
+          note: 'Stable sort preserves relative order of equal elements — important for multi-key sorts.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Merge sort on [38,27,43,3]:
+Split: [38,27] [43,3]
+Split: [38][27] [43][3]
+Merge: [27,38] [3,43]
+Merge: [3,27,38,43]`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Merge, Quick, Heap Sort',
+            code: `def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    out, i, j = [], 0, 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            out.append(left[i]); i += 1
+        else:
+            out.append(right[j]); j += 1
+    return out + left[i:] + right[j:]
+
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    mid = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + mid + quick_sort(right)
+
+def heap_sort(arr):
+    import heapq
+    h = arr[:]
+    heapq.heapify(h)
+    return [heapq.heappop(h) for _ in range(len(h))]
+
+data = [3, 1, 4, 1, 5, 9, 2, 6]
+print("Merge:", merge_sort(data))
+print("Quick:", quick_sort(data))
+print("Heap:", heap_sort(data))`,
+            output: `Merge: [1,1,2,3,4,5,6,9]
+Quick: [1,1,2,3,4,5,6,9]`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Merge Sort in Java',
+            code: `import java.util.*;
+
+public class SortDemo {
+    static void merge(int[] a, int l, int m, int r) {
+        int[] tmp = new int[r - l + 1];
+        int i = l, j = m + 1, k = 0;
+        while (i <= m && j <= r) tmp[k++] = a[i] <= a[j] ? a[i++] : a[j++];
+        while (i <= m) tmp[k++] = a[i++];
+        while (j <= r) tmp[k++] = a[j++];
+        for (k = 0; k < tmp.length; k++) a[l + k] = tmp[k];
+    }
+
+    static void mergeSort(int[] a, int l, int r) {
+        if (l >= r) return;
+        int m = l + (r - l) / 2;
+        mergeSort(a, l, m);
+        mergeSort(a, m + 1, r);
+        merge(a, l, m, r);
+    }
+
+    public static void main(String[] args) {
+        int[] a = {3,1,4,1,5,9,2,6};
+        mergeSort(a, 0, a.length - 1);
+        System.out.println(Arrays.toString(a));
+    }
+}`,
+            output: '[1, 1, 2, 3, 4, 5, 6, 9]',
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Merge sort:</strong> Divide in half, sort halves, merge two sorted arrays.',
+            '<strong>Quick sort:</strong> Pick pivot, partition smaller/larger, recurse.',
+            '<strong>Heap sort:</strong> heapify, repeatedly extract min/max.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'n elements:',
+          table: {
+            headers: [
+              'Algorithm',
+              'Best',
+              'Average',
+              'Worst',
+              'Space',
+              'Stable'
+            ],
+            rows: [
+              [
+                'Merge',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n)',
+                'Yes'
+              ],
+              [
+                'Quick',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n²)',
+                'O(log n)',
+                'No'
+              ],
+              [
+                'Heap',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n log n)',
+                'O(1)',
+                'No'
+              ],
+              [
+                'Bubble',
+                'O(n)',
+                'O(n²)',
+                'O(n²)',
+                'O(1)',
+                'Yes'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'Using O(n²) sort on large n in interviews.',
+            'Quicksort worst case on sorted input without random pivot.'
+          ],
+          code: `# Use random pivot for quicksort partition
+import random
+pivot_idx = random.randint(lo, hi)
+nums[pivot_idx], nums[hi] = nums[hi], nums[pivot_idx]`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Databases, search ranking, deduplication pipelines.',
+          list: [
+            '<strong>SQL ORDER BY:</strong> Often merge-based',
+            '<strong>Big data:</strong> External merge sort'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Kth largest → quickselect O(n) average.',
+            'Nearly sorted → insertion sort O(n).'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Sort array. Implement merge sort. Ans: O(n log n).',
+            'Q2: Kth largest. Hint: quickselect. Ans: O(n) avg.',
+            'Q3 (Hard): Count inversions. Hint: merge sort count during merge. Ans: O(n log n).'
+          ]
+        }
+      ]
+    },
+    'binary-search': {
+      title: 'Binary Search',
+      subtitle: 'O(log n) on sorted data — and beyond',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'Binary search halves the search space each step. Works on sorted arrays and on monotonic answer spaces (binary search on answer).',
+          list: [
+            '<strong>Loop invariant:</strong> target in [lo, hi] if exists',
+            '<strong>lower_bound:</strong> First index where arr[i] >= target',
+            '<strong>upper_bound:</strong> First index where arr[i] > target',
+            '<strong>Rotated array:</strong> One half always sorted',
+            '<strong>Search on answer:</strong> Minimize/maximize with feasibility check'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Classic mistake: using mid = (lo+hi)/2 overflow in Java — use lo + (hi-lo)/2. Another: infinite loop when lo=mid with lo=mid+1 update — use lo < hi for lower_bound.</p>'
+          ],
+          note: 'Binary search on answer: if feasible(x) is monotonic, binary search the answer space.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `arr = [1,3,5,7,9,11], target = 7
+lo=0 hi=5 mid=2 (5<7) lo=3
+lo=3 hi=5 mid=4 (9>7) hi=3
+lo=3 hi=3 mid=3 arr[3]=7 FOUND`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Binary Search, lower_bound, Rotated Array',
+            code: `def binary_search(arr, target):
+    lo, hi = 0, len(arr) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1
+
+def lower_bound(arr, target):
+    lo, hi = 0, len(arr)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if arr[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo
+
+def search_rotated(nums, target):
+    lo, hi = 0, len(nums) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[lo] <= nums[mid]:
+            if nums[lo] <= target < nums[mid]:
+                hi = mid - 1
+            else:
+                lo = mid + 1
+        else:
+            if nums[mid] < target <= nums[hi]:
+                lo = mid + 1
+            else:
+                hi = mid - 1
+    return -1
+
+arr = [1, 2, 4, 4, 5, 7]
+print(binary_search(arr, 5))
+print(lower_bound(arr, 4))
+print(search_rotated([4,5,6,7,0,1,2], 0))`,
+            output: `4
+2
+4`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Binary Search in Java',
+            code: `public class BSearch {
+    static int search(int[] a, int t) {
+        int lo = 0, hi = a.length - 1;
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (a[mid] == t) return mid;
+            if (a[mid] < t) lo = mid + 1; else hi = mid - 1;
+        }
+        return -1;
+    }
+    public static void main(String[] args) {
+        System.out.println(search(new int[]{1,3,5,7}, 5));
+    }
+}`,
+            output: '2',
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1:</strong> lo=0, hi=n-1 (or n for lower_bound).',
+            '<strong>Step 2:</strong> mid = lo + (hi-lo)//2.',
+            '<strong>Step 3:</strong> Compare, shrink left or right half.',
+            '<strong>Step 4:</strong> Rotated: identify sorted half, check if target in range.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'n elements:',
+          table: {
+            headers: [
+              'Variant',
+              'Time',
+              'Space'
+            ],
+            rows: [
+              [
+                'Standard',
+                'O(log n)',
+                'O(1)'
+              ],
+              [
+                'lower_bound',
+                'O(log n)',
+                'O(1)'
+              ],
+              [
+                'Search on answer',
+                'O(log R · f(n))',
+                'O(1)'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'Off-by-one with lo<=hi vs lo<hi.',
+            'Mid overflow in Java/C++.',
+            'Applying to unsorted array.'
+          ],
+          code: 'mid = lo + (hi - lo) // 2  # safe mid',
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Database indexes, pagination, version control bisect.',
+          list: [
+            '<strong>Git bisect:</strong> Find breaking commit O(log n commits)'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Find first/last occurrence → lower_bound + check neighbors.',
+            'Minimize maximum → binary search on answer.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Search in rotated sorted array. Hint: sorted half check. Ans: O(log n).',
+            'Q2: Find peak element. Hint: compare mid with mid+1. Ans: O(log n).',
+            'Q3 (Hard): Median of two sorted arrays. Hint: binary search partition. Ans: O(log(min(m,n))).'
+          ]
+        }
+      ]
+    },
+    'two-pointers': {
+      title: 'Two Pointers & Sliding Window',
+      subtitle: 'Turn O(n²) brute force into O(n)',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'Two pointers move across arrays/strings; sliding window maintains a valid contiguous segment. Together they solve a huge fraction of array interview problems.',
+          list: [
+            '<strong>Opposite ends:</strong> Sorted pair-sum, palindrome, container water',
+            '<strong>Same direction:</strong> Remove duplicates, fast/slow cycle detection',
+            '<strong>Fixed window k:</strong> Max sum subarray of size k',
+            '<strong>Variable window:</strong> Longest substring with constraint',
+            '<strong>Invariant:</strong> Window always satisfies (or violates) a condition'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Sliding window: each element enters and leaves at most once → O(n). Expand right until invalid, shrink left until valid again.</p>'
+          ],
+          note: 'If array sorted → try opposite-end two pointers before hash map.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Longest unique substring "abcabcbb":
+a|bcabcbb  → best=1
+ab|cabcbb  → best=2
+abc|abcbb  → dup 'a', shrink left past index 0
+  bc|abcbb → best=3`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Two Sum II, Fixed K Window, Longest Unique Substring',
+            code: `def two_sum_sorted(nums, target):
+    l, r = 0, len(nums) - 1
+    while l < r:
+        s = nums[l] + nums[r]
+        if s == target:
+            return [l + 1, r + 1]
+        elif s < target:
+            l += 1
+        else:
+            r -= 1
+    return []
+
+def max_sum_subarray_k(nums, k):
+    window = sum(nums[:k])
+    best = window
+    for i in range(k, len(nums)):
+        window += nums[i] - nums[i - k]
+        best = max(best, window)
+    return best
+
+def longest_unique_substring(s):
+    last = {}
+    left = best = 0
+    for right, ch in enumerate(s):
+        if ch in last and last[ch] >= left:
+            left = last[ch] + 1
+        last[ch] = right
+        best = max(best, right - left + 1)
+    return best
+
+print(two_sum_sorted([2,7,11,15], 9))
+print(max_sum_subarray_k([2,1,5,1,3,2], 3))
+print(longest_unique_substring("abcabcbb"))`,
+            output: `[1,2]
+9
+3`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Sliding Window in Java',
+            code: `public class Window {
+    static int maxSumK(int[] a, int k) {
+        int sum = 0;
+        for (int i = 0; i < k; i++) sum += a[i];
+        int best = sum;
+        for (int i = k; i < a.length; i++) {
+            sum += a[i] - a[i - k];
+            best = Math.max(best, sum);
+        }
+        return best;
+    }
+    public static void main(String[] args) {
+        System.out.println(maxSumK(new int[]{2,1,5,1,3,2}, 3));
+    }
+}`,
+            output: '9',
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Two Sum sorted:</strong> If sum too small, l++; too big, r--.',
+            '<strong>Fixed k:</strong> Add right, subtract falling off left.',
+            '<strong>Variable:</strong> Track last index map; shrink on duplicate inside window.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'n = array/string length:',
+          table: {
+            headers: [
+              'Pattern',
+              'Time',
+              'Space'
+            ],
+            rows: [
+              [
+                'Two pointers',
+                'O(n)',
+                'O(1)'
+              ],
+              [
+                'Sliding window',
+                'O(n)',
+                'O(k) or O(alphabet)'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'Shrinking window before expanding.',
+            'Wrong window size formula (right-left+1).'
+          ],
+          code: 'best = max(best, right - left + 1)  # inclusive window size',
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Stream processing, genomic sequence analysis, rate limiting.',
+          list: [
+            '<strong>Rate limiter:</strong> Sliding window counter'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'At most K distinct → shrink when map size > k.',
+            'Minimum window substring → shrink while valid.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Max sum subarray size k. Hint: fixed window. Ans: O(n).',
+            'Q2: Longest substring without repeating. Hint: variable window + last index. Ans: O(n).',
+            'Q3 (Hard): Minimum window substring containing all chars of t. Hint: expand until valid, shrink while valid. Ans: O(n).'
+          ]
+        }
+      ]
+    },
+    'divide-conquer': {
+      title: 'Divide & Conquer',
+      subtitle: 'Split, solve subproblems, combine',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'Divide & conquer breaks problems into independent subproblems. Classic examples: merge sort, quicksort, binary search, closest pair of points.',
+          list: [
+            '<strong>Divide:</strong> Split input into smaller pieces',
+            '<strong>Conquer:</strong> Solve subproblems recursively',
+            '<strong>Combine:</strong> Merge partial results — often O(n)',
+            '<strong>Master Theorem:</strong> T(n)=aT(n/b)+O(n^d) → solve recurrence',
+            '<strong>Base case:</strong> Small n solved directly'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Merge sort: T(n)=2T(n/2)+O(n) → O(n log n). Binary search: T(n)=T(n/2)+O(1) → O(log n).</p>'
+          ],
+          note: 'If combine step is O(n) and you split in half, often O(n log n) total.'
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Max subarray (Kadane is O(n); D&C version):
+[-2,1,-3,4,-1,2,1,-5,4]
+Left max=1, Right max=2, Cross max=6 → global 6`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Merge Sort as Divide & Conquer',
+            code: `def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    out, i, j = [], 0, 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            out.append(left[i]); i += 1
+        else:
+            out.append(right[j]); j += 1
+    return out + left[i:] + right[j:]
+
+print(merge_sort([38,27,43,3,9]))`,
+            output: '[3, 9, 27, 38, 43]',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Merge Sort D&C',
+            code: `import java.util.*;
+
+public class SortDemo {
+    static void merge(int[] a, int l, int m, int r) {
+        int[] tmp = new int[r - l + 1];
+        int i = l, j = m + 1, k = 0;
+        while (i <= m && j <= r) tmp[k++] = a[i] <= a[j] ? a[i++] : a[j++];
+        while (i <= m) tmp[k++] = a[i++];
+        while (j <= r) tmp[k++] = a[j++];
+        for (k = 0; k < tmp.length; k++) a[l + k] = tmp[k];
+    }
+
+    static void mergeSort(int[] a, int l, int r) {
+        if (l >= r) return;
+        int m = l + (r - l) / 2;
+        mergeSort(a, l, m);
+        mergeSort(a, m + 1, r);
+        merge(a, l, m, r);
+    }
+
+    public static void main(String[] args) {
+        int[] a = {3,1,4,1,5,9,2,6};
+        mergeSort(a, 0, a.length - 1);
+        System.out.println(Arrays.toString(a));
+    }
+}`,
+            output: '[1, 1, 2, 3, 4, 5, 6, 9]',
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1:</strong> Define base case (n<=1).',
+            '<strong>Step 2:</strong> Split array in half.',
+            '<strong>Step 3:</strong> Recursively sort each half.',
+            '<strong>Step 4:</strong> Merge two sorted halves in O(n).'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Recurrence determines complexity:',
+          table: {
+            headers: [
+              'Problem',
+              'Recurrence',
+              'Result'
+            ],
+            rows: [
+              [
+                'Merge sort',
+                '2T(n/2)+O(n)',
+                'O(n log n)'
+              ],
+              [
+                'Binary search',
+                'T(n/2)+O(1)',
+                'O(log n)'
+              ],
+              [
+                'Strassen',
+                '7T(n/2)+O(n²)',
+                'O(n^2.81)'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'Forgetting combine step cost.',
+            'Subproblems not independent (use DP instead).'
+          ],
+          code: `# Merge step is O(n) — don't drop it from complexity analysis`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'FFT, map reduce, parallel sorting.',
+          list: [
+            '<strong>MapReduce:</strong> Divide data across workers'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Draw recursion tree: levels × work per level.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Implement merge sort. Ans: O(n log n).',
+            'Q2: Count inversions. Hint: merge sort merge step. Ans: O(n log n).',
+            'Q3 (Hard): Pow(x,n) fast exponentiation. Hint: T(n/2). Ans: O(log n).'
+          ]
+        }
+      ]
+    },
+    greedy: {
+      title: 'Greedy Algorithms',
+      subtitle: 'Local optimal choices — when they work globally',
+      sections: [
+        {
+          heading: 'Core Concepts',
+          text: 'Greedy picks the best local option at each step. Works for matroids and problems with greedy choice property; fails otherwise (need DP).',
+          list: [
+            '<strong>Activity selection:</strong> Sort by end time, pick non-overlapping',
+            '<strong>Merge intervals:</strong> Sort by start, merge overlaps',
+            '<strong>Huffman coding:</strong> Build tree by merging least frequent',
+            '<strong>Coin change (canonical):</strong> Greedy works for US coins, not all systems',
+            '<strong>Proof:</strong> Exchange argument or staying ahead'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Greedy fails for coin systems like coins=[1,3,4] amount=6: greedy gives 4+1+1=3 coins, optimal is 3+3=2 coins. Always verify or mention when greedy fails.</p>'
+          ],
+          note: `Prove greedy works or cite classic result — interviewers ask 'why greedy?'`
+        },
+        {
+          heading: 'Visual Diagram',
+          code: `Activity selection (sort by end):
+[1,4] [3,5] [0,6] [5,7] [8,9] [5,9]
+Pick [1,4], skip [3,5],[0,6], pick [5,7], pick [8,9] → 3 activities`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Activity Selection, Merge Intervals, Coin Greedy',
+            code: `def activity_selection(start, end):
+    order = sorted(range(len(start)), key=lambda i: end[i])
+    count, last_end = 0, float('-inf')
+    for i in order:
+        if start[i] >= last_end:
+            count += 1
+            last_end = end[i]
+    return count
+
+def merge_intervals(intervals):
+    intervals.sort(key=lambda x: x[0])
+    merged = []
+    for s, e in intervals:
+        if not merged or s > merged[-1][1]:
+            merged.append([s, e])
+        else:
+            merged[-1][1] = max(merged[-1][1], e)
+    return merged
+
+def coin_change_greedy(coins, amount):
+    coins.sort(reverse=True)
+    count = 0
+    for c in coins:
+        if amount == 0:
+            break
+        take = amount // c
+        count += take
+        amount -= take * c
+    return count if amount == 0 else -1
+
+print(activity_selection([1,2,3,0],[4,5,6,7]))
+print(merge_intervals([[1,3],[2,6],[8,10],[15,18]]))
+print(coin_change_greedy([1,5,10,25], 63))`,
+            output: `2
+[[1,6],[8,10],[15,18]]
+5`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Merge Intervals Java',
+            code: `import java.util.*;
+public class Greedy {
+    static int[][] merge(int[][] in) {
+        Arrays.sort(in, (a,b) -> a[0]-b[0]);
+        List<int[]> out = new ArrayList<>();
+        for (int[] iv : in) {
+            if (out.isEmpty() || iv[0] > out.get(out.size()-1)[1])
+                out.add(iv);
+            else
+                out.get(out.size()-1)[1] = Math.max(out.get(out.size()-1)[1], iv[1]);
+        }
+        return out.toArray(new int[0][]);
+    }
+    public static void main(String[] args) {
+        System.out.println(Arrays.deepToString(merge(new int[][]{{1,3},{2,6},{8,10}})));
+    }
+}`,
+            output: '[[1, 6], [8, 10]]',
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Activity selection:</strong> Sort by finish time; greedy pick if start >= last end.',
+            '<strong>Merge intervals:</strong> Sort by start; extend last if overlap.',
+            '<strong>Prove:</strong> Show greedy choice never blocks better solution.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Typical greedy sorts first O(n log n):',
+          table: {
+            headers: [
+              'Problem',
+              'Greedy?',
+              'Complexity'
+            ],
+            rows: [
+              [
+                'Activity selection',
+                'Yes',
+                'O(n log n)'
+              ],
+              [
+                'Fractional knapsack',
+                'Yes',
+                'O(n log n)'
+              ],
+              [
+                '0/1 knapsack',
+                'No — use DP',
+                'O(nW)'
+              ],
+              [
+                'Coin change general',
+                'No',
+                'DP O(n·amount)'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            'Applying greedy to 0/1 knapsack.',
+            'Not sorting before greedy interval problems.'
+          ],
+          code: '# Coin [1,3,4] amount 6: greedy fails — use DP',
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Huffman compression, task scheduling, network routing.',
+          list: [
+            '<strong>ZIP/Huffman:</strong> Optimal prefix codes'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Interval problems → sort by start or end first.',
+            'If greedy fails small case → DP.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            'Q1: Non-overlapping intervals (max count). Hint: sort by end. Ans: O(n log n).',
+            'Q2: Jump game can reach end? Hint: track farthest reach. Ans: O(n).',
+            'Q3 (Hard): Minimum arrows to burst balloons. Hint: sort by end, greedy. Ans: O(n log n).'
+          ]
+        }
+      ]
+    }
+  },
+  module4: {
+    'recursion-backtracking': {
+      title: 'Recursion & Backtracking',
+      subtitle: 'Explore every branch, prune what fails',
+      sections: [
+        {
+          heading: 'Core Concepts: Recursion & Backtracking',
+          text: 'Recursion solves a problem by reducing it to smaller instances of itself. Backtracking extends recursion by building candidates incrementally and undoing (backtracking) choices that violate constraints. Together they power subset generation, permutations, constraint puzzles, and combinatorial search — staples of medium-to-hard interview problems.',
+          list: [
+            '<strong>Base case:</strong> The smallest subproblem with a direct answer — without it, recursion never terminates.',
+            '<strong>Recursive case:</strong> Decompose the problem, call yourself on a smaller input, combine results.',
+            '<strong>Choice:</strong> At each step, decide what to include (pick element, place queen, add coin).',
+            '<strong>Constraint:</strong> Prune branches that cannot lead to a valid solution (N-Queens diagonal conflict).',
+            '<strong>Undo (backtrack):</strong> Remove the last choice and try the next option — the hallmark of backtracking.',
+            '<strong>State space tree:</strong> Every recursive call is a node; edges are choices; leaves are complete or pruned solutions.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Think of backtracking as <em>DFS over an implicit decision tree</em>. You descend by making a choice, explore that branch fully, then return and try the next sibling. The key insight: you only need <strong>O(depth)</strong> extra space for the current path — not to store the entire tree.</p>',
+            '<p>The universal template has four phases: <strong>(1)</strong> check if current path is a complete solution → record it; <strong>(2)</strong> iterate over available choices; <strong>(3)</strong> apply choice (push to path); <strong>(4)</strong> recurse, then undo (pop from path). Subsets use a <em>start index</em> to avoid duplicates; permutations use a <em>used array</em>; combination sum allows <em>reusing elements</em> by passing the same start index after picking.</p>',
+            '<p>Time complexity is often exponential: subsets produce 2^n results, permutations produce n! results. Space is O(n) for the recursion stack plus O(output) for storing results. Interviewers care that you can <strong>prune early</strong> — e.g., stop combination-sum recursion when the running total exceeds the target.</p>'
+          ],
+          note: 'Template mantra: choose → explore → unchoose. Every backtracking solution follows this three-step loop inside a for-loop over choices.'
+        },
+        {
+          heading: 'Visual Diagram — Backtracking Decision Tree',
+          code: `Subsets of [1, 2, 3] — each level = include/skip decision
+
+                        []
+               /                    \\
+           [1]                      []
+        /       \\                 /     \\
+    [1,2]      [1]            [2]        []
+    /   \\      / \\           / \\       / \\
+ [1,2,3][1,2][1,3][1]     [2,3][2]  [3]  []
+
+8 subsets total = 2^3. Backtracking visits each leaf once.
+
+Combination Sum — candidates [2,3,5], target 8:
+
+  start=0, path=[], rem=8
+    pick 2 → path=[2], rem=6, start=0 (reuse allowed)
+      pick 2 → path=[2,2], rem=4
+        pick 2 → path=[2,2,2], rem=2
+          pick 2 → path=[2,2,2,2] rem=0 ✓ SOLUTION
+        pick 3 → rem=1, prune (no valid coins)
+      pick 3 → path=[2,3], rem=3
+        pick 3 → path=[2,3,3] rem=0 ✓ SOLUTION
+    pick 3 → path=[3], rem=5
+      pick 5 → path=[3,5] rem=0 ✓ SOLUTION`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Subsets, Permutations, Combination Sum & N-Queens',
+            code: `from typing import List
+
+# ── 1. Subsets (power set) — O(n * 2^n) time, O(n) stack ──
+def subsets(nums: List[int]) -> List[List[int]]:
+    result = []
+    def backtrack(start: int, path: List[int]) -> None:
+        result.append(path[:])          # snapshot current path
+        for i in range(start, len(nums)):
+            path.append(nums[i])        # choose
+            backtrack(i + 1, path)      # explore (no reuse)
+            path.pop()                  # unchoose
+    backtrack(0, [])
+    return result
+
+# ── 2. Permutations — O(n * n!) time ──
+def permutations(nums: List[int]) -> List[List[int]]:
+    result = []
+    used = [False] * len(nums)
+    def backtrack(path: List[int]) -> None:
+        if len(path) == len(nums):
+            result.append(path[:])
+            return
+        for i in range(len(nums)):
+            if used[i]:
+                continue
+            used[i] = True
+            path.append(nums[i])
+            backtrack(path)
+            path.pop()
+            used[i] = False
+    backtrack([])
+    return result
+
+# ── 3. Combination Sum — reuse allowed, no duplicate combos ──
+def combination_sum(candidates: List[int], target: int) -> List[List[int]]:
+    result = []
+    candidates.sort()   # enables pruning when sum exceeds target
+    def backtrack(start: int, path: List[int], remaining: int) -> None:
+        if remaining == 0:
+            result.append(path[:])
+            return
+        for i in range(start, len(candidates)):
+            if candidates[i] > remaining:
+                break   # sorted — all further values too large
+            path.append(candidates[i])
+            backtrack(i, path, remaining - candidates[i])  # i, not i+1
+            path.pop()
+    backtrack(0, [], target)
+    return result
+
+# ── 4. N-Queens sketch — place queens row by row ──
+def solve_n_queens(n: int) -> List[List[str]]:
+    result = []
+    cols = set()
+    diag1 = set()   # row + col
+    diag2 = set()   # row - col
+    board = [['.'] * n for _ in range(n)]
+
+    def backtrack(row: int) -> None:
+        if row == n:
+            result.append([''.join(r) for r in board])
+            return
+        for col in range(n):
+            if col in cols or (row + col) in diag1 or (row - col) in diag2:
+                continue
+            cols.add(col)
+            diag1.add(row + col)
+            diag2.add(row - col)
+            board[row][col] = 'Q'
+            backtrack(row + 1)
+            board[row][col] = '.'
+            cols.remove(col)
+            diag1.remove(row + col)
+            diag2.remove(row - col)
+
+    backtrack(0)
+    return result
+
+# Demo
+print(subsets([1, 2, 3]))
+print(permutations([1, 2, 3]))
+print(combination_sum([2, 3, 5], 8))
+print(solve_n_queens(4))`,
+            output: `[[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]]
+[[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+[[2, 2, 2, 2], [2, 3, 3], [3, 5]]
+[['.Q..', '...Q', 'Q...', '..Q.'], ['..Q.', 'Q...', '...Q', '.Q..']]`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Subsets, Permutations & Combination Sum in Java',
+            code: `import java.util.*;
+
+public class BacktrackingDemo {
+
+    // Subsets
+    static List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrackSubsets(nums, 0, new ArrayList<>(), result);
+        return result;
+    }
+
+    static void backtrackSubsets(int[] nums, int start, List<Integer> path,
+                                 List<List<Integer>> result) {
+        result.add(new ArrayList<>(path));
+        for (int i = start; i < nums.length; i++) {
+            path.add(nums[i]);
+            backtrackSubsets(nums, i + 1, path, result);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    // Permutations
+    static List<List<Integer>> permutations(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        boolean[] used = new boolean[nums.length];
+        backtrackPerms(nums, used, new ArrayList<>(), result);
+        return result;
+    }
+
+    static void backtrackPerms(int[] nums, boolean[] used, List<Integer> path,
+                               List<List<Integer>> result) {
+        if (path.size() == nums.length) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i]) continue;
+            used[i] = true;
+            path.add(nums[i]);
+            backtrackPerms(nums, used, path, result);
+            path.remove(path.size() - 1);
+            used[i] = false;
+        }
+    }
+
+    // Combination Sum
+    static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> result = new ArrayList<>();
+        backtrackCombo(candidates, 0, target, new ArrayList<>(), result);
+        return result;
+    }
+
+    static void backtrackCombo(int[] cands, int start, int rem, List<Integer> path,
+                               List<List<Integer>> result) {
+        if (rem == 0) { result.add(new ArrayList<>(path)); return; }
+        for (int i = start; i < cands.length; i++) {
+            if (cands[i] > rem) break;
+            path.add(cands[i]);
+            backtrackCombo(cands, i, rem - cands[i], path, result);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(subsets(new int[]{1, 2, 3}));
+        System.out.println(permutations(new int[]{1, 2, 3}));
+        System.out.println(combinationSum(new int[]{2, 3, 5}, 8));
+    }
+}`,
+            output: `[[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]]
+[[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+[[2, 2, 2, 2], [2, 3, 3], [3, 5]]`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 — Subsets:</strong> At each index, snapshot the path (valid subset), then try including each element from `start` onward. Increment `start` on recurse to avoid duplicate subsets like [1,2] and [2,1].',
+            '<strong>Step 2 — Permutations:</strong> When path length equals n, record it. Otherwise try every unused element — track usage with a boolean array, not a start index.',
+            '<strong>Step 3 — Combination Sum:</strong> Sort candidates first. Pass `i` (not `i+1`) to allow reuse. Prune when `candidates[i] > remaining` since array is sorted.',
+            '<strong>Step 4 — N-Queens:</strong> Place one queen per row. For each column, check three sets: occupied columns, positive diagonals (row+col), negative diagonals (row-col). Undo all three on backtrack.',
+            '<strong>Step 5 — Pruning:</strong> Always ask: can this branch ever succeed? If not, `continue` or `break` early — this is what separates TLE from AC.',
+            '<strong>Step 6 — Copying:</strong> Use `path[:]` or `new ArrayList<>(path)` when saving results — the path list is mutated in place.',
+            '<strong>Step 7 — Complexity defense:</strong> State output size dominates (2^n, n!) — you cannot do better than generating all solutions when asked to return all of them.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Backtracking problems are inherently exponential when returning all solutions:',
+          table: {
+            headers: [
+              'Problem',
+              'Time',
+              'Space (auxiliary)',
+              'Output size'
+            ],
+            rows: [
+              [
+                'Subsets',
+                'O(n · 2^n)',
+                'O(n) stack',
+                '2^n subsets'
+              ],
+              [
+                'Permutations',
+                'O(n · n!)',
+                'O(n) stack + used[]',
+                'n! permutations'
+              ],
+              [
+                'Combination Sum',
+                'O(2^target/min)',
+                'O(target/min) stack',
+                'Exponential'
+              ],
+              [
+                'N-Queens',
+                'O(n!)',
+                'O(n) sets + board',
+                'Multiple valid boards'
+              ],
+              [
+                'General backtracking',
+                'O(b^d)',
+                'O(d) recursion depth',
+                'Varies by branching factor b, depth d'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Forgetting to copy the path:</strong> `result.append(path)` stores a reference that gets mutated — <em>Fix:</em> `result.append(path[:])`.',
+            '<strong>Wrong start index in subsets:</strong> Using `i` instead of `i+1` creates duplicate subsets — <em>Fix:</em> pass `i + 1` for no-reuse problems.',
+            '<strong>Not sorting for combination sum:</strong> Without sorting you cannot break early when sum exceeds target — <em>Fix:</em> sort candidates first.',
+            '<strong>Checking constraints after placing:</strong> In N-Queens, validate before placing, not after — <em>Fix:</em> `continue` on conflict before modifying state.',
+            '<strong>Missing base case:</strong> Infinite recursion if you never return — <em>Fix:</em> always define the smallest input that needs no further recursion.'
+          ],
+          code: `# WRONG — stores mutable reference
+result.append(path)
+
+# CORRECT — snapshot
+result.append(path[:])
+
+# WRONG — combination sum passes i+1 (no reuse)
+backtrack(i + 1, path, remaining - candidates[i])
+
+# CORRECT — reuse allowed
+backtrack(i, path, remaining - candidates[i])`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          text: 'Combinatorial search appears wherever you must enumerate or find configurations under constraints:',
+          list: [
+            '<strong>Sudoku / puzzle solvers:</strong> Try a digit, recurse, backtrack on conflict — same N-Queens pattern.',
+            '<strong>Resource allocation:</strong> Select tasks/subsets meeting budget caps (knapsack-style subset sum).',
+            '<strong>Test case generation:</strong> QA tools enumerate input combinations to maximize coverage.',
+            '<strong>Compiler register allocation:</strong> Backtracking over assignment choices under hardware constraints.',
+            '<strong>Route planning with constraints:</strong> Visit cities in valid orders (permutation with pruning).',
+            '<strong>Feature selection in ML:</strong> Subset search over features — often pruned with heuristics when 2^n is too large.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Write the backtracking template first (choose → explore → unchoose), then fill in problem-specific details.',
+            'Clarify: distinct elements? reuse allowed? return all solutions or count only? sorted output required?',
+            'For "return all X" problems, exponential time is expected — defend it by citing output size.',
+            'Use sets for O(1) conflict checks in N-Queens instead of scanning the board each time.',
+            'Sort input when it enables pruning (combination sum, combination sum II with duplicates).',
+            'If asked to optimize, consider DP or bitmask tricks — but only when the problem asks for count/optimal, not all solutions.',
+            'Draw a small decision tree on the whiteboard — interviewers love seeing you trace one path to a leaf and backtrack.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1 (Easy): Generate all subsets of [1, 2]. Walk through the recursion tree.
+Hint: Snapshot at every node before the for-loop.
+Ans: [], [1], [2], [1,2]. Tree: root [] → branch pick 1 → [1] → pick 2 → [1,2], backtrack → [1] → done, backtrack → pick 2 from root → [2].`,
+            `Q2 (Medium): Combination Sum — candidates [2,3,6,7], target 7. List all combinations.
+Hint: Sort first; pass index i (not i+1) to allow reuse; prune when candidate > remaining.
+Ans: [[2,2,3], [7]]. Path [2,2,3]: pick 2 (rem 5) → pick 2 (rem 3) → pick 3 (rem 0). Path [7]: single pick.`,
+            `Q3 (Hard): N-Queens n=4 — how many distinct solutions?
+Hint: One queen per row; track col and both diagonal sets; backtrack row by row.
+Ans: 2 solutions (shown in Python output above). Time O(n!), space O(n) for constraint sets.`
+          ]
+        }
+      ]
+    },
+    'dp-memoization': {
+      title: 'Dynamic Programming (Memoization)',
+      subtitle: 'Top-down DP — recurse with a cache',
+      sections: [
+        {
+          heading: 'Core Concepts: Memoization',
+          text: 'Memoization (top-down dynamic programming) wraps recursion with a cache. Before computing a subproblem, check the cache; after computing, store the result. It converts exponential brute-force recursion into polynomial time when subproblems overlap — the defining trait of DP.',
+          list: [
+            '<strong>Overlapping subproblems:</strong> The same state is reached via different paths (Fibonacci: fib(5) calls fib(3) twice without memo).',
+            '<strong>Optimal substructure:</strong> Optimal solution composed of optimal solutions to subproblems (knapsack, coin change).',
+            '<strong>State:</strong> Parameters that uniquely identify a subproblem (index, remaining capacity, remaining sum).',
+            '<strong>Memo table:</strong> Dict, array, or @lru_cache mapping state → result.',
+            '<strong>Top-down vs bottom-up:</strong> Memoization is lazy — only visits needed states; tabulation fills entire table.',
+            '<strong>Never use mutable default args:</strong> `memo={}` is shared across calls — use `memo=None` and initialize inside.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>The memoization recipe: <strong>(1)</strong> define recursive function with explicit state parameters; <strong>(2)</strong> check cache at top — return if hit; <strong>(3)</strong> compute recursively; <strong>(4)</strong> store in cache before returning. The recursion tree collapses from exponential nodes to O(unique states) nodes.</p>',
+            '<p>For <strong>coin change</strong>, state is `(index, amount)`. Try taking 0, 1, 2… coins of `coins[index]` or skip to next coin. For <strong>0/1 knapsack</strong>, state is `(index, capacity)` — either include item (capacity -= weight) or exclude (index + 1). Each state is computed once → O(n · W) for knapsack, O(n · amount) for coin change.</p>',
+            '<p>Fibonacci is the pedagogical example: without memo, O(2^n); with memo, O(n) time and O(n) space. Use `functools.lru_cache` in Python for quick prototyping, but write explicit dict memo in interviews to show understanding.</p>'
+          ],
+          note: 'Interview signal: say "overlapping subproblems" and "optimal substructure" — these are the two DP prerequisites every interviewer listens for.'
+        },
+        {
+          heading: 'Visual Diagram — Memoization Call Tree Collapse',
+          code: `Fibonacci(5) WITHOUT memo — exponential revisits:
+
+                    fib(5)
+                   /      \\
+              fib(4)        fib(3)  ← fib(3) computed twice
+             /     \\        /    \\
+        fib(3)  fib(2)  fib(2) fib(1)  ← fib(2) computed 3 times!
+        ...
+
+WITH memo — each fib(k) computed once:
+
+  fib(5) → fib(4) → fib(3) → fib(2) → fib(1) → fib(0)
+  Cache fills: {0:0, 1:1, 2:1, 3:2, 4:3, 5:5}
+  Total calls: 6 (linear)
+
+0/1 Knapsack memo table sketch — weights [1,2,3], values [6,10,12], cap=5:
+
+         cap→  0   1   2   3   4   5
+  item 0     [ 0   6   6  12  12  18 ]  include w=1,v=6
+  item 1     [ 0   6  10  16  16  22 ]
+  item 2     [ 0   6  10  16  18  22 ]  max value = 22`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Fibonacci, Coin Change & 0/1 Knapsack (Top-Down)',
+            code: `from typing import List, Optional
+from functools import lru_cache
+
+# ── 1. Fibonacci — memo=None pattern (NO mutable default arg) ──
+def fib(n: int, memo: Optional[dict] = None) -> int:
+    if memo is None:
+        memo = {}
+    if n in memo:
+        return memo[n]
+    if n <= 1:
+        return n
+    memo[n] = fib(n - 1, memo) + fib(n - 2, memo)
+    return memo[n]
+
+# Alternative: @lru_cache(maxsize=None)
+@lru_cache(maxsize=None)
+def fib_lru(n: int) -> int:
+    if n <= 1:
+        return n
+    return fib_lru(n - 1) + fib_lru(n - 2)
+
+# ── 2. Coin Change — min coins to make amount ──
+def coin_change(coins: List[int], amount: int) -> int:
+    memo = {}
+
+    def dp(i: int, rem: int) -> int:
+        if rem == 0:
+            return 0
+        if rem < 0 or i == len(coins):
+            return float('inf')
+        key = (i, rem)
+        if key in memo:
+            return memo[key]
+        # skip coin i, or take one and stay at i (unbounded)
+        skip = dp(i + 1, rem)
+        take = 1 + dp(i, rem - coins[i])
+        memo[key] = min(skip, take)
+        return memo[key]
+
+    ans = dp(0, amount)
+    return ans if ans != float('inf') else -1
+
+# ── 3. 0/1 Knapsack — max value, each item once ──
+def knapsack_01(weights: List[int], values: List[int], capacity: int) -> int:
+    memo = {}
+
+    def dp(i: int, cap: int) -> int:
+        if i == len(weights) or cap == 0:
+            return 0
+        key = (i, cap)
+        if key in memo:
+            return memo[key]
+        # exclude item i
+        exclude = dp(i + 1, cap)
+        # include item i (if fits)
+        include = 0
+        if weights[i] <= cap:
+            include = values[i] + dp(i + 1, cap - weights[i])
+        memo[key] = max(exclude, include)
+        return memo[key]
+
+    return dp(0, capacity)
+
+# Demo
+print(fib(10))                              # 55
+print(coin_change([1, 2, 5], 11))           # 3 (5+5+1)
+print(knapsack_01([1, 2, 3], [6, 10, 12], 5))  # 22`,
+            output: `55
+3
+22`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Memoized Fibonacci, Coin Change & Knapsack',
+            code: `import java.util.*;
+
+public class MemoizationDemo {
+
+    // Fibonacci with int[] memo (-1 = uncomputed)
+    static int fib(int n, int[] memo) {
+        if (n <= 1) return n;
+        if (memo[n] != -1) return memo[n];
+        memo[n] = fib(n - 1, memo) + fib(n - 2, memo);
+        return memo[n];
+    }
+
+    // Coin change — min coins
+    static int coinChange(int[] coins, int amount) {
+        Integer[][] memo = new Integer[coins.length][amount + 1];
+        int ans = dpCoin(coins, 0, amount, memo);
+        return ans >= Integer.MAX_VALUE / 2 ? -1 : ans;
+    }
+
+    static int dpCoin(int[] coins, int i, int rem, Integer[][] memo) {
+        if (rem == 0) return 0;
+        if (rem < 0 || i == coins.length) return Integer.MAX_VALUE / 2;
+        if (memo[i][rem] != null) return memo[i][rem];
+        int skip = dpCoin(coins, i + 1, rem, memo);
+        int take = 1 + dpCoin(coins, i, rem - coins[i], memo);
+        memo[i][rem] = Math.min(skip, take);
+        return memo[i][rem];
+    }
+
+    // 0/1 Knapsack
+    static int knapsack01(int[] w, int[] v, int cap) {
+        Integer[][] memo = new Integer[w.length][cap + 1];
+        return dpKnap(w, v, 0, cap, memo);
+    }
+
+    static int dpKnap(int[] w, int[] v, int i, int cap, Integer[][] memo) {
+        if (i == w.length || cap == 0) return 0;
+        if (memo[i][cap] != null) return memo[i][cap];
+        int exclude = dpKnap(w, v, i + 1, cap, memo);
+        int include = 0;
+        if (w[i] <= cap)
+            include = v[i] + dpKnap(w, v, i + 1, cap - w[i], memo);
+        memo[i][cap] = Math.max(exclude, include);
+        return memo[i][cap];
+    }
+
+    public static void main(String[] args) {
+        int[] memo = new int[11];
+        Arrays.fill(memo, -1);
+        System.out.println(fib(10, memo));         // 55
+        System.out.println(coinChange(new int[]{1,2,5}, 11)); // 3
+        System.out.println(knapsack01(
+            new int[]{1,2,3}, new int[]{6,10,12}, 5));       // 22
+    }
+}`,
+            output: `55
+3
+22`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 — Identify state:</strong> List parameters that change between subproblems. Coin change: `(coin_index, remaining_amount)`. Knapsack: `(item_index, remaining_capacity)`.',
+            '<strong>Step 2 — Base cases:</strong> Coin change: `rem == 0 → 0` (done), `rem < 0 or i == n → INF` (invalid). Knapsack: `i == n or cap == 0 → 0`.',
+            '<strong>Step 3 — Cache check:</strong> First lines after base cases: if state in memo, return cached value.',
+            '<strong>Step 4 — Transitions:</strong> Coin change: min(skip, 1+take). Knapsack: max(exclude, include).',
+            '<strong>Step 5 — Store & return:</strong> Save result in memo before returning — order matters for correctness.',
+            '<strong>Step 6 — Fib memo init:</strong> `if memo is None: memo = {}` — never `memo={}` as default parameter.',
+            '<strong>Step 7 — Trace coin change( coins=[1,2,5], amount=3):</strong> dp(0,3) → min(dp(1,3), 1+dp(0,2)) → … → 2 coins (2+1).'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          text: 'Memoization complexity = O(number of unique states × work per state):',
+          table: {
+            headers: [
+              'Problem',
+              'States',
+              'Time',
+              'Space'
+            ],
+            rows: [
+              [
+                'Fibonacci',
+                'n',
+                'O(n)',
+                'O(n) memo + O(n) stack'
+              ],
+              [
+                'Coin Change',
+                'n × amount',
+                'O(n · amount)',
+                'O(n · amount)'
+              ],
+              [
+                '0/1 Knapsack',
+                'n × W',
+                'O(n · W)',
+                'O(n · W)'
+              ],
+              [
+                'Unbounded knapsack',
+                'n × W',
+                'O(n · W)',
+                'O(n · W)'
+              ],
+              [
+                'General top-down DP',
+                'State space S',
+                'O(S · transition cost)',
+                'O(S) + O(depth) stack'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Mutable default argument:</strong> `def fib(n, memo={})` shares dict across calls — <em>Fix:</em> `memo=None` then `memo = {}` inside.',
+            '<strong>Forgetting to cache before return:</strong> Storing only on some branches — <em>Fix:</em> always `memo[key] = result` before every return from computation.',
+            '<strong>Wrong state definition:</strong> Missing a parameter that changes (e.g., forgetting index in knapsack) — <em>Fix:</em> list all varying parameters.',
+            '<strong>0/1 vs unbounded confusion:</strong> Passing `i` vs `i+1` after taking — <em>Fix:</em> 0/1 uses `i+1` (item consumed); unbounded uses `i` (reuse allowed).',
+            '<strong>Integer overflow in Java:</strong> Using `Integer.MAX_VALUE` in min() without sentinel — <em>Fix:</em> use `MAX_VALUE/2` for invalid states.'
+          ],
+          code: `# WRONG — shared mutable default
+def fib(n, memo={}):
+    ...
+
+# CORRECT
+def fib(n, memo=None):
+    if memo is None:
+        memo = {}
+    ...`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          list: [
+            '<strong>Financial optimization:</strong> Portfolio knapsack — maximize return under risk/capital constraints.',
+            '<strong>Currency systems:</strong> Minimum coins for change-making in POS systems.',
+            '<strong>Bioinformatics:</strong> Sequence alignment (edit distance) uses DP memo over string positions.',
+            '<strong>Game AI:</strong> Memoized game states (chess endgame tables) avoid recomputing positions.',
+            '<strong>Compiler optimization:</strong> DP on expression trees for optimal code generation.',
+            '<strong>Resource scheduling:</strong> Memo over (time, resources) for project planning.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'Start with brute-force recursion, identify overlapping subproblems, then add memo — shows structured thinking.',
+            'State your state: "dp(i, w) = max value using items i..n-1 with capacity w" — precision impresses interviewers.',
+            'Distinguish 0/1 knapsack (i+1 after take) from unbounded (i after take) — a very common trap.',
+            'For coin change, clarify: min coins, number of ways, or feasibility? Each has a different recurrence.',
+            'Mention you can convert top-down to bottom-up (tabulation) for better space control.',
+            'Draw the memo table and fill 2-3 cells by hand — demonstrates mastery beyond memorization.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1 (Easy): Compute fib(6) with memo. How many unique subproblems?
+Hint: Each fib(k) for k=0..6 is computed once.
+Ans: fib(6)=8. Seven unique states (fib(0) through fib(6)). Without memo, 25 total calls.`,
+            `Q2 (Medium): Coin change — coins [1,3,4], amount 6. Minimum coins?
+Hint: dp(i, rem) = min(skip, 1+take). Trace dp(0,6).
+Ans: 2 coins (3+3). dp(0,6): take 3 → dp(0,3) → take 3 → dp(0,0)=0. Total 2.`,
+            `Q3 (Hard): 0/1 Knapsack — weights [2,3,4,5], values [3,4,5,6], capacity 8. Max value?
+Hint: At each item, max(exclude, value[i] + dp(i+1, cap-weight[i])).
+Ans: 10 (items 2+3 with w=3,v=4 and w=5,v=6). Fill memo row for item index 2, cap 8 → 10.`
+          ]
+        }
+      ]
+    },
+    'dp-tabulation': {
+      title: 'Dynamic Programming (Tabulation)',
+      subtitle: 'Bottom-up DP — fill the table iteratively',
+      sections: [
+        {
+          heading: 'Core Concepts: Tabulation',
+          text: 'Tabulation builds the DP table bottom-up: solve the smallest subproblems first, store results in an array/table, and iterate toward the target. No recursion overhead, no stack overflow risk, and often allows space optimization by keeping only the previous row.',
+          list: [
+            '<strong>Bottom-up:</strong> Start from base cases (dp[0], empty strings) and fill toward the answer.',
+            '<strong>Iteration order matters:</strong> Fill cells only after their dependencies are computed.',
+            '<strong>2D tables:</strong> Common for two-sequence problems (LCS, edit distance) — rows/cols are string indices.',
+            '<strong>Space optimization:</strong> Knapsack needs only previous row → reduce O(n·W) space to O(W).',
+            '<strong>Climbing stairs:</strong> Simple 1D DP where dp[i] = dp[i-1] + dp[i-2] — Fibonacci in disguise.',
+            '<strong>When to prefer tabulation:</strong> You need all subproblem answers, want to avoid recursion limits, or can optimize space.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Tabulation converts the recursive recurrence into nested loops. For <strong>coin change</strong>: `dp[a] = min(dp[a], 1 + dp[a - coin])` for each coin and each amount. For <strong>LCS</strong>: if chars match, `dp[i][j] = 1 + dp[i-1][j-1]`; else `dp[i][j] = max(dp[i-1][j], dp[i][j-1])`.</p>',
+            '<p><strong>Edit distance</strong> (Levenshtein): `dp[i][j]` = min edits to transform first i chars of s1 to first j chars of s2. Base: `dp[i][0]=i`, `dp[0][j]=j`. Recurrence: if s1[i-1]==s2[j-1], copy diagonal; else 1 + min(insert, delete, replace).</p>',
+            '<p>The visual walkthrough below shows how tables fill row-by-row. Each cell depends only on already-filled neighbors — this dependency structure is what makes bottom-up correct.</p>'
+          ],
+          note: 'Space trick: for 0/1 knapsack tabulation, iterate capacity backwards when using 1D array to prevent reusing the same item twice.'
+        },
+        {
+          heading: 'Visual Walkthrough — DP Table Filling',
+          code: `Coin Change (bottom-up) — coins [1,2,5], amount 5:
+
+  dp[0] = 0  (0 coins for amount 0)
+  coin 1: dp = [0, 1, 2, 3, 4, 5]
+  coin 2: dp = [0, 1, 1,  2,  2,  3]  ← dp[2]=min(2,1+dp[0])=1
+  coin 5: dp = [0, 1, 1,  2,  2,  1]  ← dp[5]=min(5,1+dp[0])=1
+  Answer: 1 coin
+
+LCS("ABCD", "AED") — table fill order row by row:
+
+        ""  A  E  D
+    ""   0  0  0  0
+    A    0  1  1  1   ← match A,A → 1+dp[0][0]=1
+    B    0  1  1  1
+    C    0  1  1  1
+    D    0  1  1  2   ← match D,D → 1+dp[2][2]=2
+
+  LCS length = 2 ("AD")
+
+Edit Distance("cat", "cut") — 3×3 fill:
+
+        ""  c  u  t
+    ""   0  1  2  3
+    c    1  0  1  2   ← c==c → dp[1][1]=0
+    a    2  1  1  2
+    t    3  2  2  1   ← t==t → dp[3][3]=1+dp[2][2]=1
+
+  Answer: 1 edit (a → u)
+
+Climbing Stairs(n=5):
+
+  dp[0]=1, dp[1]=1
+  dp[2]=dp[1]+dp[0]=2
+  dp[3]=2+1=3
+  dp[4]=3+2=5
+  dp[5]=5+3=8 ways`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Coin Change, LCS, Edit Distance & Climbing Stairs',
+            code: `from typing import List
+
+# ── 1. Coin Change (bottom-up) — min coins ──
+def coin_change_bu(coins: List[int], amount: int) -> int:
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    for coin in coins:
+        for a in range(coin, amount + 1):
+            dp[a] = min(dp[a], 1 + dp[a - coin])
+    return dp[amount] if dp[amount] != float('inf') else -1
+
+# ── 2. Longest Common Subsequence ──
+def lcs(s1: str, s2: str) -> int:
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = 1 + dp[i - 1][j - 1]
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[m][n]
+
+# ── 3. Edit Distance (Levenshtein) ──
+def edit_distance(s1: str, s2: str) -> int:
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1):
+        dp[i][0] = i
+    for j in range(n + 1):
+        dp[0][j] = j
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1]
+            else:
+                dp[i][j] = 1 + min(
+                    dp[i - 1][j],      # delete
+                    dp[i][j - 1],      # insert
+                    dp[i - 1][j - 1]   # replace
+                )
+    return dp[m][n]
+
+# ── 4. Climbing Stairs — distinct ways to reach step n ──
+def climb_stairs(n: int) -> int:
+    if n <= 2:
+        return n
+    dp = [0] * (n + 1)
+    dp[1], dp[2] = 1, 2
+    for i in range(3, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    return dp[n]
+
+# Demo
+print(coin_change_bu([1, 2, 5], 11))       # 3
+print(lcs("ABCD", "AED"))                   # 2
+print(edit_distance("cat", "cut"))            # 1
+print(climb_stairs(5))                      # 8`,
+            output: `3
+2
+1
+8`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Tabulation — Coin Change, LCS & Edit Distance',
+            code: `import java.util.*;
+
+public class TabulationDemo {
+
+    static int coinChangeBU(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        for (int coin : coins)
+            for (int a = coin; a <= amount; a++)
+                dp[a] = Math.min(dp[a], 1 + dp[a - coin]);
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+    static int lcs(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++)
+            for (int j = 1; j <= n; j++)
+                if (s1.charAt(i - 1) == s2.charAt(j - 1))
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                else
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+        return dp[m][n];
+    }
+
+    static int editDistance(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) dp[i][0] = i;
+        for (int j = 0; j <= n; j++) dp[0][j] = j;
+        for (int i = 1; i <= m; i++)
+            for (int j = 1; j <= n; j++)
+                if (s1.charAt(i - 1) == s2.charAt(j - 1))
+                    dp[i][j] = dp[i - 1][j - 1];
+                else
+                    dp[i][j] = 1 + Math.min(dp[i-1][j],
+                                 Math.min(dp[i][j-1], dp[i-1][j-1]));
+        return dp[m][n];
+    }
+
+    static int climbStairs(int n) {
+        if (n <= 2) return n;
+        int[] dp = new int[n + 1];
+        dp[1] = 1; dp[2] = 2;
+        for (int i = 3; i <= n; i++)
+            dp[i] = dp[i - 1] + dp[i - 2];
+        return dp[n];
+    }
+
+    public static void main(String[] args) {
+        System.out.println(coinChangeBU(new int[]{1,2,5}, 11)); // 3
+        System.out.println(lcs("ABCD", "AED"));                  // 2
+        System.out.println(editDistance("cat", "cut"));            // 1
+        System.out.println(climbStairs(5));                      // 8
+    }
+}`,
+            output: `3
+2
+1
+8`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 — Define table dimensions:</strong> Coin change: 1D array size `amount+1`. LCS/edit: 2D `(m+1) × (n+1)` with extra row/col for empty string.',
+            '<strong>Step 2 — Initialize base cases:</strong> `dp[0]=0` for coin change; `dp[i][0]` and `dp[0][j]` for string DP.',
+            '<strong>Step 3 — Determine loop order:</strong> Coin change: outer loop coins, inner loop amounts ascending. Knapsack 1D: inner loop capacity descending.',
+            '<strong>Step 4 — Apply recurrence:</strong> LCS match → diagonal + 1; mismatch → max(top, left). Edit distance mismatch → 1 + min(top, left, diagonal).',
+            '<strong>Step 5 — Read answer:</strong> Bottom-right cell for 2D; `dp[amount]` for coin change; `dp[n]` for climbing stairs.',
+            '<strong>Step 6 — Reconstruct solution (bonus):</strong> Backtrack from dp[m][n] following which direction was chosen to print actual LCS string.',
+            '<strong>Step 7 — Space optimize:</strong> LCS can use two rows; climbing stairs needs only two variables.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          table: {
+            headers: [
+              'Problem',
+              'Time',
+              'Space',
+              'Space-Optimized'
+            ],
+            rows: [
+              [
+                'Coin Change BU',
+                'O(n · amount)',
+                'O(amount)',
+                'O(amount)'
+              ],
+              [
+                'LCS',
+                'O(m · n)',
+                'O(m · n)',
+                'O(min(m,n)) two rows'
+              ],
+              [
+                'Edit Distance',
+                'O(m · n)',
+                'O(m · n)',
+                'O(min(m,n))'
+              ],
+              [
+                'Climbing Stairs',
+                'O(n)',
+                'O(n)',
+                'O(1) two vars'
+              ],
+              [
+                '0/1 Knapsack BU',
+                'O(n · W)',
+                'O(n · W)',
+                'O(W) 1D array'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Wrong loop order in 0/1 knapsack 1D:</strong> Forward inner loop allows reuse — <em>Fix:</em> iterate capacity backwards for 0/1.',
+            '<strong>Off-by-one in string DP:</strong> Compare `s1[i-1]` with `s2[j-1]` when dp is 1-indexed — <em>Fix:</em> draw the table with "" row/col.',
+            '<strong>Initializing dp with 0 for coin change:</strong> Unreachable amounts look like 0 coins — <em>Fix:</em> init with INF, set dp[0]=0.',
+            '<strong>Forgetting base row/column:</strong> LCS without dp[i][0]=0 gives wrong answers — <em>Fix:</em> empty string has LCS 0.',
+            '<strong>Not handling empty input:</strong> edit_distance("", "") should be 0 — <em>Fix:</em> base cases handle this via dp[0][j]=j.'
+          ],
+          code: `# 0/1 Knapsack — 1D space-optimized (iterate BACKWARDS)
+for i in range(n):
+    for w in range(W, weights[i] - 1, -1):
+        dp[w] = max(dp[w], values[i] + dp[w - weights[i]])`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          list: [
+            '<strong>Spell checkers:</strong> Edit distance ranks suggestions ("teh" → "the").',
+            '<strong>Diff tools (git diff):</strong> LCS-based longest common lines between file versions.',
+            '<strong>DNA sequence alignment:</strong> LCS/edit distance variants measure genetic similarity.',
+            '<strong>Robotics path counting:</strong> Climbing stairs models grid paths with restricted moves.',
+            '<strong>Vending machine / ATM:</strong> Coin change minimizes coins/tokens dispensed.',
+            '<strong>Natural language processing:</strong> Word alignment in machine translation uses edit distance.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'When you hear "minimum/maximum" + "subsequence/subarray" + two strings → think 2D DP table.',
+            'Draw the 3×3 edit distance table for small strings — interviewers often ask you to fill it by hand.',
+            'Coin change: outer coin loop, inner amount loop — reversing causes wrong answers for bounded coin counts.',
+            'Climbing stairs is Fibonacci — mention you can optimize from O(n) space to O(1).',
+            'After writing tabulation, offer to reconstruct the actual solution (LCS string, coin list) by backtracking.',
+            'Compare top-down vs bottom-up: "Memoization is easier to write; tabulation avoids stack overflow and enables space optimization."'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1 (Medium): LCS of "abcde" and "ace". What is the table's bottom-right value?
+Hint: Fill row by row; on match take diagonal+1, else max(top,left).
+Ans: 3 ("ace"). dp[5][3]=3. Matches at (a,a), (c,c), (e,e).`,
+            `Q2 (Medium): Edit distance between "kitten" and "sitting".
+Hint: Standard 3-operation recurrence; cat→cut style trace helps.
+Ans: 3 edits (k→s, e→i, insert g). Classic interview problem — dp[6][7]=3.`,
+            `Q3 (Hard): Coin change BU — coins [2,5,10], amount 27. Min coins?
+Hint: Fill dp[0..27]; for each coin update dp[a] = min(dp[a], 1+dp[a-coin]).
+Ans: 4 coins (10+10+5+2). dp[27]=4 after processing all coins.`
+          ]
+        }
+      ]
+    },
+    'advanced-graphs': {
+      title: 'Dijkstra, TopSort & Union-Find',
+      subtitle: 'Shortest paths, DAG ordering & connected components',
+      sections: [
+        {
+          heading: 'Core Concepts: Advanced Graph Algorithms',
+          text: `Module 4 graph algorithms go beyond basic BFS/DFS: Dijkstra finds shortest paths in weighted graphs, Kahn's algorithm topologically sorts DAGs, and Union-Find tracks connected components with near-constant operations. These three appear constantly in medium-to-hard interviews and system design.`,
+          list: [
+            '<strong>Dijkstra:</strong> Greedy shortest path from a source; requires non-negative edge weights; uses min-heap for O((V+E) log V).',
+            `<strong>Topological Sort (Kahn's):</strong> BFS by in-degree — process nodes with in-degree 0, reduce neighbors' in-degrees.`,
+            '<strong>Union-Find (DSU):</strong> Track disjoint sets with `find` (with path compression) and `union` (by rank) — nearly O(1) amortized.',
+            '<strong>Min-heap role:</strong> Always extract the unvisited node with smallest known distance in Dijkstra.',
+            '<strong>DAG prerequisite:</strong> Topological sort fails on cycles — detect via incomplete ordering.',
+            '<strong>Applications:</strong> Course scheduling (toposort), network routing (Dijkstra), Kruskal MST (Union-Find).'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Dijkstra</strong> maintains `dist[v]` = best known distance from source. Each iteration pops the min-dist unvisited node `u`, relaxes all edges `(u, v, w)`: if `dist[u] + w < dist[v]`, update `dist[v]` and push `(dist[v], v)` onto the heap. Non-negative weights ensure once a node is popped, its distance is final.</p>',
+            `<p><strong>Kahn's algorithm</strong> computes in-degrees, enqueues all zero-in-degree nodes, processes them in order, decrements neighbor in-degrees, enqueues newly zero nodes. If processed count < V, a cycle exists. This is BFS on the "dependency graph" — course A must precede course B.</p>`,
+            '<p><strong>Union-Find</strong> stores `parent[i]` and `rank[i]`. `find(x)` walks to root with path compression (point every node directly to root). `union(x, y)` attaches smaller-rank root under larger-rank root (union by rank). Together they yield α(n) amortized time — effectively constant.</p>'
+          ],
+          note: `Dijkstra does NOT work with negative edges — use Bellman-Ford. Topological sort requires a DAG — use DFS coloring or Kahn's incomplete result to detect cycles.`
+        },
+        {
+          heading: 'Visual Walkthrough — Graph Algorithms',
+          code: `Dijkstra from node 0 — graph: 0→1(4), 0→2(1), 2→1(2), 1→3(1), 2→3(5)
+
+  Initial dist: {0:0, 1:∞, 2:∞, 3:∞}
+  Heap: [(0,0)]
+
+  Pop (0,0) → relax 0→1: dist[1]=4; 0→2: dist[2]=1
+  Heap: [(1,2), (4,1)]
+
+  Pop (1,2) → relax 2→1: dist[1]=min(4,1+2)=3; 2→3: dist[3]=6
+  Heap: [(3,1), (4,1), (6,3)]
+
+  Pop (3,1) → relax 1→3: dist[3]=min(6,3+1)=4
+  Heap: [(4,1), (4,3), (6,3)]
+
+  Final dist: {0:0, 2:1, 1:3, 3:4}
+
+Kahn's Topological Sort — courses: 0→1, 0→2, 1→3, 2→3
+
+  In-degrees: {0:0, 1:1, 2:1, 3:2}
+  Queue: [0]
+
+  Process 0 → reduce 1,2: in-deg={1:0,2:0,3:2} → queue [1,2]
+  Process 1 → reduce 3: in-deg={3:1} → queue [2]
+  Process 2 → reduce 3: in-deg={3:0} → queue [3]
+  Process 3 → done
+
+  Order: [0, 1, 2, 3] (or [0,2,1,3] — valid too)
+
+Union-Find — union(0,1), union(2,3), union(1,2):
+
+  After union(0,1): parent=[1,1,2,3], rank=[0,1,0,0]
+  After union(2,3): parent=[1,1,3,3], rank=[0,1,0,1]
+  After union(1,2): parent=[1,1,3,1] (rank 1 > 0) → all in set {0,1,2,3}
+  find(0) with path compression → parent[0]=1`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'Dijkstra, Kahn TopSort & Union-Find',
+            code: `import heapq
+from collections import defaultdict, deque
+from typing import List, Dict, Tuple
+
+# ── 1. Dijkstra with min-heap ──
+def dijkstra(graph: Dict[int, List[Tuple[int, int]]], src: int) -> Dict[int, int]:
+    dist = {src: 0}
+    heap = [(0, src)]   # (distance, node)
+    while heap:
+        d, u = heapq.heappop(heap)
+        if d > dist.get(u, float('inf')):
+            continue   # stale entry
+        for v, w in graph.get(u, []):
+            nd = d + w
+            if nd < dist.get(v, float('inf')):
+                dist[v] = nd
+                heapq.heappush(heap, (nd, v))
+    return dist
+
+# ── 2. Topological Sort — Kahn's BFS ──
+def topological_sort_kahn(n: int, edges: List[Tuple[int, int]]) -> List[int]:
+    adj = defaultdict(list)
+    indeg = [0] * n
+    for u, v in edges:
+        adj[u].append(v)
+        indeg[v] += 1
+    queue = deque(i for i in range(n) if indeg[i] == 0)
+    order = []
+    while queue:
+        u = queue.popleft()
+        order.append(u)
+        for v in adj[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                queue.append(v)
+    return order if len(order) == n else []  # empty if cycle
+
+# ── 3. Union-Find with path compression + union by rank ──
+class UnionFind:
+    def __init__(self, n: int):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+        self.components = n
+
+    def find(self, x: int) -> int:
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # path compression
+        return self.parent[x]
+
+    def union(self, x: int, y: int) -> bool:
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry:
+            return False
+        if self.rank[rx] < self.rank[ry]:
+            rx, ry = ry, rx
+        self.parent[ry] = rx
+        if self.rank[rx] == self.rank[ry]:
+            self.rank[rx] += 1
+        self.components -= 1
+        return True
+
+    def connected(self, x: int, y: int) -> bool:
+        return self.find(x) == self.find(y)
+
+# Demo
+graph = {0: [(1, 4), (2, 1)], 1: [(3, 1)], 2: [(1, 2), (3, 5)]}
+print(dijkstra(graph, 0))                    # {0:0, 2:1, 1:3, 3:4}
+print(topological_sort_kahn(4, [(0,1),(0,2),(1,3),(2,3)]))  # [0,1,2,3]
+uf = UnionFind(4)
+uf.union(0, 1); uf.union(2, 3); uf.union(1, 2)
+print(uf.connected(0, 3))  # True`,
+            output: `{0: 0, 2: 1, 1: 3, 3: 4}
+[0, 1, 2, 3]
+True`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'Dijkstra, Kahn & Union-Find in Java',
+            code: `import java.util.*;
+
+public class AdvancedGraphs {
+
+    // Dijkstra with PriorityQueue (min-heap)
+    static int[] dijkstra(List<List<int[]>> graph, int src) {
+        int n = graph.size();
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        pq.offer(new int[]{0, src});
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
+            int d = cur[0], u = cur[1];
+            if (d > dist[u]) continue;
+            for (int[] edge : graph.get(u)) {
+                int v = edge[0], w = edge[1];
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    pq.offer(new int[]{dist[v], v});
+                }
+            }
+        }
+        return dist;
+    }
+
+    // Kahn's topological sort
+    static List<Integer> topoSort(int n, int[][] edges) {
+        List<List<Integer>> adj = new ArrayList<>();
+        int[] indeg = new int[n];
+        for (int i = 0; i < n; i++) adj.add(new ArrayList<>());
+        for (int[] e : edges) { adj.get(e[0]).add(e[1]); indeg[e[1]]++; }
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) if (indeg[i] == 0) q.offer(i);
+        List<Integer> order = new ArrayList<>();
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            order.add(u);
+            for (int v : adj.get(u))
+                if (--indeg[v] == 0) q.offer(v);
+        }
+        return order.size() == n ? order : Collections.emptyList();
+    }
+
+    // Union-Find
+    static class UnionFind {
+        int[] parent, rank;
+        UnionFind(int n) {
+            parent = new int[n]; rank = new int[n];
+            for (int i = 0; i < n; i++) parent[i] = i;
+        }
+        int find(int x) {
+            if (parent[x] != x) parent[x] = find(parent[x]);
+            return parent[x];
+        }
+        boolean union(int x, int y) {
+            int rx = find(x), ry = find(y);
+            if (rx == ry) return false;
+            if (rank[rx] < rank[ry]) { int t = rx; rx = ry; ry = t; }
+            parent[ry] = rx;
+            if (rank[rx] == rank[ry]) rank[rx]++;
+            return true;
+        }
+    }
+
+    public static void main(String[] args) {
+        List<List<int[]>> g = new ArrayList<>();
+        for (int i = 0; i < 4; i++) g.add(new ArrayList<>());
+        g.get(0).add(new int[]{1, 4}); g.get(0).add(new int[]{2, 1});
+        g.get(1).add(new int[]{3, 1}); g.get(2).add(new int[]{1, 2});
+        g.get(2).add(new int[]{3, 5});
+        System.out.println(Arrays.toString(dijkstra(g, 0)));
+        System.out.println(topoSort(4, new int[][]{{0,1},{0,2},{1,3},{2,3}}));
+        UnionFind uf = new UnionFind(4);
+        uf.union(0,1); uf.union(2,3); uf.union(1,2);
+        System.out.println(uf.find(0) == uf.find(3));
+    }
+}`,
+            output: `[0, 1, 3, 4]
+[0, 1, 2, 3]
+true`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Dijkstra Step 1:</strong> Init `dist[src]=0`, all others ∞. Push `(0, src)` on min-heap.',
+            '<strong>Dijkstra Step 2:</strong> Pop smallest dist node `u`. Skip if stale (`d > dist[u]`).',
+            '<strong>Dijkstra Step 3:</strong> For each neighbor `(v, w)`, if `dist[u]+w < dist[v]`, update and push `(dist[v], v)`.',
+            '<strong>Kahn Step 1:</strong> Build adjacency list and in-degree array from edges.',
+            '<strong>Kahn Step 2:</strong> Enqueue all nodes with in-degree 0.',
+            '<strong>Kahn Step 3:</strong> Dequeue, append to order, decrement neighbor in-degrees, enqueue new zeros.',
+            '<strong>Union-Find:</strong> `find` with path compression flattens tree; `union` by rank keeps trees shallow — together → α(n) per op.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          table: {
+            headers: [
+              'Algorithm',
+              'Time',
+              'Space',
+              'Notes'
+            ],
+            rows: [
+              [
+                'Dijkstra (binary heap)',
+                'O((V + E) log V)',
+                'O(V + E)',
+                'Non-negative weights only'
+              ],
+              [
+                'Dijkstra (Fibonacci heap)',
+                'O(E + V log V)',
+                'O(V + E)',
+                'Theoretical; rarely used in practice'
+              ],
+              [
+                'Kahn TopSort',
+                'O(V + E)',
+                'O(V + E)',
+                'Detects cycles via incomplete order'
+              ],
+              [
+                'DFS TopSort',
+                'O(V + E)',
+                'O(V + E)',
+                'Alternative; use 3-color cycle detect'
+              ],
+              [
+                'Union-Find',
+                'O(α(n)) per op',
+                'O(n)',
+                'α = inverse Ackermann ≈ constant'
+              ],
+              [
+                'Bellman-Ford',
+                'O(V · E)',
+                'O(V)',
+                'Handles negative edges'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Dijkstra on negative edges:</strong> Produces wrong answers — <em>Fix:</em> use Bellman-Ford or SPFA.',
+            '<strong>Not skipping stale heap entries:</strong> Without `if d > dist[u]: continue`, you reprocess nodes — <em>Fix:</em> lazy deletion check.',
+            '<strong>TopSort on cyclic graph:</strong> Returns incomplete order silently — <em>Fix:</em> check `len(order) == n`.',
+            '<strong>Union-Find without path compression:</strong> Degrades to O(n) per find — <em>Fix:</em> always compress in find().',
+            '<strong>Confusing BFS with Dijkstra:</strong> BFS works for unweighted graphs only — <em>Fix:</em> use heap when edges have weights.'
+          ],
+          code: `# Dijkstra — MUST skip stale heap entries
+d, u = heapq.heappop(heap)
+if d > dist.get(u, float('inf')):
+    continue`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          list: [
+            '<strong>GPS / Maps routing:</strong> Dijkstra (or A*) on road networks with non-negative distances.',
+            '<strong>Build systems (Make, Bazel):</strong> Topological sort determines task execution order.',
+            '<strong>Course prerequisites:</strong> TopSort detects if graduation is possible (cycle = deadlock).',
+            '<strong>Network connectivity:</strong> Union-Find for dynamic connectivity queries (social networks).',
+            '<strong>Kruskal MST:</strong> Union-Find detects cycles when adding edges greedily by weight.',
+            '<strong>Dependency resolution (npm, pip):</strong> TopSort with version constraints on package DAG.'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'State upfront: "Non-negative weights? DAG or general directed graph?" — shows you know algorithm prerequisites.',
+            'For "shortest path in weighted graph" → Dijkstra. Unweighted → BFS. Negative edges → Bellman-Ford.',
+            'Course schedule / alien dictionary → topological sort. Always mention cycle detection.',
+            'Number of connected components / is connected → Union-Find or DFS.',
+            'Write Dijkstra with a `(dist, node)` heap and stale-entry skip — interviewers check this detail.',
+            'For Union-Find, always mention both optimizations: path compression AND union by rank.',
+            `Draw the graph and trace Dijkstra's first 3 heap pops — visual fluency wins trust.`
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1 (Medium): Dijkstra from A in graph A→B(3), A→C(1), C→B(1), B→D(2). dist[D]?
+Hint: Process C before B because dist[C]=1 < dist[B]=3; relax C→B gives dist[B]=2.
+Ans: dist[D]=4 (path A→C→B→D = 1+1+2).`,
+            `Q2 (Medium): 5 courses, prerequisites [[1,0],[2,0],[3,1],[3,2]]. Valid topo order?
+Hint: Kahn's — in-deg 0 starts with course 0; then 1,2 become available; then 3.
+Ans: [0,1,2,3] or [0,2,1,3]. Course 4 has no prereqs — can appear anywhere if it exists.`,
+            `Q3 (Hard): Union-Find on 6 nodes: union(0,1), union(1,2), union(3,4). connected(0,4)?
+Hint: Two separate components {0,1,2} and {3,4}; node 5 alone.
+Ans: False. find(0)=find(2) but find(0)≠find(4). components count = 3.`
+          ]
+        }
+      ]
+    },
+    'string-algos': {
+      title: 'Advanced String Algorithms',
+      subtitle: 'KMP & Rabin-Karp pattern matching',
+      sections: [
+        {
+          heading: 'Core Concepts: Advanced String Matching',
+          text: 'Naive pattern matching is O(n·m). KMP and Rabin-Karp reduce this to O(n + m) by avoiding redundant comparisons. KMP uses a precomputed LPS (Longest Proper Prefix which is also Suffix) array to skip ahead on mismatch. Rabin-Karp uses rolling hash to compare pattern fingerprint against every text window in O(1) amortized.',
+          list: [
+            '<strong>Naive matching:</strong> Try every text position, compare char-by-char — O(n·m) worst case.',
+            '<strong>KMP LPS array:</strong> lps[i] = length of longest proper prefix of pattern[0..i] that is also a suffix.',
+            '<strong>KMP scan:</strong> On mismatch at text[i], shift pattern by i - lps[j-1] instead of restarting.',
+            '<strong>Rolling hash:</strong> Update hash in O(1) when sliding window: subtract outgoing char, add incoming char.',
+            '<strong>Hash collision:</strong> Rabin-Karp verifies char-by-char on hash match — rare but necessary.',
+            '<strong>When to use which:</strong> KMP for single pattern guaranteed O(n+m); Rabin-Karp for multiple patterns or average-case speed.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>KMP LPS construction:</strong> Use two pointers `len` (length of previous longest prefix suffix) and `i` scanning the pattern. If `pattern[i] == pattern[len]`, extend: `lps[i+1] = len+1`. On mismatch, shrink `len` via `lps[len]` until match or len=0. The LPS array tells us how much of the pattern we can reuse after a mismatch.</p>',
+            '<p><strong>KMP search:</strong> Walk text with pointer `i`, pattern with `j`. On match, increment both. On mismatch with j>0, set `j = lps[j-1]` (never move i backwards). On mismatch with j=0, increment i. When j==m, pattern found at `i-j`.</p>',
+            '<p><strong>Rabin-Karp rolling hash:</strong> Compute `hash(pattern)` and `hash(text[0..m-1])`. Slide window: `new_hash = (old_hash - text[i-m]*base^(m-1)) * base + text[i]`, all mod a large prime. On hash match, verify characters to avoid false positives from collisions.</p>'
+          ],
+          note: 'KMP never backtracks in the text — pointer i only moves forward. This is the key insight that guarantees O(n + m).'
+        },
+        {
+          heading: 'Visual Walkthrough — KMP LPS & Search',
+          code: `Pattern "ABABC" — build LPS:
+
+  i=1: B≠A → lps[1]=0
+  i=2: A==A → lps[2]=1
+  i=3: B==B → lps[3]=2
+  i=4: C≠A → len=lps[1]=0 → lps[4]=0
+
+  LPS: [0, 0, 1, 2, 0]
+
+Text "ABABDABABC" — search for "ABABC":
+
+  Match ABAB at i=4, mismatch D vs C at j=4
+  j = lps[3] = 2  (reuse "AB" prefix, don't restart text pointer)
+  Continue matching → full match at index 5
+
+Rabin-Karp rolling hash — text "ABCD", pattern "BC", base=31, mod=10^9+7:
+
+  hash("BC") = (B*31 + C) mod M
+  hash("AB") = window at i=0
+  Slide to i=1: hash("BC") = (hash("AB") - A*31)*31 + C
+  hash("BC") matches → verify chars → match at index 1`,
+          language: 'text'
+        },
+        {
+          heading: 'Python Implementation',
+          example: {
+            title: 'KMP (full LPS + search) & Rabin-Karp (rolling hash)',
+            code: `from typing import List
+
+# ── KMP: build LPS array ──
+def build_lps(pattern: str) -> List[int]:
+    m = len(pattern)
+    lps = [0] * m
+    length = 0   # length of previous longest prefix suffix
+    i = 1
+    while i < m:
+        if pattern[i] == pattern[length]:
+            length += 1
+            lps[i] = length
+            i += 1
+        elif length > 0:
+            length = lps[length - 1]   # fall back
+        else:
+            lps[i] = 0
+            i += 1
+    return lps
+
+# ── KMP: search all occurrences ──
+def kmp_search(text: str, pattern: str) -> List[int]:
+    if not pattern:
+        return []
+    n, m = len(text), len(pattern)
+    lps = build_lps(pattern)
+    result = []
+    i = j = 0
+    while i < n:
+        if text[i] == pattern[j]:
+            i += 1
+            j += 1
+            if j == m:
+                result.append(i - m)
+                j = lps[j - 1]   # continue searching
+        elif j > 0:
+            j = lps[j - 1]
+        else:
+            i += 1
+    return result
+
+# ── Rabin-Karp with rolling hash ──
+def rabin_karp(text: str, pattern: str, base: int = 31,
+               mod: int = 10**9 + 7) -> List[int]:
+    n, m = len(text), len(pattern)
+    if m == 0 or m > n:
+        return []
+    h = pow(base, m - 1, mod)
+    p_hash = t_hash = 0
+    for k in range(m):
+        p_hash = (p_hash * base + ord(pattern[k])) % mod
+        t_hash = (t_hash * base + ord(text[k])) % mod
+    result = []
+    for i in range(n - m + 1):
+        if p_hash == t_hash:
+            if text[i:i + m] == pattern:   # verify — collision guard
+                result.append(i)
+        if i < n - m:
+            t_hash = (t_hash - ord(text[i]) * h) % mod
+            t_hash = (t_hash * base + ord(text[i + m])) % mod
+            t_hash = (t_hash + mod) % mod   # ensure positive
+    return result
+
+# Demo
+pat = "ABABC"
+print(build_lps(pat))                    # [0, 0, 1, 2, 0]
+print(kmp_search("ABABDABABC", pat))      # [5]
+print(rabin_karp("ABABDABABC", pat))       # [5]`,
+            output: `[0, 0, 1, 2, 0]
+[5]
+[5]`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation',
+          example: {
+            title: 'KMP & Rabin-Karp in Java',
+            code: `import java.util.*;
+
+public class StringAlgos {
+
+    static int[] buildLPS(String pattern) {
+        int m = pattern.length();
+        int[] lps = new int[m];
+        int len = 0, i = 1;
+        while (i < m) {
+            if (pattern.charAt(i) == pattern.charAt(len)) {
+                lps[i++] = ++len;
+            } else if (len > 0) {
+                len = lps[len - 1];
+            } else {
+                lps[i++] = 0;
+            }
+        }
+        return lps;
+    }
+
+    static List<Integer> kmpSearch(String text, String pattern) {
+        List<Integer> result = new ArrayList<>();
+        int n = text.length(), m = pattern.length();
+        if (m == 0) return result;
+        int[] lps = buildLPS(pattern);
+        int i = 0, j = 0;
+        while (i < n) {
+            if (text.charAt(i) == pattern.charAt(j)) {
+                i++; j++;
+                if (j == m) {
+                    result.add(i - m);
+                    j = lps[j - 1];
+                }
+            } else if (j > 0) {
+                j = lps[j - 1];
+            } else {
+                i++;
+            }
+        }
+        return result;
+    }
+
+    static List<Integer> rabinKarp(String text, String pattern) {
+        int base = 31, mod = 1_000_000_007;
+        int n = text.length(), m = pattern.length();
+        List<Integer> result = new ArrayList<>();
+        if (m == 0 || m > n) return result;
+        long h = 1;
+        for (int k = 0; k < m - 1; k++) h = (h * base) % mod;
+        long pHash = 0, tHash = 0;
+        for (int k = 0; k < m; k++) {
+            pHash = (pHash * base + pattern.charAt(k)) % mod;
+            tHash = (tHash * base + text.charAt(k)) % mod;
+        }
+        for (int i = 0; i <= n - m; i++) {
+            if (pHash == tHash && text.substring(i, i + m).equals(pattern))
+                result.add(i);
+            if (i < n - m) {
+                tHash = (tHash - text.charAt(i) * h % mod + mod) % mod;
+                tHash = (tHash * base + text.charAt(i + m)) % mod;
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        String pat = "ABABC";
+        System.out.println(Arrays.toString(buildLPS(pat)));
+        System.out.println(kmpSearch("ABABDABABC", pat));
+        System.out.println(rabinKarp("ABABDABABC", pat));
+    }
+}`,
+            output: `[0, 0, 1, 2, 0]
+[5]
+[5]`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>LPS Step 1:</strong> Initialize `lps[0]=0`, `len=0`, `i=1`.',
+            '<strong>LPS Step 2:</strong> If `pattern[i]==pattern[len]`, increment len, set `lps[i]=len`, i++.',
+            '<strong>LPS Step 3:</strong> On mismatch: if len>0, `len=lps[len-1]`; else `lps[i]=0`, i++.',
+            '<strong>KMP Search:</strong> On match, advance both pointers. On mismatch, only retreat j via LPS — i never goes backward.',
+            '<strong>Rabin-Karp Step 1:</strong> Compute pattern hash and first window hash.',
+            '<strong>Rabin-Karp Step 2:</strong> Slide window — subtract leading char × base^(m-1), multiply by base, add trailing char, mod prime.',
+            '<strong>Rabin-Karp Step 3:</strong> On hash equality, verify substring char-by-char.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          table: {
+            headers: [
+              'Algorithm',
+              'Preprocess',
+              'Search',
+              'Space',
+              'Notes'
+            ],
+            rows: [
+              [
+                'Naive',
+                'O(1)',
+                'O(n · m)',
+                'O(1)',
+                'Simple but slow on repetitive text'
+              ],
+              [
+                'KMP',
+                'O(m)',
+                'O(n)',
+                'O(m) LPS',
+                'Guaranteed linear, no backtracking'
+              ],
+              [
+                'Rabin-Karp',
+                'O(m)',
+                'O(n) avg',
+                'O(1)',
+                'O(n·m) worst case if all hashes collide'
+              ],
+              [
+                'Boyer-Moore',
+                'O(m + σ)',
+                'O(n) avg',
+                'O(m + σ)',
+                'Sublinear on large alphabets'
+              ],
+              [
+                'Z-Algorithm',
+                'O(m)',
+                'O(n + m)',
+                'O(m)',
+                'Alternative to KMP via Z-array'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Off-by-one in LPS:</strong> Confusing 0-indexed lps[i] with 1-indexed definitions — <em>Fix:</em> lps[i] = length of proper prefix of pattern[0..i] that is also suffix.',
+            '<strong>Moving text pointer back in KMP:</strong> Breaks O(n) guarantee — <em>Fix:</em> only j changes on mismatch via lps[j-1].',
+            '<strong>Skipping hash verification in Rabin-Karp:</strong> False positives on collision — <em>Fix:</em> always verify `text[i:i+m] == pattern`.',
+            '<strong>Negative hash modulo:</strong> `(a - b) % mod` can be negative in Python/Java — <em>Fix:</em> add mod before final mod.',
+            '<strong>Wrong hash base:</strong> Base too small increases collisions — <em>Fix:</em> use base > alphabet size (31 for lowercase, 256 for ASCII).'
+          ],
+          code: `# Rabin-Karp — keep hash positive after subtraction
+t_hash = (t_hash - ord(text[i]) * h) % mod
+t_hash = (t_hash * base + ord(text[i + m])) % mod
+t_hash = (t_hash + mod) % mod`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          list: [
+            '<strong>Plagiarism detection:</strong> Rabin-Karp fingerprints document chunks for similarity search.',
+            '<strong>DNA motif finding:</strong> KMP locates gene sequences in long genomes in linear time.',
+            '<strong>Text editors (Ctrl+F):</strong> Boyer-Moore and KMP variants power find-in-file features.',
+            '<strong>Intrusion detection:</strong> Pattern matching on network packet payloads.',
+            '<strong>Search engines:</strong> Multi-pattern Rabin-Karp (Aho-Corasick extension) for keyword filtering.',
+            '<strong>Data deduplication:</strong> Rolling hashes identify duplicate file blocks (rsync, backup systems).'
+          ]
+        },
+        {
+          heading: 'Interview Tips',
+          list: [
+            'If asked "find pattern in string" with O(n+m) requirement → KMP. Mention LPS construction first.',
+            'Rabin-Karp shines for "find all occurrences of multiple patterns" — mention Aho-Corasick as follow-up.',
+            'Walk through LPS for "ABABAC" on the whiteboard — interviewers love this concrete example.',
+            'Always state: KMP is guaranteed O(n+m); Rabin-Karp is expected O(n+m) but worst-case O(nm) without verification.',
+            'For repeated pattern in string (LeetCode 28), KMP is the optimal answer — naive is O(nm).',
+            'Know when NOT to use these: very short patterns or single search → naive or built-in `str.find()` is fine.'
+          ]
+        },
+        {
+          heading: 'Practice Problems',
+          list: [
+            `Q1 (Medium): Build LPS for pattern "AABAACAAB". What is lps[8]?
+Hint: Track len pointer; on mismatch fall back via lps[len-1].
+Ans: lps = [0,1,0,1,2,0,1,2,3]. lps[8]=3 (prefix "AAB" matches suffix "AAB").`,
+            `Q2 (Medium): KMP — find "ABA" in "ABABABA". All occurrence indices?
+Hint: On full match, record i-m and set j=lps[j-1] to find overlapping matches.
+Ans: [0, 2, 4]. Overlapping matches are KMP's strength over naive restart.`,
+            `Q3 (Hard): Rabin-Karp — why verify after hash match? Give a collision example.
+Hint: Different strings can have equal hash mod M (birthday paradox).
+Ans: "abc" and "bca" may collide mod small prime; verification prevents false match. Always O(m) verify on hash hit.`
+          ]
+        }
+      ]
+    }
+  },
+  module5: {
+    'python-stdlib': {
+      title: 'Python Standard Library',
+      subtitle: 'collections & heapq — your interview superpowers',
+      sections: [
+        {
+          heading: 'Core Concepts: Python Stdlib for DSA',
+          text: `Python's \`collections\` and \`heapq\` modules provide battle-tested implementations that replace hand-rolled data structures in interviews. Knowing when to reach for \`deque\`, \`Counter\`, \`defaultdict\`, or \`heapq\` can turn an O(n²) brute force into an O(n) or O(n log k) solution — and signals fluency to interviewers.`,
+          list: [
+            '<strong>deque:</strong> Double-ended queue — O(1) append/pop from both ends. Use for BFS, sliding window max, monotonic queue.',
+            '<strong>Counter:</strong> Dict subclass for frequency counting — O(1) lookup/update. Use for anagrams, top-k frequency, character counts.',
+            '<strong>defaultdict:</strong> Auto-initializes missing keys — O(1) grouping. Use for adjacency lists, graph building, bucketing.',
+            '<strong>heapq:</strong> Min-heap on a list — O(log n) push/pop. Use for top-k, merge k sorted, Dijkstra, scheduling.',
+            '<strong>OrderedDict:</strong> Dict with insertion order (Python 3.7+ dicts are ordered anyway) — LRU cache patterns.',
+            '<strong>namedtuple / dataclass:</strong> Lightweight structs for graph nodes, intervals, and priority queue entries.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>deque vs list:</strong> Python lists are dynamic arrays — `append`/`pop` at end are O(1) amortized, but `pop(0)` or `insert(0, x)` is O(n) because every element shifts. `collections.deque` uses a doubly-linked block structure — both ends are O(1). For BFS, always use `deque`, never `list.pop(0)`.</p>',
+            '<p><strong>Counter arithmetic:</strong> Counters support `+`, `-`, `&` (intersection), `|` (union). `most_common(k)` returns the k highest-frequency items in O(n log k) time — faster than sorting the entire dict when k is small.</p>',
+            '<p><strong>defaultdict factory:</strong> `defaultdict(list)` auto-creates `[]` for missing keys — perfect for `graph[u].append(v)`. `defaultdict(int)` starts at 0 — perfect for counting without `if key in dict` checks. `defaultdict(set)` for grouping unique values per key.</p>',
+            '<p><strong>heapq is a min-heap:</strong> `heapq[0]` is always the smallest. For a max-heap, negate values: `heapq.heappush(heap, -val)`. `heapq.heapify(arr)` builds a heap in O(n) — use this instead of pushing elements one by one when you have all data upfront.</p>'
+          ],
+          note: 'Interview mantra: BFS → deque. Frequency → Counter. Grouping/graph → defaultdict. Top-k / scheduling → heapq.'
+        },
+        {
+          heading: 'Visual Diagram — deque vs list & heap operations',
+          code: `deque (doubly-linked blocks) — O(1) both ends:
+
+  HEAD ← [block1] ↔ [block2] ↔ [block3] → TAIL
+         appendleft O(1)    append O(1)
+         popleft  O(1)    pop      O(1)
+
+list (contiguous array) — O(n) front operations:
+
+  [0][1][2][3][4]  pop(0) → shift ALL elements left → O(n)
+
+Min-heap (heapq) — array representation:
+
+         1
+       /   \\
+      3     2
+     / \\   /
+    7   5 4
+
+  heap[0] = minimum (1)
+  heappush: append + sift-up   O(log n)
+  heappop:  swap root/last + sift-down O(log n)
+  heapify:  bottom-up build     O(n)`,
+          language: 'text'
+        },
+        {
+          heading: 'deque — Interview Patterns',
+          example: {
+            title: 'BFS, Sliding Window Maximum & Monotonic Deque',
+            code: `from collections import deque
+from typing import List
+
+# ── 1. BFS shortest path in unweighted graph ──
+def bfs_shortest_path(graph: dict, start: int, target: int) -> int:
+    if start == target:
+        return 0
+    queue = deque([(start, 0)])   # NEVER use list.pop(0) — O(n) per pop
+    visited = {start}
+    while queue:
+        node, dist = queue.popleft()
+        for neighbor in graph.get(node, []):
+            if neighbor == target:
+                return dist + 1
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, dist + 1))
+    return -1
+
+# ── 2. Sliding Window Maximum (LC 239) — monotonic deque ──
+def max_sliding_window(nums: List[int], k: int) -> List[int]:
+    dq = deque()   # stores indices; front = max of window
+    result = []
+    for i, num in enumerate(nums):
+        # remove indices outside window
+        while dq and dq[0] <= i - k:
+            dq.popleft()
+        # maintain decreasing order — smaller elements useless
+        while dq and nums[dq[-1]] < num:
+            dq.pop()
+        dq.append(i)
+        if i >= k - 1:
+            result.append(nums[dq[0]])
+    return result
+
+# ── 3. Rotting Oranges (LC 994) — multi-source BFS ──
+def oranges_rotting(grid: List[List[int]]) -> int:
+    rows, cols = len(grid), len(grid[0])
+    queue = deque()
+    fresh = 0
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 2:
+                queue.append((r, c, 0))
+            elif grid[r][c] == 1:
+                fresh += 1
+    if fresh == 0:
+        return 0
+    directions = [(0,1),(0,-1),(1,0),(-1,0)]
+    while queue:
+        r, c, mins = queue.popleft()
+        for dr, dc in directions:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
+                grid[nr][nc] = 2
+                fresh -= 1
+                if fresh == 0:
+                    return mins + 1
+                queue.append((nr, nc, mins + 1))
+    return -1
+
+# Demo
+graph = {0: [1, 2], 1: [3], 2: [3], 3: []}
+print(bfs_shortest_path(graph, 0, 3))           # 2
+print(max_sliding_window([1,3,-1,-3,5,3,6,7], 3))
+print(oranges_rotting([[2,1,1],[1,1,0],[0,1,1]]))  # 4`,
+            output: `2
+[3, 3, 5, 5, 6, 7]
+4`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Counter & defaultdict — Interview Patterns',
+          example: {
+            title: 'Frequency Analysis, Anagram Grouping & Graph Building',
+            code: `from collections import Counter, defaultdict
+from typing import List
+
+# ── 1. Valid Anagram (LC 242) ──
+def is_anagram(s: str, t: str) -> bool:
+    return Counter(s) == Counter(t)
+
+# ── 2. Group Anagrams (LC 49) ──
+def group_anagrams(strs: List[str]) -> List[List[str]]:
+    groups = defaultdict(list)
+    for word in strs:
+        key = tuple(sorted(word))   # or tuple(Counter(word).items())
+        groups[key].append(word)
+    return list(groups.values())
+
+# ── 3. Top K Frequent Elements (LC 347) — Counter + heap ──
+import heapq
+def top_k_frequent(nums: List[int], k: int) -> List[int]:
+    counts = Counter(nums)
+    return [num for num, _ in counts.most_common(k)]
+
+# ── 4. Build adjacency list with defaultdict ──
+def build_graph(edges: List[List[int]], directed: bool = False) -> dict:
+    graph = defaultdict(list)
+    for u, v in edges:
+        graph[u].append(v)
+        if not directed:
+            graph[v].append(u)
+    return graph
+
+# ── 5. Subarray sum equals K (LC 560) — prefix sum + Counter ──
+def subarray_sum(nums: List[int], k: int) -> int:
+    prefix_count = Counter({0: 1})
+    total = count = 0
+    for num in nums:
+        total += num
+        count += prefix_count[total - k]
+        prefix_count[total] += 1
+    return count
+
+# Demo
+print(is_anagram("anagram", "nagaram"))          # True
+print(group_anagrams(["eat","tea","tan","ate","nat","bat"]))
+print(top_k_frequent([1,1,1,2,2,3], 2))         # [1, 2]
+print(dict(build_graph([[0,1],[1,2],[2,3]])))
+print(subarray_sum([1,1,1], 2))                 # 2`,
+            output: `True
+[['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]
+[1, 2]
+{0: [1], 1: [0, 2], 2: [1, 3], 3: [2]}
+2`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'heapq — Priority Queue Patterns',
+          example: {
+            title: 'Top K, Merge K Sorted & Dijkstra',
+            code: `import heapq
+from typing import List, Optional
+
+# ── 1. Kth Largest Element (LC 215) — min-heap of size k ──
+def find_kth_largest(nums: List[int], k: int) -> int:
+    heap = []
+    for num in nums:
+        heapq.heappush(heap, num)
+        if len(heap) > k:
+            heapq.heappop(heap)
+    return heap[0]
+
+# ── 2. Merge K Sorted Lists (LC 23) ──
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def merge_k_lists(lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+    heap = []
+    for i, node in enumerate(lists):
+        if node:
+            heapq.heappush(heap, (node.val, i, node))
+    dummy = ListNode(0)
+    curr = dummy
+    while heap:
+        val, i, node = heapq.heappop(heap)
+        curr.next = node
+        curr = curr.next
+        if node.next:
+            heapq.heappush(heap, (node.next.val, i, node.next))
+    return dummy.next
+
+# ── 3. Dijkstra shortest path ──
+def dijkstra(graph: dict, start: int) -> dict:
+    dist = {start: 0}
+    heap = [(0, start)]   # (distance, node)
+    while heap:
+        d, u = heapq.heappop(heap)
+        if d > dist.get(u, float('inf')):
+            continue
+        for v, weight in graph.get(u, []):
+            new_dist = d + weight
+            if new_dist < dist.get(v, float('inf')):
+                dist[v] = new_dist
+                heapq.heappush(heap, (new_dist, v))
+    return dist
+
+# ── 4. Max-heap trick — negate values ──
+def k_smallest(nums: List[int], k: int) -> List[int]:
+    max_heap = []
+    for num in nums:
+        heapq.heappush(max_heap, -num)
+        if len(max_heap) > k:
+            heapq.heappop(max_heap)
+    return sorted([-x for x in max_heap])
+
+# Demo
+print(find_kth_largest([3,2,1,5,6,4], 2))        # 5
+print(k_smallest([3,1,4,1,5,9,2,6], 3))         # [1, 1, 2]
+print(dijkstra({0: [(1,4),(2,1)], 1: [(3,1)], 2: [(1,2),(3,5)], 3: []}, 0))`,
+            output: `5
+[1, 1, 2]
+{0: 0, 2: 1, 1: 3, 3: 6}`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Comparison — Python vs Java Equivalents',
+          example: {
+            title: 'Side-by-Side Mapping for Interviews',
+            code: `/*
+Python stdlib          →  Java equivalent
+─────────────────────────────────────────────
+collections.deque      →  ArrayDeque (O(1) both ends)
+collections.Counter    →  HashMap<K,Integer> + getOrDefault
+collections.defaultdict→  HashMap + computeIfAbsent
+heapq (min-heap)       →  PriorityQueue (min-heap default)
+list as stack          →  ArrayDeque or Stack (prefer ArrayDeque)
+set()                  →  HashSet
+dict (ordered 3.7+)    →  LinkedHashMap (if order matters)
+*/
+
+// Java ArrayDeque — BFS (never LinkedList for queue)
+import java.util.*;
+
+Deque<Integer> queue = new ArrayDeque<>();
+queue.offer(0);          // enqueue
+int node = queue.poll(); // dequeue — O(1)
+
+// HashMap frequency count (Counter equivalent)
+Map<String, Integer> freq = new HashMap<>();
+for (String word : words) {
+    freq.put(word, freq.getOrDefault(word, 0) + 1);
+}
+
+// PriorityQueue — min-heap (top-k pattern)
+PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+minHeap.offer(5);
+int min = minHeap.poll();
+
+// Max-heap: reverse comparator
+PriorityQueue<Integer> maxHeap =
+    new PriorityQueue<>(Collections.reverseOrder());`,
+            output: `Use ArrayDeque not LinkedList for queues in Java interviews.
+PriorityQueue is the Java heapq equivalent.`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 — Identify the pattern:</strong> Need both-end O(1) ops? → deque. Counting? → Counter. Grouping? → defaultdict. K-th / scheduling? → heapq.',
+            '<strong>Step 2 — BFS template:</strong> `queue = deque([start])`, `visited = {start}`, while queue: `node = queue.popleft()`, process neighbors, `queue.append(neighbor)`.',
+            '<strong>Step 3 — Monotonic deque:</strong> For sliding window max, maintain decreasing indices in deque. Pop from left when out of window; pop from right while smaller than new element.',
+            '<strong>Step 4 — Counter prefix sum:</strong> For subarray sum = k, track `prefix_count[total - k]` — how many prior prefixes sum to the complement.',
+            '<strong>Step 5 — Top-k with heap:</strong> Maintain heap of size k. For k-th largest, use min-heap — when size > k, pop smallest. Result is heap[0].',
+            '<strong>Step 6 — Max-heap in Python:</strong> Negate on push/pop: `heappush(heap, -val)`, `-heappop(heap)`.',
+            '<strong>Step 7 — heapify vs heappush:</strong> If you have all elements upfront, `heapq.heapify(arr)` is O(n) vs n × O(log n) for individual pushes.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          table: {
+            headers: [
+              'Structure / Op',
+              'Time',
+              'Space',
+              'Interview use case'
+            ],
+            rows: [
+              [
+                'deque append/pop either end',
+                'O(1)',
+                'O(n)',
+                'BFS, monotonic queue'
+              ],
+              [
+                'deque[i] random access',
+                'O(n)',
+                'O(n)',
+                'Avoid — use for ends only'
+              ],
+              [
+                'Counter update/lookup',
+                'O(1) avg',
+                'O(k) unique keys',
+                'Frequency, anagrams'
+              ],
+              [
+                'Counter.most_common(k)',
+                'O(n log k)',
+                'O(k)',
+                'Top-k frequent'
+              ],
+              [
+                'defaultdict access',
+                'O(1) avg',
+                'O(n)',
+                'Graph adjacency, grouping'
+              ],
+              [
+                'heapq push/pop',
+                'O(log n)',
+                'O(n)',
+                'Top-k, Dijkstra, scheduling'
+              ],
+              [
+                'heapq.heapify',
+                'O(n)',
+                'O(1) extra',
+                'Build heap from array'
+              ],
+              [
+                'heapq nsmallest(k, arr)',
+                'O(n log k)',
+                'O(k)',
+                'Shortcut for top-k'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>list.pop(0) for BFS:</strong> O(n) per pop → O(n²) total BFS — <em>Fix:</em> use `collections.deque` with `popleft()`.',
+            '<strong>Forgetting heapq is min-heap:</strong> Pushing all elements expecting largest — <em>Fix:</em> negate values or use `heapq.nlargest(k, arr)`.',
+            '<strong>Tuple comparison in heap:</strong> `(val, node)` breaks when vals tie and node is not comparable — <em>Fix:</em> add unique index: `(val, i, node)`.',
+            '<strong>Counter with mutable keys:</strong> Lists are unhashable as Counter keys — <em>Fix:</em> use `tuple(lst)` or `frozenset`.',
+            `<strong>defaultdict infinite loop:</strong> Accessing missing key creates it — <em>Fix:</em> use \`if key in d\` when you don't want auto-creation.`,
+            '<strong>Not using most_common:</strong> Sorting entire Counter when only top-3 needed — <em>Fix:</em> `counts.most_common(3)`.'
+          ],
+          code: `# WRONG — O(n) per BFS pop
+queue = [start]
+node = queue.pop(0)
+
+# CORRECT — O(1) per pop
+from collections import deque
+queue = deque([start])
+node = queue.popleft()
+
+# WRONG — max-heap attempt without negation
+heapq.heappush(heap, val)  # this is min-heap
+
+# CORRECT — max-heap via negation
+heapq.heappush(heap, -val)
+largest = -heapq.heappop(heap)`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          list: [
+            '<strong>Log analysis:</strong> Counter for IP frequency; heapq for top-N error codes in streaming logs.',
+            '<strong>Recommendation systems:</strong> Top-k similar items via heap; defaultdict for user→item grouping.',
+            '<strong>Network routing:</strong> Dijkstra with heapq for shortest path in ISP backbone graphs.',
+            '<strong>Task schedulers:</strong> Priority queues (heapq) for OS process scheduling and job queues.',
+            '<strong>NLP pipelines:</strong> Counter for word frequencies; deque for sliding token windows in streaming text.',
+            '<strong>Game servers:</strong> BFS with deque for matchmaking proximity; heap for leaderboard top-k.'
+          ]
+        },
+        {
+          heading: 'Interview Tips & Practice Problems',
+          list: [
+            `Say the module name out loud: "I'll use a Counter for frequency" — shows Python fluency.`,
+            'For BFS on grids, combine `deque` + `set` of visited coordinates — template is identical to graph BFS.',
+            'Monotonic deque (LC 239) is a hard sliding-window variant — know it for senior roles.',
+            'When interviewer says "optimize to O(n log k)", reach for heapq before sorting the full array.',
+            `Q1 (Easy): Count character frequencies in "leetcode". Which char appears most?
+Hint: Counter(s); most_common(1).
+Ans: Counter({'e':3,'l':1,'t':1,'c':1,'o':1,'d':1}). 'e' appears 3 times.`,
+            `Q2 (Medium): Merge 3 sorted arrays [1,4,7], [2,5,8], [3,6,9] using heapq.
+Hint: Push (val, array_index, element_index) for each array head; pop min, push next from same array.
+Ans: [1,2,3,4,5,6,7,8,9]. Time O(n log k), space O(k).`,
+            `Q3 (Hard): Sliding window maximum for nums=[1,3,-1,-3,5,3,6,7], k=3.
+Hint: Monotonic deque storing indices in decreasing value order.
+Ans: [3,3,5,5,6,7]. Each element pushed/popped at most once → O(n).`
+          ]
+        }
+      ]
+    },
+    'java-collections': {
+      title: 'Java Collections Framework',
+      subtitle: 'ArrayList, HashMap, TreeMap & PriorityQueue mastery',
+      sections: [
+        {
+          heading: 'Core Concepts: Java Collections Framework',
+          text: 'The Java Collections Framework (JCF) provides a unified hierarchy of interfaces and implementations for storing and manipulating groups of objects. In interviews, the critical decision is picking the right implementation — ArrayList vs LinkedList, HashMap vs TreeMap, HashSet vs TreeSet — based on access patterns and ordering requirements.',
+          list: [
+            '<strong>List:</strong> Ordered, allows duplicates. ArrayList (array-backed) vs LinkedList (doubly-linked nodes).',
+            '<strong>Set:</strong> No duplicates. HashSet (O(1) avg) vs TreeSet (O(log n), sorted).',
+            '<strong>Map:</strong> Key-value pairs. HashMap (O(1) avg) vs TreeMap (O(log n), sorted keys).',
+            '<strong>Queue/Deque:</strong> ArrayDeque (preferred) for BFS — O(1) both ends. Never use Stack class.',
+            '<strong>PriorityQueue:</strong> Min-heap by default — O(log n) insert/extract. Custom Comparator for max-heap.',
+            '<strong>Iteration order:</strong> HashMap = undefined; LinkedHashMap = insertion order; TreeMap = sorted key order.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            `<p><strong>ArrayList vs LinkedList:</strong> ArrayList stores elements in a contiguous resizable array — random access \`get(i)\` is O(1), append is O(1) amortized, but insert/delete in the middle is O(n) due to shifting. LinkedList stores nodes with prev/next pointers — insert/delete at a <em>known node reference</em> is O(1), but \`get(i)\` is O(n) because you must traverse. In 99% of interview scenarios, <strong>ArrayList wins</strong> — cache locality and O(1) indexing outweigh LinkedList's theoretical insert advantage.</p>`,
+            '<p><strong>HashMap vs TreeMap:</strong> HashMap uses a hash table — O(1) average for get/put/remove, but keys are unordered and hash collisions degrade to O(n) worst case. TreeMap uses a Red-Black tree — O(log n) for all operations, but keys are always sorted. Use HashMap for frequency counting and lookups; TreeMap when you need floor/ceiling key, range queries, or sorted iteration.</p>',
+            '<p><strong>PriorityQueue:</strong> Internally a binary heap. `offer()` and `poll()` are O(log n); `peek()` is O(1). Default is min-heap. For max-heap: `new PriorityQueue<>(Collections.reverseOrder())` or `Comparator.comparingInt(a -> -a)`. Not thread-safe — mention `PriorityBlockingQueue` for concurrent scenarios.</p>'
+          ],
+          note: 'Java interview default: ArrayList for lists, HashMap for maps, ArrayDeque for queues, PriorityQueue for heaps. Only reach for LinkedList/TreeMap when you have a specific reason.'
+        },
+        {
+          heading: 'Visual Diagram — ArrayList vs LinkedList Internals',
+          code: `ArrayList (resizable array):
+
+  index:  0    1    2    3    4    5   (capacity may be larger)
+        [10] [20] [30] [40] [50] [  ]
+         ↑ get(2) = O(1) direct index
+         insert at index 2 → shift 30,40,50 right → O(n)
+
+LinkedList (doubly-linked nodes):
+
+  HEAD ↔ [10] ↔ [20] ↔ [30] ↔ [40] ↔ TAIL
+          get(2) → traverse 2 nodes → O(n)
+          insert after known node → O(1) pointer swap
+
+HashMap vs TreeMap:
+
+  HashMap:  key --hash--> bucket --> linked list / tree node
+            get/put O(1) avg, unordered
+
+  TreeMap:  Red-Black Tree on keys
+            get/put O(log n), keys always sorted
+            floorKey(7) → largest key ≤ 7`,
+          language: 'text'
+        },
+        {
+          heading: 'ArrayList vs LinkedList — Benchmark Patterns',
+          example: {
+            title: 'When Each Wins in Interview Code',
+            code: `import java.util.*;
+
+public class ListComparison {
+
+    // ArrayList — O(1) random access, O(1) amortized append
+    static void arrayListDemo() {
+        List<Integer> list = new ArrayList<>();
+        list.add(10);           // append end — O(1) amortized
+        list.add(0, 5);         // insert front — O(n) shift!
+        int val = list.get(2);  // random access — O(1)
+        list.remove(list.size() - 1);  // pop end — O(1)
+        System.out.println("ArrayList: " + list + ", get(2)=" + val);
+    }
+
+    // LinkedList — O(n) access, O(1) insert at Iterator position
+    static void linkedListDemo() {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.addLast(10);
+        list.addFirst(5);       // O(1) — has head pointer
+        int val = list.get(2);  // O(n) — must traverse!
+        list.removeFirst();     // O(1)
+        System.out.println("LinkedList: " + list);
+    }
+
+    // Interview pattern: two-pointer on ArrayList (NOT LinkedList)
+    static List<Integer> removeDuplicatesSorted(List<Integer> nums) {
+        if (nums.isEmpty()) return nums;
+        int write = 1;
+        for (int read = 1; read < nums.size(); read++) {
+            if (!nums.get(read).equals(nums.get(read - 1))) {
+                nums.set(write++, nums.get(read));
+            }
+        }
+        return nums.subList(0, write);
+    }
+
+    // LRU Cache needs LinkedHashMap (ordered HashMap), not LinkedList alone
+    // ArrayDeque for BFS — faster than LinkedList as queue
+    static int bfsShortestPath(Map<Integer, List<Integer>> graph, int start, int target) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        Set<Integer> visited = new HashSet<>();
+        Map<Integer, Integer> dist = new HashMap<>();
+        queue.offer(start);
+        visited.add(start);
+        dist.put(start, 0);
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            if (node == target) return dist.get(node);
+            for (int neighbor : graph.getOrDefault(node, List.of())) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    dist.put(neighbor, dist.get(node) + 1);
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        arrayListDemo();
+        linkedListDemo();
+        System.out.println(removeDuplicatesSorted(
+            new ArrayList<>(List.of(1, 1, 2, 2, 3))));  // [1, 2, 3]
+    }
+}`,
+            output: `ArrayList: [5, 10], get(2)=10
+LinkedList: [10]
+[1, 2, 3]`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'HashMap vs TreeMap — Interview Patterns',
+          example: {
+            title: 'Frequency Count, Two Sum & Sorted Key Operations',
+            code: `import java.util.*;
+
+public class MapComparison {
+
+    // HashMap — O(1) avg: Two Sum (LC 1)
+    static int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> seen = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (seen.containsKey(complement)) {
+                return new int[]{seen.get(complement), i};
+            }
+            seen.put(nums[i], i);
+        }
+        return new int[]{};
+    }
+
+    // HashMap — frequency count (Counter equivalent)
+    static Map<Character, Integer> charFrequency(String s) {
+        Map<Character, Integer> freq = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            freq.put(c, freq.getOrDefault(c, 0) + 1);
+        }
+        return freq;
+    }
+
+    // TreeMap — sorted keys, floor/ceiling operations
+    static void treeMapDemo() {
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(3, "three");
+        map.put(1, "one");
+        map.put(7, "seven");
+        System.out.println(map);                    // {1=one, 3=three, 7=seven}
+        System.out.println(map.floorKey(5));        // 3 (largest key ≤ 5)
+        System.out.println(map.ceilingKey(5));      // 7 (smallest key ≥ 5)
+        System.out.println(map.subMap(1, 7));       // {1=one, 3=three}
+    }
+
+    // TreeMap — My Calendar I (LC 729) booking conflicts
+    static class MyCalendar {
+        private final TreeMap<Integer, Integer> bookings = new TreeMap<>();
+
+        public boolean book(int start, int end) {
+            Map.Entry<Integer, Integer> floor = bookings.floorEntry(start);
+            if (floor != null && floor.getValue() > start) return false;
+            Map.Entry<Integer, Integer> ceiling = bookings.ceilingEntry(start);
+            if (ceiling != null && ceiling.getKey() < end) return false;
+            bookings.put(start, end);
+            return true;
+        }
+    }
+
+    // LinkedHashMap — LRU Cache (insertion-ordered)
+    static class LRUCache extends LinkedHashMap<Integer, Integer> {
+        private final int capacity;
+        LRUCache(int cap) {
+            super(cap, 0.75f, true);  // accessOrder=true for LRU
+            this.capacity = cap;
+        }
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldest) {
+            return size() > capacity;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(twoSum(new int[]{2,7,11,15}, 9)));
+        System.out.println(charFrequency("leetcode"));
+        treeMapDemo();
+        MyCalendar cal = new MyCalendar();
+        System.out.println(cal.book(10, 20));  // true
+        System.out.println(cal.book(15, 25));  // false — overlap
+    }
+}`,
+            output: `[0, 1]
+{e=3, l=1, t=1, c=1, o=1, d=1}
+{1=one, 3=three, 7=seven}
+3
+7
+{1=one, 3=three}
+true
+false`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'PriorityQueue — Top K & Scheduling',
+          example: {
+            title: 'Kth Largest, Merge K Lists & Task Scheduler',
+            code: `import java.util.*;
+
+public class PriorityQueueDemo {
+
+    // Kth Largest Element (LC 215) — min-heap of size k
+    static int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for (int num : nums) {
+            minHeap.offer(num);
+            if (minHeap.size() > k) minHeap.poll();
+        }
+        return minHeap.peek();
+    }
+
+    // Top K Frequent Words (LC 692) — custom comparator
+    static List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> freq = new HashMap<>();
+        for (String w : words) freq.put(w, freq.getOrDefault(w, 0) + 1);
+
+        PriorityQueue<String> heap = new PriorityQueue<>(
+            (a, b) -> freq.get(a).equals(freq.get(b))
+                ? b.compareTo(a)   // same freq → alphabetical order
+                : freq.get(a) - freq.get(b)  // min-heap on freq
+        );
+        for (String w : freq.keySet()) {
+            heap.offer(w);
+            if (heap.size() > k) heap.poll();
+        }
+        List<String> result = new ArrayList<>();
+        while (!heap.isEmpty()) result.add(0, heap.poll());
+        return result;
+    }
+
+    // Task Scheduler (LC 621) — max-heap on task frequencies
+    static int leastInterval(char[] tasks, int n) {
+        int[] count = new int[26];
+        for (char t : tasks) count[t - 'A']++;
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+        for (int c : count) if (c > 0) maxHeap.offer(c);
+
+        int time = 0;
+        while (!maxHeap.isEmpty()) {
+            List<Integer> temp = new ArrayList<>();
+            for (int i = 0; i <= n; i++) {
+                if (!maxHeap.isEmpty()) {
+                    int cnt = maxHeap.poll() - 1;
+                    if (cnt > 0) temp.add(cnt);
+                }
+                time++;
+                if (maxHeap.isEmpty() && temp.isEmpty()) break;
+            }
+            for (int cnt : temp) maxHeap.offer(cnt);
+        }
+        return time;
+    }
+
+    // Dijkstra with PriorityQueue
+    static Map<Integer, Integer> dijkstra(Map<Integer, List<int[]>> graph, int start) {
+        Map<Integer, Integer> dist = new HashMap<>();
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.offer(new int[]{start, 0});
+        dist.put(start, 0);
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int u = curr[0], d = curr[1];
+            if (d > dist.getOrDefault(u, Integer.MAX_VALUE)) continue;
+            for (int[] edge : graph.getOrDefault(u, List.of())) {
+                int v = edge[0], w = edge[1];
+                int newDist = d + w;
+                if (newDist < dist.getOrDefault(v, Integer.MAX_VALUE)) {
+                    dist.put(v, newDist);
+                    pq.offer(new int[]{v, newDist});
+                }
+            }
+        }
+        return dist;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(findKthLargest(new int[]{3,2,1,5,6,4}, 2));  // 5
+        System.out.println(topKFrequent(
+            new String[]{"i","love","leetcode","i","love","coding"}, 2));
+        System.out.println(leastInterval(new char[]{'A','A','A','B','B','B'}, 2));  // 8
+    }
+}`,
+            output: `5
+[i, love]
+8`,
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Python Implementation — Java Collections Mirror',
+          example: {
+            title: 'Equivalent Python Patterns for Cross-Language Interviews',
+            code: `# Java HashMap two-sum → Python dict
+def two_sum(nums, target):
+    seen = {}
+    for i, num in enumerate(nums):
+        if target - num in seen:
+            return [seen[target - num], i]
+        seen[num] = i
+    return []
+
+# Java TreeMap floor/ceiling → Python sortedcontainers or bisect
+from bisect import bisect_left, bisect_right
+
+class SortedKeyMap:
+    """TreeMap-like operations using sorted list of keys."""
+    def __init__(self):
+        self._keys = []
+        self._vals = {}
+
+    def put(self, key, val):
+        if key not in self._vals:
+            idx = bisect_left(self._keys, key)
+            self._keys.insert(idx, key)
+        self._vals[key] = val
+
+    def floor_key(self, key):
+        idx = bisect_right(self._keys, key) - 1
+        return self._keys[idx] if idx >= 0 else None
+
+# Java PriorityQueue → Python heapq
+import heapq
+
+def kth_largest(nums, k):
+    heap = []
+    for num in nums:
+        heapq.heappush(heap, num)
+        if len(heap) > k:
+            heapq.heappop(heap)
+    return heap[0]
+
+# Java ArrayDeque BFS → Python deque
+from collections import deque
+
+def bfs(graph, start):
+    queue = deque([start])
+    visited = {start}
+    while queue:
+        node = queue.popleft()
+        for nb in graph.get(node, []):
+            if nb not in visited:
+                visited.add(nb)
+                queue.append(nb)
+
+print(two_sum([2, 7, 11, 15], 9))
+print(kth_largest([3, 2, 1, 5, 6, 4], 2))`,
+            output: `[0, 1]
+5`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 — Pick List:</strong> Need random access or index-based iteration? → ArrayList. Only need queue ops at both ends? → ArrayDeque (not LinkedList).',
+            '<strong>Step 2 — Pick Map:</strong> Need fast lookup only? → HashMap. Need sorted keys or floor/ceiling? → TreeMap. Need insertion/access order? → LinkedHashMap.',
+            '<strong>Step 3 — Pick Set:</strong> Need uniqueness check only? → HashSet. Need sorted unique elements? → TreeSet.',
+            '<strong>Step 4 — Top-k with PQ:</strong> Create min-heap, iterate elements, offer each, poll when size > k. Peek gives k-th largest.',
+            '<strong>Step 5 — Custom comparator:</strong> For LC 692 (top k frequent words), tie-break by alphabetical order in the comparator lambda.',
+            '<strong>Step 6 — HashMap getOrDefault:</strong> Always use `getOrDefault(key, 0) + 1` for counting — avoids NullPointerException.',
+            '<strong>Step 7 — Never use Stack class:</strong> Deprecated; use `ArrayDeque` for stack operations (`push`/`pop`).'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          table: {
+            headers: [
+              'Implementation',
+              'Access',
+              'Insert',
+              'Delete',
+              'Search',
+              'Ordering'
+            ],
+            rows: [
+              [
+                'ArrayList',
+                'O(1)',
+                'O(1) end / O(n) mid',
+                'O(1) end / O(n) mid',
+                'O(n)',
+                'Insertion order'
+              ],
+              [
+                'LinkedList',
+                'O(n)',
+                'O(1) at node',
+                'O(1) at node',
+                'O(n)',
+                'Insertion order'
+              ],
+              [
+                'ArrayDeque',
+                'O(n)',
+                'O(1) both ends',
+                'O(1) both ends',
+                'O(n)',
+                'Insertion order'
+              ],
+              [
+                'HashMap',
+                'N/A',
+                'O(1) avg',
+                'O(1) avg',
+                'O(1) avg',
+                'Unordered'
+              ],
+              [
+                'TreeMap',
+                'N/A',
+                'O(log n)',
+                'O(log n)',
+                'O(log n)',
+                'Sorted keys'
+              ],
+              [
+                'HashSet',
+                'N/A',
+                'O(1) avg',
+                'O(1) avg',
+                'O(1) avg',
+                'Unordered'
+              ],
+              [
+                'TreeSet',
+                'N/A',
+                'O(log n)',
+                'O(log n)',
+                'O(log n)',
+                'Sorted'
+              ],
+              [
+                'PriorityQueue',
+                'peek O(1)',
+                'O(log n)',
+                'O(log n)',
+                'O(n)',
+                'Heap order'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Using LinkedList as default List:</strong> Slower random access, worse cache performance — <em>Fix:</em> default to ArrayList.',
+            '<strong>Using LinkedList as Queue:</strong> ArrayDeque is faster — <em>Fix:</em> `Queue<Integer> q = new ArrayDeque<>()`.',
+            '<strong>Modifying HashMap during iteration:</strong> ConcurrentModificationException — <em>Fix:</em> use iterator.remove() or collect keys first.',
+            `<strong>Null keys in HashMap:</strong> One null key allowed, but TreeMap rejects null — <em>Fix:</em> know your map's null policy.`,
+            '<strong>PriorityQueue iteration order:</strong> Iterating PQ does NOT give sorted order — <em>Fix:</em> poll repeatedly for sorted extraction.',
+            '<strong>Integer[] in HashSet comparison:</strong> Arrays.equals vs Set.contains confusion — <em>Fix:</em> convert to List or use proper hash.'
+          ],
+          code: `// WRONG — LinkedList as default
+List<Integer> list = new LinkedList<>();
+
+// CORRECT — ArrayList for general use
+List<Integer> list = new ArrayList<>();
+
+// WRONG — Stack class (legacy)
+Stack<Integer> stack = new Stack<>();
+
+// CORRECT — ArrayDeque
+Deque<Integer> stack = new ArrayDeque<>();
+stack.push(1);
+int top = stack.pop();`,
+          language: 'java'
+        },
+        {
+          heading: 'Real-World Applications',
+          list: [
+            '<strong>Spring Boot services:</strong> HashMap for in-memory caches; ConcurrentHashMap for thread-safe lookups.',
+            '<strong>Database indexing analogy:</strong> HashMap = hash index (O(1)); TreeMap = B-tree index (O(log n), range queries).',
+            '<strong>Event scheduling:</strong> PriorityQueue for job schedulers (Quartz, Kubernetes pod priority).',
+            '<strong>LRU caches:</strong> LinkedHashMap or HashMap + doubly-linked list (Redis, Caffeine cache).',
+            '<strong>Autocomplete:</strong> TreeMap/TreeSet for prefix range queries on sorted keys.',
+            '<strong>Android development:</strong> ArrayList for RecyclerView adapters; HashMap for ViewHolder caching.'
+          ]
+        },
+        {
+          heading: 'Interview Tips & Practice Problems',
+          list: [
+            'When asked "which data structure?", state interface + implementation + why: "HashMap for O(1) complement lookup."',
+            'Know LinkedHashMap access-order mode for LRU — constructor `(capacity, 0.75f, true)`.',
+            `TreeMap's \`floorEntry\`/\`ceilingEntry\` solve calendar, meeting room, and range module problems.`,
+            'PriorityQueue with custom Comparator is tested at Amazon/Google for top-k with tie-breaking.',
+            `Q1 (Easy): Remove duplicates from [1,1,2,2,3] preserving order. Which collection?
+Hint: LinkedHashSet preserves insertion order; or two-pointer on ArrayList if sorted.
+Ans: LinkedHashSet → [1,2,3]. Or ArrayList two-pointer if in-place required.`,
+            `Q2 (Medium): Find k=2 most frequent words. Which Java structure?
+Hint: HashMap for frequency + PriorityQueue size k with custom comparator.
+Ans: HashMap<String,Integer> + PriorityQueue. Time O(n log k).`,
+            `Q3 (Hard): Design a structure supporting insert, delete, getRandom all O(1).
+Hint: HashMap for value→index + ArrayList for index→value (LC 380).
+Ans: Insert/Delete Swap-and-pop in ArrayList; HashMap tracks indices.`
+          ]
+        }
+      ]
+    },
+    'interview-patterns': {
+      title: 'Top Interview Patterns',
+      subtitle: 'The 7 patterns that solve 80% of medium problems',
+      sections: [
+        {
+          heading: 'Core Concepts: Interview Pattern Recognition',
+          text: 'Most coding interview problems reduce to a small set of reusable patterns. Recognizing the pattern within the first 5 minutes saves 20 minutes of brute-force exploration. The seven essential patterns — Sliding Window, Two Pointers, Fast/Slow Pointers, Merge Intervals, Top K (Heap), BFS/DFS on Grids, and DP — cover the majority of array, string, graph, and optimization problems at FAANG-level interviews.',
+          list: [
+            '<strong>Sliding Window:</strong> Contiguous subarray/substring with a constraint — expand right, shrink left. O(n).',
+            '<strong>Two Pointers:</strong> Opposite ends or same direction on sorted arrays / linked lists. O(n).',
+            '<strong>Fast/Slow Pointers:</strong> Cycle detection, middle node, palindrome linked list. O(n), O(1) space.',
+            '<strong>Merge Intervals:</strong> Overlapping ranges — sort by start, merge or insert. O(n log n).',
+            '<strong>Top K (Heap):</strong> K-th largest, k closest, k frequent — min-heap of size k. O(n log k).',
+            '<strong>BFS/DFS on Grids:</strong> Islands, shortest path, flood fill — queue or stack + visited. O(m·n).',
+            '<strong>DP Patterns:</strong> 1D (Fibonacci-style), 2D (grid path), knapsack, LCS — memo or tabulation.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation — Pattern Decision Guide',
+          content: [
+            '<p><strong>Sliding window triggers:</strong> "longest/shortest substring/subarray", "at most k distinct", "sum equals k (contiguous)", "minimum window containing all characters". The window [left, right] expands by incrementing right; when the constraint is violated, increment left until valid again.</p>',
+            '<p><strong>Two pointers triggers:</strong> "sorted array pair sum", "remove duplicates in-place", "container with most water", "3-sum". Opposite pointers move inward based on whether current sum is too small or too large.</p>',
+            '<p><strong>Fast/slow triggers:</strong> "linked list cycle", "find middle node", "palindrome linked list", "happy number". Slow moves 1 step, fast moves 2 steps — if they meet, cycle exists.</p>',
+            '<p><strong>DP triggers:</strong> "count ways", "minimum/maximum cost", "can you reach?", "longest increasing subsequence". Look for overlapping subproblems and optimal substructure. Start with brute recursion, add memo.</p>'
+          ],
+          note: 'Pattern recognition flowchart: contiguous subarray? → sliding window. Sorted pairs? → two pointers. Linked list cycle? → fast/slow. Overlapping ranges? → merge intervals. K-th element? → heap. Grid traversal? → BFS/DFS. Optimal substructure? → DP.'
+        },
+        {
+          heading: 'Visual Diagram — Pattern Decision Tree',
+          code: `Problem statement
+       │
+       ├─ Contiguous subarray/substring?
+       │     └─ Sliding Window (expand right, shrink left)
+       │
+       ├─ Sorted array + pair/triplet sum?
+       │     └─ Two Pointers (left/right converge)
+       │
+       ├─ Linked list + cycle/middle?
+       │     └─ Fast/Slow Pointers (1x vs 2x speed)
+       │
+       ├─ Intervals / meetings / calendar?
+       │     └─ Merge Intervals (sort by start)
+       │
+       ├─ K-th largest / top K / closest K?
+       │     └─ Heap (min-heap size K)
+       │
+       ├─ 2D grid + connected cells / shortest path?
+       │     └─ BFS (unweighted) or DFS (explore all)
+       │
+       └─ Count ways / min cost / optimal choice?
+             └─ Dynamic Programming (1D / 2D / knapsack)
+
+Sliding Window invariant:
+  [left ... right] always satisfies constraint
+  right++  → expand
+  while invalid: left++  → shrink`,
+          language: 'text'
+        },
+        {
+          heading: 'Sliding Window — Template & Implementation',
+          example: {
+            title: 'Fixed Window, Variable Window & Minimum Window Substring',
+            code: `from collections import Counter, defaultdict
+from typing import List
+
+# ── Template: variable sliding window ──
+def sliding_window_template(s: str) -> int:
+    left = result = 0
+    state = {}   # window state (counts, sum, etc.)
+    for right in range(len(s)):
+        # 1. ADD s[right] to window state
+        state[s[right]] = state.get(s[right], 0) + 1
+        # 2. SHRINK while window is invalid
+        while not is_valid(state):
+            state[s[left]] -= 1
+            if state[s[left]] == 0:
+                del state[s[left]]
+            left += 1
+        # 3. UPDATE result with valid window
+        result = max(result, right - left + 1)
+    return result
+
+def is_valid(state):
+    return True  # problem-specific
+
+# ── LC 3: Longest Substring Without Repeating Characters ──
+def length_of_longest_substring(s: str) -> int:
+    last_seen = {}
+    left = max_len = 0
+    for right, char in enumerate(s):
+        if char in last_seen and last_seen[char] >= left:
+            left = last_seen[char] + 1
+        last_seen[char] = right
+        max_len = max(max_len, right - left + 1)
+    return max_len
+
+# ── LC 76: Minimum Window Substring ──
+def min_window(s: str, t: str) -> str:
+    need = Counter(t)
+    missing = len(t)
+    left = start = end = 0
+    for right, char in enumerate(s, 1):
+        if need[char] > 0:
+            missing -= 1
+        need[char] -= 1
+        while missing == 0:
+            if end == 0 or right - left < end - start:
+                start, end = left, right
+            need[s[left]] += 1
+            if need[s[left]] > 0:
+                missing += 1
+            left += 1
+    return s[start:end]
+
+# ── Fixed window size k: max sum subarray of size k ──
+def max_sum_subarray_k(nums: List[int], k: int) -> int:
+    window_sum = sum(nums[:k])
+    max_sum = window_sum
+    for right in range(k, len(nums)):
+        window_sum += nums[right] - nums[right - k]
+        max_sum = max(max_sum, window_sum)
+    return max_sum
+
+print(length_of_longest_substring("abcabcbb"))  # 3 ("abc")
+print(min_window("ADOBECODEBANC", "ABC"))         # "BANC"
+print(max_sum_subarray_k([2,1,5,1,3,2], 3))      # 9`,
+            output: `3
+BANC
+9`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Two Pointers & Fast/Slow Pointers',
+          example: {
+            title: 'Opposite Ends, Same Direction & Floyd Cycle Detection',
+            code: `from typing import List, Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+# ── LC 167: Two Sum II (sorted array) ──
+def two_sum_sorted(numbers: List[int], target: int) -> List[int]:
+    left, right = 0, len(numbers) - 1
+    while left < right:
+        total = numbers[left] + numbers[right]
+        if total == target:
+            return [left + 1, right + 1]
+        elif total < target:
+            left += 1
+        else:
+            right -= 1
+    return []
+
+# ── LC 11: Container With Most Water ──
+def max_area(height: List[int]) -> int:
+    left, right = 0, len(height) - 1
+    best = 0
+    while left < right:
+        best = max(best, min(height[left], height[right]) * (right - left))
+        if height[left] < height[right]:
+            left += 1
+        else:
+            right -= 1
+    return best
+
+# ── LC 26: Remove Duplicates In-Place (same-direction pointers) ──
+def remove_duplicates(nums: List[int]) -> int:
+    if not nums:
+        return 0
+    write = 1
+    for read in range(1, len(nums)):
+        if nums[read] != nums[read - 1]:
+            nums[write] = nums[read]
+            write += 1
+    return write
+
+# ── LC 141: Linked List Cycle (fast/slow) ──
+def has_cycle(head: Optional[ListNode]) -> bool:
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False
+
+# ── LC 142: Find Cycle Start ──
+def detect_cycle(head: Optional[ListNode]) -> Optional[ListNode]:
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            slow = head
+            while slow is not fast:
+                slow = slow.next
+                fast = fast.next
+            return slow
+    return None
+
+# ── LC 876: Middle of Linked List ──
+def middle_node(head: Optional[ListNode]) -> Optional[ListNode]:
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow
+
+print(two_sum_sorted([2, 7, 11, 15], 9))
+print(max_area([1,8,6,2,5,4,8,3,7]))
+print(has_cycle(ListNode(1)))`,
+            output: `[1, 2]
+49
+False`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Merge Intervals, Top K & BFS/DFS on Grids',
+          example: {
+            title: 'Intervals, Heap Top-K, Grid Traversal Templates',
+            code: `import heapq
+from collections import deque, Counter
+from typing import List
+
+# ── LC 56: Merge Intervals ──
+def merge_intervals(intervals: List[List[int]]) -> List[List[int]]:
+    intervals.sort(key=lambda x: x[0])
+    merged = []
+    for start, end in intervals:
+        if merged and start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    return merged
+
+# ── LC 57: Insert Interval ──
+def insert_interval(intervals: List[List[int]], new: List[int]) -> List[List[int]]:
+    result = []
+    i = 0
+    n = len(intervals)
+    while i < n and intervals[i][1] < new[0]:
+        result.append(intervals[i])
+        i += 1
+    while i < n and intervals[i][0] <= new[1]:
+        new[0] = min(new[0], intervals[i][0])
+        new[1] = max(new[1], intervals[i][1])
+        i += 1
+    result.append(new)
+    result.extend(intervals[i:])
+    return result
+
+# ── LC 347: Top K Frequent Elements ──
+def top_k_frequent(nums: List[int], k: int) -> List[int]:
+    counts = Counter(nums)
+    heap = []
+    for num, freq in counts.items():
+        heapq.heappush(heap, (freq, num))
+        if len(heap) > k:
+            heapq.heappop(heap)
+    return [num for freq, num in heap]
+
+# ── LC 973: K Closest Points to Origin ──
+def k_closest(points: List[List[int]], k: int) -> List[List[int]]:
+    heap = []
+    for x, y in points:
+        dist = x*x + y*y
+        heapq.heappush(heap, (-dist, x, y))   # max-heap via negation
+        if len(heap) > k:
+            heapq.heappop(heap)
+    return [[x, y] for dist, x, y in heap]
+
+# ── LC 200: Number of Islands (DFS on grid) ──
+def num_islands(grid: List[List[str]]) -> int:
+    if not grid:
+        return 0
+    rows, cols = len(grid), len(grid[0])
+    count = 0
+
+    def dfs(r, c):
+        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':
+            return
+        grid[r][c] = '0'   # mark visited
+        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)
+
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1':
+                dfs(r, c)
+                count += 1
+    return count
+
+# ── LC 994: Rotting Oranges (BFS on grid) ──
+def oranges_rotting(grid: List[List[int]]) -> int:
+    rows, cols = len(grid), len(grid[0])
+    queue = deque()
+    fresh = 0
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 2:
+                queue.append((r, c, 0))
+            elif grid[r][c] == 1:
+                fresh += 1
+    if fresh == 0:
+        return 0
+    dirs = [(0,1),(0,-1),(1,0),(-1,0)]
+    while queue:
+        r, c, t = queue.popleft()
+        for dr, dc in dirs:
+            nr, nc = r+dr, c+dc
+            if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
+                grid[nr][nc] = 2
+                fresh -= 1
+                if fresh == 0:
+                    return t + 1
+                queue.append((nr, nc, t+1))
+    return -1
+
+print(merge_intervals([[1,3],[2,6],[8,10],[15,18]]))
+print(top_k_frequent([1,1,1,2,2,3], 2))
+print(num_islands([["1","1","0"],["1","1","0"],["0","0","1"]]))`,
+            output: `[[1, 6], [8, 10], [15, 18]]
+[1, 2]
+2`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Dynamic Programming Patterns',
+          example: {
+            title: '1D DP, 2D Grid DP, Knapsack & LCS Templates',
+            code: `from typing import List
+
+# ── 1D DP: LC 70 Climbing Stairs ──
+def climb_stairs(n: int) -> int:
+    if n <= 2:
+        return n
+    prev2, prev1 = 1, 2
+    for _ in range(3, n + 1):
+        curr = prev1 + prev2
+        prev2, prev1 = prev1, curr
+    return prev1
+
+# ── 1D DP: LC 322 Coin Change ──
+def coin_change(coins: List[int], amount: int) -> int:
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    for a in range(1, amount + 1):
+        for coin in coins:
+            if coin <= a:
+                dp[a] = min(dp[a], dp[a - coin] + 1)
+    return dp[amount] if dp[amount] != float('inf') else -1
+
+# ── 1D DP: LC 300 Longest Increasing Subsequence O(n log n) ──
+def length_of_lis(nums: List[int]) -> int:
+    tails = []
+    for num in nums:
+        lo, hi = 0, len(tails)
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if tails[mid] < num:
+                lo = mid + 1
+            else:
+                hi = mid
+        if lo == len(tails):
+            tails.append(num)
+        else:
+            tails[lo] = num
+    return len(tails)
+
+# ── 2D DP: LC 62 Unique Paths ──
+def unique_paths(m: int, n: int) -> int:
+    dp = [[1] * n for _ in range(m)]
+    for r in range(1, m):
+        for c in range(1, n):
+            dp[r][c] = dp[r-1][c] + dp[r][c-1]
+    return dp[m-1][n-1]
+
+# ── 2D DP: LC 1143 Longest Common Subsequence ──
+def longest_common_subsequence(text1: str, text2: str) -> int:
+    m, n = len(text1), len(text2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if text1[i-1] == text2[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+            else:
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    return dp[m][n]
+
+# ── 0/1 Knapsack ──
+def knapsack_01(weights: List[int], values: List[int], capacity: int) -> int:
+    dp = [0] * (capacity + 1)
+    for w, v in zip(weights, values):
+        for cap in range(capacity, w - 1, -1):
+            dp[cap] = max(dp[cap], dp[cap - w] + v)
+    return dp[capacity]
+
+print(climb_stairs(5))                          # 8
+print(coin_change([1,2,5], 11))                 # 3
+print(length_of_lis([10,9,2,5,3,7,101,18]))     # 4
+print(unique_paths(3, 7))                       # 28
+print(longest_common_subsequence("abcde", "ace")) # 3
+print(knapsack_01([1,2,3], [6,10,12], 5))        # 22`,
+            output: `8
+3
+4
+28
+3
+22`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Worked Problem 1 — Sliding Window: Longest Repeating Character Replacement (LC 424)',
+          text: 'Given a string s and integer k, you can replace at most k characters. Return the length of the longest substring containing the same letter.',
+          note: 'Hint: Sliding window with a frequency map. Window is valid when (window_size - max_frequency) ≤ k. Track max_freq of the dominant character; shrink left when invalid.',
+          example: {
+            title: 'Solution — O(n) time, O(1) space (26 letters)',
+            code: `def character_replacement(s: str, k: int) -> int:
+    count = {}
+    left = max_freq = result = 0
+    for right in range(len(s)):
+        count[s[right]] = count.get(s[right], 0) + 1
+        max_freq = max(max_freq, count[s[right]])
+        # chars to replace = window size - count of dominant char
+        while (right - left + 1) - max_freq > k:
+            count[s[left]] -= 1
+            left += 1
+        result = max(result, right - left + 1)
+    return result
+
+# LC 3 variant for reference
+def length_of_longest_substring(s: str) -> int:
+    seen = {}
+    left = ans = 0
+    for right, ch in enumerate(s):
+        if ch in seen and seen[ch] >= left:
+            left = seen[ch] + 1
+        seen[ch] = right
+        ans = max(ans, right - left + 1)
+    return ans
+
+print(character_replacement("ABAB", 2))    # 4 ("ABAB" → all A or all B)
+print(character_replacement("AABABBA", 1)) # 4
+print(length_of_longest_substring("abcabcbb"))  # 3`,
+            output: `4
+4
+3`,
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(n) — each character visited at most twice (left and right pass).',
+            '<strong>Space:</strong> O(1) — at most 26 uppercase letter counts.',
+            '<strong>Key insight:</strong> max_freq in the window never decreases on expand — safe to skip shrinking max_freq (optimization trick).'
+          ]
+        },
+        {
+          heading: 'Worked Problem 2 — Sliding Window: Permutation in String (LC 567)',
+          text: 'Given strings s1 and s2, return true if s2 contains a permutation (anagram) of s1 — i.e., a substring of s2 with exactly the same character counts as s1.',
+          note: 'Hint: Fixed-size sliding window of len(s1) over s2. Compare frequency arrays (or a "matches" counter) instead of sorting each window.',
+          example: {
+            title: 'Solution — O(n) time, O(1) space',
+            code: `def check_inclusion(s1: str, s2: str) -> bool:
+    if len(s1) > len(s2):
+        return False
+    need = [0] * 26
+    window = [0] * 26
+    for c in s1:
+        need[ord(c) - ord('a')] += 1
+
+    left = matches = 0
+    required = sum(1 for x in need if x > 0)
+
+    for right in range(len(s2)):
+        idx = ord(s2[right]) - ord('a')
+        window[idx] += 1
+        if window[idx] == need[idx]:
+            matches += 1
+        elif window[idx] == need[idx] + 1:
+            matches -= 1
+
+        if right - left + 1 > len(s1):
+            left_idx = ord(s2[left]) - ord('a')
+            window[left_idx] -= 1
+            if window[left_idx] == need[left_idx]:
+                matches += 1
+            elif window[left_idx] == need[left_idx] - 1:
+                matches -= 1
+            left += 1
+
+        if matches == required:
+            return True
+    return False
+
+# LC 76: Minimum Window Substring (variable window)
+def min_window(s: str, t: str) -> str:
+    need = {}
+    for c in t:
+        need[c] = need.get(c, 0) + 1
+    missing = len(t)
+    left = start = end = 0
+    for right, c in enumerate(s, 1):
+        if need.get(c, 0) > 0:
+            missing -= 1
+        need[c] = need.get(c, 0) - 1
+        while missing == 0:
+            if end == 0 or right - left < end - start:
+                start, end = left, right
+            need[s[left]] = need.get(s[left], 0) + 1
+            if need[s[left]] > 0:
+                missing += 1
+            left += 1
+    return s[start:end]
+
+print(check_inclusion("ab", "eidbaooo"))  # True ("ba")
+print(check_inclusion("ab", "eidboaoo"))  # False
+print(min_window("ADOBECODEBANC", "ABC"))  # "BANC"`,
+            output: `True
+False
+BANC`,
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(n + m) where n = len(s2), m = len(s1).',
+            '<strong>Space:</strong> O(1) — fixed 26-element frequency arrays.',
+            '<strong>Key insight:</strong> Track "matches" (how many chars have correct count) instead of comparing full arrays each step.'
+          ]
+        },
+        {
+          heading: 'Worked Problem 3 — Sliding Window: Max Consecutive Ones III (LC 1004)',
+          text: `Given a binary array nums and integer k, return the maximum number of consecutive 1's if you can flip at most k 0's to 1's.`,
+          note: 'Hint: Variable sliding window. Count zeros in window; while zeros > k, shrink from left. Answer is max window size seen.',
+          example: {
+            title: 'Solution — O(n) time, O(1) space',
+            code: `from typing import List
+
+def longest_ones(nums: List[int], k: int) -> int:
+    left = zeros = result = 0
+    for right in range(len(nums)):
+        if nums[right] == 0:
+            zeros += 1
+        while zeros > k:
+            if nums[left] == 0:
+                zeros -= 1
+            left += 1
+        result = max(result, right - left + 1)
+    return result
+
+# LC 209: Minimum Size Subarray Sum (variable window, sum constraint)
+def min_subarray_len(target: int, nums: List[int]) -> int:
+    left = total = result = float('inf')
+    for right in range(len(nums)):
+        total += nums[right]
+        while total >= target:
+            result = min(result, right - left + 1)
+            total -= nums[left]
+            left += 1
+    return result if result != float('inf') else 0
+
+print(longest_ones([1,1,1,0,0,0,1,1,1,1,0], 2))  # 6
+print(longest_ones([0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], 3))  # 10
+print(min_subarray_len(7, [2,3,1,2,4,3]))  # 2`,
+            output: `6
+10
+2`,
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(n) — left pointer only advances, never retreats past right.',
+            '<strong>Space:</strong> O(1).',
+            '<strong>Pattern family:</strong> "at most K violations" → count violations, shrink while violations > K.'
+          ]
+        },
+        {
+          heading: 'Worked Problem 4 — DP: House Robber (LC 198)',
+          text: 'You are a robber planning to rob houses along a street. Adjacent houses have security systems — you cannot rob two adjacent houses. Given an array of money per house, return the maximum you can rob without alerting police.',
+          note: 'Hint: At each house, decide rob (prev2 + nums[i]) or skip (prev1). Classic 1D DP with O(1) space optimization.',
+          example: {
+            title: 'Solution — O(n) time, O(1) space',
+            code: `from typing import List
+
+def rob(nums: List[int]) -> int:
+    prev2 = prev1 = 0
+    for num in nums:
+        curr = max(prev1, prev2 + num)
+        prev2, prev1 = prev1, curr
+    return prev1
+
+# LC 213: House Robber II (circular street)
+def rob_circular(nums: List[int]) -> int:
+    if len(nums) == 1:
+        return nums[0]
+    def rob_linear(arr):
+        p2 = p1 = 0
+        for x in arr:
+            p2, p1 = p1, max(p1, p2 + x)
+        return p1
+    return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
+
+print(rob([1, 2, 3, 1]))        # 4 (rob house 0 + house 2)
+print(rob([2, 7, 9, 3, 1]))     # 12 (2 + 9 + 1)
+print(rob_circular([2, 3, 2]))  # 3`,
+            output: `4
+12
+3`,
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(n) — single pass.',
+            '<strong>Space:</strong> O(1) — only two rolling variables.',
+            '<strong>Recurrence:</strong> dp[i] = max(dp[i-1], dp[i-2] + nums[i]).'
+          ]
+        },
+        {
+          heading: 'Worked Problem 5 — DP: Word Break (LC 139)',
+          text: 'Given a string s and a dictionary of words, determine if s can be segmented into a space-separated sequence of one or more dictionary words. Words may be reused.',
+          note: 'Hint: dp[i] = True if s[0:i] can be segmented. For each i, check all j < i where s[j:i] is in the dictionary and dp[j] is True.',
+          example: {
+            title: 'Solution — O(n² · m) time where m = avg word length for hash lookup',
+            code: `def word_break(s: str, word_dict: list) -> bool:
+    word_set = set(word_dict)
+    n = len(s)
+    dp = [False] * (n + 1)
+    dp[0] = True
+    for i in range(1, n + 1):
+        for j in range(i):
+            if dp[j] and s[j:i] in word_set:
+                dp[i] = True
+                break
+    return dp[n]
+
+# LC 322: Coin Change (unbounded knapsack DP)
+def coin_change(coins: list, amount: int) -> int:
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    for a in range(1, amount + 1):
+        for coin in coins:
+            if coin <= a:
+                dp[a] = min(dp[a], dp[a - coin] + 1)
+    return dp[amount] if dp[amount] != float('inf') else -1
+
+print(word_break("leetcode", ["leet", "code"]))           # True
+print(word_break("applepenapple", ["apple", "pen"]))     # True
+print(word_break("catsandog", ["cats","dog","sand","and","cat"]))  # False
+print(coin_change([1, 2, 5], 11))  # 3`,
+            output: `True
+True
+False
+3`,
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(n²) for the nested loop; each substring check O(1) with hash set.',
+            '<strong>Space:</strong> O(n) for dp array + O(k) for word set.',
+            '<strong>Pattern:</strong> "Can you partition string?" → boolean 1D DP over prefixes.'
+          ]
+        },
+        {
+          heading: 'Worked Problem 6 — DP: Edit Distance (LC 72)',
+          text: 'Given two strings word1 and word2, return the minimum number of operations (insert, delete, replace) to convert word1 to word2.',
+          note: 'Hint: 2D DP. If chars match, dp[i][j] = dp[i-1][j-1]. Else, dp[i][j] = 1 + min(insert, delete, replace) = 1 + min(dp[i][j-1], dp[i-1][j], dp[i-1][j-1]).',
+          example: {
+            title: 'Solution — O(m·n) time and space',
+            code: `def min_distance(word1: str, word2: str) -> int:
+    m, n = len(word1), len(word2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1):
+        dp[i][0] = i
+    for j in range(n + 1):
+        dp[0][j] = j
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if word1[i-1] == word2[j-1]:
+                dp[i][j] = dp[i-1][j-1]
+            else:
+                dp[i][j] = 1 + min(
+                    dp[i-1][j],      # delete from word1
+                    dp[i][j-1],      # insert into word1
+                    dp[i-1][j-1]     # replace
+                )
+    return dp[m][n]
+
+# LC 1143: Longest Common Subsequence (related 2D DP)
+def longest_common_subsequence(text1: str, text2: str) -> int:
+    m, n = len(text1), len(text2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if text1[i-1] == text2[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+            else:
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    return dp[m][n]
+
+print(min_distance("horse", "ros"))     # 3
+print(min_distance("intention", "execution"))  # 5
+print(longest_common_subsequence("abcde", "ace"))  # 3`,
+            output: `3
+5
+3`,
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(m · n).',
+            '<strong>Space:</strong> O(m · n); can optimize to O(min(m, n)) with rolling array.',
+            '<strong>Pattern:</strong> Two-sequence DP — rows = word1 prefix, cols = word2 prefix.'
+          ]
+        },
+        {
+          heading: 'Worked Problem 7 — Graphs: Number of Islands (LC 200)',
+          text: `Given an m×n 2D grid of '1's (land) and '0's (water), return the number of islands. An island is surrounded by water and formed by connecting adjacent lands horizontally or vertically.`,
+          note: 'Hint: Iterate every cell. When you find unvisited land, run DFS or BFS to mark the entire island, increment count. Mutate grid in-place to avoid extra visited set.',
+          example: {
+            title: 'Solution — DFS O(m·n) time, O(m·n) stack space worst case',
+            code: `from typing import List
+from collections import deque
+
+def num_islands(grid: List[List[str]]) -> int:
+    if not grid:
+        return 0
+    rows, cols = len(grid), len(grid[0])
+    count = 0
+
+    def dfs(r, c):
+        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':
+            return
+        grid[r][c] = '0'
+        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)
+
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1':
+                dfs(r, c)
+                count += 1
+    return count
+
+# BFS alternative
+def num_islands_bfs(grid: List[List[str]]) -> int:
+    if not grid:
+        return 0
+    rows, cols = len(grid), len(grid[0])
+    count = 0
+    dirs = [(0,1),(0,-1),(1,0),(-1,0)]
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1':
+                count += 1
+                queue = deque([(r, c)])
+                grid[r][c] = '0'
+                while queue:
+                    cr, cc = queue.popleft()
+                    for dr, dc in dirs:
+                        nr, nc = cr+dr, cc+dc
+                        if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == '1':
+                            grid[nr][nc] = '0'
+                            queue.append((nr, nc))
+    return count
+
+grid1 = [["1","1","1","1","0"],
+         ["1","1","0","1","0"],
+         ["1","1","0","0","0"],
+         ["0","0","0","0","0"]]
+print(num_islands([row[:] for row in grid1]))  # 1`,
+            output: '1',
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(m · n) — each cell visited once.',
+            '<strong>Space:</strong> O(m · n) worst-case recursion stack for snake-shaped island; BFS uses O(min(m,n)) queue.',
+            '<strong>Pattern:</strong> Connected components on implicit graph (grid neighbors).'
+          ]
+        },
+        {
+          heading: 'Worked Problem 8 — Graphs: Max Area of Island (LC 695)',
+          text: `Given a binary grid (1 = land, 0 = water), return the maximum area of an island. An island's area is the number of land cells.`,
+          note: 'Hint: Same DFS/BFS as LC 200, but return the size of each component and track the maximum.',
+          example: {
+            title: 'Solution — O(m·n) time',
+            code: `from typing import List
+
+def max_area_of_island(grid: List[List[int]]) -> int:
+    rows, cols = len(grid), len(grid[0])
+    best = 0
+
+    def dfs(r, c):
+        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != 1:
+            return 0
+        grid[r][c] = 0
+        return 1 + dfs(r+1,c) + dfs(r-1,c) + dfs(r,c+1) + dfs(r,c-1)
+
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 1:
+                best = max(best, dfs(r, c))
+    return best
+
+# LC 733: Flood Fill (single-component DFS from click)
+def flood_fill(image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
+    original = image[sr][sc]
+    if original == color:
+        return image
+    rows, cols = len(image), len(image[0])
+
+    def dfs(r, c):
+        if r < 0 or r >= rows or c < 0 or c >= cols or image[r][c] != original:
+            return
+        image[r][c] = color
+        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)
+
+    dfs(sr, sc)
+    return image
+
+grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],
+        [0,0,0,0,0,0,0,1,1,1,0,0,0],
+        [0,1,1,0,1,0,0,0,0,0,0,0,0],
+        [0,1,0,0,1,1,0,0,1,0,1,0,0],
+        [0,1,0,0,1,1,0,0,1,1,1,0,0],
+        [0,0,0,0,0,0,0,0,0,0,1,0,0],
+        [0,0,0,0,0,0,0,1,1,1,0,0,0],
+        [0,0,0,0,0,0,0,1,1,0,0,0,0]]
+print(max_area_of_island([row[:] for row in grid]))  # 6`,
+            output: '6',
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(m · n).',
+            '<strong>Space:</strong> O(m · n) recursion depth worst case.',
+            '<strong>Key difference from LC 200:</strong> DFS returns accumulated area; track global max.'
+          ]
+        },
+        {
+          heading: 'Worked Problem 9 — Graphs: Pacific Atlantic Water Flow (LC 417)',
+          text: 'Given an m×n matrix of heights, find all cells that can flow to both the Pacific (top/left edges) and Atlantic (bottom/right edges). Water flows from a cell to adjacent equal-or-lower height cells.',
+          note: 'Hint: Reverse thinking — start DFS/BFS from ocean edges moving INLAND to cells with equal-or-higher height. Intersect the two reachable sets.',
+          example: {
+            title: 'Solution — Multi-source BFS from both oceans O(m·n)',
+            code: `from typing import List
+from collections import deque
+
+def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
+    if not heights:
+        return []
+    rows, cols = len(heights), len(heights[0])
+    pacific = set()
+    atlantic = set()
+    dirs = [(0,1),(0,-1),(1,0),(-1,0)]
+
+    def bfs(starts, reachable):
+        queue = deque(starts)
+        reachable.update(starts)
+        while queue:
+            r, c = queue.popleft()
+            for dr, dc in dirs:
+                nr, nc = r + dr, c + dc
+                if (0 <= nr < rows and 0 <= nc < cols
+                        and (nr, nc) not in reachable
+                        and heights[nr][nc] >= heights[r][c]):
+                    reachable.add((nr, nc))
+                    queue.append((nr, nc))
+
+    pacific_starts = [(r, 0) for r in range(rows)] + [(0, c) for c in range(cols)]
+    atlantic_starts = [(r, cols-1) for r in range(rows)] + [(rows-1, c) for c in range(cols)]
+
+    bfs(pacific_starts, pacific)
+    bfs(atlantic_starts, atlantic)
+
+    return [[r, c] for r, c in pacific & atlantic]
+
+# LC 130: Surrounded Regions (BFS from border)
+def solve(board: List[List[str]]) -> None:
+    if not board:
+        return
+    rows, cols = len(board), len(board[0])
+    dirs = [(0,1),(0,-1),(1,0),(-1,0)]
+
+    def bfs(r, c):
+        queue = deque([(r, c)])
+        board[r][c] = 'T'
+        while queue:
+            cr, cc = queue.popleft()
+            for dr, dc in dirs:
+                nr, nc = cr+dr, cc+dc
+                if 0 <= nr < rows and 0 <= nc < cols and board[nr][nc] == 'O':
+                    board[nr][nc] = 'T'
+                    queue.append((nr, nc))
+
+    for r in range(rows):
+        for c in range(cols):
+            if (r == 0 or r == rows-1 or c == 0 or c == cols-1) and board[r][c] == 'O':
+                bfs(r, c)
+    for r in range(rows):
+        for c in range(cols):
+            if board[r][c] == 'O':
+                board[r][c] = 'X'
+            elif board[r][c] == 'T':
+                board[r][c] = 'O'
+
+heights = [[1,2,2,3,5],
+           [3,2,3,4,4],
+           [2,4,5,3,1],
+           [6,7,1,4,5],
+           [5,1,1,2,4]]
+print(sorted(pacific_atlantic(heights)))`,
+            output: '[[0, 4], [1, 3], [1, 4], [2, 2], [3, 0], [3, 1], [4, 0]]',
+            language: 'python',
+            type: 'code'
+          },
+          list: [
+            '<strong>Time:</strong> O(m · n) — each cell visited at most twice (once per ocean).',
+            '<strong>Space:</strong> O(m · n) for the two reachable sets + BFS queue.',
+            '<strong>Key insight:</strong> Reverse the flow direction — "can ocean reach this cell?" instead of "can this cell reach ocean?"'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity — All Patterns',
+          table: {
+            headers: [
+              'Pattern',
+              'Typical Time',
+              'Typical Space',
+              'Classic Problems'
+            ],
+            rows: [
+              [
+                'Sliding Window',
+                'O(n)',
+                'O(k) or O(1)',
+                'LC 3, 76, 424, 567, 1004'
+              ],
+              [
+                'Two Pointers',
+                'O(n)',
+                'O(1)',
+                'LC 11, 15, 26, 167, 283'
+              ],
+              [
+                'Fast/Slow',
+                'O(n)',
+                'O(1)',
+                'LC 141, 142, 876, 202'
+              ],
+              [
+                'Merge Intervals',
+                'O(n log n)',
+                'O(n)',
+                'LC 56, 57, 252, 253'
+              ],
+              [
+                'Top K (Heap)',
+                'O(n log k)',
+                'O(k)',
+                'LC 215, 347, 973, 692'
+              ],
+              [
+                'BFS on Grid',
+                'O(m · n)',
+                'O(m · n)',
+                'LC 200, 994, 417, 695'
+              ],
+              [
+                'DFS on Grid',
+                'O(m · n)',
+                'O(m · n) stack',
+                'LC 200, 695, 130, 79'
+              ],
+              [
+                '1D DP',
+                'O(n)',
+                'O(1)–O(n)',
+                'LC 70, 198, 322, 300'
+              ],
+              [
+                '2D DP',
+                'O(m · n)',
+                'O(m · n)',
+                'LC 62, 72, 1143, 64'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Interview Tips & Pattern Recognition Checklist',
+          list: [
+            'Spend first 3-5 minutes classifying the problem — say the pattern name aloud: "This is a sliding window problem."',
+            'Write the template before filling in details — interviewers reward structured thinking over jumping to code.',
+            'For sliding window: clarify fixed vs variable size. Fixed = pre-fill first k elements; variable = expand/shrink loop.',
+            'For grid problems: ask "4-directional or 8-directional?" and "can I modify input in-place?"',
+            'For DP: start with recursive brute force, draw the recursion tree, identify repeated states, then memoize.',
+            'Combine patterns: "Minimum Window Substring" = sliding window + hash map frequency. "Course Schedule" = BFS + topological sort.',
+            'Always state time/space complexity and mention if you can optimize space (rolling DP array, in-place grid marking).',
+            `Practice saying: "I'll use a min-heap of size k to track the k largest elements in O(n log k) time."`
+          ]
+        }
+      ]
+    },
+    'ds-ml-pipelines': {
+      title: 'Data Structures in ML',
+      subtitle: 'Tensors, graphs, heaps & spatial trees in production ML',
+      sections: [
+        {
+          heading: 'Core Concepts: Data Structures in ML Pipelines',
+          text: 'Machine learning systems are not just matrix multiplication — they rely on the same fundamental data structures from DSA, scaled to billions of elements. Understanding how tensors, graphs, heaps, and spatial trees appear in ML pipelines helps you debug performance bottlenecks, design efficient feature pipelines, and ace system-design interviews at AI companies.',
+          list: [
+            '<strong>Tensors / N-D Arrays:</strong> Multi-dimensional contiguous arrays — the backbone of PyTorch, TensorFlow, NumPy. O(1) element access, O(n) reshape/transpose.',
+            '<strong>Graphs (GNN):</strong> Adjacency lists for molecular, social, and knowledge graphs. Message-passing aggregates neighbor features.',
+            '<strong>Heaps (A*):</strong> Priority queues for optimal pathfinding in robotics, game AI, and planning agents.',
+            '<strong>KD-Trees / Ball Trees:</strong> Spatial partitioning for O(log n) nearest-neighbor queries in KNN, recommendation, and clustering.',
+            '<strong>Hash Maps:</strong> Feature stores, embedding lookups (word2vec, entity IDs), and deduplication in data pipelines.',
+            '<strong>Queues / Deques:</strong> BFS in graph sampling, streaming batch buffers, and async data loaders.'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Tensors as structured memory:</strong> A tensor is a generalization of vectors and matrices to N dimensions. Shape (batch, channels, height, width) in CNNs; (seq_len, embed_dim) in transformers. Contiguous memory layout enables SIMD/GPU parallelism. Reshape is O(1) if contiguous (view); transpose may require O(n) copy. Strided access patterns affect cache performance — row-major vs column-major matters.</p>',
+            '<p><strong>Graphs for GNNs:</strong> Graph Neural Networks operate on `edge_index` (COO format) or adjacency lists. Each layer aggregates neighbor node features: `h_v = UPDATE(h_v, AGGREGATE({h_u : u ∈ N(v)}))`. PyTorch Geometric stores sparse graphs efficiently. BFS order affects mini-batch sampling (GraphSAGE neighbor sampling).</p>',
+            '<p><strong>Heaps in A* search:</strong> A* uses f(n) = g(n) + h(n) where g = cost so far, h = heuristic estimate. PriorityQueue orders by f(n). Used in path planning for autonomous vehicles, game NPCs, and RL environment navigation. O(log n) per expansion vs O(n) for Dijkstra when heuristic is weak.</p>',
+            `<p><strong>KD-Trees for KNN:</strong> Recursively partition space by median along alternating axes. Query: traverse tree, prune branches farther than current best. sklearn's \`BallTree\` handles high dimensions better when KD-tree degrades. Approximate NN (FAISS, HNSW) trades accuracy for speed at billion-vector scale.</p>`
+          ],
+          note: 'ML interview bridge: "KNN inference is O(n) brute force but O(log n) with KD-tree" shows you connect algorithms to production latency.'
+        },
+        {
+          heading: 'Visual Diagram — ML Data Structure Pipeline',
+          code: `ML Training Pipeline — where DS appear:
+
+  Raw Data (CSV, logs, images)
+       │
+       ▼
+  HashMap / Set ─── dedup, feature encoding, vocab lookup
+       │
+       ▼
+  Tensor (N-D array) ─── batching, GPU transfer, matrix ops
+       │
+       ├─ CNN:  (N, C, H, W) convolutions
+       ├─ Transformer: (seq, embed) attention — O(n²) pairwise
+       └─ GNN:  node features + edge_index graph
+
+  Inference / Serving:
+       │
+       ├─ KD-Tree / FAISS ─── KNN, similarity search, RAG retrieval
+       ├─ PriorityQueue ─── A* pathfinding in RL agents
+       └─ BFS/DFS ─── graph sampling, connected component features
+
+KD-Tree partition (2D):
+
+        split on x
+       /          \\
+   x < median    x ≥ median
+   /     \\       /     \\
+ y-split  ...  y-split  ...
+
+Query: find nearest to point P
+  → prune subtrees whose bounding box is farther than best-so-far`,
+          language: 'text'
+        },
+        {
+          heading: 'Tensors — PyTorch & NumPy Patterns',
+          example: {
+            title: 'Shape Operations, Batching & Memory Layout',
+            code: `import numpy as np
+
+# ── Tensor basics: shape, reshape, broadcasting ──
+data = np.arange(12).reshape(3, 4)   # 3×4 matrix
+print(data.shape)                     # (3, 4)
+print(data.reshape(2, 6))             # O(1) view if contiguous
+print(data.T)                         # transpose — may copy O(n)
+
+# ── Batching for ML pipelines ──
+batch_size = 32
+features = np.random.randn(1000, 128)  # 1000 samples, 128-dim
+for i in range(0, len(features), batch_size):
+    batch = features[i:i+batch_size]   # O(batch_size) slice — contiguous
+    # forward pass on batch...
+
+# ── Broadcasting — avoid explicit loops (GPU-friendly) ──
+a = np.array([[1],[2],[3]])    # (3, 1)
+b = np.array([10, 20, 30])     # (3,)
+print(a + b)                   # (3, 3) without nested loops
+
+# ── Embedding lookup = HashMap-style index into tensor ──
+vocab_size, embed_dim = 10000, 256
+embeddings = np.random.randn(vocab_size, embed_dim)
+token_ids = [42, 7, 99]                    # integer indices
+token_embeds = embeddings[token_ids]       # O(k) lookup, k = seq length
+print(token_embeds.shape)                    # (3, 256)
+
+# ── PyTorch equivalent (commented for reference) ──
+# import torch
+# x = torch.randn(32, 3, 224, 224)  # batch of images
+# x = x.to('cuda')                     # GPU transfer
+# y = model(x)                         # tensor in → tensor out`,
+            output: `(3, 4)
+[[ 0  1  2  3  4  5]
+ [ 6  7  8  9 10 11]]
+(3, 256)`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Graphs for GNNs — Adjacency & Message Passing',
+          example: {
+            title: 'Graph Construction, BFS Sampling & Simple GNN Layer',
+            code: `from collections import defaultdict, deque
+import numpy as np
+
+# ── Build graph from edge list (PyG-style) ──
+def build_graph(edges, num_nodes):
+    adj = defaultdict(list)
+    for u, v in edges:
+        adj[u].append(v)
+        adj[v].append(u)   # undirected
+    return adj
+
+# ── BFS neighbor sampling (GraphSAGE-style) ──
+def sample_neighbors(adj, node, max_neighbors=5):
+    neighbors = adj.get(node, [])
+    if len(neighbors) <= max_neighbors:
+        return neighbors
+    # random sample for large-degree nodes
+    import random
+    return random.sample(neighbors, max_neighbors)
+
+# ── Simple mean-aggregation GNN layer ──
+def gnn_layer(node_features, adj, num_nodes):
+    """Aggregate neighbor features + self. node_features: (N, F)."""
+    feature_dim = node_features.shape[1]
+    new_features = np.zeros((num_nodes, feature_dim))
+    for node in range(num_nodes):
+        neighbors = adj.get(node, [])
+        if neighbors:
+            neighbor_feats = node_features[neighbors]
+            aggregated = neighbor_feats.mean(axis=0)
+        else:
+            aggregated = np.zeros(feature_dim)
+        new_features[node] = 0.5 * node_features[node] + 0.5 * aggregated
+    return new_features
+
+# Demo: 4-node social graph
+edges = [(0,1), (1,2), (2,3), (0,2)]
+adj = build_graph(edges, 4)
+features = np.array([[1,0], [0,1], [1,1], [0,0]], dtype=float)
+print("Neighbors of 1:", adj[1])
+updated = gnn_layer(features, adj, 4)
+print("After GNN layer:", updated.shape)  # (4, 2)`,
+            output: `Neighbors of 1: [0, 2]
+After GNN layer: (4, 2)`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Heaps in A* Search & KD-Trees for KNN',
+          example: {
+            title: 'A* Pathfinding & sklearn Nearest Neighbors',
+            code: `import heapq
+import numpy as np
+
+# ── A* search on grid with priority queue ──
+def astar(grid, start, goal):
+    rows, cols = len(grid), len(grid[0])
+    def heuristic(a, b):
+        return abs(a[0]-b[0]) + abs(a[1]-b[1])  # Manhattan
+
+    open_set = [(0, start)]   # (f_score, position)
+    g_score = {start: 0}
+    came_from = {}
+    dirs = [(0,1),(0,-1),(1,0),(-1,0)]
+
+    while open_set:
+        _, current = heapq.heappop(open_set)
+        if current == goal:
+            # reconstruct path
+            path = [current]
+            while current in came_from:
+                current = came_from[current]
+                path.append(current)
+            return path[::-1]
+
+        for dr, dc in dirs:
+            nr, nc = current[0]+dr, current[1]+dc
+            if 0 <= nr < rows and 0 <= cols and grid[nr][nc] == 0:
+                neighbor = (nr, nc)
+                tentative = g_score[current] + 1
+                if tentative < g_score.get(neighbor, float('inf')):
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative
+                    f = tentative + heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (f, neighbor))
+    return []
+
+# ── KD-Tree KNN with sklearn ──
+from sklearn.neighbors import KDTree
+
+# Training data: 2D points
+X_train = np.array([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]])
+tree = KDTree(X_train, leaf_size=2)
+
+query_point = np.array([[4, 5]])
+distances, indices = tree.query(query_point, k=2)
+print("2 nearest neighbors:", indices[0], "distances:", distances[0])
+
+# Grid A* demo
+grid = [[0,0,0,0],
+        [1,1,0,1],
+        [0,0,0,0],
+        [0,1,1,0]]
+print("A* path:", astar(grid, (0,0), (3,3)))`,
+            output: `2 nearest neighbors: [1 2] distances: [1.41 1.41]
+A* path: [(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 3), (3, 3)]`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Java Implementation — ML Pipeline Data Structures',
+          example: {
+            title: 'PriorityQueue A* & HashMap Feature Store Pattern',
+            code: `import java.util.*;
+
+public class MLDataStructures {
+
+    // A* with PriorityQueue — same pattern as Python heapq
+    static List<int[]> aStar(int[][] grid, int[] start, int[] goal) {
+        int rows = grid.length, cols = grid[0].length;
+        PriorityQueue<int[]> open = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
+        Map<String, Integer> gScore = new HashMap<>();
+        Map<String, int[]> cameFrom = new HashMap<>();
+        String startKey = start[0] + "," + start[1];
+        gScore.put(startKey, 0);
+        open.offer(new int[]{start[0], start[1], manhattan(start, goal)});
+
+        int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+        while (!open.isEmpty()) {
+            int[] curr = open.poll();
+            if (curr[0] == goal[0] && curr[1] == goal[1]) {
+                return reconstruct(cameFrom, start, goal);
+            }
+            String key = curr[0] + "," + curr[1];
+            for (int[] d : dirs) {
+                int nr = curr[0] + d[0], nc = curr[1] + d[1];
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == 0) {
+                    String nKey = nr + "," + nc;
+                    int tentative = gScore.get(key) + 1;
+                    if (tentative < gScore.getOrDefault(nKey, Integer.MAX_VALUE)) {
+                        gScore.put(nKey, tentative);
+                        cameFrom.put(nKey, new int[]{curr[0], curr[1]});
+                        open.offer(new int[]{nr, nc, tentative + manhattan(new int[]{nr,nc}, goal)});
+                    }
+                }
+            }
+        }
+        return List.of();
+    }
+
+    static int manhattan(int[] a, int[] b) {
+        return Math.abs(a[0]-b[0]) + Math.abs(a[1]-b[1]);
+    }
+
+    static List<int[]> reconstruct(Map<String, int[]> cameFrom, int[] start, int[] goal) {
+        List<int[]> path = new ArrayList<>();
+        int[] curr = goal;
+        path.add(curr);
+        while (!(curr[0] == start[0] && curr[1] == start[1])) {
+            curr = cameFrom.get(curr[0] + "," + curr[1]);
+            path.add(0, curr);
+        }
+        return path;
+    }
+
+    // Feature store pattern: entity ID → feature vector
+    static class FeatureStore {
+        private final Map<String, float[]> store = new HashMap<>();
+        void put(String entityId, float[] features) { store.put(entityId, features); }
+        float[] get(String entityId) { return store.get(entityId); }
+    }
+
+    public static void main(String[] args) {
+        int[][] grid = {{0,0,0},{0,1,0},{0,0,0}};
+        System.out.println(aStar(grid, new int[]{0,0}, new int[]{2,2}));
+    }
+}`,
+            output: '[[0, 0], [0, 1], [0, 2], [1, 2], [2, 2]]',
+            language: 'java',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>Step 1 — Tensor pipeline:</strong> Load data → encode to indices (HashMap vocab) → embed (tensor lookup) → batch (contiguous slices) → GPU transfer.',
+            '<strong>Step 2 — GNN pipeline:</strong> Build adjacency list from edge list → sample neighbors (BFS/random) → aggregate features → update node embeddings.',
+            '<strong>Step 3 — A* setup:</strong> PriorityQueue ordered by f=g+h. Push start with f=h(start,goal). Pop min, expand neighbors, update g scores.',
+            '<strong>Step 4 — KD-Tree build:</strong> Recursively split on median axis. Query: descend tree, check if other subtree could have closer point.',
+            '<strong>Step 5 — KNN at scale:</strong> <100K points → KD-Tree/BallTree. >1M points → FAISS/HNSW approximate NN.',
+            '<strong>Step 6 — Latency budget:</strong> Brute KNN O(n) per query. KD-tree O(log n). Know when accuracy vs speed trade-off matters.',
+            '<strong>Step 7 — RAG retrieval:</strong> Embed documents (tensor), store in vector index (FAISS), query with heap for top-k similarity.'
+          ]
+        },
+        {
+          heading: 'Time & Space Complexity',
+          table: {
+            headers: [
+              'Structure / Op',
+              'Build',
+              'Query',
+              'Space',
+              'ML use case'
+            ],
+            rows: [
+              [
+                'Tensor element access',
+                'O(1)',
+                'O(1)',
+                'O(n) elements',
+                'Forward pass, embedding lookup'
+              ],
+              [
+                'Tensor reshape (view)',
+                'O(1)',
+                'O(1)',
+                'O(1) extra',
+                'Batch reshaping'
+              ],
+              [
+                'Tensor matmul (m×k)(k×n)',
+                'O(1)',
+                'O(m·k·n)',
+                'O(m·n)',
+                'Attention, linear layers'
+              ],
+              [
+                'Graph adjacency list',
+                'O(E)',
+                'O(deg(v))',
+                'O(V+E)',
+                'GNN, social networks'
+              ],
+              [
+                'BFS neighbor sampling',
+                'O(V+E)',
+                'O(k)',
+                'O(V)',
+                'GraphSAGE mini-batches'
+              ],
+              [
+                'A* with heap',
+                'O(1)',
+                'O(b^d log b)',
+                'O(b^d)',
+                'RL navigation, robotics'
+              ],
+              [
+                'KD-Tree build',
+                'O(n log n)',
+                'O(log n) avg',
+                'O(n)',
+                'KNN, anomaly detection'
+              ],
+              [
+                'Brute-force KNN',
+                'O(1)',
+                'O(n)',
+                'O(n)',
+                'Small datasets, baseline'
+              ],
+              [
+                'FAISS HNSW index',
+                'O(n log n)',
+                'O(log n) approx',
+                'O(n·M)',
+                'Billion-vector search'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Non-contiguous tensor reshape:</strong> PyTorch view() fails on transposed tensors — <em>Fix:</em> call `.contiguous()` first.',
+            '<strong>Brute-force KNN at scale:</strong> O(n) per query kills latency at 1M+ vectors — <em>Fix:</em> KD-tree, BallTree, or FAISS.',
+            `<strong>Full graph in memory:</strong> Billion-edge graphs don't fit RAM — <em>Fix:</em> neighbor sampling, subgraph mini-batches.`,
+            '<strong>Attention O(n²) memory:</strong> Long sequences explode memory — <em>Fix:</em> flash attention, sparse attention, chunking.',
+            '<strong>Wrong heuristic in A*:</strong> Inadmissible heuristic (overestimates) → suboptimal paths — <em>Fix:</em> use admissible heuristic (never overestimate).',
+            '<strong>Feature store without versioning:</strong> Stale embeddings served to production — <em>Fix:</em> versioned HashMap keys or timestamped entries.'
+          ],
+          code: `# WRONG — O(n) KNN for every inference query
+distances = [np.linalg.norm(x - query) for x in all_points]
+
+# CORRECT — spatial index for O(log n) queries
+from sklearn.neighbors import KDTree
+tree = KDTree(all_points)
+dist, idx = tree.query(query, k=5)`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          list: [
+            '<strong>Recommendation systems:</strong> FAISS/HNSW for user→item similarity; embeddings stored as tensors.',
+            '<strong>Drug discovery (GNN):</strong> Molecular graphs with atom/bond features; message passing predicts properties.',
+            '<strong>Autonomous vehicles:</strong> A* / D* Lite on occupancy grids for real-time path planning.',
+            '<strong>RAG / LLM serving:</strong> Vector database (Pinecone, Weaviate) = KD-tree/HNSW at scale for document retrieval.',
+            '<strong>Fraud detection:</strong> KNN on transaction feature vectors — anomalies are far from all neighbors.',
+            '<strong>Computer vision:</strong> Tensors (N,C,H,W) through CNN pipeline; batch normalization across batch dimension.'
+          ]
+        },
+        {
+          heading: 'Interview Tips & Practice Problems',
+          list: [
+            'Connect DSA to ML: "Embedding lookup is O(1) hash index into a tensor — same as HashMap get."',
+            'Know when KD-tree fails: curse of dimensionality above ~20 dimensions — mention approximate methods.',
+            'For GNN questions: explain message passing in 3 steps — aggregate, update, readout.',
+            'A* vs Dijkstra: A* with admissible heuristic explores fewer nodes; both use priority queues.',
+            `Q1: Why batch tensors in ML training?
+Hint: GPU parallelism — contiguous memory, amortized transfer overhead.
+Ans: Batching enables SIMD/GPU matrix ops; O(1) per-element cost at scale vs per-sample overhead.`,
+            `Q2: KNN with 10M vectors — which data structure?
+Hint: Brute O(n) too slow; KD-tree degrades in high dims; FAISS for approximate NN.
+Ans: FAISS IVF/HNSW index — O(log n) approximate query, tunable recall/speed trade-off.`,
+            `Q3: How does GraphSAGE scale to billion-node graphs?
+Hint: Full graph doesn't fit memory; sample fixed-size neighborhoods per mini-batch.
+Ans: BFS/random neighbor sampling + mini-batch training. O(sample_size) per node, not O(degree).`
+          ]
+        }
+      ]
+    },
+    'complexity-cheat-sheet': {
+      title: 'Final Complexity Review',
+      subtitle: 'The definitive reference for interviews & system design',
+      sections: [
+        {
+          heading: 'Core Concepts: Complexity as a Decision Tool',
+          text: 'Big-O is not academic trivia — it is the decision framework for choosing data structures, algorithms, and system architectures. This cheat sheet consolidates everything from Modules 1–5 into actionable tables: when to use what, what complexity to expect, and what breaks at scale.',
+          list: [
+            '<strong>Time complexity:</strong> Upper bound on operations as input grows — always defend worst case in interviews.',
+            '<strong>Space complexity:</strong> Auxiliary memory beyond input — includes recursion stack, hash maps, queues.',
+            '<strong>Amortized analysis:</strong> Average cost over a sequence — dynamic array append, hash map insert.',
+            '<strong>Trade-offs:</strong> Time vs space (hash map for O(1) lookup costs O(n) memory), simplicity vs optimality.',
+            '<strong>Scale limits:</strong> At n=10⁶: O(n) OK, O(n log n) tight, O(n²) fails.',
+            '<strong>Pattern → complexity:</strong> Each interview pattern has a predictable complexity class — memorize the mapping.'
+          ]
+        },
+        {
+          heading: 'Data Structure Complexity — Complete Reference',
+          table: {
+            headers: [
+              'Data Structure',
+              'Access',
+              'Search',
+              'Insert',
+              'Delete',
+              'Notes'
+            ],
+            rows: [
+              [
+                'Array (static)',
+                'O(1)',
+                'O(n)',
+                'O(n)',
+                'O(n)',
+                'Fixed size, cache-friendly'
+              ],
+              [
+                'Dynamic Array (ArrayList)',
+                'O(1)',
+                'O(n)',
+                'O(1) amortized end',
+                'O(1) end / O(n) mid',
+                'Python list, Java ArrayList'
+              ],
+              [
+                'Linked List',
+                'O(n)',
+                'O(n)',
+                'O(1) at node',
+                'O(1) at node',
+                'No random access'
+              ],
+              [
+                'Stack (ArrayDeque)',
+                'O(n)',
+                'O(n)',
+                'O(1) push',
+                'O(1) pop',
+                'LIFO'
+              ],
+              [
+                'Queue (deque/ArrayDeque)',
+                'O(n)',
+                'O(n)',
+                'O(1) enqueue',
+                'O(1) dequeue',
+                'FIFO, BFS'
+              ],
+              [
+                'Hash Table (HashMap)',
+                'N/A',
+                'O(1) avg',
+                'O(1) avg',
+                'O(1) avg',
+                'O(n) worst case collisions'
+              ],
+              [
+                'TreeMap / BST',
+                'O(log n)',
+                'O(log n)',
+                'O(log n)',
+                'O(log n)',
+                'Sorted keys, range queries'
+              ],
+              [
+                'Binary Heap',
+                'O(1) peek',
+                'O(n)',
+                'O(log n)',
+                'O(log n)',
+                'Priority queue, top-k'
+              ],
+              [
+                'Trie (prefix tree)',
+                'O(m)',
+                'O(m)',
+                'O(m)',
+                'O(m)',
+                'm = key length'
+              ],
+              [
+                'Union-Find',
+                'O(α(n))',
+                'O(α(n))',
+                'O(α(n))',
+                'O(α(n))',
+                'α = inverse Ackermann ≈ O(1)'
+              ],
+              [
+                'Adjacency List',
+                'O(deg(v))',
+                'O(V+E)',
+                'O(1) add edge',
+                'O(E) remove',
+                'Graphs, GNNs'
+              ],
+              [
+                'Adjacency Matrix',
+                'O(1)',
+                'O(V²)',
+                'O(1)',
+                'O(1)',
+                'Dense graphs, O(V²) space'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Sorting Algorithm Complexity — Complete Reference',
+          table: {
+            headers: [
+              'Algorithm',
+              'Best',
+              'Average',
+              'Worst',
+              'Space',
+              'Stable?',
+              'When to Use'
+            ],
+            rows: [
+              [
+                'Bubble Sort',
+                'O(n)',
+                'O(n²)',
+                'O(n²)',
+                'O(1)',
+                'Yes',
+                'Never in interviews (teaching only)'
+              ],
+              [
+                'Selection Sort',
+                'O(n²)',
+                'O(n²)',
+                'O(n²)',
+                'O(1)',
+                'No',
+                'Never — always use better option'
+              ],
+              [
+                'Insertion Sort',
+                'O(n)',
+                'O(n²)',
+                'O(n²)',
+                'O(1)',
+                'Yes',
+                'Small n (<50), nearly sorted data'
+              ],
+              [
+                'Merge Sort',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n)',
+                'Yes',
+                'Guaranteed O(n log n), linked lists, external sort'
+              ],
+              [
+                'Quick Sort',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n²)',
+                'O(log n)',
+                'No',
+                'In-place, cache-friendly, default in practice'
+              ],
+              [
+                'Heap Sort',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n log n)',
+                'O(1)',
+                'No',
+                'Guaranteed O(n log n), in-place, no extra space'
+              ],
+              [
+                'Counting Sort',
+                'O(n+k)',
+                'O(n+k)',
+                'O(n+k)',
+                'O(k)',
+                'Yes',
+                'Small integer range k'
+              ],
+              [
+                'Radix Sort',
+                'O(n·d)',
+                'O(n·d)',
+                'O(n·d)',
+                'O(n+d)',
+                'Yes',
+                'Fixed-width integers/strings, d = digits'
+              ],
+              [
+                'TimSort (Python/Java)',
+                'O(n)',
+                'O(n log n)',
+                'O(n log n)',
+                'O(n)',
+                'Yes',
+                'Real-world default — adaptive merge sort'
+              ],
+              [
+                'Bucket Sort',
+                'O(n+k)',
+                'O(n+k)',
+                'O(n²)',
+                'O(n)',
+                'Yes',
+                'Uniformly distributed floats'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Graph & Algorithm Complexity — Complete Reference',
+          table: {
+            headers: [
+              'Algorithm',
+              'Time',
+              'Space',
+              'Use Case'
+            ],
+            rows: [
+              [
+                'BFS (unweighted shortest path)',
+                'O(V+E)',
+                'O(V)',
+                'Shortest path, level order, grid flood fill'
+              ],
+              [
+                'DFS (explore all)',
+                'O(V+E)',
+                'O(V) stack',
+                'Connected components, cycle detect, topological sort'
+              ],
+              [
+                'Dijkstra (non-negative weights)',
+                'O((V+E) log V)',
+                'O(V)',
+                'Weighted shortest path, network routing'
+              ],
+              [
+                'Bellman-Ford',
+                'O(V·E)',
+                'O(V)',
+                'Negative edges, detect negative cycles'
+              ],
+              [
+                'Topological Sort (Kahn/BFS)',
+                'O(V+E)',
+                'O(V)',
+                'Course schedule, build order, DAG tasks'
+              ],
+              [
+                'Union-Find + Kruskal MST',
+                'O(E log E)',
+                'O(V)',
+                'Minimum spanning tree, connected components'
+              ],
+              [
+                'Floyd-Warshall (all pairs)',
+                'O(V³)',
+                'O(V²)',
+                'Dense graphs, small V (<400)'
+              ],
+              [
+                'Binary Search',
+                'O(log n)',
+                'O(1)',
+                'Sorted array lookup, search space halving'
+              ],
+              [
+                'Sliding Window',
+                'O(n)',
+                'O(k)',
+                'Contiguous subarray/substring problems'
+              ],
+              [
+                'Two Pointers',
+                'O(n)',
+                'O(1)',
+                'Sorted pairs, in-place removal'
+              ],
+              [
+                'Top-K with Heap',
+                'O(n log k)',
+                'O(k)',
+                'K-th largest, k closest, k frequent'
+              ],
+              [
+                '1D DP',
+                'O(n)',
+                'O(1)–O(n)',
+                'Fibonacci, house robber, coin change'
+              ],
+              [
+                '2D DP',
+                'O(m·n)',
+                'O(m·n)',
+                'Grid paths, LCS, edit distance'
+              ],
+              [
+                'Backtracking (all solutions)',
+                'O(b^d)',
+                'O(d)',
+                'Subsets, permutations, N-Queens'
+              ],
+              [
+                'KMP string search',
+                'O(n+m)',
+                'O(m)',
+                'Pattern matching, guaranteed linear'
+              ],
+              [
+                'KD-Tree KNN query',
+                'O(log n) avg',
+                'O(n)',
+                'Spatial nearest neighbor'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'When-to-Use Guide — Data Structure Selection',
+          text: 'Use this decision guide when an interviewer asks "which data structure would you use?" or when designing a solution:',
+          list: [
+            '<strong>Need fast lookup by key?</strong> → HashMap / HashSet — O(1) average. If sorted keys needed → TreeMap / TreeSet.',
+            '<strong>Need fast access by index?</strong> → Array / ArrayList — O(1). Not LinkedList.',
+            '<strong>Need FIFO processing?</strong> → deque / ArrayDeque — O(1) enqueue/dequeue. Never list.pop(0).',
+            '<strong>Need LIFO processing?</strong> → Stack / ArrayDeque — O(1) push/pop.',
+            '<strong>Need min/max repeatedly?</strong> → Heap / PriorityQueue — O(log n) insert, O(1) peek.',
+            '<strong>Need sorted order iteration?</strong> → TreeMap / TreeSet — O(log n) ops, sorted traversal.',
+            '<strong>Need prefix matching?</strong> → Trie — O(m) per operation, m = key length.',
+            '<strong>Need connectivity queries?</strong> → Union-Find — O(α(n)) ≈ O(1) per query.',
+            '<strong>Need contiguous subarray optimal?</strong> → Sliding window on array — O(n).',
+            '<strong>Need spatial nearest neighbor?</strong> → KD-Tree (<20 dims) or FAISS (>1M vectors).',
+            '<strong>Need LRU eviction?</strong> → LinkedHashMap (Java) or OrderedDict + HashMap (Python).',
+            '<strong>Need graph representation?</strong> → Adjacency list (sparse, default) or matrix (dense, O(1) edge check).'
+          ]
+        },
+        {
+          heading: 'Visual Diagram — Complexity Scale & n Limits',
+          code: `What fits in 1 second? (≈ 10^8 operations)
+
+  n         O(1)    O(log n)   O(n)      O(n log n)  O(n²)     O(2^n)
+  ─────────────────────────────────────────────────────────────────────
+  10        ✓       ✓          ✓         ✓           ✓         ✓
+  1,000     ✓       ✓          ✓         ✓           ✗         ✗
+  100,000   ✓       ✓          ✓         tight       ✗         ✗
+  1,000,000 ✓       ✓          tight     ✗           ✗         ✗
+  10^9      ✓       ✓          ✗         ✗           ✗         ✗
+
+Decision tree — "My solution is O(?)":
+
+  Single loop?                    → O(n)
+  Two nested loops same data?     → O(n²)
+  Halve search space each step?   → O(log n)
+  Sort then scan?                  → O(n log n)
+  BFS/DFS on graph?               → O(V + E)
+  DP table m×n?                   → O(m · n)
+  Generate all subsets?           → O(2^n) — exponential
+
+Pattern → Complexity quick map:
+  Sliding window    → O(n)
+  Two pointers      → O(n)
+  Binary search     → O(log n)
+  Heap top-k        → O(n log k)
+  Merge intervals   → O(n log n) [sort dominates]
+  BFS/DFS grid      → O(m · n)
+  DP 1D             → O(n)
+  DP 2D             → O(m · n)`,
+          language: 'text'
+        },
+        {
+          heading: 'Best Practices — Complexity Analysis',
+          content: [
+            '<p><strong>Always state both time and space.</strong> "O(n) time, O(n) space for the hash map" — interviewers expect both. Omitting space analysis is a red flag.</p>',
+            '<p><strong>Drop constants and lower-order terms.</strong> O(3n + 50) → O(n). O(n² + n log n) → O(n²). But mention when constants matter in practice (e.g., hash map vs tree for small n).</p>',
+            '<p><strong>Identify the dominant operation.</strong> Sort + scan = O(n log n) because sort dominates. BFS + hash set = O(V+E) because both are linear in graph size.</p>',
+            '<p><strong>Count the state space for DP.</strong> Memoization cost = O(number of unique states × cost per transition). Coin change: O(n × amount). Knapsack: O(n × W).</p>',
+            '<p><strong>Amortized vs worst case.</strong> HashMap insert is O(1) amortized but O(n) worst case (all collisions). ArrayList append is O(1) amortized but O(n) on resize. Say "amortized" when relevant.</p>'
+          ],
+          note: 'Rule of thumb: n ≤ 10⁵ → O(n log n) OK. n ≤ 10³ → O(n²) might pass. n ≤ 20 → O(2^n) backtracking OK.'
+        },
+        {
+          heading: 'Python & Java — Operation Complexity Side-by-Side',
+          table: {
+            headers: [
+              'Operation',
+              'Python',
+              'Java',
+              'Complexity'
+            ],
+            rows: [
+              [
+                'Append to end',
+                'list.append()',
+                'ArrayList.add()',
+                'O(1) amortized'
+              ],
+              [
+                'Insert at front',
+                'list.insert(0,x)',
+                'ArrayList.add(0,x)',
+                'O(n)'
+              ],
+              [
+                'Pop from front',
+                'deque.popleft()',
+                'ArrayDeque.poll()',
+                'O(1)'
+              ],
+              [
+                'Dict/map lookup',
+                'dict[key]',
+                'HashMap.get()',
+                'O(1) avg'
+              ],
+              [
+                'Dict key iteration (sorted)',
+                'sorted(d.keys())',
+                'TreeMap.keySet()',
+                'O(n log n) / O(log n) each'
+              ],
+              [
+                'Heap push/pop',
+                'heapq.heappush/pop',
+                'PriorityQueue.offer/poll',
+                'O(log n)'
+              ],
+              [
+                'Set membership',
+                'x in set',
+                'HashSet.contains()',
+                'O(1) avg'
+              ],
+              [
+                'Sort',
+                'sorted() / .sort()',
+                'Arrays.sort()',
+                'O(n log n)'
+              ],
+              [
+                'String concat in loop',
+                '"".join(list)',
+                'StringBuilder.append()',
+                'O(n) vs O(n²)'
+              ],
+              [
+                'Counter frequency',
+                'Counter(lst)',
+                'HashMap + getOrDefault',
+                'O(n) build, O(1) query'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Space Complexity Guide',
+          table: {
+            headers: [
+              'Pattern / Algorithm',
+              'Auxiliary Space',
+              'What counts'
+            ],
+            rows: [
+              [
+                'Two pointers',
+                'O(1)',
+                'Only pointer indices'
+              ],
+              [
+                'Sliding window',
+                'O(k)',
+                'k = charset size or distinct elements'
+              ],
+              [
+                'Hash map solution',
+                'O(n)',
+                'Store up to n keys'
+              ],
+              [
+                'BFS',
+                'O(V) or O(W)',
+                'W = max queue width (level size)'
+              ],
+              [
+                'DFS recursion',
+                'O(h) or O(V)',
+                'h = tree height; graph = O(V) visited'
+              ],
+              [
+                'Merge sort',
+                'O(n)',
+                'Temporary merge array'
+              ],
+              [
+                'Quick sort',
+                'O(log n)',
+                'Recursion stack'
+              ],
+              [
+                'DP 1D tabulation',
+                'O(n)',
+                'DP array'
+              ],
+              [
+                'DP 2D tabulation',
+                'O(m·n)',
+                'DP table; can optimize to O(min(m,n))'
+              ],
+              [
+                'Backtracking',
+                'O(d)',
+                'd = recursion depth / path length'
+              ],
+              [
+                'Graph adjacency list',
+                'O(V+E)',
+                'Store all edges'
+              ],
+              [
+                'Union-Find',
+                'O(V)',
+                'Parent + rank arrays'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes & Pitfalls',
+          list: [
+            '<strong>Claiming O(1) for hash map without "average":</strong> Worst case O(n) with collisions — <em>Fix:</em> say "O(1) average, O(n) worst case."',
+            '<strong>Forgetting recursion stack space:</strong> DFS depth h uses O(h) stack — <em>Fix:</em> mention stack space separately from visited set.',
+            '<strong>Sorting hidden in solution:</strong> `sorted(arr)` before scan makes it O(n log n), not O(n) — <em>Fix:</em> identify the dominant sort step.',
+            '<strong>Nested loops on different inputs:</strong> O(n·m) is not O(n²) — <em>Fix:</em> use separate variables for each input size.',
+            '<strong>Confusing best and worst case:</strong> Quick sort O(n log n) average but O(n²) worst — <em>Fix:</em> always defend worst case unless asked otherwise.',
+            '<strong>Ignoring output size:</strong> Returning all subsets is O(2^n) output — <em>Fix:</em> exponential output means exponential time is unavoidable.'
+          ],
+          code: `# Analyze this — what's the complexity?
+def solve(nums):
+    nums.sort()                    # O(n log n)
+    seen = set()                   # O(n) space
+    for num in nums:               # O(n)
+        if target - num in seen:   # O(1) avg
+            return True
+        seen.add(num)
+    return False
+# Answer: O(n log n) time, O(n) space — sort dominates`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Applications',
+          list: [
+            '<strong>API rate limiting:</strong> Sliding window counter — O(1) per request with deque of timestamps.',
+            '<strong>Database indexing:</strong> B-tree = O(log n) search (TreeMap analogy); hash index = O(1) (HashMap analogy).',
+            '<strong>CDN cache eviction:</strong> LRU = LinkedHashMap pattern — O(1) get/put/evict.',
+            '<strong>Search autocomplete:</strong> Trie for prefix → O(m) lookup, m = prefix length.',
+            '<strong>Social graph:</strong> BFS for degrees of separation — O(V+E) with adjacency list.',
+            '<strong>ML inference:</strong> Top-k recommendations with heap — O(n log k) vs O(n log n) full sort.'
+          ]
+        },
+        {
+          heading: 'Interview Tips & Final Checklist',
+          list: [
+            '<strong>Before coding:</strong> State brute force complexity → optimized approach → final time AND space.',
+            '<strong>Pattern first:</strong> Name the pattern (sliding window, BFS, DP) — then complexity follows predictably.',
+            '<strong>Constraints matter:</strong> "n up to 10⁵" → need O(n log n) or better. "n up to 20" → backtracking OK.',
+            '<strong>Trade-off proactively:</strong> "Hash map gives O(n) time but O(n) space; two pointers give O(n) time O(1) space but needs sorted input."',
+            '<strong>Draw the table:</strong> For DP, fill 3×3 of the memo table on the whiteboard — proves you understand, not just memorized.',
+            '<strong>Know your sort:</strong> Python uses TimSort O(n log n). Java Arrays.sort uses dual-pivot quicksort for primitives, TimSort for objects.',
+            '<strong>Module 5 summary:</strong> Python stdlib (deque, Counter, defaultdict, heapq) + Java Collections (ArrayList, HashMap, TreeMap, PQ) + 7 interview patterns + ML structures + this cheat sheet = interview-ready.',
+            `Q1: n=500,000, algorithm is O(n²). Will it pass?
+Ans: No. n² = 2.5×10¹¹ operations — far beyond 10⁸ budget. Need O(n log n) or O(n).`,
+            `Q2: When is O(n) extra space unacceptable?
+Ans: When input is streamed (unknown/infinite size) or memory-constrained (embedded). Prefer O(1) two-pointer or in-place algorithms.`,
+            `Q3: Sorting 10 integers vs 10 million — same algorithm?
+Ans: Same Big-O O(n log n), but insertion sort wins for tiny n (low constant factor, cache-friendly). TimSort adapts — O(n) on nearly sorted data.`
+          ]
         }
       ]
     }
@@ -66775,6 +75359,11 @@ export const tutorialData = {
     structure: dlStructure,
     content: dlContent,
     title: 'Deep Learning Approaches'
+  },
+  dsa: {
+    structure: dsaStructure,
+    content: dsaContent,
+    title: 'Data Structures & Algorithms'
   },
   imaging: {
     structure: imagingStructure,

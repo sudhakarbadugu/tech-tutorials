@@ -45,6 +45,7 @@ function subjectTag(filename) {
   if (filename.startsWith('llm')) return 'large language models';
   if (filename.startsWith('multimodal')) return 'multimodal machine learning';
   if (filename.startsWith('imaging')) return 'medical and satellite imaging';
+  if (filename.startsWith('dsa')) return 'data structures and algorithms';
   return 'data science';
 }
 

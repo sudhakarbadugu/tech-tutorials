@@ -30,7 +30,7 @@ const tutorialCategories = [
   {
     key: 'programming',
     title: 'Programming & Web',
-    subjects: ['python', 'java', 'javascript', 'html', 'css', 'react', 'angular', 'react-native']
+    subjects: ['python', 'java', 'javascript', 'dsa', 'html', 'css', 'react', 'angular', 'react-native']
   },
   {
     key: 'data',

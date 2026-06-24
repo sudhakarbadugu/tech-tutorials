@@ -5,6 +5,7 @@ const AI_ML_SUBJECTS = [
   'ai',
   'cv',
   'dl',
+  'dsa',
   'imaging',
   'llm',
   'mlalgo',

@@ -294,6 +294,22 @@ print("Cosine similarity (random):", round(sim, 4))`,
 ct = np.random.randint(-1000, 2000, (512, 512), dtype=np.int16)
 print("HU range:", ct.min(), "to", ct.max(), "mean:", round(ct.mean(), 1))`,
   },
+  'data structures and algorithms': {
+    caseText:
+      '<strong>Google — search & ranking.</strong> Inverted indexes (hash + trie), graph algorithms for PageRank, and heap-backed priority queues power query latency at billions of requests per day — every layer is a DSA trade-off.',
+    py: (title) => `from collections import deque
+
+# ${title} — BFS on a small graph
+graph = {0: [1, 2], 1: [0, 3], 2: [0], 3: [1]}
+seen, q = {0}, deque([0])
+while q:
+    node = q.popleft()
+    for nei in graph[node]:
+        if nei not in seen:
+            seen.add(nei)
+            q.append(nei)
+print("${title} — BFS visited:", sorted(seen))`,
+  },
   'artificial intelligence': {
     caseText:
       '<strong>DeepMind — AlphaFold.</strong> Search + learning over protein conformation space solved structure prediction for 200M+ proteins, transforming structural biology.',

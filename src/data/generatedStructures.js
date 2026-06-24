@@ -1,5 +1,5 @@
 // Auto-generated from rewritten modules — do not edit manually
-// Generated: 2026-06-24T02:40:54.683Z
+// Generated: 2026-06-24T12:28:27.025Z
 
 export const aiStructure = {
   module1: {
@@ -424,6 +424,134 @@ export const dlStructure = {
       {
         id: 'scalable-training',
         title: 'Scalable & Distributed Training'
+      }
+    ]
+  }
+};
+
+export const dsaStructure = {
+  module1: {
+    title: 'Module 1: Core Linear Structures',
+    topics: [
+      {
+        id: 'big-o',
+        title: 'Big-O Notation & Complexity Analysis'
+      },
+      {
+        id: 'arrays-strings',
+        title: 'Arrays & Strings'
+      },
+      {
+        id: 'linked-lists',
+        title: 'Linked Lists (Singly & Doubly)'
+      },
+      {
+        id: 'stacks-queues',
+        title: 'Stacks & Queues'
+      },
+      {
+        id: 'hashmaps-sets',
+        title: 'HashMaps & Sets'
+      }
+    ]
+  },
+  module2: {
+    title: 'Module 2: Trees & Heaps',
+    topics: [
+      {
+        id: 'binary-trees',
+        title: 'Binary Trees'
+      },
+      {
+        id: 'bst',
+        title: 'Binary Search Trees (BST)'
+      },
+      {
+        id: 'heaps',
+        title: 'Heaps & Priority Queues'
+      },
+      {
+        id: 'tries',
+        title: 'Tries (Prefix Trees)'
+      },
+      {
+        id: 'graphs-bfs-dfs',
+        title: 'Graphs BFS/DFS Basics'
+      }
+    ]
+  },
+  module3: {
+    title: 'Module 3: Sorting, Searching & Patterns',
+    topics: [
+      {
+        id: 'sorting',
+        title: 'Sorting Algorithms'
+      },
+      {
+        id: 'binary-search',
+        title: 'Binary Search'
+      },
+      {
+        id: 'two-pointers',
+        title: 'Two Pointers & Sliding Window'
+      },
+      {
+        id: 'divide-conquer',
+        title: 'Divide & Conquer'
+      },
+      {
+        id: 'greedy',
+        title: 'Greedy Algorithms'
+      }
+    ]
+  },
+  module4: {
+    title: 'Module 4: DP & Graph Algorithms',
+    topics: [
+      {
+        id: 'recursion-backtracking',
+        title: 'Recursion & Backtracking'
+      },
+      {
+        id: 'dp-memoization',
+        title: 'Dynamic Programming (Memoization)'
+      },
+      {
+        id: 'dp-tabulation',
+        title: 'Dynamic Programming (Tabulation)'
+      },
+      {
+        id: 'advanced-graphs',
+        title: 'Dijkstra, TopSort & Union-Find'
+      },
+      {
+        id: 'string-algos',
+        title: 'Advanced String Algorithms'
+      }
+    ]
+  },
+  module5: {
+    title: 'Module 5: Practical DS in Python/Java',
+    topics: [
+      {
+        id: 'python-stdlib',
+        title: 'Python Standard Library'
+      },
+      {
+        id: 'java-collections',
+        title: 'Java Collections Framework'
+      },
+      {
+        id: 'interview-patterns',
+        title: 'Top Interview Patterns'
+      },
+      {
+        id: 'ds-ml-pipelines',
+        title: 'Data Structures in ML'
+      },
+      {
+        id: 'complexity-cheat-sheet',
+        title: 'Final Complexity Review'
       }
     ]
   }

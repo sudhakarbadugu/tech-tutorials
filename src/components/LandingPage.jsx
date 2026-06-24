@@ -70,6 +70,7 @@ const subjectIcons = {
   python: Code2,
   java: Code2,
   javascript: Code2,
+  dsa: GitBranch,
   html: FileCode,
   css: Palette,
   react: Atom,
@@ -92,6 +93,7 @@ const subjectColors = {
   python: { bg: '#ffedd5', accent: '#ea580c', gradient: 'linear-gradient(135deg, #ea580c 0%, #fb923c 100%)' },
   java: { bg: '#dbeafe', accent: '#1e40af', gradient: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)' },
   javascript: { bg: '#fef3c7', accent: '#d97706', gradient: 'linear-gradient(135deg, #d97706 0%, #fbbf24 100%)' },
+  dsa: { bg: '#f3e8ff', accent: '#7e22ce', gradient: 'linear-gradient(135deg, #7e22ce 0%, #a855f7 100%)' },
   html: { bg: '#ffedd5', accent: '#c2410c', gradient: 'linear-gradient(135deg, #c2410c 0%, #fb923c 100%)' },
   css: { bg: '#dbeafe', accent: '#1d4ed8', gradient: 'linear-gradient(135deg, #1d4ed8 0%, #60a5fa 100%)' },
   react: { bg: '#cffafe', accent: '#0891b2', gradient: 'linear-gradient(135deg, #0891b2 0%, #22d3ee 100%)' },
@@ -106,7 +108,7 @@ const subjectColors = {
 const categories = {
   all: { title: 'All Courses', icon: LayoutGrid },
   aiml: { title: 'AI & Machine Learning', icon: Brain, subjects: ['ai', 'cv', 'dl', 'llm', 'mlalgo', 'multimodal', 'nlp', 'rl'] },
-  programming: { title: 'Programming & Web', icon: Code2, subjects: ['python', 'java', 'javascript', 'html', 'css', 'react', 'angular', 'react-native'] },
+  programming: { title: 'Programming & Web', icon: Code2, subjects: ['python', 'java', 'javascript', 'dsa', 'html', 'css', 'react', 'angular', 'react-native'] },
   data: { title: 'Data & Statistics', icon: BarChart3, subjects: ['stats', 'timeseries', 'imaging'] }
 }
 

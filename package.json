@@ -1,7 +1,7 @@
 {
   "name": "tech-tutorials",
   "private": true,
-  "version": "2.18.23",
+  "version": "2.18.24",
   "type": "module",
   "homepage": "https://sudhakarbadugu.github.io/tech-tutorials/",
   "scripts": {

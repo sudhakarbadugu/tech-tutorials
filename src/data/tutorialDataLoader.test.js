@@ -44,13 +44,14 @@ function assertValidTopicContent(topicContent, label) {
 
 describe('tutorialDataLoader', () => {
   describe('subjectMeta', () => {
-    it('registers all 19 tutorial subjects', () => {
-      expect(ALL_SUBJECTS).toHaveLength(19)
+    it('registers all 20 tutorial subjects', () => {
+      expect(ALL_SUBJECTS).toHaveLength(20)
       expect(ALL_SUBJECTS).toEqual(
         expect.arrayContaining([
           'ai',
           'cv',
           'dl',
+          'dsa',
           'imaging',
           'llm',
           'mlalgo',
