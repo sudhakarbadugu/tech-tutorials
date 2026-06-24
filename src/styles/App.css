@@ -94,9 +94,40 @@ body {
   transition: var(--transition);
 }
 
+/* Tutorial pages: lock to viewport so only the content panel scrolls */
+html.tutorial-layout-active,
+html.tutorial-layout-active body {
+  height: 100%;
+  overflow: hidden;
+}
+
+html.tutorial-layout-active #root {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app.tutorial-layout {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app.tutorial-layout .main-container {
+  flex: 1;
+  min-height: 0;
+}
+
+.app.tutorial-layout .sidebar,
+.app.tutorial-layout .content {
+  min-height: 0;
+  max-height: none;
+}
+
 .main-container {
   display: flex;
   flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -1909,8 +1940,8 @@ table tr:hover {
   display: none;
 }
 
-.reading-mode .content {
-  max-height: 100vh;
+.app.tutorial-layout.reading-mode .content {
+  max-height: none;
 }
 
 .reading-mode .content-header {

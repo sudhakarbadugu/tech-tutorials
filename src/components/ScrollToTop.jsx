@@ -11,26 +11,52 @@ import './ScrollToTop.css'
  * - Smooth-scrolls to the top, falling back to instant scroll if the user
  *   prefers reduced motion.
  */
+function getTutorialContentScroller() {
+  if (typeof document === 'undefined') return null
+  return document.querySelector('.app.tutorial-layout .content')
+}
+
+function getScrollTop() {
+  const contentScroller = getTutorialContentScroller()
+  if (contentScroller) return contentScroller.scrollTop
+  if (typeof window === 'undefined') return 0
+  return window.scrollY
+}
+
+function scrollPageToTop() {
+  const contentScroller = getTutorialContentScroller()
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const behavior = reduceMotion ? 'auto' : 'smooth'
+  if (contentScroller) {
+    contentScroller.scrollTo({ top: 0, behavior })
+    return
+  }
+  window.scrollTo({ top: 0, behavior })
+}
+
 export default function ScrollToTop({ threshold = 400 }) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      // window may be undefined in some test environments
       if (typeof window === 'undefined') return
-      setVisible(window.scrollY > threshold)
+      setVisible(getScrollTop() > threshold)
     }
 
     // Run once on mount in case the page is already scrolled
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    // Capture scroll on nested panels (e.g. tutorial content) — scroll does not bubble.
+    document.addEventListener('scroll', handleScroll, { passive: true, capture: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('scroll', handleScroll, { capture: true })
+    }
   }, [threshold])
 
   const scrollToTop = useCallback(() => {
     if (typeof window === 'undefined') return
-    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })
+    scrollPageToTop()
   }, [])
 
   return (

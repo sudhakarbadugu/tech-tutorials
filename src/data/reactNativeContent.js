@@ -1,5 +1,12 @@
-// Auto-generated from trinits-web-angular tutorial sources
-// Generated: 2026-06-13T02:26:18.130Z
+// React Native tutorial content - beginner-friendly, w3schools-style explanations.
+// Each topic has a title and an array of sections. Sections support:
+//   - content: array of HTML strings (paragraphs of explanation)
+//   - list: array of HTML strings (reference / property bullets)
+//   - code: string of example code shown in an ExampleBox
+//   - example: { title, code, output, type } for the ExampleBox component
+//   - heading: string shown above the section body
+//
+// Inside content / list items we can use inline HTML such as <code>...</code>.
 
 export const reactNativeContent = {
   module1: {
@@ -7,27 +14,75 @@ export const reactNativeContent = {
       title: 'Environment Setup',
       sections: [
         {
-          heading: 'Environment Setup',
+          heading: 'What is React Native, and what do you need to run it?',
           content: [
-            '<strong>Common Setup Issues:</strong> • Android emulator not detected? Check AVD Manager and ANDROID_HOME path • iOS build fails? Ensure Xcode Command Line Tools are installed • Metro bundler issues? Clear cache with <code>npx react-native start --reset-cache</code> • Use <code>npx react-native doctor</code> for automated troubleshooting'
+            '<strong>React Native</strong> is a framework from Meta (Facebook) that lets you build real mobile apps for iOS and Android using JavaScript and React. Instead of writing two separate codebases in Swift and Kotlin, you write one React app and React Native renders real native UI components on each platform — a <code>&lt;View&gt;</code> becomes a native <code>UIView</code> on iOS and a <code>android.view.View</code> on Android.',
+            'This is different from "hybrid" frameworks like Cordova or Ionic, which wrap a web app in a webview. React Native apps look and feel native because the UI <em>is</em> native. You get near-native performance for most tasks, full access to device APIs (camera, GPS, Bluetooth), and you can reuse 80–90% of your code between iOS and Android.',
+            'Because the output is a real native app, you need the native build tools installed. That means <strong>Node.js</strong> (to run the JavaScript tooling), <strong>Xcode</strong> on macOS for iOS builds, and <strong>Android Studio</strong> for Android builds. iOS development requires a Mac; Android development works on macOS, Windows, or Linux.',
+            'There are two ways to start a React Native project: <strong>Expo</strong> (the simplest, recommended for beginners — no native build tools required for most work) and the <strong>React Native CLI</strong> (full control, needed if you want to add custom native code). This tutorial uses the CLI, but most of what you learn applies to both.'
           ],
           list: [
-            '<span class="badge bg-primary me-2">Essential</span> Install <strong>Node.js (LTS)</strong> from <a href="https://nodejs.org" target="_blank">nodejs.org</a> for best compatibility and package management.',
-            '<strong>Watchman</strong> (macOS): <code>brew install watchman</code> - Improves file watching performance during development.',
-            '<strong>Xcode</strong> (macOS): Download from App Store, install Command Line Tools, and configure iOS simulator for iOS development.',
-            '<strong>Android Studio</strong> : Install with Android Virtual Device (AVD) and SDK tools. Set ANDROID_HOME environment variable.',
-            '<strong>JDK 11+</strong> : Required for Android builds. Use <code>brew install openjdk@11</code> on macOS.',
-            '<span class="badge bg-success me-2">CLI Tools</span> <strong>Install CLI:</strong> <code>npm install -g react-native-cli</code> (for legacy projects; prefer <code>npx</code> for new projects).',
-            '<strong>Create App:</strong> <code>npx react-native init MyApp</code> - Creates a new React Native project.',
-            '<strong>Run Android:</strong> <code>npx react-native run-android</code> - Builds and runs on Android device/emulator.',
-            '<strong>Run iOS:</strong> <code>npx react-native run-ios</code> (macOS only) - Builds and runs on iOS simulator.',
-            '<strong>Health Check:</strong> <code>npx react-native doctor</code> - Diagnoses common setup issues.',
-            '<span class="badge bg-warning text-dark me-2">Alternative</span> <strong>Expo CLI:</strong> For rapid prototyping, use <code>npm install -g expo-cli</code> and <code>expo init MyApp</code> (no native code access).',
-            '<strong>Version Control:</strong> Use proper <code>.gitignore</code> to exclude <code>node_modules</code> , <code>android/build</code> , <code>ios/build</code> .'
+            'React Native = build <strong>real iOS and Android apps</strong> with React + JavaScript.',
+            'Renders native UI — looks and feels like a native app, not a web wrapper.',
+            'Reuse ~80–90% of code between iOS and Android.',
+            'Needs <strong>Node.js</strong> + (Xcode on macOS for iOS, Android Studio for Android).',
+            'Two ways to start: <strong>Expo</strong> (beginner-friendly, no native tools) or <strong>React Native CLI</strong> (full control).',
+            'iOS builds require a Mac; Android builds work on macOS, Windows, or Linux.'
+          ]
+        },
+        {
+          heading: 'Installing the tools (step by step)',
+          content: [
+            'The setup is a one-time chore. Once done, you can create and run projects with two commands.',
+            '<strong>1. Install Node.js (LTS)</strong> — download from <a href="https://nodejs.org" target="_blank">nodejs.org</a>. Pick the LTS version. This installs both <code>node</code> and <code>npm</code>.',
+            '<strong>2. (macOS only) Install Watchman</strong> — <code>brew install watchman</code>. Watchman is Meta\'s file-watcher; it makes Hot Reload faster on macOS.',
+            '<strong>3. (macOS only) Install Xcode</strong> — from the App Store. Open it once and accept the license; install the Command Line Tools (<code>xcode-select --install</code>). This gives you the iOS simulator.',
+            '<strong>4. Install Android Studio</strong> — from <a href="https://developer.android.com/studio" target="_blank">developer.android.com/studio</a>. Use its SDK Manager to install an Android SDK and create an AVD (Android Virtual Device) for the emulator. Then set the <code>ANDROID_HOME</code> environment variable to the SDK path.',
+            '<strong>5. (Android) Install JDK 11+</strong> — Android builds need Java. On macOS: <code>brew install openjdk@11</code>. Android Studio bundles a JDK, so this is often already covered.',
+            'Run <code>npx react-native doctor</code> at any time — it checks your setup and tells you what is missing or misconfigured.'
           ],
-          code: `npx react-native init MyApp
+          list: [
+            'Step 1: install <strong>Node.js LTS</strong> from nodejs.org.',
+            'Step 2 (macOS): <code>brew install watchman</code>.',
+            'Step 3 (macOS): install <strong>Xcode</strong> + Command Line Tools.',
+            'Step 4: install <strong>Android Studio</strong> + an AVD; set <code>ANDROID_HOME</code>.',
+            'Step 5 (Android): ensure <strong>JDK 11+</strong> is on the PATH.',
+            'Sanity check: <code>npx react-native doctor</code>.'
+          ],
+          code: `# Verify the install
+node -v
+npm -v
+npx react-native doctor
+
+# Create a new project (React Native CLI)
+npx react-native init MyApp
 cd MyApp
-npx react-native run-android  # or run-ios`
+
+# Run on Android (emulator or connected device)
+npx react-native run-android
+
+# Run on iOS (macOS only — launches the simulator)
+npx react-native run-ios
+
+# Start the Metro bundler separately if needed
+npx react-native start --reset-cache`
+        },
+        {
+          heading: 'Common setup problems and fixes',
+          content: [
+            'If something does not work, the error message usually points at the cause. Here are the issues beginners hit most often:',
+            '<strong>Android emulator not detected</strong> — open the AVD Manager in Android Studio and create a virtual device first. Make sure <code>ANDROID_HOME</code> points at the SDK folder (e.g. <code>~/Library/Android/sdk</code> on macOS).',
+            '<strong>iOS build fails</strong> — open Xcode once, accept the license, and run <code>xcode-select --install</code> to install the Command Line Tools. Run <code>cd ios &amp;&amp; pod install</code> to install CocoaPods dependencies.',
+            '<strong>Metro bundler issues</strong> — clear the cache: <code>npx react-native start --reset-cache</code>. Then rebuild.',
+            '<strong>Expo alternative</strong> — if all this setup is too much, try Expo: <code>npm install -g expo-cli &amp;&amp; expo init MyApp</code>. Expo handles the native build for you, so you can develop without Xcode or Android Studio. You "eject" later if you need custom native code.'
+          ],
+          list: [
+            'Android emulator missing? Create an AVD and set <code>ANDROID_HOME</code>.',
+            'iOS build fails? Open Xcode, accept the license, run <code>pod install</code>.',
+            'Metro problems? <code>npx react-native start --reset-cache</code>.',
+            'Diagnose with <code>npx react-native doctor</code>.',
+            'Beginner-friendly alternative: <strong>Expo</strong> — no native build tools needed.'
+          ]
         }
       ]
     },
@@ -35,23 +90,50 @@ npx react-native run-android  # or run-ios`
       title: 'Hello World',
       sections: [
         {
-          heading: 'Hello World',
+          heading: 'Your first React Native app',
+          content: [
+            'A React Native app is just a React app that renders native components instead of HTML. The smallest possible app imports <code>View</code> and <code>Text</code> from <code>react-native</code>, returns some JSX, and exports it as the default. That component becomes the app\'s entry point.',
+            'Two things to notice right away:',
+            '1. There is no <code>&lt;div&gt;</code> or <code>&lt;p&gt;</code>. React Native uses <code>&lt;View&gt;</code> (a container, like a <code>div</code>) and <code>&lt;Text&gt;</code> (for text, like a <code>span</code> or <code>p</code>). All text <em>must</em> be wrapped in <code>&lt;Text&gt;</code> — bare text inside a <code>&lt;View&gt;</code> throws an error.<br>2. The component is exported as the default. In a real app the entry file (<code>index.js</code>) registers this component with <code>AppRegistry.registerComponent</code> (older projects) or imports it as <code>App</code> (newer setups).',
+            'Run the app on a device or emulator with <code>npx react-native run-android</code> or <code>npx react-native run-ios</code>. The Metro bundler packages your JavaScript and ships it to the app — you should see "Hello, React Native!" on the screen.'
+          ],
           list: [
-            '<span class="badge bg-success me-2">Objective</span> <strong>Goal:</strong> Display a basic message using React Native components and understand the basic structure.',
-            '<strong>View Component:</strong> Acts like a container (similar to <code><div></code> in HTML) for layout and styling.',
-            '<strong>Text Component:</strong> Used to display textual content. All text must be wrapped in <code><Text></code> components.',
-            '<strong>JSX Structure:</strong> Use HTML-like syntax in JavaScript. Must return a single parent element.',
-            '<span class="badge bg-warning text-dark me-2">Important</span> <strong>Export Default:</strong> Use <code>export default App;</code> to make your component the main entry point.'
+            'A React Native app is a React app that renders native components.',
+            'Use <code>&lt;View&gt;</code> as a container (like <code>&lt;div&gt;</code>) and <code>&lt;Text&gt;</code> for text.',
+            'All text must be inside <code>&lt;Text&gt;</code> — bare text throws an error.',
+            'Export the component as default; it becomes the app\'s entry point.',
+            'Run with <code>npx react-native run-android</code> or <code>run-ios</code>.'
           ],
           code: `import { View, Text } from 'react-native';
 
 const App = () => (
-  <View>
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     <Text>Hello, React Native!</Text>
   </View>
 );
 
-export default App;`
+export default App;`,
+          example: {
+            title: 'Try it Yourself',
+            code: `import { View, Text, StyleSheet } from 'react-native';
+
+const App = () => (
+  <View style={styles.container}>
+    <Text style={styles.title}>Hello, React Native!</Text>
+    <Text style={styles.subtitle}>My first mobile app.</Text>
+  </View>
+);
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  title:     { fontSize: 24, fontWeight: 'bold' },
+  subtitle:  { fontSize: 16, color: '#666' },
+});
+
+export default App;`,
+            output: 'Hello, React Native!<br>My first mobile app.',
+            type: 'code'
+          }
         }
       ]
     },
@@ -59,75 +141,38 @@ export default App;`
       title: 'Core Components',
       sections: [
         {
-          heading: 'Core Components',
+          heading: 'The components you will use constantly',
           content: [
-            '<strong>💡 Core Concept:</strong> React Native provides pre-built components that map to native platform UI elements. Core components work across platforms, while Native components are platform-specific for enhanced functionality.'
+            'React Native ships with a set of <strong>core components</strong> — built-in components that map to real native UI on each platform. You import them from <code>react-native</code> and use them in JSX. These are the building blocks for everything you build:',
+            "<strong>View</strong> — the basic container. Like a <code>&lt;div&gt;</code> in HTML. Use it for layout, padding, grouping other components, and as the root of a screen.<br><strong>Text</strong> — displays text. <em>All</em> text in React Native must be inside a <code>&lt;Text&gt;</code>; bare text in a <code>&lt;View&gt;</code> throws.<br><strong>Image</strong> — displays images. Use <code>source={{ uri: '...' }}</code> for remote images or <code>source={require('./local.png')}</code> for local ones.<br><strong>TextInput</strong> — user input. Like an <code>&lt;input&gt;</code> in HTML; controlled with <code>value</code> + <code>onChangeText</code>.<br><strong>ScrollView</strong> — makes content scrollable when it is taller than the screen. Renders all children at once, so use only for small content.<br><strong>FlatList</strong> — the high-performance list for large datasets. Only renders the items currently on screen (virtualization).<br><strong>Button</strong> / <strong>TouchableOpacity</strong> — clickable elements. <code>Button</code> is basic and styled by the platform; <code>TouchableOpacity</code> wraps any component and adds a fade-on-press feedback.<br><strong>Modal</strong> — an overlay above the rest of the app, for dialogs and popups.<br><strong>ActivityIndicator</strong> — a loading spinner.<br><strong>Switch</strong> — a toggle switch that adapts to platform style.",
+            'There are also a few <strong>platform-specific</strong> components (e.g. <code>ActionSheetIOS</code>, <code>DrawerLayoutAndroid</code>), but for most apps you stick to the cross-platform ones above and let React Native handle the platform differences.'
           ],
           list: [
-            '<span class="badge bg-primary me-2">Essential</span> <strong>View:</strong> The fundamental building block - like a <code><div></code> in HTML. Used for layout, styling, and grouping other components.',
-            '<strong>Text:</strong> Displays text content. All text must be wrapped in <code><Text></code> components. Supports nesting and styling.',
-            '<strong>Image:</strong> Displays local and remote images with resize modes and lazy loading capabilities.',
-            '<span class="badge bg-success me-2">Input</span> <strong>TextInput:</strong> Handles user text input with keyboard types, validation, and formatting options.',
-            '<strong>ScrollView:</strong> Makes content scrollable when it exceeds screen boundaries. Use for small lists.',
-            '<strong>FlatList:</strong> High-performance list component for large datasets with virtualization and lazy loading.',
-            '<span class="badge bg-warning text-dark me-2">Interactive</span> <strong>Button:</strong> Basic button component with platform-specific styling and press handling.',
-            '<strong>TouchableOpacity:</strong> Wrapper for making any component touchable with opacity feedback.',
-            '<strong>Modal:</strong> Displays content overlay above the main interface for dialogs and popups.',
-            '<span class="badge bg-info text-dark me-2">Status</span> <strong>ActivityIndicator:</strong> Shows loading spinner with customizable size and color.',
-            '<span class="badge bg-danger me-2">iOS Only</span> <strong>ActionSheetIOS:</strong> Native iOS action sheet for presenting choices to users.',
-            '<strong>DatePickerIOS:</strong> iOS-specific date and time picker component.',
-            '<span class="badge bg-success me-2">Android Only</span> <strong>DrawerLayoutAndroid:</strong> Android-specific drawer navigation component.',
-            '<strong>ProgressBarAndroid:</strong> Android-style progress indicator with different modes.',
-            '<span class="badge bg-primary me-2">Cross-Platform</span> <strong>Switch:</strong> Toggle switch component that adapts to platform design guidelines.',
-            '<strong>Slider:</strong> Adjustable value selector that follows platform conventions.',
-            '<strong>Picker:</strong> Dropdown selection component (deprecated in favor of community alternatives).',
-            '<strong>View:</strong> Container/Layout (like HTML div)',
-            '<strong>Text:</strong> Text Content (like HTML span/p)',
-            '<strong>Image:</strong> Media Display (like HTML img)',
-            '<strong>TextInput:</strong> User Input (like HTML input)',
-            '<strong>ScrollView:</strong> Scrollable Container (like CSS overflow: scroll)',
-            '<strong>FlatList:</strong> Optimized List (like virtualized table)',
-            '<span class="badge bg-info text-dark me-2">Performance</span> <strong>Native Driver:</strong> Components support native driver for 60fps animations without JS bridge overhead.',
-            '<strong>Ref Access:</strong> Use refs to directly access native component methods and properties.',
-            '<strong>Event Handling:</strong> All components support gesture and touch events with synthetic event objects.',
-            `<span class="badge bg-warning text-dark me-2">Styling</span> <strong>Style Inheritance:</strong> Limited inheritance compared to web; styles don't cascade down automatically.`,
-            '<strong>Platform Adaptation:</strong> Components automatically adapt to platform design patterns and behaviors.',
-            '<strong>Accessibility:</strong> Built-in accessibility support with <code>accessible</code> , <code>accessibilityLabel</code> , and <code>accessibilityRole</code> props.',
-            '<strong>Performance:</strong> Use FlatList for large datasets instead of ScrollView with map',
-            '<strong>Accessibility:</strong> Always provide accessibilityLabel for interactive components',
-            '<strong>Platform Consistency:</strong> Let native components handle platform-specific styling',
-            '<strong>Memory Management:</strong> Use keys for list items and avoid inline functions in render',
-            '<strong>Image Optimization:</strong> Specify dimensions for images to prevent layout shifts',
-            '<strong>Input Validation:</strong> Implement proper validation and error states for TextInput',
-            '<strong>Touch Feedback:</strong> Use TouchableOpacity for better user experience than Button',
-            '<strong>Modal Usage:</strong> Always provide a way to close modals and handle Android back button',
-            `<strong>Q:</strong> What's the difference between View and ScrollView?`,
-            '<strong>A:</strong> View is a static container; ScrollView makes content scrollable but renders all items',
-            '<strong>Q:</strong> When to use FlatList vs ScrollView?',
-            '<strong>A:</strong> FlatList for large datasets (virtualized), ScrollView for small content',
-            '<strong>Q:</strong> How do you handle platform-specific components?',
-            '<strong>A:</strong> Use Platform.OS checks or create separate .ios.js and .android.js files',
-            '<strong>Q:</strong> What are the performance implications of inline functions in render?',
-            '<strong>A:</strong> Creates new function instances on every render, causing unnecessary re-renders'
+            '<strong>View</strong> — container (like <code>&lt;div&gt;</code>).',
+            '<strong>Text</strong> — text. All text must be inside <code>&lt;Text&gt;</code>.',
+            '<strong>Image</strong> — images; remote via <code>uri</code> or local via <code>require()</code>.',
+            '<strong>TextInput</strong> — user input; controlled with <code>value</code> + <code>onChangeText</code>.',
+            '<strong>ScrollView</strong> — scrollable container; renders all children (small content only).',
+            '<strong>FlatList</strong> — virtualized list; for large datasets.',
+            '<strong>Button</strong> / <strong>TouchableOpacity</strong> — pressable elements.',
+            '<strong>Modal</strong> — overlay for dialogs.',
+            '<strong>ActivityIndicator</strong> — loading spinner.',
+            '<strong>Switch</strong> — toggle switch.'
+          ]
+        },
+        {
+          heading: 'A quick tour of the core components',
+          content: [
+            'The example below shows the most common components in one screen: a heading (<code>Text</code>), an image (<code>Image</code>), a text input (<code>TextInput</code>), a button (<code>TouchableOpacity</code>), a toggle (<code>Switch</code>), a loading spinner (<code>ActivityIndicator</code>), a list (<code>FlatList</code>), and a popup (<code>Modal</code>).',
+            'Notice how state drives everything: the text input is controlled by <code>text</code>, the toggle by <code>isEnabled</code>, the spinner by <code>isLoading</code>, and the modal by <code>isModalVisible</code>. This is the React pattern you already know — just with native components.'
           ],
           code: `import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  ActivityIndicator,
-  Switch,
-  FlatList,
-  StyleSheet,
+  View, Text, TextInput, Image, TouchableOpacity, Alert,
+  Modal, ActivityIndicator, Switch, FlatList, StyleSheet
 } from 'react-native';
 
-// Basic Component Usage
-const BasicComponents = () => {
+const App = () => {
   const [text, setText] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLoading, setLoading] = useState(false);
@@ -139,289 +184,69 @@ const BasicComponents = () => {
     { id: '3', title: 'Item 3' },
   ];
 
-  const handlePress = () => {
-    Alert.alert('Button Pressed', 'Hello from React Native!');
-  };
-
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.listItem}>
-      <Text style={styles.listItemText}>{item.title}</Text>
+      <Text>{item.title}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Basic View and Text */}
-      <View style={styles.section}>
-        <Text style={styles.heading}>Core Components Demo</Text>
-        <Text style={styles.subtext}>
-          This demonstrates essential React Native components
-        </Text>
+    <View style={styles.container}>
+      <Text style={styles.heading}>Core Components</Text>
+
+      <Image
+        source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+        style={{ width: 80, height: 80 }}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Type here..."
+        value={text}
+        onChangeText={setText}
+      />
+      <Text>You typed: {text}</Text>
+
+      <TouchableOpacity style={styles.button} onPress={() => Alert.alert('Hi!')}>
+        <Text style={styles.buttonText}>Press me</Text>
+      </TouchableOpacity>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text>Notifications</Text>
+        <Switch value={isEnabled} onValueChange={setEnabled} />
       </View>
 
-      {/* Image Component */}
-      <View style={styles.section}>
-        <Image
-          source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-        <Image
-          source={require('./assets/local-image.png')}
-          style={styles.localImage}
-        />
-      </View>
+      {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
 
-      {/* TextInput Component */}
-      <View style={styles.section}>
-        <Text style={styles.label}>Enter your name:</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Type here..."
-          value={text}
-          onChangeText={setText}
-          autoCapitalize="words"
-          autoCorrect={false}
-        />
-        <Text style={styles.output}>You typed: {text}</Text>
-      </View>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
 
-      {/* Button and TouchableOpacity */}
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
-          <Text style={styles.buttonText}>Custom Button</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.modalButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.buttonText}>Show Modal</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Switch Component */}
-      <View style={styles.section}>
-        <View style={styles.switchContainer}>
-          <Text style={styles.label}>Enable notifications</Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-            onValueChange={setEnabled}
-            value={isEnabled}
-          />
-        </View>
-      </View>
-
-      {/* ActivityIndicator */}
-      <View style={styles.section}>
-        {isLoading && (
-          <ActivityIndicator size="large" color="#0000ff" />
-        )}
-        <TouchableOpacity
-          style={styles.loadingButton}
-          onPress={() => {
-            setLoading(true);
-            setTimeout(() => setLoading(false), 2000);
-          }}
-        >
-          <Text style={styles.buttonText}>Start Loading</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* FlatList Component */}
-      <View style={styles.section}>
-        <Text style={styles.label}>FlatList Example:</Text>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          style={styles.flatList}
-        />
-      </View>
-
-      {/* Modal Component */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Modal Example</Text>
-            <Text style={styles.modalText}>
-              This is a modal overlay that demonstrates the Modal component.
-            </Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.buttonText}>Close Modal</Text>
-            </TouchableOpacity>
-          </View>
+      <Modal visible={isModalVisible} transparent>
+        <View style={styles.modal}>
+          <Text>I'm a modal!</Text>
+          <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <Text>Close</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 };
 
-// Platform-Specific Component Example
-import { Platform } from 'react-native';
-
-const PlatformSpecificComponents = () => {
-  if (Platform.OS === 'ios') {
-    return (
-      <View>
-        <Text>iOS-specific components here</Text>
-        {/* Use ActionSheetIOS, DatePickerIOS, etc. */}
-      </View>
-    );
-  } else {
-    return (
-      <View>
-        <Text>Android-specific components here</Text>
-        {/* Use DrawerLayoutAndroid, ProgressBarAndroid, etc. */}
-      </View>
-    );
-  }
-};
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  section: {
-    margin: 16,
-    padding: 16,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  subtext: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 6,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 12,
-  },
-  output: {
-    fontSize: 14,
-    color: '#666',
-    fontStyle: 'italic',
-  },
-  logo: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
-    marginVertical: 16,
-  },
-  localImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    alignSelf: 'center',
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  modalButton: {
-    backgroundColor: '#34C759',
-    padding: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  loadingButton: {
-    backgroundColor: '#FF9500',
-    padding: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  flatList: {
-    maxHeight: 150,
-    marginTop: 8,
-  },
-  listItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  listItemText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 24,
-    alignItems: 'center',
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#333',
-  },
-  modalText: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#666',
-    marginBottom: 20,
-  },
-  closeButton: {
-    backgroundColor: '#FF3B30',
-    padding: 12,
-    borderRadius: 6,
-    minWidth: 100,
-    alignItems: 'center',
-  },
-});`
+  container:  { flex: 1, padding: 16 },
+  heading:    { fontSize: 24, fontWeight: 'bold', marginBottom: 12 },
+  input:      { borderWidth: 1, padding: 8, marginVertical: 8 },
+  button:     { backgroundColor: '#007bff', padding: 12, borderRadius: 6 },
+  buttonText: { color: 'white', textAlign: 'center' },
+  listItem:   { padding: 12, borderBottomWidth: 1 },
+  modal:      { backgroundColor: 'white', padding: 20, margin: 40 },
+});
+
+export default App;`
         }
       ]
     },
@@ -429,369 +254,29 @@ const styles = StyleSheet.create({
       title: 'Native Components',
       sections: [
         {
-          heading: '3. Core & Native Components',
+          heading: 'Core vs. native components',
           content: [
-            '<strong>💡 Core Concept:</strong> React Native provides pre-built components that map to native platform UI elements. Core components work across platforms, while Native components are platform-specific for enhanced functionality.'
+            'The core components (<code>View</code>, <code>Text</code>, <code>Image</code>, ...) cover most needs and work on both iOS and Android. But sometimes you need a UI element that exists on only one platform, or you want to use a platform\'s native look-and-feel directly. That is where <strong>native components</strong> come in.',
+            'React Native exposes a few platform-specific components directly, like <code>ActionSheetIOS</code> (the iOS slide-up action sheet), <code>DatePickerIOS</code>, <code>DrawerLayoutAndroid</code> (the Android slide-out drawer), and <code>ProgressBarAndroid</code>. These render only on their platform — importing them on the other platform gives you nothing (or an error).',
+            'For richer native UI, the React Native community publishes libraries like <strong>@react-native-community/datetimepicker</strong>, <strong>@react-native-community/picker</strong>, and <strong>react-native-paper</strong> (Material Design components). These wrap the native platform components and expose a single cross-platform API.',
+            'If you need something truly custom — say, a barcode scanner or a map — you reach for a third-party native module (covered in Module 5) or write your own. Either way, the JavaScript side just renders a component; the heavy lifting happens in native code.'
           ],
           list: [
-            '<span class="badge bg-primary me-2">Essential</span> <strong>View:</strong> The fundamental building block - like a <code><div></code> in HTML. Used for layout, styling, and grouping other components.',
-            '<strong>Text:</strong> Displays text content. All text must be wrapped in <code><Text></code> components. Supports nesting and styling.',
-            '<strong>Image:</strong> Displays local and remote images with resize modes and lazy loading capabilities.',
-            '<span class="badge bg-success me-2">Input</span> <strong>TextInput:</strong> Handles user text input with keyboard types, validation, and formatting options.',
-            '<strong>ScrollView:</strong> Makes content scrollable when it exceeds screen boundaries. Use for small lists.',
-            '<strong>FlatList:</strong> High-performance list component for large datasets with virtualization and lazy loading.',
-            '<span class="badge bg-warning text-dark me-2">Interactive</span> <strong>Button:</strong> Basic button component with platform-specific styling and press handling.',
-            '<strong>TouchableOpacity:</strong> Wrapper for making any component touchable with opacity feedback.',
-            '<strong>Modal:</strong> Displays content overlay above the main interface for dialogs and popups.',
-            '<span class="badge bg-info text-dark me-2">Status</span> <strong>ActivityIndicator:</strong> Shows loading spinner with customizable size and color.',
-            '<span class="badge bg-danger me-2">iOS Only</span> <strong>ActionSheetIOS:</strong> Native iOS action sheet for presenting choices to users.',
-            '<strong>DatePickerIOS:</strong> iOS-specific date and time picker component.',
-            '<span class="badge bg-success me-2">Android Only</span> <strong>DrawerLayoutAndroid:</strong> Android-specific drawer navigation component.',
-            '<strong>ProgressBarAndroid:</strong> Android-style progress indicator with different modes.',
-            '<span class="badge bg-primary me-2">Cross-Platform</span> <strong>Switch:</strong> Toggle switch component that adapts to platform design guidelines.',
-            '<strong>Slider:</strong> Adjustable value selector that follows platform conventions.',
-            '<strong>Picker:</strong> Dropdown selection component (deprecated in favor of community alternatives).',
-            '<strong>View:</strong> Container/Layout (like HTML div)',
-            '<strong>Text:</strong> Text Content (like HTML span/p)',
-            '<strong>Image:</strong> Media Display (like HTML img)',
-            '<strong>TextInput:</strong> User Input (like HTML input)',
-            '<strong>ScrollView:</strong> Scrollable Container (like CSS overflow: scroll)',
-            '<strong>FlatList:</strong> Optimized List (like virtualized table)',
-            '<span class="badge bg-info text-dark me-2">Performance</span> <strong>Native Driver:</strong> Components support native driver for 60fps animations without JS bridge overhead.',
-            '<strong>Ref Access:</strong> Use refs to directly access native component methods and properties.',
-            '<strong>Event Handling:</strong> All components support gesture and touch events with synthetic event objects.',
-            `<span class="badge bg-warning text-dark me-2">Styling</span> <strong>Style Inheritance:</strong> Limited inheritance compared to web; styles don't cascade down automatically.`,
-            '<strong>Platform Adaptation:</strong> Components automatically adapt to platform design patterns and behaviors.',
-            '<strong>Accessibility:</strong> Built-in accessibility support with <code>accessible</code> , <code>accessibilityLabel</code> , and <code>accessibilityRole</code> props.',
-            '<strong>Performance:</strong> Use FlatList for large datasets instead of ScrollView with map',
-            '<strong>Accessibility:</strong> Always provide accessibilityLabel for interactive components',
-            '<strong>Platform Consistency:</strong> Let native components handle platform-specific styling',
-            '<strong>Memory Management:</strong> Use keys for list items and avoid inline functions in render',
-            '<strong>Image Optimization:</strong> Specify dimensions for images to prevent layout shifts',
-            '<strong>Input Validation:</strong> Implement proper validation and error states for TextInput',
-            '<strong>Touch Feedback:</strong> Use TouchableOpacity for better user experience than Button',
-            '<strong>Modal Usage:</strong> Always provide a way to close modals and handle Android back button',
-            `<strong>Q:</strong> What's the difference between View and ScrollView?`,
-            '<strong>A:</strong> View is a static container; ScrollView makes content scrollable but renders all items',
-            '<strong>Q:</strong> When to use FlatList vs ScrollView?',
-            '<strong>A:</strong> FlatList for large datasets (virtualized), ScrollView for small content',
-            '<strong>Q:</strong> How do you handle platform-specific components?',
-            '<strong>A:</strong> Use Platform.OS checks or create separate .ios.js and .android.js files',
-            '<strong>Q:</strong> What are the performance implications of inline functions in render?',
-            '<strong>A:</strong> Creates new function instances on every render, causing unnecessary re-renders'
+            '<strong>Core components</strong> — cross-platform, built into <code>react-native</code>.',
+            '<strong>Native components</strong> — platform-specific (e.g. <code>ActionSheetIOS</code>, <code>DrawerLayoutAndroid</code>).',
+            '<strong>Community libraries</strong> — wrap native UI in a cross-platform API (datetimepicker, picker, paper).',
+            '<strong>Native modules</strong> — access platform APIs not exposed by default (camera, Bluetooth, sensors).',
+            'Use <code>Platform.OS</code> or <code>.ios.js</code>/<code>.android.js</code> files to pick the right component per platform.'
           ],
-          code: `import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  ActivityIndicator,
-  Switch,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
+          code: `import { Platform, Text, ActionSheetIOS, DrawerLayoutAndroid } from 'react-native';
 
-// Basic Component Usage
-const BasicComponents = () => {
-  const [text, setText] = useState('');
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const [isEnabled, setEnabled] = useState(false);
-
-  const data = [
-    { id: '1', title: 'Item 1' },
-    { id: '2', title: 'Item 2' },
-    { id: '3', title: 'Item 3' },
-  ];
-
-  const handlePress = () => {
-    Alert.alert('Button Pressed', 'Hello from React Native!');
-  };
-
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.listItem}>
-      <Text style={styles.listItemText}>{item.title}</Text>
-    </TouchableOpacity>
-  );
-
-  return (
-    <ScrollView style={styles.container}>
-      {/* Basic View and Text */}
-      <View style={styles.section}>
-        <Text style={styles.heading}>Core Components Demo</Text>
-        <Text style={styles.subtext}>
-          This demonstrates essential React Native components
-        </Text>
-      </View>
-
-      {/* Image Component */}
-      <View style={styles.section}>
-        <Image
-          source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-        <Image
-          source={require('./assets/local-image.png')}
-          style={styles.localImage}
-        />
-      </View>
-
-      {/* TextInput Component */}
-      <View style={styles.section}>
-        <Text style={styles.label}>Enter your name:</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Type here..."
-          value={text}
-          onChangeText={setText}
-          autoCapitalize="words"
-          autoCorrect={false}
-        />
-        <Text style={styles.output}>You typed: {text}</Text>
-      </View>
-
-      {/* Button and TouchableOpacity */}
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
-          <Text style={styles.buttonText}>Custom Button</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.modalButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.buttonText}>Show Modal</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Switch Component */}
-      <View style={styles.section}>
-        <View style={styles.switchContainer}>
-          <Text style={styles.label}>Enable notifications</Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-            onValueChange={setEnabled}
-            value={isEnabled}
-          />
-        </View>
-      </View>
-
-      {/* ActivityIndicator */}
-      <View style={styles.section}>
-        {isLoading && (
-          <ActivityIndicator size="large" color="#0000ff" />
-        )}
-        <TouchableOpacity
-          style={styles.loadingButton}
-          onPress={() => {
-            setLoading(true);
-            setTimeout(() => setLoading(false), 2000);
-          }}
-        >
-          <Text style={styles.buttonText}>Start Loading</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* FlatList Component */}
-      <View style={styles.section}>
-        <Text style={styles.label}>FlatList Example:</Text>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          style={styles.flatList}
-        />
-      </View>
-
-      {/* Modal Component */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Modal Example</Text>
-            <Text style={styles.modalText}>
-              This is a modal overlay that demonstrates the Modal component.
-            </Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.buttonText}>Close Modal</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    </ScrollView>
-  );
-};
-
-// Platform-Specific Component Example
-import { Platform } from 'react-native';
-
-const PlatformSpecificComponents = () => {
+// Use Platform.OS to pick the right component
+function NativeExample() {
   if (Platform.OS === 'ios') {
-    return (
-      <View>
-        <Text>iOS-specific components here</Text>
-        {/* Use ActionSheetIOS, DatePickerIOS, etc. */}
-      </View>
-    );
-  } else {
-    return (
-      <View>
-        <Text>Android-specific components here</Text>
-        {/* Use DrawerLayoutAndroid, ProgressBarAndroid, etc. */}
-      </View>
-    );
+    return <Text>iOS — could show an ActionSheetIOS here</Text>;
   }
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  section: {
-    margin: 16,
-    padding: 16,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  subtext: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 6,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 12,
-  },
-  output: {
-    fontSize: 14,
-    color: '#666',
-    fontStyle: 'italic',
-  },
-  logo: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
-    marginVertical: 16,
-  },
-  localImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    alignSelf: 'center',
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  modalButton: {
-    backgroundColor: '#34C759',
-    padding: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  loadingButton: {
-    backgroundColor: '#FF9500',
-    padding: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  flatList: {
-    maxHeight: 150,
-    marginTop: 8,
-  },
-  listItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  listItemText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 24,
-    alignItems: 'center',
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#333',
-  },
-  modalText: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#666',
-    marginBottom: 20,
-  },
-  closeButton: {
-    backgroundColor: '#FF3B30',
-    padding: 12,
-    borderRadius: 6,
-    minWidth: 100,
-    alignItems: 'center',
-  },
-});`
+  return <Text>Android — could show a DrawerLayoutAndroid here</Text>;
+}`
         }
       ]
     },
@@ -799,21 +284,34 @@ const styles = StyleSheet.create({
       title: 'JSX',
       sections: [
         {
-          heading: 'JSX',
-          list: [
-            '<span class="badge bg-info text-dark me-2">Syntax</span> <strong>JSX:</strong> HTML-like syntax inside JavaScript, compiled to React.createElement() function calls.',
-            '<strong>JavaScript Expressions:</strong> Wrap JavaScript code inside <code>{}</code> curly braces for dynamic content.',
-            '<strong>Single Root Element:</strong> JSX expressions must return exactly one parent element or use React Fragments.',
-            '<strong>Naming Convention:</strong> Use camelCase for attributes (e.g., <code>onPress</code> , <code>backgroundColor</code> ).',
-            '<strong>React Fragments:</strong> Use <code><></></code> for grouping elements without adding extra DOM nodes.',
-            '<span class="badge bg-warning text-dark me-2">Best Practice</span> Use JSX comments <code>{/* ... */}</code> for documentation and conditional rendering with ternary operators.'
+          heading: 'JSX in React Native',
+          content: [
+            '<strong>JSX</strong> works in React Native exactly the same way it works in React for the web — it is JavaScript XML, a syntax extension that lets you write HTML-like markup inside JavaScript. The only difference is the tag names: instead of <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;img&gt;</code>, you use <code>&lt;View&gt;</code>, <code>&lt;Text&gt;</code>, <code>&lt;Image&gt;</code>.',
+            'The same JSX rules apply:',
+            '1. <strong>One parent element.</strong> A component returns a single root. Use a Fragment <code>&lt;&gt;...&lt;/&gt;</code> to group several without an extra node.<br>2. <strong>Curly braces for JavaScript.</strong> Any expression inside <code>{ }</code> is evaluated: <code>{name}</code>, <code>{2 + 2}</code>, <code>{isLoggedIn ? &lt;Welcome/&gt; : &lt;Login/&gt;}</code>.<br>3. <strong>camelCase attributes.</strong> In HTML you write <code>onclick</code>; in JSX you write <code>onPress</code>. CSS properties are camelCase too: <code>backgroundColor</code>, not <code>background-color</code>.<br>4. <strong>JSX comments</strong> are <code>{/* ... */}</code>, not <code>&lt;!-- --&gt;</code>.',
+            'Browsers cannot read JSX, and neither can a phone — Metro (the bundler) compiles JSX to <code>React.createElement()</code> calls before sending it to the app.'
           ],
-          code: `const App = () => (
-  <View>
-    <Text>Hello</Text>
-    {isLoggedIn ? <Text>Welcome!</Text> : <Text>Please log in</Text>}
-  </View>
-);`
+          list: [
+            'JSX works the same as in React for the web — only the tag names change.',
+            'Use <code>&lt;View&gt;</code>, <code>&lt;Text&gt;</code>, <code>&lt;Image&gt;</code> instead of <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;img&gt;</code>.',
+            'One parent element (use a Fragment <code>&lt;&gt;&lt;/&gt;</code> to group several).',
+            'Curly braces <code>{ }</code> for any JavaScript expression.',
+            'Attributes are camelCase: <code>onPress</code>, <code>backgroundColor</code>.',
+            'JSX comments: <code>{/* ... */}</code>.'
+          ],
+          code: `import { View, Text } from 'react-native';
+
+const App = () => {
+  const isLoggedIn = true;
+  return (
+    <View>
+      <Text>Hello</Text>
+      {isLoggedIn ? <Text>Welcome back!</Text> : <Text>Please log in</Text>}
+    </View>
+  );
+};
+
+export default App;`
         }
       ]
     },
@@ -821,46 +319,48 @@ const styles = StyleSheet.create({
       title: 'Props',
       sections: [
         {
-          heading: 'Props',
-          list: [
-            '<span class="badge bg-primary me-2">Definition</span> <strong>Props:</strong> Short for "properties", used to pass data from parent to child components. Think of them as function parameters.',
-            '<strong>Read-Only/Immutable:</strong> Props are immutable in the child component and follow one-way data flow from parent to child.',
-            '<strong>Custom Props:</strong> You can define and use custom props in your component. Use TypeScript interfaces for type safety.',
-            '<span class="badge bg-success me-2">Best Practice</span> <strong>Destructuring:</strong> Preferred way to access props inside functional components for cleaner code.',
-            '<strong>Default Props:</strong> Use default parameters or <code>defaultProps</code> to provide fallback values when props are not passed.',
-            '<strong>Prop Types:</strong> Use TypeScript or PropTypes for runtime type checking and better development experience.',
-            '<span class="badge bg-warning text-dark me-2">Performance</span> <strong>Props Drilling:</strong> Avoid passing props through multiple levels. Use Context API or state management for deep nesting.',
-            '<strong>Children Prop:</strong> Special prop that allows passing JSX elements as children to components for composition.'
+          heading: 'Customizing components with props',
+          content: [
+            '<strong>Props</strong> (short for "properties") are how a parent passes data to a child component — exactly like in React for the web. You write them as attributes on the component tag, and they arrive inside the child as the <code>props</code> argument. Think of props as function parameters for a component.',
+            'Two rules to remember:',
+            '1. <strong>Props are read-only.</strong> A child must never modify its own props. If a child needs to change a value, the parent passes a <em>function</em> prop the child can call.<br>2. <strong>One-way data flow.</strong> Data flows from parent to child. When the parent\'s value changes, the child re-renders with the new prop automatically.',
+            'For type safety, use <strong>TypeScript</strong> and define a props interface. Then your editor catches typos and missing props before you run the app. You can also give props default values with default parameters or <code>defaultProps</code>.',
+            'A common pitfall as your app grows is <strong>props drilling</strong> — passing a prop through five levels of components that do not care about it. For data many components need (the current user, the theme), reach for the Context API (Module 4) instead.'
           ],
-          code: `// Basic Props Usage
-const Greeting = ({name, age = 18}) => {
-  return (
-    <View>
-      <Text>Hello, {name}!</Text>
-      <Text>Age: {age}</Text>
-    </View>
-  );
+          list: [
+            'Props pass data from parent to child (like function parameters).',
+            'Props are <strong>read-only</strong>; the child must not modify them.',
+            'One-way: parent → child. The child re-renders when the prop changes.',
+            'Use <strong>TypeScript interfaces</strong> for type-safe props.',
+            'Default values: default parameters or <code>defaultProps</code>.',
+            'Avoid <strong>props drilling</strong> — use Context API for app-wide data.',
+            '<code>children</code> is a special prop for nesting JSX inside a component.'
+          ],
+          code: `import { View, Text } from 'react-native';
+
+// Define the props with TypeScript
+type GreetingProps = {
+  name: string;
+  age?: number;       // ? means optional
 };
 
-// TypeScript Interface
-interface GreetingProps {
-  name: string;
-  age?: number;
-  isVip?: boolean;
-}
-
-const TypedGreeting: React.FC<GreetingProps> = ({name, age = 18, isVip}) => (
+// Destructure props for cleaner code
+const Greeting = ({ name, age = 18 }: GreetingProps) => (
   <View>
-    <Text style={{fontWeight: isVip ? 'bold' : 'normal'}}>
-      Hello, {name}! Age: {age}
-    </Text>
+    <Text>Hello, {name}!</Text>
+    <Text>Age: {age}</Text>
   </View>
 );
 
-// Usage with Children
-<Greeting name="React Native">
-  <Text>This is a child component</Text>
-</Greeting>`
+// Usage — pass props like HTML attributes
+const App = () => (
+  <View>
+    <Greeting name="Ada" age={30} />
+    <Greeting name="Alan" />          {/* age uses the default */}
+  </View>
+);
+
+export default App;`
         }
       ]
     },
@@ -868,26 +368,31 @@ const TypedGreeting: React.FC<GreetingProps> = ({name, age = 18, isVip}) => (
       title: 'State',
       sections: [
         {
-          heading: 'State',
-          list: [
-            '<span class="badge bg-primary me-2">Core Concept</span> <strong>State:</strong> A built-in object that stores component data that may change over time and affects rendering.',
-            '<strong>useState Hook:</strong> A React Hook used to manage local component state in functional components.',
-            '<strong>Triggers Re-render:</strong> Updating state causes the component to re-render and update the UI accordingly.',
-            '<span class="badge bg-success me-2">Encapsulation</span> <strong>Component Level:</strong> Each component manages its own state independently of other components.',
-            '<strong>State Updates:</strong> Always use setter functions; never mutate state directly. State updates are asynchronous.',
-            '<strong>Complex State:</strong> Use <code>useReducer</code> for complex state logic with multiple sub-values or dependencies.',
-            '<span class="badge bg-warning text-dark me-2">Performance</span> <strong>Optimization:</strong> Use <code>useCallback</code> and <code>useMemo</code> to prevent unnecessary re-renders.',
-            '<strong>State Lifting:</strong> Move state up to parent component when multiple children need to share the same data.'
+          heading: 'Remembering data with state',
+          content: [
+            '<strong>State</strong> is the data a component remembers between renders — a counter, a search query, a list of users. Unlike props (which come from the parent), state lives <em>inside</em> the component and is managed by the component itself. When state changes, React re-renders the component so the UI always shows the latest data.',
+            'In modern React (function components), you create state with the <strong>useState</strong> hook. It returns a pair: the current value and a setter function. You call the setter to update the value; you never modify the value directly.',
+            'A few key facts:',
+            '1. <strong>State updates are asynchronous.</strong> React batches them, so reading the state right after a setter may show the old value. Use the functional form <code>setCount(prev =&gt; prev + 1)</code> when the new value depends on the old one.<br>2. <strong>Each component has its own state.</strong> Two instances of the same component do not share state.<br>3. <strong>For complex state</strong> with many related fields or complex update logic, use <strong>useReducer</strong> instead of several <code>useState</code>s. It is the React equivalent of Redux\'s reducer pattern.',
+            'When several components need the same state, "lift" it up to their common parent and pass it down as props (or use Context — Module 4).'
           ],
-          code: `import React, { useState, useReducer, useCallback } from 'react';
+          list: [
+            'State = data a component remembers between renders.',
+            'Create with <strong>useState</strong>; returns <code>[value, setter]</code>.',
+            'Call the setter to update; never modify the value directly.',
+            'State updates are <strong>async</strong> — use the functional form for updates that depend on the previous value.',
+            'Each component instance has its own independent state.',
+            'For complex state, use <strong>useReducer</strong>.',
+            'Share state between siblings by <strong>lifting it up</strong> to a common parent.'
+          ],
+          code: `import React, { useState } from 'react';
+import { View, Text, Button } from 'react-native';
 
-// Basic useState example
 const Counter = () => {
   const [count, setCount] = useState(0);
 
-  const increment = useCallback(() => {
-    setCount(prevCount => prevCount + 1);
-  }, []);
+  // Functional update — safe when the new value depends on the old one
+  const increment = () => setCount(prev => prev + 1);
 
   return (
     <View>
@@ -897,14 +402,20 @@ const Counter = () => {
   );
 };
 
-// Complex state with useReducer
+export default Counter;`,
+          example: {
+            title: 'Try it Yourself — useReducer for complex state',
+            code: `import { useReducer, useState } from 'react';
+import { View, TextInput, Button, Text } from 'react-native';
+
+// A reducer is a pure function: (state, action) => newState
 const todoReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_TODO':
-      return [...state, { id: Date.now(), text: action.text, completed: false }];
+      return [...state, { id: Date.now(), text: action.text, done: false }];
     case 'TOGGLE_TODO':
-      return state.map(todo => 
-        todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
+      return state.map(t =>
+        t.id === action.id ? { ...t, done: !t.done } : t
       );
     default:
       return state;
@@ -915,56 +426,90 @@ const TodoApp = () => {
   const [todos, dispatch] = useReducer(todoReducer, []);
   const [text, setText] = useState('');
 
-  const addTodo = () => {
-    dispatch({ type: 'ADD_TODO', text });
-    setText('');
-  };
-
   return (
     <View>
-      {/* Render todos and input */}
+      <TextInput value={text} onChangeText={setText} placeholder="New todo" />
+      <Button title="Add" onPress={() => {
+        dispatch({ type: 'ADD_TODO', text });
+        setText('');
+      }} />
+      {todos.map(t => (
+        <Text key={t.id} onPress={() => dispatch({ type: 'TOGGLE_TODO', id: t.id })}>
+          {t.done ? '✓' : '○'} {t.text}
+        </Text>
+      ))}
     </View>
   );
-};`
+};`,
+            output: '○ Buy milk<br>✓ Call mom<br>○ Walk dog',
+            type: 'code'
+          }
         }
       ]
     }
   },
+
   module2: {
     'handling-text-input': {
       title: 'Handling Text Input',
       sections: [
         {
-          heading: 'Handling Text Input',
-          list: [
-            '<span class="badge bg-primary me-2">Core Component</span> <strong>TextInput:</strong> Essential component for receiving user input in React Native applications.',
-            '<strong>Controlled Component:</strong> Use state to manage the value of the input for two-way data binding.',
-            '<strong>onChangeText:</strong> Primary event handler for tracking text changes (recommended over onChange).',
-            '<span class="badge bg-success me-2">UX</span> <strong>Placeholder:</strong> Use placeholder text to provide hints and improve user experience.',
-            '<strong>Keyboard Types:</strong> Use appropriate <code>keyboardType</code> props (numeric, email-address, phone-pad, etc.).',
-            '<strong>Validation:</strong> Implement real-time validation with error states and user feedback.',
-            '<span class="badge bg-warning text-dark me-2">Accessibility</span> <strong>Accessibility:</strong> Use <code>accessibilityLabel</code> and <code>accessibilityHint</code> for screen readers.',
-            '<strong>Security:</strong> Use <code>secureTextEntry</code> for passwords and sensitive data input.',
-            '<strong>Performance:</strong> Debounce text changes for expensive operations like API calls.'
+          heading: 'Reading what the user types',
+          content: [
+            'The <code>TextInput</code> component is React Native\'s equivalent of an HTML <code>&lt;input&gt;</code>. To make it interactive, you make it <strong>controlled</strong>: store the value in state, bind it with <code>value</code>, and update it on every keystroke with <code>onChangeText</code>.',
+            'The pattern is the same three lines as in React for the web:',
+            "1. Declare state: <code>const [text, setText] = useState('');</code><br>2. Bind the value: <code>&lt;TextInput value={text} /&gt;</code><br>3. Update on change: <code>onChangeText={setText}</code>.",
+            'Note the prop is <code>onChangeText</code>, not <code>onChange</code> — it gives you the new text directly, not an event object. (There is also <code>onChange</code> with a full event, but <code>onChangeText</code> is the simpler, more common choice.)',
+            '<code>TextInput</code> has many useful props: <code>placeholder</code> (hint text), <code>keyboardType</code> (<code>"numeric"</code>, <code>"email-address"</code>, etc. — picks the right keyboard), <code>secureTextEntry</code> (for passwords), <code>multiline</code> (for textareas), <code>autoCapitalize</code>, and <code>autoCorrect</code>.'
           ],
-          code: `import React, { useState, useCallback } from 'react';
-import { TextInput, Text, View } from 'react-native';
+          list: [
+            '<strong>Controlled input</strong>: state holds the value, <code>value</code> binds it, <code>onChangeText</code> updates state.',
+            'The change prop is <code>onChangeText</code> (gives the new text directly), not <code>onChange</code>.',
+            '<code>placeholder</code> — hint text.',
+            '<code>keyboardType</code> — picks the right keyboard (<code>"numeric"</code>, <code>"email-address"</code>, ...).',
+            '<code>secureTextEntry</code> — masks input for passwords.',
+            '<code>multiline</code> — turns the input into a textarea.',
+            '<code>autoCapitalize</code>, <code>autoCorrect</code> — fine-tune typing behavior.'
+          ],
+          code: `import { useState } from 'react';
+import { View, TextInput, Text, StyleSheet } from 'react-native';
 
-const MyInput = () => {
-  const [text, setText] = useState('');
+const NameForm = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
-        placeholder="Type something"
-        onChangeText={(value) => setText(value)}
-        value={text}
-        style={{ borderWidth: 1, padding: 10 }}
+        style={styles.input}
+        placeholder="Your name"
+        value={name}
+        onChangeText={setName}
+        autoCapitalize="words"
       />
-      <Text>You typed: {text}</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      <Text>Hello, {name || 'stranger'}!</Text>
+      <Text>Email: {email}</Text>
     </View>
   );
-};`
+};
+
+const styles = StyleSheet.create({
+  container: { padding: 16 },
+  input: {
+    borderWidth: 1, padding: 8, marginVertical: 8, borderRadius: 4
+  },
+});
+
+export default NameForm;`
         }
       ]
     },
@@ -972,23 +517,39 @@ const MyInput = () => {
       title: 'ScrollView',
       sections: [
         {
-          heading: 'ScrollView',
-          list: [
-            '<strong>ScrollView:</strong> A generic scrolling container that can hold multiple components and views.',
-            'Useful when the content is larger than the screen and you want to scroll vertically or horizontally.',
-            'Not recommended for large lists; use FlatList instead for better performance.',
-            '<strong>Props:</strong> <code>horizontal</code> , <code>showsVerticalScrollIndicator</code> , <code>refreshControl</code> , etc.'
+          heading: 'Making content scrollable',
+          content: [
+            'A phone screen is small. When your content is taller than the screen, you need it to scroll. The simplest way is to wrap the content in a <strong>ScrollView</strong> — React Native\'s basic scrollable container.',
+            '<code>ScrollView</code> is easy to use: put your components inside it and they will scroll if they overflow. It works in both directions (<code>horizontal</code> prop for horizontal scrolling) and supports pinch-to-zoom with the <code>minimumZoomScale</code>/<code>maximumZoomScale</code> props.',
+            'The catch: <code>ScrollView</code> renders <em>all</em> its children at once, even the ones off-screen. For a few items this is fine; for a list of 1000 items it wastes memory and startup time. For large lists, use <code>FlatList</code> (next topic) instead — it only renders the items currently visible.'
           ],
-          code: `import { ScrollView, Text } from 'react-native';
+          list: [
+            '<strong>ScrollView</strong> — wraps content so it scrolls when it overflows.',
+            'Renders <strong>all children at once</strong> — fine for small content, bad for large lists.',
+            '<code>horizontal</code> prop for horizontal scrolling.',
+            '<code>minimumZoomScale</code> / <code>maximumZoomScale</code> for pinch-to-zoom.',
+            'For lists of more than ~20 items, use <strong>FlatList</strong> instead.'
+          ],
+          code: `import { ScrollView, View, Text, StyleSheet } from 'react-native';
 
-const MyScroll = () => (
-  <ScrollView>
-    <Text>Item 1</Text>
-    <Text>Item 2</Text>
-    <Text>Item 3</Text>
-    {/* Add more items here */}
+const App = () => (
+  <ScrollView style={styles.container}>
+    <Text style={styles.heading}>A long page</Text>
+    {Array.from({ length: 50 }).map((_, i) => (
+      <View key={i} style={styles.card}>
+        <Text>Item #{i + 1}</Text>
+      </View>
+    ))}
   </ScrollView>
-);`
+);
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16 },
+  heading:   { fontSize: 24, fontWeight: 'bold', marginBottom: 12 },
+  card:      { padding: 16, backgroundColor: 'white', marginBottom: 8, borderRadius: 8 },
+});
+
+export default App;`
         }
       ]
     },
@@ -996,427 +557,52 @@ const MyScroll = () => (
       title: 'ListView / FlatList',
       sections: [
         {
-          heading: 'ListView / FlatList',
+          heading: 'High-performance lists with FlatList',
           content: [
-            '<strong>🎯 Performance Focus:</strong> FlatList is the go-to component for rendering large, scrollable lists efficiently. It uses virtualization to render only visible items, making it essential for performance-critical applications.'
+            'For any list longer than a screen or two, use <strong>FlatList</strong> instead of <code>ScrollView</code>. <code>FlatList</code> uses <strong>virtualization</strong>: it renders only the items currently visible on screen (plus a small buffer), and recycles their views as you scroll. This keeps memory low and scrolling smooth even for thousands of items.',
+            '<code>FlatList</code> takes three required pieces:',
+            '1. <code>data</code> — the array of items to render.<br>2. <code>renderItem</code> — a function that turns one item into JSX.<br>3. <code>keyExtractor</code> — a function that returns a unique key for each item (usually <code>item.id</code>). React Native uses the key to match items across renders — without it, scrolling and state can get confused when items are added, removed, or reordered.',
+            'Two performance tips: wrap <code>renderItem</code> and <code>keyExtractor</code> in <code>useCallback</code> so they keep the same reference between renders, and use a stable <code>key</code> (the item\'s id) — never the array index. For very large lists you can also tune <code>initialNumToRender</code>, <code>maxToRenderPerBatch</code>, <code>windowSize</code>, and <code>removeClippedSubviews</code>.'
           ],
           list: [
-            '<span class="badge bg-primary me-2">High Performance</span> <strong>Virtualization:</strong> Only renders visible items plus a small buffer, dramatically improving performance for large datasets.',
-            '<strong>Memory Efficiency:</strong> Automatically recycles item views as user scrolls, preventing memory bloat with thousands of items.',
-            '<strong>Built-in Features:</strong> Pull-to-refresh, infinite scrolling, separator components, empty state handling, and more.',
-            '<span class="badge bg-success me-2">Cross-Platform</span> <strong>Platform Optimized:</strong> Uses native list components (UITableView on iOS, RecyclerView on Android) for optimal performance.',
-            '<strong>Flexible Layout:</strong> Supports vertical/horizontal scrolling, multi-column grids, and custom item layouts.',
-            '<strong>data:</strong> Array of items to render. Must be an array-like structure.',
-            '<strong>renderItem:</strong> Function that returns JSX for each item. Receives <code>{item, index}</code> .',
-            '<strong>keyExtractor:</strong> Function to generate unique keys. Critical for performance and state management.',
-            '<span class="badge bg-warning text-dark me-2">Performance</span> <strong>getItemLayout:</strong> Pre-calculate item dimensions for better scroll performance.',
-            '<strong>horizontal:</strong> Enable horizontal scrolling. Useful for carousels and image galleries.',
-            '<strong>numColumns:</strong> Create grid layouts with multiple columns.',
-            '<strong>onEndReached:</strong> Triggered when user scrolls near the end. Perfect for pagination.',
-            '<strong>refreshControl:</strong> Add pull-to-refresh functionality with RefreshControl component.',
-            '<strong>ListView:</strong> Deprecated since React Native 0.60+. No longer maintained or recommended.',
-            '<strong>Migration:</strong> All ListView functionality is available in FlatList with better performance.',
-            '<strong>Replacement:</strong> Use FlatList for simple lists, SectionList for grouped data.',
-            '<strong>Performance Gain:</strong> FlatList typically performs 2-5x better than old ListView implementation.',
-            '<span class="badge bg-danger me-2">Critical</span> <strong>getItemLayout:</strong> Pre-define item dimensions for instant scrolling and better performance. <code> getItemLayout=(data, index) => {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index} </code>',
-            '<strong>removeClippedSubviews:</strong> Remove off-screen views from native view hierarchy. Set to <code>true</code> for large lists.',
-            '<strong>keyExtractor:</strong> Use stable, unique keys. Avoid array indices. Use item IDs or unique properties.',
-            '<span class="badge bg-warning text-dark me-2">Memory</span> <strong>maxToRenderPerBatch:</strong> Control batch size (default: 10). Smaller values = smoother scrolling.',
-            '<strong>windowSize:</strong> Number of screen lengths to render (default: 21). Reduce for memory optimization.',
-            '<strong>initialNumToRender:</strong> Items to render initially (default: 10). Balance between performance and blank screens.',
-            '<span class="badge bg-info text-dark me-2">Render</span> <strong>useCallback:</strong> Wrap renderItem and keyExtractor in useCallback to prevent unnecessary re-renders.',
-            `<strong>React.memo:</strong> Memoize item components to prevent re-renders when props haven't changed.`,
-            '<strong>Data Structure:</strong> Use immutable data updates. Always create new arrays/objects for state changes',
-            '<strong>Key Management:</strong> Use stable, unique keys. Never use array indices for dynamic lists',
-            '<strong>Item Components:</strong> Keep item components lightweight. Move heavy logic outside render',
-            '<strong>Image Optimization:</strong> Use proper image dimensions and caching for better scroll performance',
-            '<strong>Pagination:</strong> Implement infinite scrolling with onEndReached for large datasets',
-            '<strong>Empty States:</strong> Always provide ListEmptyComponent for better UX',
-            '<strong>Error Handling:</strong> Wrap data fetching in try-catch and show error states',
-            '<strong>Accessibility:</strong> Add proper accessibility labels and roles for screen readers',
-            `<strong>Inline Functions:</strong> Don't use inline functions in renderItem - they break memoization`,
-            '<strong>Array Index Keys:</strong> Using index as key causes rendering issues with dynamic data',
-            `<strong>Heavy Rendering:</strong> Don't put expensive operations in renderItem`,
-            '<strong>Missing Keys:</strong> Always provide keyExtractor for proper list item identification',
-            '<strong>ScrollView for Large Lists:</strong> Never use ScrollView for long lists - it renders all items',
-            '<strong>Nested FlatLists:</strong> Avoid nested scrollable components without proper configuration',
-            '<strong>Missing Loading States:</strong> Always show loading indicators during data fetching',
-            '<strong>Q:</strong> How does FlatList optimize performance compared to ScrollView?',
-            '<strong>A:</strong> FlatList uses virtualization - only renders visible items plus buffer, recycles views',
-            `<strong>Q:</strong> What's the purpose of keyExtractor in FlatList?`,
-            `<strong>A:</strong> Provides unique keys for React's reconciliation, crucial for performance and state management`,
-            '<strong>Q:</strong> How would you implement infinite scrolling?',
-            '<strong>A:</strong> Use onEndReached with onEndReachedThreshold, manage loading states and pagination',
-            `<strong>Q:</strong> What's getItemLayout and when should you use it?`,
-            '<strong>A:</strong> Pre-calculates item dimensions, enables instant scrolling to any position, use for fixed-height items',
-            '<strong>Q:</strong> How do you handle empty states in FlatList?',
-            '<strong>A:</strong> Use ListEmptyComponent prop to show custom empty state UI'
+            '<strong>FlatList</strong> — virtualized list; renders only visible items.',
+            'Required props: <code>data</code>, <code>renderItem</code>, <code>keyExtractor</code>.',
+            '<code>keyExtractor</code> returns a unique key — use <code>item.id</code>, never the array index.',
+            'Wrap <code>renderItem</code> and <code>keyExtractor</code> in <code>useCallback</code> for stable references.',
+            'Tuning props: <code>initialNumToRender</code>, <code>maxToRenderPerBatch</code>, <code>windowSize</code>, <code>removeClippedSubviews</code>.',
+            'For grouped/sectioned data, use <strong>SectionList</strong> instead.'
           ],
-          code: `import React, { useState, useEffect, useCallback } from 'react';
-import {
-  FlatList,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  ActivityIndicator,
-  RefreshControl,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+          code: `import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-// Sample data structure
-const generateSampleData = (count = 50) => {
-  return Array.from({ length: count }, (_, index) => ({
-    id: \`item-\${index + 1}\`,
-    title: \`Item \${index + 1}\`,
-    subtitle: \`Description for item \${index + 1}\`,
-    avatar: \`https://picsum.photos/50/50?random=\${index}\`,
-    price: (Math.random() * 100).toFixed(2),
-    category: ['Electronics', 'Clothing', 'Books', 'Home'][index % 4],
-    isPopular: Math.random() > 0.7,
-  }));
-};
+const data = [
+  { id: '1', title: 'Buy milk' },
+  { id: '2', title: 'Call mom' },
+  { id: '3', title: 'Walk dog' },
+];
 
-// Basic FlatList Example
-const BasicFlatListExample = () => {
-  const [data, setData] = useState(() => generateSampleData(20));
-  const [refreshing, setRefreshing] = useState(false);
-
-  // Pull to refresh handler
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setData(generateSampleData(20));
-      setRefreshing(false);
-    }, 1500);
-  }, []);
-
-  // Item renderer with proper key optimization
-  const renderItem = useCallback(({ item, index }) => (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={() => Alert.alert('Pressed', \`You tapped \${item.title}\`)}
-      activeOpacity={0.7}
-    >
-      <Image source={{ uri: item.avatar }} style={styles.avatar} />
-      <View style={styles.itemContent}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.subtitle}>{item.subtitle}</Text>
-        <View style={styles.itemFooter}>
-          <Text style={styles.category}>{item.category}</Text>
-          <Text style={styles.price}>\${item.price}</Text>
-          {item.isPopular && (
-            <View style={styles.popularBadge}>
-              <Text style={styles.popularText}>🔥 Popular</Text>
-            </View>
-          )}
-        </View>
-      </View>
-    </TouchableOpacity>
-  ), []);
-
-  // Optimized key extractor
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  return (
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      ItemSeparatorComponent={() => <View style={styles.separator} />}
-      ListEmptyComponent={() => (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No items found</Text>
-        </View>
-      )}
-      showsVerticalScrollIndicator={false}
-      removeClippedSubviews={true} // Performance optimization
-      maxToRenderPerBatch={10} // Render batch size
-      updateCellsBatchingPeriod={50} // Update frequency
-      initialNumToRender={10} // Initial render count
-      windowSize={10} // Viewport multiplier
-    />
-  );
-};
-
-// Advanced FlatList with Pagination
-const PaginatedFlatListExample = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-
-  // Load initial data
-  useEffect(() => {
-    loadData(1, true);
-  }, []);
-
-  const loadData = async (pageNum, isRefresh = false) => {
-    if (loading) return;
-    
-    setLoading(true);
-    
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const newData = generateSampleData(20);
-      
-      if (isRefresh) {
-        setData(newData);
-        setPage(2);
-        setHasMore(true);
-      } else {
-        setData(prevData => [...prevData, ...newData]);
-        setPage(pageNum + 1);
-        // Simulate end of data after 5 pages
-        if (pageNum >= 5) setHasMore(false);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to load data');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadData(1, true);
-  };
-
-  const onEndReached = () => {
-    if (hasMore && !loading) {
-      loadData(page);
-    }
-  };
-
-  const renderFooter = () => {
-    if (!loading) return null;
-    return (
-      <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#007AFF" />
-        <Text style={styles.loadingText}>Loading more...</Text>
-      </View>
-    );
-  };
-
-  return (
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={0.5} // Trigger when 50% from bottom
-      ListFooterComponent={renderFooter}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      // Performance optimizations
-      removeClippedSubviews={true}
-      maxToRenderPerBatch={15}
-      updateCellsBatchingPeriod={100}
-      initialNumToRender={15}
-      windowSize={21}
-    />
-  );
-};
-
-// Horizontal FlatList (Carousel)
-const HorizontalFlatListExample = () => {
-  const carouselData = generateSampleData(10);
-
-  const renderCarouselItem = ({ item, index }) => (
-    <View style={styles.carouselItem}>
-      <Image source={{ uri: item.avatar }} style={styles.carouselImage} />
-      <Text style={styles.carouselTitle}>{item.title}</Text>
-    </View>
-  );
-
-  return (
-    <FlatList
-      data={carouselData}
-      renderItem={renderCarouselItem}
-      keyExtractor={item => item.id}
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
-      snapToInterval={150} // Snap to item width
-      decelerationRate="fast"
-      ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-      contentContainerStyle={styles.carouselContainer}
-    />
-  );
-};
-
-// Grid Layout with numColumns
-const GridFlatListExample = () => {
-  const gridData = generateSampleData(20);
-
-  const renderGridItem = ({ item }) => (
-    <TouchableOpacity style={styles.gridItem}>
-      <Image source={{ uri: item.avatar }} style={styles.gridImage} />
-      <Text style={styles.gridTitle} numberOfLines={1}>
-        {item.title}
-      </Text>
-      <Text style={styles.gridPrice}>\${item.price}</Text>
+const App = () => {
+  const renderItem = ({ item }) => (
+    <TouchableOpacity style={styles.item}>
+      <Text>{item.title}</Text>
     </TouchableOpacity>
   );
 
   return (
     <FlatList
-      data={gridData}
-      renderItem={renderGridItem}
+      data={data}
+      renderItem={renderItem}
       keyExtractor={item => item.id}
-      numColumns={2}
-      ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-      columnWrapperStyle={styles.gridRow} // Style for each row
-      contentContainerStyle={styles.gridContainer}
+      contentContainerStyle={styles.list}
     />
   );
 };
 
 const styles = StyleSheet.create({
-  // Basic list styles
-  itemContainer: {
-    flexDirection: 'row',
-    padding: 16,
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 12,
-  },
-  itemContent: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
-  },
-  itemFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  category: {
-    fontSize: 12,
-    color: '#007AFF',
-    backgroundColor: '#E3F2FD',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 10,
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-  },
-  popularBadge: {
-    backgroundColor: '#FF5722',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 10,
-  },
-  popularText: {
-    fontSize: 10,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#E0E0E0',
-    marginLeft: 16,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 50,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#666',
-  },
-  
-  // Pagination styles
-  footerLoader: {
-    paddingVertical: 20,
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 8,
-    fontSize: 14,
-    color: '#666',
-  },
-  
-  // Carousel styles
-  carouselContainer: {
-    paddingHorizontal: 16,
-  },
-  carouselItem: {
-    width: 120,
-    alignItems: 'center',
-  },
-  carouselImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginBottom: 8,
-  },
-  carouselTitle: {
-    fontSize: 12,
-    textAlign: 'center',
-    color: '#333',
-  },
-  
-  // Grid styles
-  gridContainer: {
-    padding: 16,
-  },
-  gridRow: {
-    justifyContent: 'space-between',
-  },
-  gridItem: {
-    width: '48%',
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 12,
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  gridImage: {
-    width: '100%',
-    height: 120,
-    borderRadius: 6,
-    marginBottom: 8,
-  },
-  gridTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
-  },
-  gridPrice: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-  },
-});`
+  list: { padding: 16 },
+  item: { padding: 16, backgroundColor: 'white', marginBottom: 8, borderRadius: 8 },
+});
+
+export default App;`
         }
       ]
     },
@@ -1424,784 +610,46 @@ const styles = StyleSheet.create({
       title: 'SectionList',
       sections: [
         {
-          heading: 'SectionList',
-          list: [
-            '<strong>SectionList:</strong> Used for grouped list views with section headers.',
-            'Good for contact lists, categorized menus, or grouped data.',
-            '<strong>Props:</strong> <code>sections</code> , <code>renderItem</code> , <code>renderSectionHeader</code> .',
-            'Highly performant and optimized for large sections.'
+          heading: 'Grouped lists with SectionList',
+          content: [
+            'When your data is naturally grouped — contacts by letter, settings by category, events by date — use <strong>SectionList</strong>. It is like <code>FlatList</code> but takes an array of <em>sections</em>, each with a title and an array of data. It renders a header for each section automatically.',
+            'The props are similar to FlatList, with two differences:',
+            '1. <code>sections</code> takes an array of <code>{ title, data }</code> objects (not a flat array).<br>2. <code>renderSectionHeader</code> renders the header for each section.',
+            'Use <code>SectionList</code> for any grouped data; use <code>FlatList</code> for flat lists. The two are not interchangeable — pick the one that matches your data shape.'
           ],
-          example: {
-            title: 'Example',
-            code: `import { SectionList, Text, View } from 'react-native';
+          list: [
+            '<strong>SectionList</strong> — for <strong>grouped</strong> data (contacts by letter, events by date).',
+            '<code>sections</code> prop takes an array of <code>{ title, data }</code> objects.',
+            '<code>renderItem</code> renders one item; <code>renderSectionHeader</code> renders the group header.',
+            '<code>keyExtractor</code> is still required (unique per item).',
+            'Use FlatList for flat lists; SectionList for grouped lists.'
+          ],
+          code: `import { SectionList, View, Text, StyleSheet } from 'react-native';
 
-const DATA = [
-  {
-    title: 'Fruits',
-    data: ['Apple', 'Banana', 'Orange'],
-  },
-  {
-    title: 'Vegetables',
-    data: ['Carrot', 'Tomato'],
-  },
+const sections = [
+  { title: 'Fruits',  data: ['Apple', 'Banana', 'Cherry'] },
+  { title: 'Veggies', data: ['Carrot', 'Potato', 'Spinach'] },
 ];
 
-const MySectionList = () => (
+const App = () => (
   <SectionList
-    sections={DATA}
-    keyExtractor={(item, index) => item + index}
-    renderItem={({ item }) => <Text>{item}</Text>}
-    renderSectionHeader={({ section }) => (
-      <Text style={{ fontWeight: 'bold' }}>{section.title}</Text>
+    sections={sections}
+    keyExtractor={item => item}
+    renderItem={({ item }) => (
+      <View style={styles.item}><Text>{item}</Text></View>
+    )}
+    renderSectionHeader={({ section: { title } }) => (
+      <Text style={styles.header}>{title}</Text>
     )}
   />
-);`,
-            output: `import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
-const FlexboxExamples = () => {
-  return (
-    <View style={styles.container}>
-      {/* Horizontal Layout */}
-      <View style={styles.row}>
-        <View style={styles.box}><Text>1</Text></View>
-        <View style={styles.box}><Text>2</Text></View>
-        <View style={styles.box}><Text>3</Text></View>
-      </View>
-
-      {/* Centered Content */}
-      <View style={styles.centered}>
-        <Text>Perfectly Centered</Text>
-      </View>
-
-      {/* Space Distribution */}
-      <View style={styles.spaceAround}>
-        <Text>Item 1</Text>
-        <Text>Item 2</Text>
-        <Text>Item 3</Text>
-      </View>
-
-      {/* Flexible Items */}
-      <View style={styles.flexItems}>
-        <View style={{ flex: 1, backgroundColor: 'red' }}>
-          <Text>Flex: 1</Text>
-        </View>
-        <View style={{ flex: 2, backgroundColor: 'green' }}>
-          <Text>Flex: 2</Text>
-        </View>
-        <View style={{ flex: 1, backgroundColor: 'blue' }}>
-          <Text>Flex: 1</Text>
-        </View>
-      </View>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
-  
-  // Horizontal row layout
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  
-  // Perfect centering
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'lightblue',
-    marginBottom: 20,
-  },
-  
-  // Space distribution
-  spaceAround: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 60,
-    backgroundColor: 'lightgreen',
-    marginBottom: 20,
-  },
-  
-  // Flexible items
-  flexItems: {
-    flexDirection: 'row',
-    height: 100,
-    marginBottom: 20,
-  },
-  
-  box: {
-    width: 50,
-    height: 50,
-    backgroundColor: 'orange',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  
-  // Common responsive patterns
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    height: 60,
-  },
-  
-  sidebar: {
-    flexDirection: 'row',
-    flex: 1,
-  },
-  
-  sidebarMenu: {
-    width: 200,
-    backgroundColor: '#333',
-  },
-  
-  mainContent: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  
-  // Card layout
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    marginBottom: 8,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  
-  cardImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 16,
-  },
-  
-  cardContent: {
-    flex: 1,
-  },
-  
-  cardActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
-
-// Common Flexbox Patterns
-const CommonLayouts = () => (
-  <View>
-    {/* Header with logo and menu */}
-    <View style={styles.header}>
-      <Text>Logo</Text>
-      <Text>Menu</Text>
-    </View>
-    
-    {/* Sidebar layout */}
-    <View style={styles.sidebar}>
-      <View style={styles.sidebarMenu}>
-        <Text>Menu Items</Text>
-      </View>
-      <View style={styles.mainContent}>
-        <Text>Main Content</Text>
-      </View>
-    </View>
-    
-    {/* Card with image, content, and actions */}
-    <View style={styles.card}>
-      <View style={styles.cardImage} />
-      <View style={styles.cardContent}>
-        <Text>Card Title</Text>
-        <Text>Card Description</Text>
-      </View>
-      <View style={styles.cardActions}>
-        <Text>Action</Text>
-      </View>
-    </View>
-  </View>
 );
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'blue',
-  }
+  header: { fontSize: 18, fontWeight: 'bold', padding: 8, backgroundColor: '#eee' },
+  item:   { padding: 12, borderBottomWidth: 1 },
 });
 
-<Text style={styles.title}>Styled Text</Text>
-
-import { Image } from 'react-native';
-
-<Image
-  source={{ uri: 'https://example.com/image.jpg' }}
-  style={{ width: 200, height: 200 }}
-  resizeMode="cover"
-/>
-
-<Image
-  source={require('./assets/local-image.png')}
-  style={{ width: 100, height: 100 }}
-/>
-
-import { Button, View } from 'react-native';
-
-<Button
-  title="Click Me"
-  onPress={() => alert('Button Pressed')}
-  color="#6200EE"
-/>
-
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  Pressable,
-  Alert,
-  StyleSheet,
-  Animated,
-  Platform,
-} from 'react-native';
-
-// TouchableOpacity Examples
-const TouchableOpacityExamples = () => {
-  const [count, setCount] = useState(0);
-
-  return (
-    <View style={styles.container}>
-      {/* Basic Button */}
-      <TouchableOpacity
-        style={styles.primaryButton}
-        onPress={() => Alert.alert('Success', 'Button pressed!')}
-        activeOpacity={0.7} // Custom opacity
-      >
-        <Text style={styles.buttonText}>Primary Button</Text>
-      </TouchableOpacity>
-
-      {/* Counter Button */}
-      <TouchableOpacity
-        style={styles.counterButton}
-        onPress={() => setCount(count + 1)}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.counterText}>Tap Count: {count}</Text>
-      </TouchableOpacity>
-
-      {/* Card with Image */}
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => Alert.alert('Card', 'Card tapped!')}
-        activeOpacity={0.9}
-      >
-        <Image
-          source={{ uri: 'https://picsum.photos/60/60' }}
-          style={styles.cardImage}
-        />
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Interactive Card</Text>
-          <Text style={styles.cardSubtitle}>Tap to see action</Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* Disabled State */}
-      <TouchableOpacity
-        style={[styles.primaryButton, styles.disabledButton]}
-        disabled={true}
-        onPress={() => console.log('This will not be called')}
-      >
-        <Text style={[styles.buttonText, styles.disabledText]}>
-          Disabled Button
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-// TouchableHighlight Examples
-const TouchableHighlightExamples = () => {
-  const listData = [
-    { id: 1, title: 'Item 1', subtitle: 'First item description' },
-    { id: 2, title: 'Item 2', subtitle: 'Second item description' },
-    { id: 3, title: 'Item 3', subtitle: 'Third item description' },
-  ];
-
-  const handleItemPress = (item) => {
-    Alert.alert('Item Selected', \`You selected \${item.title}\`);
-  };
-
-  return (
-    <View style={styles.container}>
-      {listData.map((item) => (
-        <TouchableHighlight
-          key={item.id}
-          style={styles.listItem}
-          underlayColor="#E3F2FD" // Light blue highlight
-          onPress={() => handleItemPress(item)}
-          onShowUnderlay={() => console.log('Highlight shown')}
-          onHideUnderlay={() => console.log('Highlight hidden')}
-        >
-          <View style={styles.listItemContent}>
-            <Text style={styles.listItemTitle}>{item.title}</Text>
-            <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>
-          </View>
-        </TouchableHighlight>
-      ))}
-    </View>
-  );
-};
-
-// Pressable Examples (Modern Approach)
-const PressableExamples = () => {
-  const [isLongPressed, setIsLongPressed] = useState(false);
-
-  return (
-    <View style={styles.container}>
-      {/* Dynamic Styling with Function */}
-      <Pressable
-        style={({ pressed }) => [
-          styles.pressableButton,
-          {
-            backgroundColor: pressed ? '#0056b3' : '#007bff',
-            transform: [{ scale: pressed ? 0.95 : 1 }],
-          },
-        ]}
-        onPress={() => Alert.alert('Pressable', 'Modern button pressed!')}
-      >
-        {({ pressed }) => (
-          <Text style={styles.pressableText}>
-            {pressed ? 'Pressed!' : 'Press Me'}
-          </Text>
-        )}
-      </Pressable>
-
-      {/* Long Press Example */}
-      <Pressable
-        style={[
-          styles.longPressButton,
-          isLongPressed && styles.longPressActive,
-        ]}
-        onPress={() => Alert.alert('Quick Tap', 'Short press detected')}
-        onLongPress={() => {
-          setIsLongPressed(true);
-          Alert.alert('Long Press', 'Long press detected!');
-          setTimeout(() => setIsLongPressed(false), 1000);
-        }}
-        delayLongPress={800} // 800ms for long press
-      >
-        <Text style={styles.longPressText}>
-          {isLongPressed ? 'Long Pressed!' : 'Long Press Me'}
-        </Text>
-      </Pressable>
-
-      {/* Advanced Hit Area */}
-      <Pressable
-        style={styles.smallButton}
-        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }} // Larger hit area
-        pressRetentionOffset={{ top: 30, bottom: 30, left: 30, right: 30 }}
-        onPress={() => Alert.alert('Hit Area', 'Large hit area worked!')}
-      >
-        <Text style={styles.smallButtonText}>Small Button</Text>
-      </Pressable>
-
-      {/* Platform-specific Android Ripple */}
-      <Pressable
-        style={styles.rippleButton}
-        android_ripple={{
-          color: 'rgba(255, 255, 255, 0.3)',
-          borderless: false,
-          radius: 100,
-        }}
-        onPress={() => Alert.alert('Ripple', 'Android ripple effect!')}
-      >
-        <Text style={styles.rippleText}>Android Ripple</Text>
-      </Pressable>
-    </View>
-  );
-};
-
-// Custom Touchable with Animation
-const AnimatedTouchableExample = () => {
-  const scaleValue = new Animated.Value(1);
-
-  const handlePressIn = () => {
-    Animated.spring(scaleValue, {
-      toValue: 0.9,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  return (
-    <TouchableWithoutFeedback
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onPress={() => Alert.alert('Animated', 'Custom animation!')}
-    >
-      <Animated.View
-        style={[
-          styles.animatedButton,
-          { transform: [{ scale: scaleValue }] },
-        ]}
-      >
-        <Text style={styles.animatedButtonText}>Animated Button</Text>
-      </Animated.View>
-    </TouchableWithoutFeedback>
-  );
-};
-
-// Accessibility Example
-const AccessibleTouchableExample = () => {
-  return (
-    <TouchableOpacity
-      style={styles.accessibleButton}
-      onPress={() => Alert.alert('Accessible', 'Accessible button pressed!')}
-      accessible={true}
-      accessibilityLabel="Save document button"
-      accessibilityHint="Double tap to save your current document"
-      accessibilityRole="button"
-      accessibilityState={{ disabled: false }}
-    >
-      <Text style={styles.accessibleButtonText}>Save Document</Text>
-    </TouchableOpacity>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  
-  // TouchableOpacity Styles
-  primaryButton: {
-    backgroundColor: '#007bff',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  counterButton: {
-    backgroundColor: '#28a745',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  counterText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  card: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-    alignItems: 'center',
-  },
-  cardImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 16,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  cardSubtitle: {
-    fontSize: 14,
-    color: '#666',
-  },
-  disabledButton: {
-    backgroundColor: '#6c757d',
-    opacity: 0.6,
-  },
-  disabledText: {
-    color: '#adb5bd',
-  },
-  
-  // TouchableHighlight Styles
-  listItem: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    marginBottom: 8,
-    overflow: 'hidden', // Important for highlight effect
-  },
-  listItemContent: {
-    padding: 16,
-  },
-  listItemTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
-  },
-  listItemSubtitle: {
-    fontSize: 14,
-    color: '#666',
-  },
-  
-  // Pressable Styles
-  pressableButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  pressableText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  longPressButton: {
-    backgroundColor: '#fd7e14',
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  longPressActive: {
-    backgroundColor: '#e8590c',
-  },
-  longPressText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  smallButton: {
-    backgroundColor: '#6c757d',
-    padding: 8,
-    borderRadius: 6,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  smallButtonText: {
-    color: 'white',
-    fontSize: 14,
-  },
-  rippleButton: {
-    backgroundColor: '#6f42c1',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  rippleText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  
-  // Animation Styles
-  animatedButton: {
-    backgroundColor: '#dc3545',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  animatedButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  
-  // Accessibility Styles
-  accessibleButton: {
-    backgroundColor: '#20c997',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  accessibleButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
-
-// Stack Navigation Example
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-const Stack = createNativeStackNavigator();
-
-<NavigationContainer>
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen name="Home" component={HomeScreen} />
-    <Stack.Screen name="Details" component={DetailsScreen} />
-  </Stack.Navigator>
-</NavigationContainer>
-
-import { Platform, Text } from 'react-native';
-
-const PlatformExample = () => (
-  <Text>
-    {Platform.OS === 'ios' ? 'Running on iOS' : 'Running on Android'}
-  </Text>
-);
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const storeData = async () => {
-  try {
-    await AsyncStorage.setItem('username', 'JohnDoe');
-  } catch (e) {
-    console.error('Saving error', e);
-  }
-};
-
-const getData = async () => {
-  try {
-    const value = await AsyncStorage.getItem('username');
-    if (value !== null) {
-      console.log('Stored value:', value);
-    }
-  } catch (e) {
-    console.error('Reading error', e);
-  }
-};
-
-// Using react-native-keychain
-import * as Keychain from 'react-native-keychain';
-
-const saveSecureData = async () => {
-  await Keychain.setGenericPassword('username', 'secret_password');
-};
-
-const loadSecureData = async () => {
-  const credentials = await Keychain.getGenericPassword();
-  if (credentials) {
-    console.log('Username:', credentials.username);
-  }
-};
-
-import { Animated } from 'react-native';
-import { useRef, useEffect } from 'react';
-
-const FadeInView = ({ children }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  return <Animated.View style={{ opacity: fadeAnim }}>{children}</Animated.View>;
-};
-
-// store.js
-import { createStore } from 'redux';
-
-const initialState = { count: 0 };
-
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    case 'INCREMENT':
-      return { count: state.count + 1 };
-    default:
-      return state;
-  }
-}
-
-const store = createStore(reducer);
-export default store;
-
-import React, { createContext, useContext, useState } from 'react';
-
-const ThemeContext = createContext();
-
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-
-export const useTheme = () => useContext(ThemeContext);
-
-import * as Linking from 'expo-linking';
-
-const url = Linking.createURL('profile/42'); // opens deep route
-
-Linking.openURL(url);
-
-const loginUser = async () => {
-  const response = await fetch('https://api.example.com/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
-
-  const data = await response.json();
-  if (data.token) {
-    await AsyncStorage.setItem('token', data.token);
-  }
-};
-
-// Enable logs
-console.log('Debug log');
-
-// Show Dev Menu on Android manually
-import { DevSettings } from 'react-native';
-DevSettings.reload();
-
-// Example Native Module (Android - Java)
-@ReactModule(name = "MyNativeModule")
-public class MyNativeModule extends ReactContextBaseJavaModule {
-  @ReactMethod
-  public void showToast(String message) {
-    Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_SHORT).show();
-  }
-}`,
-            type: 'code'
-          }
+export default App;`
         }
       ]
     },
@@ -2209,207 +657,54 @@ public class MyNativeModule extends ReactContextBaseJavaModule {
       title: 'Flexbox',
       sections: [
         {
-          heading: 'Flexbox',
-          list: [
-            '<strong>Main Axis:</strong> Primary direction (flexDirection)',
-            '<strong>Cross Axis:</strong> Perpendicular to main axis',
-            '<strong>justifyContent:</strong> Controls main axis alignment',
-            '<strong>alignItems:</strong> Controls cross axis alignment',
-            'Use <code>flex: 1</code> to make components take available space',
-            'Combine <code>justifyContent</code> and <code>alignItems</code> for perfect centering',
-            `Use <code>flexDirection: 'row'</code> for horizontal layouts`,
-            `Apply <code>flexWrap: 'wrap'</code> for responsive grids`,
-            'Use <code>alignSelf</code> to override alignment for specific items',
-            'Test layouts on different screen sizes and orientations',
-            'Avoid fixed dimensions; use flex properties for responsiveness',
-            `<span class="badge bg-primary me-2">Core Concept</span> <strong>Flexbox:</strong> React Native uses Flexbox for layout, positioning, and distribution of elements. It's the primary layout system.`,
-            '<strong>Default Direction:</strong> Default <code>flexDirection</code> is <code>column</code> (vertical), unlike web which defaults to <code>row</code> (horizontal).',
-            '<span class="badge bg-info text-dark me-2">Flex Container</span> <strong>flex:</strong> Defines how a component should grow/shrink. <code>flex: 1</code> takes available space.',
-            '<strong>flexDirection:</strong> Sets primary axis - <code>row</code> , <code>column</code> , <code>row-reverse</code> , <code>column-reverse</code> .',
-            '<strong>justifyContent:</strong> Aligns children along main axis - <code>flex-start</code> , <code>center</code> , <code>flex-end</code> , <code>space-between</code> , <code>space-around</code> , <code>space-evenly</code> .',
-            '<span class="badge bg-success me-2">Cross Axis</span> <strong>alignItems:</strong> Aligns children along cross axis - <code>stretch</code> , <code>center</code> , <code>flex-start</code> , <code>flex-end</code> , <code>baseline</code> .',
-            `<strong>alignSelf:</strong> Overrides parent's alignItems for individual child components.`,
-            '<strong>flexWrap:</strong> Controls wrapping - <code>nowrap</code> (default), <code>wrap</code> , <code>wrap-reverse</code> .',
-            `<span class="badge bg-warning text-dark me-2">Advanced</span> <strong>alignContent:</strong> Aligns wrapped lines. Only works when <code>flexWrap: 'wrap'</code> .`,
-            '<strong>flexBasis:</strong> Sets initial size before free space is distributed. Similar to width/height but flex-aware.',
-            '<strong>flexGrow & flexShrink:</strong> Control how items grow and shrink. <code>flexGrow: 1</code> expands, <code>flexShrink: 0</code> prevents shrinking.',
-            '<span class="badge bg-danger me-2">Common Patterns</span> <strong>Responsive Design:</strong> Use flex values and percentages for responsive layouts that work on all screen sizes.'
+          heading: 'Layout with Flexbox',
+          content: [
+            'React Native uses <strong>Flexbox</strong> for layout — the same system as CSS on the web, with a few defaults flipped for mobile. Flexbox is a one-dimensional layout model: it arranges children either in a row (side by side) or a column (stacked), and distributes space between them.',
+            'The most important props:',
+            '<strong>flex</strong> — a number; how much space this view takes relative to its siblings. <code>flex: 1</code> means "fill all remaining space". <code>flex: 2</code> takes twice as much as a sibling with <code>flex: 1</code>.<br><strong>flexDirection</strong> — <code>"row"</code> (side by side) or <code>"column"</code> (stacked). <strong>The default in React Native is <code>column</code></strong>, opposite from the web (where it is <code>row</code>).<br><strong>justifyContent</strong> — how children are aligned along the main axis: <code>"flex-start"</code>, <code>"center"</code>, <code>"flex-end"</code>, <code>"space-between"</code>, <code>"space-around"</code>, <code>"space-evenly"</code>.<br><strong>alignItems</strong> — how children are aligned along the cross axis: <code>"flex-start"</code>, <code>"center"</code>, <code>"flex-end"</code>, <code>"stretch"</code> (fill the cross axis).',
+            "A common pattern: to center content, use <code>flex: 1, justifyContent: 'center', alignItems: 'center'</code> on the parent. To make a row of equal-width items, use <code>flexDirection: 'row'</code> on the parent and <code>flex: 1</code> on each child."
           ],
-          code: `import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+          list: [
+            'React Native uses <strong>Flexbox</strong> for layout (same as web CSS).',
+            '<strong>flex</strong> — relative space; <code>flex: 1</code> fills remaining space.',
+            '<strong>flexDirection</strong> — <code>"row"</code> or <code>"column"</code>; default is <strong>column</strong> (web default is row).',
+            '<strong>justifyContent</strong> — alignment on the main axis (<code>"center"</code>, <code>"space-between"</code>, ...).',
+            '<strong>alignItems</strong> — alignment on the cross axis (<code>"center"</code>, <code>"stretch"</code>, ...).',
+            "Center content: <code>flex: 1, justifyContent: 'center', alignItems: 'center'</code>."
+          ],
+          code: `import { View, Text, StyleSheet } from 'react-native';
 
-const FlexboxExamples = () => {
-  return (
-    <View style={styles.container}>
-      {/* Horizontal Layout */}
-      <View style={styles.row}>
-        <View style={styles.box}><Text>1</Text></View>
-        <View style={styles.box}><Text>2</Text></View>
-        <View style={styles.box}><Text>3</Text></View>
-      </View>
-
-      {/* Centered Content */}
-      <View style={styles.centered}>
-        <Text>Perfectly Centered</Text>
-      </View>
-
-      {/* Space Distribution */}
-      <View style={styles.spaceAround}>
-        <Text>Item 1</Text>
-        <Text>Item 2</Text>
-        <Text>Item 3</Text>
-      </View>
-
-      {/* Flexible Items */}
-      <View style={styles.flexItems}>
-        <View style={{ flex: 1, backgroundColor: 'red' }}>
-          <Text>Flex: 1</Text>
-        </View>
-        <View style={{ flex: 2, backgroundColor: 'green' }}>
-          <Text>Flex: 2</Text>
-        </View>
-        <View style={{ flex: 1, backgroundColor: 'blue' }}>
-          <Text>Flex: 1</Text>
-        </View>
-      </View>
-    </View>
-  );
-};
+const App = () => (
+  <View style={styles.container}>
+    <View style={styles.box1}><Text>Box 1</Text></View>
+    <View style={styles.box2}><Text>Box 2</Text></View>
+    <View style={styles.box3}><Text>Box 3</Text></View>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
-  
-  // Horizontal row layout
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  
-  // Perfect centering
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'lightblue',
-    marginBottom: 20,
-  },
-  
-  // Space distribution
-  spaceAround: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 60,
-    backgroundColor: 'lightgreen',
-    marginBottom: 20,
-  },
-  
-  // Flexible items
-  flexItems: {
-    flexDirection: 'row',
-    height: 100,
-    marginBottom: 20,
-  },
-  
-  box: {
-    width: 50,
-    height: 50,
-    backgroundColor: 'orange',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  
-  // Common responsive patterns
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    height: 60,
-  },
-  
-  sidebar: {
-    flexDirection: 'row',
-    flex: 1,
-  },
-  
-  sidebarMenu: {
-    width: 200,
-    backgroundColor: '#333',
-  },
-  
-  mainContent: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  
-  // Card layout
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flex: 1,                       // fill the screen
+    flexDirection: 'row',          // side by side
+    justifyContent: 'space-between',// spread along the row
+    alignItems: 'center',           // center vertically
     padding: 16,
-    marginBottom: 8,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
-  
-  cardImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 16,
-  },
-  
-  cardContent: {
-    flex: 1,
-  },
-  
-  cardActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  box1: { flex: 1, height: 80, backgroundColor: 'coral' },
+  box2: { flex: 2, height: 80, backgroundColor: 'skyblue' },
+  box3: { flex: 1, height: 80, backgroundColor: 'seagreen' },
 });
 
-// Common Flexbox Patterns
-const CommonLayouts = () => (
-  <View>
-    {/* Header with logo and menu */}
-    <View style={styles.header}>
-      <Text>Logo</Text>
-      <Text>Menu</Text>
-    </View>
-    
-    {/* Sidebar layout */}
-    <View style={styles.sidebar}>
-      <View style={styles.sidebarMenu}>
-        <Text>Menu Items</Text>
-      </View>
-      <View style={styles.mainContent}>
-        <Text>Main Content</Text>
-      </View>
-    </View>
-    
-    {/* Card with image, content, and actions */}
-    <View style={styles.card}>
-      <View style={styles.cardImage} />
-      <View style={styles.cardContent}>
-        <Text>Card Title</Text>
-        <Text>Card Description</Text>
-      </View>
-      <View style={styles.cardActions}>
-        <Text>Action</Text>
-      </View>
-    </View>
-  </View>
-);`
+export default App;`,
+          example: {
+            title: 'Try it Yourself — centering content',
+            code: `// Center one child vertically and horizontally
+<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  <Text>I'm centered!</Text>
+</View>`,
+            output: 'I\'m centered! (in the middle of the screen)',
+            type: 'code'
+          }
         }
       ]
     },
@@ -2417,23 +712,45 @@ const CommonLayouts = () => (
       title: 'Styling',
       sections: [
         {
-          heading: 'Styling',
-          list: [
-            '<strong>StyleSheet:</strong> React Native provides <code>StyleSheet.create()</code> for defining styles.',
-            '<strong>Inline Styles:</strong> You can also apply styles directly inside the component.',
-            '<strong>Units:</strong> All dimensions are unitless and represent density-independent pixels.',
-            '<strong>Multiple Styles:</strong> You can combine styles using array syntax: <code>[style1, style2]</code> .',
-            '<strong>Style Inheritance:</strong> Limited; not as deep as CSS in web.'
+          heading: 'How to style components',
+          content: [
+            'React Native uses JavaScript for styling — no CSS files. Every component accepts a <code>style</code> prop that takes a plain JavaScript object (or an array of objects, merged left to right). The property names are camelCase versions of CSS (<code>backgroundColor</code>, <code>fontSize</code>, <code>marginTop</code>).',
+            'The cleanest pattern is to define styles once with <strong>StyleSheet.create()</strong> at the bottom of the file, and reference them by name. This is faster than inline objects (the styles are sent to native once, not recreated on every render) and keeps the JSX readable.',
+            'A few differences from web CSS to watch for:',
+            '1. <strong>No cascading.</strong> Styles do not inherit to children the way CSS does — a <code>&lt;Text&gt;</code> inside a <code>&lt;View&gt;</code> does <em>not</em> inherit the view\'s <code>color</code>. Set text styles on the <code>&lt;Text&gt;</code> itself.<br>2. <strong>Units are numbers, not strings.</strong> <code>fontSize: 16</code>, not <code>"16px"</code>. The numbers are in <em>device-independent pixels</em> (dp).<br>3. <strong>Only a subset of CSS</strong> is supported — no <code>display: grid</code>, limited selectors, no pseudo-classes. Use conditional styles (arrays of style objects or ternaries) instead.',
+            'For shared styles across files, export a <code>StyleSheet</code> from a separate <code>styles.js</code> module. For reusable styled components, wrap a component and pass <code>style</code> as a prop and merge it with <code>StyleSheet.flatten</code>.'
           ],
-          code: `const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'blue',
-  }
+          list: [
+            'Styles are <strong>JavaScript objects</strong> — no CSS files.',
+            'Use <strong>StyleSheet.create()</strong> for performance and readability.',
+            'Property names are camelCase: <code>backgroundColor</code>, <code>fontSize</code>, <code>marginTop</code>.',
+            'Units are <strong>numbers</strong> (dp), not strings: <code>fontSize: 16</code>, not <code>"16px"</code>.',
+            'No cascading — set text styles on the <code>&lt;Text&gt;</code>, not the parent <code>&lt;View&gt;</code>.',
+            'Merge styles with arrays: <code>[styles.base, isPressed &amp;&amp; styles.pressed]</code>.',
+            'Only a subset of CSS is supported — no grid, no pseudo-classes.'
+          ],
+          code: `import { View, Text, StyleSheet } from 'react-native';
+
+const App = () => {
+  const isPressed = false;
+  return (
+    <View style={styles.container}>
+      <Text style={[styles.title, isPressed && styles.pressed]}>
+        Hello
+      </Text>
+      <Text style={styles.subtitle}>Stylish.</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: '#f5f5f5' },
+  title:     { fontSize: 24, fontWeight: 'bold', color: '#333' },
+  subtitle:  { fontSize: 16, color: '#666', marginTop: 4 },
+  pressed:   { color: 'red' },   // applied only when isPressed is true
 });
 
-<Text style={styles.title}>Styled Text</Text>`
+export default App;`
         }
       ]
     },
@@ -2441,597 +758,88 @@ const CommonLayouts = () => (
       title: 'Images',
       sections: [
         {
-          heading: 'Images',
-          list: [
-            '<strong>Image Component:</strong> Displays both local and remote images.',
-            '<strong>Source:</strong> Use <code>require()</code> for local or URI for remote images.',
-            '<strong>Style Required:</strong> Must define width and height in styles.',
-            '<strong>Resize Mode:</strong> Controls image scaling — <code>cover</code> , <code>contain</code> , <code>stretch</code> , etc.'
+          heading: 'Displaying images',
+          content: [
+            'The <code>Image</code> component displays images. There are two ways to provide the source:',
+            "<strong>1. Local images</strong> — use <code>require()</code> with a relative path. The bundler includes the file in the app, so it loads instantly and works offline. <code>&lt;Image source={require('./logo.png')} /&gt;</code>",
+            "<strong>2. Remote images</strong> — use an object with a <code>uri</code>: <code>&lt;Image source={{ uri: 'https://example.com/logo.png' }} /&gt;</code>. The app downloads it at runtime, so it needs a network connection and the URL must allow CORS.",
+            'Two things beginners often miss:',
+            '<strong>Always set explicit dimensions.</strong> Unlike the web, a remote <code>&lt;Image&gt;</code> with no <code>style.width</code> and <code>style.height</code> shows <em>nothing</em> — there is no automatic size. Set <code>style={{ width: 100, height: 100 }}</code> (or use <code>flex</code>) so the image has a size.<br><strong>Use <code>resizeMode</code></strong> to control how the image fits its box: <code>"cover"</code> (fill, may crop), <code>"contain"</code> (fit, may letterbox), <code>"stretch"</code> (fill, may distort), <code>"repeat"</code> (tile), <code>"center"</code>.',
+            'For background images, use <code>ImageBackground</code>, which lets you render children on top of an image.'
           ],
-          example: {
-            title: 'Example',
-            code: `import { Image } from 'react-native';
+          list: [
+            "<strong>Local image</strong>: <code>source={require('./logo.png')}</code> — bundled, works offline.",
+            "<strong>Remote image</strong>: <code>source={{ uri: 'https://...' }}</code> — downloaded at runtime.",
+            '<strong>Always set width and height</strong> — remote images with no size render nothing.',
+            '<code>resizeMode</code> — <code>"cover"</code>, <code>"contain"</code>, <code>"stretch"</code>, <code>"repeat"</code>, <code>"center"</code>.',
+            'For background images, use <code>ImageBackground</code>.',
+            'Load images from <code>./assets/</code> — bundler includes them in the app.'
+          ],
+          code: `import { View, Image, ImageBackground, Text, StyleSheet } from 'react-native';
 
-<Image
-  source={{ uri: 'https://example.com/image.jpg' }}
-  style={{ width: 200, height: 200 }}
-  resizeMode="cover"
-/>
+const App = () => (
+  <View style={styles.container}>
+    {/* Local image — bundled at build time */}
+    <Image source={require('./assets/logo.png')} style={styles.logo} />
 
-<Image
-  source={require('./assets/local-image.png')}
-  style={{ width: 100, height: 100 }}
-/>`,
-            output: `import { Button, View } from 'react-native';
+    {/* Remote image — needs width and height! */}
+    <Image
+      source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+      style={{ width: 80, height: 80 }}
+      resizeMode="contain"
+    />
 
-<Button
-  title="Click Me"
-  onPress={() => alert('Button Pressed')}
-  color="#6200EE"
-/>
-
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  Pressable,
-  Alert,
-  StyleSheet,
-  Animated,
-  Platform,
-} from 'react-native';
-
-// TouchableOpacity Examples
-const TouchableOpacityExamples = () => {
-  const [count, setCount] = useState(0);
-
-  return (
-    <View style={styles.container}>
-      {/* Basic Button */}
-      <TouchableOpacity
-        style={styles.primaryButton}
-        onPress={() => Alert.alert('Success', 'Button pressed!')}
-        activeOpacity={0.7} // Custom opacity
-      >
-        <Text style={styles.buttonText}>Primary Button</Text>
-      </TouchableOpacity>
-
-      {/* Counter Button */}
-      <TouchableOpacity
-        style={styles.counterButton}
-        onPress={() => setCount(count + 1)}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.counterText}>Tap Count: {count}</Text>
-      </TouchableOpacity>
-
-      {/* Card with Image */}
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => Alert.alert('Card', 'Card tapped!')}
-        activeOpacity={0.9}
-      >
-        <Image
-          source={{ uri: 'https://picsum.photos/60/60' }}
-          style={styles.cardImage}
-        />
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Interactive Card</Text>
-          <Text style={styles.cardSubtitle}>Tap to see action</Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* Disabled State */}
-      <TouchableOpacity
-        style={[styles.primaryButton, styles.disabledButton]}
-        disabled={true}
-        onPress={() => console.log('This will not be called')}
-      >
-        <Text style={[styles.buttonText, styles.disabledText]}>
-          Disabled Button
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-// TouchableHighlight Examples
-const TouchableHighlightExamples = () => {
-  const listData = [
-    { id: 1, title: 'Item 1', subtitle: 'First item description' },
-    { id: 2, title: 'Item 2', subtitle: 'Second item description' },
-    { id: 3, title: 'Item 3', subtitle: 'Third item description' },
-  ];
-
-  const handleItemPress = (item) => {
-    Alert.alert('Item Selected', \`You selected \${item.title}\`);
-  };
-
-  return (
-    <View style={styles.container}>
-      {listData.map((item) => (
-        <TouchableHighlight
-          key={item.id}
-          style={styles.listItem}
-          underlayColor="#E3F2FD" // Light blue highlight
-          onPress={() => handleItemPress(item)}
-          onShowUnderlay={() => console.log('Highlight shown')}
-          onHideUnderlay={() => console.log('Highlight hidden')}
-        >
-          <View style={styles.listItemContent}>
-            <Text style={styles.listItemTitle}>{item.title}</Text>
-            <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>
-          </View>
-        </TouchableHighlight>
-      ))}
-    </View>
-  );
-};
-
-// Pressable Examples (Modern Approach)
-const PressableExamples = () => {
-  const [isLongPressed, setIsLongPressed] = useState(false);
-
-  return (
-    <View style={styles.container}>
-      {/* Dynamic Styling with Function */}
-      <Pressable
-        style={({ pressed }) => [
-          styles.pressableButton,
-          {
-            backgroundColor: pressed ? '#0056b3' : '#007bff',
-            transform: [{ scale: pressed ? 0.95 : 1 }],
-          },
-        ]}
-        onPress={() => Alert.alert('Pressable', 'Modern button pressed!')}
-      >
-        {({ pressed }) => (
-          <Text style={styles.pressableText}>
-            {pressed ? 'Pressed!' : 'Press Me'}
-          </Text>
-        )}
-      </Pressable>
-
-      {/* Long Press Example */}
-      <Pressable
-        style={[
-          styles.longPressButton,
-          isLongPressed && styles.longPressActive,
-        ]}
-        onPress={() => Alert.alert('Quick Tap', 'Short press detected')}
-        onLongPress={() => {
-          setIsLongPressed(true);
-          Alert.alert('Long Press', 'Long press detected!');
-          setTimeout(() => setIsLongPressed(false), 1000);
-        }}
-        delayLongPress={800} // 800ms for long press
-      >
-        <Text style={styles.longPressText}>
-          {isLongPressed ? 'Long Pressed!' : 'Long Press Me'}
-        </Text>
-      </Pressable>
-
-      {/* Advanced Hit Area */}
-      <Pressable
-        style={styles.smallButton}
-        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }} // Larger hit area
-        pressRetentionOffset={{ top: 30, bottom: 30, left: 30, right: 30 }}
-        onPress={() => Alert.alert('Hit Area', 'Large hit area worked!')}
-      >
-        <Text style={styles.smallButtonText}>Small Button</Text>
-      </Pressable>
-
-      {/* Platform-specific Android Ripple */}
-      <Pressable
-        style={styles.rippleButton}
-        android_ripple={{
-          color: 'rgba(255, 255, 255, 0.3)',
-          borderless: false,
-          radius: 100,
-        }}
-        onPress={() => Alert.alert('Ripple', 'Android ripple effect!')}
-      >
-        <Text style={styles.rippleText}>Android Ripple</Text>
-      </Pressable>
-    </View>
-  );
-};
-
-// Custom Touchable with Animation
-const AnimatedTouchableExample = () => {
-  const scaleValue = new Animated.Value(1);
-
-  const handlePressIn = () => {
-    Animated.spring(scaleValue, {
-      toValue: 0.9,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  return (
-    <TouchableWithoutFeedback
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onPress={() => Alert.alert('Animated', 'Custom animation!')}
-    >
-      <Animated.View
-        style={[
-          styles.animatedButton,
-          { transform: [{ scale: scaleValue }] },
-        ]}
-      >
-        <Text style={styles.animatedButtonText}>Animated Button</Text>
-      </Animated.View>
-    </TouchableWithoutFeedback>
-  );
-};
-
-// Accessibility Example
-const AccessibleTouchableExample = () => {
-  return (
-    <TouchableOpacity
-      style={styles.accessibleButton}
-      onPress={() => Alert.alert('Accessible', 'Accessible button pressed!')}
-      accessible={true}
-      accessibilityLabel="Save document button"
-      accessibilityHint="Double tap to save your current document"
-      accessibilityRole="button"
-      accessibilityState={{ disabled: false }}
-    >
-      <Text style={styles.accessibleButtonText}>Save Document</Text>
-    </TouchableOpacity>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  
-  // TouchableOpacity Styles
-  primaryButton: {
-    backgroundColor: '#007bff',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  counterButton: {
-    backgroundColor: '#28a745',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  counterText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  card: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-    alignItems: 'center',
-  },
-  cardImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 16,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  cardSubtitle: {
-    fontSize: 14,
-    color: '#666',
-  },
-  disabledButton: {
-    backgroundColor: '#6c757d',
-    opacity: 0.6,
-  },
-  disabledText: {
-    color: '#adb5bd',
-  },
-  
-  // TouchableHighlight Styles
-  listItem: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    marginBottom: 8,
-    overflow: 'hidden', // Important for highlight effect
-  },
-  listItemContent: {
-    padding: 16,
-  },
-  listItemTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
-  },
-  listItemSubtitle: {
-    fontSize: 14,
-    color: '#666',
-  },
-  
-  // Pressable Styles
-  pressableButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  pressableText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  longPressButton: {
-    backgroundColor: '#fd7e14',
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  longPressActive: {
-    backgroundColor: '#e8590c',
-  },
-  longPressText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  smallButton: {
-    backgroundColor: '#6c757d',
-    padding: 8,
-    borderRadius: 6,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  smallButtonText: {
-    color: 'white',
-    fontSize: 14,
-  },
-  rippleButton: {
-    backgroundColor: '#6f42c1',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  rippleText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  
-  // Animation Styles
-  animatedButton: {
-    backgroundColor: '#dc3545',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  animatedButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  
-  // Accessibility Styles
-  accessibleButton: {
-    backgroundColor: '#20c997',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  accessibleButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
-
-// Stack Navigation Example
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-const Stack = createNativeStackNavigator();
-
-<NavigationContainer>
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen name="Home" component={HomeScreen} />
-    <Stack.Screen name="Details" component={DetailsScreen} />
-  </Stack.Navigator>
-</NavigationContainer>
-
-import { Platform, Text } from 'react-native';
-
-const PlatformExample = () => (
-  <Text>
-    {Platform.OS === 'ios' ? 'Running on iOS' : 'Running on Android'}
-  </Text>
+    {/* Background image */}
+    <ImageBackground source={require('./assets/bg.jpg')} style={styles.bg}>
+      <Text style={styles.bgText}>Text on top of the image</Text>
+    </ImageBackground>
+  </View>
 );
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, alignItems: 'center' },
+  logo:      { width: 100, height: 100, margin: 12 },
+  bg:        { width: '100%', height: 200, justifyContent: 'center', alignItems: 'center' },
+  bgText:    { color: 'white', fontSize: 20, fontWeight: 'bold' },
+});
 
-const storeData = async () => {
-  try {
-    await AsyncStorage.setItem('username', 'JohnDoe');
-  } catch (e) {
-    console.error('Saving error', e);
-  }
-};
-
-const getData = async () => {
-  try {
-    const value = await AsyncStorage.getItem('username');
-    if (value !== null) {
-      console.log('Stored value:', value);
-    }
-  } catch (e) {
-    console.error('Reading error', e);
-  }
-};
-
-// Using react-native-keychain
-import * as Keychain from 'react-native-keychain';
-
-const saveSecureData = async () => {
-  await Keychain.setGenericPassword('username', 'secret_password');
-};
-
-const loadSecureData = async () => {
-  const credentials = await Keychain.getGenericPassword();
-  if (credentials) {
-    console.log('Username:', credentials.username);
-  }
-};
-
-import { Animated } from 'react-native';
-import { useRef, useEffect } from 'react';
-
-const FadeInView = ({ children }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  return <Animated.View style={{ opacity: fadeAnim }}>{children}</Animated.View>;
-};
-
-// store.js
-import { createStore } from 'redux';
-
-const initialState = { count: 0 };
-
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    case 'INCREMENT':
-      return { count: state.count + 1 };
-    default:
-      return state;
-  }
-}
-
-const store = createStore(reducer);
-export default store;
-
-import React, { createContext, useContext, useState } from 'react';
-
-const ThemeContext = createContext();
-
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-
-export const useTheme = () => useContext(ThemeContext);
-
-import * as Linking from 'expo-linking';
-
-const url = Linking.createURL('profile/42'); // opens deep route
-
-Linking.openURL(url);
-
-const loginUser = async () => {
-  const response = await fetch('https://api.example.com/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
-
-  const data = await response.json();
-  if (data.token) {
-    await AsyncStorage.setItem('token', data.token);
-  }
-};
-
-// Enable logs
-console.log('Debug log');
-
-// Show Dev Menu on Android manually
-import { DevSettings } from 'react-native';
-DevSettings.reload();
-
-// Example Native Module (Android - Java)
-@ReactModule(name = "MyNativeModule")
-public class MyNativeModule extends ReactContextBaseJavaModule {
-  @ReactMethod
-  public void showToast(String message) {
-    Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_SHORT).show();
-  }
-}`,
-            type: 'code'
-          }
+export default App;`
         }
       ]
     }
   },
+
   module3: {
     buttons: {
       title: 'Buttons',
       sections: [
         {
-          heading: 'Buttons',
-          list: [
-            '<strong>Button:</strong> A basic component used for user actions.',
-            '<strong>Props:</strong> <code>title</code> , <code>onPress</code> , <code>color</code> , and <code>disabled</code> .',
-            'Platform-specific styling; limited customization options.',
-            'For custom design, use <code>TouchableOpacity</code> or <code>Pressable</code> with <code>Text</code> .'
+          heading: 'The basic Button',
+          content: [
+            'The <code>Button</code> component is the simplest way to make something tappable. It renders a platform-styled button (Material on Android, default on iOS) and calls an <code>onPress</code> handler when tapped.',
+            '<code>Button</code> is intentionally limited — it takes a <code>title</code>, a <code>color</code> (the background on Android, the text color on iOS), an <code>onPress</code> handler, and a <code>disabled</code> flag. You cannot style its padding, border radius, or font. For anything custom, use <code>TouchableOpacity</code> (next topic) instead.',
+            'A common pattern is to disable the button until a form is valid: <code>&lt;Button title="Submit" onPress={onSubmit} disabled={!isValid} /&gt;</code>.'
           ],
-          code: `import { Button, View } from 'react-native';
+          list: [
+            '<strong>Button</strong> — simplest pressable; renders a platform-styled button.',
+            'Props: <code>title</code>, <code>onPress</code>, <code>color</code>, <code>disabled</code>.',
+            'Limited styling — no custom padding, border radius, or font.',
+            'For custom-styled buttons, use <strong>TouchableOpacity</strong> instead.',
+            'Disable with <code>disabled={!isValid}</code> until a form is valid.'
+          ],
+          code: `import { View, Button, Alert } from 'react-native';
 
-<Button
-  title="Click Me"
-  onPress={() => alert('Button Pressed')}
-  color="#6200EE"
-/>`
+const App = () => (
+  <View style={{ padding: 16 }}>
+    <Button
+      title="Press me"
+      color="#007bff"
+      onPress={() => Alert.alert('You pressed the button!')}
+    />
+  </View>
+);
+
+export default App;`
         }
       ]
     },
@@ -3039,471 +847,50 @@ public class MyNativeModule extends ReactContextBaseJavaModule {
       title: 'Touchables',
       sections: [
         {
-          heading: 'Touchables',
+          heading: 'Making any component tappable',
           content: [
-            `<strong>🎯 Core Concept:</strong> Touchable components make any element interactive by wrapping it with touch handling capabilities. They're essential for creating buttons, cards, and any tappable UI elements with proper user feedback.`
+            'When you want a custom-styled button (an image, a card, a row), wrap it in a <strong>Touchable</strong> component. The Touchables add a press handler and a visual feedback effect so the user knows the tap registered.',
+            'The most popular is <strong>TouchableOpacity</strong> — it lowers the opacity (fades out) while pressed. It wraps any component, so you can put text, images, or a whole card inside. This is what you will use 90% of the time.',
+            'Other Touchables for specific feedback:',
+            '<strong>TouchableHighlight</strong> — darkens the background while pressed (good for list rows).<br><strong>TouchableWithoutFeedback</strong> — no visual feedback at all (use sparingly; feedback helps users).<br><strong>Pressable</strong> (newer, recommended) — a single component that supports all feedback styles via a function: <code>style={({ pressed }) =&gt; pressed ? styles.pressed : styles.normal}</code>. For new code, prefer <code>Pressable</code> over the older Touchables.',
+            'All Touchables support <code>onPress</code>, <code>onPressIn</code>, <code>onPressOut</code>, and <code>onLongPress</code>, plus a <code>hitSlop</code> prop to make the tappable area bigger than the visual one (good for small buttons).'
           ],
           list: [
-            '<span class="badge bg-primary me-2">Core Purpose</span> <strong>Touch Handling:</strong> Wrap any component to make it interactive with proper touch feedback and gesture recognition.',
-            '<strong>User Experience:</strong> Provide visual and haptic feedback to users when they interact with UI elements.',
-            '<strong>Accessibility:</strong> Built-in accessibility support for screen readers and assistive technologies.',
-            '<span class="badge bg-success me-2">Flexibility</span> <strong>Wrapper Nature:</strong> Can wrap any child components - Text, View, Image, or complex layouts.',
-            '<strong>Platform Adaptation:</strong> Automatically adapts touch behavior to platform conventions (iOS vs Android).',
-            '<strong>🔘 TouchableOpacity:</strong> Most popular. Reduces opacity (0.2) when pressed. Simple and effective feedback.',
-            '<strong>🎯 TouchableHighlight:</strong> Shows highlight color when pressed. Good for list items and cards.',
-            '<span class="badge bg-warning text-dark me-2">Minimal</span> <strong>👻 TouchableWithoutFeedback:</strong> No visual feedback. Use sparingly for custom feedback implementations.',
-            '<span class="badge bg-danger me-2">Modern</span> <strong>🚀 Pressable:</strong> New recommended component. More flexible with advanced gesture handling and state-based styling.',
-            '<strong>📱 TouchableNativeFeedback:</strong> Android-only. Provides material design ripple effects.',
-            '<strong>Feedback:</strong> Fades to specified opacity (default 0.2) when pressed',
-            '<strong>Use Cases:</strong> Buttons, cards, menu items, any general interactive element',
-            '<strong>Props:</strong> <code>activeOpacity</code> , <code>onPress</code> , <code>onPressIn</code> , <code>onPressOut</code> , <code>disabled</code>',
-            '<strong>Performance:</strong> Lightweight and efficient, works well for most use cases',
-            '<strong>Feedback:</strong> Shows background color overlay when pressed',
-            '<strong>Use Cases:</strong> List items, table rows, cards where highlight effect is desired',
-            '<strong>Props:</strong> <code>underlayColor</code> , <code>onShowUnderlay</code> , <code>onHideUnderlay</code>',
-            '<strong>Limitation:</strong> Can only have one child element (must wrap in View if multiple children)',
-            '<span class="badge bg-success me-2">Modern</span> <strong>Advantages:</strong> More flexible, better performance, function-based styling',
-            '<strong>Dynamic Styling:</strong> Style prop can be a function that receives press state',
-            '<strong>Advanced Gestures:</strong> Better long press, hover (web), and focus handling',
-            '<strong>Press Rect:</strong> Configure hit area with <code>pressRetentionOffset</code> and <code>hitSlop</code>',
-            `<span class="badge bg-danger me-2">Critical</span> <strong>Avoid Inline Functions:</strong> Don't use inline functions in onPress. Use useCallback or class methods to prevent re-renders.`,
-            '<strong>TouchableWithoutFeedback:</strong> Use sparingly. Only when you need custom feedback implementation.',
-            '<strong>Pressable vs TouchableOpacity:</strong> Pressable offers better performance and more control for complex interactions.',
-            '<span class="badge bg-warning text-dark me-2">Memory</span> <strong>Event Handlers:</strong> Always clean up event listeners and timers in useEffect cleanup or componentWillUnmount.',
-            '<strong>Animation Performance:</strong> Use native driver for animations when possible (transform, opacity).',
-            '<strong>Component Choice:</strong> Use Pressable for new code, TouchableOpacity for simple cases',
-            '<strong>Hit Areas:</strong> Ensure touchable areas are at least 44x44 points for good UX',
-            '<strong>Feedback:</strong> Always provide visual feedback to user interactions',
-            '<strong>Accessibility:</strong> Use proper accessibility labels and roles for screen readers',
-            '<strong>Disabled States:</strong> Style disabled states clearly and prevent interaction',
-            '<strong>Performance:</strong> Use useCallback for event handlers to prevent unnecessary re-renders',
-            '<strong>Platform Consistency:</strong> Consider platform-specific behaviors (Android ripple effects)',
-            '<strong>Long Press:</strong> Implement long press for secondary actions when appropriate',
-            '• Buttons and CTAs',
-            '• Menu items',
-            '• Cards and tiles',
-            '• Icon buttons',
-            '• Simple interactions',
-            '• Complex interactions',
-            '• Dynamic styling needs',
-            '• Long press actions',
-            '• Custom animations',
-            '• New projects',
-            '• List items',
-            '• Table rows',
-            '• Selection interfaces',
-            '• When highlight effect is desired',
-            '• Custom feedback implementation',
-            '• Dismissing modals/keyboards',
-            '• Areas where no visual feedback is needed',
-            '• Accessibility-first designs',
-            `<strong>Q:</strong> What's the difference between TouchableOpacity and Pressable?`,
-            '<strong>A:</strong> Pressable is newer, more flexible with function-based styling, better performance, and advanced gesture handling',
-            '<strong>Q:</strong> When would you use TouchableWithoutFeedback?',
-            '<strong>A:</strong> When implementing custom feedback, dismissing overlays, or when no visual feedback is desired',
-            '<strong>Q:</strong> How do you make a touchable area larger without changing visual size?',
-            '<strong>A:</strong> Use hitSlop prop to extend the touchable area beyond the visual bounds',
-            `<strong>Q:</strong> What's the recommended minimum touch target size?`,
-            '<strong>A:</strong> 44x44 points (iOS) or 48x48 dp (Android) for good accessibility and usability',
-            '<strong>Q:</strong> How do you prevent multiple rapid taps on a button?',
-            '<strong>A:</strong> Use debouncing, disable the button temporarily, or track press state'
+            '<strong>TouchableOpacity</strong> — fades while pressed; wraps any component. The most common choice.',
+            '<strong>TouchableHighlight</strong> — darkens the background while pressed (good for list rows).',
+            '<strong>TouchableWithoutFeedback</strong> — no feedback; use sparingly.',
+            '<strong>Pressable</strong> (newer, recommended) — one component, any feedback style via a function.',
+            'Events: <code>onPress</code>, <code>onPressIn</code>, <code>onPressOut</code>, <code>onLongPress</code>.',
+            '<code>hitSlop</code> enlarges the tappable area beyond the visual one (good for small buttons).'
           ],
-          code: `import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  Pressable,
-  Alert,
-  StyleSheet,
-  Animated,
-  Platform,
-} from 'react-native';
+          code: `import { View, Text, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
 
-// TouchableOpacity Examples
-const TouchableOpacityExamples = () => {
-  const [count, setCount] = useState(0);
+// TouchableOpacity — fades while pressed
+const Card = ({ title, onPress }) => (
+  <TouchableOpacity style={styles.card} onPress={onPress}>
+    <Text style={styles.title}>{title}</Text>
+  </TouchableOpacity>
+);
 
-  return (
-    <View style={styles.container}>
-      {/* Basic Button */}
-      <TouchableOpacity
-        style={styles.primaryButton}
-        onPress={() => Alert.alert('Success', 'Button pressed!')}
-        activeOpacity={0.7} // Custom opacity
-      >
-        <Text style={styles.buttonText}>Primary Button</Text>
-      </TouchableOpacity>
-
-      {/* Counter Button */}
-      <TouchableOpacity
-        style={styles.counterButton}
-        onPress={() => setCount(count + 1)}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.counterText}>Tap Count: {count}</Text>
-      </TouchableOpacity>
-
-      {/* Card with Image */}
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => Alert.alert('Card', 'Card tapped!')}
-        activeOpacity={0.9}
-      >
-        <Image
-          source={{ uri: 'https://picsum.photos/60/60' }}
-          style={styles.cardImage}
-        />
-        <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>Interactive Card</Text>
-          <Text style={styles.cardSubtitle}>Tap to see action</Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* Disabled State */}
-      <TouchableOpacity
-        style={[styles.primaryButton, styles.disabledButton]}
-        disabled={true}
-        onPress={() => console.log('This will not be called')}
-      >
-        <Text style={[styles.buttonText, styles.disabledText]}>
-          Disabled Button
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-// TouchableHighlight Examples
-const TouchableHighlightExamples = () => {
-  const listData = [
-    { id: 1, title: 'Item 1', subtitle: 'First item description' },
-    { id: 2, title: 'Item 2', subtitle: 'Second item description' },
-    { id: 3, title: 'Item 3', subtitle: 'Third item description' },
-  ];
-
-  const handleItemPress = (item) => {
-    Alert.alert('Item Selected', \`You selected \${item.title}\`);
-  };
-
-  return (
-    <View style={styles.container}>
-      {listData.map((item) => (
-        <TouchableHighlight
-          key={item.id}
-          style={styles.listItem}
-          underlayColor="#E3F2FD" // Light blue highlight
-          onPress={() => handleItemPress(item)}
-          onShowUnderlay={() => console.log('Highlight shown')}
-          onHideUnderlay={() => console.log('Highlight hidden')}
-        >
-          <View style={styles.listItemContent}>
-            <Text style={styles.listItemTitle}>{item.title}</Text>
-            <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>
-          </View>
-        </TouchableHighlight>
-      ))}
-    </View>
-  );
-};
-
-// Pressable Examples (Modern Approach)
-const PressableExamples = () => {
-  const [isLongPressed, setIsLongPressed] = useState(false);
-
-  return (
-    <View style={styles.container}>
-      {/* Dynamic Styling with Function */}
-      <Pressable
-        style={({ pressed }) => [
-          styles.pressableButton,
-          {
-            backgroundColor: pressed ? '#0056b3' : '#007bff',
-            transform: [{ scale: pressed ? 0.95 : 1 }],
-          },
-        ]}
-        onPress={() => Alert.alert('Pressable', 'Modern button pressed!')}
-      >
-        {({ pressed }) => (
-          <Text style={styles.pressableText}>
-            {pressed ? 'Pressed!' : 'Press Me'}
-          </Text>
-        )}
-      </Pressable>
-
-      {/* Long Press Example */}
-      <Pressable
-        style={[
-          styles.longPressButton,
-          isLongPressed && styles.longPressActive,
-        ]}
-        onPress={() => Alert.alert('Quick Tap', 'Short press detected')}
-        onLongPress={() => {
-          setIsLongPressed(true);
-          Alert.alert('Long Press', 'Long press detected!');
-          setTimeout(() => setIsLongPressed(false), 1000);
-        }}
-        delayLongPress={800} // 800ms for long press
-      >
-        <Text style={styles.longPressText}>
-          {isLongPressed ? 'Long Pressed!' : 'Long Press Me'}
-        </Text>
-      </Pressable>
-
-      {/* Advanced Hit Area */}
-      <Pressable
-        style={styles.smallButton}
-        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }} // Larger hit area
-        pressRetentionOffset={{ top: 30, bottom: 30, left: 30, right: 30 }}
-        onPress={() => Alert.alert('Hit Area', 'Large hit area worked!')}
-      >
-        <Text style={styles.smallButtonText}>Small Button</Text>
-      </Pressable>
-
-      {/* Platform-specific Android Ripple */}
-      <Pressable
-        style={styles.rippleButton}
-        android_ripple={{
-          color: 'rgba(255, 255, 255, 0.3)',
-          borderless: false,
-          radius: 100,
-        }}
-        onPress={() => Alert.alert('Ripple', 'Android ripple effect!')}
-      >
-        <Text style={styles.rippleText}>Android Ripple</Text>
-      </Pressable>
-    </View>
-  );
-};
-
-// Custom Touchable with Animation
-const AnimatedTouchableExample = () => {
-  const scaleValue = new Animated.Value(1);
-
-  const handlePressIn = () => {
-    Animated.spring(scaleValue, {
-      toValue: 0.9,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  return (
-    <TouchableWithoutFeedback
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onPress={() => Alert.alert('Animated', 'Custom animation!')}
-    >
-      <Animated.View
-        style={[
-          styles.animatedButton,
-          { transform: [{ scale: scaleValue }] },
-        ]}
-      >
-        <Text style={styles.animatedButtonText}>Animated Button</Text>
-      </Animated.View>
-    </TouchableWithoutFeedback>
-  );
-};
-
-// Accessibility Example
-const AccessibleTouchableExample = () => {
-  return (
-    <TouchableOpacity
-      style={styles.accessibleButton}
-      onPress={() => Alert.alert('Accessible', 'Accessible button pressed!')}
-      accessible={true}
-      accessibilityLabel="Save document button"
-      accessibilityHint="Double tap to save your current document"
-      accessibilityRole="button"
-      accessibilityState={{ disabled: false }}
-    >
-      <Text style={styles.accessibleButtonText}>Save Document</Text>
-    </TouchableOpacity>
-  );
-};
+// Pressable — newer, recommended for new code
+const Button = ({ title, onPress }) => (
+  <Pressable
+    style={({ pressed }) => [
+      styles.btn,
+      pressed && styles.btnPressed
+    ]}
+    onPress={onPress}
+  >
+    <Text style={styles.btnText}>{title}</Text>
+  </Pressable>
+);
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  
-  // TouchableOpacity Styles
-  primaryButton: {
-    backgroundColor: '#007bff',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  counterButton: {
-    backgroundColor: '#28a745',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  counterText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  card: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-    alignItems: 'center',
-  },
-  cardImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 16,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  cardSubtitle: {
-    fontSize: 14,
-    color: '#666',
-  },
-  disabledButton: {
-    backgroundColor: '#6c757d',
-    opacity: 0.6,
-  },
-  disabledText: {
-    color: '#adb5bd',
-  },
-  
-  // TouchableHighlight Styles
-  listItem: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    marginBottom: 8,
-    overflow: 'hidden', // Important for highlight effect
-  },
-  listItemContent: {
-    padding: 16,
-  },
-  listItemTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
-  },
-  listItemSubtitle: {
-    fontSize: 14,
-    color: '#666',
-  },
-  
-  // Pressable Styles
-  pressableButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  pressableText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  longPressButton: {
-    backgroundColor: '#fd7e14',
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  longPressActive: {
-    backgroundColor: '#e8590c',
-  },
-  longPressText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  smallButton: {
-    backgroundColor: '#6c757d',
-    padding: 8,
-    borderRadius: 6,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  smallButtonText: {
-    color: 'white',
-    fontSize: 14,
-  },
-  rippleButton: {
-    backgroundColor: '#6f42c1',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  rippleText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  
-  // Animation Styles
-  animatedButton: {
-    backgroundColor: '#dc3545',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  animatedButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  
-  // Accessibility Styles
-  accessibleButton: {
-    backgroundColor: '#20c997',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  accessibleButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
+  card:       { padding: 16, backgroundColor: 'white', borderRadius: 8, marginBottom: 8 },
+  title:      { fontSize: 16 },
+  btn:        { backgroundColor: '#007bff', padding: 12, borderRadius: 6 },
+  btnPressed: { backgroundColor: '#0056b3' },
+  btnText:    { color: 'white', textAlign: 'center' },
 });`
         }
       ]
@@ -3512,27 +899,59 @@ const styles = StyleSheet.create({
       title: 'Navigation',
       sections: [
         {
-          heading: 'Navigation',
-          list: [
-            '<strong>React Navigation:</strong> Standard library for routing and navigation in React Native apps.',
-            '<strong>Installation:</strong> <code>npm install @react-navigation/native</code> and dependencies like <code>react-native-screens</code> , <code>react-native-safe-area-context</code> , etc.',
-            '<strong>Navigator Types:</strong> Stack, Tab, Drawer, and Nested navigators.',
-            '<strong>Stack Navigator:</strong> Push/pop screens like a browser history.',
-            '<strong>Tab Navigator:</strong> Bottom or top tab navigation.',
-            '<strong>Drawer Navigator:</strong> Slide-out side menu navigation.'
+          heading: 'Moving between screens',
+          content: [
+            'A mobile app is not a single screen — users move between screens by tapping buttons or tabs. <strong>React Navigation</strong> is the standard library for this in React Native. It handles the back button on Android, the navigation stack, transitions, and deep links.',
+            'Install it with <code>npm install @react-navigation/native @react-navigation/native-stack</code> plus its peer dependencies (<code>react-native-screens</code> and <code>react-native-safe-area-context</code>). Then wrap your app in a <code>NavigationContainer</code> and define a <strong>navigator</strong> with screens.',
+            'React Navigation offers several navigator types:',
+            '<strong>Stack Navigator</strong> — push/pop screens like a browser history. Each new screen slides in on top. The most common pattern.<br><strong>Tab Navigator</strong> — bottom or top tabs (like Instagram).<br><strong>Drawer Navigator</strong> — a slide-out side menu (like Gmail).<br>You can nest them: a Tab Navigator where each tab contains its own Stack Navigator.',
+            "To navigate from code, use the <code>navigation</code> prop that every screen receives: <code>navigation.navigate('Details', { id: 42 })</code>. To read the params in the target screen, use <code>route.params</code>. To go back, <code>navigation.goBack()</code>."
           ],
-          code: `// Stack Navigation Example
-import { NavigationContainer } from '@react-navigation/native';
+          list: [
+            '<strong>React Navigation</strong> — the standard routing library for React Native.',
+            'Install: <code>@react-navigation/native</code> + a navigator package (e.g. <code>native-stack</code>).',
+            '<strong>Stack</strong> — push/pop screens (most common).',
+            '<strong>Tab</strong> — bottom or top tabs (like Instagram).',
+            '<strong>Drawer</strong> — slide-out side menu (like Gmail).',
+            "Navigate: <code>navigation.navigate('Screen', params)</code>.",
+            'Read params: <code>route.params</code>; go back: <code>navigation.goBack()</code>.'
+          ],
+          code: `import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text, Button } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
-<NavigationContainer>
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen name="Home" component={HomeScreen} />
-    <Stack.Screen name="Details" component={DetailsScreen} />
-  </Stack.Navigator>
-</NavigationContainer>`
+function HomeScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home</Text>
+      <Button
+        title="Go to Details"
+        onPress={() => navigation.navigate('Details', { id: 42 })}
+      />
+    </View>
+  );
+}
+
+function DetailsScreen({ route }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Details for id {route.params.id}</Text>
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home"    component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}`
         }
       ]
     },
@@ -3540,20 +959,45 @@ const Stack = createNativeStackNavigator();
       title: 'Platform Specific Code',
       sections: [
         {
-          heading: 'Platform Specific Code',
-          list: [
-            '<strong>Platform API:</strong> Used to write code that behaves differently on Android and iOS.',
-            `<code>Platform.OS</code> returns either <code>'ios'</code> or <code>'android'</code> .`,
-            '<strong>Platform-specific imports:</strong> You can use <code>.ios.js</code> or <code>.android.js</code> file extensions to isolate platform-specific logic.',
-            '<strong>Responsive behavior:</strong> Use <code>Platform.select()</code> to conditionally apply values.'
+          heading: 'Writing code for iOS or Android only',
+          content: [
+            'Most of your code is shared between iOS and Android, but sometimes you need platform-specific behavior — a different color, a different component, or a different value. React Native gives you three ways to handle this.',
+            '<strong>1. The <code>Platform</code> API</strong> — check <code>Platform.OS</code> (<code>"ios"</code> or <code>"android"</code>) in an <code>if</code> or ternary. Good for one-off differences.',
+            '<strong>2. <code>Platform.select()</code></strong> — pick a value per platform from an object. Cleaner than a ternary when you have multiple options. Returns the value for the current platform: <code>Platform.select({ ios: 8, android: 12, default: 10 })</code>.',
+            '<strong>3. Platform-specific files</strong> — name a file <code>Component.ios.js</code> or <code>Component.android.js</code> and import it as <code>./Component</code>. The bundler picks the right file for the platform. This is the cleanest approach when a whole component is platform-specific.'
           ],
-          code: `import { Platform, Text } from 'react-native';
+          list: [
+            '<strong>Platform.OS</strong> — <code>"ios"</code> or <code>"android"</code>; use in a ternary.',
+            '<strong>Platform.select()</strong> — pick a value per platform: <code>Platform.select({ ios: 8, android: 12, default: 10 })</code>.',
+            '<strong>Platform-specific files</strong> — <code>Component.ios.js</code> / <code>Component.android.js</code>; import as <code>./Component</code>.',
+            'Use <code>Platform.Version</code> for OS version checks (e.g. Android API level).',
+            'Most code should be shared — only branch when you genuinely need to.'
+          ],
+          code: `import { Platform, View, Text, StyleSheet } from 'react-native';
 
+// 1. Platform.OS in a ternary
 const PlatformExample = () => (
   <Text>
     {Platform.OS === 'ios' ? 'Running on iOS' : 'Running on Android'}
   </Text>
-);`
+);
+
+// 2. Platform.select — cleaner for multiple values
+const padding = Platform.select({ ios: 8, android: 12, default: 10 });
+
+// 3. Platform-specific files:
+//    Component.ios.js       -> iOS implementation
+//    Component.android.js   -> Android implementation
+//    import Component from './Component';  // bundler picks the right one
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: padding,            // different per platform
+    backgroundColor: Platform.select({ ios: '#f5f5f5', android: '#fafafa' }),
+  },
+});
+
+export default PlatformExample;`
         }
       ]
     },
@@ -3561,32 +1005,53 @@ const PlatformExample = () => (
       title: 'AsyncStorage',
       sections: [
         {
-          heading: 'AsyncStorage',
+          heading: 'Simple persistent key-value storage',
+          content: [
+            '<strong>AsyncStorage</strong> is React Native\'s built-in key-value store — like <code>localStorage</code> on the web, but asynchronous. It persists data across app restarts, so it is perfect for lightweight things: a username, a theme preference, an "has seen onboarding" flag, a small cache.',
+            'Install the community package: <code>npm install @react-native-async-storage/async-storage</code>. (The old <code>AsyncStorage</code> from <code>react-native</code> core is deprecated — use the community package.)',
+            'All methods are <strong>async</strong> and return Promises, because reading and writing happen on the native side:',
+            '<strong>setItem(key, value)</strong> — store a string value. (Objects must be <code>JSON.stringify</code>ed first.)<br><strong>getItem(key)</strong> — read a value; returns <code>null</code> if the key does not exist.<br><strong>removeItem(key)</strong> — delete one key.<br><strong>clear()</strong> — delete everything (use with care).',
+            'Do not use AsyncStorage for sensitive data (tokens, passwords) — it is not encrypted. Use <strong>Secure Storage</strong> (next topic) for that. And do not use it for large or structured data — use SQLite or a proper database instead.'
+          ],
           list: [
-            '<strong>AsyncStorage:</strong> Used for simple key-value persistent data storage.',
-            'Not suitable for large data or complex storage needs. Use only for lightweight needs like settings, tokens, flags, etc.',
-            'Use <code>@react-native-async-storage/async-storage</code> library.',
-            'All methods are asynchronous and return Promises: <code>setItem</code> , <code>getItem</code> , <code>removeItem</code> .'
+            '<strong>AsyncStorage</strong> — async key-value store; persists across app restarts.',
+            'Install: <code>npm install @react-native-async-storage/async-storage</code>.',
+            '<code>setItem(key, value)</code> — store; <code>getItem(key)</code> — read; <code>removeItem(key)</code> — delete.',
+            'Values are strings — <code>JSON.stringify</code> objects before storing.',
+            'All methods are <strong>async</strong> (return Promises).',
+            'Good for: settings, flags, small cache. Not for sensitive data or large data.',
+            'For secrets, use <strong>Secure Storage</strong>; for structured data, use SQLite.'
           ],
           code: `import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const storeData = async () => {
+// Store a value (must be a string)
+const storeData = async (value) => {
   try {
-    await AsyncStorage.setItem('username', 'JohnDoe');
+    await AsyncStorage.setItem('username', value);
   } catch (e) {
     console.error('Saving error', e);
   }
 };
 
+// Read a value
 const getData = async () => {
   try {
     const value = await AsyncStorage.getItem('username');
     if (value !== null) {
-      console.log('Stored value:', value);
+      console.log('Stored username:', value);
     }
   } catch (e) {
     console.error('Reading error', e);
   }
+};
+
+// Store an object — JSON.stringify first
+const storeUser = async (user) => {
+  await AsyncStorage.setItem('user', JSON.stringify(user));
+};
+const loadUser = async () => {
+  const raw = await AsyncStorage.getItem('user');
+  return raw ? JSON.parse(raw) : null;
 };`
         }
       ]
@@ -3595,25 +1060,42 @@ const getData = async () => {
       title: 'Secure Storage',
       sections: [
         {
-          heading: 'Secure Storage',
-          list: [
-            '<strong>Secure Storage:</strong> Used to store sensitive data like tokens, passwords, and credentials.',
-            'More secure than AsyncStorage; encrypted and backed by platform-specific secure systems.',
-            '<strong>Libraries:</strong> Popular ones include <code>react-native-keychain</code> , <code>react-native-encrypted-storage</code> .',
-            'Supports biometric protection and authentication (Face ID, fingerprint).'
+          heading: 'Storing secrets safely',
+          content: [
+            '<strong>AsyncStorage</strong> is not encrypted — anyone with access to the device file system can read it. For secrets (auth tokens, passwords, API keys), use a <strong>secure storage</strong> library that stores data in the platform\'s secure enclave: the <strong>Keychain</strong> on iOS and the <strong>Keystore</strong> on Android.',
+            'The most popular library is <code>react-native-keychain</code>. It encrypts the data, ties it to the device, and can require biometric authentication (Face ID, fingerprint) before releasing it.',
+            'A simpler alternative is <code>react-native-encrypted-storage</code>, which has a similar API to AsyncStorage but encrypts the values. Pick whichever fits your needs — both are widely used and maintained.',
+            'A typical auth flow: on login, the backend returns a JWT; you store it in the keychain (not AsyncStorage). On the next app launch, you read it from the keychain and use it for API calls. If the user logs out, you wipe the keychain entry.'
           ],
-          code: `// Using react-native-keychain
-import * as Keychain from 'react-native-keychain';
+          list: [
+            '<strong>Secure storage</strong> — encrypted, backed by iOS Keychain / Android Keystore.',
+            'Use for: auth tokens, passwords, API keys — anything sensitive.',
+            'Libraries: <code>react-native-keychain</code> (most popular), <code>react-native-encrypted-storage</code>.',
+            'Supports biometric authentication (Face ID, fingerprint).',
+            'Never store tokens in plain AsyncStorage — it is not encrypted.'
+          ],
+          code: `import * as Keychain from 'react-native-keychain';
 
-const saveSecureData = async () => {
-  await Keychain.setGenericPassword('username', 'secret_password');
+// Store credentials securely
+const saveCredentials = async (username, password) => {
+  await Keychain.setGenericPassword(username, password, {
+    accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET, // require Face ID/fingerprint
+  });
 };
 
-const loadSecureData = async () => {
-  const credentials = await Keychain.getGenericPassword();
-  if (credentials) {
-    console.log('Username:', credentials.username);
+// Read them back (may prompt for biometrics)
+const loadCredentials = async () => {
+  const creds = await Keychain.getGenericPassword();
+  if (creds) {
+    console.log('Username:', creds.username);
+    return creds;
   }
+  return null;
+};
+
+// Wipe on logout
+const clearCredentials = async () => {
+  await Keychain.resetGenericPassword();
 };`
         }
       ]
@@ -3622,96 +1104,119 @@ const loadSecureData = async () => {
       title: 'Animations',
       sections: [
         {
-          heading: 'Animations',
+          heading: 'Animating UI',
+          content: [
+            'Animations make an app feel polished — a button that scales when pressed, a card that fades in, a sidebar that slides in. React Native ships with the <strong>Animated</strong> API for declarative, performant animations, and the community offers <strong>Reanimated</strong> for more complex gesture-driven work.',
+            'The <code>Animated</code> API works like this:',
+            '1. Create an <code>Animated.Value</code> (a number that can change over time).<br>2. Run an animation with <code>Animated.timing()</code> (smooth to a value), <code>Animated.spring()</code> (physics-based), or <code>Animated.loop()</code> (repeat).<br>3. Bind the value to a style on an <code>Animated.View</code> (or <code>Animated.Text</code>, <code>Animated.Image</code>).<br>4. Set <code>useNativeDriver: true</code> when possible — it runs the animation on the native thread, which stays smooth even if JavaScript is busy.',
+            'For complex animations tied to gestures (drag, swipe, pinch), use <strong>react-native-reanimated</strong>. It runs entirely on the UI thread, so gestures feel instant. It is the standard for modern, gesture-rich apps.'
+          ],
           list: [
-            '<strong>Animated API:</strong> Used for declarative, performant animations in React Native.',
-            'Supports animated values like opacity, scale, translate, rotate, etc.',
-            'Common methods include <code>Animated.timing</code> , <code>Animated.spring</code> , and <code>Animated.loop</code> .',
-            'Always wrap animatable properties inside <code>Animated.View</code> or <code>Animated.Text</code> .',
-            '<strong>Reanimated:</strong> For complex animations and gesture-based interactions, use <code>react-native-reanimated</code> .'
+            '<strong>Animated</strong> — built-in API for declarative animations.',
+            'Create an <code>Animated.Value</code>; animate with <code>Animated.timing</code> / <code>spring</code> / <code>loop</code>.',
+            'Bind the value to a style on an <code>Animated.View</code> / <code>Animated.Text</code>.',
+            'Use <code>useNativeDriver: true</code> to run on the native thread (60fps, no JS overhead).',
+            '<strong>react-native-reanimated</strong> — for complex, gesture-driven animations.',
+            '<code>Animated.timing</code> for smooth changes; <code>Animated.spring</code> for physics; <code>Animated.loop</code> to repeat.'
           ],
           code: `import { Animated } from 'react-native';
 import { useRef, useEffect } from 'react';
 
+// Fade in a view over 2 seconds
 const FadeInView = ({ children }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;  // start at 0
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 2000,
-      useNativeDriver: true,
+      useNativeDriver: true,    // runs on the native thread — smooth
     }).start();
   }, []);
 
-  return <Animated.View style={{ opacity: fadeAnim }}>{children}</Animated.View>;
-};`
+  return (
+    <Animated.View style={{ opacity: fadeAnim }}>
+      {children}
+    </Animated.View>
+  );
+};
+
+// Usage
+import { Text } from 'react-native';
+const App = () => (
+  <FadeInView>
+    <Text>I fade in!</Text>
+  </FadeInView>
+);
+
+export default App;`
         }
       ]
     }
   },
+
   module4: {
     hooks: {
       title: 'React Hooks',
       sections: [
         {
-          heading: 'React Hooks',
-          list: [
-            '<span class="badge bg-primary me-2">Core Concept</span> <strong>State:</strong> A built-in object that stores component data that may change over time and affects rendering.',
-            '<strong>useState Hook:</strong> A React Hook used to manage local component state in functional components.',
-            '<strong>Triggers Re-render:</strong> Updating state causes the component to re-render and update the UI accordingly.',
-            '<span class="badge bg-success me-2">Encapsulation</span> <strong>Component Level:</strong> Each component manages its own state independently of other components.',
-            '<strong>State Updates:</strong> Always use setter functions; never mutate state directly. State updates are asynchronous.',
-            '<strong>Complex State:</strong> Use <code>useReducer</code> for complex state logic with multiple sub-values or dependencies.',
-            '<span class="badge bg-warning text-dark me-2">Performance</span> <strong>Optimization:</strong> Use <code>useCallback</code> and <code>useMemo</code> to prevent unnecessary re-renders.',
-            '<strong>State Lifting:</strong> Move state up to parent component when multiple children need to share the same data.'
+          heading: 'The hooks you will use most',
+          content: [
+            '<strong>Hooks</strong> are functions that let function components "hook into" React features — state, side effects, refs, context. They are the modern way to write React (and React Native) components. Here are the ones you will use in almost every component:',
+            '<strong>useState</strong> — add local state. Returns <code>[value, setter]</code>. Covered in Module 1.<br><strong>useEffect</strong> — run side effects (fetch data, subscribe, set a timer). Runs after render; the dependency array controls when it re-runs. Covered below in detail.<br><strong>useRef</strong> — hold a mutable value that does <em>not</em> trigger a re-render, or get a reference to a native component (e.g. to focus an input).<br><strong>useContext</strong> — read a Context value without prop drilling. Covered in the Context API topic.<br><strong>useReducer</strong> — an alternative to <code>useState</code> for complex state, using a reducer function. Covered in Module 1.<br><strong>useMemo / useCallback</strong> — memoize values and functions to prevent unnecessary re-renders (performance).',
+            'The two rules of hooks:',
+            '1. <strong>Only call hooks at the top level</strong> of a component — never inside loops, conditions, or nested functions. React relies on call order to match hooks to state.<br>2. <strong>Only call hooks from React functions</strong> — function components or custom hooks, not regular JavaScript functions.'
           ],
-          code: `import React, { useState, useReducer, useCallback } from 'react';
+          list: [
+            '<strong>useState</strong> — local state. Returns <code>[value, setter]</code>.',
+            '<strong>useEffect</strong> — side effects (fetch, subscribe, timer). Runs after render.',
+            '<strong>useRef</strong> — mutable value with no re-render, or a ref to a native component.',
+            '<strong>useContext</strong> — read Context without prop drilling.',
+            '<strong>useReducer</strong> — complex state via a reducer function.',
+            '<strong>useMemo / useCallback</strong> — memoize values/functions for performance.',
+            'Rules: top-level only, and only inside React functions (components or custom hooks).'
+          ]
+        },
+        {
+          heading: 'useEffect in detail',
+          content: [
+            '<code>useEffect</code> is how you run code that reaches outside the component — fetching data, subscribing to events, setting a timer, writing to storage. The basic shape is <code>useEffect(() =&gt; { ... return cleanup; }, [deps])</code>.',
+            'The dependency array is the key:',
+            '<strong><code>[]</code></strong> — run once on mount, cleanup on unmount. Good for one-time setup.<br><strong><code>[a, b]</code></strong> — run on mount and whenever <code>a</code> or <code>b</code> changes. Good for "do this when the value changes".<br><strong>no array</strong> — run after every render. Almost never what you want.',
+            'Always return a cleanup function when you subscribe to something (a timer, a listener, a WebSocket) — otherwise you leak memory when the component unmounts or the effect re-runs. The cleanup runs before the next effect and on unmount.'
+          ],
+          list: [
+            '<code>useEffect(fn, [])</code> — run once on mount (like componentDidMount).',
+            '<code>useEffect(fn, [deps])</code> — run on mount and when a dep changes.',
+            '<code>useEffect(fn)</code> — run after every render (rare).',
+            'Return a cleanup function to unsubscribe, clear timers, close sockets.',
+            'List every value from outside the effect in the dependency array.'
+          ],
+          code: `import { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
 
-// Basic useState example
-const Counter = () => {
+// Fetch data once on mount
+const UserProfile = ({ userId }) => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetch(\`https://api.example.com/users/\${userId}\`)
+      .then(r => r.json())
+      .then(setUser);
+  }, [userId]);  // re-fetch when userId changes
+
+  if (!user) return <Text>Loading...</Text>;
+  return <Text>{user.name}</Text>;
+};
+
+// Timer with cleanup
+const Timer = () => {
   const [count, setCount] = useState(0);
-
-  const increment = useCallback(() => {
-    setCount(prevCount => prevCount + 1);
+  useEffect(() => {
+    const id = setInterval(() => setCount(c => c + 1), 1000);
+    return () => clearInterval(id);   // cleanup on unmount
   }, []);
-
-  return (
-    <View>
-      <Text>Count: {count}</Text>
-      <Button title="Increase" onPress={increment} />
-    </View>
-  );
-};
-
-// Complex state with useReducer
-const todoReducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return [...state, { id: Date.now(), text: action.text, completed: false }];
-    case 'TOGGLE_TODO':
-      return state.map(todo => 
-        todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
-      );
-    default:
-      return state;
-  }
-};
-
-const TodoApp = () => {
-  const [todos, dispatch] = useReducer(todoReducer, []);
-  const [text, setText] = useState('');
-
-  const addTodo = () => {
-    dispatch({ type: 'ADD_TODO', text });
-    setText('');
-  };
-
-  return (
-    <View>
-      {/* Render todos and input */}
-    </View>
-  );
+  return <Text>{count}</Text>;
 };`
         }
       ]
@@ -3720,26 +1225,49 @@ const TodoApp = () => {
       title: 'Networking & APIs',
       sections: [
         {
-          heading: 'Networking & APIs',
-          list: [
-            '<strong>Authentication:</strong> Securely identify users using login/signup forms, tokens, and backend APIs.',
-            'Use form validation libraries (like <code>Formik</code> + <code>Yup</code> ) for managing forms.',
-            'Securely store access tokens using <code>AsyncStorage</code> or <code>SecureStorage</code> .',
-            'Use JWT (JSON Web Tokens) for session-based authentication.',
-            'You can integrate social auth (Google, Facebook) using Firebase or OAuth providers.'
+          heading: 'Talking to a backend',
+          content: [
+            'Most React Native apps talk to a backend API — to log in, fetch data, save changes. The built-in <code>fetch</code> function (same as on the web) is usually all you need. For more advanced cases (interceptors, automatic JSON parsing, timeouts), use <strong>Axios</strong>.',
+            'A typical flow:',
+            '1. Call <code>fetch(url, options)</code> — returns a Promise of a <code>Response</code>.<br>2. Parse the body with <code>response.json()</code> (another Promise).<br>3. Use the data (set state, navigate, store a token).<br>4. Handle errors with <code>try/catch</code> — network requests fail often (no connection, server down, bad token).',
+            'Wrap your fetches in <code>useEffect</code> (with the right dependency array) when you need to load data on mount, or call them from event handlers for actions like login. Always show a loading state while the request is in flight, and an error state if it fails.',
+            'For auth, store the token securely (use Secure Storage, not AsyncStorage) and attach it to every request as a header. An <strong>HTTP interceptor</strong> (easy with Axios, a bit more work with fetch) lets you attach the token in one place instead of on every call.'
           ],
-          code: `const loginUser = async () => {
-  const response = await fetch('https://api.example.com/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
+          list: [
+            'Use the built-in <code>fetch</code> or <strong>Axios</strong> for HTTP requests.',
+            '<code>fetch(url, options)</code> returns a Promise; parse the body with <code>response.json()</code>.',
+            'Wrap fetches in <code>useEffect</code> for "load on mount", or call from event handlers for actions.',
+            'Always show a loading state and an error state — networks fail often.',
+            'Store auth tokens in <strong>Secure Storage</strong>, not AsyncStorage.',
+            'Attach the token as a header on every request (an interceptor does this in one place).',
+            'For REST testing, use <a href="https://www.postman.com/" target="_blank">Postman</a> to try endpoints before coding them.'
+          ],
+          code: `import { useState, useEffect } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
 
-  const data = await response.json();
-  if (data.token) {
-    await AsyncStorage.setItem('token', data.token);
-  }
-};`
+const UserList = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(r => r.json())
+      .then(data => { setUsers(data); setLoading(false); })
+      .catch(e => { setError(e.message); setLoading(false); });
+  }, []);  // run once on mount
+
+  if (loading) return <ActivityIndicator />;
+  if (error)   return <Text>Error: {error}</Text>;
+
+  return (
+    <View>
+      {users.map(u => <Text key={u.id}>{u.name}</Text>)}
+    </View>
+  );
+};
+
+export default UserList;`
         }
       ]
     },
@@ -3747,17 +1275,65 @@ const TodoApp = () => {
       title: 'Performance Optimization',
       sections: [
         {
-          heading: 'Performance Optimization',
+          heading: 'Keeping the app smooth',
+          content: [
+            'A React Native app runs JavaScript on a separate thread from the native UI. When JavaScript is busy, the UI can stutter. Most performance work is about doing less on the JavaScript thread and avoiding unnecessary re-renders.',
+            'The most impactful list optimizations (for <code>FlatList</code>):',
+            '<strong>getItemLayout</strong> — if every item has the same height, tell FlatList the layout up front. It can then skip measuring and scroll instantly.<br><strong>removeClippedSubviews</strong> — remove off-screen views from the native hierarchy. Set to <code>true</code> for large lists.<br><strong>keyExtractor</strong> — use a stable id, never the array index. Without a stable key, React recreates items on every data change.<br><strong>windowSize</strong>, <code>maxToRenderPerBatch</code>, <code>initialNumToRender</code> — tune how many items FlatList renders ahead. Smaller = less memory; larger = fewer blank flashes during fast scroll.',
+            'General re-render optimizations:',
+            '<strong>useCallback</strong> for <code>renderItem</code> and other handlers passed to children — it keeps the same function reference so memoized children do not re-render.<br><strong>React.memo</strong> on list item components — skip re-rendering items whose props have not changed.<br><strong>useMemo</strong> for expensive calculations.<br>Avoid inline functions and objects in JSX (they get a new reference every render and break memo).'
+          ],
           list: [
-            '<span class="badge bg-danger me-2">Critical</span> <strong>getItemLayout:</strong> Pre-define item dimensions for instant scrolling and better performance. <code> getItemLayout=(data, index) => {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index} </code>',
-            '<strong>removeClippedSubviews:</strong> Remove off-screen views from native view hierarchy. Set to <code>true</code> for large lists.',
-            '<strong>keyExtractor:</strong> Use stable, unique keys. Avoid array indices. Use item IDs or unique properties.',
-            '<span class="badge bg-warning text-dark me-2">Memory</span> <strong>maxToRenderPerBatch:</strong> Control batch size (default: 10). Smaller values = smoother scrolling.',
-            '<strong>windowSize:</strong> Number of screen lengths to render (default: 21). Reduce for memory optimization.',
-            '<strong>initialNumToRender:</strong> Items to render initially (default: 10). Balance between performance and blank screens.',
-            '<span class="badge bg-info text-dark me-2">Render</span> <strong>useCallback:</strong> Wrap renderItem and keyExtractor in useCallback to prevent unnecessary re-renders.',
-            `<strong>React.memo:</strong> Memoize item components to prevent re-renders when props haven't changed.`
-          ]
+            '<strong>getItemLayout</strong> — pre-declare item sizes for instant scrolling on large lists.',
+            '<strong>removeClippedSubviews</strong> — drop off-screen views from the native hierarchy.',
+            '<strong>keyExtractor</strong> — stable unique id, never the array index.',
+            '<strong>windowSize</strong>, <strong>maxToRenderPerBatch</strong>, <strong>initialNumToRender</strong> — tune FlatList rendering.',
+            '<strong>useCallback</strong> — stable function references for handlers and <code>renderItem</code>.',
+            '<strong>React.memo</strong> — skip re-rendering items whose props have not changed.',
+            '<strong>useMemo</strong> — memoize expensive calculations.',
+            'Avoid inline functions/objects in JSX — they break memoization.'
+          ],
+          code: `import { FlatList, View, Text, useCallback, StyleSheet } from 'react-native';
+
+const ITEM_HEIGHT = 60;
+
+const data = Array.from({ length: 1000 }).map((_, i) => ({
+  id: String(i), title: \`Item \${i}\`,
+}));
+
+const ListItem = React.memo(({ item }) => (
+  <View style={styles.item}><Text>{item.title}</Text></View>
+));
+
+const App = () => {
+  // useCallback keeps the same function reference between renders
+  const renderItem = useCallback(
+    ({ item }) => <ListItem item={item} />,
+    []
+  );
+  const keyExtractor = useCallback((item) => item.id, []);
+
+  return (
+    <FlatList
+      data={data}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      getItemLayout={(_, index) => ({
+        length: ITEM_HEIGHT,
+        offset: ITEM_HEIGHT * index,
+        index,
+      })}
+      removeClippedSubviews
+      initialNumToRender={10}
+      maxToRenderPerBatch={5}
+      windowSize={11}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  item: { height: 60, justifyContent: 'center', padding: 16, borderBottomWidth: 1 },
+});`
         }
       ]
     },
@@ -3765,30 +1341,59 @@ const TodoApp = () => {
       title: 'Redux',
       sections: [
         {
-          heading: 'Redux',
-          list: [
-            '<strong>Redux:</strong> A predictable state container for global app state management.',
-            'Common in large-scale apps with complex data flows.',
-            '<strong>Core Concepts:</strong> Store, Reducers, Actions, Dispatch, and Middleware.',
-            'Works well with <code>react-redux</code> for connecting UI to state.',
-            '<strong>Setup:</strong> Requires boilerplate but is powerful for cross-component communication.'
+          heading: 'Predictable global state',
+          content: [
+            'When an app grows, state that many components need (the logged-in user, a cart, a feed) gets hard to pass around with props. <strong>Redux</strong> is a predictable state container: all app state lives in one <strong>store</strong>, the only way to change it is to dispatch an <strong>action</strong>, and a <strong>reducer</strong> is a pure function that turns the current state + an action into the new state. This makes every state change traceable, testable, and undo-able.',
+            'For new React Native apps, use <strong>Redux Toolkit</strong> (the official, recommended way) — it removes most of the boilerplate of classic Redux. Install: <code>npm install @reduxjs/toolkit react-redux</code>.',
+            'The four classic Redux parts still apply, just with less boilerplate:',
+            '<strong>Action</strong> — a plain object with a <code>type</code> and optional <code>payload</code>. With Toolkit, <code>createSlice</code> generates them for you.<br><strong>Reducer</strong> — a pure function: <code>(state, action) =&gt; newState</code>. Never mutate state.<br><strong>Store</strong> — holds the state. Created with <code>configureStore({ reducer })</code>.<br><strong>Dispatch / Selectors</strong> — <code>dispatch(action)</code> updates the store; <code>useSelector(state =&gt; state.user)</code> reads from it.',
+            'Reach for Redux when the app is large and many components need the same state. For simpler needs, the Context API (next topic) is enough and adds no dependencies.'
           ],
-          code: `// store.js
-import { createStore } from 'redux';
+          list: [
+            '<strong>Redux</strong> — predictable state container; all state in one store.',
+            'Use <strong>Redux Toolkit</strong> (<code>createSlice</code>) for new code — far less boilerplate.',
+            'Install: <code>npm install @reduxjs/toolkit react-redux</code>.',
+            'Four parts: <strong>Action</strong>, <strong>Reducer</strong>, <strong>Store</strong>, <strong>Dispatch/Selectors</strong>.',
+            'Read state: <code>useSelector(state =&gt; state.user)</code>.',
+            'Update state: <code>dispatch(action)</code>.',
+            'Reach for Redux only when the app is large; otherwise Context API is enough.'
+          ],
+          code: `// store/userSlice.js
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = { count: 0 };
+const userSlice = createSlice({
+  name: 'user',
+  initialState: { username: '', isAuthenticated: false },
+  reducers: {
+    login: (state, action) => { state.username = action.payload; state.isAuthenticated = true; },
+    logout: (state) => { state.username = ''; state.isAuthenticated = false; },
+  },
+});
 
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    case 'INCREMENT':
-      return { count: state.count + 1 };
-    default:
-      return state;
-  }
-}
+export const { login, logout } = userSlice.actions;
+export default userSlice.reducer;
 
-const store = createStore(reducer);
-export default store;`
+// store/store.js
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from './userSlice';
+export const store = configureStore({ reducer: { user: userReducer } });
+
+// index.js — wrap the app in a Provider
+import { Provider } from 'react-redux';
+<Provider store={store}><App /></Provider>;
+
+// In a component
+import { useSelector, useDispatch } from 'react-redux';
+const Header = () => {
+  const { username, isAuthenticated } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  return (
+    <View>
+      <Text>{isAuthenticated ? \`Hi, \${username}\` : 'Please log in'}</Text>
+      <Button title="Logout" onPress={() => dispatch(logout())} />
+    </View>
+  );
+};`
         }
       ]
     },
@@ -3796,19 +1401,30 @@ export default store;`
       title: 'Context API',
       sections: [
         {
-          heading: 'Context API',
-          list: [
-            '<strong>Context API:</strong> Native solution for state sharing across components without prop drilling.',
-            'Good for themes, auth, language settings, and other global values.',
-            'Consists of <code>createContext</code> , <code>Provider</code> , and <code>useContext</code> .',
-            'Simpler than Redux for basic state needs, no external packages needed.'
+          heading: 'Sharing state without prop drilling',
+          content: [
+            'The <strong>Context API</strong> is React\'s built-in way to share state across many components without passing props through every level. It is the simpler alternative to Redux for app-wide data: the current user, the theme, the language.',
+            'The setup is three steps:',
+            '1. <strong>Create</strong> a context: <code>const ThemeContext = createContext();</code><br>2. <strong>Provide</strong> it: wrap your app in <code>&lt;ThemeContext.Provider value={{ theme, setTheme }}&gt;</code>. Any descendant can now read it.<br>3. <strong>Consume</strong> it: in any child, call <code>const { theme, setTheme } = useContext(ThemeContext);</code>.',
+            'Context is great for slow-changing data (theme, locale, the current user). It re-renders every consumer when the value changes, so for fast-changing data it can become a bottleneck — that is where Redux or Zustand shine.',
+            'For convenience, export a custom hook (<code>useTheme</code>) that wraps <code>useContext</code> and throws a clear error if used outside the provider. This catches mistakes early.'
           ],
-          example: {
-            title: 'Example',
-            code: `import React, { createContext, useContext, useState } from 'react';
+          list: [
+            '<strong>Context API</strong> — built-in way to share state without prop drilling.',
+            'Good for: theme, locale, current user — slow-changing global data.',
+            'Step 1: <code>createContext()</code>.',
+            'Step 2: wrap the app in <code>&lt;MyContext.Provider value={...}&gt;</code>.',
+            'Step 3: read it with <code>useContext(MyContext)</code>.',
+            'Every consumer re-renders when the value changes — not ideal for fast-changing data.',
+            'Export a custom hook (<code>useTheme</code>) for a clean API and error checking.'
+          ],
+          code: `import { createContext, useContext, useState } from 'react';
+import { View, Text, Button } from 'react-native';
 
+// 1. Create the context
 const ThemeContext = createContext();
 
+// 2. Provide it
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('light');
   return (
@@ -3818,43 +1434,28 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-export const useTheme = () => useContext(ThemeContext);`,
-            output: `import * as Linking from 'expo-linking';
-
-const url = Linking.createURL('profile/42'); // opens deep route
-
-Linking.openURL(url);
-
-const loginUser = async () => {
-  const response = await fetch('https://api.example.com/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
-
-  const data = await response.json();
-  if (data.token) {
-    await AsyncStorage.setItem('token', data.token);
-  }
+// 3. Custom hook for clean consumption + error checking
+export const useTheme = () => {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error('useTheme must be used inside ThemeProvider');
+  return ctx;
 };
 
-// Enable logs
-console.log('Debug log');
+// Usage — any descendant can read the theme
+const Header = () => {
+  const { theme } = useTheme();
+  return <Text style={{ color: theme === 'dark' ? 'white' : 'black' }}>Header</Text>;
+};
 
-// Show Dev Menu on Android manually
-import { DevSettings } from 'react-native';
-DevSettings.reload();
+const Settings = () => {
+  const { theme, setTheme } = useTheme();
+  return <Button title="Toggle" onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />;
+};
 
-// Example Native Module (Android - Java)
-@ReactModule(name = "MyNativeModule")
-public class MyNativeModule extends ReactContextBaseJavaModule {
-  @ReactMethod
-  public void showToast(String message) {
-    Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_SHORT).show();
-  }
-}`,
-            type: 'code'
-          }
+// index.js
+<ThemeProvider>
+  <App />
+</ThemeProvider>`
         }
       ]
     },
@@ -3862,19 +1463,53 @@ public class MyNativeModule extends ReactContextBaseJavaModule {
       title: 'Deep Linking',
       sections: [
         {
-          heading: 'Deep Linking',
-          list: [
-            '<strong>Deep Linking:</strong> Allows your app to respond to custom URLs or open specific screens directly.',
-            'Useful for opening screens from notifications, emails, or external links.',
-            '<strong>React Navigation:</strong> Supports deep linking via config in <code>linking</code> prop of <code>NavigationContainer</code> .',
-            '<strong>Custom Schemes:</strong> Define in native code for iOS and Android.',
-            'Use <code>Linking.openURL()</code> to open external or in-app URLs.'
+          heading: 'Opening a screen from a URL',
+          content: [
+            'A <strong>deep link</strong> is a URL that opens a specific screen inside your app — for example, <code>myapp://profile/42</code> opens the profile screen for user 42. Deep links are used by push notifications, emails, SMS, and other apps to send users straight to the right place.',
+            'There are two URL schemes: <strong>custom schemes</strong> (<code>myapp://...</code>, which you register in the native config) and <strong>Universal Links / App Links</strong> (<code>https://example.com/...</code>, which require a verification file on your website but are more robust and survive app reinstallation).',
+            'With <strong>React Navigation</strong>, deep linking is configured through the <code>linking</code> prop on <code>NavigationContainer</code>. You provide a <code>prefix</code> (your scheme) and a <code>config</code> that maps URL paths to screen names. React Navigation then parses incoming URLs and navigates automatically.',
+            'To open a URL from your app (another app, the browser, the phone dialer), use <code>Linking.openURL(url)</code>. To check if an app can handle a URL first, use <code>Linking.canOpenURL(url)</code>.'
           ],
-          code: `import * as Linking from 'expo-linking';
+          list: [
+            'A <strong>deep link</strong> opens a specific screen in the app (<code>myapp://profile/42</code>).',
+            'Two schemes: <strong>custom</strong> (<code>myapp://</code>) and <strong>Universal Links / App Links</strong> (<code>https://</code>).',
+            'Configure in React Navigation via the <code>linking</code> prop on <code>NavigationContainer</code>.',
+            '<code>Linking.openURL(url)</code> — open an external URL or trigger a deep link.',
+            '<code>Linking.canOpenURL(url)</code> — check if an app can handle the URL.',
+            'Used by push notifications, emails, SMS, and other apps.'
+          ],
+          code: `import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const url = Linking.createURL('profile/42'); // opens deep route
+const Stack = createNativeStackNavigator();
 
-Linking.openURL(url);`
+const linking = {
+  prefixes: ['myapp://', 'https://myapp.com'],
+  config: {
+    screens: {
+      Home:    '',
+      Profile: 'profile/:id',   // myapp://profile/42 -> Profile screen, params.id = '42'
+      Settings: 'settings',
+    },
+  },
+};
+
+export default function App() {
+  return (
+    <NavigationContainer linking={linking}>
+      <Stack.Navigator>
+        <Stack.Screen name="Home"     component={HomeScreen} />
+        <Stack.Screen name="Profile"  component={ProfileScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+// Open a URL from your app
+import { Linking } from 'react-native';
+Linking.openURL('mailto:support@example.com');
+Linking.openURL('https://example.com');`
         }
       ]
     },
@@ -3882,54 +1517,108 @@ Linking.openURL(url);`
       title: 'Authentication',
       sections: [
         {
-          heading: 'Authentication',
-          list: [
-            '<strong>Authentication:</strong> Securely identify users using login/signup forms, tokens, and backend APIs.',
-            'Use form validation libraries (like <code>Formik</code> + <code>Yup</code> ) for managing forms.',
-            'Securely store access tokens using <code>AsyncStorage</code> or <code>SecureStorage</code> .',
-            'Use JWT (JSON Web Tokens) for session-based authentication.',
-            'You can integrate social auth (Google, Facebook) using Firebase or OAuth providers.'
+          heading: 'Logging users in',
+          content: [
+            '<strong>Authentication</strong> is how your app knows who the user is. The typical flow: the user enters credentials, your app sends them to the backend, the backend returns a <strong>token</strong> (usually a JWT), and your app includes that token in every following request to prove who the user is.',
+            'A few best practices:',
+            '1. <strong>Validate the form</strong> before submitting — use a library like <strong>Formik</strong> + <strong>Yup</strong> for schema validation. Show clear errors next to the fields.<br>2. <strong>Store the token securely</strong> — in the <strong>Keychain/Keystore</strong> (see Module 3 Secure Storage), <em>not</em> in AsyncStorage, which is not encrypted.<br>3. <strong>Attach the token to every request</strong> — an <strong>HTTP interceptor</strong> (easy with Axios) does this in one place. With raw <code>fetch</code>, write a small wrapper.<br>4. <strong>Handle expiry</strong> — tokens expire. Refresh them transparently, or send the user back to login when the refresh fails.',
+            'For social login (Google, Facebook, Apple), use <strong>Firebase Auth</strong> or the provider\'s SDK. They handle the OAuth dance and return a token you can use the same way as a JWT.'
           ],
-          code: `const loginUser = async () => {
-  const response = await fetch('https://api.example.com/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
+          list: [
+            'Auth flow: credentials → backend returns a <strong>JWT token</strong> → token attached to every request.',
+            'Validate forms with <strong>Formik + Yup</strong>; show clear field-level errors.',
+            'Store the token in <strong>Secure Storage</strong> (Keychain/Keystore), never AsyncStorage.',
+            'Attach the token to every request with an <strong>HTTP interceptor</strong> (or a fetch wrapper).',
+            'Handle token expiry — refresh transparently, or send the user to login.',
+            'Social login: use <strong>Firebase Auth</strong> or the provider\'s SDK.'
+          ],
+          code: `import { useState } from 'react';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import * as Keychain from 'react-native-keychain';
 
-  const data = await response.json();
-  if (data.token) {
-    await AsyncStorage.setItem('token', data.token);
-  }
-};`
+const LoginScreen = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const login = async () => {
+    try {
+      const res = await fetch('https://api.example.com/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (data.token) {
+        // Store the token securely
+        await Keychain.setGenericPassword('token', data.token);
+        // navigate to the main app...
+      } else {
+        setError('Invalid credentials');
+      }
+    } catch (e) {
+      setError('Network error');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
+      <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
+      {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+      <Button title="Login" onPress={login} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { padding: 16 },
+  input: { borderWidth: 1, padding: 8, marginVertical: 8, borderRadius: 4 },
+});`
         }
       ]
     }
   },
+
   module5: {
     security: {
       title: 'Security Best Practices',
       sections: [
         {
-          heading: 'Security Best Practices',
-          list: [
-            '<strong>Secure Storage:</strong> Used to store sensitive data like tokens, passwords, and credentials.',
-            'More secure than AsyncStorage; encrypted and backed by platform-specific secure systems.',
-            '<strong>Libraries:</strong> Popular ones include <code>react-native-keychain</code> , <code>react-native-encrypted-storage</code> .',
-            'Supports biometric protection and authentication (Face ID, fingerprint).'
+          heading: 'Keeping the app safe',
+          content: [
+            'Mobile apps run on devices you do not control, so security matters from day one. A few practices every production app should follow:',
+            '<strong>1. Store secrets in the Keychain/Keystore, not AsyncStorage.</strong> Tokens, API keys, and passwords belong in <strong>secure storage</strong>, where they are encrypted and can require biometric authentication.<br><strong>2. Use HTTPS, always.</strong> Never send data over plain HTTP. On iOS, enable <strong>App Transport Security</strong> with no exceptions; on Android, use <code>usesCleartextTraffic="false"</code>.<br><strong>3. Never hardcode secrets in source.</strong> API keys in <code>config.js</code> ship inside the app binary — anyone can extract them. Put secrets on the backend and proxy through it, or use a secrets manager.<br><strong>4. Validate on the backend too.</strong> Client-side validation is for UX, not security. The backend must re-check everything.<br><strong>5. Obfuscate the JS bundle</strong> in production (Hermes does this automatically in modern React Native) to make reverse engineering harder.<br><strong>6. Pin certificates</strong> for highly sensitive apps to prevent man-in-the-middle attacks.',
+            'For biometric login (Face ID, fingerprint), wrap the Keychain access with <code>accessControl: BIOMETRY_CURRENT_SET</code> so the device prompts the user before releasing a secret.'
           ],
-          code: `// Using react-native-keychain
-import * as Keychain from 'react-native-keychain';
+          list: [
+            'Store secrets in <strong>Secure Storage</strong> (Keychain/Keystore), not AsyncStorage.',
+            'Use <strong>HTTPS only</strong> — never plain HTTP.',
+            'Never hardcode secrets in source — they ship inside the app binary.',
+            'Validate on the backend too — client validation is for UX, not security.',
+            '<strong>Obfuscate</strong> the JS bundle (Hermes) to slow reverse engineering.',
+            '<strong>Certificate pinning</strong> for highly sensitive apps (prevents MITM).',
+            'Use biometrics (Face ID/fingerprint) to gate access to secrets.'
+          ],
+          code: `import * as Keychain from 'react-native-keychain';
 
-const saveSecureData = async () => {
-  await Keychain.setGenericPassword('username', 'secret_password');
+// Store a token with biometric protection
+const saveToken = async (token) => {
+  await Keychain.setGenericPassword('token', token, {
+    accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET,
+    accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+  });
 };
 
-const loadSecureData = async () => {
-  const credentials = await Keychain.getGenericPassword();
-  if (credentials) {
-    console.log('Username:', credentials.username);
-  }
+// Read it back (prompts for Face ID/fingerprint)
+const readToken = async () => {
+  const creds = await Keychain.getGenericPassword();
+  return creds ? creds.password : null;
+};
+
+// Wipe everything on logout
+const wipe = async () => {
+  await Keychain.resetGenericPassword();
 };`
         }
       ]
@@ -3938,20 +1627,36 @@ const loadSecureData = async () => {
       title: 'Dev Menu & Debugging',
       sections: [
         {
-          heading: 'Dev Menu & Debugging',
-          list: [
-            '<strong>Dev Menu:</strong> Access with ⌘D (iOS), Ctrl+M or Shake (Android).',
-            '<strong>Remote Debugging:</strong> Enables debugging via Chrome or React DevTools.',
-            '<strong>Fast Refresh:</strong> Automatically reloads updated components without full reload.',
-            '<strong>Console Logs:</strong> Output to Metro bundler terminal or debug console.',
-            '<strong>Reactotron / Flipper:</strong> Third-party tools for inspecting Redux, async storage, navigation, etc.'
+          heading: 'Tools for finding bugs',
+          content: [
+            'React Native gives you a set of tools for debugging. The <strong>Dev Menu</strong> is the starting point — open it with <code>⌘D</code> on the iOS simulator, <code>Ctrl+M</code> or a device shake on Android. From it you can reload the app, toggle the inspector, enable remote JS debugging, and more.',
+            'The most useful debugging tools:',
+            '<strong>Fast Refresh</strong> — the default; edits to your code reload instantly, keeping component state. This is what makes React Native development fast.<br><strong>React DevTools</strong> — inspect the component tree and props/state. Run <code>npx react-devtools</code> and connect.<br><strong>Flipper</strong> — a desktop app for inspecting the network traffic, the AsyncStorage contents, the layout, Redux state, and logs all in one place. The standard tool for React Native debugging.<br><strong>Reactotron</strong> — an alternative to Flipper for inspecting Redux, async storage, and navigation.<br><strong><code>console.log</code></strong> — output appears in the Metro bundler terminal (or in Flipper/Reactotron). For long objects, use <code>console.log(JSON.stringify(obj, null, 2))</code>.',
+            'For crashes and freezes, the red error screen (dev) or the device logs (production) show the stack trace. To reload the app from code (e.g. after a deep config change), use <code>DevSettings.reload()</code>.'
           ],
-          code: `// Enable logs
-console.log('Debug log');
+          list: [
+            'Open the <strong>Dev Menu</strong>: <code>⌘D</code> (iOS sim), <code>Ctrl+M</code> or shake (Android).',
+            '<strong>Fast Refresh</strong> — instant reload with state preserved; the default dev experience.',
+            '<strong>React DevTools</strong> — inspect components, props, state (<code>npx react-devtools</code>).',
+            '<strong>Flipper</strong> — network, storage, layout, Redux, logs in one desktop app.',
+            '<strong>Reactotron</strong> — alternative for Redux/storage/navigation inspection.',
+            '<code>console.log</code> — output in the Metro terminal or Flipper/Reactotron.',
+            '<code>DevSettings.reload()</code> — reload the app from code.'
+          ],
+          code: `import { DevSettings } from 'react-native';
 
-// Show Dev Menu on Android manually
-import { DevSettings } from 'react-native';
-DevSettings.reload();`
+// Reload the app from code (use sparingly)
+const reloadApp = () => DevSettings.reload();
+
+// Classic console debugging — shows in Metro/Flipper
+const debug = (label, value) => {
+  console.log(label, JSON.stringify(value, null, 2));
+};
+
+// In a component
+useEffect(() => {
+  debug('user on mount', user);
+}, [user]);`
         }
       ]
     },
@@ -3959,22 +1664,53 @@ DevSettings.reload();`
       title: 'Native Modules',
       sections: [
         {
-          heading: 'Native Modules',
-          list: [
-            '<strong>Native Modules:</strong> Used to access native platform APIs not available in JavaScript by default.',
-            'You can write native code in Java (Android) or Objective-C/Swift (iOS) and expose it to JavaScript.',
-            '<strong>Common Use Cases:</strong> Sensors, Bluetooth, background services, file system access, etc.',
-            '<strong>Bridge:</strong> Communication happens over a “bridge” between JavaScript and native code.',
-            '<strong>Libraries:</strong> Many third-party libraries use native modules internally (e.g., camera, location, biometrics).'
+          heading: 'Reaching beyond JavaScript',
+          content: [
+            'React Native covers a lot, but sometimes you need a platform feature it does not expose — a Bluetooth API, a sensor, a background task, a third-party SDK. That is what <strong>Native Modules</strong> are for: you write a bit of native code (Java/Kotlin on Android, Objective-C/Swift on iOS), expose methods to JavaScript, and call them from your React Native code.',
+            'The two halves:',
+            "<strong>Native side</strong> — a class that extends <code>ReactContextBaseJavaModule</code> (Android) or implements <code>RCTBridgeModule</code> (iOS). Methods you want to call from JS are annotated with <code>@ReactMethod</code> (Android) or declared in an <code>RCT_EXTERN_METHOD</code> (iOS).<br><strong>JavaScript side</strong> — <code>NativeModules.MyModule.showToast('hello')</code> to call the native method. For most modules, the community has already published a JS wrapper that makes the API feel native.",
+            'Most apps never write a native module — the community libraries on npm cover the common needs (camera, location, notifications, biometrics). You write your own when you need something truly custom or a proprietary SDK.',
+            'Modern React Native also offers the <strong>new architecture (Fabric/TurboModules)</strong>, which is faster and type-safe via code generation. For new native modules, prefer the TurboModules approach.'
           ],
-          code: `// Example Native Module (Android - Java)
+          list: [
+            '<strong>Native Modules</strong> — call native platform code from JavaScript.',
+            'Write native code in Java/Kotlin (Android) or Objective-C/Swift (iOS).',
+            'Expose methods with <code>@ReactMethod</code> (Android) / <code>RCT_EXTERN_METHOD</code> (iOS).',
+            'Call from JS: <code>NativeModules.MyModule.method()</code>.',
+            'Most apps use community libraries instead of writing their own.',
+            'Write your own only for custom/proprietary needs.',
+            'New architecture (TurboModules) is faster and type-safe — prefer it for new modules.'
+          ],
+          code: `// ---- Android: MyNativeModule.java ----
+package com.myapp;
+
+import com.facebook.react.bridge.*;
+import android.widget.Toast;
+
 @ReactModule(name = "MyNativeModule")
 public class MyNativeModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void showToast(String message) {
     Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_SHORT).show();
   }
-}`
+}
+
+// ---- iOS: MyNativeModule.m ----
+#import <React/RCTBridgeModule.h>
+@implementation MyNativeModule
+RCT_EXPORT_MODULE();
+RCT_EXPORT_METHOD(showToast:(NSString *)message) {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    // show a native iOS alert or HUD
+  });
+}
+@end
+
+// ---- JavaScript side ----
+import { NativeModules } from 'react-native';
+const { MyNativeModule } = NativeModules;
+
+const press = () => MyNativeModule.showToast('Hello from native!');`
         }
       ]
     },
@@ -3982,24 +1718,28 @@ public class MyNativeModule extends ReactContextBaseJavaModule {
       title: 'Interview Questions',
       sections: [
         {
-          heading: 'Interview Questions',
+          heading: 'Common React Native interview questions',
+          content: [
+            'These are the questions that come up most often in React Native interviews. Try to answer each one out loud before reading the hint — explaining concepts clearly is a skill worth practicing.',
+            'For each, the answer should explain <em>what</em> it is, <em>why</em> it matters, and give a quick example. Interviewers are checking whether you understand the trade-offs, not just the syntax.'
+          ],
           list: [
-            '<span class="badge bg-primary me-2">Fundamental</span> What is the difference between React and React Native?',
-            'How does React Native handle rendering UI on different platforms?',
-            'What are the benefits and limitations of using React Native?',
-            '<span class="badge bg-success me-2">Components</span> Explain the difference between <code>FlatList</code> and <code>ScrollView</code> .',
+            '<strong>Fundamental</strong> — What is the difference between React and React Native?',
+            'How does React Native render native UI on different platforms?',
+            'What are the benefits and limitations of React Native?',
+            '<strong>Components</strong> — Explain the difference between <code>FlatList</code> and <code>ScrollView</code>.',
             'What are native modules? When should you use them?',
             'How would you persist data in a React Native app?',
-            '<span class="badge bg-warning text-dark me-2">Advanced</span> Explain how navigation works in React Native.',
+            '<strong>Advanced</strong> — Explain how navigation works in React Native.',
             'How can you secure user authentication and tokens?',
             'What are the performance considerations in React Native?',
             'How do you debug React Native applications?',
-            '<span class="badge bg-info text-dark me-2">Expert</span> Explain the React Native bridge and how it works.',
+            '<strong>Expert</strong> — Explain the React Native bridge and how it works.',
             'How would you implement code splitting in React Native?',
             'What strategies would you use for handling offline functionality?',
             'How do you handle deep linking and universal links?',
             'Explain the difference between Expo and React Native CLI.',
-            '<span class="badge bg-danger me-2">Scenario</span> How would you optimize a React Native app for performance?',
+            '<strong>Scenario</strong> — How would you optimize a React Native app for performance?',
             'Describe how you would implement push notifications.',
             'How would you handle app state management in a large application?',
             'What security measures would you implement in a production app?',
@@ -4012,22 +1752,30 @@ public class MyNativeModule extends ReactContextBaseJavaModule {
       title: 'Project Examples',
       sections: [
         {
-          heading: 'Project Examples',
+          heading: 'Apps to build while you learn',
+          content: [
+            'The best way to learn React Native is to build apps. Each project below targets a specific set of skills — start at the top and work down. By the time you build the advanced ones, you will be job-ready.',
+            'Each project lists the main concepts it teaches, so you can pick the one that fills your knowledge gaps.'
+          ],
           list: [
-            '<span class="badge bg-success me-2">Beginner</span> <strong>To-Do App:</strong> CRUD operations with local storage, form validation, and list management.',
-            '<strong>Calculator App:</strong> Mathematical operations with state management and responsive design.',
-            '<strong>Weather App:</strong> API integration, location services, and data visualization.',
-            '<span class="badge bg-warning text-dark me-2">Intermediate</span> <strong>Login + Registration:</strong> Authentication flow with JWT, form validation, and secure storage.',
-            '<strong>News Reader:</strong> REST API integration with infinite scroll, search, and offline reading.',
-            '<strong>Photo Gallery:</strong> Camera integration, image manipulation, and cloud storage.',
-            '<strong>Music Player:</strong> Audio playback, playlist management, and media controls.',
-            '<span class="badge bg-danger me-2">Advanced</span> <strong>E-commerce App:</strong> Product catalog, cart management, payment integration, and order tracking.',
-            '<strong>Social Media App:</strong> User profiles, posts, comments, real-time updates, and media sharing.',
-            '<strong>Chat Application:</strong> Real-time messaging with WebSockets, file sharing, and push notifications.',
-            '<strong>Fitness Tracker:</strong> Health data integration, GPS tracking, charts, and wearable device connectivity.',
-            '<span class="badge bg-info text-dark me-2">Enterprise</span> <strong>Banking App:</strong> Biometric authentication, transaction history, QR payments, and security features.',
-            '<strong>Learning Management System:</strong> Video streaming, progress tracking, quizzes, and offline content.',
-            '<strong>Delivery App:</strong> Real-time tracking, maps integration, route optimization, and driver management.'
+            '<strong>Beginner</strong>',
+            '<strong>To-Do App</strong> — CRUD with AsyncStorage, form validation, list management.',
+            '<strong>Calculator App</strong> — state management, responsive layout with Flexbox.',
+            '<strong>Weather App</strong> — fetch a REST API, location permissions, data display.',
+            '<strong>Intermediate</strong>',
+            '<strong>Login + Registration</strong> — auth flow with JWT, form validation, secure storage.',
+            '<strong>News Reader</strong> — REST API with infinite scroll, search, offline reading.',
+            '<strong>Photo Gallery</strong> — camera integration, image manipulation, cloud storage.',
+            '<strong>Music Player</strong> — audio playback, playlist management, media controls.',
+            '<strong>Advanced</strong>',
+            '<strong>E-commerce App</strong> — catalog, cart, payment integration, order tracking.',
+            '<strong>Social Media App</strong> — profiles, posts, comments, real-time updates.',
+            '<strong>Chat Application</strong> — real-time messaging with WebSockets, file sharing, push notifications.',
+            '<strong>Fitness Tracker</strong> — health data, GPS tracking, charts, wearable integration.',
+            '<strong>Enterprise</strong>',
+            '<strong>Banking App</strong> — biometric auth, transaction history, QR payments, heavy security.',
+            '<strong>Learning Management System</strong> — video streaming, progress tracking, quizzes, offline content.',
+            '<strong>Delivery App</strong> — real-time tracking, maps, route optimization, driver management.'
           ]
         }
       ]
@@ -4036,14 +1784,47 @@ public class MyNativeModule extends ReactContextBaseJavaModule {
       title: 'Best Practices & Tips',
       sections: [
         {
-          heading: 'Best Practices & Tips',
+          heading: 'Habits that pay off',
+          content: [
+            'A few habits make React Native code more maintainable, safer, and faster — worth picking up from the start rather than unlearning bad ones later.',
+            '<strong>1. Use TypeScript.</strong> Create new projects with <code>npx react-native init MyApp --template react-native-template-typescript</code> (or use the TS template in the modern CLI). Define <code>Props</code> and state with interfaces; use <code>useState&lt;Type&gt;</code>. The compiler catches a whole class of bugs before you run the app.<br><strong>2. Test your code.</strong> Use <strong>Jest</strong> for unit tests and <strong>React Native Testing Library</strong> for component tests. Aim for coverage of business logic, critical UI flows, and API integration (with the network mocked).<br><strong>3. Use the right list component.</strong> <code>ScrollView</code> for small content, <code>FlatList</code> for large lists, <code>SectionList</code> for grouped data. Wrong choice = jank or memory blowups.<br><strong>4. Keep components small and focused.</strong> One component per file; extract reusable bits into their own components or custom hooks.<br><strong>5. Name things well.</strong> <code>handleLogin</code>, not <code>fn1</code>. Self-documenting names save hours later.<br><strong>6. Handle loading and error states everywhere.</strong> A spinner while waiting; a clear message if the request fails. Users notice when an app feels broken because nobody handled the error case.'
+          ],
           list: [
-            '<span class="badge bg-info text-dark me-2">TypeScript</span> <strong>Type Safety:</strong> Use <code>npx react-native init MyApp --template react-native-template-typescript</code> for better development experience.',
-            '<strong>Type Definitions:</strong> Define <code>Props</code> and <code>State</code> interfaces. Use <code>React.FC</code> and <code>useState<Type></code> .',
-            '<span class="badge bg-success me-2">Testing</span> <strong>Testing Tools:</strong> Use <code>Jest</code> for unit tests and <code>React Native Testing Library</code> for component testing.',
-            '<strong>Test Coverage:</strong> Write tests for all business logic, UI components, and API integrations. Mock external dependencies.',
-            '<strong>Debugging Tools:</strong> Use <code>console.log</code> , React Native Debugger, and Flipper for comprehensive debugging.'
-          ]
+            '<strong>TypeScript</strong> — start new projects with the TS template; type props and state.',
+            '<strong>Test</strong> with Jest + React Native Testing Library; mock the network.',
+            '<strong>Pick the right list</strong>: ScrollView (small), FlatList (large), SectionList (grouped).',
+            'Keep components <strong>small and focused</strong>; one per file.',
+            'Extract reusable logic into <strong>custom hooks</strong>.',
+            'Name things clearly — <code>handleLogin</code>, not <code>fn1</code>.',
+            'Always handle <strong>loading and error states</strong> — users notice when you do not.',
+            'Run <code>npx react-native doctor</code> before reporting a setup bug.'
+          ],
+          code: `// TypeScript props + state
+type Props = { userId: string };
+const Profile = ({ userId }: Props) => {
+  const [user, setUser] = useState<User | null>(null);
+  // ...
+};
+
+// A custom hook — reusable, testable
+import { useEffect, useState } from 'react';
+const useUser = (id: string) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch(\`/api/users/\${id}\`)
+      .then(r => r.json())
+      .then(u => { setUser(u); setLoading(false); });
+  }, [id]);
+  return { user, loading };
+};
+
+// Usage
+const Header = ({ userId }) => {
+  const { user, loading } = useUser(userId);
+  if (loading) return <ActivityIndicator />;
+  return <Text>{user.name}</Text>;
+};`
         }
       ]
     }

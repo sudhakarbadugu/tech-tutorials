@@ -84,6 +84,11 @@ function TutorialView() {
   }, [currentData])
 
   useEffect(() => {
+    document.documentElement.classList.add('tutorial-layout-active')
+    return () => document.documentElement.classList.remove('tutorial-layout-active')
+  }, [])
+
+  useEffect(() => {
     if (activeUnit && activeTopic) {
       markTopicViewed(subject, activeUnit, activeTopic)
       const unitMeta = currentData?.structure[activeUnit]
@@ -146,7 +151,7 @@ function TutorialView() {
   }
 
   return (
-    <div className={`app ${theme}${readingMode ? ' reading-mode' : ''}`}>
+    <div className={`app tutorial-layout ${theme}${readingMode ? ' reading-mode' : ''}`}>
       <a href="#content-title" className="skip-link">Skip to main content</a>
       <Header
         theme={theme}
