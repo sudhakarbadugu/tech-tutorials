@@ -1,15 +1,42 @@
+// natural language processing — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js nlp_module4.js
+
 export const nlpStructure = {
   module4: {
     title: 'Module 4: Large Language Models',
     topics: [
-      { id: 'attention-nlp', title: 'Attention Mechanism' },
-      { id: 'transformers-nlp', title: 'Transformers' },
-      { id: 'bert-nlp', title: 'BERT' },
-      { id: 'gpt-nlp', title: 'GPT' },
-      { id: 'xlnet', title: 'XLNet' },
-      { id: 'bart', title: 'BART' },
-      { id: 'multilingual', title: 'Multilingual Models' },
-      { id: 'indian-llms', title: 'LLMs for Indian Languages' },
+      {
+        id: 'attention-nlp',
+        title: 'Attention Mechanism'
+      },
+      {
+        id: 'transformers-nlp',
+        title: 'Transformers'
+      },
+      {
+        id: 'bert-nlp',
+        title: 'BERT'
+      },
+      {
+        id: 'gpt-nlp',
+        title: 'GPT'
+      },
+      {
+        id: 'xlnet',
+        title: 'XLNet'
+      },
+      {
+        id: 'bart',
+        title: 'BART'
+      },
+      {
+        id: 'multilingual',
+        title: 'Multilingual Models'
+      },
+      {
+        id: 'indian-llms',
+        title: 'LLMs for Indian Languages'
+      }
     ]
   }
 };
@@ -30,6 +57,26 @@ export const nlpContent = {
             'The output is a weighted combination of value vectors',
             'Self-attention relates different positions within the same sequence'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Attention is a mechanism that allows a model to focus on different parts of the input when producing each part of the output. It computes a weighted sum of input representations, where the weights indicate relevance. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Attention is a mechanism that allows a model to focus on different parts of the input when producing each part of the output. It computes a weighted sum of input representations, where the weights indicate relevance. Attention removes the bottleneck of fixed-size context vectors in seq2seq models It computes relevance scores between query and key vectors Weights are normalized via softmax to form a probability distribution The output is a weighted combination of value vectors Self-attention relates different positions within the same sequence</p>',
+            '<p>You use attention mechanism when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Attention Mechanism
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Attention Mechanism sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -63,16 +110,72 @@ Example:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Attention Mechanism with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("Attention Mechanism — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Different attention variants suit different needs.',
           table: {
-            headers: ['Aspect', 'Self-Attention', 'Cross-Attention', 'Multi-Head'],
+            headers: [
+              'Aspect',
+              'Self-Attention',
+              'Cross-Attention',
+              'Multi-Head'
+            ],
             rows: [
-              ['Query source', 'Same sequence', 'Different sequence', 'Multiple parallel heads'],
-              ['Use case', 'Encoding context within text', 'Machine translation (source → target)', 'Capture diverse relationships'],
-              ['Parameters', 'Q=K=V from same input', 'Q from decoder, K=V from encoder', 'h parallel attention layers'],
-              ['Output', 'Context-aware representation', 'Target-aware source context', 'Concatenated head outputs'],
-              ['Example', 'BERT encoder', 'Transformer decoder', 'Transformer full model']
+              [
+                'Query source',
+                'Same sequence',
+                'Different sequence',
+                'Multiple parallel heads'
+              ],
+              [
+                'Use case',
+                'Encoding context within text',
+                'Machine translation (source → target)',
+                'Capture diverse relationships'
+              ],
+              [
+                'Parameters',
+                'Q=K=V from same input',
+                'Q from decoder, K=V from encoder',
+                'h parallel attention layers'
+              ],
+              [
+                'Output',
+                'Context-aware representation',
+                'Target-aware source context',
+                'Concatenated head outputs'
+              ],
+              [
+                'Example',
+                'BERT encoder',
+                'Transformer decoder',
+                'Transformer full model'
+              ]
             ]
           }
         },
@@ -83,10 +186,18 @@ Example:
             'Mistake 2: Ignoring the scaling factor sqrt(d_k) (fix: always scale; without it, dot products grow large and softmax saturates)',
             'Mistake 3: Confusing self-attention with cross-attention (fix: self-attention uses same input for Q/K/V; cross-attention uses encoder output for K/V)',
             'Mistake 4: Using too few heads (fix: use 8–16 heads for base models; too few limits relationship diversity)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Attention powers the most impactful NLP systems in production.',
           list: [
             'Machine translation: Google Translate uses attention to align source and target words dynamically',
@@ -108,12 +219,36 @@ Example:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why is the scaling factor sqrt(d_k) necessary in attention?\nAns: Without scaling, dot products grow with dimension, pushing softmax into saturation where gradients vanish.',
-            'Q2: What is the difference between self-attention and cross-attention?\nAns: Self-attention draws Q, K, V from the same input; cross-attention draws Q from the decoder and K/V from the encoder output.',
-            'Q3: Why does attention need positional encoding?\nAns: Attention is permutation-invariant; positional encodings inject sequence order so the model knows word positions.'
+            `Q1: Why is the scaling factor sqrt(d_k) necessary in attention?
+Ans: Without scaling, dot products grow with dimension, pushing softmax into saturation where gradients vanish.`,
+            `Q2: What is the difference between self-attention and cross-attention?
+Ans: Self-attention draws Q, K, V from the same input; cross-attention draws Q from the decoder and K/V from the encoder output.`,
+            `Q3: Why does attention need positional encoding?
+Ans: Attention is permutation-invariant; positional encodings inject sequence order so the model knows word positions.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Attention Mechanism</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Attention Mechanism")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -131,6 +266,26 @@ Example:
             'Encoder-decoder structure with residual connections and layer normalization',
             'Positional encodings provide sequence order information'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>The Transformer is a neural network architecture that replaces recurrence with self-attention, enabling parallel processing of entire sequences and capturing global dependencies in constant time per layer. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, The Transformer is a neural network architecture that replaces recurrence with self-attention, enabling parallel processing of entire sequences and capturing global dependencies in constant time per layer. Introduced in "Attention Is All You Need" (Vaswani et al., 2017) No recurrence or convolution — pure attention-based Processes all tokens in parallel, unlike RNNs Encoder-decoder structure with residual connections and layer normalization Positional encodings provide sequence order information</p>',
+            '<p>You use transformers when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Transformers
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Transformers sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -163,16 +318,72 @@ Repeat for N layers (e.g., N=12 for BERT-base)`,
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Transformers with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("Transformers — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Transformer variants differ in directionality and purpose.',
           table: {
-            headers: ['Aspect', 'Transformer (Original)', 'BERT (Encoder-only)', 'GPT (Decoder-only)'],
+            headers: [
+              'Aspect',
+              'Transformer (Original)',
+              'BERT (Encoder-only)',
+              'GPT (Decoder-only)'
+            ],
             rows: [
-              ['Directionality', 'Encoder + decoder', 'Bidirectional', 'Left-to-right (autoregressive)'],
-              ['Attention mask', 'Source + target masks', 'No mask (full context)', 'Causal mask (future hidden)'],
-              ['Pre-training', 'Machine translation', 'MLM + NSP', 'Next-token prediction'],
-              ['Best for', 'Translation, summarization', 'Understanding tasks', 'Generation tasks'],
-              ['Parameters', 'Base: 65M, Large: 213M', 'Base: 110M, Large: 340M', 'GPT-3: 175B']
+              [
+                'Directionality',
+                'Encoder + decoder',
+                'Bidirectional',
+                'Left-to-right (autoregressive)'
+              ],
+              [
+                'Attention mask',
+                'Source + target masks',
+                'No mask (full context)',
+                'Causal mask (future hidden)'
+              ],
+              [
+                'Pre-training',
+                'Machine translation',
+                'MLM + NSP',
+                'Next-token prediction'
+              ],
+              [
+                'Best for',
+                'Translation, summarization',
+                'Understanding tasks',
+                'Generation tasks'
+              ],
+              [
+                'Parameters',
+                'Base: 65M, Large: 213M',
+                'Base: 110M, Large: 340M',
+                'GPT-3: 175B'
+              ]
             ]
           }
         },
@@ -183,10 +394,18 @@ Repeat for N layers (e.g., N=12 for BERT-base)`,
             'Mistake 2: Forgetting causal masking in autoregressive decoders (fix: apply a lower-triangular mask so positions cannot attend to future tokens)',
             'Mistake 3: Using too few layers for complex tasks (fix: base models use 12 layers; large tasks need 24+; depth matters for hierarchical abstraction)',
             'Mistake 4: Ignoring the feed-forward sublayer (fix: FFN provides token-wise non-linearity and increases capacity; it is not optional)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Transformers are the backbone of modern NLP infrastructure.',
           list: [
             'Search engines: Google uses BERT to understand query intent and rank documents',
@@ -208,12 +427,36 @@ Repeat for N layers (e.g., N=12 for BERT-base)`,
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why can transformers process sequences in parallel while RNNs cannot?\nAns: Transformers use self-attention which relates all positions simultaneously; RNNs update hidden states sequentially.',
-            'Q2: What is the purpose of causal masking in a decoder?\nAns: It prevents the model from attending to future tokens, preserving autoregressive generation.',
-            'Q3: Why are residual connections and layer normalization important?\nAns: Residual connections enable gradient flow through deep stacks; layer normalization stabilizes activations and speeds convergence.'
+            `Q1: Why can transformers process sequences in parallel while RNNs cannot?
+Ans: Transformers use self-attention which relates all positions simultaneously; RNNs update hidden states sequentially.`,
+            `Q2: What is the purpose of causal masking in a decoder?
+Ans: It prevents the model from attending to future tokens, preserving autoregressive generation.`,
+            `Q3: Why are residual connections and layer normalization important?
+Ans: Residual connections enable gradient flow through deep stacks; layer normalization stabilizes activations and speeds convergence.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Transformers</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Transformers")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -231,6 +474,26 @@ Repeat for N layers (e.g., N=12 for BERT-base)`,
             'Fine-tuning requires only task-specific layers on top',
             'Achieved state-of-the-art on 11 NLP benchmarks at release'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>BERT is a transformer-based model that pre-trains deep bidirectional representations by jointly conditioning on both left and right context in all layers. It can be fine-tuned with just one additional output layer for a wide range of tasks. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, BERT is a transformer-based model that pre-trains deep bidirectional representations by jointly conditioning on both left and right context in all layers. It can be fine-tuned with just one additional output layer for a wide range of tasks. Introduced by Google in 2018 Pre-trains on unlabeled text using two objectives: MLM and NSP Bidirectional — reads entire sentences in both directions simultaneously Fine-tuning requires only task-specific layers on top Achieved state-of-the-art on 11 NLP benchmarks at release</p>',
+            '<p>You use bert when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — BERT
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: BERT sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -264,17 +527,85 @@ Fine-tuning:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'BERT with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("BERT — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'BERT variants differ in size, training data, and objective.',
           table: {
-            headers: ['Aspect', 'BERT-base', 'BERT-large', 'RoBERTa', 'ALBERT'],
+            headers: [
+              'Aspect',
+              'BERT-base',
+              'BERT-large',
+              'RoBERTa',
+              'ALBERT'
+            ],
             rows: [
-              ['Layers', '12', '24', '12 or 24', '12'],
-              ['Hidden size', '768', '1024', '768 or 1024', '768 or 1024'],
-              ['Parameters', '110M', '340M', '125M or 355M', '12M or 18M'],
-              ['Pre-training', 'MLM + NSP', 'MLM + NSP', 'Dynamic MLM only', 'SOP (sentence order)'],
-              ['Data', 'BookCorpus + Wikipedia', 'Same', '10× more data', 'Same'],
-              ['Key change', 'Original', 'Deeper', 'Better training', 'Parameter sharing']
+              [
+                'Layers',
+                '12',
+                '24',
+                '12 or 24',
+                '12'
+              ],
+              [
+                'Hidden size',
+                '768',
+                '1024',
+                '768 or 1024',
+                '768 or 1024'
+              ],
+              [
+                'Parameters',
+                '110M',
+                '340M',
+                '125M or 355M',
+                '12M or 18M'
+              ],
+              [
+                'Pre-training',
+                'MLM + NSP',
+                'MLM + NSP',
+                'Dynamic MLM only',
+                'SOP (sentence order)'
+              ],
+              [
+                'Data',
+                'BookCorpus + Wikipedia',
+                'Same',
+                '10× more data',
+                'Same'
+              ],
+              [
+                'Key change',
+                'Original',
+                'Deeper',
+                'Better training',
+                'Parameter sharing'
+              ]
             ]
           }
         },
@@ -285,10 +616,18 @@ Fine-tuning:
             'Mistake 2: Fine-tuning without proper learning rate (fix: use small learning rates like 2e-5 or 3e-5; BERT embeddings need gentle updates)',
             'Mistake 3: Ignoring max sequence length (fix: BERT-base handles 512 tokens; truncate or chunk longer documents)',
             'Mistake 4: Assuming NSP is always useful (fix: later work shows NSP provides limited benefit; RoBERTa drops it and still improves)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'BERT powers understanding tasks across industries.',
           list: [
             'Search ranking: Google Search uses BERT to match queries with relevant passages',
@@ -310,12 +649,36 @@ Fine-tuning:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why is BERT called "bidirectional" while GPT is not?\nAns: BERT attends to all tokens in both directions simultaneously during MLM; GPT only attends to past tokens.',
-            'Q2: What are the two pre-training objectives in BERT?\nAns: Masked Language Modeling (predict masked words) and Next Sentence Prediction (predict sentence relationship).',
-            'Q3: Why should you use a small learning rate when fine-tuning BERT?\nAns: Pre-trained representations are already well-tuned; large updates can destroy general linguistic knowledge.'
+            `Q1: Why is BERT called "bidirectional" while GPT is not?
+Ans: BERT attends to all tokens in both directions simultaneously during MLM; GPT only attends to past tokens.`,
+            `Q2: What are the two pre-training objectives in BERT?
+Ans: Masked Language Modeling (predict masked words) and Next Sentence Prediction (predict sentence relationship).`,
+            `Q3: Why should you use a small learning rate when fine-tuning BERT?
+Ans: Pre-trained representations are already well-tuned; large updates can destroy general linguistic knowledge.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>BERT</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — BERT")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -333,6 +696,26 @@ Fine-tuning:
             'GPT-4 (2023): multimodal, significantly improved reasoning and safety',
             'Autoregressive: predicts P(token_t | token_1...token_t-1)'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>GPT is a family of autoregressive transformer models that learn to predict the next token in a sequence. By pre-training on vast corpora and fine-tuning on specific tasks, GPT excels at text generation, completion, and conditioning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, GPT is a family of autoregressive transformer models that learn to predict the next token in a sequence. By pre-training on vast corpora and fine-tuning on specific tasks, GPT excels at text generation, completion, and conditioning. GPT-1 (2018): 117M parameters, demonstrated unsupervised pre-training + supervised fine-tuning GPT-2 (2019): 1.5B parameters, showed strong zero-shot capabilities GPT-3 (2020): 175B parameters, enabled few-shot and prompt-based learning GPT-4 (2023): multimodal, significantly improved reasoning and safety Autoregressive: predicts P(token_t | token_1...token_t-1)</p>',
+            '<p>You use gpt when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — GPT
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: GPT sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -366,17 +749,85 @@ Temperature controls randomness:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'GPT with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("GPT — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'GPT models scale in size, data, and capability.',
           table: {
-            headers: ['Aspect', 'GPT-1', 'GPT-2', 'GPT-3', 'GPT-4'],
+            headers: [
+              'Aspect',
+              'GPT-1',
+              'GPT-2',
+              'GPT-3',
+              'GPT-4'
+            ],
             rows: [
-              ['Parameters', '117M', '1.5B', '175B', 'Unknown (estimated >1T)'],
-              ['Layers', '12', '48', '96', 'Unknown'],
-              ['Context length', '512', '1024', '2048', '128K'],
-              ['Pre-training data', 'BookCorpus', 'WebText', 'Common Crawl + books', 'Unknown'],
-              ['Learning paradigm', 'Pre-train + fine-tune', 'Zero-shot', 'Few-shot', 'Instruction tuning + RLHF'],
-              ['Key innovation', 'Transfer to NLP', 'Zero-shot generation', 'In-context learning', 'Multimodal reasoning']
+              [
+                'Parameters',
+                '117M',
+                '1.5B',
+                '175B',
+                'Unknown (estimated >1T)'
+              ],
+              [
+                'Layers',
+                '12',
+                '48',
+                '96',
+                'Unknown'
+              ],
+              [
+                'Context length',
+                '512',
+                '1024',
+                '2048',
+                '128K'
+              ],
+              [
+                'Pre-training data',
+                'BookCorpus',
+                'WebText',
+                'Common Crawl + books',
+                'Unknown'
+              ],
+              [
+                'Learning paradigm',
+                'Pre-train + fine-tune',
+                'Zero-shot',
+                'Few-shot',
+                'Instruction tuning + RLHF'
+              ],
+              [
+                'Key innovation',
+                'Transfer to NLP',
+                'Zero-shot generation',
+                'In-context learning',
+                'Multimodal reasoning'
+              ]
             ]
           }
         },
@@ -387,10 +838,18 @@ Temperature controls randomness:
             'Mistake 2: Using high temperature for factual tasks (fix: set temperature near 0 for deterministic, factual outputs; higher T for creative writing)',
             'Mistake 3: Ignoring prompt engineering (fix: few-shot examples, clear instructions, and role framing dramatically improve output quality)',
             'Mistake 4: Treating GPT as a reasoning engine rather than a pattern matcher (fix: break complex reasoning into explicit chain-of-thought steps)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'GPT models power generative applications across domains.',
           list: [
             'Content creation: drafting emails, blog posts, marketing copy, and creative writing',
@@ -412,11 +871,36 @@ Temperature controls randomness:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What makes GPT "autoregressive"?\nAns: It predicts each token conditioned only on previous tokens, generating text left-to-right.',
-            'Q2: How does few-shot learning work in GPT-3?\nAns: The model reads task examples in the prompt and infers the pattern without updating weights.',
-            'Q3: Why does temperature affect output quality?\nAns: Temperature scales the logits before softmax; low T sharpens the distribution (greedy), high T flattens it (diverse).' ]
+            `Q1: What makes GPT "autoregressive"?
+Ans: It predicts each token conditioned only on previous tokens, generating text left-to-right.`,
+            `Q2: How does few-shot learning work in GPT-3?
+Ans: The model reads task examples in the prompt and infers the pattern without updating weights.`,
+            `Q3: Why does temperature affect output quality?
+Ans: Temperature scales the logits before softmax; low T sharpens the distribution (greedy), high T flattens it (diverse).`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>GPT</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — GPT")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -434,6 +918,26 @@ Temperature controls randomness:
             'Integrates Transformer-XL for long-sequence modeling',
             'Outperformed BERT on 20 tasks at release'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>XLNet is a generalized autoregressive language model that captures bidirectional context by maximizing the expected likelihood over all permutations of the factorization order. It overcomes the limitations of both BERT (masking introduces pretrain-finetune discrepancy) and GPT (unidirectional context). Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, XLNet is a generalized autoregressive language model that captures bidirectional context by maximizing the expected likelihood over all permutations of the factorization order. It overcomes the limitations of both BERT (masking introduces pretrain-finetune discrepancy) and GPT (unidirectional context). Uses permutation language modeling instead of masking Predicts tokens in random order while maintaining autoregressive formulation No [MASK] token — avoids pretrain-finetune mismatch Integrates Transformer-XL for long-sequence modeling Outperformed BERT on 20 tasks at release</p>',
+            '<p>You use xlnet when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — XLNet
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: XLNet sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -461,17 +965,78 @@ Two-stream attention:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'XLNet with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("XLNet — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'XLNet addresses limitations of both BERT and GPT.',
           table: {
-            headers: ['Aspect', 'BERT', 'GPT', 'XLNet'],
+            headers: [
+              'Aspect',
+              'BERT',
+              'GPT',
+              'XLNet'
+            ],
             rows: [
-              ['Context', 'Bidirectional (masked)', 'Unidirectional', 'Bidirectional via permutation'],
-              ['Pretrain objective', 'MLM (mask tokens)', 'Next-token prediction', 'Permutation LM'],
-              ['Masking', 'Uses [MASK]', 'No masking', 'No masking needed'],
-              ['Pretrain-finetune gap', 'Exists (mask absent at fine-tune)', 'None', 'None'],
-              ['Position encoding', 'Absolute', 'Absolute', 'Relative (Transformer-XL)'],
-              ['Long sequences', '512 tokens', '1024–2048', 'Up to thousands (segment recurrence)']
+              [
+                'Context',
+                'Bidirectional (masked)',
+                'Unidirectional',
+                'Bidirectional via permutation'
+              ],
+              [
+                'Pretrain objective',
+                'MLM (mask tokens)',
+                'Next-token prediction',
+                'Permutation LM'
+              ],
+              [
+                'Masking',
+                'Uses [MASK]',
+                'No masking',
+                'No masking needed'
+              ],
+              [
+                'Pretrain-finetune gap',
+                'Exists (mask absent at fine-tune)',
+                'None',
+                'None'
+              ],
+              [
+                'Position encoding',
+                'Absolute',
+                'Absolute',
+                'Relative (Transformer-XL)'
+              ],
+              [
+                'Long sequences',
+                '512 tokens',
+                '1024–2048',
+                'Up to thousands (segment recurrence)'
+              ]
             ]
           }
         },
@@ -482,10 +1047,18 @@ Two-stream attention:
             'Mistake 2: Using XLNet for very short sequences (fix: XLNet shines on longer texts where relative positions and permutation modeling add value)',
             'Mistake 3: Ignoring the two-stream attention complexity (fix: the query/content stream split is essential; incorrect implementation breaks permutation invariance)',
             'Mistake 4: Confusing permutation sampling with shuffled input (fix: inputs stay in original order; only the prediction order permutes)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'XLNet excels on tasks requiring deep contextual reasoning.',
           list: [
             'Reading comprehension: SQuAD and RACE benchmarks where bidirectional context is critical',
@@ -507,12 +1080,36 @@ Two-stream attention:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: How does XLNet achieve bidirectional context without masking?\nAns: It trains on all permutations of the prediction order, so each token learns to condition on every other position.',
-            'Q2: What is the pretrain-finetune discrepancy in BERT?\nAns: BERT sees [MASK] during pre-training but never during fine-tuning, creating a distribution mismatch.',
-            'Q3: What is two-stream attention in XLNet?\nAns: A content stream that sees all context tokens and a query stream that excludes the target token itself.'
+            `Q1: How does XLNet achieve bidirectional context without masking?
+Ans: It trains on all permutations of the prediction order, so each token learns to condition on every other position.`,
+            `Q2: What is the pretrain-finetune discrepancy in BERT?
+Ans: BERT sees [MASK] during pre-training but never during fine-tuning, creating a distribution mismatch.`,
+            `Q3: What is two-stream attention in XLNet?
+Ans: A content stream that sees all context tokens and a query stream that excludes the target token itself.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>XLNet</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — XLNet")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -522,7 +1119,7 @@ Two-stream attention:
       sections: [
         {
           heading: 'What is BART?',
-          text: 'BART is a denoising autoencoder built with a seq2seq architecture. It combines BERT\'s bidirectional encoder with GPT\'s left-to-right decoder, making it exceptionally flexible for both understanding and generation tasks.',
+          text: `BART is a denoising autoencoder built with a seq2seq architecture. It combines BERT's bidirectional encoder with GPT's left-to-right decoder, making it exceptionally flexible for both understanding and generation tasks.`,
           list: [
             'Encoder is bidirectional (like BERT) — sees full corrupted input',
             'Decoder is autoregressive (like GPT) — generates left-to-right',
@@ -530,6 +1127,26 @@ Two-stream attention:
             'Supports flexible noise functions: token masking, deletion, permutation, infilling',
             'Achieves strong results on summarization, translation, and dialogue'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            `<p>BART is a denoising autoencoder built with a seq2seq architecture. It combines BERT's bidirectional encoder with GPT's left-to-right decoder, making it exceptionally flexible for both understanding and generation tasks. Start with intuition: ask what question this concept answers before memorizing formulas.</p>`,
+            `<p>Technically, BART is a denoising autoencoder built with a seq2seq architecture. It combines BERT's bidirectional encoder with GPT's left-to-right decoder, making it exceptionally flexible for both understanding and generation tasks. Encoder is bidirectional (like BERT) — sees full corrupted input Decoder is autoregressive (like GPT) — generates left-to-right Pre-training objective: reconstruct original text from corrupted versions Supports flexible noise functions: token masking, deletion, permutation, infilling Achieves strong results on summarization, translation, and dialogue</p>`,
+            '<p>You use bart when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — BART
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: BART sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -565,17 +1182,78 @@ Architecture:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'BART with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("BART — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'BART sits between BERT and GPT in capability.',
           table: {
-            headers: ['Aspect', 'BERT', 'GPT', 'BART'],
+            headers: [
+              'Aspect',
+              'BERT',
+              'GPT',
+              'BART'
+            ],
             rows: [
-              ['Architecture', 'Encoder-only', 'Decoder-only', 'Encoder-decoder'],
-              ['Encoder', 'Bidirectional', 'None', 'Bidirectional'],
-              ['Decoder', 'None', 'Autoregressive', 'Autoregressive'],
-              ['Pre-training', 'MLM + NSP', 'Next-token', 'Denoising autoencoder'],
-              ['Best for', 'Understanding', 'Generation', 'Both (seq2seq tasks)'],
-              ['Fine-tuning', 'Add classification head', 'Prompting', 'End-to-end seq2seq']
+              [
+                'Architecture',
+                'Encoder-only',
+                'Decoder-only',
+                'Encoder-decoder'
+              ],
+              [
+                'Encoder',
+                'Bidirectional',
+                'None',
+                'Bidirectional'
+              ],
+              [
+                'Decoder',
+                'None',
+                'Autoregressive',
+                'Autoregressive'
+              ],
+              [
+                'Pre-training',
+                'MLM + NSP',
+                'Next-token',
+                'Denoising autoencoder'
+              ],
+              [
+                'Best for',
+                'Understanding',
+                'Generation',
+                'Both (seq2seq tasks)'
+              ],
+              [
+                'Fine-tuning',
+                'Add classification head',
+                'Prompting',
+                'End-to-end seq2seq'
+              ]
             ]
           }
         },
@@ -586,10 +1264,18 @@ Architecture:
             'Mistake 2: Applying BART with single-sentence corruption only (fix: leverage diverse noising — permutation, infilling, rotation — for better generalization)',
             'Mistake 3: Treating encoder and decoder as independent (fix: the decoder cross-attends to encoder output; both must be trained jointly)',
             'Mistake 4: Ignoring the text infilling capability (fix: BART can fill gaps by predicting multiple tokens at masked spans, useful for completion tasks)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'BART excels at sequence-to-sequence tasks.',
           list: [
             'Text summarization: CNN/DailyMail and XSum benchmarks use BART to compress long articles',
@@ -611,12 +1297,36 @@ Architecture:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: How does BART differ architecturally from BERT and GPT?\nAns: BART has both a bidirectional encoder (like BERT) and an autoregressive decoder (like GPT), making it a seq2seq model.',
-            'Q2: What is BART\'s pre-training objective?\nAns: Denoising autoencoder — corrupt input text and train the decoder to reconstruct the original.',
-            'Q3: When should you prefer BART over BERT?\nAns: When the task involves text generation or sequence transformation (summarization, translation) rather than pure classification.'
+            `Q1: How does BART differ architecturally from BERT and GPT?
+Ans: BART has both a bidirectional encoder (like BERT) and an autoregressive decoder (like GPT), making it a seq2seq model.`,
+            `Q2: What is BART's pre-training objective?
+Ans: Denoising autoencoder — corrupt input text and train the decoder to reconstruct the original.`,
+            `Q3: When should you prefer BART over BERT?
+Ans: When the task involves text generation or sequence transformation (summarization, translation) rather than pure classification.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>BART</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — BART")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -634,6 +1344,26 @@ Architecture:
             'Especially valuable for low-resource languages with limited labeled data',
             'Common architectures: mBERT, XLM, XLM-RoBERTa, mBART, mT5'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Multilingual models are trained on data from many languages simultaneously, sharing parameters across languages. They enable cross-lingual transfer — a model trained on one language can often perform well on others without language-specific training data. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Multilingual models are trained on data from many languages simultaneously, sharing parameters across languages. They enable cross-lingual transfer — a model trained on one language can often perform well on others without language-specific training data. Trained on parallel or monolingual corpora from dozens to hundreds of languages Shared vocabulary and weights enable transfer between languages Zero-shot cross-lingual transfer reduces annotation costs Especially valuable for low-resource languages with limited labeled data Common architectures: mBERT, XLM, XLM-RoBERTa, mBART, mT5</p>',
+            '<p>You use multilingual models when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Multilingual Models
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Multilingual Models sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -663,16 +1393,78 @@ Why it works:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Multilingual Models with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("Multilingual Models — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Different multilingual models vary in architecture and training approach.',
           table: {
-            headers: ['Model', 'Languages', 'Architecture', 'Training Approach', 'Best For'],
+            headers: [
+              'Model',
+              'Languages',
+              'Architecture',
+              'Training Approach',
+              'Best For'
+            ],
             rows: [
-              ['mBERT', '104', 'BERT-base', 'Shared Wikipedia', 'Cross-lingual understanding'],
-              ['XLM', '100', 'BERT-like', 'MLM + TLM', 'Translation + NLU'],
-              ['XLM-R', '100', 'RoBERTa', 'CC-100 corpus', 'Better cross-lingual NLU'],
-              ['mBART', '25', 'BART', 'Denoising autoencoder', 'Multilingual generation'],
-              ['mT5', '101', 'T5', 'Span corruption', 'Multilingual translation']
+              [
+                'mBERT',
+                '104',
+                'BERT-base',
+                'Shared Wikipedia',
+                'Cross-lingual understanding'
+              ],
+              [
+                'XLM',
+                '100',
+                'BERT-like',
+                'MLM + TLM',
+                'Translation + NLU'
+              ],
+              [
+                'XLM-R',
+                '100',
+                'RoBERTa',
+                'CC-100 corpus',
+                'Better cross-lingual NLU'
+              ],
+              [
+                'mBART',
+                '25',
+                'BART',
+                'Denoising autoencoder',
+                'Multilingual generation'
+              ],
+              [
+                'mT5',
+                '101',
+                'T5',
+                'Span corruption',
+                'Multilingual translation'
+              ]
             ]
           }
         },
@@ -683,10 +1475,18 @@ Why it works:
             'Mistake 2: Using English tokenizers for multilingual text (fix: use language-specific or jointly trained tokenizers like SentencePiece to avoid character explosion)',
             'Mistake 3: Ignoring language imbalance in training data (fix: English dominates most corpora; upsample low-resource languages or use balanced sampling)',
             'Mistake 4: Assuming all multilingual models are encoder-only (fix: mBART and mT5 are encoder-decoder and excel at generation/translation tasks)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Multilingual models reduce the need for language-specific annotation.',
           list: [
             'Global customer support: one model handles tickets in English, Spanish, German, and Japanese',
@@ -708,12 +1508,36 @@ Why it works:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: How does a multilingual model perform zero-shot transfer?\nAns: Joint pre-training aligns embedding spaces across languages, so a classifier trained on English representations generalizes to similar representations in other languages.',
-            'Q2: What is the main limitation of cross-lingual transfer?\nAns: Performance degrades for low-resource languages and language pairs with little structural similarity.',
-            'Q3: When should you use mBART instead of mBERT?\nAns: When the task involves text generation or translation across languages, since mBART has an autoregressive decoder.'
+            `Q1: How does a multilingual model perform zero-shot transfer?
+Ans: Joint pre-training aligns embedding spaces across languages, so a classifier trained on English representations generalizes to similar representations in other languages.`,
+            `Q2: What is the main limitation of cross-lingual transfer?
+Ans: Performance degrades for low-resource languages and language pairs with little structural similarity.`,
+            `Q3: When should you use mBART instead of mBERT?
+Ans: When the task involves text generation or translation across languages, since mBART has an autoregressive decoder.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Multilingual Models</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Multilingual Models")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -723,7 +1547,7 @@ Why it works:
       sections: [
         {
           heading: 'What are Indian Language LLMs?',
-          text: 'Indian language LLMs are multilingual models specifically pre-trained on Indic languages. They address the unique challenges of India\'s linguistic diversity — 22 scheduled languages, multiple scripts, code-switching, and limited digital corpora for many languages.',
+          text: `Indian language LLMs are multilingual models specifically pre-trained on Indic languages. They address the unique challenges of India's linguistic diversity — 22 scheduled languages, multiple scripts, code-switching, and limited digital corpora for many languages.`,
           list: [
             'MuRIL (Google): 17 Indian languages + English, BERT-like, 236M parameters',
             'IndicBERT (AI4Bharat): 12 Indic languages, compact and efficient',
@@ -731,6 +1555,26 @@ Why it works:
             'Sarvam-1: 1B parameter model focused on Indian languages',
             'Challenges: code-switching (Hinglish), script diversity, low-resource settings'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            `<p>Indian language LLMs are multilingual models specifically pre-trained on Indic languages. They address the unique challenges of India's linguistic diversity — 22 scheduled languages, multiple scripts, code-switching, and limited digital corpora for many languages. Start with intuition: ask what question this concept answers before memorizing formulas.</p>`,
+            `<p>Technically, Indian language LLMs are multilingual models specifically pre-trained on Indic languages. They address the unique challenges of India's linguistic diversity — 22 scheduled languages, multiple scripts, code-switching, and limited digital corpora for many languages. MuRIL (Google): 17 Indian languages + English, BERT-like, 236M parameters IndicBERT (AI4Bharat): 12 Indic languages, compact and efficient BharatGPT (OlaKrutrim): Indic-centric large language model Sarvam-1: 1B parameter model focused on Indian languages Challenges: code-switching (Hinglish), script diversity, low-resource settings</p>`,
+            '<p>You use llms for indian languages when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — LLMs for Indian Languages
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: LLMs for Indian Languages sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -767,16 +1611,78 @@ Code-switching example:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'LLMs for Indian Languages with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("LLMs for Indian Languages — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Indian language models differ in scale, focus, and accessibility.',
           table: {
-            headers: ['Model', 'Languages', 'Parameters', 'Focus', 'Accessibility'],
+            headers: [
+              'Model',
+              'Languages',
+              'Parameters',
+              'Focus',
+              'Accessibility'
+            ],
             rows: [
-              ['MuRIL', '17 + English', '236M', 'Cross-lingual understanding', 'Open (Google)'],
-              ['IndicBERT', '12', 'Base: 34M', 'Efficiency + low-resource', 'Open (AI4Bharat)'],
-              ['Bharam-1 / Sarvam-1', '10+', '1B', 'Indic generation', 'API access'],
-              ['BharatGPT', 'Multiple', 'Unknown', 'Indic-centric LLM', 'Commercial'],
-              ['mBERT', '104 (incl. Indic)', '110M', 'General multilingual', 'Open']
+              [
+                'MuRIL',
+                '17 + English',
+                '236M',
+                'Cross-lingual understanding',
+                'Open (Google)'
+              ],
+              [
+                'IndicBERT',
+                '12',
+                'Base: 34M',
+                'Efficiency + low-resource',
+                'Open (AI4Bharat)'
+              ],
+              [
+                'Bharam-1 / Sarvam-1',
+                '10+',
+                '1B',
+                'Indic generation',
+                'API access'
+              ],
+              [
+                'BharatGPT',
+                'Multiple',
+                'Unknown',
+                'Indic-centric LLM',
+                'Commercial'
+              ],
+              [
+                'mBERT',
+                '104 (incl. Indic)',
+                '110M',
+                'General multilingual',
+                'Open'
+              ]
             ]
           }
         },
@@ -787,16 +1693,24 @@ Code-switching example:
             'Mistake 2: Ignoring code-switching in training data (fix: Indian users frequently mix languages; models must see Hinglish, Tanglish, etc. during training)',
             'Mistake 3: Assuming all Indian languages have equal digital resources (fix: Hindi and Tamil have more data than Odia or Assamese; use upsampling or augmentation)',
             'Mistake 4: Using Latin transliteration instead of native scripts (fix: native script models perform better; transliteration loses orthographic information)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Indian language NLP powers local digital services.',
           list: [
             'Government portals: translating schemes and forms into regional languages',
             'Agricultural apps: providing crop advice in Kannada, Marathi, and Telugu',
             'Financial inclusion: chatbots in Hindi and Bengali for banking services',
-            'Education: generating explanations and quizzes in students\' native languages'
+            `Education: generating explanations and quizzes in students' native languages`
           ]
         },
         {
@@ -812,12 +1726,36 @@ Code-switching example:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why is code-switching a unique challenge for Indian language NLP?\nAns: Speakers frequently mix Hindi + English, Tamil + English, etc. within sentences, requiring models to handle multiple scripts and grammars simultaneously.',
-            'Q2: What makes MuRIL different from general multilingual BERT?\nAns: MuRIL is specifically trained on 17 Indian languages with parallel Bible corpus for better cross-lingual alignment within the Indian language family.',
-            'Q3: Why should you prefer native script over Latin transliteration?\nAns: Native scripts preserve orthographic, morphological, and phonetic information that transliteration strips away, leading to better model performance.'
+            `Q1: Why is code-switching a unique challenge for Indian language NLP?
+Ans: Speakers frequently mix Hindi + English, Tamil + English, etc. within sentences, requiring models to handle multiple scripts and grammars simultaneously.`,
+            `Q2: What makes MuRIL different from general multilingual BERT?
+Ans: MuRIL is specifically trained on 17 Indian languages with parallel Bible corpus for better cross-lingual alignment within the Indian language family.`,
+            `Q3: Why should you prefer native script over Latin transliteration?
+Ans: Native scripts preserve orthographic, morphological, and phonetic information that transliteration strips away, leading to better model performance.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>LLMs for Indian Languages</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — LLMs for Indian Languages")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

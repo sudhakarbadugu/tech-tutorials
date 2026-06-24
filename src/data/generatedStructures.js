@@ -1,5 +1,5 @@
 // Auto-generated from rewritten modules — do not edit manually
-// Generated: 2026-06-23T23:52:04.546Z
+// Generated: 2026-06-24T02:40:54.683Z
 
 export const aiStructure = {
   module1: {
@@ -196,150 +196,102 @@ export const cvStructure = {
     ]
   },
   module2: {
-    title: 'Module 2: Feature Detection, Description & Recognition',
+    title: 'Module 2: Image Processing',
     topics: [
       {
-        id: 'corner-detection',
-        title: 'Corner & Interest Point Detection'
+        id: 'geometric-ops',
+        title: 'Geometric Operations (Resize, Crop, Rotate)'
       },
       {
-        id: 'blob-detection',
-        title: 'Blob Detection'
+        id: 'color-conversions',
+        title: 'Color Space Conversions'
       },
       {
-        id: 'sift',
-        title: 'SIFT — Scale-Invariant Feature Transform'
+        id: 'smoothing-sharpening',
+        title: 'Smoothing & Sharpening'
       },
       {
-        id: 'hog',
-        title: 'HOG — Histogram of Oriented Gradients'
+        id: 'histogram-equalization',
+        title: 'Histogram Equalization'
       },
       {
-        id: 'feature-matching',
-        title: 'Feature Matching'
+        id: 'morphology',
+        title: 'Morphological Operations'
       },
       {
-        id: 'image-segmentation',
-        title: 'Image Segmentation'
-      },
-      {
-        id: 'object-detection-cv',
-        title: 'Object Detection'
-      },
-      {
-        id: 'face-detection-cv',
-        title: 'Face Detection'
-      },
-      {
-        id: 'image-classification',
-        title: 'Image Classification'
-      },
-      {
-        id: 'image-retrieval',
-        title: 'Image Retrieval'
+        id: 'canny-edge',
+        title: 'Canny Edge Detection'
       }
     ]
   },
   module3: {
-    title: 'Module 3: Stereo Vision, Motion & 3D Reconstruction',
+    title: 'Module 3: Feature Detection & Matching',
     topics: [
       {
-        id: 'stereo-vision-cv',
-        title: 'Stereo Vision'
+        id: 'harris-corners',
+        title: 'Harris Corner Detection'
       },
       {
-        id: 'motion-estimation-cv',
-        title: 'Motion Estimation'
+        id: 'sift-orb',
+        title: 'SIFT, SURF & ORB Features'
       },
       {
-        id: 'optical-flow',
-        title: 'Optical Flow'
+        id: 'feature-matching',
+        title: 'Feature Matching with RANSAC'
       },
       {
-        id: 'video-analysis',
-        title: 'Video Analysis'
+        id: 'panorama-stitching',
+        title: 'Panorama Stitching'
       },
       {
-        id: 'action-recognition-cv',
-        title: 'Action Recognition'
-      },
-      {
-        id: 'image-stitching-cv',
-        title: 'Image Stitching'
-      },
-      {
-        id: 'panorama',
-        title: 'Panoramas'
-      },
-      {
-        id: 'photogrammetry-cv',
-        title: 'Photogrammetry'
-      },
-      {
-        id: '3d-reconstruction',
-        title: '3D Reconstruction'
-      },
-      {
-        id: 'depth-estimation-cv',
-        title: 'Depth Estimation'
+        id: 'template-matching',
+        title: 'Template Matching'
       }
     ]
   },
   module4: {
-    title: 'Module 4: 3D Vision & Applications',
+    title: 'Module 4: Object Detection',
     topics: [
       {
-        id: 'camera-calibration',
-        title: 'Camera Calibration'
+        id: 'hog-svm-detection',
+        title: 'Classical Detection (HOG + SVM)'
       },
       {
-        id: 'epipolar-geometry',
-        title: 'Epipolar Geometry'
+        id: 'rcnn-family',
+        title: 'R-CNN Family (Fast & Faster R-CNN)'
       },
       {
-        id: 'structure-from-motion',
-        title: 'Structure from Motion'
+        id: 'yolo-detection',
+        title: 'YOLO Architecture & Inference'
       },
       {
-        id: 'slam',
-        title: 'SLAM'
-      },
-      {
-        id: 'visual-odometry',
-        title: 'Visual Odometry'
-      },
-      {
-        id: 'augmented-reality',
-        title: 'Augmented Reality'
-      },
-      {
-        id: 'autonomous-driving',
-        title: 'Autonomous Driving'
-      },
-      {
-        id: 'medical-imaging-cv',
-        title: 'Medical Imaging'
+        id: 'fine-tune-detection',
+        title: 'Fine-Tuning & mAP Evaluation'
       }
     ]
   },
   module5: {
-    title: 'Module 5: Advanced CV & Deployment',
+    title: 'Module 5: Advanced Computer Vision',
     topics: [
       {
-        id: '3d-reconstruction',
-        title: '3d Reconstruction'
+        id: 'semantic-segmentation',
+        title: 'Semantic Segmentation (U-Net)'
       },
       {
-        id: 'video-analysis',
-        title: 'Video Analysis'
+        id: 'instance-segmentation',
+        title: 'Instance Segmentation (Mask R-CNN)'
       },
       {
-        id: 'cv-deployment',
-        title: 'Cv Deployment'
+        id: 'optical-flow',
+        title: 'Optical Flow (Lucas-Kanade)'
       },
       {
-        id: 'cv-ethics',
-        title: 'Cv Ethics'
+        id: 'image-generation',
+        title: 'Image Generation (VAE & Diffusion)'
+      },
+      {
+        id: 'transfer-learning',
+        title: 'Transfer Learning with torchvision'
       }
     ]
   }
@@ -347,11 +299,11 @@ export const cvStructure = {
 
 export const dlStructure = {
   module1: {
-    title: 'Module 1: Deep Learning Fundamentals',
+    title: 'Module 1: Foundations of Deep Learning',
     topics: [
       {
         id: 'intro-dl',
-        title: 'Intro Dl'
+        title: 'Introduction to Deep Learning'
       },
       {
         id: 'perceptron',
@@ -366,144 +318,112 @@ export const dlStructure = {
         title: 'Backpropagation'
       },
       {
-        id: 'gradient-descent',
-        title: 'Gradient Descent'
-      },
-      {
         id: 'loss-functions',
         title: 'Loss Functions'
-      },
-      {
-        id: 'optimization',
-        title: 'Optimization'
       }
     ]
   },
   module2: {
-    title: 'Module 2: Convolutional Neural Networks',
+    title: 'Module 2: Training Deep Networks',
     topics: [
       {
-        id: 'cnn',
-        title: 'Convolutional Neural Network (CNN)'
+        id: 'gradient-descent',
+        title: 'Gradient Descent'
       },
       {
-        id: 'cnn-architectures',
-        title: 'Cnn Architectures'
+        id: 'advanced-optimizers',
+        title: 'Advanced Optimizers'
       },
       {
-        id: 'transfer-learning',
-        title: 'Transfer Learning'
+        id: 'weight-initialization',
+        title: 'Weight Initialization'
       },
       {
-        id: 'object-detection',
-        title: 'Object Detection'
+        id: 'normalization-and-regularization',
+        title: 'Normalization & Regularization'
       },
       {
-        id: 'segmentation',
-        title: 'Segmentation'
+        id: 'learning-rate-scheduling',
+        title: 'Learning Rate Scheduling'
+      },
+      {
+        id: 'debugging-training',
+        title: 'Debugging & Distributed Training'
       }
     ]
   },
   module3: {
-    title: 'Module 3: Advanced CNNs & Model Optimization',
+    title: 'Module 3: Convolutional Neural Networks',
     topics: [
       {
-        id: 'cnn-advanced',
-        title: 'Cnn Advanced'
+        id: 'convolution-arithmetic',
+        title: 'Convolution Arithmetic'
+      },
+      {
+        id: 'lenet-alexnet-vgg',
+        title: 'LeNet, AlexNet & VGG'
       },
       {
         id: 'resnet',
         title: 'ResNet'
       },
       {
-        id: 'inception',
-        title: 'Inception'
+        id: 'transfer-learning-cnn',
+        title: 'Transfer Learning with torchvision'
       },
       {
-        id: 'densenet',
-        title: 'DenseNet'
-      },
-      {
-        id: 'efficientnet',
-        title: 'Efficientnet'
-      },
-      {
-        id: 'neural-architecture-search',
-        title: 'Neural Architecture Search'
-      },
-      {
-        id: 'transfer-learning-dl',
-        title: 'Transfer Learning Dl'
-      },
-      {
-        id: 'fine-tuning',
-        title: 'Fine Tuning'
-      },
-      {
-        id: 'quantization',
-        title: 'Quantization'
-      },
-      {
-        id: 'pruning',
-        title: 'Pruning'
+        id: 'data-augmentation',
+        title: 'Data Augmentation'
       }
     ]
   },
   module4: {
-    title: 'Module 4: Generative & Advanced Architectures',
+    title: 'Module 4: Recurrent Neural Networks',
     topics: [
       {
-        id: 'object-detection-dl',
-        title: 'Object Detection Dl'
+        id: 'rnn-basics',
+        title: 'RNN Basics'
       },
       {
-        id: 'semantic-segmentation',
-        title: 'Semantic Segmentation'
+        id: 'lstm-gru',
+        title: 'LSTM & GRU'
       },
       {
-        id: 'instance-segmentation',
-        title: 'Instance Segmentation'
+        id: 'text-generation',
+        title: 'Text Generation'
       },
       {
-        id: 'generative-models',
-        title: 'Generative Models'
+        id: 'time-series-forecasting',
+        title: 'Time Series Forecasting'
       },
       {
-        id: 'diffusion-models',
-        title: 'Diffusion Models'
-      },
-      {
-        id: 'normalizing-flows',
-        title: 'Normalizing Flows'
-      },
-      {
-        id: 'graph-neural-networks',
-        title: 'Graph Neural Networks'
-      },
-      {
-        id: 'capsule-networks',
-        title: 'Capsule Networks'
-      },
-      {
-        id: 'self-supervised-learning',
-        title: 'Self Supervised Learning'
-      },
-      {
-        id: 'contrastive-learning',
-        title: 'Contrastive Learning'
+        id: 'attention-intro',
+        title: 'Introduction to Attention'
       }
     ]
   },
   module5: {
-    title: 'Module 5: Ethics & Future of Deep Learning',
+    title: 'Module 5: Advanced Architectures',
     topics: [
       {
-        id: 'ethics-dl',
-        title: 'Ethics Dl'
+        id: 'transformers-from-scratch',
+        title: 'Transformers from Scratch'
       },
       {
-        id: 'future-dl',
-        title: 'Future Dl'
+        id: 'autoencoders',
+        title: 'Autoencoders'
+      },
+      {
+        id: 'gans',
+        title: 'Generative Adversarial Networks'
+      },
+      {
+        id: 'modern-regularization',
+        title: 'Modern Regularization'
+      },
+      {
+        id: 'scalable-training',
+        title: 'Scalable & Distributed Training'
       }
     ]
   }
@@ -511,27 +431,27 @@ export const dlStructure = {
 
 export const imagingStructure = {
   module1: {
-    title: 'Module 1: Imaging Foundations',
+    title: 'Module 1: Foundations of Imaging',
     topics: [
       {
-        id: 'imaging-basics',
-        title: 'Imaging Basics'
+        id: 'image-types-representation',
+        title: 'Image Types & Representation'
       },
       {
-        id: 'image-formation',
-        title: 'Image Formation'
+        id: 'image-formats-io',
+        title: 'Image Formats & I/O'
       },
       {
-        id: 'camera-models',
-        title: 'Camera Models'
+        id: 'sampling-quantization-resolution',
+        title: 'Sampling, Quantization & Resolution'
       },
       {
-        id: 'image-sensors',
-        title: 'Image Sensors'
+        id: 'medical-imaging-modalities',
+        title: 'Medical Imaging Modalities'
       },
       {
-        id: 'sampling-quantization',
-        title: 'Sampling & Quantization'
+        id: 'imaging-pipeline-overview',
+        title: 'Imaging Pipeline Overview'
       }
     ]
   },
@@ -663,163 +583,131 @@ export const imagingStructure = {
 
 export const llmStructure = {
   module1: {
-    title: 'Module 1: Foundations of Language Models',
+    title: 'Module 1: Foundations of Large Language Models',
     topics: [
       {
-        id: 'intro',
-        title: 'Introduction to Language Models'
+        id: 'evolution',
+        title: 'Evolution: N-gram to RNN to Transformer to GPT/BERT'
       },
       {
-        id: 'neural-representation',
-        title: 'Neural Representations for Language'
+        id: 'scaling-laws',
+        title: 'Scaling Laws and Emergent Abilities'
       },
       {
-        id: 'embedding',
-        title: 'Word Embeddings'
+        id: 'tokenization',
+        title: 'Tokenization Deep Dive (BPE, WordPiece, SentencePiece)'
       },
       {
-        id: 'ngram',
-        title: 'N-gram Models'
+        id: 'context-window',
+        title: 'Context Window and Attention Complexity'
       },
       {
-        id: 'rnn',
-        title: 'Recurrent Neural Networks'
-      },
-      {
-        id: 'lstm',
-        title: 'LSTM and GRU'
-      },
-      {
-        id: 'attention',
-        title: 'Attention Mechanism'
+        id: 'foundations-recap',
+        title: 'Foundations Recap: Representations, Embeddings, Attention'
       }
     ]
   },
   module2: {
-    title: 'Module 2: Neural Language Models & Word Representations',
+    title: 'Module 2: Transformer Architecture Deep Dive',
     topics: [
       {
-        id: 'ngram-language-model',
-        title: 'N-gram Language Models'
+        id: 'self-attention',
+        title: 'Self-Attention: Query, Key, Value with Matrix Math'
       },
       {
-        id: 'markov-chains',
-        title: 'Markov Chains for Language'
+        id: 'multi-head-attention',
+        title: 'Multi-Head Attention: Parallel Attention Heads'
       },
       {
-        id: 'word2vec',
-        title: 'Word2Vec'
+        id: 'norm-residual-ffn',
+        title: 'Layer Normalization, Residual Connections, and the Feed-Forward Network'
       },
       {
-        id: 'glove',
-        title: 'GloVe'
+        id: 'positional-encodings',
+        title: 'Positional Encodings: Sinusoidal, Learned, and RoPE'
       },
       {
-        id: 'fasttext',
-        title: 'FastText'
+        id: 'gpt-architecture',
+        title: 'The GPT Block Stack and Full Forward Pass'
       },
       {
-        id: 'transformer-architecture',
-        title: 'Transformer Architecture'
-      },
-      {
-        id: 'bert-gpt',
-        title: 'BERT and GPT'
+        id: 'mini-gpt-pytorch',
+        title: 'Building a Mini-GPT from Scratch in PyTorch'
       }
     ]
   },
   module3: {
-    title: 'Module 3: Training, Fine-Tuning & Inference',
+    title: 'Module 3: Training & Fine-Tuning LLMs',
     topics: [
       {
-        id: 'fine-tuning',
-        title: 'Fine-Tuning Pre-trained Models'
+        id: 'pretraining-objectives',
+        title: 'Pre-Training Objectives: Autoregressive and Masked'
       },
       {
-        id: 'prompt-engineering',
-        title: 'Prompt Engineering'
+        id: 'fine-tuning-strategies',
+        title: 'Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning'
       },
       {
         id: 'instruction-tuning',
-        title: 'Instruction Tuning'
+        title: 'Instruction Tuning and FLAN'
       },
       {
         id: 'rlhf',
-        title: 'RLHF: Reinforcement Learning from Human Feedback'
+        title: 'RLHF: Reward Model + PPO'
       },
       {
-        id: 'model-compression',
-        title: 'Model Compression'
-      },
-      {
-        id: 'quantization',
-        title: 'Quantization'
-      },
-      {
-        id: 'distillation',
-        title: 'Knowledge Distillation'
-      },
-      {
-        id: 'pruning',
-        title: 'Model Pruning'
-      },
-      {
-        id: 'efficient-inference',
-        title: 'Efficient Inference'
-      },
-      {
-        id: 'llm-evaluation',
-        title: 'LLM Evaluation'
+        id: 'dpo',
+        title: 'DPO: Direct Preference Optimization'
       }
     ]
   },
   module4: {
-    title: 'Module 4: Advanced Reasoning, Prompting & Agentic Systems',
+    title: 'Module 4: Prompt Engineering & Applications',
     topics: [
       {
-        id: 'chain-of-thought',
-        title: 'Chain-of-Thought Prompting'
+        id: 'prompting-basics',
+        title: 'Zero-Shot, Few-Shot, and Chain-of-Thought'
       },
       {
-        id: 'prompt-engineering',
-        title: 'Prompt Engineering'
+        id: 'react-pattern',
+        title: 'The ReAct Pattern: Reasoning + Acting'
       },
       {
-        id: 'retrieval-augmented-generation',
-        title: 'Retrieval-Augmented Generation'
+        id: 'self-consistency',
+        title: 'Self-Consistency Decoding'
       },
       {
-        id: 'agents-and-tools',
-        title: 'Agents and Tools'
+        id: 'tree-of-thoughts',
+        title: 'Tree of Thoughts'
+      },
+      {
+        id: 'function-calling-agent',
+        title: 'Building an Agent with Function Calling'
       }
     ]
   },
   module5: {
-    title: 'Module 5: Advanced LLM Topics',
+    title: 'Module 5: LLM Systems & Deployment',
     topics: [
       {
-        id: 'llm-evaluation',
-        title: 'LLM Evaluation'
+        id: 'quantization',
+        title: 'Quantization: INT8, INT4, GPTQ, AWQ'
       },
       {
-        id: 'multimodal-llms',
-        title: 'Multimodal LLMs'
+        id: 'vllm-serving',
+        title: 'vLLM for High-Throughput Serving'
       },
       {
-        id: 'efficient-llms',
-        title: 'Efficient LLMs'
+        id: 'model-merging',
+        title: 'Model Merging with MergeKit'
       },
       {
-        id: 'llm-safety',
-        title: 'LLM Safety & Alignment'
+        id: 'multi-gpu-inference',
+        title: 'Multi-GPU Inference: Tensor and Pipeline Parallelism'
       },
       {
-        id: 'llm-fine-tuning',
-        title: 'Advanced Fine-Tuning'
-      },
-      {
-        id: 'future-llms',
-        title: 'Future of LLMs'
+        id: 'safety-alignment',
+        title: 'Safety and Alignment Considerations'
       }
     ]
   }
@@ -827,127 +715,135 @@ export const llmStructure = {
 
 export const mlalgoStructure = {
   module1: {
-    title: 'Module 1: Introduction and Analysis of ML Algorithms',
+    title: 'Module 1: Foundations of ML',
     topics: [
       {
-        id: 'intro-mlalgo',
-        title: 'Introduction to ML Algorithms'
+        id: 'intro-ml-foundations',
+        title: 'Introduction to ML Foundations'
       },
       {
-        id: 'algorithm-analysis',
-        title: 'Algorithm Analysis'
+        id: 'bias-variance-tradeoff',
+        title: 'Bias-Variance Tradeoff'
       },
       {
-        id: 'time-complexity',
-        title: 'Time Complexity'
+        id: 'cross-validation-strategies',
+        title: 'Cross-Validation Strategies'
       },
       {
-        id: 'space-complexity',
-        title: 'Space Complexity'
+        id: 'evaluation-metrics-overview',
+        title: 'Evaluation Metrics Overview'
       },
       {
-        id: 'big-o-notation',
-        title: 'Big-O Notation'
+        id: 'imbalanced-data-handling',
+        title: 'Imbalanced Data Handling'
       }
     ]
   },
   module2: {
-    title: 'Module 2: Design and Analysis of ML Algorithms',
+    title: 'Module 2: Supervised Learning — Classification',
     topics: [
       {
-        id: 'sorting-algorithms',
-        title: 'Sorting Algorithms'
+        id: 'logistic-regression',
+        title: 'Logistic Regression'
       },
       {
-        id: 'searching-algorithms',
-        title: 'Searching Algorithms'
+        id: 'support-vector-machines',
+        title: 'Support Vector Machines'
       },
       {
-        id: 'graph-algorithms',
-        title: 'Graph Algorithms'
+        id: 'k-nearest-neighbors',
+        title: 'K-Nearest Neighbors'
       },
       {
-        id: 'dynamic-programming',
-        title: 'Dynamic Programming'
+        id: 'naive-bayes',
+        title: 'Naive Bayes'
       },
       {
-        id: 'greedy-algorithms',
-        title: 'Greedy Algorithms'
+        id: 'decision-trees',
+        title: 'Decision Trees'
+      },
+      {
+        id: 'classification-metrics-deep-dive',
+        title: 'Classification Metrics Deep Dive'
+      },
+      {
+        id: 'churn-prediction-project',
+        title: 'Customer Churn Prediction Project'
       }
     ]
   },
   module3: {
-    title: 'Module 3: Algorithm Design Paradigms',
+    title: 'Module 3: Supervised Learning — Regression',
     topics: [
       {
-        id: 'divide-and-conquer',
-        title: 'Divide and Conquer'
+        id: 'linear-regression',
+        title: 'Linear Regression'
       },
       {
-        id: 'greedy-algorithms',
-        title: 'Greedy Algorithms'
+        id: 'polynomial-regression',
+        title: 'Polynomial Regression'
       },
       {
-        id: 'dynamic-programming',
-        title: 'Dynamic Programming'
+        id: 'ridge-lasso-elastic-net',
+        title: 'Ridge, Lasso & Elastic Net'
       },
       {
-        id: 'graph-algorithms',
-        title: 'Graph Algorithms'
+        id: 'regression-pipeline-eda',
+        title: 'Regression Pipeline & EDA'
       },
       {
-        id: 'string-algorithms',
-        title: 'String Algorithms'
+        id: 'house-price-prediction-project',
+        title: 'House Price Prediction Project'
       }
     ]
   },
   module4: {
-    title: 'Module 4: Advanced Algorithmic Techniques',
+    title: 'Module 4: Unsupervised Learning',
     topics: [
       {
-        id: 'advanced-graph-algorithms',
-        title: 'Advanced Graph Algorithms'
+        id: 'k-means-clustering',
+        title: 'K-Means Clustering'
       },
       {
-        id: 'network-flow',
-        title: 'Network Flow'
+        id: 'hierarchical-clustering',
+        title: 'Hierarchical Clustering'
       },
       {
-        id: 'linear-programming',
-        title: 'Linear Programming'
+        id: 'dbscan',
+        title: 'DBSCAN'
       },
       {
-        id: 'approximation-algorithms',
-        title: 'Approximation Algorithms'
+        id: 'principal-component-analysis',
+        title: 'Principal Component Analysis'
       },
       {
-        id: 'randomized-algorithms',
-        title: 'Randomized Algorithms'
+        id: 'gaussian-mixture-models',
+        title: 'Gaussian Mixture Models'
       }
     ]
   },
   module5: {
-    title: 'Module 5: Advanced Algorithms & Systems',
+    title: 'Module 5: Ensemble Methods & Model Selection',
     topics: [
       {
-        id: 'advanced-data-structures',
-        title: 'Advanced Data Structures'
+        id: 'bagging-boosting-stacking',
+        title: 'Bagging, Boosting & Stacking'
       },
       {
-        id: 'parallel-algorithms',
-        title: 'Parallel Algorithms'
+        id: 'random-forest',
+        title: 'Random Forest'
       },
       {
-        id: 'distributed-algorithms',
-        title: 'Distributed Algorithms'
+        id: 'gradient-boosting',
+        title: 'Gradient Boosting'
       },
       {
-        id: 'quantum-algorithms',
-        title: 'Quantum Algorithms'
+        id: 'xgboost-lightgbm',
+        title: 'XGBoost & LightGBM'
       },
       {
-        id: 'algorithm-engineering',
-        title: 'Algorithm Engineering'
+        id: 'hyperparameter-tuning-optuna',
+        title: 'Hyperparameter Tuning with Optuna'
       }
     ]
   }
@@ -955,247 +851,127 @@ export const mlalgoStructure = {
 
 export const multimodalStructure = {
   unit1: {
-    title: 'Unit 1: Foundations of Machine Learning',
+    title: 'Unit 1: Foundations of Multimodal ML',
     topics: [
       {
-        id: 'intro',
-        title: 'Intro'
+        id: 'intro-multimodal',
+        title: 'Introduction to Multimodal Machine Learning'
       },
       {
-        id: 'linear-models',
-        title: 'Linear Models'
+        id: 'modality-representations',
+        title: 'Modality Representations'
       },
       {
-        id: 'score-loss',
-        title: 'Score Loss'
+        id: 'alignment-challenge',
+        title: 'The Alignment Challenge'
       },
       {
-        id: 'regularization',
-        title: 'Regularization'
+        id: 'co-learning-zero-shot',
+        title: 'Co-learning and Zero-Shot Transfer'
       },
       {
-        id: 'neural-networks',
-        title: 'Neural Networks'
-      },
-      {
-        id: 'activation-functions',
-        title: 'Activation Functions'
-      },
-      {
-        id: 'backpropagation',
-        title: 'Backpropagation'
-      },
-      {
-        id: 'optimization',
-        title: 'Optimization'
-      },
-      {
-        id: 'svm',
-        title: 'Support Vector Machine (SVM)'
-      },
-      {
-        id: 'knn',
-        title: 'K-Nearest Neighbors (KNN)'
-      },
-      {
-        id: 'decision-trees',
-        title: 'Decision Trees'
-      },
-      {
-        id: 'ensemble-learning',
-        title: 'Ensemble Learning'
+        id: 'multimodal-datasets',
+        title: 'Multimodal Datasets'
       }
     ]
   },
   unit2: {
-    title: 'Unit 2: Multimodal Representations',
+    title: 'Unit 2: Vision-Language Models',
     topics: [
       {
-        id: 'distributional',
-        title: 'Distributional'
+        id: 'clip',
+        title: 'CLIP'
       },
       {
-        id: 'word-embedding',
-        title: 'Word Embedding'
+        id: 'zero-shot-classification',
+        title: 'Zero-Shot Classification'
       },
       {
-        id: 'elmo',
-        title: 'ELMo'
+        id: 'image-text-retrieval',
+        title: 'Image-Text Retrieval'
       },
       {
-        id: 'tokenization',
-        title: 'Tokenization'
+        id: 'llava',
+        title: 'LLaVA'
       },
       {
-        id: 'cnn',
-        title: 'Convolutional Neural Network (CNN)'
-      },
-      {
-        id: 'spectrograms',
-        title: 'Spectrograms'
-      },
-      {
-        id: 'autoencoders',
-        title: 'Autoencoders'
-      },
-      {
-        id: 'visual-semantic',
-        title: 'Visual Semantic'
-      },
-      {
-        id: 'cca',
-        title: 'Canonical Correlation Analysis (CCA)'
-      },
-      {
-        id: 'component-analysis',
-        title: 'Component Analysis'
-      },
-      {
-        id: 'multimodal-rep',
-        title: 'Multimodal Rep'
+        id: 'fine-tune-clip',
+        title: 'Fine-Tuning CLIP'
       }
     ]
   },
   unit3: {
-    title: 'Unit 3: Sequence Models & Attention',
+    title: 'Unit 3: Multimodal Fusion',
     topics: [
       {
-        id: 'language-models',
-        title: 'Language Models'
+        id: 'early-late-hybrid-fusion',
+        title: 'Early, Late, and Hybrid Fusion'
       },
       {
-        id: 'skip-thought',
-        title: 'Skip Thought'
+        id: 'attention-based-fusion',
+        title: 'Attention-Based Fusion'
       },
       {
-        id: 'n-grams',
-        title: 'N Grams'
+        id: 'cross-attention',
+        title: 'Cross-Attention Mechanism'
       },
       {
-        id: 'rnn',
-        title: 'Recurrent Neural Network (RNN)'
+        id: 'multimodal-sentiment-classifier',
+        title: 'Build a Multimodal Sentiment Classifier'
       },
       {
-        id: 'lstm',
-        title: 'Long Short-Term Memory (LSTM)'
+        id: 'fusion-best-practices',
+        title: 'Fusion Best Practices'
+      }
+    ]
+  },
+  unit4: {
+    title: 'Unit 4: Generative Multimodal Models',
+    topics: [
+      {
+        id: 'dalle-stable-diffusion',
+        title: 'Text-to-Image Models: DALL·E and Stable Diffusion'
       },
       {
-        id: 'gru',
-        title: 'Gated Recurrent Unit (GRU)'
+        id: 'text-to-image-pipeline',
+        title: 'Building a Text-to-Image Pipeline'
       },
       {
-        id: 'bptt',
-        title: 'Backpropagation Through Time (BPTT)'
+        id: 'multimodal-gpt4v',
+        title: 'Multimodal LLMs: GPT-4V and Beyond'
       },
       {
-        id: 'encoder-decoder',
-        title: 'Encoder Decoder'
+        id: 'whisper-audio-text',
+        title: 'Whisper: Audio-Text Foundation Model'
+      },
+      {
+        id: 'generation-evaluation',
+        title: 'Evaluating Generative Multimodal Models'
+      }
+    ]
+  },
+  unit5: {
+    title: 'Unit 5: Applications & Systems',
+    topics: [
+      {
+        id: 'visual-question-answering',
+        title: 'Visual Question Answering'
       },
       {
         id: 'image-captioning',
         title: 'Image Captioning'
       },
       {
-        id: 'encoder-decoder-architecture',
-        title: 'Encoder Decoder Architecture'
+        id: 'video-understanding',
+        title: 'Video Understanding'
       },
       {
-        id: 'attention-mechanism',
-        title: 'Attention Mechanism'
+        id: 'medical-multimodal-ai',
+        title: 'Medical Multimodal AI'
       },
       {
-        id: 'transformers',
-        title: 'Transformers'
-      },
-      {
-        id: 'multimodal-transformers',
-        title: 'Multimodal Transformers'
-      },
-      {
-        id: 'viseme',
-        title: 'Viseme'
-      },
-      {
-        id: 'dtw',
-        title: 'Dynamic Time Warping (DTW)'
-      }
-    ]
-  },
-  unit4: {
-    title: 'Unit 4: Multimodal Tasks & Fusion',
-    topics: [
-      {
-        id: 'transformer',
-        title: 'Transformer'
-      },
-      {
-        id: 'bert',
-        title: 'BERT'
-      },
-      {
-        id: 'vqa',
-        title: 'Visual Question Answering (VQA)'
-      },
-      {
-        id: 'retrieval',
-        title: 'Retrieval'
-      },
-      {
-        id: 'sentiment',
-        title: 'Sentiment'
-      },
-      {
-        id: 'speech-recognition',
-        title: 'Speech Recognition'
-      },
-      {
-        id: 'text-to-speech',
-        title: 'Text To Speech'
-      },
-      {
-        id: 'modality-spectrum',
-        title: 'Modality Spectrum'
-      },
-      {
-        id: 'representation-alignment',
-        title: 'Representation Alignment'
-      },
-      {
-        id: 'co-learning',
-        title: 'Co Learning'
-      },
-      {
-        id: 'fusion-approaches',
-        title: 'Fusion Approaches'
-      },
-      {
-        id: 'kernel-based-fusion',
-        title: 'Kernel Based Fusion'
-      },
-      {
-        id: 'factorial-hmm',
-        title: 'Factorial Hmm'
-      }
-    ]
-  },
-  unit5: {
-    title: 'Unit 5: Advanced Multimodal Applications',
-    topics: [
-      {
-        id: 'multimodalFusion',
-        title: 'MultimodalFusion'
-      },
-      {
-        id: 'crossModalRetrieval',
-        title: 'CrossModalRetrieval'
-      },
-      {
-        id: 'multimodalGeneration',
-        title: 'MultimodalGeneration'
-      },
-      {
-        id: 'multimodalDialogue',
-        title: 'MultimodalDialogue'
+        id: 'multimodal-systems-design',
+        title: 'Designing Multimodal Systems'
       }
     ]
   }
@@ -1359,123 +1135,123 @@ export const rlStructure = {
     topics: [
       {
         id: 'intro-rl',
-        title: 'Introduction to RL'
+        title: 'Introduction to RL & Agent-Environment Loop'
       },
       {
-        id: 'markov-decision',
-        title: 'Markov Decision Processes'
+        id: 'state-action-spaces',
+        title: 'Reward, State, and Action Spaces'
       },
       {
-        id: 'bellman-equation',
-        title: 'Bellman Equations'
+        id: 'gymnasium-walkthrough',
+        title: 'OpenAI Gymnasium API Walkthrough'
       },
       {
-        id: 'policy-iteration',
-        title: 'Policy Iteration'
+        id: 'random-vs-heuristic',
+        title: 'Building Random and Heuristic Agents'
       },
       {
-        id: 'value-iteration',
-        title: 'Value Iteration'
+        id: 'performance-comparison',
+        title: 'Performance Comparison and Visualization'
       }
     ]
   },
   module2: {
-    title: 'Module 2: Core RL Algorithms',
+    title: 'Module 2: Markov Decision Processes',
     topics: [
       {
-        id: 'q-learning',
-        title: 'Q-Learning'
+        id: 'mdp-formalism',
+        title: 'Formalizing Markov Decision Processes'
       },
       {
-        id: 'policy-gradient',
-        title: 'Policy Gradient Methods'
+        id: 'bellman-derivation',
+        title: 'Bellman Equation and Full Derivation'
       },
       {
-        id: 'actor-critic',
-        title: 'Actor-Critic Methods'
+        id: 'value-iteration',
+        title: 'Value Iteration with Step-by-Step Trace'
       },
       {
-        id: 'exploration-exploitation',
-        title: 'Exploration vs Exploitation'
+        id: 'policy-iteration',
+        title: 'Policy Iteration Algorithm'
+      },
+      {
+        id: 'solving-frozenlake',
+        title: 'FrozenLake Solution and Policy Visualization'
       }
     ]
   },
   module3: {
-    title: 'Module 3: Model-Free Learning',
+    title: 'Module 3: Model-Based Methods',
     topics: [
       {
-        id: 'mc-prediction',
-        title: 'Monte Carlo Prediction'
+        id: 'model-based-intro',
+        title: 'Introduction to Model-Based RL'
       },
       {
-        id: 'mc-control',
-        title: 'Monte Carlo Control'
+        id: 'dyna-q',
+        title: 'The Dyna-Q Architecture'
       },
       {
-        id: 'off-policy-mc',
-        title: 'Off-Policy Monte Carlo'
+        id: 'mcts',
+        title: 'Monte Carlo Tree Search (MCTS)'
       },
       {
-        id: 'td-prediction',
-        title: 'TD Prediction'
+        id: 'trajectory-opt-mpc',
+        title: 'Trajectory Optimization and MPC'
       },
       {
-        id: 'sarsa',
-        title: 'SARSA'
-      },
-      {
-        id: 'q-learning',
-        title: 'Q-Learning'
-      },
-      {
-        id: 'expected-sarsa',
-        title: 'Expected SARSA'
-      },
-      {
-        id: 'double-learning',
-        title: 'Double Learning'
+        id: 'model-based-challenges',
+        title: 'Model Bias and Sim-to-Real Challenges'
       }
     ]
   },
   module4: {
-    title: 'Module 4: Advanced RL Methods',
+    title: 'Module 4: Model-Free Methods',
     topics: [
       {
-        id: 'rl-algorithms',
-        title: 'Deep RL Algorithms'
+        id: 'td-learning',
+        title: 'Temporal Difference Learning'
       },
       {
-        id: 'model-based-rl',
-        title: 'Model-Based RL'
+        id: 'sarsa',
+        title: 'SARSA (On-Policy TD Control)'
       },
       {
-        id: 'imitation-learning',
-        title: 'Imitation Learning'
+        id: 'q-learning',
+        title: 'Q-Learning (Off-Policy TD Control)'
       },
       {
-        id: 'rl-challenges',
-        title: 'RL Challenges & Frontiers'
+        id: 'sarsa-vs-q',
+        title: 'SARSA vs Q-Learning Comparison'
+      },
+      {
+        id: 'cartpole-qlearning',
+        title: 'Solving CartPole with Tabular Q-Learning'
       }
     ]
   },
   module5: {
-    title: 'Module 5: RL Applications',
+    title: 'Module 5: Deep Reinforcement Learning',
     topics: [
       {
-        id: 'rl-real-world',
-        title: 'Real-World RL Applications'
+        id: 'dqn-architecture',
+        title: 'Deep Q-Networks (DQN)'
       },
       {
-        id: 'rl-robotics',
-        title: 'RL in Robotics'
+        id: 'policy-gradients',
+        title: 'Policy Gradient and REINFORCE'
       },
       {
-        id: 'rl-games',
-        title: 'RL in Games'
+        id: 'actor-critic-ppo',
+        title: 'Actor-Critic and PPO'
       },
       {
-        id: 'rl-recommenders',
-        title: 'RL in Recommendation Systems'
+        id: 'dqn-case-study',
+        title: 'Solving CartPole and LunarLander'
+      },
+      {
+        id: 'practical-considerations',
+        title: 'Practical Considerations in RL'
       }
     ]
   }

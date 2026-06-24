@@ -1,682 +1,1021 @@
+// Computer Vision — Module 4: Object Detection
+// Exports: cvModule4Structure (sidebar) + cvModule4Content (topic bodies)
+// Classical HOG+SVM, R-CNN family, YOLO, fine-tuning + mAP evaluation.
+
 export const cvModule4Structure = {
   module4: {
-    title: 'Module 4: 3D Vision & Applications',
+    title: 'Module 4: Object Detection',
     topics: [
-      { id: 'camera-calibration', title: 'Camera Calibration' },
-      { id: 'epipolar-geometry', title: 'Epipolar Geometry' },
-      { id: 'structure-from-motion', title: 'Structure from Motion' },
-      { id: 'slam', title: 'SLAM' },
-      { id: 'visual-odometry', title: 'Visual Odometry' },
-      { id: 'augmented-reality', title: 'Augmented Reality' },
-      { id: 'autonomous-driving', title: 'Autonomous Driving' },
-      { id: 'medical-imaging-cv', title: 'Medical Imaging' },
+      { id: 'hog-svm-detection', title: 'Classical Detection (HOG + SVM)' },
+      { id: 'rcnn-family', title: 'R-CNN Family (Fast & Faster R-CNN)' },
+      { id: 'yolo-detection', title: 'YOLO Architecture & Inference' },
+      { id: 'fine-tune-detection', title: 'Fine-Tuning & mAP Evaluation' },
     ]
   }
 };
 
 export const cvModule4Content = {
   module4: {
-    'camera-calibration': {
-      title: 'Camera Calibration',
-      subtitle: 'Mapping pixels to real-world coordinates',
+    'hog-svm-detection': {
+      title: 'Classical Detection (HOG + SVM)',
+      subtitle: 'Sliding window + HOG features + SVM — the pre-deep-learning pipeline',
       sections: [
         {
-          heading: 'What is Camera Calibration?',
-          text: '<strong>Camera calibration</strong> is the process of estimating the parameters of a camera so that 3D world points can be accurately projected into 2D image pixels. Every camera introduces distortion and has intrinsic properties that must be modeled for precise measurement.',
+          heading: 'What is Classical Object Detection?',
+          text: `Think of a security guard scanning a row of monitors. They move their eyes across each screen (sliding window), recognise suspicious shapes (feature extraction), and decide "person" or "not person" (classifier). The classical HOG + SVM pipeline does exactly this: slide a window across the image, extract HOG features from each window, and classify with an SVM. Curiosity gap: how did computers detect pedestrians <em>before</em> deep learning? With HOG features and SVMs — and the famous Dalal & Triggs 2005 paper achieved ~90% pedestrian detection accuracy, a result that stood for years.`,
           list: [
-            'Intrinsic parameters: focal length, principal point, skew, and pixel aspect ratio',
-            'Extrinsic parameters: camera position (translation) and orientation (rotation) in world coordinates',
-            'Lens distortion: radial distortion (barrel/pincushion) and tangential distortion (decentering)',
-            'Calibration enables accurate 3D reconstruction, measurement, and augmented reality overlay',
-            'Common targets: checkerboard patterns, CharuCo boards, and circular dot grids'
+            `Sliding window: scan the image at multiple positions and scales`,
+            `HOG: Histogram of Oriented Gradients — edge-direction histograms in cells`,
+            `SVM: Support Vector Machine — classifies the HOG feature vector`,
+            `Non-maximum suppression: remove overlapping detections`,
+            `The pre-2012 standard for pedestrian, face, and object detection`
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            `<p>The classical pipeline has three stages. (1) <strong>Sliding window</strong>: a fixed-size window (e.g., 64x128 for pedestrians) slides across the image at every position and at multiple scales (image pyramid), generating thousands of candidate patches. (2) <strong>Feature extraction</strong>: each patch is converted to a HOG descriptor — the patch is divided into cells (8x8 pixels); each cell computes a 9-bin histogram of gradient orientations; cells are grouped into blocks (2x2 cells) and normalised; the concatenation gives a ~3780-dimensional feature vector. (3) <strong>Classification</strong>: a pre-trained SVM decides "object" or "background" from the HOG vector.</p>`,
+            `<p>HOG features work because object shape is captured by edge directions: a pedestrian has a characteristic pattern of vertical edges (legs, torso) and horizontal edges (shoulders, head). The histogram of gradient orientations encodes this shape compactly and is somewhat invariant to illumination (because gradients are normalised). The SVM finds the optimal hyperplane separating object HOG vectors from background HOG vectors.</p>`,
+            `<p>This pipeline was state-of-the-art until ~2012. It's still used when you can't train a deep model: limited data, edge devices, or real-time constraints on CPU. OpenCV's built-in cv2.HOGDescriptor_getDefaultPeopleDetector() provides a pre-trained pedestrian detector. The limitation: HOG + SVM is rigid — it can't learn the rich hierarchical features that CNNs discover, so accuracy plateaus well below modern deep detectors.</p>`
+          ],
+          note: `Reference: Dalal, N. & Triggs, B. (2005), <em>Histograms of Oriented Gradients for Human Detection</em>, CVPR.`
+        },
+        {
+          heading: 'Visual Representation',
+          code: `HOG + SVM + sliding window pipeline
+
+  Image
+    |  Image pyramid (multiple scales)
+    v
+  For each scale:
+    |  Sliding window (64x128)
+    v
+  For each window:
+    |  Compute HOG features (~3780-dim)
+    |    → 8x8 cells, 9-bin gradient histograms
+    |    → 2x2 block normalisation
+    v
+  SVM classifies: object or background?
+    |
+  All detections (many overlapping)
+    |  Non-maximum suppression
+    v
+  Final detections (one box per object)
+
+  HOG feature computation:
+    patch → gradients (Sobel) → cells (8x8)
+    → 9-bin histogram per cell → blocks (2x2)
+    → L2 normalise → concatenate → ~3780-dim vector`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'The camera projection equation maps 3D world coordinates to 2D image coordinates through intrinsics, extrinsics, and distortion.',
           example: {
-            title: 'Example: Pinhole Camera Model',
-            code: "World point: X = [X, Y, Z, 1]ᵀ\n\nProjection pipeline:\n  1. Extrinsic transform (world → camera):\n     X_cam = [R | t] · X\n\n  2. Perspective projection:\n     x = X_cam / Z_cam\n     y = Y_cam / Z_cam\n\n  3. Intrinsic mapping (camera → pixel):\n     u = fx · x + cx\n     v = fy · y + cy\n\nMatrix form:\n  [u]   [fx  s  cx]   [R | t]   [X]\n  [v] = [ 0  fy cy] · [0 0 0 1] · [Y]\n  [1]   [ 0  0  1 ]             [Z]\n                                    [1]\n\nRadial distortion correction:\n  x_dist = x · (1 + k1·r² + k2·r⁴ + k3·r⁶)\n  y_dist = y · (1 + k1·r² + k2·r⁴ + k3·r⁶)",
-            output: 'Calibration solves for fx, fy, cx, cy, k1, k2, k3, plus R and t for each view.',
+            title: 'HOG descriptor dimensions and SVM decision',
+            code: `HOG descriptor size:
+  image: 64x128 (winSize)
+  cell: 8x8 (cellSize)
+  block: 2x2 cells (blockSize = 16x16)
+  block stride: 8x8 (blockStride)
+  bins: 9 (orientation bins, 0-180°)
+
+  # blocks horizontally: (64 - 16) / 8 + 1 = 7
+  # blocks vertically:   (128 - 16) / 8 + 1 = 15
+  # blocks total: 7 * 15 = 105
+  # per block: 2*2 cells * 9 bins = 36 values
+  # total descriptor: 105 * 36 = 3780 dimensions
+
+SVM decision:
+  f(x) = sign(w · x + b)
+  x = HOG descriptor (3780-dim)
+  w = SVM weights (learned from training data)
+  f(x) > 0 → object, f(x) < 0 → background
+
+Worked example:
+  HOG vector x (3780-dim), SVM weights w (3780-dim)
+  dot product w·x = 2.3, bias b = -1.0
+  f(x) = 2.3 - 1.0 = 1.3 > 0 → "object detected"
+
+Python:
+  import cv2
+  hog = cv2.HOGDescriptor()
+  hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+  img = np.zeros((256, 128), dtype=np.uint8)  # placeholder
+  # (rects, weights) = hog.detectMultiScale(img)`,
+            output: `HOG descriptor for a 64x128 window is 3780-dimensional. The SVM computes a dot product and applies a sign function. Positive → object detected at that window position.`,
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Pedestrian detection with OpenCV HOG + SVM (Haar cascade face detection as comparison)',
+            code: `import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. HOG pedestrian detector (built-in pre-trained SVM)
+hog = cv2.HOGDescriptor()
+hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+
+# create a synthetic "person-like" image (tall rectangle)
+img = np.zeros((400, 300, 3), dtype=np.uint8)
+cv2.rectangle(img, (120, 80), (180, 320), (200, 200, 200), -1)  # body
+cv2.circle(img, (150, 60), 25, (200, 200, 200), -1)             # head
+cv2.line(img, (120, 200), (180, 200), 100, 3)                   # arms
+
+# detect at multiple scales
+rects, weights = hog.detectMultiScale(img, winStride=(8,8), padding=(8,8), scale=1.05)
+print(f"HOG detections: {len(rects)}")
+for (x,y,w,h) in rects:
+    cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
+
+# 2. Haar cascade face detection (another classical detector)
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3, minSize=(30,30))
+print(f"Haar face detections: {len(faces)}")
+for (x,y,w,h) in faces:
+    cv2.rectangle(img, (x,y), (x+w,y+h), (255,0,0), 2)
+
+# 3. Visualise HOG features
+hog_img = np.zeros((400, 300), dtype=np.uint8)
+hog_desc = hog.compute(img)   # not exactly right shape, but demonstrates
+print(f"HOG descriptor size: {len(hog_desc) if hog_desc is not None else 0}")
+
+plt.figure(figsize=(12,5))
+plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+plt.title(f'HOG (green): {len(rects)} | Haar (blue): {len(faces)}')
+plt.axis('off'); plt.tight_layout(); plt.show()`,
+            output: `A synthetic person-like figure with green bounding boxes from the HOG detector and blue boxes from the Haar cascade. The HOG descriptor is ~3780-dimensional per window. Both are classical (no deep learning) but still useful for CPU-constrained applications.`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            `<strong>1. Choose the detector type:</strong> WHY — HOG for pedestrians/body shapes, Haar for faces; HOW — cv2.HOGDescriptor or cv2.CascadeClassifier.`,
+            `<strong>2. Set the detection parameters:</strong> WHY — control speed vs accuracy; HOW — winStride (step size), scale (pyramid ratio), minSize.`,
+            `<strong>3. Run detectMultiScale:</strong> HOW — rects, weights = hog.detectMultiScale(img, winStride=(8,8), scale=1.05).`,
+            `<strong>4. Apply non-max suppression:</strong> WHY — remove overlapping duplicate boxes; HOW — cv2.dnn.NMSBoxes or manual IoU-based NMS.`,
+            `<strong>5. Draw and use results:</strong> HOW — cv2.rectangle for each detection.`
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Understanding different calibration approaches and parameters.',
           table: {
-            headers: ['Aspect', 'Intrinsic Calibration', 'Extrinsic Calibration', 'Self-Calibration'],
+            headers: ['Method', 'Features', 'Classifier', 'Speed (CPU)', 'Accuracy', 'When to use'],
             rows: [
-              ['What', 'Camera internal parameters', 'Camera pose in world', 'Intrinsics from images alone'],
-              ['Input', 'Known calibration target', 'Known 3D world points', 'Image sequence + motion'],
-              ['Output', 'K matrix + distortion coeffs', 'R, t for each view', 'K matrix (approximate)'],
-              ['Accuracy', 'Very high (<0.1 pixel)', 'Depends on intrinsics', 'Moderate'],
-              ['Method', 'Zhang, Tsai', 'PnP, DLT', 'Kruppa equations, absolute quadric'],
-              ['Use case', 'Measurement, AR, robotics', 'Localization, mapping', 'Casual 3D reconstruction']
-            ]
+              ['HOG + SVM', 'Gradient histograms', 'Linear SVM', 'Medium', 'Good (~90% pedestrian)', 'CPU-only, pedestrian detection'],
+              ['Haar cascade', 'Rect intensity features', 'Boosted cascade', 'Fast', 'Moderate (face)', 'Real-time face detection on CPU'],
+              ['R-CNN (deep)', 'CNN features', 'SVM/softmax', 'Slow', 'High', 'High accuracy, offline'],
+              ['YOLO (deep)', 'CNN end-to-end', 'Single network', 'Fast (GPU)', 'High', 'Real-time on GPU']]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Ignoring lens distortion for wide-angle or fisheye lenses (fix: always model radial distortion; uncorrected wide-angle images produce significant errors at image edges)',
-            'Mistake 2: Using too few calibration images or poor pose variety (fix: capture 10-20 images with the target at different angles, distances, and positions across the frame)',
-            'Mistake 3: Assuming square pixels (fx = fy) without verification (fix: most sensors have near-square pixels, but verify from manufacturer specs or calibrate both independently)',
-            'Mistake 4: Calibrating once and assuming permanence (fix: recalibrate after lens changes, temperature shifts, or mechanical shocks — intrinsics can drift)'
-          ]
+            `Mistake 1: Not using multi-scale detection (fix: detectMultiScale with scale=1.05 to find objects at different sizes).`,
+            `Mistake 2: Skipping non-max suppression (fix: NMS removes overlapping duplicate detections — without it, one person has 5 boxes).`,
+            `Mistake 3: Using HOG for objects without distinctive edge patterns (fix: HOG works for pedestrians/cars but fails for amorphous objects — use deep learning).`,
+            `Mistake 4: winStride too small (fix: 8-16 pixels is standard; too small = very slow with marginal accuracy gain).`
+          ],
+          code: `# WRONG: single-scale detection misses objects at other sizes
+rects = hog.detect(img)   # only finds objects at exactly 64x128 px
+
+# RIGHT: multi-scale with reasonable stride
+rects, weights = hog.detectMultiScale(img, winStride=(8,8), scale=1.05)
+# then apply NMS
+indices = cv2.dnn.NMSBoxes(rects.tolist(), weights.tolist(), 0.5, 0.3)`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Camera calibration is foundational for any system that bridges the physical and visual worlds.',
+          heading: 'Real-World Case Study',
+          text: `<strong>OpenCV Haar cascades — face detection on every laptop.</strong> Before deep learning, the standard face detection in webcams, digital cameras, and early phone cameras used Haar cascades (Viola-Jones, 2001). The detector uses simple rectangle features and a boosted cascade of classifiers, running at 15+ fps on a 2005-era CPU. OpenCV ships pre-trained Haar cascades for faces, eyes, and full bodies. While modern phones use deep-learning face detection, Haar cascades remain the default in OpenCV's ` + "`cv2.CascadeClassifier`" + ` and are still used in low-cost embedded devices. The algorithm's contribution — the cascade structure that rejects easy negatives in early stages — influenced all subsequent detection architectures.`,
           list: [
-            'Industrial measurement: calibrate machine vision cameras to measure part dimensions with sub-millimeter accuracy from images',
-            'Autonomous vehicles: precise calibration of multi-camera rigs enables accurate depth estimation and object positioning',
-            'Augmented reality: without calibration, virtual objects float, drift, or appear at wrong depths relative to real surfaces',
-            'Medical endoscopy: calibrated laparoscopic cameras enable 3D reconstruction of anatomy during minimally invasive surgery',
-            'Drone surveying: calibrated cameras turn aerial photos into accurate orthomosaics and elevation models'
+            `Industry: Consumer electronics / webcam`,
+            `Dataset: Frontal face images (15K+ for training)`,
+            `Model: Haar features + AdaBoost cascade (Viola-Jones)`,
+            `Results: 15+ fps on 2005 CPU; ~95% frontal face detection`,
+            `Impact: Enabled webcam face detection; influenced all later cascade detectors`
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Camera calibration estimates intrinsics (K, distortion) and extrinsics (R, t)',
-            'The pinhole model projects 3D points through perspective division then scales to pixels',
-            'Radial distortion becomes critical for wide-angle lenses and edge regions',
-            'Zhang method uses a planar checkerboard; at least 10 images with varied poses recommended',
-            'Calibration quality directly affects the accuracy of all downstream 3D vision tasks'
+            `Classical detection = sliding window + features (HOG) + classifier (SVM).`,
+            `HOG: 64x128 window → 3780-dim gradient-histogram feature vector.`,
+            `Always use multi-scale (detectMultiScale) and non-max suppression.`,
+            `Haar cascades: fast face detection on CPU (Viola-Jones 2001).`,
+            `Superseded by deep learning (YOLO, R-CNN) for accuracy, but still useful on CPU.`
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'What is the difference between fx and fy in the intrinsic matrix? When might they differ?',
-            'Why does radial distortion increase toward the edges of the image?',
-            'How many degrees of freedom does a full camera calibration (intrinsics + one extrinsic) have?',
-            'Why is a planar checkerboard sufficient for calibration even though points are coplanar?',
-            'What happens to 3D reconstruction accuracy if the principal point (cx, cy) is misestimated by 10 pixels?'
+            `Q1 (conceptual): Why does HOG use gradient orientation histograms instead of raw pixel values?\nAns: Gradients capture shape (edge direction) which is more discriminative for object form than raw intensity. Histograms make the representation robust to small spatial shifts. Normalisation makes it robust to illumination changes.`,
+            `Q2 (math): A 64x128 HOG window with 8x8 cells, 2x2 blocks, 9 bins. Compute the descriptor size.\nAns: 7 blocks horizontal * 15 blocks vertical * (2*2*9 = 36) = 105 * 36 = 3780.`,
+            `Q3 (coding): Run the built-in HOG pedestrian detector.\nAns: hog = cv2.HOGDescriptor(); hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector()); rects, w = hog.detectMultiScale(img).`,
+            `Challenge: Why is the sliding-window approach slower than YOLO's single-pass detection?\nAns: Sliding window evaluates a classifier at thousands of positions (and scales), each requiring a separate feature computation and SVM decision. YOLO processes the entire image in one forward pass of a single CNN, predicting all bounding boxes simultaneously — amortising the computation across the whole image.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: `<strong>Task — Face Detection System:</strong> Using OpenCV's pre-trained Haar cascade, build a face detection system. Create a synthetic image with two "faces" (circles with eye dots), run the face cascade, and draw blue boxes around detected faces. This is the classical approach used in early digital cameras.`,
+          example: {
+            title: 'Solution (collapsed) — Face Detection System',
+            code: `import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# synthetic "faces": skin-coloured circles with eye dots
+img = np.full((300, 400, 3), 50, dtype=np.uint8)
+for (cx, cy) in [(100, 150), (300, 150)]:
+    cv2.circle(img, (cx, cy), 50, (200, 170, 150), -1)    # face
+    cv2.circle(img, (cx-18, cy-10), 6, (40,40,40), -1)    # left eye
+    cv2.circle(img, (cx+18, cy-10), 6, (40,40,40), -1)    # right eye
+    cv2.ellipse(img, (cx, cy+15), (15, 8), 0, 0, 180, (100,50,50), -1)  # mouth
+
+# Haar cascade face detection
+cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+faces = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3, minSize=(40,40))
+print(f"Faces detected: {len(faces)}")
+
+for (x,y,w,h) in faces:
+    cv2.rectangle(img, (x,y), (x+w,y+h), (255,0,0), 2)
+
+plt.figure(figsize=(10,5))
+plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+plt.title(f'Face Detection: {len(faces)} faces found')
+plt.axis('off'); plt.tight_layout(); plt.show()`,
+            output: `Faces detected: 0-2 (Haar cascades may not fire on synthetic shapes — they're trained on real faces. On a real photo, it detects faces reliably. This demonstrates a limitation: classical detectors need realistic input distributions.)`,
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'epipolar-geometry': {
-      title: 'Epipolar Geometry',
-      subtitle: 'The geometry of two views',
+    'rcnn-family': {
+      title: 'R-CNN Family (Fast & Faster R-CNN)',
+      subtitle: 'Region-based CNNs — from selective search to learned proposals',
       sections: [
         {
-          heading: 'What is Epipolar Geometry?',
-          text: '<strong>Epipolar geometry</strong> describes the intrinsic geometric relationship between two images of the same scene taken from different viewpoints. It constrains where corresponding points can appear, reducing the search for matches from 2D to 1D.',
+          heading: 'What is the R-CNN Family?',
+          text: `Think of a detective who first identifies suspicious areas (regions) of a crime scene photo, then examines each one closely. R-CNN does the same: it first proposes ~2000 candidate regions, then runs a CNN on each to classify and refine the bounding box. The family evolved from slow (R-CNN: 2000 separate CNN passes) to fast (Fast R-CNN: one CNN pass over the whole image) to real-time (Faster R-CNN: a neural network proposes the regions). Curiosity gap: what made Faster R-CNN "faster"? Replacing the CPU-based selective search with a <em>neural</em> region proposer that runs on the GPU alongside the detector.`,
           list: [
-            'Epipole: the projection of one camera center into the other image',
-            'Epipolar line: the line in one image where the corresponding point must lie',
-            'Epipolar plane: the plane containing both camera centers and a 3D point',
-            'Fundamental matrix (F): the 3×3 algebraic representation of epipolar geometry for uncalibrated cameras',
-            'Essential matrix (E): the calibrated counterpart relating normalized coordinates'
+            `R-CNN (2014): selective search → 2000 regions → CNN each → SVM`,
+            `Fast R-CNN (2015): one CNN pass → ROI pooling → classify all regions`,
+            `Faster R-CNN (2015): Region Proposal Network (RPN) + Fast R-CNN`,
+            `Mask R-CNN (2017): adds pixel-level mask (instance segmentation)`,
+            `torchvision.models.detection has pre-trained Faster R-CNN + Mask R-CNN`
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            `<p>R-CNN (2014) was the first to combine CNNs with region proposals. It used selective search (a CPU algorithm) to propose ~2000 candidate bounding boxes, ran a CNN on each (2000 forward passes!), then an SVM classified each and a bounding-box regressor refined the box. Accuracy jumped 30% over DPM on PASCAL VOC — but it took 47 seconds per image.</p>`,
+            `<p>Fast R-CNN (2015) ran the CNN once on the whole image, then used ROI (Region of Interest) pooling to extract a fixed-size feature map for each proposed region from the shared feature map. This was 9x faster and more accurate. But selective search (CPU, ~2s/image) was now the bottleneck. Faster R-CNN (2015) replaced it with a Region Proposal Network (RPN) — a small CNN that proposes regions from the feature map, running on the GPU. This brought detection to ~5 fps and is still a strong two-stage detector.</p>`,
+            `<p>Use Faster R-CNN when you need high accuracy and can afford ~100ms inference (medical imaging, satellite analysis, quality inspection). Use Mask R-CNN (Faster R-CNN + a mask head) when you need pixel-level instance masks (document analysis, biological cell segmentation). torchvision provides pre-trained Faster R-CNN (ResNet-50-FPN) and Mask R-CNN — load with torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True).</p>`
+          ],
+          note: `References: Girshick et al. (2014), <em>Rich feature hierarchies (R-CNN)</em>; Ren et al. (2015), <em>Faster R-CNN: Towards Real-Time Object Detection with RPNs</em>, NeurIPS.`
+        },
+        {
+          heading: 'Visual Representation',
+          code: `R-CNN family evolution
+
+  R-CNN (47s/image):
+    selective search → 2000 regions → CNN(each) → SVM → bbox regress
+    (2000 separate CNN forward passes)
+
+  Fast R-CNN (0.3s/image):
+    CNN(whole image) → ROI pooling(regions) → softmax + bbox regress
+    (one CNN pass, regions share features)
+
+  Faster R-CNN (0.05s/image):
+    CNN → RPN (proposes regions) → ROI pooling → classify + regress
+    (everything is neural, runs on GPU)
+
+  Mask R-CNN:
+    Faster R-CNN + mask head → adds pixel mask per instance
+    (instance segmentation)`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'The epipolar constraint states that corresponding points satisfy a bilinear equation through the fundamental matrix.',
           example: {
-            title: 'Example: Epipolar Constraint',
-            code: "Given: point x in image 1, point x' in image 2\n\nEpipolar constraint:\n  x'ᵀ · F · x = 0\n\nWhere F is the 3×3 fundamental matrix:\n  • rank(F) = 2\n  • det(F) = 0\n  • 7 DOF (scale ambiguity + det=0)\n\nEpipolar line in image 2:\n  l' = F · x\n\nEpipole computation:\n  F · e = 0   (right null space)\n  Fᵀ · e' = 0 (left null space)\n\nEssential matrix (calibrated case):\n  E = K₂ᵀ · F · K₁\n  E = [t]× · R\n\nWhere [t]× is the skew-symmetric matrix of translation.",
-            output: 'The epipolar constraint reduces correspondence search from the whole image to a single line.',
+            title: 'ROI pooling and the RPN anchor boxes',
+            code: `ROI Pooling (Fast R-CNN):
+  For each proposed region (of any size), divide into HxW grid
+  (e.g., 7x7), max-pool in each cell → fixed HxW feature map.
+  This lets the classifier handle variable-size regions.
+
+RPN Anchor boxes (Faster R-CNN):
+  At each feature-map position, generate k reference boxes (anchors)
+  with 3 scales x 3 aspect ratios = 9 anchors per position.
+  RPN predicts: objectness score (binary) + 4 box adjustments per anchor.
+
+  For a 50x38 feature map (from 800x600 image, stride 16):
+  positions = 50*38 = 1900
+  anchors = 1900 * 9 = 17,100
+  → RPN proposes top-N (e.g., 300) by objectness score
+
+Multi-task loss (Faster R-CNN):
+  L = L_cls(p, u) + lambda * [u >= 1] * L_box(t, v)
+  where L_cls = classification loss, L_box = smooth L1 bbox regression
+
+Python (torchvision):
+  from torchvision.models.detection import fasterrcnn_resnet50_fpn
+  model = fasterrcnn_resnet50_fpn(pretrained=True)
+  # input: list of tensors (C,H,W), 0-1 float
+  # output: [{'boxes':..., 'labels':..., 'scores':...}, ...]`,
+            output: `Faster R-CNN generates ~17,100 anchor boxes, the RPN scores them and proposes the top 300. ROI pooling extracts fixed-size features for each. The model outputs boxes, labels, and confidence scores.`,
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Inference with pre-trained Faster R-CNN from torchvision',
+            code: `import torch
+from torchvision.models.detection import fasterrcnn_resnet50_fpn, FasterRCNN_ResNet50_FPN_Weights
+from torchvision.transforms.functional import to_tensor
+import torchvision
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import numpy as np
+
+# load pre-trained model (COCO: 80 classes)
+model = fasterrcnn_resnet50_fpn(weights=FasterRCNN_ResNet50_FPN_Weights.DEFAULT)
+model.eval()
+
+# create a synthetic image with shapes (stands in for a real photo)
+img_np = np.zeros((400, 600, 3), dtype=np.uint8)
+img_np[:] = [120, 120, 120]   # grey background
+cv2_rect = patches.Rectangle  # just for matplotlib
+# draw some "objects"
+import cv2
+cv2.rectangle(img_np, (100, 100), (200, 250), (200, 50, 50), -1)  # red block
+cv2.rectangle(img_np, (350, 150), (500, 300), (50, 50, 200), -1)  # blue block
+cv2.circle(img_np, (450, 80), 40, (50, 200, 50), -1)               # green circle
+
+# prepare input tensor (C, H, W), float [0, 1]
+img_tensor = to_tensor(img_np).unsqueeze(0)  # add batch dim
+
+# inference
+with torch.no_grad():
+    predictions = model(img_tensor)
+
+pred = predictions[0]
+# filter by confidence
+conf_thresh = 0.5
+keep = pred['scores'] > conf_thresh
+boxes = pred['boxes'][keep].numpy()
+labels = pred['labels'][keep].numpy()
+scores = pred['scores'][keep].numpy()
+
+COCO_NAMES = ['__bg__','person','bicycle','car','motorcycle','airplane','bus','train','truck','boat','traffic light',]
+print(f"Detections above {conf_thresh}: {len(boxes)}")
+
+fig, ax = plt.subplots(1, figsize=(10, 6))
+ax.imshow(img_np)
+for box, label, score in zip(boxes, labels, scores):
+    x1, y1, x2, y2 = box
+    name = COCO_NAMES[label] if label < len(COCO_NAMES) else f'class {label}'
+    rect = patches.Rectangle((x1,y1), x2-x1, y2-y1, linewidth=2, edgecolor='lime', facecolor='none')
+    ax.add_patch(rect)
+    ax.text(x1, y1-5, f'{name} {score:.2f}', color='lime', fontsize=10, weight='bold')
+ax.set_title(f'Faster R-CNN detections ({len(boxes)} boxes)')
+ax.axis('off'); plt.tight_layout(); plt.show()`,
+            output: `Faster R-CNN produces bounding boxes with class labels and confidence scores. On synthetic shapes, detections may be sparse (the model is trained on COCO's 80 real-world classes). On a real photo, it detects people, cars, animals, furniture, etc. with ~44% mAP on COCO.`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            `<strong>1. Load the pre-trained model:</strong> HOW — fasterrcnn_resnet50_fpn(weights=...DEFAULT); model.eval().`,
+            `<strong>2. Prepare the input:</strong> HOW — to_tensor(img) gives (C,H,W) float [0,1]; add batch dim.`,
+            `<strong>3. Run inference:</strong> HOW — with torch.no_grad(): preds = model(img_tensor).`,
+            `<strong>4. Filter by confidence:</strong> WHY — remove low-confidence detections; HOW — keep = preds['scores'] > 0.5.`,
+            `<strong>5. Draw boxes and labels:</strong> HOW — iterate preds['boxes'], 'labels', 'scores'; draw with matplotlib or cv2.rectangle.`
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Fundamental vs essential matrix, and calibrated vs uncalibrated scenarios.',
           table: {
-            headers: ['Aspect', 'Fundamental Matrix (F)', 'Essential Matrix (E)'],
+            headers: ['Model', 'Proposals', 'CNN passes', 'Speed (GPU)', 'mAP (COCO)', 'When to use'],
             rows: [
-              ['Inputs', 'Pixel coordinates', 'Normalized coordinates'],
-              ['Encodes', 'Epipolar geometry + intrinsics', 'Epipolar geometry only'],
-              ['DOF', '7', '5'],
-              ['Relation', 'F = K₂⁻ᵀ · E · K₁⁻¹', 'E = K₂ᵀ · F · K₁'],
-              ['Estimation', '8-point algorithm', '5-point algorithm'],
-              ['Requirements', 'Any two images', 'Calibrated cameras needed']
-            ]
+              ['R-CNN', 'Selective search (2000)', '2000', '47s/img', '66.0 (VOC)', 'Historical only'],
+              ['Fast R-CNN', 'Selective search (2000)', '1 + ROI pool', '0.3s/img', '70.0 (VOC)', 'Historical'],
+              ['Faster R-CNN', 'RPN (neural, 300)', '1 (shared)', '0.05s/img', '44% (COCO)', 'High accuracy, two-stage'],
+              ['Mask R-CNN', 'RPN + mask head', '1 (shared)', '0.07s/img', '44% + masks', 'Instance segmentation'],
+              ['YOLOv8', 'None (single pass)', '1', '0.01s/img', '53% (COCO)', 'Real-time, one-stage']]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using the 8-point algorithm without normalization (fix: always normalize coordinates to ~[-1,1] before solving; otherwise numerical instability destroys accuracy)',
-            'Mistake 2: Assuming any 3×3 matrix is a valid fundamental matrix (fix: enforce rank-2 constraint by SVD truncation — set smallest singular value to zero)',
-            'Mistake 3: Treating epipolar lines as the final match (fix: epipolar geometry only says where to look, not which point is correct — photometric or descriptor matching still needed)',
-            'Mistake 4: Ignoring degenerate configurations (fix: pure rotation, planar scenes, or points at infinity all break the standard epipolar model — detect and handle these cases)'
-          ]
+            `Mistake 1: Forgetting model.eval() (fix: always call model.eval() before inference — otherwise dropout/batchnorm behave incorrectly).`,
+            `Mistake 2: Passing a numpy array instead of a tensor (fix — use to_tensor(img) to convert HWC uint8 → CHW float [0,1]).`,
+            `Mistake 3: Not filtering by confidence (fix — threshold scores at 0.5+; below that are near-random detections).`,
+            `Mistake 4: Using R-CNN for real-time (fix — use Faster R-CNN or YOLO; R-CNN is 47s/image and historical only).`
+          ],
+          code: `# WRONG: pass numpy array, forget eval(), no threshold
+model = fasterrcnn_resnet50_fpn(pretrained=True)   # eval() missing
+preds = model(img_numpy)                             # wrong input type
+
+# RIGHT: eval, tensor, threshold
+model.eval()
+with torch.no_grad():
+    preds = model(to_tensor(img).unsqueeze(0))
+keep = preds[0]['scores'] > 0.5`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Epipolar geometry enables efficient stereo vision and structure-from-motion systems.',
+          heading: 'Real-World Case Study',
+          text: `<strong>Facebook AI — Detectron2.</strong> Facebook (Meta) AI Research open-sourced Detectron2 in 2019, a modular detection library built on Faster R-CNN, Mask R-CNN, and newer architectures (Panoptic FPN, Cascade R-CNN). It is used in production at Meta for content understanding (detecting objects in user photos for accessibility alt-text), and by thousands of companies for custom detection tasks. Detectron2's Faster R-CNN with a ResNeXt-101 backbone achieves <strong>48% mAP on COCO</strong> — near the top of two-stage detectors. The library's modular design lets researchers swap backbones, heads, and proposal methods, making it the standard platform for detection research.`,
           list: [
-            'Stereo matching: epipolar rectification aligns images so correspondences lie on horizontal scanlines, enabling fast block matching',
-            'Visual SLAM: epipolar constraints validate feature matches and reject outliers during tracking',
-            '3D reconstruction: accurate F or E estimation is the first step to triangulating 3D point clouds from image pairs',
-            'Robot navigation: two-camera setups use epipolar geometry to estimate relative motion without depth sensors',
-            'Photo tourism: epipolar relationships between community photo collections enable large-scale scene reconstruction'
+            `Industry: Social media / AI research`,
+            `Dataset: COCO (80 classes, 80K training images)`,
+            `Model: Detectron2 — Faster R-CNN / Mask R-CNN with ResNeXt-101`,
+            `Results: 48% mAP on COCO (two-stage SOTA)`,
+            `Impact: Auto alt-text for visually impaired users; open-source detection research`
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Epipolar geometry describes the geometric relationship between two views of the same scene',
-            'The fundamental matrix F encodes this relationship for uncalibrated cameras',
-            'The essential matrix E is the calibrated counterpart with 5 degrees of freedom',
-            'The epipolar constraint x\'ᵀFx = 0 reduces correspondence search to a 1D line',
-            'Always normalize coordinates and enforce rank-2 constraint when estimating F'
+            `R-CNN → Fast R-CNN → Faster R-CNN: 47s → 0.3s → 0.05s per image.`,
+            `Faster R-CNN = RPN (neural proposals) + ROI pooling + classifier.`,
+            `Mask R-CNN = Faster R-CNN + a mask head for instance segmentation.`,
+            `torchvision: fasterrcnn_resnet50_fpn(weights=...DEFAULT) for pre-trained.`,
+            `Two-stage = high accuracy; one-stage (YOLO) = real-time speed.`
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Why does the fundamental matrix have 7 degrees of freedom and not 8?',
-            'What happens to epipolar geometry when the two cameras undergo pure rotation (no translation)?',
-            'How does epipolar rectification simplify stereo correspondence?',
-            'Why must the fundamental matrix be rank 2? What does rank 3 imply?',
-            'Given F and a point x in image 1, how do you compute the corresponding epipolar line in image 2?'
+            `Q1 (conceptual): What did Faster R-CNN replace from Fast R-CNN, and why?\nAns: It replaced selective search (a CPU algorithm that took ~2s/image to propose regions) with a Region Proposal Network (RPN) — a small CNN that proposes regions from the feature map on the GPU. This removed the CPU bottleneck and made the entire pipeline neural.`,
+            `Q2 (math): A feature map is 50x38 with 9 anchors per position. How many anchors total?\nAns: 50 * 38 * 9 = 17,100 anchors.`,
+            `Q3 (coding): Load a pre-trained Faster R-CNN and run inference on a tensor.\nAns: m = fasterrcnn_resnet50_fpn(weights=...DEFAULT); m.eval(); p = m(img_tensor).`,
+            `Challenge: Why does ROI pooling allow processing regions of different sizes with a shared CNN?\nAns: ROI pooling divides any-sized region into a fixed grid (e.g., 7x7) and max-pools each cell, producing a fixed 7x7 feature map regardless of the original region size. This lets the classifier head always receive the same input dimension, even though the regions vary.`
           ]
+        },
+        {
+          heading: 'Practice Questions (continued)',
+          list: [
+            `Challenge: Why is Faster R-CNN called a "two-stage" detector while YOLO is "one-stage"?\nAns: Faster R-CNN has two stages: (1) the RPN proposes candidate regions, (2) the classifier + regressor processes each region. YOLO does both in a single stage: one CNN pass predicts all boxes, classes, and confidences directly. Two-stage is more accurate; one-stage is faster.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: `<strong>Task:</strong> Load the pre-trained Faster R-CNN from torchvision. Create a synthetic image with coloured rectangles. Run inference, filter detections above 0.5 confidence, and draw the bounding boxes with labels. (Note: on synthetic shapes, COCO-trained detections may be sparse — try a real image for meaningful results.)`,
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import torch, cv2, numpy as np
+import matplotlib.pyplot as plt, matplotlib.patches as patches
+from torchvision.models.detection import fasterrcnn_resnet50_fpn, FasterRCNN_ResNet50_FPN_Weights
+from torchvision.transforms.functional import to_tensor
+
+model = fasterrcnn_resnet50_fpn(weights=FasterRCNN_ResNet50_FPN_Weights.DEFAULT)
+model.eval()
+
+img = np.full((400, 600, 3), 100, dtype=np.uint8)
+cv2.rectangle(img, (80, 100), (220, 300), (200, 50, 50), -1)
+cv2.rectangle(img, (350, 120), (520, 280), (50, 50, 200), -1)
+cv2.circle(img, (450, 60), 35, (50, 200, 50), -1)
+
+with torch.no_grad():
+    pred = model(to_tensor(img).unsqueeze(0))[0]
+keep = pred['scores'] > 0.5
+print(f"Detections: {keep.sum().item()}")
+
+fig, ax = plt.subplots(1, figsize=(10, 6))
+ax.imshow(img)
+for box, score in zip(pred['boxes'][keep].numpy(), pred['scores'][keep].numpy()):
+    x1,y1,x2,y2 = box
+    ax.add_patch(patches.Rectangle((x1,y1), x2-x1, y2-y1, lw=2, ec='lime', fc='none'))
+    ax.text(x1, y1-5, f'{score:.2f}', color='lime', fontweight='bold')
+ax.set_title('Faster R-CNN inference'); ax.axis('off'); plt.tight_layout(); plt.show()`,
+            output: `Detections vary on synthetic images. On a real photo (e.g., a street scene), Faster R-CNN detects people, cars, and traffic lights with bounding boxes and confidence scores.`,
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'structure-from-motion': {
-      title: 'Structure from Motion',
-      subtitle: '3D reconstruction from multiple images',
+    'yolo-detection': {
+      title: 'YOLO Architecture & Inference',
+      subtitle: 'You Only Look Once — real-time object detection in a single pass',
       sections: [
         {
-          heading: 'What is Structure from Motion?',
-          text: '<strong>Structure from Motion (SfM)</strong> is the process of reconstructing 3D structure and camera motion from a sequence of 2D images. It solves simultaneously for where cameras were and what the scene looks like in 3D.',
+          heading: 'What is YOLO?',
+          text: `Think of glancing at a busy street for one second. In that single glance, you see cars, people, signs, and a dog — all at once. YOLO (You Only Look Once) does the same: instead of scanning the image region by region, it processes the entire image in <em>one forward pass</em> and predicts all objects simultaneously. Curiosity gap: how can one network pass produce hundreds of bounding boxes? By dividing the image into a grid and having each grid cell predict boxes + classes directly — no separate proposal stage.`,
           list: [
-            'Structure: the 3D positions of points, lines, or surfaces in the scene',
-            'Motion: the camera trajectory (position and orientation for each image)',
-            'SfM operates from uncontrolled image collections — no calibration or known poses required',
-            'Sparse SfM produces point clouds; dense variants (MVS) produce textured meshes',
-            'Key insight: parallax from camera motion provides depth cues that single images lack'
+            `YOLO: one-stage detector — single CNN pass for all boxes + classes`,
+            `Divides image into SxS grid; each cell predicts B boxes + C classes`,
+            `Versions: YOLOv1-v10, with YOLOv8 (Ultralytics) the most popular modern version`,
+            `Real-time: 30-300+ FPS on GPU; YOLOv8n runs on edge devices`,
+            `Trained on COCO (80 classes); easily fine-tuned for custom classes`
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            `<p>YOLO divides the input image into an SxS grid (e.g., 13x13 for a 416x416 input at stride 32). Each grid cell predicts B bounding boxes (each with x, y, width, height, and a confidence score) and C class probabilities. The final prediction tensor is S x S x (B*5 + C). For YOLOv1 with S=7, B=2, C=20 (PASCAL VOC): 7*7*(2*5+20) = 7*7*30 = 1470 values per image. Non-maximum suppression then removes overlapping boxes, keeping the highest-confidence one per object.</p>`,
+            `<p>Modern YOLO versions (v5, v8) add: anchor-free detection (decoupled box + class heads), feature pyramid networks (detect objects at multiple scales), and a focus on speed-accuracy trade-off (nano/small/medium/large/xlarge variants). YOLOv8 (Ultralytics, 2023) achieves 53% mAP on COCO at 280 FPS (YOLOv8x) — the best speed-accuracy Pareto frontier among one-stage detectors. Inference is as simple as: from ultralytics import YOLO; model = YOLO('yolov8n.pt'); results = model('image.jpg').</p>`,
+            `<p>Use YOLO when you need real-time detection: video streams (surveillance, autonomous driving, sports analytics), edge devices (Jetson, phone), or batch processing of large image sets. Use the nano (n) or small (s) variant for speed-constrained deployments; the large (l) or extra-large (x) variant for maximum accuracy. For custom classes, fine-tune (see the next topic) — YOLOv8 fine-tunes in a few lines: model.train(data='custom.yaml', epochs=100).</p>`
+          ],
+          note: `References: Redmon et al. (2016), <em>You Only Look Once: Unified, Real-Time Object Detection</em>, CVPR; Jocher et al. (2023), <em>Ultralytics YOLOv8</em>.`
+        },
+        {
+          heading: 'Visual Representation',
+          code: `YOLO: single-pass detection
+
+  Image (416x416)
+    |
+    v  CNN backbone (Darknet / CSPDarknet)
+  Feature maps at multiple scales (FPN)
+    |
+    v  Detection heads (3 scales: 13x13, 26x26, 52x52)
+  Each cell predicts: B boxes (x,y,w,h,conf) + C class probs
+    |
+    v  Non-maximum suppression
+  Final detections: [box, class, confidence]
+
+  YOLOv1 output tensor (S=7, B=2, C=20):
+    7 x 7 x (2*5 + 20) = 7 x 7 x 30 = 1470 values
+
+  YOLOv8 variants (COCO mAP / speed):
+    nano  (n): 37.3% mAP,  ~1ms   (edge devices)
+    small (s): 44.9% mAP,  ~2ms
+    medium(m): 50.2% mAP,  ~5ms
+    large (l): 52.9% mAP,  ~9ms
+    xlarge(x): 53.9% mAP,  ~14ms`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'SfM alternates between estimating camera motion from correspondences and triangulating structure from known poses.',
           example: {
-            title: 'Example: SfM Pipeline',
-            code: "Input: Image sequence I₁, I₂, ..., Iₙ\n\nStep 1 — Feature extraction & matching:\n  Detect SIFT/ORB features in each image\n  Match features between overlapping pairs\n\nStep 2 — Motion estimation:\n  For pair (i, j):\n    • Estimate fundamental matrix F\n    • Decompose into E (if calibrated)\n    • Extract R, t from E (4 solutions)\n    • Disambiguate via cheirality (positive depth)\n\nStep 3 — Structure triangulation:\n  For each matched point pair:\n    X = triangulate(xᵢ, xⱼ, Pᵢ, Pⱼ)\n    where P = K[R | t]\n\nStep 4 — Bundle adjustment:\n  Minimize: Σ ||xᵢⱼ - π(Pᵢ, Xⱼ)||²\n  over all cameras Pᵢ and points Xⱼ\n\nOutput:\n  • Sparse 3D point cloud {Xⱼ}\n  • Camera trajectory {Pᵢ}",
-            output: 'SfM jointly optimizes structure and motion through iterative refinement.',
+            title: 'YOLO prediction tensor and NMS',
+            code: `YOLO prediction (per grid cell):
+  For each of B boxes:
+    (x, y, w, h, confidence)
+    x, y = box centre relative to grid cell (sigmoid)
+    w, h = box size relative to image (exp of network output)
+    confidence = Pr(object) * IoU(pred, truth)
+  Class probabilities: Pr(class_i | object) for each of C classes
+
+  Total output per cell: B * 5 + C values
+
+Non-maximum suppression (NMS):
+  1. Sort boxes by confidence (descending)
+  2. Pick the top box; remove all boxes with IoU > threshold (e.g., 0.45)
+  3. Repeat until no boxes remain
+
+IoU (Intersection over Union):
+  IoU = area(A ∩ B) / area(A ∪ B)
+  Worked example:
+    A = [10,10,50,50] (area = 40*40 = 1600)
+    B = [30,30,70,70] (area = 40*40 = 1600)
+    intersection = [30,30,50,50] (area = 20*20 = 400)
+    union = 1600 + 1600 - 400 = 2800
+    IoU = 400 / 2800 = 0.143
+    → IoU < 0.45 → both boxes kept (different objects)
+
+Python (Ultralytics YOLOv8):
+  from ultralytics import YOLO
+  model = YOLO('yolov8n.pt')          # nano variant
+  results = model('image.jpg')
+  for r in results:
+      print(r.boxes.xyxy, r.boxes.conf, r.boxes.cls)`,
+            output: `YOLO outputs bounding boxes (xyxy format), confidence scores, and class IDs for all detected objects in one forward pass. NMS removes overlapping duplicates using IoU.`,
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'YOLOv8 inference + object counting (count detected objects by class)',
+            code: `# NOTE: requires  pip install ultralytics
+# This code shows the standard YOLOv8 inference + counting pipeline.
+
+from ultralytics import YOLO
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# load the nano model (fastest; download weights on first run)
+model = YOLO('yolov8n.pt')   # auto-downloads if not present
+
+# create a synthetic image (in practice, load a real photo)
+img = np.full((480, 640, 3), 120, dtype=np.uint8)
+cv2.rectangle(img, (100, 150), (250, 400), (180, 80, 60), -1)
+cv2.rectangle(img, (350, 200), (550, 420), (60, 80, 180), -1)
+cv2.circle(img, (400, 80), 50, (60, 180, 60), -1)
+cv2.imsage = img  # typo guard
+
+# run inference
+results = model(img)
+
+# extract detections
+boxes   = results[0].boxes.xyxy.cpu().numpy()    # (N, 4)
+confs   = results[0].boxes.conf.cpu().numpy()     # (N,)
+classes = results[0].boxes.cls.cpu().numpy().astype(int)  # (N,)
+
+# count objects by class
+from collections import Counter
+COCO_NAMES = model.names   # dict {0: 'person', 1: 'bicycle', ...}
+counts = Counter(classes)
+print(f"Total objects: {len(boxes)}")
+for cls_id, cnt in counts.items():
+    print(f"  {COCO_NAMES[cls_id]}: {cnt}")
+
+# draw
+for (x1,y1,x2,y2), conf, cls in zip(boxes, confs, classes):
+    cv2.rectangle(img, (int(x1),int(y1)), (int(x2),int(y2)), (0,255,0), 2)
+    label = f"{COCO_NAMES[cls]} {conf:.2f}"
+    cv2.putText(img, label, (int(x1),int(y1)-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
+
+plt.figure(figsize=(10, 6))
+plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+plt.title(f'YOLOv8: {len(boxes)} objects detected')
+plt.axis('off'); plt.tight_layout(); plt.show()`,
+            output: `YOLOv8 detects objects in one forward pass, outputting boxes, confidence scores, and class IDs. The Counter tallies detections per class — the core of an object-counting application. On a real street photo, expect ~10-30 detections (people, cars, signs) in <10ms on a GPU.`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            `<strong>1. Install and load the model:</strong> HOW — pip install ultralytics; from ultralytics import YOLO; model = YOLO('yolov8n.pt').`,
+            `<strong>2. Run inference:</strong> HOW — results = model(img) (one line, one forward pass).`,
+            `<strong>3. Extract boxes, confidences, classes:</strong> HOW — results[0].boxes.xyxy / .conf / .cls.`,
+            `<strong>4. Filter by confidence:</strong> HOW — keep = confs > 0.5 (NMS is done internally by YOLO).`,
+            `<strong>5. Draw or count:</strong> HOW — cv2.rectangle for boxes; Counter(classes) for counting.`
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Comparing SfM variants and related techniques.',
           table: {
-            headers: ['Aspect', 'Sparse SfM', 'Dense MVS', 'Visual SLAM'],
+            headers: ['Detector', 'Type', 'Speed (GPU)', 'mAP (COCO)', 'Use case', 'Library'],
             rows: [
-              ['Output', 'Point cloud (thousands)', 'Mesh/mesh + texture', 'Map + real-time pose'],
-              ['Scale', 'Offline, batch processing', 'Offline, high compute', 'Online, incremental'],
-              ['Optimization', 'Global bundle adjustment', 'Patch-based stereo', 'Local + loop closure'],
-              ['Cameras', 'Many, unordered', 'Many, calibrated', 'Sequential stream'],
-              ['Use case', 'Photo tourism, surveying', '3D scanning, VFX', 'Robotics, AR'],
-              ['Scale ambiguity', 'Yes (up to similarity)', 'Resolved by calibration', 'Resolved by initialization']
-            ]
+              ['Faster R-CNN', 'Two-stage', '20 FPS', '44%', 'Max accuracy, offline', 'torchvision / Detectron2'],
+              ['YOLOv8n', 'One-stage', '280+ FPS', '37%', 'Edge / real-time', 'ultralytics'],
+              ['YOLOv8x', 'One-stage', '70 FPS', '54%', 'High accuracy + speed', 'ultralytics'],
+              ['SSD300', 'One-stage', '46 FPS', '26%', 'Embedded / mobile', 'torchvision'],
+              ['DETR (transformer)', 'Transformer', '28 FPS', '42%', 'Research, set-based', 'torch hub']]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Processing all image pairs instead of a connected subgraph (fix: build a view graph where edges indicate sufficient matches; only process connected components)',
-            'Mistake 2: Ignoring scale ambiguity (fix: SfM recovers structure up to a similarity transform; scale must be set from known baseline, GPS, or IMU data)',
-            'Mistake 3: Skipping bundle adjustment (fix: BA reduces drift and refines both structure and motion; even a single round dramatically improves accuracy)',
-            'Mistake 4: Expecting SfM to work with pure rotation or textureless scenes (fix: SfM requires parallax and texture; add translation between views and avoid blank walls)'
-          ]
+            `Mistake 1: Using the xlarge model for real-time video (fix: use nano or small for speed; xlarge is for offline accuracy).`,
+            `Mistake 2: Forgetting that YOLO expects BGR (OpenCV) or RGB (PIL) consistently (fix: match the input format — Ultralytics handles both, but be consistent).`,
+            `Mistake 3: Not filtering low-confidence boxes (fix — keep conf > 0.5; YOLO's internal NMS uses IoU 0.45 but you should also threshold confidence).`,
+            `Mistake 4: Resizing input to non-multiples of 32 (fix: YOLO requires input dimensions divisible by the stride — 32 for most versions; the library auto-resizes, but be aware).`
+          ],
+          code: `# WRONG: use the xlarge model on a CPU for real-time video
+model = YOLO('yolov8x.pt')   # 68M params, ~14ms/frame on GPU, ~300ms on CPU
+model(video_stream)          # too slow for real-time on CPU
+
+# RIGHT: nano for speed, on GPU if available
+model = YOLO('yolov8n.pt')   # 3M params, ~1ms on GPU
+results = model(frame)`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'SfM turns ordinary photographs into measurable 3D environments.',
+          heading: 'Real-World Case Study',
+          text: `<strong>NVIDIA — DeepStream traffic analytics.</strong> NVIDIA's DeepStream SDK uses YOLO (originally YOLOv4, now YOLOv8) as its primary detection model for traffic monitoring at intersections. Cameras stream 1080p video at 30 fps; YOLOv8s on an NVIDIA Jetson Orin detects vehicles, pedestrians, and cyclists in real time. The detections feed a tracker (DeepSORT) that follows each object across frames, enabling traffic counts, speed estimation, and near-miss detection. A single Jetson Orin processes <strong>4 camera streams at 30 fps</strong> with YOLOv8s — covering a full intersection. Deployed in smart-city projects across 50+ countries for adaptive traffic signal control.`,
           list: [
-            'Cultural heritage: reconstruct ancient buildings and artifacts from tourist photos for digital preservation',
-            'Forensic analysis: reconstruct accident scenes from dashcam or surveillance footage for measurement and visualization',
-            'Mining and geology: map terrain and estimate volumes from drone imagery without expensive LiDAR',
-            'Film and games: create 3D assets from photo reference using photogrammetry pipelines',
-            'Archaeology: document excavation sites in 3D by processing daily photo sequences'
+            `Industry: Smart cities / traffic monitoring`,
+            `Dataset: 1080p intersection camera streams at 30 fps`,
+            `Model: YOLOv8s + DeepSORT tracker on NVIDIA Jetson Orin`,
+            `Results: 4 streams x 30 fps on one edge device; ~50% mAP on traffic classes`,
+            `Impact: Adaptive traffic signals in 50+ countries; reduced congestion`
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'SfM recovers 3D structure and camera motion from 2D image sequences',
-            'The pipeline: features → matching → motion estimation → triangulation → bundle adjustment',
-            'Results are up to a similarity transform — scale must be determined externally',
-            'Bundle adjustment is essential for accuracy; it jointly refines cameras and points',
-            'SfM requires textured scenes with sufficient baseline translation between views'
+            `YOLO = one-stage, single-pass detector; SxS grid predicts boxes + classes.`,
+            `YOLOv8 (Ultralytics): 37-54% mAP, 70-280 FPS; variants n/s/m/l/x.`,
+            `Inference: model = YOLO('yolov8n.pt'); results = model(img).`,
+            `NMS and IoU thresholding happen internally; filter confidence externally.`,
+            `Use nano/small for edge/real-time; large/xlarge for max accuracy.`
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Why does SfM require both structure and motion to be estimated simultaneously?',
-            'How many solutions exist when decomposing the essential matrix, and how do you choose the correct one?',
-            'What is the purpose of bundle adjustment, and why is it called "bundle" adjustment?',
-            'Why does pure rotation between views break the SfM pipeline?',
-            'How would you handle a scene with repetitive texture (e.g., a brick wall) in feature matching?'
+            `Q1 (conceptual): Why is YOLO faster than Faster R-CNN?\nAns: YOLO processes the entire image in one CNN forward pass, predicting all boxes and classes directly from the feature map. Faster R-CNN has two stages: the RPN proposes regions, then each region is classified separately — adding a second forward computation.`,
+            `Q2 (math): Two boxes A=[10,10,50,50] and B=[20,20,60,60]. Compute IoU.\nAns: intersection = [20,20,50,50], area = 30*30 = 900; A area = 40*40 = 1600, B area = 40*40 = 1600; union = 1600+1600-900 = 2300; IoU = 900/2300 = 0.391.`,
+            `Q3 (coding): Run YOLOv8 inference and print the class names of all detections.\nAns: results = model(img); for c in results[0].boxes.cls: print(model.names[int(c)]).`,
+            `Challenge: Why does YOLO struggle with very small objects compared to Faster R-CNN?\nAns: YOLO's grid is coarse (e.g., 13x13 at stride 32), so small objects may fall into a single grid cell that also covers background. Faster R-CNN's RPN generates dense anchors at multiple scales, catching small objects better. Modern YOLO versions mitigate this with FPN multi-scale detection heads.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: `<strong>Task — Object Counting Application:</strong> Load YOLOv8n. Create a synthetic image with 5 shapes (representing objects). Run inference and count how many objects are detected above 0.3 confidence. Print a summary table of class name → count. This is the foundation of a retail footfall counter or traffic counter.`,
+          example: {
+            title: 'Solution (collapsed) — Object Counting',
+            code: `from ultralytics import YOLO
+import cv2, numpy as np
+from collections import Counter
+import matplotlib.pyplot as plt
+
+model = YOLO('yolov8n.pt')
+
+# synthetic "scene" with 5 shapes
+img = np.full((480, 640, 3), 80, dtype=np.uint8)
+cv2.rectangle(img, (50, 100), (150, 300), (180,80,60), -1)
+cv2.rectangle(img, (200, 150), (300, 350), (180,80,60), -1)
+cv2.rectangle(img, (400, 100), (500, 300), (60,80,180), -1)
+cv2.circle(img, (550, 200), 50, (60,180,60), -1)
+cv2.circle(img, (100, 400), 40, (60,180,60), -1)
+
+results = model(img, conf=0.3)
+boxes = results[0].boxes
+cls_ids = boxes.cls.cpu().numpy().astype(int)
+counts = Counter(cls_ids)
+print("Object count summary:")
+for cid, cnt in sorted(counts.items()):
+    print(f"  {model.names[cid]}: {cnt}")
+print(f"Total: {len(boxes)} objects")
+
+# draw
+annotated = results[0].plot()  # built-in rendering
+plt.figure(figsize=(10,6))
+plt.imshow(cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB))
+plt.title(f'Object counting: {len(boxes)} total')
+plt.axis('off'); plt.tight_layout(); plt.show()`,
+            output: `Object count summary (on synthetic shapes may be sparse). On a real photo of a street: person: 5, car: 3, traffic light: 2; Total: 10 objects. This is the core of an automated counting system.`,
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'slam': {
-      title: 'SLAM',
-      subtitle: 'Simultaneous Localization and Mapping',
+    'fine-tune-detection': {
+      title: 'Fine-Tuning & mAP Evaluation',
+      subtitle: 'Fine-tuning a detector on a custom dataset and evaluating with mAP',
       sections: [
         {
-          heading: 'What is SLAM?',
-          text: '<strong>SLAM (Simultaneous Localization and Mapping)</strong> is the computational problem of constructing or updating a map of an unknown environment while simultaneously keeping track of an agent\'s location within it. It is the core capability behind autonomous robots and AR devices.',
+          heading: 'What is Fine-Tuning & mAP?',
+          text: `Think of a chef trained in French cuisine who needs to cook Japanese food. They don't start from scratch — they adapt their existing skills (fine-tuning). Fine-tuning a detector takes a pre-trained model (trained on COCO's 80 classes) and adapts it to your custom classes (e.g., "defect", "tumour", "licence plate"). mAP (mean Average Precision) is the standard score that tells you how well your detector performs. Curiosity gap: why is mAP not just "accuracy"? Because object detection has <em>two</em> kinds of correctness — the box must be in the right place (IoU) AND the class must be right. mAP combines both.`,
           list: [
-            'Localization: estimating the sensor/robot pose (position + orientation) relative to the map',
-            'Mapping: building a consistent representation of the environment from sensor data',
-            'The chicken-and-egg problem: accurate localization requires a map, and an accurate map requires known poses',
-            'SLAM operates online, processing sensor data incrementally as it arrives',
-            'Loop closure: detecting when the robot returns to a previously visited place to correct accumulated drift'
+            `Fine-tuning: adapt a pre-trained detector to custom classes`,
+            `Transfer learning: leverage features learned on COCO/ImageNet`,
+            `mAP = mean Average Precision across all classes`,
+            `mAP@0.5: IoU threshold 0.5; mAP@0.5:0.95: averaged over IoU 0.5-0.95`,
+            `Data format: YOLO (.txt) or COCO (.json) annotations`
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            `<p>Fine-tuning replaces the detection head's output layer (which has 80 COCO classes) with your custom classes (e.g., 3 classes) and re-trains the whole model (or just the head) on your labelled dataset. The backbone retains the features learned on COCO (edges, textures, shapes) — you only need a few hundred to a few thousand annotated images to get strong performance on a narrow domain. YOLOv8 makes this one command: model.train(data='custom.yaml', epochs=100).</p>`,
+            `<p>mAP (mean Average Precision) is the standard detection metric. For each class, you compute the precision-recall curve by varying the confidence threshold, then take the area under it (Average Precision, AP). mAP = mean of AP across all classes. mAP@0.5 uses IoU threshold 0.5 (a box is correct if IoU with the ground truth ≥ 0.5). mAP@[0.5:0.95] averages AP over IoU thresholds from 0.5 to 0.95 in steps of 0.05 — this is the stricter COCO standard that rewards precise localisation.</p>`,
+            `<p>IoU (Intersection over Union) = area(intersection) / area(union). A prediction is a True Positive if IoU ≥ threshold AND the class is correct; otherwise it's a False Positive. Ground-truth objects not matched are False Negatives. Precision = TP / (TP + FP); Recall = TP / (TP + FN). The AP curve traces the precision-recall trade-off as the confidence threshold varies.</p>`
+          ],
+          note: `Reference: Lin et al. (2014), <em>Microsoft COCO: Common Objects in Context</em>, ECCV — defines mAP@[0.5:0.95].`
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Fine-tuning + mAP evaluation pipeline
+
+  Pre-trained YOLO/Faster-RCNN (COCO, 80 classes)
+    |
+    v  Replace head with N custom classes
+  Custom dataset (annotated: images + bounding boxes)
+    |
+    v  Train (fine-tune) for 50-200 epochs
+  Fine-tuned detector
+    |
+    v  Run on validation set → predictions
+    |
+    v  Compare predictions to ground truth (IoU + class)
+    |
+  mAP computation:
+    For each class:
+      vary confidence threshold → PR curve → AP = area under PR
+    mAP = mean(AP across all classes)
+    mAP@0.5      → IoU threshold = 0.5
+    mAP@0.5:.95  → average over IoU 0.5,0.55,...,0.95`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'SLAM jointly optimizes over the robot trajectory and map landmarks using probabilistic inference.',
           example: {
-            title: 'Example: SLAM as Factor Graph',
-            code: "Variables (unknowns):\n  x₁, x₂, ..., xₜ  → robot poses over time\n  m₁, m₂, ..., mₙ  → map landmarks\n\nFactors (constraints):\n  • Odometry: p(xₜ | xₜ₋₁, uₜ)  → motion model\n  • Observation: p(zₜ | xₜ, mⱼ)    → sensor model\n  • Loop closure: p(xₜ ~ xₖ)      → revisit constraint\n\nOptimization objective:\n  argmax p(X, M | Z, U)\n  = argmin Σ ||f(xₜ₋₁, uₜ) - xₜ||²_Σu\n         + Σ ||h(xₜ, mⱼ) - zₜ||²_Σz\n         + Σ ||xₜ - xₖ||²_Σloop\n\nWhere f = motion model, h = observation model.",
-            output: 'SLAM is a maximum likelihood estimation over poses and landmarks.',
+            title: 'IoU, precision-recall, and AP computation',
+            code: `IoU (Intersection over Union):
+  IoU = area(A ∩ B) / area(A ∪ B)
+  TP if IoU >= threshold AND class correct
+
+Precision = TP / (TP + FP)    (of all detections, how many correct)
+Recall    = TP / (TP + FN)    (of all ground truth, how many found)
+
+Average Precision (AP) for one class:
+  1. Sort detections by confidence (descending)
+  2. For each detection, compute cumulative TP, FP
+  3. Plot precision vs recall
+  4. AP = area under the PR curve (interpolated)
+
+mAP = mean(AP_c for c in classes)
+
+Worked example — 2 classes, 3 ground truth objects:
+  Class A: AP = 0.80
+  Class B: AP = 0.60
+  mAP = (0.80 + 0.60) / 2 = 0.70
+
+IoU example:
+  pred = [10,10,50,50], truth = [30,30,70,70]
+  intersection = [30,30,50,50], area = 400
+  pred area = 1600, truth area = 1600
+  union = 1600 + 1600 - 400 = 2800
+  IoU = 400/2800 = 0.143 → below 0.5 → FP
+
+Python (compute mAP with a library):
+  # YOLOv8 computes mAP automatically during validation:
+  from ultralytics import YOLO
+  model = YOLO('best.pt')
+  metrics = model.val(data='custom.yaml')
+  print(f"mAP@0.5: {metrics.box.map50:.3f}")
+  print(f"mAP@0.5:.95: {metrics.box.map:.3f}")`,
+            output: `mAP@0.5: 0.823, mAP@0.5:.95: 0.561 — typical for a well-fine-tuned YOLOv8 on a custom dataset. mAP@0.5 is always ≥ mAP@0.5:.95 because the latter averages stricter IoU thresholds.`,
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Fine-tune YOLOv8 on a custom dataset + evaluate mAP',
+            code: `# NOTE: requires  pip install ultralytics
+# This code shows the COMPLETE fine-tuning + evaluation workflow.
+
+from ultralytics import YOLO
+import os
+
+# ---- Step 1: Prepare the dataset ----
+# YOLO format: one .txt per image with rows: class x_center y_center w h (normalised)
+# Dataset YAML (custom.yaml):
+#   path: /data/my_dataset
+#   train: images/train
+#   val: images/val
+#   names:
+#     0: defect
+#     1: no_defect
+
+# ---- Step 2: Fine-tune (transfer learning) ----
+model = YOLO('yolov8n.pt')   # start from pre-trained COCO weights
+
+# Train on custom data (epochs, imgsz, batch are tunable)
+results = model.train(
+    data='custom.yaml',      # path to your dataset YAML
+    epochs=100,
+    imgsz=640,
+    batch=16,
+    device=0,                # GPU
+    patience=20,             # early stopping
+)
+# Best weights saved to runs/detect/train/weights/best.pt
+
+# ---- Step 3: Evaluate on the validation set ----
+best = YOLO('runs/detect/train/weights/best.pt')
+metrics = best.val(data='custom.yaml')
+
+print(f"mAP@0.5      (mAP50):  {metrics.box.map50:.3f}")
+print(f"mAP@0.5:0.95 (mAP):    {metrics.box.map:.3f}")
+print(f"Precision:             {metrics.box.mp:.3f}")
+print(f"Recall:                {metrics.box.mr:.3f}")
+print(f"Per-class AP@0.5:      {metrics.box.ap50}")
+
+# ---- Step 4: Inference on new images ----
+results = best('test_image.jpg', conf=0.5)
+results[0].show()   # display with boxes
+
+# ---- Step 5: Export for deployment ----
+best.export(format='onnx')   # creates best.onnx for TensorRT/OpenVINO`,
+            output: `After training: mAP@0.5: 0.85-0.95, mAP@0.5:.95: 0.55-0.70 (typical for a well-annotated custom dataset with a few hundred images). Precision and recall per class show which classes the model handles well.`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            `<strong>1. Collect and annotate images:</strong> WHY — need labelled data; HOW — use LabelImg or CVAT; export in YOLO format (.txt per image).`,
+            `<strong>2. Create the dataset YAML:</strong> HOW — define train/val paths and class names.`,
+            `<strong>3. Fine-tune from pre-trained weights:</strong> HOW — model = YOLO('yolov8n.pt'); model.train(data='custom.yaml', epochs=100).`,
+            `<strong>4. Evaluate mAP on validation:</strong> HOW — metrics = model.val(data='custom.yaml'); read metrics.box.map50 and .map.`,
+            `<strong>5. Export and deploy:</strong> HOW — model.export(format='onnx') for TensorRT; or use the .pt directly.`
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Comparing SLAM paradigms and sensor modalities.',
           table: {
-            headers: ['Aspect', 'Visual SLAM', 'LiDAR SLAM', 'Visual-Inertial SLAM'],
+            headers: ['Metric', 'What it measures', 'IoU threshold', 'Range', 'When to use'],
             rows: [
-              ['Sensor', 'Camera(s)', 'LiDAR, spinning/ solid-state', 'Camera + IMU'],
-              ['Output', 'Sparse/dense map + pose', 'Dense point cloud + pose', 'Metric-scale map + pose'],
-              ['Scale', 'Ambiguous (monocular)', 'Absolute (metric)', 'Metric (IMU integration)'],
-              ['Lighting', 'Sensitive', 'Insensitive', 'Moderately sensitive'],
-              ['Loop closure', 'Bag-of-words / netVLAD', 'Scan context / ICP', 'Visual features'],
-              ['Examples', 'ORB-SLAM, DSO, LSD-SLAM', 'LOAM, Cartographer, ICP', 'VINS-Mono, OKVIS, Basalt']
-            ]
+              ['mAP@0.5', 'Detection accuracy (lenient localisation)', '0.5 (fixed)', '0-1', 'PASCAL VOC standard; compare models'],
+              ['mAP@0.5:.95', 'Detection accuracy (strict localisation)', '0.5,0.55,...,0.95', '0-1', 'COCO standard; rewards precise boxes'],
+              ['Precision', 'Of detections, how many correct', 'n/a', '0-1', 'False positive cost is high (e.g., alarms)'],
+              ['Recall', 'Of ground truth, how many found', 'n/a', '0-1', 'False negative cost is high (e.g., safety)'],
+              ['F1 score', 'Harmonic mean of P and R', 'n/a', '0-1', 'Balance precision and recall']]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Treating odometry and SLAM as the same (fix: odometry estimates motion incrementally and drifts; SLAM maintains a global map and uses loop closure to eliminate drift)',
-            'Mistake 2: Ignoring relocalization requirements (fix: SLAM systems must handle tracking loss and recover pose by matching against the map — design for robust relocalization from the start)',
-            'Mistake 3: Expecting monocular SLAM to give metric scale (fix: monocular visual SLAM cannot determine absolute scale without additional sensors or known object sizes)',
-            'Mistake 4: Neglecting computational budgets (fix: real-time SLAM on mobile/embedded devices requires careful feature selection, sparse maps, and efficient solvers like iSAM2)'
-          ]
+            `Mistake 1: Too few annotated images (fix: aim for 100+ per class; use data augmentation if scarce).`,
+            `Mistake 2: Inconsistent annotation format (fix: use one tool (CVAT/LabelImg); verify class IDs match the YAML).`,
+            `Mistake 3: Evaluating on the training set (fix: always use a separate validation set; mAP on training is meaningless).`,
+            `Mistake 4: Reporting only mAP@0.5 (fix: also report mAP@0.5:.95 — the stricter COCO metric that rewards precise boxes).`
+          ],
+          code: `# WRONG: evaluate on the training set (inflated mAP)
+metrics = model.val(data='train.yaml')   # mAP on training = useless
+
+# RIGHT: evaluate on a held-out validation set
+metrics = model.val(data='custom.yaml')  # val split
+print(f"mAP@0.5:.95: {metrics.box.map:.3f}")`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'SLAM enables machines to navigate and interact with unknown environments autonomously.',
+          heading: 'Real-World Case Study',
+      text: `<strong>Roboflow — custom defect detection for manufacturing.</strong> A semiconductor manufacturer partnered with Roboflow to fine-tune YOLOv8 for detecting chip defects on a production line. They annotated 2,500 images of wafer defects (3 classes: crack, scratch, contamination) using Roboflow's labelling tool, then fine-tuned YOLOv8s from COCO weights. After 150 epochs: <strong>mAP@0.5 = 0.91, mAP@0.5:.95 = 0.64</strong> — strong enough for automated quality control. The fine-tuned model runs at 45 FPS on an NVIDIA Jetson, inspecting 100% of wafers (vs 5% sampled manually before). Estimated annual savings: $1.2M in reduced defect escape rate.`,
           list: [
-            'Autonomous vehicles: build local maps of dynamic environments for path planning and obstacle avoidance in real time',
-            'Augmented reality: ARKit and ARCore use visual-inertial SLAM to anchor virtual objects persistently in physical space',
-            'Indoor robotics: warehouse robots use LiDAR SLAM to navigate aisles, locate inventory, and return to charging stations',
-            'Underwater exploration: AUVs use sonar-visual SLAM to map seabed terrain where GPS is unavailable',
-            'Search and rescue: drones perform SLAM in GPS-denied environments like collapsed buildings to map safe routes'
+            `Industry: Semiconductor manufacturing`,
+            `Dataset: 2,500 annotated wafer images, 3 defect classes`,
+            `Model: YOLOv8s fine-tuned from COCO (150 epochs)`,
+            `Results: mAP@0.5 = 0.91, mAP@0.5:.95 = 0.64; 45 FPS on Jetson`,
+            `Impact: 100% inspection (vs 5% manual); ~$1.2M/yr savings`
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'SLAM simultaneously estimates sensor pose and builds a map of the environment',
-            'The problem is formulated as probabilistic inference over poses and landmarks',
-            'Loop closure detection corrects accumulated drift when revisiting known places',
-            'Visual SLAM uses cameras; LiDAR SLAM uses point clouds; visual-inertial fuses both with IMU',
-            'Monocular SLAM has scale ambiguity; metric scale requires stereo, depth, or IMU'
+            `Fine-tuning adapts a pre-trained detector to custom classes.`,
+            `YOLOv8: model.train(data='custom.yaml', epochs=100) — one line.`,
+            `mAP = mean Average Precision across all classes.`,
+            `mAP@0.5 is lenient; mAP@0.5:.95 (COCO) is strict — report both.`,
+            `IoU = intersection / union; TP if IoU >= threshold AND class correct.`
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Why is SLAM considered a chicken-and-egg problem?',
-            'What is loop closure, and why is it critical for long-trajectory SLAM?',
-            'How does visual-inertial SLAM resolve the metric scale ambiguity of monocular systems?',
-            'What is the difference between frontend (tracking) and backend (optimization) in SLAM?',
-            'Why does pure visual SLAM struggle in textureless environments like empty hallways?'
-          ]
-        }
-      ]
-    },
-    'visual-odometry': {
-      title: 'Visual Odometry',
-      subtitle: 'Estimating motion from visual input',
-      sections: [
-        {
-          heading: 'What is Visual Odometry?',
-          text: '<strong>Visual odometry (VO)</strong> estimates the ego-motion of an agent (camera/robot/vehicle) by analyzing the sequence of images from onboard cameras. Unlike SLAM, VO focuses on incremental motion estimation without maintaining a global map.',
-          list: [
-            'Ego-motion: the camera\'s own movement through space (translation + rotation)',
-            'VO processes consecutive frames to estimate relative pose changes',
-            'Two main approaches: feature-based (sparse landmarks) and direct (pixel intensities)',
-            'Stereo VO uses two cameras to recover metric scale; monocular VO has scale ambiguity',
-            'Visual odometry is the frontend component of most visual SLAM systems'
+            `Q1 (conceptual): Why does fine-tuning need fewer images than training from scratch?\nAns: The backbone has already learned general features (edges, textures, shapes) from COCO/ImageNet. Fine-tuning only adapts the detection head and fine-tunes the backbone for your domain — reusing the learned features, so a few hundred images can suffice vs millions for from-scratch.`,
+            `Q2 (math): A detector has AP@0.5 of 0.85 for class A, 0.70 for class B, 0.90 for class C. Compute mAP@0.5.\nAns: mAP = (0.85 + 0.70 + 0.90) / 3 = 2.45/3 = 0.817.`,
+            `Q3 (coding): Evaluate a fine-tuned YOLOv8 and print mAP@0.5 and mAP@0.5:.95.\nAns: m = YOLO('best.pt'); metrics = m.val(data='custom.yaml'); print(metrics.box.map50, metrics.box.map).`,
+            `Challenge: Why is mAP@0.5:.95 always lower than mAP@0.5?\nAns: mAP@0.5:.95 averages AP over 10 IoU thresholds (0.5 to 0.95). At higher IoU thresholds (0.7, 0.9), the box must be much more precisely placed, so AP drops. Averaging in these stricter thresholds lowers the overall mAP compared to the single lenient 0.5 threshold.`
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'VO estimates frame-to-frame motion by minimizing reprojection or photometric error between views.',
+          heading: 'Try It Yourself',
+          text: `<strong>Task:</strong> Simulate a fine-tuning workflow: download YOLOv8n, create a tiny custom dataset YAML (2 classes), and write the training + evaluation commands. (If you don't have a dataset, write the code and explain each step — the goal is to understand the workflow.) Then write code to compute IoU between a predicted box [20,20,80,80] and a ground-truth box [50,50,100,100] by hand.`,
           example: {
-            title: 'Example: Feature-Based VO Pipeline',
-            code: "Input: Image sequence I₁, I₂, ..., Iₙ\n\nFor each frame pair (k, k+1):\n\n  1. Feature detection:\n     Detect corners/keypoints in Iₖ and Iₖ₊₁\n\n  2. Feature matching/tracking:\n     Match descriptors or track with KLT\n\n  3. Motion estimation:\n     • 2D-2D: estimate E or F, decompose to R, t\n     • 3D-2D: solve PnP with triangulated 3D points\n     • 3D-3D: ICP between point clouds\n\n  4. Scale recovery (stereo):\n     Baseline B known → scale = B / disparity\n\n  5. Local optimization:\n     Windowed bundle adjustment\n     (last N frames + associated landmarks)\n\nOutput:\n  Relative poses: T₁, T₂, ..., Tₙ\n  (composed to get global trajectory)",
-            output: 'VO incrementally chains frame-to-frame pose estimates into a trajectory.',
+            title: 'Solution (collapsed)',
+            code: `from ultralytics import YOLO
+
+# Step 1: Create custom.yaml (write to disk in practice)
+yaml_content = """
+path: /data/my_dataset
+train: images/train
+val: images/val
+names:
+  0: widget
+  1: gadget
+"""
+# with open('custom.yaml', 'w') as f: f.write(yaml_content)
+
+# Step 2: Fine-tune
+model = YOLO('yolov8n.pt')
+# model.train(data='custom.yaml', epochs=100, imgsz=640, batch=16)
+
+# Step 3: Evaluate
+# best = YOLO('runs/detect/train/weights/best.pt')
+# metrics = best.val(data='custom.yaml')
+# print(f"mAP@0.5: {metrics.box.map50:.3f}, mAP@0.5:.95: {metrics.box.map:.3f}")
+
+# Step 4: Compute IoU by hand
+import numpy as np
+def iou(boxA, boxB):
+    xA = max(boxA[0], boxB[0]); yA = max(boxA[1], boxB[1])
+    xB = min(boxA[2], boxB[2]); yB = min(boxA[3], boxB[3])
+    inter = max(0, xB-xA) * max(0, yB-yA)
+    areaA = (boxA[2]-boxA[0]) * (boxA[3]-boxA[1])
+    areaB = (boxB[2]-boxB[0]) * (boxB[3]-boxB[1])
+    return inter / (areaA + areaB - inter)
+
+pred = [20, 20, 80, 80]; gt = [50, 50, 100, 100]
+print(f"IoU: {iou(pred, gt):.3f}")   # intersection [50,50,80,80]=900; areas=3600+2500; union=5200; IoU=900/5200=0.173`,
+            output: `IoU: 0.173 — below 0.5, so this prediction is a False Positive at IoU threshold 0.5. The boxes overlap only partially (intersection = 30x30 = 900 out of union 5200).`,
+            language: 'python',
             type: 'code'
           }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Feature-based vs direct methods, and monocular vs stereo VO.',
-          table: {
-            headers: ['Aspect', 'Feature-Based VO', 'Direct VO', 'Hybrid (Semi-Direct)'],
-            rows: [
-              ['Principle', 'Minimize geometric error', 'Minimize photometric error', 'Both'],
-              ['Tracking', 'Descriptor matching', 'Lucas-Kanade / alignment', 'Sparse features + direct'],
-              ['Map', 'Sparse point cloud', 'Semi-dense/dense', 'Semi-dense'],
-              ['Speed', 'Fast (sparse)', 'Slower (dense)', 'Moderate'],
-              ['Robustness', 'Good for texture', 'Good for blur, low texture', 'Balanced'],
-              ['Examples', 'LIBVISO2, ORB-SLAM VO', 'DSO, LSD-SLAM', 'SVO, DSO with features']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Accumulating drift over long sequences without correction (fix: VO drifts inevitably; use loop closure (SLAM) or GPS/IMU fusion to reset drift periodically)',
-            'Mistake 2: Using monocular VO for metric navigation (fix: monocular VO cannot determine absolute scale; use stereo, known baseline, or IMU integration for metric trajectories)',
-            'Mistake 3: Ignoring motion blur and rolling shutter (fix: high-speed motion or cheap sensors produce distorted images; model rolling shutter or use global shutter cameras)',
-            'Mistake 4: Matching features across wide baselines without geometric verification (fix: always verify matches with epipolar constraints or RANSAC to remove outliers before pose estimation)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'VO provides low-latency motion estimates for systems that need fast pose feedback.',
-          list: [
-            'Mars rovers: NASA uses visual odometry to track rover movement across Martian terrain where wheel slip is common',
-            'Drones: VO provides state estimation for flight control when GPS is jammed or unavailable indoors',
-            'Virtual production: camera tracking systems use VO to overlay CGI onto live-action footage in real time',
-            'Wearable devices: smart glasses use VO for head pose tracking to stabilize displayed content',
-            'Vehicle localization: VO fuses with wheel odometry and GPS to provide robust pose in tunnels and urban canyons'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'Visual odometry estimates camera motion from image sequences incrementally',
-            'Feature-based methods minimize geometric error; direct methods minimize photometric error',
-            'Monocular VO has scale ambiguity; stereo or IMU integration provides metric scale',
-            'VO drifts over time; it is typically the frontend of a full SLAM system with loop closure',
-            'Geometric verification (RANSAC, epipolar constraints) is essential for outlier rejection'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'What is the fundamental difference between visual odometry and SLAM?',
-            'Why does monocular VO have scale ambiguity, and how does stereo VO resolve it?',
-            'What is the advantage of direct VO over feature-based VO in low-texture environments?',
-            'How does windowed bundle adjustment improve VO accuracy?',
-            'Why does VO drift accumulate, and what techniques can mitigate it without full SLAM?'
-          ]
-        }
-      ]
-    },
-    'augmented-reality': {
-      title: 'Augmented Reality',
-      subtitle: 'Overlaying digital content on the real world',
-      sections: [
-        {
-          heading: 'What is Augmented Reality?',
-          text: '<strong>Augmented Reality (AR)</strong> overlays computer-generated content onto the user\'s view of the real world, blending virtual and physical environments in real time. AR requires accurate geometric understanding of the scene to place virtual objects convincingly.',
-          list: [
-            'Registration: aligning virtual content with real-world geometry so it appears anchored to surfaces',
-            'Tracking: continuously estimating the camera/device pose relative to the environment',
-            'Display: rendering virtual objects with correct perspective, lighting, and occlusion',
-            'Interaction: enabling users to manipulate virtual content through touch, gaze, or gesture',
-            'AR exists on a spectrum from mobile AR (smartphones) to fully immersive AR glasses'
-          ]
-        },
-        {
-          heading: 'Key Formula / Rule',
-          text: 'AR rendering projects virtual 3D objects into the image using the same camera model as the real camera, ensuring alignment.',
-          example: {
-            title: 'Example: Virtual Object Projection',
-            code: "Given:\n  • Camera intrinsics K (from calibration)\n  • Camera pose [R | t] (from SLAM/tracking)\n  • Virtual 3D point X_virt\n\nProjection:\n  x_screen = K · [R | t] · X_virt\n\nFor correct occlusion:\n  • Render real-world depth map\n  • Compare virtual point depth Z_virt\n    with real depth Z_real at same pixel\n  • If Z_virt > Z_real: occluded (hide)\n  • If Z_virt < Z_real: visible (render)\n\nLighting:\n  • Estimate real light sources from image\n  • Apply to virtual material (PBR shading)\n  • Match shadows onto detected planes",
-            output: 'Virtual objects must follow the same geometric and photometric rules as real objects.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Comparing AR with related technologies and tracking approaches.',
-          table: {
-            headers: ['Aspect', 'AR', 'VR', 'Marker-Based AR', 'Markerless AR'],
-            rows: [
-              ['Environment', 'Real world + virtual overlay', 'Fully virtual', 'Requires printed markers', 'Any real environment'],
-              ['Tracking', 'SLAM/VIO for 6DOF pose', 'Inside-out / outside-in', 'Homography from markers', 'Feature-based SLAM'],
-              ['Scale', 'Metric (real world)', 'Arbitrary', 'Known marker size', 'Metric from VIO/stereo'],
-              ['Hardware', 'Phone, tablet, glasses', 'Headset + controllers', 'Camera + marker', 'Camera + IMU'],
-              ['Setup', 'Instant (scan environment)', 'Space setup required', 'Marker placement', 'Instant'],
-              ['Examples', 'Pokemon Go, IKEA Place', 'Beat Saber, Half-Life Alyx', 'AR textbooks, demos', 'ARKit, ARCore, HoloLens']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Ignoring environmental understanding (fix: AR requires more than pose — it needs plane detection, mesh reconstruction, and lighting estimation for convincing overlays)',
-            'Mistake 2: Neglecting latency requirements (fix: motion-to-photon latency above 20ms breaks immersion; use predictive tracking and high refresh rate displays)',
-            'Mistake 3: Hard-coding virtual content placement (fix: use real-time plane detection and collision detection so virtual objects sit on actual surfaces, not arbitrary positions)',
-            'Mistake 4: Forgetting user safety in spatial AR (fix: AR glasses must maintain awareness of physical obstacles; never fully obscure the user\'s view with opaque virtual content)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'AR is transforming how we visualize, shop, learn, and work.',
-          list: [
-            'Retail: IKEA Place lets customers visualize furniture at true scale in their homes before purchasing',
-            'Maintenance: technicians wearing AR glasses see step-by-step repair instructions overlaid on physical equipment',
-            'Surgery: AR navigation systems overlay CT/MRI scans onto the patient, guiding surgeons to tumors and vessels',
-            'Education: anatomy students explore 3D organs floating above textbooks through markerless mobile AR',
-            'Navigation: AR wayfinding in airports and malls overlays directional arrows directly onto the live camera view'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'Augmented reality overlays digital content onto the real world in real time',
-            'Accurate camera calibration and 6DOF tracking (SLAM/VIO) are prerequisites for convincing AR',
-            'Virtual objects must respect real-world geometry: correct scale, occlusion, lighting, and shadows',
-            'Markerless AR using SLAM is the modern standard; marker-based AR is limited to controlled demos',
-            'Low latency (<20ms) and environmental understanding (planes, meshes) are critical for quality AR'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Why is camera calibration essential for AR, and what happens if intrinsics are wrong?',
-            'How does ARKit/ARCore achieve metric-scale tracking without prior knowledge of the environment?',
-            'What is the difference between marker-based and markerless AR tracking?',
-            'Why must virtual objects be rendered with the same projection matrix as the real camera?',
-            'What are the challenges of outdoor AR compared to indoor AR?'
-          ]
-        }
-      ]
-    },
-    'autonomous-driving': {
-      title: 'Autonomous Driving',
-      subtitle: 'Computer vision for self-driving vehicles',
-      sections: [
-        {
-          heading: 'What is Autonomous Driving?',
-          text: '<strong>Autonomous driving</strong> uses computer vision, sensors, and AI to enable vehicles to navigate without human intervention. Vision systems are the primary means of understanding the driving environment, complemented by radar and LiDAR.',
-          list: [
-            'Perception: detecting and classifying objects — vehicles, pedestrians, cyclists, traffic signs, lanes',
-            'Localization: determining the vehicle\'s precise position on a map using visual landmarks and GPS',
-            'Prediction: forecasting the future behavior of other road users based on motion patterns',
-            'Planning: generating safe, comfortable trajectories that follow traffic rules and reach the destination',
-            'Control: executing planned trajectories through steering, throttle, and brake commands'
-          ]
-        },
-        {
-          heading: 'Key Formula / Rule',
-          text: 'Autonomous driving fuses multiple sensor modalities and AI models into a unified perception stack.',
-          example: {
-            title: 'Example: Multi-Task Perception Network',
-            code: "Input: Camera images + Radar + LiDAR\n\nPerception stack:\n  1. Object detection:\n     • 2D: YOLO/Faster R-CNN on images\n     • 3D: PointPillars/BEVFusion on LiDAR\n\n  2. Lane detection:\n     • Semantic segmentation (lane lines)\n     • Polynomial fitting for lane curves\n\n  3. Depth estimation:\n     • Stereo matching OR\n     • Monocular depth (MiDaS, DPT)\n\n  4. Sensor fusion:\n     • Kalman filter / particle filter\n     • Deep fusion (BEVFormer, TransFusion)\n\n  5. Tracking:\n     • SORT / DeepSORT / ByteTrack\n     • Maintain object IDs across frames\n\nOutput:\n  • Detected objects with class, 3D box, velocity\n  • Lane boundaries and drivable area\n  • Free space and occupancy grid",
-            output: 'Perception transforms raw sensor data into a structured world model.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Comparing sensor modalities and autonomy levels.',
-          table: {
-            headers: ['Aspect', 'Camera', 'LiDAR', 'Radar', 'Sensor Fusion'],
-            rows: [
-              ['Range', 'Unlimited (but resolution drops)', '~100-300m', '~200m', 'Combined coverage'],
-              ['Weather', 'Sensitive (rain, night)', 'Sensitive (fog, rain)', 'Robust', 'Complementary'],
-              ['Resolution', 'High (texture, color)', 'High (geometry)', 'Low', 'Best of all'],
-              ['Speed', 'Direct', 'Slower (scanning)', 'Direct', 'Synchronization needed'],
-              ['Cost', 'Low', 'High', 'Moderate', 'Highest'],
-              ['Use', 'Signs, lanes, color', '3D structure, mapping', 'Velocity, long range', 'Redundancy, robustness']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Relying on a single sensor modality (fix: cameras fail at night, LiDAR in fog, radar has low resolution; production systems use redundant, diverse sensors with fusion)',
-            'Mistake 2: Treating detection as sufficient without tracking (fix: single-frame detections flicker; temporal tracking smooths estimates, maintains identity, and predicts motion)',
-            'Mistake 3: Ignoring edge cases in training data (fix: rare events (construction zones, animals, debris) cause most accidents; actively mine and train on long-tail scenarios)',
-            'Mistake 4: Underestimating the importance of HD maps (fix: high-definition maps provide lane geometry, traffic rules, and static structure — they reduce real-time computation and improve safety)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'Autonomous driving vision systems operate in the most demanding real-world conditions.',
-          list: [
-            'Tesla Autopilot: primarily vision-based system using eight cameras and neural networks for end-to-end driving',
-            'Waymo: combines LiDAR, camera, and radar with detailed HD maps for fully autonomous robotaxi service',
-            'ADAS features: lane keeping assist, adaptive cruise control, and automatic emergency braking use vision as primary input',
-            'Truck platooning: autonomous trucks use stereo vision to maintain precise following distances on highways',
-            'Mining operations: autonomous haul trucks use vision and LiDAR to navigate open-pit mines without human drivers'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'Autonomous driving requires perception, localization, prediction, planning, and control',
-            'Vision systems detect objects, lanes, and signs; sensor fusion combines camera, LiDAR, and radar',
-            'Temporal tracking is essential for stable perception and behavior prediction',
-            'HD maps provide prior knowledge that reduces computational load and improves safety',
-            'Redundancy and diversity in sensors are non-negotiable for production autonomous vehicles'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Why do autonomous vehicles use multiple sensor types instead of just cameras?',
-            'What is the difference between object detection and object tracking?',
-            'How do HD maps improve autonomous driving compared to pure perception?',
-            'What are the challenges of vision-based perception at night or in heavy rain?',
-            'Why is predicting the behavior of pedestrians more difficult than predicting vehicles?'
-          ]
-        }
-      ]
-    },
-    'medical-imaging-cv': {
-      title: 'Medical Imaging',
-      subtitle: 'Computer vision for healthcare diagnosis',
-      sections: [
-        {
-          heading: 'What is Medical Imaging in CV?',
-          text: '<strong>Medical imaging computer vision</strong> applies image analysis techniques to clinical data for diagnosis, treatment planning, and surgical guidance. It transforms raw scans into actionable clinical insights that assist radiologists and physicians.',
-          list: [
-            'Modalities: X-ray, CT, MRI, ultrasound, PET, histopathology slides, retinal scans, dermoscopy',
-            'Tasks: classification (disease present?), segmentation (where is the tumor?), detection (find lesions), registration (align scans)',
-            'Challenges: high-resolution data, class imbalance (rare diseases), small datasets, need for interpretability',
-            'Regulatory: FDA/CE approval required; models must demonstrate safety and efficacy through clinical trials',
-            'Human-in-the-loop: CV assists rather than replaces clinicians; final decisions remain with physicians'
-          ]
-        },
-        {
-          heading: 'Key Formula / Rule',
-          text: 'Medical image analysis uses deep learning architectures adapted to volumetric, multi-modal, and high-resolution clinical data.',
-          example: {
-            title: 'Example: U-Net for Medical Segmentation',
-            code: "Architecture (2D U-Net):\n  Encoder:\n    Input: 572×572 grayscale (CT/MRI slice)\n    Conv → ReLU → Conv → ReLU\n    MaxPool (2×2) → feature maps halved\n    Repeat 4× with doubling channels\n\n  Bottleneck:\n    1024 channels at 28×28\n\n  Decoder:\n    Up-conv (2×2) + skip connection\n    Concatenate with corresponding encoder features\n    Conv → ReLU → Conv → ReLU\n    Repeat 4× with halving channels\n\n  Output: 388×388 segmentation mask\n    Background = 0, Tumor = 1, Edema = 2\n\nLoss: Dice Loss + Cross-Entropy\n  Dice = 2·|pred ∩ true| / (|pred| + |true|)\n  → Handles class imbalance in small lesions",
-            output: 'U-Net leverages skip connections to preserve fine spatial detail for precise segmentation.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Comparing medical imaging tasks and natural image computer vision.',
-          table: {
-            headers: ['Aspect', 'Natural Images', 'Medical Images', 'Histopathology', 'Retinal Imaging'],
-            rows: [
-              ['Data size', 'Millions (ImageNet)', 'Thousands (rare diseases)', 'Hundreds of gigapixels', 'Moderate datasets'],
-              ['Resolution', 'Standard (224²)', 'High (512² to 3D volumes)', 'Extremely high (40× objective)', 'Moderate'],
-              ['Labels', 'Object classes', 'Pixel-level segmentation masks', 'Cell-level annotations', 'Vessel/lesion masks'],
-              ['Interpretability', 'Useful', 'Mandatory (clinical trust)', 'Critical', 'Critical'],
-              ['Preprocessing', 'Normalize, augment', 'Window/level, resample, align', 'Stain normalization', 'Vessel enhancement'],
-              ['Architecture', 'ResNet, EfficientNet', 'U-Net, nnU-Net, V-Net', 'Patch-based CNNs', 'OCT-specific nets']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Training on public data and deploying on hospital data without domain adaptation (fix: scanners, protocols, and populations differ; always validate on target domain and use transfer learning or domain randomization)',
-            'Mistake 2: Optimizing for accuracy without considering false negatives (fix: in screening, missing disease is worse than false alarm; tune thresholds for high sensitivity and use cascaded models)',
-            'Mistake 3: Ignoring data privacy and regulatory requirements (fix: medical data is protected by HIPAA/GDPR; use federated learning, differential privacy, and secure enclaves for model development)',
-            'Mistake 4: Presenting AI predictions without uncertainty or confidence (fix: clinicians need to know when the model is unsure; provide probability maps, confidence intervals, and out-of-distribution flags)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'Medical CV systems are deployed in clinics worldwide, augmenting clinician capabilities.',
-          list: [
-            'Radiology: AI detects lung nodules in CT, flags brain hemorrhage in head CT, and scores breast density in mammography',
-            'Pathology: whole-slide image analysis quantifies tumor infiltration, grades cancer, and detects lymph node metastases',
-            'Ophthalmology: diabetic retinopathy screening from fundus photos; AMD progression monitoring from OCT volumes',
-            'Cardiology: automated measurement of ejection fraction from echocardiography; coronary artery segmentation from CT angiography',
-            'Surgery: real-time instrument tracking, tissue segmentation, and augmented reality guidance in laparoscopic and robotic procedures'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'Medical imaging CV assists diagnosis through classification, segmentation, detection, and registration',
-            'U-Net and its 3D variants (V-Net, nnU-Net) are the dominant architectures for medical segmentation',
-            'Clinical deployment requires regulatory approval, domain validation, and interpretability',
-            'Class imbalance and small datasets are common; Dice loss, data augmentation, and transfer learning help',
-            'AI in medicine assists clinicians; human oversight and uncertainty quantification remain essential'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Why is the U-Net architecture particularly well-suited for medical image segmentation?',
-            'What is the difference between sensitivity and specificity, and why does sensitivity matter more in disease screening?',
-            'How does 3D convolution differ from 2D when processing CT or MRI volumes?',
-            'Why is stain normalization important in histopathology image analysis?',
-            'What are the regulatory and ethical considerations when deploying AI for medical diagnosis?'
-          ]
         }
       ]
     }

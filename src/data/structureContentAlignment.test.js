@@ -41,8 +41,8 @@ describe('structure and content alignment', () => {
     const firstTopic = structure[firstUnit].topics[0].id
 
     expect(firstUnit).toBe('unit1')
-    expect(firstTopic).toBe('intro')
-    expect(multimodalContent.unit1.intro).toBeTruthy()
+    expect(firstTopic).toBe('intro-multimodal')
+    expect(multimodalContent.unit1['intro-multimodal']).toBeTruthy()
   })
 
   it('maps every generated-structure topic to tutorialData content', async () => {

@@ -1,455 +1,1279 @@
+// deep learning — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js dl_module2.js
+
 export const dlModule2Content = {
   module2: {
-    cnn: {
-      title: 'Convolutional Neural Networks',
-      subtitle: 'Deep learning architectures for grid-like data such as images',
+    'gradient-descent': {
+      title: 'Gradient Descent',
+      subtitle: 'Optimizing neural network weights',
       sections: [
         {
-          heading: 'What is a Convolutional Neural Network?',
-          text: 'A <strong>Convolutional Neural Network (CNN)</strong> is a deep learning architecture specifically designed for processing grid-structured data like images. It uses convolutional layers with learnable filters to automatically detect local features such as edges, textures, and shapes, building up to complex object representations through hierarchical feature learning.',
+          heading: 'What is Gradient Descent?',
+          text: '<strong>Gradient Descent</strong> is the core optimization algorithm used to train neural networks. It iteratively adjusts weights in the direction that reduces the loss function, using the negative gradient as the update direction. The variants — batch, stochastic, and mini-batch — differ in how much data is used per update.',
           list: [
-            'CNNs use sliding filters (kernels) to detect local patterns, reducing the need for manual feature engineering',
-            'They leverage parameter sharing: the same filter is applied across the entire input, dramatically reducing parameters',
-            'Pooling layers provide translation invariance and reduce spatial dimensions, making the network more efficient',
-            'They are the dominant architecture for computer vision tasks including classification, detection, and segmentation'
+            'Gradient descent minimizes the loss by moving weights in the opposite direction of the gradient',
+            'Batch gradient descent uses the entire dataset for stable but slow updates',
+            'Stochastic gradient descent uses one sample at a time for fast but noisy updates',
+            'Mini-batch gradient descent balances stability and speed using small batches (e.g., 32–512 samples)'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Gradient Descent</strong> is the core optimization algorithm used to train neural networks. It iteratively adjusts weights in the direction that reduces the loss function, using the negative gradient as the update direction. The variants — batch, stochastic, and mini-batch — differ in how much data is used per update. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Gradient Descent</strong> is the core optimization algorithm used to train neural networks. It iteratively adjusts weights in the direction that reduces the loss function, using the negative gradient as the update direction. The variants — batch, stochastic, and mini-batch — differ in how much data is used per update. Gradient descent minimizes the loss by moving weights in the opposite direction of the gradient Batch gradient descent uses the entire dataset for stable but slow updates Stochastic gradient descent uses one sample at a time for fast but noisy updates Mini-batch gradient descent balances stability and speed using small batches (e.g., 32–512 samples)</p>',
+            '<p>You use gradient descent when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Gradient Descent
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Gradient Descent sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'The convolution operation computes the dot product between a filter and local patches of the input.',
+          text: 'The update rule moves weights opposite to the gradient, scaled by the learning rate.',
           example: {
-            title: 'Example: Convolution Operation',
-            code: `Input patch (3×3):      Filter (3×3):
-[1  2  1]              [1  0 -1]
-[0  0  0]       *      [1  0 -1]
-[-1 -2 -1]             [1  0 -1]
+            title: 'Mini-Batch Gradient Descent in NumPy and PyTorch',
+            code: `import numpy as np
 
-Result = (1×1)+(2×0)+(1×-1)+
-         (0×1)+(0×0)+(0×-1)+
-         (-1×1)+(-2×0)+(-1×-1)
-       = 0
+# Synthetic data
+np.random.seed(0)
+X = np.random.randn(100, 3)
+y = (X[:,0] + 2*X[:,1] - 0.5*X[:,2] + 0.1).reshape(-1,1)
 
-Output feature map size:
-  O = (I - K + 2P) / S + 1
-  I = input size, K = kernel size
-  P = padding, S = stride`,
-            output: 'Vertical edge detection filter highlights vertical boundaries in the image.',
+w = np.zeros((3, 1))
+b = 0.0
+lr = 0.05
+batch_size = 16
+epochs = 100
+
+for epoch in range(epochs):
+    # Shuffle each epoch
+    idx = np.random.permutation(len(X))
+    X, y = X[idx], y[idx]
+    for i in range(0, len(X), batch_size):
+        xb, yb = X[i:i+batch_size], y[i:i+batch_size]
+        pred = xb @ w + b
+        grad_w = xb.T @ (pred - yb) / len(xb)
+        grad_b = (pred - yb).mean()
+        w -= lr * grad_w
+        b -= lr * grad_b
+print("w:", w.ravel(), "b:", b)
+
+# PyTorch equivalent
+import torch, torch.nn as nn
+Xt = torch.tensor(X, dtype=torch.float32)
+yt = torch.tensor(y, dtype=torch.float32)
+model = nn.Linear(3, 1)
+opt = torch.optim.SGD(model.parameters(), lr=0.05)
+loss_fn = nn.MSELoss()
+for epoch in range(100):
+    for i in range(0, len(Xt), batch_size):
+        xb, yb = Xt[i:i+batch_size], yt[i:i+batch_size]
+        opt.zero_grad()
+        loss = loss_fn(model(xb), yb)
+        loss.backward()
+        opt.step()`,
+            output: 'Mini-batch GD (B=32–512) is the most widely used variant in practice.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Gradient Descent with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Gradient Descent — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'CNN vs Fully Connected Network.',
+          text: 'Batch vs stochastic vs mini-batch gradient descent.',
           table: {
-            headers: ['Aspect', 'Fully Connected Network', 'CNN'],
+            headers: [
+              'Type',
+              'Data Used',
+              'Pros',
+              'Cons',
+              'Best For'
+            ],
             rows: [
-              ['Connectivity', 'Every neuron connects to all inputs', 'Each neuron connects to a local region only'],
-              ['Parameters', 'Grows exponentially with input size', 'Shared filters drastically reduce parameters'],
-              ['Translation', 'No built-in translation invariance', 'Pooling provides translation invariance'],
-              ['Feature learning', 'Learns global patterns only', 'Hierarchical: edges → textures → objects'],
-              ['Input structure', 'Treats input as flat vector', 'Preserves spatial structure (2D/3D)'],
-              ['Best for', 'Tabular data, simple features', 'Images, video, spatial grid data']
+              [
+                'Batch GD',
+                'Entire dataset (N samples)',
+                'Stable, accurate gradient',
+                'Slow, memory heavy',
+                'Small datasets'
+              ],
+              [
+                'Stochastic GD',
+                '1 sample per update',
+                'Fast, online learning, escapes local minima',
+                'Noisy, oscillates',
+                'Streaming data'
+              ],
+              [
+                'Mini-batch GD',
+                'B samples (e.g., 32–512)',
+                'Balanced, vectorized on GPU',
+                'Requires tuning B',
+                'Most deep learning tasks'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using too large kernel sizes like 7×7 in early layers (fix: use 3×3 filters stacked together; two 3×3 layers have the same receptive field as one 5×5 with fewer parameters)',
-            'Mistake 2: Ignoring the effect of stride and padding on output dimensions (fix: always compute output size with O = (I - K + 2P)/S + 1 to avoid dimension mismatches in layer stacking)',
-            'Mistake 3: Using CNNs on non-spatial data without considering structure (fix: CNNs excel on grid data; for sequential or tabular data, use RNNs or fully connected networks instead)'
-          ]
+            'Mistake 1: Using batch gradient descent on large datasets (fix: use mini-batch GD; batch GD is too slow and memory-intensive for millions of samples)',
+            'Mistake 2: Setting a fixed learning rate that is too high or too low (fix: use learning rate schedules — step decay, exponential decay, or cosine annealing — to adapt η over time)',
+            'Mistake 3: Not shuffling data before each epoch in SGD (fix: always shuffle training data each epoch; ordered data introduces harmful correlation in gradient estimates)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'CNNs are the backbone of modern computer vision systems.',
+          heading: 'Real-World Case Study',
+          text: 'Gradient descent variants are chosen based on data scale and constraints.',
           list: [
-            'Medical imaging: CNNs detect tumors in X-rays, CT scans, and MRI by learning subtle visual patterns invisible to the human eye',
-            'Autonomous driving: perception systems use CNNs to detect lanes, vehicles, pedestrians, and traffic signs from camera feeds in real time',
-            'Facial recognition: deep CNNs map faces to compact embeddings for authentication, used in smartphones and security systems worldwide',
-            'Retail and manufacturing: visual inspection systems use CNNs to detect product defects on assembly lines with superhuman accuracy'
+            'Large-scale vision models: mini-batch GD with momentum on GPUs trains ResNet and Vision Transformer on millions of images',
+            'Online recommendation systems: stochastic gradient descent updates models continuously as new user interactions arrive',
+            'Small tabular datasets: batch gradient descent or even closed-form solutions work well with limited data',
+            'Federated learning: mini-batch GD runs locally on devices before aggregated updates are sent to a central server'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'CNNs are specialized for grid-structured data like images, using sliding filters to detect local features',
-            'Parameter sharing and sparse connectivity make CNNs far more efficient than fully connected networks for vision',
-            'Convolution extracts features; pooling reduces dimensions and provides translation invariance',
-            'Hierarchical feature learning: early layers detect edges, middle layers detect textures, deep layers detect objects',
-            'Always track output dimensions when stacking convolutions to avoid shape mismatches'
+            'Gradient descent iteratively updates weights to minimize loss using the negative gradient direction',
+            'Batch GD: accurate but slow; uses all data per update',
+            'Stochastic GD: fast but noisy; uses one sample per update',
+            'Mini-batch GD: the practical default; balances speed, stability, and GPU vectorization',
+            'Learning rate and batch size are the most critical hyperparameters to tune'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why does a CNN need fewer parameters than a fully connected network for the same input image?\nAns: CNNs use shared filters that slide across the entire image, so the same weights are reused everywhere, unlike fully connected layers which have unique weights per connection.',
-            'Q2: What is the purpose of a pooling layer in a CNN?\nAns: Pooling reduces spatial dimensions, lowers computation, and introduces translation invariance by summarizing local regions.',
-            'Q3: Why are 3×3 filters preferred over larger filters like 5×5 or 7×7?\nAns: Two stacked 3×3 layers achieve the same receptive field as one 5×5 layer with fewer parameters and more non-linearity, making the network deeper and more expressive.'
+            `Q1: Why is mini-batch gradient descent preferred over batch GD for large datasets?
+Ans: It is computationally efficient, fits in GPU memory, and provides a good balance between gradient accuracy and update frequency.`,
+            `Q2: What is the risk of a learning rate that is too high?
+Ans: The loss may oscillate or diverge because weight updates overshoot the minimum.`,
+            `Q3: Why does SGD help escape local minima better than batch GD?
+Ans: The noise in single-sample gradients allows the optimizer to bounce out of shallow local minima and explore the loss landscape.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Gradient Descent</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Gradient Descent")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'cnn-architectures': {
-      title: 'CNN Architectures',
-      subtitle: 'Landmark designs that shaped modern computer vision',
+    'advanced-optimizers': {
+      title: 'Advanced Optimizers',
+      subtitle: 'Momentum, adaptive learning rates, and optimizer comparison',
       sections: [
         {
-          heading: 'What are CNN Architectures?',
-          text: '<strong>CNN architectures</strong> refer to the specific arrangements of layers, connections, and design choices that define how a convolutional neural network is structured. Landmark architectures like LeNet, AlexNet, VGG, ResNet, and EfficientNet introduced innovations that solved key training and scaling challenges, setting the standard for how deep networks are built today.',
+          heading: 'What are Advanced Optimizers?',
+          text: 'Optimization refers to the algorithms and techniques used to minimize the loss function during neural network training. While vanilla gradient descent is the foundation, modern deep learning relies on <strong>adaptive optimizers</strong> like Adam, RMSProp, and AdamW that automatically adjust learning rates per parameter and incorporate momentum for faster, more stable convergence.',
           list: [
-            'LeNet-5 (1998) proved CNNs could work for handwritten digit recognition with just 60K parameters',
-            'AlexNet (2012) reignited deep learning by using ReLU, dropout, and GPUs to win ImageNet by a massive margin',
-            'ResNet (2015) introduced skip connections that enabled training networks with 100+ layers without degradation',
-            'Modern architectures like EfficientNet balance depth, width, and resolution using compound scaling for maximum accuracy per FLOP'
+            'Optimization algorithms determine how weights are updated based on computed gradients',
+            'Momentum accumulates past gradients to speed up convergence and dampen oscillations',
+            'Adaptive optimizers maintain per-parameter learning rates based on historical gradient magnitudes',
+            'The choice of optimizer affects both training speed and final model quality'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Optimization refers to the algorithms and techniques used to minimize the loss function during neural network training. While vanilla gradient descent is the foundation, modern deep learning relies on <strong>adaptive optimizers</strong> like Adam, RMSProp, and AdamW that automatically adjust learning rates per parameter and incorporate momentum for faster, more stable convergence. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Optimization refers to the algorithms and techniques used to minimize the loss function during neural network training. While vanilla gradient descent is the foundation, modern deep learning relies on <strong>adaptive optimizers</strong> like Adam, RMSProp, and AdamW that automatically adjust learning rates per parameter and incorporate momentum for faster, more stable convergence. Optimization algorithms determine how weights are updated based on computed gradients Momentum accumulates past gradients to speed up convergence and dampen oscillations Adaptive optimizers maintain per-parameter learning rates based on historical gradient magnitudes The choice of optimizer affects both training speed and final model quality</p>',
+            '<p>You use advanced optimizers when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Advanced Optimizers
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Advanced Optimizers sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'Receptive field grows with depth; skip connections preserve gradients.',
+          text: 'Adam combines momentum with adaptive learning rates for robust, parameter-wise updates.',
           example: {
-            title: 'Example: Receptive Field & Skip Connection',
-            code: `Receptive field after n conv layers:
-  RF = 1 + Σᵢ (Kᵢ - 1) × Πⱼ₌₁ⁱ⁻¹ Sⱼ
+            title: 'Optimizer Comparison in PyTorch and TensorFlow',
+            code: `import torch
+import torch.nn as nn
 
-Example: three 3×3 conv layers, stride 1:
-  RF = 1 + (3-1) + (3-1) + (3-1) = 7
-  → A neuron sees 7×7 region
+model = nn.Sequential(nn.Linear(10, 64), nn.ReLU(), nn.Linear(64, 1))
 
-ResNet Skip Connection:
-  y = F(x) + x
+# SGD with momentum
+sgd = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
 
-If F(x) is a residual mapping:
-  Backprop gradient flows through
-  both F(x) and the identity path x,
-  preventing vanishing gradients.`,
-            output: 'Skip connections create an identity path that preserves gradient flow in very deep networks.',
+# Adam
+adam = torch.optim.Adam(model.parameters(), lr=1e-3, betas=(0.9, 0.999))
+
+# AdamW (decoupled weight decay)
+adamw = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)
+
+# RMSprop
+rmsprop = torch.optim.RMSprop(model.parameters(), lr=1e-3, alpha=0.99)
+
+# TensorFlow / Keras equivalents
+import tensorflow as tf
+sgd_tf = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9)
+adam_tf = tf.keras.optimizers.Adam(learning_rate=1e-3)
+adamw_tf = tf.keras.optimizers.AdamW(learning_rate=1e-3, weight_decay=0.01)
+rmsprop_tf = tf.keras.optimizers.RMSprop(learning_rate=1e-3)
+
+# Plotting learning curves (conceptual)
+import matplotlib.pyplot as plt
+# history_sgd = ...; history_adam = ...
+# plt.plot(history_sgd, label='SGD'); plt.plot(history_adam, label='Adam'); plt.legend()`,
+            output: 'Adam adapts learning rates per parameter and is the most popular default optimizer; AdamW is preferred for transformers.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Advanced Optimizers with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Advanced Optimizers — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Landmark CNN architectures compared.',
+          text: 'Comparing popular optimizers.',
           table: {
-            headers: ['Architecture', 'Year', 'Key Innovation', 'Parameters', 'Depth'],
+            headers: [
+              'Optimizer',
+              'Key Feature',
+              'Best For',
+              'Caveat'
+            ],
             rows: [
-              ['LeNet-5', '1998', 'First practical CNN', '~60K', '5 layers'],
-              ['AlexNet', '2012', 'ReLU + Dropout + GPU training', '~60M', '8 layers'],
-              ['VGG-16', '2014', 'Uniform 3×3 conv blocks', '~138M', '16 layers'],
-              ['ResNet-50', '2015', 'Skip (residual) connections', '~25.6M', '50 layers'],
-              ['Inception-v3', '2015', 'Multi-scale parallel filters', '~23.8M', '48 layers'],
-              ['EfficientNet-B0', '2019', 'Compound scaling (d,w,r)', '~5.3M', '82 layers']
+              [
+                'SGD + Momentum',
+                'Accumulates velocity along gradients',
+                'General problems',
+                'Requires tuning learning rate'
+              ],
+              [
+                'AdaGrad',
+                'Adapts LR per parameter based on history',
+                'Sparse data, NLP',
+                'Learning rate decays too aggressively'
+              ],
+              [
+                'RMSProp',
+                'Moving average of squared gradients',
+                'RNNs, non-stationary data',
+                'Needs decay hyperparameter tuning'
+              ],
+              [
+                'Adam',
+                'Momentum + RMSProp combined',
+                'Most problems (default choice)',
+                'May overfit; needs warmup in transformers'
+              ],
+              [
+                'AdamW',
+                'Adam with decoupled weight decay',
+                'Transformers, large models',
+                'Default for modern NLP and vision'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Stacking too many convolutional layers without skip connections (fix: beyond ~20 layers, always use residual connections or dense connections to prevent degradation and vanishing gradients)',
-            'Mistake 2: Blindly copying an architecture without considering dataset size (fix: use smaller EfficientNet variants or MobileNet for small datasets; ResNet-50 is overkill for <10K images without transfer learning)',
-            'Mistake 3: Ignoring input resolution when choosing architecture depth (fix: match network depth to image resolution; small images do not need 152-layer networks; EfficientNet scales all three dimensions together)'
-          ]
+            'Mistake 1: Using Adam with L2 regularization instead of AdamW (fix: AdamW decouples weight decay from the adaptive gradient update; using L2 with Adam incorrectly regularizes the scaled gradients)',
+            'Mistake 2: Not using learning rate warmup with Adam in transformers (fix: start with a small LR and linearly increase for the first few thousand steps to prevent early instability)',
+            'Mistake 3: Sticking with Adam for every problem without trying SGD (fix: SGD with momentum sometimes generalizes better than Adam; it is worth experimenting for final model quality)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Architecture choice directly impacts deployment feasibility and accuracy.',
+          heading: 'Real-World Case Study',
+          text: 'Optimizer choice is a critical design decision in production ML pipelines.',
           list: [
-            'Mobile apps: MobileNet and EfficientNet-Lite are optimized for mobile CPUs, enabling real-time object detection on smartphones with minimal battery drain',
-            'Cloud vision APIs: ResNet-50 and Inception-v3 power Google Cloud Vision and AWS Rekognition for high-accuracy image classification at scale',
-            'Medical diagnostics: U-Net, a CNN encoder-decoder architecture, is the standard for medical image segmentation in radiology and pathology workflows',
-            'Self-driving cars: custom multi-scale CNN architectures process multiple camera feeds simultaneously for 360-degree perception in autonomous vehicles'
+            'Large language models: AdamW with cosine decay and warmup is the standard for training GPT, LLaMA, and BERT-scale models',
+            'Computer vision: SGD with momentum and step decay remains competitive for ResNet and ConvNeXt on ImageNet',
+            'Reinforcement learning: RMSProp and Adam handle the non-stationary, high-variance gradients common in policy gradient methods',
+            'Edge deployment: AdaFactor and memory-efficient variants reduce optimizer state for training on resource-constrained devices'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'LeNet proved CNNs work; AlexNet proved they scale; ResNet proved they can go arbitrarily deep',
-            'Receptive field grows with depth: understand how much context each layer sees',
-            'Skip connections are essential for training networks deeper than ~20 layers',
-            'Match architecture complexity to dataset size and target hardware',
-            'Compound scaling (EfficientNet) balances depth, width, and resolution jointly'
+            'Optimization goes beyond vanilla GD: momentum, adaptive rates, and weight decay all improve training',
+            'Momentum: accumulates velocity to speed up and smooth updates',
+            'Adaptive optimizers (Adam, RMSProp) maintain per-parameter learning rates based on gradient history',
+            'AdamW decouples weight decay from gradient scaling and is the modern default for many architectures',
+            'Learning rate scheduling (warmup, decay, cosine) is as important as the optimizer choice itself'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What problem do ResNet skip connections solve?\nAns: Skip connections solve the degradation problem in very deep networks by providing an identity path that preserves gradient flow during backpropagation.',
-            'Q2: Why are 3×3 convolutions preferred in VGG-style architectures?\nAns: Stacked 3×3 layers achieve the same receptive field as larger filters with fewer parameters and more non-linear activations between them.',
-            'Q3: What is compound scaling in EfficientNet?\nAns: EfficientNet scales depth, width, and input resolution together using a single compound coefficient, rather than tuning each dimension independently.'
+            `Q1: What two ideas does Adam combine?
+Ans: Momentum (exponential moving average of gradients) and RMSProp (exponential moving average of squared gradients).`,
+            `Q2: Why is AdamW preferred over Adam with L2 regularization?
+Ans: AdamW decouples weight decay from the adaptive gradient scaling, so regularization is applied correctly to the weights rather than to the momentum-adjusted gradients.`,
+            `Q3: What problem does learning rate warmup solve?
+Ans: In the early stages of training, large adaptive learning rates can cause instability and divergence; warmup gradually increases the LR to prevent this.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Advanced Optimizers</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Advanced Optimizers")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'transfer-learning': {
-      title: 'Transfer Learning',
-      subtitle: 'Leveraging pre-trained models for new tasks',
+    'weight-initialization': {
+      title: 'Weight Initialization',
+      subtitle: 'Xavier, He, and why initialization matters',
       sections: [
         {
-          heading: 'What is Transfer Learning?',
-          text: '<strong>Transfer Learning</strong> is the practice of taking a neural network trained on a large, general dataset and adapting it to a new, often smaller, specific task. Instead of training from scratch, you reuse learned features from a source domain, dramatically reducing training time and data requirements while often achieving better accuracy.',
-          list: [
-            'Transfer learning reuses features learned from large datasets like ImageNet, saving weeks of training time',
-            'The early layers of a pre-trained CNN learn generic features (edges, textures) that transfer well to almost any vision task',
-            'Only the final classification layers are retrained on the new task, keeping most of the network frozen',
-            'Fine-tuning unfreezes deeper layers and trains with a very small learning rate to adapt features subtly'
-          ]
+          heading: 'What is Weight Initialization?',
+          text: 'Weight Initialization is essential for deep learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in deep learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Weight Initialization provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use weight initialization when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Weight Initialization
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Weight Initialization sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'Transfer learning workflow: freeze base, replace head, retrain.',
+          text: 'Xavier and He formulas set initial weight variance to preserve forward and backward signal magnitudes.',
           example: {
-            title: 'Example: Transfer Learning in PyTorch',
-            code: `Load pre-trained ResNet-50:
-  model = torchvision.models.resnet50(pretrained=True)
+            title: 'Xavier and He Initialization in NumPy, PyTorch, and TensorFlow',
+            code: `import numpy as np
 
-Freeze all base layers:
-  for param in model.parameters():
-    param.requires_grad = False
+def xavier_uniform(fan_in, fan_out):
+    limit = np.sqrt(6.0 / (fan_in + fan_out))
+    return np.random.uniform(-limit, limit, (fan_in, fan_out))
 
-Replace classifier head:
-  model.fc = nn.Linear(2048, num_new_classes)
+def he_normal(fan_in, fan_out):
+    std = np.sqrt(2.0 / fan_in)
+    return np.random.normal(0, std, (fan_in, fan_out))
 
-Train only the new head:
-  optimizer = optim.Adam(model.fc.parameters(), lr=1e-3)
+W_xavier = xavier_uniform(784, 256)
+W_he = he_normal(784, 256)
+print("Xavier std:", W_xavier.std(), "He std:", W_he.std())
 
-Fine-tune (optional):
-  unfreeze deeper layers
-  optimizer = optim.Adam(model.parameters(), lr=1e-5)`,
-            output: 'Freezing preserves generic features; fine-tuning adapts them to the target domain.',
+# PyTorch
+import torch, torch.nn as nn
+layer_x = nn.Linear(784, 256)
+nn.init.xavier_uniform_(layer_x.weight)
+
+layer_h = nn.Linear(784, 256)
+nn.init.kaiming_normal_(layer_h.weight, nonlinearity='relu')
+
+# TensorFlow / Keras
+import tensorflow as tf
+layer_tf = tf.keras.layers.Dense(256, kernel_initializer='he_normal',
+                                  activation='relu')
+layer_tf2 = tf.keras.layers.Dense(256, kernel_initializer='glorot_uniform')`,
+            output: 'Use Xavier for tanh/sigmoid and He for ReLU to maintain stable variance.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Weight Initialization with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Weight Initialization — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Feature extraction vs fine-tuning.',
+          text: 'Xavier vs He initialization.',
           table: {
-            headers: ['Aspect', 'Feature Extraction', 'Fine-Tuning'],
+            headers: [
+              'Aspect',
+              'Xavier / Glorot',
+              'He'
+            ],
             rows: [
-              ['Layers trained', 'Only new classifier head', 'All or some pre-trained layers'],
-              ['Data needed', 'Very small (hundreds of images)', 'Moderate (thousands of images)'],
-              ['Training time', 'Minutes to hours', 'Hours to days'],
-              ['Risk of overfitting', 'Very low', 'Moderate (use small LR)'],
-              ['Accuracy potential', 'Good baseline', 'Higher ceiling'],
-              ['When to use', 'Small dataset, similar domain', 'Larger dataset, different domain']
+              [
+                'Formula',
+                'Var(W) = 2 / (fan_in + fan_out)',
+                'Var(W) = 2 / fan_in'
+              ],
+              [
+                'Activation',
+                'Sigmoid, tanh, linear',
+                'ReLU, Leaky ReLU'
+              ],
+              [
+                'Distribution',
+                'Uniform or normal',
+                'Usually normal'
+              ],
+              [
+                'Goal',
+                'Keep activation variance constant',
+                'Compensate for ReLU killing half the inputs'
+              ],
+              [
+                'Use in modern CNN',
+                'Less common',
+                'Default for ReLU-based nets'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Fine-tuning all layers immediately with a large learning rate (fix: start by training only the classifier head; only fine-tune deeper layers later with a very small LR like 1e-5 to avoid destroying pre-trained features)',
-            'Mistake 2: Using a pre-trained model from an unrelated domain without adaptation (fix: if your task is medical imaging, use a model pre-trained on medical data or at least fine-tune extensively; ImageNet features do not transfer perfectly to X-rays)',
-            'Mistake 3: Forgetting to normalize input using the pre-trained model\'s mean and std (fix: always use the same preprocessing the pre-trained model was trained with, e.g., ImageNet normalization: mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])'
-          ]
+            'Mistake 1: Initializing all weights to zero (fix: zero weights cause symmetric gradients and prevent learning; use random initialization)',
+            'Mistake 2: Using Xavier initialization with ReLU networks (fix: ReLU zeros out half the activations, so He initialization with variance 2/fan_in is more appropriate)',
+            'Mistake 3: Forgetting to initialize biases (fix: initialize biases to zero for most layers; use small positive values for LSTM forget gates if specified)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Transfer learning makes state-of-the-art vision accessible to small teams.',
+          heading: 'Real-World Case Study',
+          text: 'Initialization choices directly affect whether deep models train at all.',
           list: [
-            'Startup product classification: a company with only 500 product images can build a classifier by fine-tuning ResNet-50, achieving 95% accuracy without weeks of GPU training',
-            'Medical imaging: radiology departments fine-tune ImageNet-pre-trained models on chest X-rays to detect pneumonia, tuberculosis, and COVID-19 with expert-level accuracy',
-            'Agriculture: farmers use transfer learning on drone imagery to detect crop diseases, using just a few hundred labeled photos per disease class',
-            'Content moderation: social platforms fine-tune vision transformers to detect harmful imagery across cultures and languages with limited labeled data per region'
+            'ResNet: He initialization is the default because ResNet uses ReLU activations throughout',
+            'Vision Transformers: often use truncated normal initialization with small standard deviations for patch embeddings',
+            'LSTMs/GRUs: use orthogonal or Xavier initialization for recurrent weights and forget-gate bias tricks',
+            'Generative models: GAN generators and discriminators are sensitive to initialization; spectral normalization helps stability'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Transfer learning reuses pre-trained features to save time, data, and compute on new tasks',
-            'Feature extraction: freeze base, train only the new head; best for small datasets',
-            'Fine-tuning: unfreeze and train deeper layers with small LR; best for larger datasets',
-            'Early CNN layers learn generic features that transfer across almost all vision tasks',
-            'Always match the pre-processing (normalization, image size) to the pre-trained model\'s training setup'
+            'Weight initialization sets the optimization starting point and affects gradient flow',
+            'Xavier initialization preserves variance for sigmoid/tanh networks',
+            'He initialization compensates for ReLU sparsity by using variance 2/fan_in',
+            'Never initialize all weights to zero — randomness breaks symmetry',
+            'Most modern frameworks apply sensible defaults, but explicit initialization is important for custom layers'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why is transfer learning especially effective for small datasets?\nAns: Pre-trained models already learned generic features from millions of images; the new task only needs to adapt the final classifier, which requires far less data than training from scratch.',
-            'Q2: What is the difference between feature extraction and fine-tuning?\nAns: Feature extraction freezes the pre-trained base and trains only a new classifier head; fine-tuning also updates some or all pre-trained layers with a small learning rate.',
-            'Q3: Why must input normalization match the pre-trained model?\nAns: The pre-trained features were learned on data with specific mean and standard deviation; feeding differently scaled inputs shifts the feature distribution and degrades performance.'
+            `Q1: Why is initializing all weights to zero problematic?
+Ans: Zero weights produce identical gradients for all neurons, so hidden units never differentiate and the network cannot learn.`,
+            `Q2: When should you use He initialization over Xavier?
+Ans: When using ReLU activations, because He initialization accounts for the fact that ReLU zeros out roughly half of the inputs.`,
+            `Q3: What does fan_in represent in initialization formulas?
+Ans: The number of input connections to a neuron, which determines the scale of the weighted sum variance.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Weight Initialization</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Weight Initialization")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'object-detection': {
-      title: 'Object Detection',
-      subtitle: 'Locating and classifying multiple objects in images',
+    'normalization-and-regularization': {
+      title: 'Normalization & Regularization',
+      subtitle: 'BatchNorm, LayerNorm, Dropout, and weight decay',
       sections: [
         {
-          heading: 'What is Object Detection?',
-          text: '<strong>Object Detection</strong> is the computer vision task of identifying all instances of target objects in an image and localizing each with a bounding box and class label. Unlike image classification, which assigns a single label to the entire image, detection must handle multiple objects of varying sizes, positions, and classes simultaneously.',
-          list: [
-            'Object detection outputs bounding boxes (x, y, width, height) plus class labels for every detected object',
-            'It is harder than classification because it must handle variable numbers of objects and localize them precisely',
-            'Modern detectors use anchor boxes, region proposals, or direct regression to predict object locations',
-            'It powers applications from autonomous driving to retail analytics and medical lesion detection'
-          ]
+          heading: 'What is Normalization & Regularization?',
+          text: 'Normalization & Regularization is essential for deep learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in deep learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Normalization & Regularization provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use normalization & regularization when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Normalization & Regularization
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Normalization & Regularization sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'Intersection over Union (IoU) measures how well a predicted box overlaps with the ground truth.',
+          text: 'BatchNorm: normalize by batch mean and variance, then scale and shift. Dropout: zero neurons with probability p during training.',
           example: {
-            title: 'Example: IoU and Bounding Box Regression',
-            code: `Intersection over Union:
-  IoU = Area(Intersection) / Area(Union)
+            title: 'BatchNorm, LayerNorm, and Dropout in PyTorch & TensorFlow',
+            code: `import torch, torch.nn as nn
 
-Bounding box regression (smooth L1):
-  L_loc = Σ smooth_L1(pᵢ - tᵢ)
+# PyTorch
+net = nn.Sequential(
+    nn.Linear(256, 128),
+    nn.BatchNorm1d(128),
+    nn.ReLU(),
+    nn.Dropout(0.3),
+    nn.Linear(128, 10)
+)
 
-  smooth_L1(x) = 0.5x²   if |x| < 1
-               = |x| - 0.5  otherwise
+# LayerNorm for sequences
+seq = nn.TransformerEncoderLayer(d_model=512, nhead=8,
+                                  dim_feedforward=2048,
+                                  norm_first=True, batch_first=True)
 
-Typical IoU thresholds:
-  IoU ≥ 0.5  → Positive match
-  IoU < 0.3  → Negative (background)
-  0.3 ≤ IoU < 0.5  → Ignored`,
-            output: 'IoU quantifies localization accuracy; smooth L1 loss is robust to outlier box coordinates.',
+# TensorFlow / Keras
+import tensorflow as tf
+net_tf = tf.keras.Sequential([
+    tf.keras.layers.Dense(128),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.ReLU(),
+    tf.keras.layers.Dropout(0.3),
+    tf.keras.layers.Dense(10)
+])
+
+# Manual BatchNorm in NumPy (inference mode)
+def batch_norm(x, gamma, beta, mean, var, eps=1e-5):
+    return gamma * (x - mean) / np.sqrt(var + eps) + beta`,
+            output: 'BatchNorm for CNNs/MLPs, LayerNorm for sequences/RNNs/Transformers; Dropout before the final layer is common.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Normalization & Regularization with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Normalization & Regularization — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Two-stage vs one-stage detectors.',
+          text: 'BatchNorm vs LayerNorm vs Dropout vs Weight Decay.',
           table: {
-            headers: ['Aspect', 'Two-Stage (R-CNN family)', 'One-Stage (YOLO, SSD)'],
+            headers: [
+              'Technique',
+              'What It Does',
+              'Where Used',
+              'Caveat'
+            ],
             rows: [
-              ['Pipeline', 'Propose regions, then classify', 'Single forward pass predicts all boxes'],
-              ['Speed', 'Slower (~5-15 FPS)', 'Fast (~30-140 FPS)'],
-              ['Accuracy', 'Higher accuracy, especially on small objects', 'Good accuracy, faster inference'],
-              ['Architecture', 'Region proposal network + classifier', 'Single CNN backbone + detection head'],
-              ['Best for', 'High-accuracy offline analysis', 'Real-time applications'],
-              ['Examples', 'Faster R-CNN, Mask R-CNN', 'YOLOv8, SSD, RetinaNet']
+              [
+                'BatchNorm',
+                'Normalize across batch per feature',
+                'CNNs, MLPs',
+                'Sensitive to small batch size'
+              ],
+              [
+                'LayerNorm',
+                'Normalize across features per sample',
+                'RNNs, Transformers',
+                'No batch dependence'
+              ],
+              [
+                'InstanceNorm',
+                'Normalize per channel per sample',
+                'Style transfer',
+                'Removes contrast info'
+              ],
+              [
+                'GroupNorm',
+                'Normalize in channel groups',
+                'Small batches',
+                'Generalizes BN'
+              ],
+              [
+                'Dropout',
+                'Randomly zero activations',
+                'Before fully-connected layers',
+                'Must scale by 1/(1-p) at test time'
+              ],
+              [
+                'Weight Decay',
+                'Penalize squared weights',
+                'All optimizers',
+                'Use AdamW for Adam'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using classification accuracy instead of mAP to evaluate detectors (fix: use mean Average Precision (mAP) at IoU=0.50:0.95; it rewards both correct classification and precise localization)',
-            'Mistake 2: Ignoring class imbalance between background and object boxes (fix: use focal loss or hard negative mining to prevent the model from being overwhelmed by the vast number of background regions)',
-            'Mistake 3: Using the same anchor box sizes for all datasets (fix: run k-means clustering on your dataset bounding boxes to find optimal anchor aspect ratios and scales; default COCO anchors may not fit your objects)'
-          ]
+            'Mistake 1: Forgetting to call model.eval() before validation in PyTorch (fix: BatchNorm and Dropout behave differently at train/test time; always switch modes)',
+            'Mistake 2: Using BatchNorm with very small batch sizes (fix: use GroupNorm or LayerNorm when batch size < 8 to avoid noisy statistics)',
+            'Mistake 3: Applying dropout too close to the output layer or using too high a rate (fix: typical dropout rates are 0.2–0.5; output layers usually have no dropout)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Object detection is one of the most deployed vision technologies.',
+          heading: 'Real-World Case Study',
+          text: 'Normalization and regularization are essential in production deep learning.',
           list: [
-            'Autonomous vehicles: real-time detection of cars, pedestrians, cyclists, and traffic signs at 30+ FPS using YOLO-family detectors on embedded GPUs',
-            'Retail analytics: stores detect which products shoppers pick up, track queue lengths, and monitor shelf stock levels using overhead camera detectors',
-            'Medical imaging: detectors locate tumors, lesions, and anomalies in radiology scans, drawing radiologist attention to suspicious regions automatically',
-            'Drones and robotics: agricultural drones detect weeds and crop health; warehouse robots detect and localize packages for robotic grasping'
+            'ResNet: BatchNorm enables training of networks with 100+ layers by stabilizing gradients',
+            'Transformers: LayerNorm is used instead of BatchNorm because sequence batches are variable and attention heads are independent',
+            'Computer vision: Dropout in fully-connected layers of AlexNet/VGG prevents overfitting on ImageNet',
+            'Medical imaging: small datasets rely heavily on Dropout and data augmentation to avoid overfitting'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Object detection localizes and classifies multiple objects simultaneously in a single image',
-            'IoU measures how well predicted and ground-truth boxes overlap; it is the core localization metric',
-            'Two-stage detectors (R-CNN) are more accurate; one-stage detectors (YOLO, SSD) are faster',
-            'Anchor boxes, focal loss, and non-maximum suppression (NMS) are key techniques in modern detectors',
-            'Always evaluate with mAP, not classification accuracy, because detection requires both correct class and correct location'
+            'BatchNorm normalizes per-feature across the batch; LayerNorm normalizes per-sample across features',
+            'Use BatchNorm for CNNs/MLPs and LayerNorm for sequences and Transformers',
+            'Dropout prevents overfitting by randomly dropping activations during training',
+            'Weight decay (L2) penalizes large weights; use AdamW when training with Adam',
+            'Always set model.eval() in PyTorch before validation/testing'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What does IoU measure in object detection?\nAns: IoU measures the overlap between a predicted bounding box and the ground-truth box, calculated as the ratio of intersection area to union area.',
-            'Q2: Why is object detection harder than image classification?\nAns: Detection must handle variable numbers of objects, localize each with a bounding box, and distinguish overlapping instances, while classification only assigns a single label to the entire image.',
-            'Q3: When should you choose a one-stage detector over a two-stage detector?\nAns: Choose one-stage detectors when real-time inference speed is critical, such as in autonomous driving, live video analytics, or embedded devices.'
+            `Q1: Why is LayerNorm preferred over BatchNorm in Transformers?
+Ans: Transformers process variable-length sequences and use small per-sample independence; LayerNorm does not depend on batch statistics.`,
+            `Q2: Why must dropout be disabled at test time?
+Ans: Dropout is only a training regularizer; at inference all neurons are used and outputs are scaled to maintain expected magnitudes.`,
+            `Q3: What is the difference between weight decay and L2 regularization in Adam?
+Ans: They are mathematically equivalent for SGD, but AdamW decouples weight decay from adaptive gradient scaling, making it work correctly with Adam.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Normalization & Regularization</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Normalization & Regularization")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    segmentation: {
-      title: 'Image Segmentation',
-      subtitle: 'Pixel-level classification for precise object boundaries',
+    'learning-rate-scheduling': {
+      title: 'Learning Rate Scheduling',
+      subtitle: 'Warmup, decay, and cosine annealing',
       sections: [
         {
-          heading: 'What is Image Segmentation?',
-          text: '<strong>Image Segmentation</strong> is the computer vision task of partitioning an image into meaningful regions at the pixel level. Unlike object detection, which outputs bounding boxes, segmentation predicts a class label for every single pixel, producing precise object boundaries. It comes in two forms: semantic segmentation (class per pixel, no instance distinction) and instance segmentation (separate mask per object instance).',
-          list: [
-            'Semantic segmentation assigns a class label to every pixel without distinguishing individual object instances',
-            'Instance segmentation separates individual objects of the same class, providing a mask for each car, person, or animal',
-            'Panoptic segmentation combines both: semantic labels for background stuff and instance masks for foreground things',
-            'Segmentation requires encoder-decoder architectures that preserve spatial resolution through skip connections and upsampling'
-          ]
+          heading: 'What is Learning Rate Scheduling?',
+          text: 'Learning Rate Scheduling is essential for deep learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in deep learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Learning Rate Scheduling provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use learning rate scheduling when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Learning Rate Scheduling
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Learning Rate Scheduling sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'Segmentation loss is typically pixel-wise cross-entropy, optionally weighted by class frequency.',
+          text: 'Common schedules: step decay, exponential decay, cosine annealing, and warmup.',
           example: {
-            title: 'Example: Segmentation Loss & Dice Score',
-            code: `Pixel-wise Cross-Entropy:
-  L = -(1/N) Σᵢ Σ_c yᵢ,c log(ŷᵢ,c)
+            title: 'LR Schedules in PyTorch and TensorFlow',
+            code: `import torch, torch.nn as nn
+from torch.optim.lr_scheduler import StepLR, CosineAnnealingLR, ExponentialLR
 
-Dice Score (F1 for segmentation):
-  Dice = 2 × |X ∩ Y| / (|X| + |Y|)
+model = nn.Linear(10, 1)
+opt = torch.optim.SGD(model.parameters(), lr=0.1)
 
-For soft predictions:
-  Dice = 2 × Σᵢ pᵢgᵢ / (Σᵢ pᵢ² + Σᵢ gᵢ²)
+# Step decay: multiply LR by gamma every N epochs
+step_scheduler = StepLR(opt, step_size=30, gamma=0.1)
 
-Where:
-  pᵢ = predicted probability for pixel i
-  gᵢ = ground truth (0 or 1) for pixel i`,
-            output: 'Dice loss directly optimizes overlap, making it robust to class imbalance in medical images.',
+# Cosine annealing
+T_max = 100
+cos_scheduler = CosineAnnealingLR(opt, T_max=T_max, eta_min=1e-6)
+
+# Exponential decay
+exp_scheduler = ExponentialLR(opt, gamma=0.95)
+
+# Warmup + cosine (manual)
+for epoch in range(T_max):
+    if epoch < 5:                       # 5-epoch warmup
+        lr = 0.1 * (epoch + 1) / 5
+        for pg in opt.param_groups:
+            pg['lr'] = lr
+    else:
+        cos_scheduler.step()
+    # training loop here...
+
+# TensorFlow / Keras
+callbacks = [
+    tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2,
+                                          patience=5, min_lr=1e-6),
+    tf.keras.callbacks.CosineDecay(initial_learning_rate=0.1,
+                                    decay_steps=1000, alpha=1e-6)
+]`,
+            output: 'Combine warmup with cosine annealing for modern transformer and CNN training.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Learning Rate Scheduling with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Learning Rate Scheduling — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Semantic vs instance vs panoptic segmentation.',
+          text: 'Common learning rate schedules compared.',
           table: {
-            headers: ['Type', 'Output', 'Distinguishes Instances', 'Use Case'],
+            headers: [
+              'Schedule',
+              'Mechanism',
+              'Best For',
+              'Caveat'
+            ],
             rows: [
-              ['Classification', '1 label per image', 'No', 'What is in the image?'],
-              ['Object Detection', 'Boxes + labels', 'Yes', 'Where are the objects?'],
-              ['Semantic Segmentation', 'Class per pixel', 'No', 'Which pixels belong to road, sky, car?'],
-              ['Instance Segmentation', 'Mask per instance', 'Yes', 'Which pixels belong to car #1 vs car #2?'],
-              ['Panoptic Segmentation', 'Both semantic + instance', 'Yes', 'Complete scene understanding']
+              [
+                'Step Decay',
+                'Drop LR by factor every N epochs',
+                'CNNs, simple baselines',
+                'Requires tuning step size'
+              ],
+              [
+                'Exponential Decay',
+                'Multiply by gamma every step',
+                'Smooth decay',
+                'May decay too fast'
+              ],
+              [
+                'Cosine Annealing',
+                'LR follows cosine curve to eta_min',
+                'Modern CNNs, transformers',
+                'Needs T_max tuning'
+              ],
+              [
+                'ReduceLROnPlateau',
+                'Drop LR when metric stalls',
+                'General training',
+                'Requires patience'
+              ],
+              [
+                'Warmup',
+                'Linearly increase LR at start',
+                'Large batches, Adam',
+                'Prevents early divergence'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using standard cross-entropy on highly imbalanced segmentation datasets (fix: use weighted cross-entropy, focal loss, or Dice loss to prevent the model from predicting only the dominant background class)',
-            'Mistake 2: Downsampling too aggressively in the encoder without skip connections (fix: use U-Net style skip connections that copy high-resolution features from the encoder to the decoder, preserving fine boundary details)',
-            'Mistake 3: Evaluating segmentation with pixel accuracy instead of IoU or Dice (fix: pixel accuracy is misleading when backgrounds dominate; always use mean IoU or Dice score to properly measure segmentation quality)'
-          ]
+            'Mistake 1: Using cosine annealing without warmup for large-batch training (fix: always add a short warmup when batch size or learning rate is large)',
+            'Mistake 2: Calling scheduler.step() at the wrong frequency (fix: in PyTorch, some schedulers step per epoch, others per iteration; read the docs and match your loop)',
+            'Mistake 3: Combining too many schedules simultaneously (fix: pick one primary schedule and optionally ReduceLROnPlateau; stacking complex schedules often hurts reproducibility)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Segmentation provides pixel-precise understanding for demanding applications.',
+          heading: 'Real-World Case Study',
+          text: 'LR scheduling is used in virtually every state-of-the-art training recipe.',
           list: [
-            'Autonomous driving: semantic segmentation labels every pixel as road, pedestrian, vehicle, or sidewalk, enabling precise path planning beyond bounding box detection',
-            'Medical imaging: U-Net and its variants segment organs, tumors, and lesions in MRI and CT scans, guiding surgeons and automating radiology measurements',
-            'Fashion and e-commerce: segmentation separates clothing items from backgrounds for virtual try-on and automatic product cropping',
-            'Satellite imagery: land cover segmentation maps forests, water bodies, urban areas, and agricultural fields from aerial and satellite photos for environmental monitoring'
+            'ImageNet training: SGD with momentum + cosine annealing + warmup is the ResNet standard',
+            'BERT/GPT: AdamW with linear warmup and cosine or linear decay over millions of steps',
+            'Object detection: warmup followed by step decay at specific epochs is common in Detectron2 and MMDetection',
+            'Fine-tuning: use a much smaller base LR and shorter warmup to avoid destroying pre-trained features'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Segmentation classifies every pixel, producing precise object boundaries unlike bounding box detection',
-            'Semantic segmentation: one label map; instance segmentation: separate mask per object; panoptic: both',
-            'Encoder-decoder architectures with skip connections (U-Net) preserve spatial detail during upsampling',
-            'Dice loss and IoU metrics are preferred over pixel accuracy because they handle class imbalance',
-            'Medical and autonomous driving are the two most impactful domains for segmentation technology'
+            'Learning rate scheduling adapts the LR during training for faster convergence and better final accuracy',
+            'Warmup stabilizes early training, especially with adaptive optimizers and large batches',
+            'Step decay and cosine annealing are the two most common decay strategies',
+            'ReduceLROnPlateau reacts to validation metrics and is useful when the optimal schedule is unknown',
+            'Match scheduler frequency (epoch vs iteration) to your training loop'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What is the key difference between semantic and instance segmentation?\nAns: Semantic segmentation assigns a class label to every pixel but does not distinguish individual objects; instance segmentation provides a separate mask for each object instance.',
-            'Q2: Why are skip connections important in segmentation networks like U-Net?\nAns: Skip connections copy high-resolution encoder features to the decoder, preserving fine spatial details and sharp object boundaries that would otherwise be lost during downsampling.',
-            'Q3: Why is pixel accuracy a poor metric for segmentation evaluation?\nAns: Pixel accuracy is dominated by large background regions and ignores how well the model segments minority classes; mIoU and Dice score measure per-class overlap fairly.'
+            `Q1: Why is warmup important when using large learning rates?
+Ans: Warmup gradually increases the LR, preventing large adaptive gradient updates from destabilizing early training.`,
+            `Q2: What does cosine annealing do?
+Ans: It smoothly decreases the learning rate following a cosine curve from the initial value down to a minimum.`,
+            `Q3: When is ReduceLROnPlateau preferred over a fixed schedule?
+Ans: When you do not know the ideal decay epochs in advance; it reacts to stagnation in validation metrics.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Learning Rate Scheduling</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Learning Rate Scheduling")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
+        }
+      ]
+    },
+    'debugging-training': {
+      title: 'Debugging Training',
+      subtitle: 'NaN loss, vanishing gradients, gradient clipping, accumulation, and distributed training',
+      sections: [
+        {
+          heading: 'What is Debugging Training?',
+          text: 'Debugging Training is essential for deep learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in deep learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Debugging Training provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use debugging training when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Debugging Training
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Debugging Training sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Gradient clipping caps the norm of gradients. Gradient accumulation averages gradients over several forward passes before updating.',
+          example: {
+            title: 'Gradient Clipping, Accumulation, and Debugging Checks',
+            code: `import torch, torch.nn as nn
+
+model = nn.Linear(100, 10)
+opt = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+# Gradient clipping by norm
+for p in model.parameters():
+    if p.grad is not None:
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+
+# Gradient accumulation
+accum_steps = 4
+opt.zero_grad()
+for i, (xb, yb) in enumerate(dataloader):
+    loss = loss_fn(model(xb), yb) / accum_steps
+    loss.backward()
+    if (i + 1) % accum_steps == 0:
+        opt.step()
+        opt.zero_grad()
+
+# Debugging checks
+for name, p in model.named_parameters():
+    if p.grad is not None:
+        assert not torch.isnan(p.grad).any(), f"NaN grad in {name}"
+        print(f"{name}: grad mean={p.grad.mean():.2e} std={p.grad.std():.2e}")
+
+# Check loss and activations
+print("loss:", loss.item())
+print("activations mean:", model(xb).mean().item())
+
+# Detect vanishing gradients
+from torch.utils.tensorboard import SummaryWriter
+writer = SummaryWriter()
+for name, p in model.named_parameters():
+    writer.add_histogram(f"grad/{name}", p.grad, global_step)`,
+            output: 'Clipping stabilizes training; accumulation reduces memory pressure; histograms reveal vanishing or exploding gradients.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Debugging Training with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Debugging Training — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Techniques for stabilizing and scaling training.',
+          table: {
+            headers: [
+              'Technique',
+              'Problem Solved',
+              'How It Works',
+              'When to Use'
+            ],
+            rows: [
+              [
+                'Gradient Clipping',
+                'Exploding gradients / NaN loss',
+                'Caps gradient norm to max_norm',
+                'RNNs, Transformers, large LRs'
+              ],
+              [
+                'Gradient Accumulation',
+                'Limited GPU memory',
+                'Average grads over N mini-batches',
+                'Need large batch on small GPU'
+              ],
+              [
+                'Mixed Precision',
+                'Memory and speed',
+                'FP16 forward/backward + FP32 master weights',
+                'Modern GPUs with Tensor Cores'
+              ],
+              [
+                'Gradient Penalty',
+                'Unstable GANs',
+                'Penalize gradient norm',
+                'WGAN-GP'
+              ],
+              [
+                'Check NaNs Early',
+                'Silent failures',
+                'Assert after loss.backward()',
+                'All training loops'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Ignoring NaN loss and continuing training (fix: add asserts and print max gradient/activation values; reduce LR or add normalization)',
+            'Mistake 2: Using gradient clipping on every problem (fix: clipping helps RNNs and unstable training but can harm convergence in stable CNNs; monitor gradient norms first)',
+            'Mistake 3: Forgetting to scale loss when using gradient accumulation (fix: divide loss by accumulation steps so the effective gradient magnitude matches the target batch size)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: 'Training at scale requires combining many stabilization techniques.',
+          list: [
+            'Large language models: gradient clipping, mixed precision, gradient accumulation, and FSDP are all used together to train GPT-scale models',
+            'Vision transformers: DDP with cosine annealing and warmup trains models like ViT and DeiT on hundreds of GPUs',
+            'Self-driving perception: gradient accumulation lets teams use large effective batch sizes on memory-hungry 3D detection heads',
+            'Recommender systems: model parallelism splits huge embedding tables across many GPU nodes'
+          ]
+        },
+        {
+          heading: 'Quick Recap',
+          list: [
+            'NaN loss usually indicates instability: check LR, initialization, loss implementation, and activations',
+            'Gradient clipping controls exploding gradients, especially in RNNs and Transformers',
+            'Gradient accumulation simulates large batches without requiring a large GPU',
+            'Mixed precision (FP16/BF16) speeds up training and reduces memory on modern hardware',
+            'Distributed training scales via DDP (data parallel), model parallel, or FSDP (sharded) strategies'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: What is the most common cause of NaN loss?
+Ans: A learning rate that is too high, numerical overflow in softmax/loss, or bad initialization.`,
+            `Q2: Why must you divide the loss by accumulation steps?
+Ans: To keep the effective gradient magnitude the same as training on the full combined batch.`,
+            `Q3: What is the difference between Data Parallel and Model Parallel training?
+Ans: Data parallel splits the batch across replicas of the full model; model parallel splits the model itself across devices.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Debugging Training</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Debugging Training")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

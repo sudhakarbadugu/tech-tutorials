@@ -1,13 +1,34 @@
+// medical and satellite imaging — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js imaging_module2.js
+
 export const imagingModule2Structure = {
   module2: {
     title: 'Module 2: Image Processing Fundamentals',
     topics: [
-      { id: 'color-spaces', title: 'Color Spaces' },
-      { id: 'histogram', title: 'Histogram & Contrast' },
-      { id: 'filtering', title: 'Image Filtering' },
-      { id: 'edge-detection', title: 'Edge Detection' },
-      { id: 'morphological', title: 'Morphological Operations' },
-      { id: 'segmentation', title: 'Image Segmentation' },
+      {
+        id: 'color-spaces',
+        title: 'Color Spaces'
+      },
+      {
+        id: 'histogram',
+        title: 'Histogram & Contrast'
+      },
+      {
+        id: 'filtering',
+        title: 'Image Filtering'
+      },
+      {
+        id: 'edge-detection',
+        title: 'Edge Detection'
+      },
+      {
+        id: 'morphological',
+        title: 'Morphological Operations'
+      },
+      {
+        id: 'segmentation',
+        title: 'Image Segmentation'
+      }
     ]
   }
 };
@@ -28,6 +49,26 @@ export const imagingModule2Content = {
             'YCbCr: luma + chroma separation used in video compression (JPEG, MPEG)',
             'LAB: perceptually uniform — equal numerical distances correspond to equal perceived color differences'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>A <strong>color space</strong> is a mathematical model that describes how colors can be represented as tuples of numbers, typically as three or four values (color channels). Different color spaces are designed for different purposes — display, printing, human perception, or computational processing. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, A <strong>color space</strong> is a mathematical model that describes how colors can be represented as tuples of numbers, typically as three or four values (color channels). Different color spaces are designed for different purposes — display, printing, human perception, or computational processing. RGB: additive color model used by screens and cameras (Red, Green, Blue channels) HSV/HSL: intuitive models separating hue, saturation, and brightness/lightness CMYK: subtractive model used in printing (Cyan, Magenta, Yellow, Key/black) YCbCr: luma + chroma separation used in video compression (JPEG, MPEG) LAB: perceptually uniform — equal numerical distances correspond to equal perceived color differences</p>',
+            '<p>You use color spaces when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Color Spaces
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Color Spaces sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -57,16 +98,69 @@ export const imagingModule2Content = {
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Color Spaces with Python',
+            code: `import numpy as np
+# Color Spaces — synthetic 16-bit slice
+ct = np.random.randint(-1000, 2000, (512, 512), dtype=np.int16)
+print("HU range:", ct.min(), "to", ct.max(), "mean:", round(ct.mean(), 1))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Color spaces serve different purposes and have different properties.',
           table: {
-            headers: ['Color Space', 'Type', 'Best For', 'Key Property'],
+            headers: [
+              'Color Space',
+              'Type',
+              'Best For',
+              'Key Property'
+            ],
             rows: [
-              ['RGB', 'Additive', 'Displays, cameras', 'Direct hardware mapping'],
-              ['HSV / HSL', 'Cylindrical', 'Color picking, segmentation', 'Intuitive separation of color and brightness'],
-              ['YCbCr', 'Luma-chroma', 'Video compression', 'Luma channel is grayscale; chroma can be subsampled'],
-              ['LAB', 'Perceptual', 'Color correction, distance', 'Perceptually uniform; L = lightness, A/B = color opponents'],
-              ['CMYK', 'Subtractive', 'Printing', 'Ink-based; K prevents muddy grays']
+              [
+                'RGB',
+                'Additive',
+                'Displays, cameras',
+                'Direct hardware mapping'
+              ],
+              [
+                'HSV / HSL',
+                'Cylindrical',
+                'Color picking, segmentation',
+                'Intuitive separation of color and brightness'
+              ],
+              [
+                'YCbCr',
+                'Luma-chroma',
+                'Video compression',
+                'Luma channel is grayscale; chroma can be subsampled'
+              ],
+              [
+                'LAB',
+                'Perceptual',
+                'Color correction, distance',
+                'Perceptually uniform; L = lightness, A/B = color opponents'
+              ],
+              [
+                'CMYK',
+                'Subtractive',
+                'Printing',
+                'Ink-based; K prevents muddy grays'
+              ]
             ]
           }
         },
@@ -77,10 +171,18 @@ export const imagingModule2Content = {
             'Mistake 2: Computing Euclidean distance in RGB space to measure color similarity (fix: use LAB for perceptual distance or Delta E metric)',
             'Mistake 3: Treating HSV hue as a linear value near the 0°/360° wraparound boundary (fix: use circular distance when comparing hues)',
             'Mistake 4: Ignoring gamma correction when converting between linear and non-linear spaces (fix: apply gamma encode/decode appropriately for the target space)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Color space choice directly impacts the quality and efficiency of imaging pipelines.',
           list: [
             'Skin detection: convert to HSV or YCbCr and threshold the chroma channels to isolate skin-toned regions',
@@ -101,12 +203,36 @@ export const imagingModule2Content = {
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why is HSV preferred over RGB for color-based segmentation?\nAns: HSV separates hue (color) from value (brightness), making thresholds stable under lighting changes.',
-            'Q2: What does it mean for LAB to be "perceptually uniform"?\nAns: A fixed numerical distance between two colors corresponds to a similar perceived difference anywhere in the space.',
-            'Q3: In JPEG compression, why is RGB converted to YCbCr before encoding?\nAns: Human vision is more sensitive to brightness (Y) than color (Cb/Cr), so chroma can be downsampled to save space.'
+            `Q1: Why is HSV preferred over RGB for color-based segmentation?
+Ans: HSV separates hue (color) from value (brightness), making thresholds stable under lighting changes.`,
+            `Q2: What does it mean for LAB to be "perceptually uniform"?
+Ans: A fixed numerical distance between two colors corresponds to a similar perceived difference anywhere in the space.`,
+            `Q3: In JPEG compression, why is RGB converted to YCbCr before encoding?
+Ans: Human vision is more sensitive to brightness (Y) than color (Cb/Cr), so chroma can be downsampled to save space.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Color Spaces</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Color Spaces")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -124,6 +250,26 @@ export const imagingModule2Content = {
             'Peaks correspond to dominant tones; valleys indicate rarely occurring intensities',
             'Histograms are lossless summaries — they discard spatial information but preserve intensity statistics'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>An <strong>image histogram</strong> is a graphical representation of the distribution of pixel intensities in an image. For a grayscale image, it counts how many pixels have each possible intensity value (0–255). For color images, separate histograms are computed for each channel. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, An <strong>image histogram</strong> is a graphical representation of the distribution of pixel intensities in an image. For a grayscale image, it counts how many pixels have each possible intensity value (0–255). For color images, separate histograms are computed for each channel. X-axis: pixel intensity values (0 to 255 for 8-bit images) Y-axis: number of pixels (or frequency) at each intensity A narrow histogram indicates low contrast; a spread-out histogram indicates high contrast Peaks correspond to dominant tones; valleys indicate rarely occurring intensities Histograms are lossless summaries — they discard spatial information but preserve intensity statistics</p>',
+            '<p>You use histogram & contrast when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Histogram & Contrast
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Histogram & Contrast sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -150,16 +296,69 @@ export const imagingModule2Content = {
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Histogram & Contrast with Python',
+            code: `import numpy as np
+# Histogram & Contrast — synthetic 16-bit slice
+ct = np.random.randint(-1000, 2000, (512, 512), dtype=np.int16)
+print("HU range:", ct.min(), "to", ct.max(), "mean:", round(ct.mean(), 1))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Global vs adaptive histogram equalization.',
           table: {
-            headers: ['Method', 'Approach', 'Strengths', 'Weaknesses'],
+            headers: [
+              'Method',
+              'Approach',
+              'Strengths',
+              'Weaknesses'
+            ],
             rows: [
-              ['Global HE', 'Single transform for entire image', 'Simple, fast, automatic', 'Amplifies noise; over-enhances some regions'],
-              ['CLAHE', 'Adaptive HE on small tiles with contrast limiting', 'Preserves details; avoids noise amplification', 'Requires tile size and clip limit tuning'],
-              ['Gamma correction', 'Non-linear power-law transform', 'Controlled dark/bright region emphasis', 'Manual parameter selection'],
-              ['Linear stretching', 'Map min/max to full range', 'Extremely fast', 'Fails if min/max are outliers (saturation)'],
-              ['Histogram matching', 'Match target histogram shape', 'Creates consistent look across images', 'Requires a reference histogram']
+              [
+                'Global HE',
+                'Single transform for entire image',
+                'Simple, fast, automatic',
+                'Amplifies noise; over-enhances some regions'
+              ],
+              [
+                'CLAHE',
+                'Adaptive HE on small tiles with contrast limiting',
+                'Preserves details; avoids noise amplification',
+                'Requires tile size and clip limit tuning'
+              ],
+              [
+                'Gamma correction',
+                'Non-linear power-law transform',
+                'Controlled dark/bright region emphasis',
+                'Manual parameter selection'
+              ],
+              [
+                'Linear stretching',
+                'Map min/max to full range',
+                'Extremely fast',
+                'Fails if min/max are outliers (saturation)'
+              ],
+              [
+                'Histogram matching',
+                'Match target histogram shape',
+                'Creates consistent look across images',
+                'Requires a reference histogram'
+              ]
             ]
           }
         },
@@ -170,10 +369,18 @@ export const imagingModule2Content = {
             'Mistake 2: Using global HE on images with highly varying illumination (fix: use CLAHE or adaptive methods that operate on local regions)',
             'Mistake 3: Confusing histogram shape with image quality (fix: a flat histogram does not guarantee a good image; it only guarantees full dynamic range usage)',
             'Mistake 4: Ignoring the effect of saturated/clipped pixels on linear stretching (fix: use percentile-based clipping before stretching to ignore extreme outliers)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Histogram analysis drives both manual and automated image enhancement workflows.',
           list: [
             'Medical imaging: X-rays and mammograms often have low contrast; equalization improves visibility of soft tissue',
@@ -194,12 +401,36 @@ export const imagingModule2Content = {
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What does a histogram peak at the left side (low intensities) indicate?\nAns: The image is predominantly dark or underexposed.',
-            'Q2: Why does CLAHE outperform global histogram equalization in many cases?\nAns: It processes small local tiles and clips extreme bins, preventing noise amplification and over-enhancement.',
-            'Q3: When equalizing a color image, which channel should you modify?\nAns: The luminance/intensity channel (Y in YCbCr, V in HSV, or L in LAB), not the color channels.'
+            `Q1: What does a histogram peak at the left side (low intensities) indicate?
+Ans: The image is predominantly dark or underexposed.`,
+            `Q2: Why does CLAHE outperform global histogram equalization in many cases?
+Ans: It processes small local tiles and clips extreme bins, preventing noise amplification and over-enhancement.`,
+            `Q3: When equalizing a color image, which channel should you modify?
+Ans: The luminance/intensity channel (Y in YCbCr, V in HSV, or L in LAB), not the color channels.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Histogram & Contrast</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Histogram & Contrast")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -217,6 +448,26 @@ export const imagingModule2Content = {
             'Padding is required at image boundaries to maintain output size (zero padding, replicate, reflect)',
             'Separable kernels (e.g., Gaussian) can be split into 1D passes for efficiency'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Image filtering</strong> is the process of modifying pixel values based on a neighborhood of surrounding pixels. It is implemented via <strong>convolution</strong>: sliding a small matrix (kernel or filter) across the image and computing a weighted sum at each position. Filters can blur, sharpen, detect edges, or remove noise. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Image filtering</strong> is the process of modifying pixel values based on a neighborhood of surrounding pixels. It is implemented via <strong>convolution</strong>: sliding a small matrix (kernel or filter) across the image and computing a weighted sum at each position. Filters can blur, sharpen, detect edges, or remove noise. Linear filters: output is a weighted sum of neighborhood pixels (mean, Gaussian, Sobel) Non-linear filters: output depends on order statistics rather than linear weights (median, bilateral) Convolution: flip the kernel, slide it over the image, multiply and sum at each position Padding is required at image boundaries to maintain output size (zero padding, replicate, reflect) Separable kernels (e.g., Gaussian) can be split into 1D passes for efficiency</p>',
+            '<p>You use image filtering when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Image Filtering
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Image Filtering sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -244,17 +495,75 @@ Mean/Box Filter (3×3):
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Image Filtering with Python',
+            code: `import numpy as np
+# Image Filtering — synthetic 16-bit slice
+ct = np.random.randint(-1000, 2000, (512, 512), dtype=np.int16)
+print("HU range:", ct.min(), "to", ct.max(), "mean:", round(ct.mean(), 1))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Common filter types and their properties.',
           table: {
-            headers: ['Filter', 'Kernel Type', 'Effect', 'Best For'],
+            headers: [
+              'Filter',
+              'Kernel Type',
+              'Effect',
+              'Best For'
+            ],
             rows: [
-              ['Mean / Box', 'Uniform weights', 'Blurring, noise reduction', 'Fast, simple smoothing'],
-              ['Gaussian', 'Bell curve weights', 'Smoothing, anti-aliasing', 'Natural blur; separable for speed'],
-              ['Median', 'Non-linear rank', 'Removes salt & pepper noise', 'Preserves edges while removing outliers'],
-              ['Bilateral', 'Spatial + intensity weights', 'Edge-preserving smoothing', 'Noise reduction without blurring edges'],
-              ['Laplacian', 'Second derivative', 'Edge enhancement', 'Detecting rapid intensity changes'],
-              ['Unsharp mask', 'Original - blurred', 'Sharpening', 'Enhancing fine detail']
+              [
+                'Mean / Box',
+                'Uniform weights',
+                'Blurring, noise reduction',
+                'Fast, simple smoothing'
+              ],
+              [
+                'Gaussian',
+                'Bell curve weights',
+                'Smoothing, anti-aliasing',
+                'Natural blur; separable for speed'
+              ],
+              [
+                'Median',
+                'Non-linear rank',
+                'Removes salt & pepper noise',
+                'Preserves edges while removing outliers'
+              ],
+              [
+                'Bilateral',
+                'Spatial + intensity weights',
+                'Edge-preserving smoothing',
+                'Noise reduction without blurring edges'
+              ],
+              [
+                'Laplacian',
+                'Second derivative',
+                'Edge enhancement',
+                'Detecting rapid intensity changes'
+              ],
+              [
+                'Unsharp mask',
+                'Original - blurred',
+                'Sharpening',
+                'Enhancing fine detail'
+              ]
             ]
           }
         },
@@ -265,10 +574,18 @@ Mean/Box Filter (3×3):
             'Mistake 2: Applying sharpening to noisy images (fix: denoise first, then sharpen; otherwise noise is amplified)',
             'Mistake 3: Forgetting to normalize convolution kernels whose weights do not sum to 1 (fix: divide by the sum before applying; otherwise brightness shifts)',
             'Mistake 4: Using zero padding for images where black borders are undesirable (fix: use replicate or reflect padding to avoid dark edge artifacts)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Filtering is the workhorse of almost every imaging pipeline.',
           list: [
             'Portrait mode (bokeh): depth-aware bilateral filtering blurs backgrounds while keeping subjects sharp',
@@ -289,12 +606,36 @@ Mean/Box Filter (3×3):
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why does a median filter remove salt & pepper noise better than a mean filter?\nAns: Outlier pixels (salt/pepper) do not affect the median value, whereas the mean is pulled toward extreme values.',
-            'Q2: What makes the bilateral filter "edge-preserving"?\nAns: It weights pixels by both spatial distance and intensity similarity, so pixels across strong edges are not averaged together.',
-            'Q3: Why is a Gaussian kernel preferred over a box filter for anti-aliasing?\nAns: Gaussian weights taper smoothly, avoiding the blocky artifacts and ringing introduced by the sharp cutoff of a box filter.'
+            `Q1: Why does a median filter remove salt & pepper noise better than a mean filter?
+Ans: Outlier pixels (salt/pepper) do not affect the median value, whereas the mean is pulled toward extreme values.`,
+            `Q2: What makes the bilateral filter "edge-preserving"?
+Ans: It weights pixels by both spatial distance and intensity similarity, so pixels across strong edges are not averaged together.`,
+            `Q3: Why is a Gaussian kernel preferred over a box filter for anti-aliasing?
+Ans: Gaussian weights taper smoothly, avoiding the blocky artifacts and ringing introduced by the sharp cutoff of a box filter.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Image Filtering</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Image Filtering")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -312,6 +653,26 @@ Mean/Box Filter (3×3):
             'Edge thinning (non-maximum suppression) ensures edges are one pixel wide',
             'Hysteresis thresholding distinguishes strong edges from weak but connected ones'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Edge detection</strong> is the process of identifying points in an image where the brightness changes sharply. Edges typically correspond to object boundaries, surface discontinuities, or texture changes. Most edge detectors compute the <strong>gradient</strong> (first derivative) of image intensity and look for high-magnitude responses. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Edge detection</strong> is the process of identifying points in an image where the brightness changes sharply. Edges typically correspond to object boundaries, surface discontinuities, or texture changes. Most edge detectors compute the <strong>gradient</strong> (first derivative) of image intensity and look for high-magnitude responses. Edges are characterized by high gradient magnitude (rapid intensity change) Gradient direction indicates the orientation perpendicular to the edge Noise amplifies gradient responses, so smoothing is usually applied first Edge thinning (non-maximum suppression) ensures edges are one pixel wide Hysteresis thresholding distinguishes strong edges from weak but connected ones</p>',
+            '<p>You use edge detection when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Edge Detection
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Edge Detection sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -342,17 +703,75 @@ Canny Edge Detector adds:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Edge Detection with Python',
+            code: `import numpy as np
+# Edge Detection — synthetic 16-bit slice
+ct = np.random.randint(-1000, 2000, (512, 512), dtype=np.int16)
+print("HU range:", ct.min(), "to", ct.max(), "mean:", round(ct.mean(), 1))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Comparison of popular edge detection methods.',
           table: {
-            headers: ['Method', 'Derivative', 'Strengths', 'Weaknesses'],
+            headers: [
+              'Method',
+              'Derivative',
+              'Strengths',
+              'Weaknesses'
+            ],
             rows: [
-              ['Sobel', 'First-order', 'Fast, simple, directional', 'Thick edges; noise-sensitive'],
-              ['Prewitt', 'First-order', 'Slightly more noise-robust than Sobel', 'Lower edge localization accuracy'],
-              ['Roberts', 'First-order (2×2)', 'Very fast', 'Highly noise-sensitive; diagonal bias'],
-              ['Canny', 'First-order + post-processing', 'Thin edges; good noise rejection; continuous contours', 'Slower; two thresholds to tune'],
-              ['Laplacian', 'Second-order', 'Zero-crossing detection; isotropic', 'Very noise-sensitive; no direction info'],
-              ['LoG', 'Second-order + Gaussian', 'Noise-resistant; finds blob-like edges', 'Blurs fine detail; slower than Sobel']
+              [
+                'Sobel',
+                'First-order',
+                'Fast, simple, directional',
+                'Thick edges; noise-sensitive'
+              ],
+              [
+                'Prewitt',
+                'First-order',
+                'Slightly more noise-robust than Sobel',
+                'Lower edge localization accuracy'
+              ],
+              [
+                'Roberts',
+                'First-order (2×2)',
+                'Very fast',
+                'Highly noise-sensitive; diagonal bias'
+              ],
+              [
+                'Canny',
+                'First-order + post-processing',
+                'Thin edges; good noise rejection; continuous contours',
+                'Slower; two thresholds to tune'
+              ],
+              [
+                'Laplacian',
+                'Second-order',
+                'Zero-crossing detection; isotropic',
+                'Very noise-sensitive; no direction info'
+              ],
+              [
+                'LoG',
+                'Second-order + Gaussian',
+                'Noise-resistant; finds blob-like edges',
+                'Blurs fine detail; slower than Sobel'
+              ]
             ]
           }
         },
@@ -363,10 +782,18 @@ Canny Edge Detector adds:
             'Mistake 2: Using a single global threshold for all images (fix: use adaptive thresholding or Canny hysteresis to handle varying edge strengths)',
             'Mistake 3: Expecting edge detectors to produce closed object boundaries (fix: edges are local operations; contour completion or segmentation is needed for closed regions)',
             'Mistake 4: Confusing gradient magnitude with edge direction (fix: magnitude tells you how strong the edge is; direction tells you the edge orientation, perpendicular to the intensity change)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Edge detection is a foundational step in higher-level vision tasks.',
           list: [
             'Object detection: edges help localize object boundaries before classification (HOG features use oriented gradients)',
@@ -388,12 +815,36 @@ Canny Edge Detector adds:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why does Canny edge detection include a Gaussian smoothing step before computing gradients?\nAns: Derivatives amplify noise; smoothing reduces high-frequency noise before differentiation.',
-            'Q2: What is the purpose of non-maximum suppression in Canny?\nAns: It thins wide gradient ridges to a single pixel, producing sharp, precise edges.',
-            'Q3: How does hysteresis thresholding improve edge continuity?\nAns: Weak edges are kept only if they connect to strong edges, filling gaps in contours while suppressing isolated noise responses.'
+            `Q1: Why does Canny edge detection include a Gaussian smoothing step before computing gradients?
+Ans: Derivatives amplify noise; smoothing reduces high-frequency noise before differentiation.`,
+            `Q2: What is the purpose of non-maximum suppression in Canny?
+Ans: It thins wide gradient ridges to a single pixel, producing sharp, precise edges.`,
+            `Q3: How does hysteresis thresholding improve edge continuity?
+Ans: Weak edges are kept only if they connect to strong edges, filling gaps in contours while suppressing isolated noise responses.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Edge Detection</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Edge Detection")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -411,6 +862,26 @@ Canny Edge Detector adds:
             'Closing: dilation followed by erosion — fills small holes and connects nearby regions',
             'Structuring elements define the shape and size of the neighborhood: common choices are squares, disks, and crosses'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Morphological operations</strong> process images based on shapes. They use a small shape template called a <strong>structuring element</strong> (SE) to probe the image and transform it according to how the SE fits or misses the foreground pixels. These operations are fundamental for binary image cleaning and shape analysis. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Morphological operations</strong> process images based on shapes. They use a small shape template called a <strong>structuring element</strong> (SE) to probe the image and transform it according to how the SE fits or misses the foreground pixels. These operations are fundamental for binary image cleaning and shape analysis. Dilation: grows foreground regions by adding pixels where the SE overlaps foreground Erosion: shrinks foreground regions by removing pixels where the SE does not fully fit inside foreground Opening: erosion followed by dilation — removes small noise blobs and smooths boundaries Closing: dilation followed by erosion — fills small holes and connects nearby regions Structuring elements define the shape and size of the neighborhood: common choices are squares, disks, and crosses</p>',
+            '<p>You use morphological operations when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Morphological Operations
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Morphological Operations sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -436,17 +907,75 @@ Let B = structuring element (origin at center)
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Morphological Operations with Python',
+            code: `import numpy as np
+# Morphological Operations — synthetic 16-bit slice
+ct = np.random.randint(-1000, 2000, (512, 512), dtype=np.int16)
+print("HU range:", ct.min(), "to", ct.max(), "mean:", round(ct.mean(), 1))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Comparison of core morphological operations.',
           table: {
-            headers: ['Operation', 'Effect on Foreground', 'Effect on Holes', 'Best For'],
+            headers: [
+              'Operation',
+              'Effect on Foreground',
+              'Effect on Holes',
+              'Best For'
+            ],
             rows: [
-              ['Dilation', 'Grows', 'Shrinks', 'Connecting broken regions; thickening lines'],
-              ['Erosion', 'Shrinks', 'Grows', 'Removing small noise; separating touching objects'],
-              ['Opening', 'Smooths (removes small blobs)', 'Unchanged', 'Noise removal; smoothing contours'],
-              ['Closing', 'Unchanged', 'Fills small holes', 'Closing gaps; joining nearby components'],
-              ['Gradient', 'Edge enhancement', 'Unchanged', 'Finding object boundaries (dilate - erode)'],
-              ['Top-hat', 'Isolates small bright features', 'Unchanged', 'Detecting small objects on bright backgrounds']
+              [
+                'Dilation',
+                'Grows',
+                'Shrinks',
+                'Connecting broken regions; thickening lines'
+              ],
+              [
+                'Erosion',
+                'Shrinks',
+                'Grows',
+                'Removing small noise; separating touching objects'
+              ],
+              [
+                'Opening',
+                'Smooths (removes small blobs)',
+                'Unchanged',
+                'Noise removal; smoothing contours'
+              ],
+              [
+                'Closing',
+                'Unchanged',
+                'Fills small holes',
+                'Closing gaps; joining nearby components'
+              ],
+              [
+                'Gradient',
+                'Edge enhancement',
+                'Unchanged',
+                'Finding object boundaries (dilate - erode)'
+              ],
+              [
+                'Top-hat',
+                'Isolates small bright features',
+                'Unchanged',
+                'Detecting small objects on bright backgrounds'
+              ]
             ]
           }
         },
@@ -457,10 +986,18 @@ Let B = structuring element (origin at center)
             'Mistake 2: Applying morphological operations to grayscale images as if they were binary (fix: for grayscale, use min/max-based definitions; erosion takes the minimum, dilation takes the maximum in the SE neighborhood)',
             'Mistake 3: Expecting opening to fill holes (fix: opening removes small blobs; use closing to fill holes)',
             'Mistake 4: Performing dilation before erosion on a noisy image thinking it will clean it (fix: that is closing, which fills noise blobs into foreground; use opening to remove noise)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Morphological operations clean and prepare binary and grayscale images for analysis.',
           list: [
             'OCR preprocessing: opening removes speckle noise from scanned documents; closing fills broken character strokes',
@@ -482,12 +1019,36 @@ Let B = structuring element (origin at center)
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What is the difference between opening and closing?\nAns: Opening erodes then dilates to remove small foreground noise; closing dilates then erodes to fill holes and gaps.',
-            'Q2: Why is the structuring element size critical in morphological operations?\nAns: An SE that is too small will not remove the target noise; one that is too large will destroy valid features.',
-            'Q3: In grayscale morphology, what operation replaces set intersection for erosion?\nAns: The minimum operation over the structuring element neighborhood.'
+            `Q1: What is the difference between opening and closing?
+Ans: Opening erodes then dilates to remove small foreground noise; closing dilates then erodes to fill holes and gaps.`,
+            `Q2: Why is the structuring element size critical in morphological operations?
+Ans: An SE that is too small will not remove the target noise; one that is too large will destroy valid features.`,
+            `Q3: In grayscale morphology, what operation replaces set intersection for erosion?
+Ans: The minimum operation over the structuring element neighborhood.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Morphological Operations</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Morphological Operations")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -506,6 +1067,26 @@ Let B = structuring element (origin at center)
             'Clustering-based: groups pixels by color or feature similarity (K-means, mean shift)',
             'Edge-based: uses detected edges to form closed boundaries'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Image segmentation</strong> is the process of partitioning an image into multiple segments (sets of pixels) such that pixels in the same segment share certain characteristics. It simplifies the image into something more meaningful and easier to analyze. Segmentation is a critical bridge between low-level image processing and high-level object understanding. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Image segmentation</strong> is the process of partitioning an image into multiple segments (sets of pixels) such that pixels in the same segment share certain characteristics. It simplifies the image into something more meaningful and easier to analyze. Segmentation is a critical bridge between low-level image processing and high-level object understanding. Semantic segmentation: classifies every pixel into a predefined category (e.g., road, sky, person) Instance segmentation: separates individual object instances of the same class (e.g., person 1 vs person 2) Panoptic segmentation: combines semantic and instance segmentation Thresholding: the simplest form — segments based on intensity value Clustering-based: groups pixels by color or feature similarity (K-means, mean shift) Edge-based: uses detected edges to form closed boundaries</p>',
+            '<p>You use image segmentation when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Image Segmentation
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Image Segmentation sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -535,17 +1116,82 @@ Let B = structuring element (origin at center)
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Image Segmentation with Python',
+            code: `import numpy as np
+# Image Segmentation — synthetic 16-bit slice
+ct = np.random.randint(-1000, 2000, (512, 512), dtype=np.int16)
+print("HU range:", ct.min(), "to", ct.max(), "mean:", round(ct.mean(), 1))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Segmentation approaches compared.',
           table: {
-            headers: ['Method', 'Type', 'Input', 'Strengths', 'Weaknesses'],
+            headers: [
+              'Method',
+              'Type',
+              'Input',
+              'Strengths',
+              'Weaknesses'
+            ],
             rows: [
-              ['Thresholding', 'Intensity-based', 'Grayscale image', 'Extremely fast; simple', 'Fails with uneven illumination'],
-              ['Otsu', 'Auto threshold', 'Histogram', 'Automatic; no parameters', 'Assumes bimodal distribution'],
-              ['K-Means', 'Clustering', 'Pixel features (RGB, position)', 'Simple; finds color regions', 'Must choose K; sensitive to initialization'],
-              ['Watershed', 'Region-based', 'Gradient image', 'Finds precise boundaries', 'Severe over-segmentation without markers'],
-              ['GrabCut', 'Graph + interaction', 'RGB image + user box', 'Accurate with minimal input', 'Requires user initialization'],
-              ['U-Net / Deep', 'Deep learning', 'RGB image', 'State-of-the-art accuracy', 'Requires large labeled dataset; compute heavy']
+              [
+                'Thresholding',
+                'Intensity-based',
+                'Grayscale image',
+                'Extremely fast; simple',
+                'Fails with uneven illumination'
+              ],
+              [
+                'Otsu',
+                'Auto threshold',
+                'Histogram',
+                'Automatic; no parameters',
+                'Assumes bimodal distribution'
+              ],
+              [
+                'K-Means',
+                'Clustering',
+                'Pixel features (RGB, position)',
+                'Simple; finds color regions',
+                'Must choose K; sensitive to initialization'
+              ],
+              [
+                'Watershed',
+                'Region-based',
+                'Gradient image',
+                'Finds precise boundaries',
+                'Severe over-segmentation without markers'
+              ],
+              [
+                'GrabCut',
+                'Graph + interaction',
+                'RGB image + user box',
+                'Accurate with minimal input',
+                'Requires user initialization'
+              ],
+              [
+                'U-Net / Deep',
+                'Deep learning',
+                'RGB image',
+                'State-of-the-art accuracy',
+                'Requires large labeled dataset; compute heavy'
+              ]
             ]
           }
         },
@@ -556,10 +1202,18 @@ Let B = structuring element (origin at center)
             'Mistake 2: Running K-means on raw RGB without spatial coordinates (fix: append (x, y) to feature vectors so spatially close pixels cluster together, producing smoother segments)',
             'Mistake 3: Treating segmentation as a solved problem for all domains (fix: medical and industrial images often need domain-specific loss functions and architectures)',
             'Mistake 4: Ignoring class imbalance in semantic segmentation training (fix: use weighted cross-entropy, Dice loss, or focal loss to prevent the model from ignoring small classes)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Segmentation turns images into structured, analyzable regions.',
           list: [
             'Medical imaging: segmenting organs, tumors, and blood vessels for diagnosis, treatment planning, and volumetric measurement',
@@ -582,12 +1236,36 @@ Let B = structuring element (origin at center)
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What is the main limitation of global thresholding, and how does adaptive thresholding address it?\nAns: Global thresholding fails with uneven illumination; adaptive thresholding computes local thresholds for each image region.',
-            'Q2: Why might K-means segmentation produce noisy or speckled regions?\nAns: K-means considers only color similarity; adding spatial coordinates or post-processing with morphological operations produces smoother segments.',
-            'Q3: In semantic segmentation, what problem does class imbalance cause, and what is one solution?\nAns: Small classes (e.g., pedestrians) are underrepresented in the loss; solutions include weighted loss, Dice loss, or focal loss.'
+            `Q1: What is the main limitation of global thresholding, and how does adaptive thresholding address it?
+Ans: Global thresholding fails with uneven illumination; adaptive thresholding computes local thresholds for each image region.`,
+            `Q2: Why might K-means segmentation produce noisy or speckled regions?
+Ans: K-means considers only color similarity; adding spatial coordinates or post-processing with morphological operations produces smoother segments.`,
+            `Q3: In semantic segmentation, what problem does class imbalance cause, and what is one solution?
+Ans: Small classes (e.g., pedestrians) are underrepresented in the loss; solutions include weighted loss, Dice loss, or focal loss.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Image Segmentation</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Image Segmentation")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

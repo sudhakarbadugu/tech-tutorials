@@ -155,11 +155,11 @@ async function build() {
       module5: 'Module 5: Advanced CV & Deployment'
     },
     dl: {
-      module1: 'Module 1: Deep Learning Fundamentals',
-      module2: 'Module 2: Convolutional Neural Networks',
-      module3: 'Module 3: Advanced CNNs & Model Optimization',
-      module4: 'Module 4: Generative & Advanced Architectures',
-      module5: 'Module 5: Ethics & Future of Deep Learning'
+      module1: 'Module 1: Foundations of Deep Learning',
+      module2: 'Module 2: Training Deep Networks',
+      module3: 'Module 3: Convolutional Neural Networks',
+      module4: 'Module 4: Recurrent Neural Networks',
+      module5: 'Module 5: Advanced Architectures'
     },
     imaging: {
       module1: 'Module 1: Imaging Foundations',
@@ -183,11 +183,11 @@ async function build() {
       module5: 'Module 5: Advanced Algorithms & Systems'
     },
     multimodal: {
-      unit1: 'Unit 1: Foundations of Machine Learning',
-      unit2: 'Unit 2: Multimodal Representations',
-      unit3: 'Unit 3: Sequence Models & Attention',
-      unit4: 'Unit 4: Multimodal Tasks & Fusion',
-      unit5: 'Unit 5: Advanced Multimodal Applications'
+      unit1: 'Unit 1: Foundations of Multimodal ML',
+      unit2: 'Unit 2: Vision-Language Models',
+      unit3: 'Unit 3: Multimodal Fusion',
+      unit4: 'Unit 4: Generative Multimodal Models',
+      unit5: 'Unit 5: Applications & Systems'
     },
     nlp: {
       module1: 'Module 1: NLP Foundations',
@@ -244,7 +244,61 @@ async function build() {
     svm: 'Support Vector Machine (SVM)',
     transformers: 'Transformers',
     'transformers-nlp': 'Transformers',
-    vqa: 'Visual Question Answering (VQA)'
+    vqa: 'Visual Question Answering (VQA)',
+    // Deep Learning module topic IDs
+    'intro-dl': 'Introduction to Deep Learning',
+    'activation-functions': 'Activation Functions',
+    'loss-functions': 'Loss Functions',
+    'gradient-descent': 'Gradient Descent',
+    'advanced-optimizers': 'Advanced Optimizers',
+    'weight-initialization': 'Weight Initialization',
+    'normalization-and-regularization': 'Normalization & Regularization',
+    'learning-rate-scheduling': 'Learning Rate Scheduling',
+    'debugging-training': 'Debugging & Distributed Training',
+    'convolution-arithmetic': 'Convolution Arithmetic',
+    'lenet-alexnet-vgg': 'LeNet, AlexNet & VGG',
+    'transfer-learning-cnn': 'Transfer Learning with torchvision',
+    'data-augmentation': 'Data Augmentation',
+    'rnn-basics': 'RNN Basics',
+    'lstm-gru': 'LSTM & GRU',
+    'text-generation': 'Text Generation',
+    'time-series-forecasting': 'Time Series Forecasting',
+    'attention-intro': 'Introduction to Attention',
+    'transformers-from-scratch': 'Transformers from Scratch',
+    autoencoders: 'Autoencoders',
+    gans: 'Generative Adversarial Networks',
+    'modern-regularization': 'Modern Regularization',
+    'scalable-training': 'Scalable & Distributed Training',
+    // Multimodal Unit 1: Foundations
+    'intro-multimodal': 'Introduction to Multimodal Machine Learning',
+    'modality-representations': 'Modality Representations',
+    'alignment-challenge': 'The Alignment Challenge',
+    'co-learning-zero-shot': 'Co-learning and Zero-Shot Transfer',
+    'multimodal-datasets': 'Multimodal Datasets',
+    // Multimodal Unit 2: Vision-Language Models
+    'clip': 'CLIP',
+    'zero-shot-classification': 'Zero-Shot Classification',
+    'image-text-retrieval': 'Image-Text Retrieval',
+    'llava': 'LLaVA',
+    'fine-tune-clip': 'Fine-Tuning CLIP',
+    // Multimodal Unit 3: Multimodal Fusion
+    'early-late-hybrid-fusion': 'Early, Late, and Hybrid Fusion',
+    'attention-based-fusion': 'Attention-Based Fusion',
+    'cross-attention': 'Cross-Attention Mechanism',
+    'multimodal-sentiment-classifier': 'Build a Multimodal Sentiment Classifier',
+    'fusion-best-practices': 'Fusion Best Practices',
+    // Multimodal Unit 4: Generative Multimodal Models
+    'dalle-stable-diffusion': 'Text-to-Image Models: DALL·E and Stable Diffusion',
+    'text-to-image-pipeline': 'Building a Text-to-Image Pipeline',
+    'multimodal-gpt4v': 'Multimodal LLMs: GPT-4V and Beyond',
+    'whisper-audio-text': 'Whisper: Audio-Text Foundation Model',
+    'generation-evaluation': 'Evaluating Generative Multimodal Models',
+    // Multimodal Unit 5: Applications & Systems
+    'visual-question-answering': 'Visual Question Answering',
+    'image-captioning': 'Image Captioning',
+    'video-understanding': 'Video Understanding',
+    'medical-multimodal-ai': 'Medical Multimodal AI',
+    'multimodal-systems-design': 'Designing Multimodal Systems'
   };
 
   function formatTopicTitle(id) {

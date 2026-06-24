@@ -1,12 +1,30 @@
+// artificial intelligence — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js ai_module3.js
+
 export const aiModule3Structure = {
   module3: {
     title: 'Module 3: Knowledge Representation & Reasoning',
     topics: [
-      { id: 'knowledge-representation', title: 'Knowledge Representation' },
-      { id: 'logic', title: 'Logic in AI' },
-      { id: 'propositional-logic', title: 'Propositional Logic' },
-      { id: 'first-order-logic', title: 'First-Order Logic' },
-      { id: 'inference', title: 'Inference & Reasoning' },
+      {
+        id: 'knowledge-representation',
+        title: 'Knowledge Representation'
+      },
+      {
+        id: 'logic',
+        title: 'Logic in AI'
+      },
+      {
+        id: 'propositional-logic',
+        title: 'Propositional Logic'
+      },
+      {
+        id: 'first-order-logic',
+        title: 'First-Order Logic'
+      },
+      {
+        id: 'inference',
+        title: 'Inference & Reasoning'
+      }
     ]
   }
 };
@@ -26,6 +44,26 @@ export const aiModule3Content = {
             'Supports reasoning under uncertainty when complete information is unavailable',
             'Must balance expressiveness (what you can say) with tractability (what you can compute)'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Knowledge Representation (KR)</strong> is the field of AI devoted to storing information about the world in a form that machines can use to solve complex problems. It bridges the gap between human knowledge (vague, contextual, and experiential) and machine computation (precise, symbolic, and algorithmic). Good KR enables an AI to reason, plan, learn, and communicate effectively. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Knowledge Representation (KR)</strong> is the field of AI devoted to storing information about the world in a form that machines can use to solve complex problems. It bridges the gap between human knowledge (vague, contextual, and experiential) and machine computation (precise, symbolic, and algorithmic). Good KR enables an AI to reason, plan, learn, and communicate effectively. Provides a formal language for expressing facts, rules, and relationships about a domain Enables inference — drawing new conclusions from existing knowledge Supports reasoning under uncertainty when complete information is unavailable Must balance expressiveness (what you can say) with tractability (what you can compute)</p>',
+            '<p>You use knowledge representation when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Knowledge Representation
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Knowledge Representation sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -54,17 +92,83 @@ Desirable KR properties:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Knowledge Representation with Python',
+            code: `from collections import deque
+
+# Knowledge Representation — BFS on a tiny grid graph
+grid = [[0,0,0],[0,1,0],[0,0,0]]
+q = deque([(0,0)]); seen = {(0,0)}
+while q:
+    r,c = q.popleft()
+    for dr,dc in [(1,0),(-1,0),(0,1),(0,-1)]:
+        nr,nc = r+dr, c+dc
+        if 0<=nr<3 and 0<=nc<3 and grid[nr][nc]==0 and (nr,nc) not in seen:
+            seen.add((nr,nc)); q.append((nr,nc))
+print("BFS reachable cells:", len(seen))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Different KR schemes serve different purposes. Selecting the right one is a core AI design decision.',
           table: {
-            headers: ['Scheme', 'Best For', 'Strength', 'Limitation'],
+            headers: [
+              'Scheme',
+              'Best For',
+              'Strength',
+              'Limitation'
+            ],
             rows: [
-              ['Logic (Propositional/FOL)', 'Formal reasoning, proofs', 'Precise, sound inference', 'Brittle, hard to scale'],
-              ['Semantic Networks', 'Conceptual relationships', 'Intuitive, graphical', 'No formal semantics'],
-              ['Frames', 'Structured object descriptions', 'Inheritance, defaults', 'Inflexible for new concepts'],
-              ['Rules (Production)', 'Expert systems, condition-action', 'Modular, explainable', 'Conflict resolution complexity'],
-              ['Ontologies', 'Domain modeling, interoperability', 'Shared meaning, reusable', 'Expensive to build'],
-              ['Probabilistic Models', 'Uncertain knowledge', 'Handles noise, incomplete data', 'Computationally expensive']
+              [
+                'Logic (Propositional/FOL)',
+                'Formal reasoning, proofs',
+                'Precise, sound inference',
+                'Brittle, hard to scale'
+              ],
+              [
+                'Semantic Networks',
+                'Conceptual relationships',
+                'Intuitive, graphical',
+                'No formal semantics'
+              ],
+              [
+                'Frames',
+                'Structured object descriptions',
+                'Inheritance, defaults',
+                'Inflexible for new concepts'
+              ],
+              [
+                'Rules (Production)',
+                'Expert systems, condition-action',
+                'Modular, explainable',
+                'Conflict resolution complexity'
+              ],
+              [
+                'Ontologies',
+                'Domain modeling, interoperability',
+                'Shared meaning, reusable',
+                'Expensive to build'
+              ],
+              [
+                'Probabilistic Models',
+                'Uncertain knowledge',
+                'Handles noise, incomplete data',
+                'Computationally expensive'
+              ]
             ]
           }
         },
@@ -75,10 +179,18 @@ Desirable KR properties:
             'Mistake 2: Ignoring the closed-world assumption (fix: explicitly state whether missing facts are false or simply unknown)',
             'Mistake 3: Representing everything as rules (fix: use frames/ontologies for static structure; reserve rules for dynamic behavior)',
             'Mistake 4: Forgetting that representation shapes reasoning (fix: the same knowledge in different forms enables different inferences — choose deliberately)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'KR is the hidden backbone of many AI systems you interact with daily.',
           list: [
             '<strong>Medical Diagnosis (MYCIN, modern EHR):</strong> Rules encode disease-symptom links; ontologies model anatomy and drug interactions',
@@ -100,12 +212,36 @@ Desirable KR properties:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why is the tradeoff between expressiveness and tractability central to KR design?\nAns: More expressive languages can describe more complex worlds, but inference becomes computationally harder or even undecidable.',
-            'Q2: Give one strength and one limitation of rule-based KR.\nAns: Strength: intuitive modularity and explainability. Limitation: rule conflicts and the knowledge acquisition bottleneck.',
-            'Q3: What is the closed-world assumption, and why does it matter?\nAns: It assumes anything not stated is false. It matters because real-world knowledge is often incomplete, and treating unknown as false can lead to incorrect inferences.'
+            `Q1: Why is the tradeoff between expressiveness and tractability central to KR design?
+Ans: More expressive languages can describe more complex worlds, but inference becomes computationally harder or even undecidable.`,
+            `Q2: Give one strength and one limitation of rule-based KR.
+Ans: Strength: intuitive modularity and explainability. Limitation: rule conflicts and the knowledge acquisition bottleneck.`,
+            `Q3: What is the closed-world assumption, and why does it matter?
+Ans: It assumes anything not stated is false. It matters because real-world knowledge is often incomplete, and treating unknown as false can lead to incorrect inferences.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Knowledge Representation</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Knowledge Representation")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -123,6 +259,26 @@ Desirable KR properties:
             'A logic is sound if every derivable conclusion is semantically valid',
             'A logic is complete if every semantically valid conclusion is derivable'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Logic</strong> provides a formal framework for representing knowledge and drawing valid conclusions. In AI, logic is used to build systems that reason rigorously: given a set of facts (premises) and inference rules, a logical agent derives new facts that are guaranteed to be true if the premises are true. This property is called <strong>soundness</strong>. Logic also allows us to verify that a conclusion necessarily follows from assumptions — a property called <strong>completeness</strong>. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Logic</strong> provides a formal framework for representing knowledge and drawing valid conclusions. In AI, logic is used to build systems that reason rigorously: given a set of facts (premises) and inference rules, a logical agent derives new facts that are guaranteed to be true if the premises are true. This property is called <strong>soundness</strong>. Logic also allows us to verify that a conclusion necessarily follows from assumptions — a property called <strong>completeness</strong>. Syntax defines the valid symbols and formulas of the language Semantics defines the meaning — which formulas are true under which conditions Inference rules define how to derive new true formulas from existing ones A logic is sound if every derivable conclusion is semantically valid A logic is complete if every semantically valid conclusion is derivable</p>',
+            '<p>You use logic in ai when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Logic in AI
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Logic in AI sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -161,17 +317,83 @@ Resolution:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Logic in AI with Python',
+            code: `from collections import deque
+
+# Logic in AI — BFS on a tiny grid graph
+grid = [[0,0,0],[0,1,0],[0,0,0]]
+q = deque([(0,0)]); seen = {(0,0)}
+while q:
+    r,c = q.popleft()
+    for dr,dc in [(1,0),(-1,0),(0,1),(0,-1)]:
+        nr,nc = r+dr, c+dc
+        if 0<=nr<3 and 0<=nc<3 and grid[nr][nc]==0 and (nr,nc) not in seen:
+            seen.add((nr,nc)); q.append((nr,nc))
+print("BFS reachable cells:", len(seen))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Different logics make different tradeoffs between expressiveness and computational complexity.',
           table: {
-            headers: ['Logic', 'Expressiveness', 'Inference Complexity', 'Typical Use'],
+            headers: [
+              'Logic',
+              'Expressiveness',
+              'Inference Complexity',
+              'Typical Use'
+            ],
             rows: [
-              ['Propositional', 'Facts only (no variables)', 'NP-complete (SAT)', 'Circuit design, planning'],
-              ['First-Order', 'Objects, relations, quantifiers', 'Semi-decidable', 'Theorem proving, ontologies'],
-              ['Description Logic', 'Structured concepts, limited quantifiers', 'Polynomial (tableau)', 'Semantic web, ontologies'],
-              ['Temporal Logic', 'Time-aware propositions', 'PSPACE-complete', 'Verification, planning'],
-              ['Fuzzy Logic', 'Degrees of truth [0,1]', 'Polynomial', 'Control systems, expert systems'],
-              ['Probabilistic Logic', 'Uncertainty over worlds', '#P-hard', 'Reasoning under uncertainty']
+              [
+                'Propositional',
+                'Facts only (no variables)',
+                'NP-complete (SAT)',
+                'Circuit design, planning'
+              ],
+              [
+                'First-Order',
+                'Objects, relations, quantifiers',
+                'Semi-decidable',
+                'Theorem proving, ontologies'
+              ],
+              [
+                'Description Logic',
+                'Structured concepts, limited quantifiers',
+                'Polynomial (tableau)',
+                'Semantic web, ontologies'
+              ],
+              [
+                'Temporal Logic',
+                'Time-aware propositions',
+                'PSPACE-complete',
+                'Verification, planning'
+              ],
+              [
+                'Fuzzy Logic',
+                'Degrees of truth [0,1]',
+                'Polynomial',
+                'Control systems, expert systems'
+              ],
+              [
+                'Probabilistic Logic',
+                'Uncertainty over worlds',
+                '#P-hard',
+                'Reasoning under uncertainty'
+              ]
             ]
           }
         },
@@ -182,10 +404,18 @@ Resolution:
             'Mistake 2: Applying modus ponens to implications that are not logical (fix: P → Q in material implication is true whenever P is false; this leads to unintuitive results if treated causally)',
             'Mistake 3: Assuming classical logic handles every domain (fix: use non-monotonic logic for default reasoning, or probabilistic logic for uncertain domains)',
             'Mistake 4: Ignoring computational cost (fix: even simple logics like propositional logic are NP-complete — use heuristics, SAT solvers, or restricted fragments for scalability)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Logical reasoning powers safety-critical and knowledge-intensive systems.',
           list: [
             '<strong>Formal Verification:</strong> Temporal logic proves that hardware circuits and software systems never enter unsafe states',
@@ -207,12 +437,36 @@ Resolution:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What is the difference between soundness and completeness in a logic?\nAns: Soundness means every provable statement is true (no false conclusions). Completeness means every true statement is provable (no missing truths).',
-            'Q2: Why is propositional logic inference NP-complete?\nAns: Because deciding whether a propositional formula is satisfiable (SAT) is NP-complete — there is no known polynomial-time algorithm for all cases.',
-            'Q3: Give an example where classical logic fails and a non-classical logic is needed.\nAns: Default reasoning: "Birds fly" is true by default, but penguins are exceptions. Classical logic cannot retract conclusions; non-monotonic logic can.'
+            `Q1: What is the difference between soundness and completeness in a logic?
+Ans: Soundness means every provable statement is true (no false conclusions). Completeness means every true statement is provable (no missing truths).`,
+            `Q2: Why is propositional logic inference NP-complete?
+Ans: Because deciding whether a propositional formula is satisfiable (SAT) is NP-complete — there is no known polynomial-time algorithm for all cases.`,
+            `Q3: Give an example where classical logic fails and a non-classical logic is needed.
+Ans: Default reasoning: "Birds fly" is true by default, but penguins are exceptions. Classical logic cannot retract conclusions; non-monotonic logic can.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Logic in AI</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Logic in AI")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -230,6 +484,26 @@ Resolution:
             'A formula is valid (a tautology) if all truth assignments make it true',
             'PL inference is NP-complete, yet modern SAT solvers handle millions of variables'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Propositional Logic (PL)</strong> is the most basic logical system. It deals with propositions — declarative statements that are either true or false — and combines them using logical connectives (AND, OR, NOT, IMPLIES, IFF). PL is the foundation upon which all more expressive logics are built. Despite its simplicity, PL is computationally powerful: the SAT problem (determining whether a propositional formula is satisfiable) was the first problem proven NP-complete and remains central to AI planning, verification, and optimization. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Propositional Logic (PL)</strong> is the most basic logical system. It deals with propositions — declarative statements that are either true or false — and combines them using logical connectives (AND, OR, NOT, IMPLIES, IFF). PL is the foundation upon which all more expressive logics are built. Despite its simplicity, PL is computationally powerful: the SAT problem (determining whether a propositional formula is satisfiable) was the first problem proven NP-complete and remains central to AI planning, verification, and optimization. Propositions (P, Q, R) are atomic statements with no internal structure Logical connectives: ¬ (NOT), ∧ (AND), ∨ (OR), → (IMPLIES), ↔ (IFF) A formula is satisfiable if at least one truth assignment makes it true A formula is valid (a tautology) if all truth assignments make it true PL inference is NP-complete, yet modern SAT solvers handle millions of variables</p>',
+            '<p>You use propositional logic when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Propositional Logic
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Propositional Logic sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -254,22 +528,78 @@ Disjunctive Normal Form (DNF):
 Key equivalences:
   P → Q  ≡  ¬P ∨ Q
   P ↔ Q  ≡  (P → Q) ∧ (Q → P)
-  ¬(P ∧ Q)  ≡  ¬P ∨ ¬Q   (De Morgan)\n  ¬(P ∨ Q)  ≡  ¬P ∧ ¬Q   (De Morgan)`,
+  ¬(P ∧ Q)  ≡  ¬P ∨ ¬Q   (De Morgan)
+  ¬(P ∨ Q)  ≡  ¬P ∧ ¬Q   (De Morgan)`,
             output: 'Every PL formula can be converted to CNF or DNF.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Propositional Logic with Python',
+            code: `from collections import deque
+
+# Propositional Logic — BFS on a tiny grid graph
+grid = [[0,0,0],[0,1,0],[0,0,0]]
+q = deque([(0,0)]); seen = {(0,0)}
+while q:
+    r,c = q.popleft()
+    for dr,dc in [(1,0),(-1,0),(0,1),(0,-1)]:
+        nr,nc = r+dr, c+dc
+        if 0<=nr<3 and 0<=nc<3 and grid[nr][nc]==0 and (nr,nc) not in seen:
+            seen.add((nr,nc)); q.append((nr,nc))
+print("BFS reachable cells:", len(seen))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Understanding the relationship between formulas is essential for efficient reasoning.',
           table: {
-            headers: ['Property', 'Definition', 'Test Method'],
+            headers: [
+              'Property',
+              'Definition',
+              'Test Method'
+            ],
             rows: [
-              ['Satisfiable', 'At least one model makes it true', 'SAT solver or truth table'],
-              ['Unsatisfiable', 'No model makes it true (contradiction)', 'Resolution refutation'],
-              ['Valid (Tautology)', 'True in every model', 'Truth table, or prove ¬F is unsatisfiable'],
-              ['Entailment (KB ⊨ α)', 'Every model of KB is a model of α', 'Prove KB ∧ ¬α is unsatisfiable'],
-              ['Equivalence', 'Same truth value in all models', 'Prove F ↔ G is a tautology']
+              [
+                'Satisfiable',
+                'At least one model makes it true',
+                'SAT solver or truth table'
+              ],
+              [
+                'Unsatisfiable',
+                'No model makes it true (contradiction)',
+                'Resolution refutation'
+              ],
+              [
+                'Valid (Tautology)',
+                'True in every model',
+                'Truth table, or prove ¬F is unsatisfiable'
+              ],
+              [
+                'Entailment (KB ⊨ α)',
+                'Every model of KB is a model of α',
+                'Prove KB ∧ ¬α is unsatisfiable'
+              ],
+              [
+                'Equivalence',
+                'Same truth value in all models',
+                'Prove F ↔ G is a tautology'
+              ]
             ]
           }
         },
@@ -280,10 +610,18 @@ Key equivalences:
             'Mistake 2: Thinking PL can express "all" or "some" (fix: PL has no quantifiers; use first-order logic for general statements about objects)',
             'Mistake 3: Negating implications incorrectly (fix: ¬(P → Q) is equivalent to P ∧ ¬Q, not to P → ¬Q)',
             'Mistake 4: Building huge truth tables instead of using SAT solvers (fix: for more than 4 variables, use DPLL/CDCL algorithms or tools like Z3, MiniSat)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Propositional logic may seem simple, but it drives powerful real-world systems.',
           list: [
             '<strong>SAT Solvers:</strong> Modern SAT solvers (MiniSat, Glucose, Z3) solve industrial-scale problems with millions of variables for circuit verification and scheduling',
@@ -305,12 +643,36 @@ Key equivalences:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Convert (P ∧ Q) → R to CNF using only standard equivalences.\nAns: (P ∧ Q) → R ≡ ¬(P ∧ Q) ∨ R ≡ ¬P ∨ ¬Q ∨ R. This is already a single clause in CNF.',
-            'Q2: Why is the SAT problem considered both hard and practically solvable?\nAns: SAT is NP-complete, meaning no polynomial algorithm is known for all cases. But in practice, modern CDCL SAT solvers exploit problem structure and solve most industrial instances efficiently.',
-            'Q3: What is the difference between a satisfiable formula and a valid formula?\nAns: Satisfiable means at least one assignment makes it true. Valid means every assignment makes it true (a tautology). All valid formulas are satisfiable, but not vice versa.'
+            `Q1: Convert (P ∧ Q) → R to CNF using only standard equivalences.
+Ans: (P ∧ Q) → R ≡ ¬(P ∧ Q) ∨ R ≡ ¬P ∨ ¬Q ∨ R. This is already a single clause in CNF.`,
+            `Q2: Why is the SAT problem considered both hard and practically solvable?
+Ans: SAT is NP-complete, meaning no polynomial algorithm is known for all cases. But in practice, modern CDCL SAT solvers exploit problem structure and solve most industrial instances efficiently.`,
+            `Q3: What is the difference between a satisfiable formula and a valid formula?
+Ans: Satisfiable means at least one assignment makes it true. Valid means every assignment makes it true (a tautology). All valid formulas are satisfiable, but not vice versa.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Propositional Logic</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Propositional Logic")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -328,6 +690,26 @@ Key equivalences:
             'Functions map objects to objects: FatherOf(x), Sqrt(x)',
             'Universal quantifier ∀ means "for all"; existential quantifier ∃ means "there exists"'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>First-Order Logic (FOL)</strong>, also called predicate logic, extends propositional logic with objects, predicates (properties and relations), functions, and quantifiers (∀, ∃). This makes FOL dramatically more expressive: instead of just saying "it is raining" (a proposition), you can say "every student who studies passes" (∀x Student(x) ∧ Studies(x) → Passes(x)). FOL is the standard formalism for knowledge representation in AI and forms the basis of description logics, database query languages, and automated theorem proving. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>First-Order Logic (FOL)</strong>, also called predicate logic, extends propositional logic with objects, predicates (properties and relations), functions, and quantifiers (∀, ∃). This makes FOL dramatically more expressive: instead of just saying "it is raining" (a proposition), you can say "every student who studies passes" (∀x Student(x) ∧ Studies(x) → Passes(x)). FOL is the standard formalism for knowledge representation in AI and forms the basis of description logics, database query languages, and automated theorem proving. Constants name specific objects: Alice, 42, Earth Variables range over objects: x, y, z Predicates represent properties (Red(x)) and relations (Loves(x, y)) Functions map objects to objects: FatherOf(x), Sqrt(x) Universal quantifier ∀ means "for all"; existential quantifier ∃ means "there exists"</p>',
+            '<p>You use first-order logic when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — First-Order Logic
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: First-Order Logic sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -358,18 +740,81 @@ Skolemization (eliminate ∃):
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'First-Order Logic with Python',
+            code: `from collections import deque
+
+# First-Order Logic — BFS on a tiny grid graph
+grid = [[0,0,0],[0,1,0],[0,0,0]]
+q = deque([(0,0)]); seen = {(0,0)}
+while q:
+    r,c = q.popleft()
+    for dr,dc in [(1,0),(-1,0),(0,1),(0,-1)]:
+        nr,nc = r+dr, c+dc
+        if 0<=nr<3 and 0<=nc<3 and grid[nr][nc]==0 and (nr,nc) not in seen:
+            seen.add((nr,nc)); q.append((nr,nc))
+print("BFS reachable cells:", len(seen))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'FOL introduces several new concepts beyond propositional logic. Understanding them is key to using FOL effectively.',
           table: {
-            headers: ['Concept', 'Propositional Logic', 'First-Order Logic'],
+            headers: [
+              'Concept',
+              'Propositional Logic',
+              'First-Order Logic'
+            ],
             rows: [
-              ['Atomic unit', 'Proposition (P)', 'Predicate (P(x)) or equality (x = y)'],
-              ['Variables', 'None', 'Object variables (∀x, ∃x)'],
-              ['Quantification', 'None', 'Universal (∀) and existential (∃)'],
-              ['Domain', 'Implicit (true/false)', 'Explicit universe of discourse'],
-              ['Interpretation', 'Truth assignment', 'Domain + mapping of symbols'],
-              ['Inference', 'Resolution on clauses', 'Unification + resolution'],
-              ['Complexity', 'NP-complete (SAT)', 'Semi-decidable (not decidable)']
+              [
+                'Atomic unit',
+                'Proposition (P)',
+                'Predicate (P(x)) or equality (x = y)'
+              ],
+              [
+                'Variables',
+                'None',
+                'Object variables (∀x, ∃x)'
+              ],
+              [
+                'Quantification',
+                'None',
+                'Universal (∀) and existential (∃)'
+              ],
+              [
+                'Domain',
+                'Implicit (true/false)',
+                'Explicit universe of discourse'
+              ],
+              [
+                'Interpretation',
+                'Truth assignment',
+                'Domain + mapping of symbols'
+              ],
+              [
+                'Inference',
+                'Resolution on clauses',
+                'Unification + resolution'
+              ],
+              [
+                'Complexity',
+                'NP-complete (SAT)',
+                'Semi-decidable (not decidable)'
+              ]
             ]
           }
         },
@@ -380,10 +825,18 @@ Skolemization (eliminate ∃):
             'Mistake 2: Confusing ∀ with ∧ and ∃ with ∨ (fix: ∀ distributes over ∧ but not ∨; ∃ distributes over ∨ but not ∧)',
             'Mistake 3: Forgetting the scope of quantifiers (fix: ∀x P(x) ∧ Q(x) means (∀x P(x)) ∧ Q(x) if x is free in Q; use parentheses: ∀x (P(x) ∧ Q(x)))',
             'Mistake 4: Treating equality as a predicate without special handling (fix: equality requires paramodulation or explicit axioms; most theorem provers treat it as a built-in)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'FOL is the lingua franca of formal knowledge representation in AI.',
           list: [
             '<strong>Automated Theorem Proving:</strong> Prover9, Vampire, and E use resolution with unification to prove mathematical theorems automatically',
@@ -405,12 +858,36 @@ Skolemization (eliminate ∃):
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Translate "Every cat loves some human" into FOL.\nAns: ∀x (Cat(x) → ∃y (Human(y) ∧ Loves(x, y))).',
-            'Q2: What does it mean that FOL is semi-decidable?\nAns: There exists an algorithm that will eventually prove any valid formula, but if the formula is not valid, the algorithm may run forever without deciding.',
-            'Q3: Why is unification necessary for FOL resolution but not for PL resolution?\nAns: In PL, literals are already ground (no variables). In FOL, predicates contain variables — unification finds variable substitutions that make two literals identical, enabling resolution.'
+            `Q1: Translate "Every cat loves some human" into FOL.
+Ans: ∀x (Cat(x) → ∃y (Human(y) ∧ Loves(x, y))).`,
+            `Q2: What does it mean that FOL is semi-decidable?
+Ans: There exists an algorithm that will eventually prove any valid formula, but if the formula is not valid, the algorithm may run forever without deciding.`,
+            `Q3: Why is unification necessary for FOL resolution but not for PL resolution?
+Ans: In PL, literals are already ground (no variables). In FOL, predicates contain variables — unification finds variable substitutions that make two literals identical, enabling resolution.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>First-Order Logic</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — First-Order Logic")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
@@ -428,6 +905,26 @@ Skolemization (eliminate ∃):
             'Unification: finds the most general substitution that makes two expressions identical',
             'Most General Unifier (MGU): the substitution with the least specificity needed'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Inference</strong> is the process of deriving new sentences (conclusions) from existing sentences (premises) using sound rules of reasoning. In AI, inference algorithms turn a static knowledge base into a dynamic reasoning engine. The two dominant paradigms are <strong>forward chaining</strong> (data-driven: start with facts, apply rules, derive new facts until the goal is reached) and <strong>backward chaining</strong> (goal-driven: start with the goal, find rules that conclude it, recursively prove their premises). For FOL, <strong>resolution</strong> with <strong>unification</strong> provides a single, complete inference rule. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Inference</strong> is the process of deriving new sentences (conclusions) from existing sentences (premises) using sound rules of reasoning. In AI, inference algorithms turn a static knowledge base into a dynamic reasoning engine. The two dominant paradigms are <strong>forward chaining</strong> (data-driven: start with facts, apply rules, derive new facts until the goal is reached) and <strong>backward chaining</strong> (goal-driven: start with the goal, find rules that conclude it, recursively prove their premises). For FOL, <strong>resolution</strong> with <strong>unification</strong> provides a single, complete inference rule. Forward chaining: breadth-first, data-driven, generates all derivable facts Backward chaining: depth-first, goal-directed, focuses proof effort on the query Resolution: a single rule that is refutation-complete for FOL Unification: finds the most general substitution that makes two expressions identical Most General Unifier (MGU): the substitution with the least specificity needed</p>',
+            '<p>You use inference & reasoning when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Inference & Reasoning
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Inference & Reasoning sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -465,16 +962,83 @@ Backward Chaining Example:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Inference & Reasoning with Python',
+            code: `from collections import deque
+
+# Inference & Reasoning — BFS on a tiny grid graph
+grid = [[0,0,0],[0,1,0],[0,0,0]]
+q = deque([(0,0)]); seen = {(0,0)}
+while q:
+    r,c = q.popleft()
+    for dr,dc in [(1,0),(-1,0),(0,1),(0,-1)]:
+        nr,nc = r+dr, c+dc
+        if 0<=nr<3 and 0<=nc<3 and grid[nr][nc]==0 and (nr,nc) not in seen:
+            seen.add((nr,nc)); q.append((nr,nc))
+print("BFS reachable cells:", len(seen))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Each inference strategy has distinct characteristics that make it suitable for different problem types.',
           table: {
-            headers: ['Strategy', 'Direction', 'Strength', 'Weakness', 'Best For'],
+            headers: [
+              'Strategy',
+              'Direction',
+              'Strength',
+              'Weakness',
+              'Best For'
+            ],
             rows: [
-              ['Forward Chaining', 'Data → Goal', 'Finds all consequences', 'May derive irrelevant facts', 'Monitoring, data analysis'],
-              ['Backward Chaining', 'Goal → Data', 'Focused, efficient', 'May loop on recursive rules', 'Query answering, diagnosis'],
-              ['Resolution', 'Refutation', 'Single rule, complete', 'Search space explodes', 'Theorem proving'],
-              ['Tableau', 'Model construction', 'Handles some DLs well', 'Not always efficient', 'Ontology consistency'],
-              ['Model Elimination', 'Goal-directed search', 'Very efficient for Horn', 'Incomplete for general FOL', 'Horn clause problems']
+              [
+                'Forward Chaining',
+                'Data → Goal',
+                'Finds all consequences',
+                'May derive irrelevant facts',
+                'Monitoring, data analysis'
+              ],
+              [
+                'Backward Chaining',
+                'Goal → Data',
+                'Focused, efficient',
+                'May loop on recursive rules',
+                'Query answering, diagnosis'
+              ],
+              [
+                'Resolution',
+                'Refutation',
+                'Single rule, complete',
+                'Search space explodes',
+                'Theorem proving'
+              ],
+              [
+                'Tableau',
+                'Model construction',
+                'Handles some DLs well',
+                'Not always efficient',
+                'Ontology consistency'
+              ],
+              [
+                'Model Elimination',
+                'Goal-directed search',
+                'Very efficient for Horn',
+                'Incomplete for general FOL',
+                'Horn clause problems'
+              ]
             ]
           }
         },
@@ -485,10 +1049,18 @@ Backward Chaining Example:
             'Mistake 2: Forgetting that resolution requires CNF conversion (fix: convert all formulas to clausal form first — eliminate implications, move negations inward, skolemize, and distribute)',
             'Mistake 3: Confusing unification with pattern matching (fix: unification is symmetric — both expressions can contain variables; pattern matching is one-directional)',
             'Mistake 4: Ignoring the occurs check (fix: x and f(x) do not unify because it would create an infinite term; the occurs check prevents this)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Real-World Case Study',
           text: 'Inference engines are the reasoning core of many deployed AI systems.',
           list: [
             '<strong>Expert Systems (MYCIN, CLIPS):</strong> Forward and backward chaining over rule bases to diagnose diseases and troubleshoot equipment',
@@ -510,12 +1082,36 @@ Backward Chaining Example:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: When is forward chaining preferable to backward chaining?\nAns: When you have many facts and want to find all possible conclusions, or when the data arrives incrementally and you need to maintain derived facts.',
-            'Q2: Why does resolution require refutation (proving KB ∧ ¬α is unsatisfiable) rather than directly proving α?\nAns: Resolution proves by contradiction. If assuming ¬α leads to a contradiction (empty clause), then α must be entailed by KB. This is simpler because resolution only needs one rule.',
-            'Q3: What would happen if unification allowed x to unify with f(x) without the occurs check?\nAns: It would produce a cyclic substitution θ = {x/f(x)}, leading to an infinite term f(f(f(...))) and non-termination of the inference process.'
+            `Q1: When is forward chaining preferable to backward chaining?
+Ans: When you have many facts and want to find all possible conclusions, or when the data arrives incrementally and you need to maintain derived facts.`,
+            `Q2: Why does resolution require refutation (proving KB ∧ ¬α is unsatisfiable) rather than directly proving α?
+Ans: Resolution proves by contradiction. If assuming ¬α leads to a contradiction (empty clause), then α must be entailed by KB. This is simpler because resolution only needs one rule.`,
+            `Q3: What would happen if unification allowed x to unify with f(x) without the occurs check?
+Ans: It would produce a cyclic substitution θ = {x/f(x)}, leading to an infinite term f(f(f(...))) and non-termination of the inference process.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Inference & Reasoning</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Inference & Reasoning")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

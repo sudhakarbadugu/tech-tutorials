@@ -1,7 +1,7 @@
 {
   "name": "tech-tutorials",
   "private": true,
-  "version": "2.18.21",
+  "version": "2.18.23",
   "type": "module",
   "homepage": "https://sudhakarbadugu.github.io/tech-tutorials/",
   "scripts": {
@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "build:data": "node scripts/build-data.js",
+    "upgrade:modules": "node scripts/upgrade-modules.js"
   },
   "dependencies": {
     "html2pdf.js": "^0.14.0",

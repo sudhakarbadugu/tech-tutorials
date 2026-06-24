@@ -1,392 +1,924 @@
+// reinforcement learning — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js rl_module2.js
+
 export const rlModule2Structure = {
-  'module2': {
-    'title': 'Module 2: Core RL Algorithms',
-    'topics': [
-      { 'id': 'q-learning', 'title': 'Q-Learning' },
-      { 'id': 'policy-gradient', 'title': 'Policy Gradient Methods' },
-      { 'id': 'actor-critic', 'title': 'Actor-Critic Methods' },
-      { 'id': 'exploration-exploitation', 'title': 'Exploration vs Exploitation' },
+  module2: {
+    title: 'Module 2: Markov Decision Processes',
+    topics: [
+      {
+        id: 'mdp-formalism',
+        title: 'Formalizing Markov Decision Processes'
+      },
+      {
+        id: 'bellman-derivation',
+        title: 'Bellman Equation and Full Derivation'
+      },
+      {
+        id: 'value-iteration',
+        title: 'Value Iteration with Step-by-Step Trace'
+      },
+      {
+        id: 'policy-iteration',
+        title: 'Policy Iteration Algorithm'
+      },
+      {
+        id: 'solving-frozenlake',
+        title: 'FrozenLake Solution and Policy Visualization'
+      }
     ]
   }
 };
 
 export const rlModule2Content = {
-  'module2': {
-    'q-learning': {
-      'title': 'Q-Learning',
-      'subtitle': 'Off-policy temporal-difference control',
-      'sections': [
+  module2: {
+    'mdp-formalism': {
+      title: 'Formalizing Markov Decision Processes',
+      subtitle: 'The mathematical framework for modeling reinforcement learning problems',
+      sections: [
         {
-          'heading': 'What is Q-Learning?',
-          'text': 'Q-Learning is a model-free, off-policy reinforcement learning algorithm that learns the value of actions in states. It discovers the optimal action-selection policy by iteratively updating Q-values based on observed transitions and rewards.',
-          'list': [
-            'Q-Learning learns a policy that maximizes expected cumulative reward without requiring a model of the environment',
-            'It is off-policy: it learns about the optimal policy while potentially following a different exploratory policy',
-            'The algorithm updates Q(S,A) using the maximum Q-value over all possible next actions',
-            'Q-Learning is guaranteed to converge to optimal Q-values in finite Markov decision processes'
+          heading: 'What is an MDP?',
+          text: 'A <strong>Markov Decision Process (MDP)</strong> is a formal mathematical framework used to model sequential decision-making in environments where outcomes are partly random and partly under the control of the agent. An MDP is defined by a 5-tuple: $(S, A, P, R, \gamma)$.',
+          list: [
+            'S: The state space, which is the set of all valid states in the environment.',
+            'A: The action space, representing all decisions available to the agent.',
+            `P: The transition probability function $P(s' | s, a) = \\mathbb{P}(S_{t+1} = s' | S_t = s, A_t = a)$, defining the probability of transitioning to state s' after taking action a in state s.`,
+            `R: The reward function $R(s, a, s') = \\mathbb{E}[R_{t+1} | S_t = s, A_t = a, S_{t+1} = s']$, giving the expected reward obtained during the transition.`,
+            'gamma: The discount factor $\gamma \in [0, 1)$, weighting the importance of future rewards.'
           ]
         },
         {
-          'heading': 'Key Formula / Rule',
-          'text': 'The Q-Learning update rule is the core mechanism that drives learning toward optimal behavior.',
-          'example': {
-            'title': 'Q-Learning Update Rule',
-            'code': `Q(S,A) <- Q(S,A) + alpha * [R + gamma * max Q(S',a) - Q(S,A)]
+          heading: 'Concept Explanation',
+          content: [
+            '<p>A <strong>Markov Decision Process (MDP)</strong> is a formal mathematical framework used to model sequential decision-making in environments where outcomes are partly random and partly under the control of the agent. An MDP is defined by a 5-tuple: $(S, A, P, R, \gamma)$. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            `<p>Technically, A <strong>Markov Decision Process (MDP)</strong> is a formal mathematical framework used to model sequential decision-making in environments where outcomes are partly random and partly under the control of the agent. An MDP is defined by a 5-tuple: $(S, A, P, R, \\gamma)$. S: The state space, which is the set of all valid states in the environment. A: The action space, representing all decisions available to the agent. P: The transition probability function $P(s' | s, a) = \\mathbb{P}(S_{t+1} = s' | S_t = s, A_t = a)$, defining the probability of transitioning to state s' after taking action a in state s. R: The reward function $R(s, a, s') = \\mathbb{E}[R_{t+1} | S_t = s, A_t = a, S_{t+1} = s']$, giving the expected reward obtained during the transition. gamma: The discount factor $\\gamma \\in [0, 1)$, weighting the importance of future rewards.</p>`,
+            '<p>You use formalizing markov decision processes when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Formalizing Markov Decision Processes
 
-Key insight:
-  Uses max over ALL actions in the next state,
-  not the action actually taken.
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
 
-Example:
-  S = start, A = right
-  R = -1, S' = next_state
-  Q(S',up) = 3, Q(S',right) = 5, Q(S',down) = 1
-
-  max Q(S') = 5
-  Q(S,A) = Q(S,A) + 0.5 * [-1 + 0.9*5 - Q(S,A)]
-
-Result: learns the optimal policy
-regardless of the exploration strategy.`,
-            'output': 'Q-Learning converges to optimal Q-values by bootstrapping from the best future action.',
-            'type': 'code'
+  Key idea: Formalizing Markov Decision Processes sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
+          example: {
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
+            type: 'code'
           }
         },
         {
-          'heading': 'Important Differences',
-          'text': 'Q-Learning differs from SARSA in a critical way that affects behavior and risk tolerance.',
-          'table': {
-            'headers': ['Aspect', 'SARSA', 'Q-Learning'],
-            'rows': [
-              ['Policy type', 'On-policy', 'Off-policy'],
-              ['Next action', 'Uses actual next action A\'', 'Uses max over all actions'],
-              ['Behavior', 'Conservative and safe', 'Optimistic and risk-seeking'],
-              ['Risk profile', 'Avoids dangerous paths', 'May explore cliffs during learning'],
-              ['Use case', 'Safety-critical systems', 'Maximum performance goals']
+          heading: 'Python Code Example',
+          example: {
+            title: 'Formalizing Markov Decision Processes with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Formalizing Markov Decision Processes — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Pick the right variant for your data type and sample size.',
+          table: {
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
+            rows: [
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
-          'heading': 'Common Mistakes',
-          'list': [
-            'Mistake 1: Forgetting to decay the exploration rate epsilon (fix: gradually reduce epsilon from 1.0 to 0.01 so the agent shifts from exploration to exploitation)',
-            'Mistake 2: Initializing Q-values to zeros in stochastic environments (fix: use optimistic initialization to encourage early exploration)',
-            'Mistake 3: Using a learning rate that is too large (fix: use alpha between 0.1 and 0.5, and consider decaying it over time for stability)',
-            'Mistake 4: Not handling the maximization bias (fix: use Double Q-Learning with two separate Q-tables to eliminate overestimation)'
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          'heading': 'Real-World Application',
-          'text': 'Q-Learning powers systems that must make sequential decisions from experience.',
-          'list': [
-            'Game playing: DeepMind DQN used Q-Learning with neural networks to master Atari games from raw pixels',
-            'Robotics: Q-Learning helps robots learn navigation and manipulation tasks through trial and error',
-            'Resource management: data centers use Q-Learning to optimize cooling and power consumption',
-            'Recommendation systems: Q-Learning optimizes long-term user engagement by balancing exploration of new content',
-            'Traffic signal control: adaptive traffic lights use Q-Learning to minimize congestion and wait times'
+          heading: 'Quick Recap',
+          list: [
+            'Formalizing Markov Decision Processes: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
-          'heading': 'Quick Recap',
-          'list': [
-            'Q-Learning is a model-free, off-policy algorithm for learning optimal action values',
-            'Update rule uses the maximum Q-value of the next state, not the action actually taken',
-            'Guaranteed to converge to optimal Q-values in finite MDPs with proper exploration',
-            'Off-policy nature means it can learn from experience generated by any behavior policy',
-            'SARSA is on-policy and conservative; Q-Learning is off-policy and seeks optimality'
+          heading: 'Practice Questions',
+          list: [
+            `Q1: If an environment does not satisfy the Markov property, how can it be modeled?
+Ans: It can be modeled as a Partially Observable Markov Decision Process (POMDP), where observations provide partial clues about hidden state variables, or by constructing a history state (window of recent observations).`,
+            `Q2: Write the definition of the action-value function Q^pi(s, a) in terms of V^pi(s').
+Ans: $Q^\\pi(s, a) = \\sum_{s'} P(s' | s, a) [ R(s, a, s') + \\gamma V^\\pi(s') ]$.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
         },
         {
-          'heading': 'Practice Questions',
-          'text': 'Test your understanding.',
-          'list': [
-            'Q1: What makes Q-Learning off-policy?\nAns: It updates using the maximum Q-value over all next actions, regardless of which action was actually taken.',
-            'Q2: Why does Q-Learning sometimes take risky paths during learning?\nAns: Because it optimistically assumes the best future action will be taken, even if the current exploratory policy might stumble.',
-            'Q3: What is the main convergence guarantee of Q-Learning?\nAns: In finite MDPs, Q-Learning converges to optimal Q-values with probability 1 if every state-action pair is visited infinitely often and the learning rate decays appropriately.',
-            'Q4: How does Double Q-Learning improve standard Q-Learning?\nAns: It maintains two Q-tables and uses one to select the best action and the other to evaluate it, eliminating positive bias from the max operator.'
-          ]
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Formalizing Markov Decision Processes</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Formalizing Markov Decision Processes")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'policy-gradient': {
-      'title': 'Policy Gradient Methods',
-      'subtitle': 'Directly optimizing the policy function',
-      'sections': [
+    'bellman-derivation': {
+      title: 'Bellman Equation and Full Derivation',
+      subtitle: 'Deriving the recursive relationships of value functions',
+      sections: [
         {
-          'heading': 'What are Policy Gradient Methods?',
-          'text': 'Policy Gradient Methods directly optimize a parameterized policy by adjusting its parameters to maximize expected cumulative reward. Unlike value-based methods that learn Q-values and derive a policy indirectly, policy gradient methods learn the policy itself.',
-          'list': [
-            'Policy gradient methods represent the policy as a differentiable function pi(a|s,theta) parameterized by theta',
-            'They use gradient ascent on the policy parameters to increase the probability of actions that yield high returns',
-            'The Policy Gradient Theorem provides the mathematical foundation for computing these gradients',
-            'These methods naturally handle continuous action spaces and stochastic policies'
-          ]
+          heading: 'What is Bellman Equation and Full Derivation?',
+          text: 'Bellman Equation and Full Derivation is essential for reinforcement learning.',
+          list: []
         },
         {
-          'heading': 'Key Formula / Rule',
-          'text': 'The Policy Gradient Theorem shows how to compute the gradient of expected return with respect to policy parameters.',
-          'example': {
-            'title': 'Policy Gradient Theorem',
-            'code': `Softmax policy:
-  pi(a|s,theta) = e^{h(s,a,theta)} / Sum_b e^{h(s,b,theta)}
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Bellman Equation and Full Derivation provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use bellman equation and full derivation when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Bellman Equation and Full Derivation
 
-Where h(s,a,theta) = theta^T * x(s,a)
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
 
-Policy Gradient Theorem:
-  grad J(theta) proportional to
-    Sum_s mu(s) Sum_a q_pi(s,a) grad pi(a|s,theta)
-
-Score function for softmax:
-  grad ln pi(a|s) = x(s,a) - E[x(s,cdot)]
-
-Intuition: increase probability of
-actions that receive high returns.`,
-            'output': 'Policy gradients optimize actions directly without needing a value function.',
-            'type': 'code'
+  Key idea: Bellman Equation and Full Derivation sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
+          example: {
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
+            type: 'code'
           }
         },
         {
-          'heading': 'Important Differences',
-          'text': 'Policy-based methods differ from value-based methods in fundamental ways.',
-          'table': {
-            'headers': ['Aspect', 'Value-Based (Q-Learning)', 'Policy-Based (Policy Gradient)'],
-            'rows': [
-              ['Representation', 'Learns Q(s,a) values', 'Learns pi(a|s) directly'],
-              ['Action space', 'Discrete only (argmax)', 'Discrete and continuous'],
-              ['Convergence', 'Stable but slower', 'Can get stuck in local optima'],
-              ['Exploration', 'Epsilon-greedy', 'Stochastic policy built-in'],
-              ['Sample efficiency', 'High (reuses transitions)', 'Low (needs full episodes)'],
-              ['Best for', 'Discrete, small actions', 'Continuous, complex policies']
+          heading: 'Python Code Example',
+          example: {
+            title: 'Bellman Equation and Full Derivation with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Bellman Equation and Full Derivation — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Pick the right variant for your data type and sample size.',
+          table: {
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
+            rows: [
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
-          'heading': 'Common Mistakes',
-          'list': [
-            'Mistake 1: Ignoring high variance in gradient estimates (fix: use baselines like average reward or value functions to reduce variance in REINFORCE)',
-            'Mistake 2: Using step sizes that are too large (fix: policy gradients are sensitive to learning rate; use Adam optimizer with small learning rates around 0.001)',
-            'Mistake 3: Applying policy gradients to discrete tabular problems (fix: use Q-Learning or SARSA for small discrete problems; policy gradients shine in continuous or high-dimensional action spaces)',
-            'Mistake 4: Forgetting that policy gradients need sufficient exploration (fix: ensure the initial policy has enough entropy; add entropy regularization to prevent premature convergence)'
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          'heading': 'Real-World Application',
-          'text': 'Policy gradient methods excel in domains with continuous or high-dimensional action spaces.',
-          'list': [
-            'Robotics control: learning continuous joint torques and velocities for walking, grasping, and flying',
-            'Autonomous driving: steering angle and throttle control through direct policy optimization',
-            'Game playing: AlphaStar and OpenAI Five used policy gradients for real-time strategy games with vast action spaces',
-            'Natural language generation: policy gradients optimize text generation models for task-specific rewards like fluency and relevance',
-            'Finance: portfolio allocation and order execution where actions are continuous investment weights'
+          heading: 'Quick Recap',
+          list: [
+            'Bellman Equation and Full Derivation: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
-          'heading': 'Quick Recap',
-          'list': [
-            'Policy gradient methods directly optimize the policy parameters to maximize expected return',
-            'They use the Policy Gradient Theorem to compute gradients without needing explicit value functions',
-            'Natural fit for continuous action spaces and stochastic policies',
-            'High variance is the main challenge; baselines and actor-critic methods address this',
-            'Value-based methods learn Q-values; policy-based methods learn the policy function directly'
+          heading: 'Practice Questions',
+          list: [
+            `Q1: Why can we not solve the Bellman Optimality Equation analytically for large state spaces?
+Ans: The max operator makes the system of equations non-linear. Direct matrix inversion is only possible for the linear Expectation equations of a fixed policy, whereas finding the optimal policy requires iterative methods.`,
+            `Q2: Express V^*(s) in terms of Q^*(s, a).
+Ans: $V^*(s) = \\max_{a \\in A} Q^*(s, a)$.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
         },
         {
-          'heading': 'Practice Questions',
-          'text': 'Test your understanding.',
-          'list': [
-            'Q1: What is the key advantage of policy gradient methods over Q-Learning?\nAns: They can handle continuous action spaces naturally and learn stochastic policies directly, without needing an argmax over actions.',
-            'Q2: What does the Policy Gradient Theorem state?\nAns: The gradient of expected return is proportional to the sum over states and actions of the state distribution, action value, and gradient of the policy.',
-            'Q3: Why do policy gradient methods suffer from high variance?\nAns: Because they rely on Monte Carlo estimates of returns from entire episodes, which can vary widely depending on environment stochasticity.',
-            'Q4: What is the score function in a softmax policy?\nAns: The gradient of the log-policy, equal to the feature vector of the taken action minus the expected feature vector under the current policy.'
-          ]
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Bellman Equation and Full Derivation</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Bellman Equation and Full Derivation")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'actor-critic': {
-      'title': 'Actor-Critic Methods',
-      'subtitle': 'Combining policy and value learning for stability',
-      'sections': [
+    'value-iteration': {
+      title: 'Value Iteration with Step-by-Step Trace',
+      subtitle: 'Solving the Bellman Optimality Equation using dynamic programming',
+      sections: [
         {
-          'heading': 'What are Actor-Critic Methods?',
-          'text': 'Actor-Critic methods combine the best of policy gradients and value-based learning. The Actor is a policy network that selects actions, while the Critic is a value network that evaluates those actions. Together they learn more efficiently than either approach alone.',
-          'list': [
-            'The Actor learns the policy pi(a|s,theta) and updates parameters to favor actions that the Critic judges as good',
-            'The Critic learns the value function V(s,w) or Q(s,a,w) and provides feedback on the quality of actions',
-            'The Critic reduces variance in policy gradient estimates by using bootstrapped value estimates instead of full episode returns',
-            'Actor-Critic is the foundation of most modern deep reinforcement learning algorithms'
-          ]
+          heading: 'What is Value Iteration with Step-by-Step Trace?',
+          text: 'Value Iteration with Step-by-Step Trace is essential for reinforcement learning.',
+          list: []
         },
         {
-          'heading': 'Key Formula / Rule',
-          'text': 'Actor-Critic methods use the TD error as a surrogate for the advantage function.',
-          'example': {
-            'title': 'Actor-Critic Update Equations',
-            'code': `Actor (policy network):
-  theta <- theta + alpha * delta * grad ln pi(At|St,theta)
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Value Iteration with Step-by-Step Trace provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use value iteration with step-by-step trace when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Value Iteration with Step-by-Step Trace
 
-Critic (value network):
-  w <- w + beta * delta * grad V(St,w)
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
 
-TD Error (advantage estimate):
-  delta = R_{t+1} + gamma * V(S_{t+1},w) - V(S_t,w)
-
-Key insight:
-  delta replaces the full return G in REINFORCE
-  -> Lower variance (bootstrapping)
-  -> Faster learning
-  -> Online updates after every step`,
-            'output': 'Actor-Critic achieves lower variance than pure policy gradients while maintaining policy flexibility.',
-            'type': 'code'
+  Key idea: Value Iteration with Step-by-Step Trace sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
+          example: {
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
+            type: 'code'
           }
         },
         {
-          'heading': 'Important Differences',
-          'text': 'Actor-Critic methods vary in how they compute advantages and update networks.',
-          'table': {
-            'headers': ['Method', 'Advantage', 'Update Style', 'Key Feature'],
-            'rows': [
-              ['REINFORCE', 'Full return G', 'Monte Carlo', 'Simple but high variance'],
-              ['Actor-Critic', 'TD error delta', 'Online bootstrapping', 'Lower variance, faster'],
-              ['A2C/A3C', 'N-step return', 'Synchronous/Async', 'Multiple workers'],
-              ['PPO', 'Clipped surrogate', 'Mini-batch', 'Stable, most popular'],
-              ['SAC', 'Maximum entropy', 'Soft updates', 'Exploration via entropy'],
-              ['DDPG', 'Deterministic policy', 'Off-policy', 'Continuous control']
+          heading: 'Python Code Example',
+          example: {
+            title: 'Value Iteration with Step-by-Step Trace with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Value Iteration with Step-by-Step Trace — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Pick the right variant for your data type and sample size.',
+          table: {
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
+            rows: [
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
-          'heading': 'Common Mistakes',
-          'list': [
-            'Mistake 1: Using the same learning rate for both Actor and Critic (fix: the Critic often needs a larger learning rate than the Actor; tune them separately)',
-            'Mistake 2: Updating the Actor before the Critic converges (fix: ensure the Critic provides accurate value estimates before relying on its advantage signal for policy updates)',
-            'Mistake 3: Ignoring the bias introduced by bootstrapping (fix: use n-step returns or generalized advantage estimation to balance bias and variance)',
-            'Mistake 4: Neglecting entropy regularization (fix: add an entropy bonus to the loss to prevent the policy from collapsing to a deterministic strategy too early)'
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Not updating values synchronously or incorrectly mixing old/new values during a single sweep. (Fix: In standard Value Iteration, keep a copy of the old value function to compute updates, or explicitly perform in-place updates, which is called asynchronous value iteration and actually converges faster.)',
+            'Mistake 2: Setting theta too high, causing the algorithm to terminate before the policy stabilizes.'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          'heading': 'Real-World Application',
-          'text': 'Actor-Critic methods dominate modern reinforcement learning deployments.',
-          'list': [
-            'DeepMind AlphaGo: combined policy networks (Actor) and value networks (Critic) with Monte Carlo Tree Search',
-            'OpenAI Five: defeated professional Dota 2 players using Proximal Policy Optimization (PPO), an actor-critic variant',
-            'Boston Dynamics robots: learned locomotion policies through actor-critic methods in simulation and real-world transfer',
-            'Tesla Autopilot: uses actor-critic frameworks for path planning and decision-making in autonomous driving',
-            'ChatGPT RLHF: the reinforcement learning from human feedback stage uses PPO, an actor-critic algorithm, to align language models with preferences'
+          heading: 'Quick Recap',
+          list: [
+            'Value Iteration with Step-by-Step Trace: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
-          'heading': 'Quick Recap',
-          'list': [
-            'Actor-Critic combines a policy network (Actor) with a value network (Critic)',
-            'The Critic evaluates actions, providing low-variance feedback to the Actor',
-            'TD error serves as an advantage estimate, replacing full episode returns',
-            'Modern variants include A3C, A2C, PPO, SAC, and DDPG',
-            'Actor-Critic is the dominant paradigm in deep reinforcement learning today'
+          heading: 'Practice Questions',
+          list: [
+            `Q1: How does value iteration differ from policy evaluation?
+Ans: Policy evaluation computes V^pi for a fixed policy pi using the Bellman expectation equation. Value iteration computes V* using the Bellman optimality equation (incorporating the max operator).`,
+            `Q2: If gamma = 0.5, and the immediate reward is 10 with next state value V(s') = 8, what is the value update target?
+Ans: $10 + 0.5 \\times 8 = 14$.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
         },
         {
-          'heading': 'Practice Questions',
-          'text': 'Test your understanding.',
-          'list': [
-            'Q1: What are the two components of an Actor-Critic method?\nAns: The Actor is a policy network that selects actions, and the Critic is a value network that evaluates the quality of those actions.',
-            'Q2: Why does Actor-Critic have lower variance than REINFORCE?\nAns: Because the Critic uses bootstrapped TD errors instead of relying on full episode returns, which are noisy.',
-            'Q3: What is the role of the TD error delta in Actor-Critic?\nAns: It acts as an advantage estimate telling the Actor whether an action was better or worse than expected.',
-            'Q4: Name three popular deep RL algorithms based on Actor-Critic.\nAns: A3C (Asynchronous Advantage Actor-Critic), PPO (Proximal Policy Optimization), and SAC (Soft Actor-Critic).'
-          ]
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Value Iteration with Step-by-Step Trace</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Value Iteration with Step-by-Step Trace")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'exploration-exploitation': {
-      'title': 'Exploration vs Exploitation',
-      'subtitle': 'The fundamental dilemma of reinforcement learning',
-      'sections': [
+    'policy-iteration': {
+      title: 'Policy Iteration Algorithm',
+      subtitle: 'Alternating between policy evaluation and policy improvement',
+      sections: [
         {
-          'heading': 'What is the Exploration-Exploitation Dilemma?',
-          'text': 'The exploration-exploitation dilemma is the central challenge in reinforcement learning: an agent must decide whether to exploit actions it knows yield high rewards, or explore new actions that might yield even higher rewards. Getting this balance right determines learning speed and final performance.',
-          'list': [
-            'Exploitation means choosing the action with the highest known reward to maximize immediate gain',
-            'Exploration means trying suboptimal or untried actions to discover potentially better strategies',
-            'Too much exploitation leads to local optima; too much exploration wastes time on poor actions',
-            'The dilemma appears in bandit problems, RL, recommendation systems, and any sequential decision-making task'
-          ]
+          heading: 'What is Policy Iteration Algorithm?',
+          text: 'Policy Iteration Algorithm is essential for reinforcement learning.',
+          list: []
         },
         {
-          'heading': 'Key Formula / Rule',
-          'text': 'Epsilon-greedy and Upper-Confidence-Bound are two classic strategies for balancing exploration and exploitation.',
-          'example': {
-            'title': 'Epsilon-Greedy and UCB Formulas',
-            'code': `Epsilon-Greedy:
-  With probability epsilon: random action
-  With probability 1 - epsilon: argmax Q(a)
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Policy Iteration Algorithm provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use policy iteration algorithm when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Policy Iteration Algorithm
 
-Example (epsilon = 0.1):
-  Q = [0.5, 0.3, 1.2, 0.1]
-  Random p = 0.07 -> explore (random arm)
-  Random p = 0.45 -> exploit (choose arm 3)
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
 
-Upper-Confidence-Bound (UCB):
-  A_t = argmax [Q(a) + c * sqrt(ln t / N_t(a))]
+  Key idea: Policy Iteration Algorithm sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Mathematical Convergence Proof Concept',
+          text: `The convergence of Policy Iteration is guaranteed by the <strong>Policy Improvement Theorem</strong>. It states that if we create a greedy policy $\\pi'$ based on $V^\\pi$, then the value of $\\pi'$ is guaranteed to be greater than or equal to $V^\\pi$ at all states:
+$$V^{\\pi'}(s) \\ge V^\\pi(s) \\quad \\forall s \\in S$$
 
-If N_t(a) is small:
-  Uncertainty term is large -> explore
-If N_t(a) is large:
-  Uncertainty shrinks -> exploit`,
-            'output': 'UCB explores based on uncertainty; epsilon-greedy explores randomly.',
-            'type': 'code'
+If equality holds, the policy is optimal.`
+        },
+        {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Policy Iteration Algorithm with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Policy Iteration Algorithm — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
           }
         },
         {
-          'heading': 'Important Differences',
-          'text': 'Different exploration strategies make different assumptions and perform differently in practice.',
-          'table': {
-            'headers': ['Strategy', 'Mechanism', 'Pros', 'Cons'],
-            'rows': [
-              ['Epsilon-Greedy', 'Random exploration', 'Simple, widely used', 'Wastes exploration on bad actions'],
-              ['UCB', 'Uncertainty-driven', 'Efficient, theoretically grounded', 'Requires accurate uncertainty estimates'],
-              ['Thompson Sampling', 'Bayesian probability', 'Optimal regret bounds', 'Needs posterior distributions'],
-              ['Boltzmann/Softmax', 'Probability proportional to Q', 'Smooth, continuous', 'Temperature tuning needed'],
-              ['Entropy Regularization', 'Bonus for randomness', 'Built into policy loss', 'Adds hyperparameter']
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Comparison: Policy Iteration vs. Value Iteration',
+          text: 'While both algorithms solve MDPs, they possess distinct trade-offs in computational profile.',
+          table: {
+            headers: [
+              'Dimension',
+              'Policy Iteration',
+              'Value Iteration'
+            ],
+            rows: [
+              [
+                'Core operations',
+                'Alternates full evaluation and greedy choice',
+                'Single value update sweep combining both'
+              ],
+              [
+                'Convergence rate',
+                'Fewer iterations (typically < 10)',
+                'More iterations (asymptotically infinite)'
+              ],
+              [
+                'Cost per iteration',
+                'High (solving systems of equations or inner loops)',
+                'Low (one scan over states and actions)'
+              ],
+              [
+                'Ideal environments',
+                'Small state spaces where evaluation is cheap',
+                'Larger state spaces where policy evaluation is slow'
+              ]
             ]
           }
         },
         {
-          'heading': 'Common Mistakes',
-          'list': [
-            'Mistake 1: Keeping epsilon constant throughout training (fix: decay epsilon over time so the agent transitions from exploration to exploitation as it gains experience)',
-            'Mistake 2: Using pure greedy action selection with no exploration (fix: a purely greedy agent will never discover better actions and will get stuck with its initial suboptimal choices)',
-            'Mistake 3: Exploring uniformly over all actions (fix: directed exploration like UCB or curiosity-driven methods focus exploration where uncertainty is highest)',
-            'Mistake 4: Ignoring nonstationarity (fix: if reward distributions change over time, use constant step sizes or sliding windows to keep exploration alive)'
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          'heading': 'Real-World Application',
-          'text': 'The exploration-exploitation tradeoff appears in countless real-world systems.',
-          'list': [
-            'Clinical trials: balancing known effective treatments against experimental drugs that might be superior',
-            'Online advertising: showing proven ads versus testing new creatives that might perform better',
-            'Restaurant choice: returning to a favorite restaurant versus trying a new one that might be amazing',
-            'A/B testing: websites allocate traffic to known layouts while testing new designs',
-            'Recommender systems: suggesting popular content versus surfacing new items to discover user preferences'
+          heading: 'Quick Recap',
+          list: [
+            'Policy Iteration Algorithm: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
-          'heading': 'Quick Recap',
-          'list': [
-            'Exploration-exploitation is the core dilemma of RL: try new things or stick with what works',
-            'Epsilon-greedy is simple but wasteful; UCB is efficient and uncertainty-aware',
-            'Exploration must decay over time for the agent to settle on a good policy',
-            'Nonstationary environments require ongoing exploration even after initial learning',
-            'Poor exploration leads to suboptimal policies; poor exploitation wastes accumulated knowledge'
+          heading: 'Practice Questions',
+          list: [
+            `Q1: When does policy iteration terminate?
+Ans: It terminates when the policy becomes stable (i.e., the policy improvement phase does not make any changes to the action selected in any state).`,
+            `Q2: Why does policy evaluation often use iterative updates rather than direct matrix inversion?
+Ans: Direct matrix inversion has $O(|S|^3)$ complexity, which is computationally expensive for large state spaces. Iterative evaluation via Bellman updates is much faster ($O(k|S|^2)$).`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
         },
         {
-          'heading': 'Practice Questions',
-          'text': 'Test your understanding.',
-          'list': [
-            'Q1: Why is the exploration-exploitation dilemma fundamental to RL?\nAns: Because the agent must discover good actions through trial and error, but repeatedly exploring poor actions wastes opportunities to gain reward.',
-            'Q2: How does UCB differ from epsilon-greedy?\nAns: UCB directs exploration toward actions with high uncertainty, while epsilon-greedy explores randomly regardless of uncertainty.',
-            'Q3: Why should epsilon decay over time?\nAns: Early in training, the agent knows little and needs to explore broadly. Later, it should exploit its knowledge to maximize reward.',
-            'Q4: What happens if an agent uses pure greedy selection with no exploration?\nAns: It will never discover actions that are better than its initial estimates and will likely converge to a suboptimal policy.'
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Policy Iteration Algorithm</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Policy Iteration Algorithm")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
+        }
+      ]
+    },
+    'solving-frozenlake': {
+      title: 'FrozenLake Solution and Policy Visualization',
+      subtitle: 'Solving FrozenLake-v1 using tabular value iteration in Python',
+      sections: [
+        {
+          heading: 'What is FrozenLake Solution and Policy Visualization?',
+          text: 'FrozenLake Solution and Policy Visualization is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, FrozenLake Solution and Policy Visualization provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use frozenlake solution and policy visualization when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — FrozenLake Solution and Policy Visualization
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: FrozenLake Solution and Policy Visualization sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
+          example: {
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Python Code Example',
+          example: {
+            title: 'FrozenLake Solution and Policy Visualization with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("FrozenLake Solution and Policy Visualization — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
           ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Pick the right variant for your data type and sample size.',
+          table: {
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
+            rows: [
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
+          ]
+        },
+        {
+          heading: 'Quick Recap',
+          list: [
+            'FrozenLake Solution and Policy Visualization: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: In FrozenLake, why does the optimal policy sometimes choose to walk into a boundary wall?
+Ans: Due to slipping dynamics (is_slippery=True), moving towards a wall acts as a "safety buffer". If the agent slips, it remains in the same cell rather than slipping into a nearby hole.`,
+            `Q2: What is the transition model mapping key in FrozenLake?
+Ans: \`env.P[state][action]\` maps to a list of transitions: \`(probability, next_state, reward, done)\`.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>FrozenLake Solution and Policy Visualization</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — FrozenLake Solution and Policy Visualization")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

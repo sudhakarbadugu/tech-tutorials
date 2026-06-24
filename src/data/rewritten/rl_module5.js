@@ -1,296 +1,926 @@
+// reinforcement learning — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js rl_module5.js
+
 export const rlModule5Structure = {
   module5: {
-    title: 'Module 5: RL Applications',
+    title: 'Module 5: Deep Reinforcement Learning',
     topics: [
-      { id: 'rl-real-world', title: 'Real-World RL Applications' },
-      { id: 'rl-robotics', title: 'RL in Robotics' },
-      { id: 'rl-games', title: 'RL in Games' },
-      { id: 'rl-recommenders', title: 'RL in Recommendation Systems' },
+      {
+        id: 'dqn-architecture',
+        title: 'Deep Q-Networks (DQN)'
+      },
+      {
+        id: 'policy-gradients',
+        title: 'Policy Gradient and REINFORCE'
+      },
+      {
+        id: 'actor-critic-ppo',
+        title: 'Actor-Critic and PPO'
+      },
+      {
+        id: 'dqn-case-study',
+        title: 'Solving CartPole and LunarLander'
+      },
+      {
+        id: 'practical-considerations',
+        title: 'Practical Considerations in RL'
+      }
     ]
   }
 };
 
 export const rlModule5Content = {
   module5: {
-    'rl-real-world': {
-      title: 'Real-World Reinforcement Learning Applications',
-      subtitle: 'From autonomous systems to finance and healthcare',
+    'dqn-architecture': {
+      title: 'Deep Q-Networks (DQN)',
+      subtitle: 'Approximating Q-functions using deep neural networks',
       sections: [
         {
-          heading: 'What is Real-World RL?',
-          text: '<strong>Real-World RL</strong> refers to deploying reinforcement learning algorithms in physical or production environments where safety, sample efficiency, and robustness are critical. Unlike simulated domains, real-world RL must handle partial observability, delayed feedback, and the cost of failed experiments.',
+          heading: 'What is DQN?',
+          text: 'In high-dimensional state spaces (like raw game screens or continuous sensor fields), storing values in a table is impossible. <strong>Deep Q-Networks (DQN)</strong>, introduced by Google DeepMind in 2013, resolve this by using a deep neural network $Q_\theta(s, a)$ to approximate the action-value function instead of a lookup table.',
           list: [
-            'Sim-to-real transfer bridges simulation and physical deployment',
-            'Safety constraints prevent catastrophic failures during learning',
-            'Sample efficiency matters because real data is expensive',
-            'Non-stationarity is common as the environment evolves over time'
+            'Input: State vector or raw pixel tensor.',
+            'Output: A vector of estimated Q-values, one for each discrete action.',
+            'Network parameters theta: Trained using gradient descent to minimize a Bellman loss function.'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The sim-to-real gap is quantified by comparing policies trained in simulation versus reality. Domain randomization and domain adaptation reduce this gap.',
-          example: {
-            title: 'Domain Randomization',
-            code: `During training, randomize:
-  • Friction coefficients: μ ~ U(0.3, 1.2)
-  • Mass perturbations: m' = m × N(1, 0.1)
-  • Sensor noise: y = y_true + ε, ε ~ N(0, σ)
-  • Lighting, textures, camera angles
+          heading: 'Concept Explanation',
+          content: [
+            '<p>In high-dimensional state spaces (like raw game screens or continuous sensor fields), storing values in a table is impossible. <strong>Deep Q-Networks (DQN)</strong>, introduced by Google DeepMind in 2013, resolve this by using a deep neural network $Q_\theta(s, a)$ to approximate the action-value function instead of a lookup table. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, In high-dimensional state spaces (like raw game screens or continuous sensor fields), storing values in a table is impossible. <strong>Deep Q-Networks (DQN)</strong>, introduced by Google DeepMind in 2013, resolve this by using a deep neural network $Q_\theta(s, a)$ to approximate the action-value function instead of a lookup table. Input: State vector or raw pixel tensor. Output: A vector of estimated Q-values, one for each discrete action. Network parameters theta: Trained using gradient descent to minimize a Bellman loss function.</p>',
+            '<p>You use deep q-networks (dqn) when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Deep Q-Networks (DQN)
 
-Policy learned across many variants
-→ Generalizes to real-world physics`,
-            output: 'Randomization forces the policy to learn robust, invariant features.',
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Deep Q-Networks (DQN) sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
+          example: {
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Deep Q-Networks (DQN) with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Deep Q-Networks (DQN) — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Understanding the gap between simulated and real RL is essential for successful deployment.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Aspect', 'Simulated RL', 'Real-World RL'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Data cost', 'Cheap and infinite', 'Expensive and limited'],
-              ['Safety', 'No risk', 'Failures have real consequences'],
-              ['Observations', 'Perfect state access', 'Noisy, partial sensors'],
-              ['Reset', 'Instant reset to any state', 'Time-consuming or impossible'],
-              ['Dynamics', 'Fixed known model', 'Unknown, non-stationary'],
-              ['Parallelization', 'Massive GPU clusters', 'Limited by hardware']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Deploying sim-trained policy without real-world validation (fix: use domain randomization, system identification, and staged rollouts)',
-            'Mistake 2: Ignoring safety constraints during learning (fix: use constrained RL, barrier functions, or shielding)',
-            'Mistake 3: Assuming stationarity (fix: implement continual learning and detect distribution shift)',
-            'Mistake 4: Underestimating latency and sensor noise (fix: design observation and action pipelines with real sensor characteristics)'
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'RL is deployed in diverse domains beyond research benchmarks.',
+          heading: 'Quick Recap',
           list: [
-            '<strong>Autonomous Driving:</strong> Waymo uses RL for trajectory planning, lane merging, and pedestrian-aware navigation in real traffic',
-            '<strong>Finance & Trading:</strong> RL agents optimize portfolio allocation, execution timing, and risk-adjusted returns under market constraints',
-            '<strong>Healthcare:</strong> RL personalizes treatment plans, insulin dosing, and radiotherapy scheduling based on patient response',
-            '<strong>Energy Systems:</strong> Google DeepMind reduced data center cooling costs by 40% using RL-based control of HVAC and server load',
-            '<strong>Manufacturing:</strong> RL optimizes robotic assembly lines, predictive maintenance schedules, and supply chain logistics'
+            'Deep Q-Networks (DQN): know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: Why is experience replay essential for training neural networks in RL?
+Ans: It breaks correlation between sequential steps by shuffling experiences, satisfying the i.i.d. assumption required for stable gradient descent, and allows data reuse.`,
+            `Q2: How does the target network prevent instability?
+Ans: It holds the TD target values constant for several hundred steps. If the active network updated the targets at every step, it would create a feedback loop resembling a dog chasing its own tail, preventing convergence.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Deep Q-Networks (DQN)</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Deep Q-Networks (DQN)")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'rl-robotics': {
-      title: 'Reinforcement Learning in Robotics',
-      subtitle: 'Teaching machines to move, grasp, and interact',
+    'policy-gradients': {
+      title: 'Policy Gradient and REINFORCE',
+      subtitle: 'Direct policy optimization via gradient ascent',
       sections: [
         {
-          heading: 'Why RL for Robotics?',
-          text: 'Robotics presents unique challenges: <strong>continuous state and action spaces</strong>, <strong>high-dimensional sensory input</strong>, and <strong>long-horizon tasks</strong>. Classical control theory requires accurate models, which are hard to obtain for complex robots. RL enables robots to learn skills directly from experience, adapting to unmodeled dynamics.',
-          list: [
-            'Continuous control: joint torques, velocities, end-effector poses',
-            'Dexterous manipulation: in-hand object reorientation, tool use',
-            'Locomotion: bipedal walking, quadruped gaits, climbing',
-            'Multi-robot coordination: swarms, collaborative assembly'
-          ]
+          heading: 'What is Policy Gradient and REINFORCE?',
+          text: 'Policy Gradient and REINFORCE is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Policy Gradient and REINFORCE provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use policy gradient and reinforce when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Policy Gradient and REINFORCE
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Policy Gradient and REINFORCE sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'Policy gradient methods are the dominant approach for continuous robotic control.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'PPO for Continuous Control',
-            code: `Objective (PPO-Clip):
-  L(θ) = E[min(rₜ(θ)Âₜ, clip(rₜ(θ), 1-ε, 1+ε)Âₜ)]
-
-Where:
-  rₜ(θ) = πθ(aₜ|sₜ) / πθ_old(aₜ|sₜ)
-  Âₜ = advantage estimate (GAE)
-  ε = 0.2 (typical)
-
-Action space:
-  a ~ N(μθ(s), σθ(s))
-  → continuous joint torque commands`,
-            output: 'PPO provides stable, sample-efficient learning for robot motor control.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Policy Gradient and REINFORCE with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Policy Gradient and REINFORCE — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'RL robotics spans a spectrum from simulation to real hardware.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Method', 'Where Learning Happens', 'Data Source', 'Pros & Cons'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Sim-to-Real', 'Simulation only', 'Synthetic physics', 'Scalable but has reality gap'],
-              ['Real-World RL', 'Physical robot', 'Actual sensor data', 'Authentic but slow and risky'],
-              ['Sim-to-Real + Adapt', 'Both stages', 'Sim + fine-tune real', 'Balances speed and accuracy'],
-              ['Imitation + RL', 'Real, guided', 'Human demonstrations', 'Warm start reduces exploration'],
-              ['Offline RL', 'Real, from logs', 'Existing datasets', 'No online risk but distribution shift']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Training entirely in simulation without randomization (fix: apply domain randomization and system identification)',
-            'Mistake 2: Using discrete action spaces for joint control (fix: use continuous policy gradients like PPO or SAC)',
-            'Mistake 3: Ignoring torque/velocity limits during training (fix: incorporate actuator constraints into the action space or reward)',
-            'Mistake 4: Sparse rewards in long-horizon tasks (fix: use reward shaping, hindsight experience replay, or curriculum learning)'
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'RL-powered robots are transitioning from labs to warehouses, homes, and hospitals.',
+          heading: 'Quick Recap',
           list: [
-            '<strong>Boston Dynamics Spot:</strong> Quadruped locomotion trained with RL to walk on uneven terrain, recover from falls, and navigate autonomously',
-            '<strong>Google Robot RT-2:</strong> Vision-language-action models combine perception and RL for general-purpose manipulation in unstructured environments',
-            '<strong>Dexterous Hand Control:</strong> OpenAI Dactyl learned to solve a Rubik\'s cube in-hand using RL with vision-based state estimation',
-            '<strong>Robotic Surgery:</strong> RL optimizes suturing trajectories and force control in minimally invasive procedures',
-            '<strong>Warehouse Automation:</strong> RL controls mobile robots for pick-and-place, path planning, and dynamic collision avoidance'
+            'Policy Gradient and REINFORCE: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: What is the main drawback of the REINFORCE algorithm?
+Ans: It suffers from high variance because returns $G_t$ are calculated using full episodic Monte Carlo rollouts, which depend on many random transition outcomes.`,
+            `Q2: How does parameterizing the policy directly help in continuous action spaces?
+Ans: It allows outputting parameters of continuous probability distributions (like the mean $\\mu$ and standard deviation $\\sigma$ of a Gaussian distribution), from which continuous action values can be sampled directly.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Policy Gradient and REINFORCE</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Policy Gradient and REINFORCE")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'rl-games': {
-      title: 'Reinforcement Learning in Games',
-      subtitle: 'From board games to open-world environments',
+    'actor-critic-ppo': {
+      title: 'Actor-Critic and PPO',
+      subtitle: 'Combining policy optimization with value estimation',
       sections: [
         {
-          heading: 'Games as RL Testbeds',
-          text: 'Games provide <strong>clear objectives</strong>, <strong>measurable rewards</strong>, and <strong>scalable difficulty</strong>, making them ideal environments for RL research. Success in games often translates to advances in planning, search, and generalization.',
-          list: [
-            'Perfect information games: chess, Go, Shogi — full state observable',
-            'Imperfect information games: poker, StarCraft — hidden information, bluffing',
-            'Real-time strategy: multi-agent, resource management, tactical planning',
-            'Open-world games: Minecraft, NetHack — exploration, crafting, survival'
-          ]
+          heading: 'What is Actor-Critic and PPO?',
+          text: 'Actor-Critic and PPO is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Actor-Critic and PPO provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use actor-critic and ppo when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Actor-Critic and PPO
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Actor-Critic and PPO sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'AlphaZero combines neural networks with Monte Carlo Tree Search (MCTS) for superhuman game play.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'AlphaZero MCTS',
-            code: `At each node s:
-  1. Selection: a* = argmaxₐ[Q(s,a) + U(s,a)]
-     U(s,a) = c_puct × π(a|s) × √N(s) / (1 + N(s,a))
-
-  2. Expansion: Evaluate leaf with (p, v) = fθ(s)
-
-  3. Backup: Update Q and N up the tree
-     Q(s,a) = Σ W(s,a) / N(s,a)
-
-  4. Play: Choose action by visit count
-     a ~ π where πₐ ∝ N(s,a)^{1/τ}`,
-            output: 'MCTS balances exploration (U term) with exploitation (Q term).',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Actor-Critic and PPO with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Actor-Critic and PPO — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Games vary in complexity and information structure, requiring different RL approaches.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Game Type', 'Information', 'Key Challenge', 'RL Approach'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Board (Chess, Go)', 'Perfect', 'Huge branching factor', 'MCTS + deep value/policy nets'],
-              ['Atari', 'Pixel input', 'Credit assignment over time', 'DQN with experience replay'],
-              ['Real-time (StarCraft)', 'Imperfect, multi-agent', 'Macro strategy + micro control', 'Hierarchical RL, population play'],
-              ['Card (Poker)', 'Hidden info', 'Bluffing, game theory', 'Counterfactual regret minimization'],
-              ['Open-world (Minecraft)', 'Sparse rewards', 'Exploration and long-term planning', 'Intrinsic motivation, LLM-guided RL']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Equating game success with general intelligence (fix: test transfer to varied environments and real-world tasks)',
-            'Mistake 2: Overfitting to specific game mechanics (fix: train on game variants and use domain randomization)',
-            'Mistake 3: Ignoring sample efficiency in favor of final performance (fix: measure wall-clock time and sample complexity)',
-            'Mistake 4: Single-agent focus in multi-agent games (fix: use population-based training and opponent modeling)'
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'Game-playing RL has produced breakthroughs that generalize beyond entertainment.',
+          heading: 'Quick Recap',
           list: [
-            '<strong>AlphaGo / AlphaZero:</strong> Mastered Go, Chess, and Shogi from self-play. The MCTS + neural network architecture is now used in protein folding (AlphaFold) and material design',
-            '<strong>OpenAI Five:</strong> Defeated professional Dota 2 teams. The system used a large-scale distributed PPO variant with careful reward shaping',
-            '<strong>MuZero:</strong> Plays Atari, Go, chess, and Shogi without knowing the rules. Learns a world model entirely from experience, enabling planning in unknown environments',
-            '<strong>Diplomacy:</strong> Meta\'s Cicero used RL + language models to negotiate and compete in the game of Diplomacy, blending strategic reasoning with natural language',
-            '<strong>Game Testing:</strong> RL agents automate bug detection, level difficulty balancing, and adversarial playtesting in commercial game development'
+            'Actor-Critic and PPO: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: How does Actor-Critic improve on REINFORCE?
+Ans: It replaces the high-variance Monte Carlo return $G_t$ with a low-variance bootstrapped TD estimate computed by the Critic network.`,
+            `Q2: What is the main purpose of PPO's clipped surrogate objective?
+Ans: It prevents the policy parameters from shifting too far from the old policy during a single update step, ensuring stable learning trajectories.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Actor-Critic and PPO</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Actor-Critic and PPO")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'rl-recommenders': {
-      title: 'RL in Recommendation Systems',
-      subtitle: 'Optimizing long-term user engagement beyond immediate clicks',
+    'dqn-case-study': {
+      title: 'Solving CartPole and LunarLander',
+      subtitle: 'Deploying deep Q-learning to master physical control tasks',
       sections: [
         {
-          heading: 'Why RL for Recommendations?',
-          text: 'Traditional recommender systems optimize <strong>immediate reward</strong> (clicks, ratings) using supervised learning. RL optimizes <strong>long-term user engagement</strong> by modeling the sequential nature of user interactions. A recommendation changes the user\'s state, which affects future preferences.',
-          list: [
-            'Sequential decision making: each recommendation affects the next user state',
-            'Delayed rewards: engagement builds over a session or lifetime',
-            'Exploration-exploitation: recommend new items vs known favorites',
-            'Dynamic environment: user preferences drift over time'
-          ]
+          heading: 'What is Solving CartPole and LunarLander?',
+          text: 'Solving CartPole and LunarLander is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Solving CartPole and LunarLander provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use solving cartpole and lunarlander when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Solving CartPole and LunarLander
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Solving CartPole and LunarLander sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'The recommendation problem is formalized as a Markov Decision Process with user state.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'RL Formulation for Recommendations',
-            code: `MDP for Recommendations:
-  State sₜ: User profile + recent interactions
-  Action aₜ: Recommend item i from catalog
-  Reward rₜ:
-    +1 if click
-    +5 if purchase/watch complete
-    -1 if dismiss / bounce
-  Transition: sₜ₊₁ = f(sₜ, aₜ, user response)
-
-Objective: maximize cumulative reward
-  J = E[Σ γᵗ rₜ]
-
-Contextual Bandit (simplified):
-  γ = 0 → optimize only immediate reward`,
-            output: 'Long-term optimization requires full RL, not just bandits.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Solving CartPole and LunarLander with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Solving CartPole and LunarLander — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Different approaches trade off between simplicity and long-term optimization.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Approach', 'Optimizes', 'Method', 'Limitation'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Matrix Factorization', 'Rating prediction', 'SVD, ALS', 'No sequence modeling'],
-              ['Collaborative Filtering', 'Item similarity', 'KNN, item-item', 'Cold start problem'],
-              ['Contextual Bandit', 'Immediate reward', 'LinUCB, Thompson Sampling', 'Ignores future impact'],
-              ['RL (Value-based)', 'Long-term return', 'DQN, Dueling DQN', 'Stability challenges'],
-              ['RL (Policy-based)', 'Policy gradient', 'REINFORCE, PPO', 'High variance'],
-              ['Offline RL', 'From logged data', 'CQL, BCQ', 'Distribution shift risk']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Treating recommendations as independent predictions (fix: model sequential interaction with RL or RNN-based state tracking)',
-            'Mistake 2: Optimizing only for clicks (fix: include dwell time, diversity, and downstream conversions in the reward)',
-            'Mistake 3: Ignoring exploration in production (fix: use epsilon-greedy, Upper Confidence Bound, or Thompson Sampling)',
-            'Mistake 4: Deploying online RL without safe exploration (fix: use off-policy evaluation, counterfactual estimation, and staged A/B tests)'
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'Major platforms use RL to personalize content and maximize user satisfaction.',
+          heading: 'Quick Recap',
           list: [
-            '<strong>YouTube Recommendations:</strong> Uses RL to optimize watch time, session length, and diversity. The system balances immediate clicks with long-term subscriber retention',
-            '<strong>TikTok For You Page:</strong> An RL-like algorithm rapidly adapts to user feedback (swipes, replays, shares) within a single session, optimizing for engagement velocity',
-            '<strong>Spotify Discover Weekly:</strong> Combines collaborative filtering with contextual bandits to balance familiar artists with novel discoveries',
-            '<strong>Amazon Product Recommendations:</strong> Uses hierarchical RL to recommend complementary products across categories, optimizing for basket value and repeat purchases',
-            '<strong>News Feeds (Twitter/X, LinkedIn):</strong> RL models user state transitions to balance fresh content, social signals, and topical diversity in the feed'
+            'Solving CartPole and LunarLander: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: Why does LunarLander-v3 take longer to train than CartPole-v1?
+Ans: LunarLander has a higher observation dimensionality (8 vs 4), a larger action space (4 vs 2), and highly sparse/delayed rewards. The agent must discover complex sequences of engine burns to stabilize flight before receiving landing rewards.`,
+            `Q2: What role do leg contacts play in the LunarLander observation vector?
+Ans: They are binary observations indicating if the lander's legs are touching the ground, helping the agent learn that landing on the pad provides the target reward.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Solving CartPole and LunarLander</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Solving CartPole and LunarLander")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
+        }
+      ]
+    },
+    'practical-considerations': {
+      title: 'Practical Considerations in RL',
+      subtitle: 'Critical concepts for designing and tuning real-world RL systems',
+      sections: [
+        {
+          heading: 'What is Practical Considerations in RL?',
+          text: 'Practical Considerations in RL is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Practical Considerations in RL provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use practical considerations in rl when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Practical Considerations in RL
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Practical Considerations in RL sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
+          example: {
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Practical Considerations in RL with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Practical Considerations in RL — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: '4. Sample Efficiency Comparison',
+          text: 'Sample efficiency measures how much real environment data is required to learn a high-quality policy. Model-based algorithms are highly efficient because they plan using virtual simulations, whereas model-free policy gradients require massive datasets.',
+          table: {
+            headers: [
+              'Algorithm Family',
+              'Sample Efficiency',
+              'Compute overhead',
+              'Typical training steps'
+            ],
+            rows: [
+              [
+                'Model-Based (MPC / PETS)',
+                'Extremely High',
+                'Very High (Online planning)',
+                '10,000 - 100,000 steps'
+              ],
+              [
+                'Off-policy Deep Q-Learning (DQN)',
+                'Medium',
+                'Medium (Replay buffer gradient steps)',
+                '100,000 - 1,000,000 steps'
+              ],
+              [
+                'On-policy Policy Gradient (PPO)',
+                'Low',
+                'Low (Simple update steps)',
+                '1,000,000 - 10,000,000 steps'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
+          ]
+        },
+        {
+          heading: 'Quick Recap',
+          list: [
+            'Practical Considerations in RL: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: What is reward hacking?
+Ans: It is when an agent finds a way to exploit an auxiliary shaped reward function to accumulate rewards without solving the actual target task.`,
+            `Q2: How does adding an entropy bonus to the policy gradient loss encourage exploration?
+Ans: Entropy measures the uncertainty of a probability distribution. Maximizing policy entropy encourages the policy to output a wide distribution of actions rather than concentrating all probability on a single action.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Practical Considerations in RL</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Practical Considerations in RL")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

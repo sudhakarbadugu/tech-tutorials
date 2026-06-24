@@ -1,532 +1,933 @@
+// large language models — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js llm_module3.js
+
 export const llmModule3Structure = {
   module3: {
-    title: 'Module 3: Training, Fine-Tuning & Inference',
+    title: 'Module 3: Training & Fine-Tuning LLMs',
     topics: [
-      { id: 'fine-tuning', title: 'Fine-Tuning Pre-trained Models' },
-      { id: 'prompt-engineering', title: 'Prompt Engineering' },
-      { id: 'instruction-tuning', title: 'Instruction Tuning' },
-      { id: 'rlhf', title: 'RLHF: Reinforcement Learning from Human Feedback' },
-      { id: 'model-compression', title: 'Model Compression' },
-      { id: 'quantization', title: 'Quantization' },
-      { id: 'distillation', title: 'Knowledge Distillation' },
-      { id: 'pruning', title: 'Model Pruning' },
-      { id: 'efficient-inference', title: 'Efficient Inference' },
-      { id: 'llm-evaluation', title: 'LLM Evaluation' },
+      {
+        id: 'pretraining-objectives',
+        title: 'Pre-Training Objectives: Autoregressive and Masked'
+      },
+      {
+        id: 'fine-tuning-strategies',
+        title: 'Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning'
+      },
+      {
+        id: 'instruction-tuning',
+        title: 'Instruction Tuning and FLAN'
+      },
+      {
+        id: 'rlhf',
+        title: 'RLHF: Reward Model + PPO'
+      },
+      {
+        id: 'dpo',
+        title: 'DPO: Direct Preference Optimization'
+      }
     ]
   }
 };
 
 export const llmModule3Content = {
   module3: {
-    'fine-tuning': {
-      title: 'Fine-Tuning Pre-trained Models',
-      subtitle: 'Adapting foundation models to specific tasks',
+    'pretraining-objectives': {
+      title: 'Pre-Training Objectives: Autoregressive and Masked',
+      subtitle: 'The self-supervised tasks that turn a transformer into a language model',
       sections: [
         {
-          heading: 'Why Fine-Tune?',
-          text: 'Foundation models like GPT, BERT, and LLaMA are trained on vast, diverse corpora. Fine-tuning adapts these general representations to specific tasks with relatively small labeled datasets, achieving strong performance with far less data than training from scratch.',
+          heading: 'What Is Pre-Training?',
+          text: '<strong>Pre-training</strong> is the first, most expensive stage of LLM development: train a transformer on a huge, generic text corpus using a <strong>self-supervised objective</strong> — no labels, just predict part of the input from the rest. The objective determines what the model learns to do (generate vs. fill in) and shapes its downstream strengths.'
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Pre-training</strong> is the first, most expensive stage of LLM development: train a transformer on a huge, generic text corpus using a <strong>self-supervised objective</strong> — no labels, just predict part of the input from the rest. The objective determines what the model learns to do (generate vs. fill in) and shapes its downstream strengths. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Pre-training</strong> is the first, most expensive stage of LLM development: train a transformer on a huge, generic text corpus using a <strong>self-supervised objective</strong> — no labels, just predict part of the input from the rest. The objective determines what the model learns to do (generate vs. fill in) and shapes its downstream strengths.</p>',
+            '<p>You use pre-training objectives: autoregressive and masked when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Pre-Training Objectives: Autoregressive and Masked
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Pre-Training Objectives: Autoregressive and Masked sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Fine-Tuning vs. From-Scratch',
-            code: 'Train from scratch:\n  Data: 1B+ tokens\n  Cost: $100,000+\n  Time: Weeks on GPU clusters\n\nFine-tune BERT-Base:\n  Data: 10K labeled examples\n  Cost: ~$50\n  Time: Minutes to hours\n  Result: 94% accuracy on task',
-            output: 'Fine-tuning is 1000x cheaper and faster while delivering competitive results.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
-          heading: 'Fine-Tuning Strategies',
+          heading: 'Python Code Example',
+          example: {
+            title: 'Pre-Training Objectives: Autoregressive and Masked with Python',
+            code: `# Pre-Training Objectives: Autoregressive and Masked — tokenization sketch (requires transformers)
+try:
+    from transformers import AutoTokenizer
+    tok = AutoTokenizer.from_pretrained("gpt2")
+    ids = tok.encode("Large language models predict the next token.")
+    print("Token IDs:", ids[:8], "... vocab size:", tok.vocab_size)
+except Exception as e:
+    print("Install transformers for live demo:", e)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Objective Comparison',
           table: {
-            headers: ['Strategy', 'What Gets Updated', 'Best For', 'Trade-off'],
+            headers: [
+              'Objective',
+              'Architecture',
+              'Context',
+              'Best For',
+              'Example Models'
+            ],
             rows: [
-              ['Full fine-tuning', 'All parameters', 'Large task-specific datasets', 'Highest accuracy, highest cost'],
-              ['Layer-wise', 'Last N layers only', 'Domain adaptation', 'Balanced cost and accuracy'],
-              ['Task heads', 'Only classification head', 'Simple classification', 'Fastest, lowest capacity'],
-              ['Adapters', 'Small inserted modules', 'Many tasks, limited compute', 'Modular, parameter-efficient'],
-              ['LoRA', 'Low-rank decomposition', 'Consumer GPUs', 'Best PEFT method']
+              [
+                'Autoregressive (next token)',
+                'Decoder-only',
+                'Causal (left-to-right)',
+                'Generation, chat, code',
+                'GPT, Llama, Mistral, Claude'
+              ],
+              [
+                'Masked LM',
+                'Encoder-only',
+                'Bidirectional',
+                'Classification, NER, QA',
+                'BERT, RoBERTa, DeBERTa'
+              ],
+              [
+                'Span corruption',
+                'Encoder-decoder',
+                'Encoder bi + decoder causal',
+                'Translation, summarization',
+                'T5, BART, mT5'
+              ]
             ]
           }
         },
         {
-          heading: 'The Fine-Tuning Pipeline',
-          text: 'A systematic pipeline ensures reliable adaptation without catastrophic forgetting.',
+          heading: 'Common Mistakes',
           list: [
-            '<strong>Data preparation:</strong> Curate high-quality, task-specific examples with consistent formatting',
-            '<strong>Hyperparameter selection:</strong> Use smaller learning rates (1e-5 to 5e-5) than pre-training',
-            '<strong>Regularization:</strong> Apply dropout, weight decay, and early stopping to prevent overfitting',
-            '<strong>Evaluation:</strong> Monitor both task metrics and general language perplexity',
-            '<strong>Checkpoint averaging:</strong> Average weights from the last few epochs for stability'
+            'Mistake 1: Using MLM for a generative product (fix: MLM models are not autoregressive; use a decoder-only autoregressive objective)',
+            'Mistake 2: Training on raw, un-deduplicated web data (fix: dedup drastically reduces memorization and raises effective data quality)',
+            'Mistake 3: Treating all tokens equally in the loss (fix: ignore padding/unknown tokens; consider loss weighting on rare-but-important tokens)',
+            'Mistake 4: Skipping warmup and high learning-rate phases (fix: large pre-training needs LR warmup + cosine decay for stability)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>Anthropic — Claude training.</strong> LLMs are trained on trillions of tokens with scaling laws governing loss vs compute. Instruction tuning + RLHF align models for helpful, harmless responses at production scale.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
-          heading: 'Catastrophic Forgetting',
-          text: 'When fine-tuning aggressively, the model may overwrite its general knowledge to optimize for the narrow task.',
+          heading: 'Quick Recap',
+          list: [
+            'Autoregressive (next-token) LM is the GPT objective; best for generation',
+            'Masked LM is the BERT objective; bidirectional, best for understanding',
+            'Span corruption (T5/BART) unifies understanding and generation in encoder-decoders',
+            'Decoder-only + autoregressive is the dominant choice for modern general LLMs',
+            'Pre-training data quality and deduplication matter as much as the objective'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: Why is an MLM model not directly usable for text generation?
+Ans: MLM is trained to fill masked tokens from bidirectional context, not to autoregressively sample one token at a time conditioned only on the past.`,
+            `Q2: What does the BERT 80/10/10 masking split achieve?
+Ans: It reduces the train/test distribution mismatch by not always feeding the model the literal [MASK] token, so fine-tuning inputs (which contain no [MASK]) look closer to pre-training inputs.`,
+            `Q3: Why did the field converge on decoder-only autoregressive models for general LLMs?
+Ans: A single unified generative objective scales cleanly, handles any task via prompting, and avoids the encoder/decoder split — simpler, and empirically strongest at scale.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Pre-Training Objectives: Autoregressive and Masked</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'Forgetting Example',
-            code: 'Pre-trained GPT:\n  Q: "What is the capital of France?"\n  A: "Paris"\n\nAfter aggressive fine-tune on medical QA:\n  Q: "What is the capital of France?"\n  A: "I am a medical assistant.\n   Please ask health-related questions."\n\nSolution: Use lower LR, LoRA,\nor replay general data during tuning.',
-            output: 'Regularization and parameter-efficient methods preserve general capabilities.',
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Pre-Training Objectives: Autoregressive and Masked")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
             type: 'code'
           }
         }
       ]
     },
-    'prompt-engineering': {
-      title: 'Prompt Engineering',
-      subtitle: 'Designing inputs that unlock model capabilities',
+    'fine-tuning-strategies': {
+      title: 'Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning',
+      subtitle: 'Adapting foundation models to specific tasks efficiently',
       sections: [
         {
-          heading: 'What is Prompt Engineering?',
-          text: 'Prompt engineering is the practice of designing input prompts to guide LLMs toward desired outputs without modifying model weights. A well-crafted prompt can outperform naive fine-tuning for many tasks.',
+          heading: 'What is Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning?',
+          text: 'Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning is essential for large language models.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in large language models. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use fine-tuning strategies: full, lora, qlora, prefix tuning when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Zero-Shot vs. Engineered Prompt',
-            code: 'Naive prompt:\n  "Classify this: I loved the movie!"\n  → Confused output\n\nEngineered prompt:\n  "You are a sentiment classifier.\n   Rate the review as Positive,\n   Negative, or Neutral.\n\n   Review: I loved the movie!\n   Sentiment:"\n  → Positive',
-            output: 'Context, role, and format instructions dramatically improve zero-shot performance.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
-          heading: 'Core Prompt Techniques',
+          heading: 'Python Code Example',
+          example: {
+            title: 'Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning with Python',
+            code: `# Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning — tokenization sketch (requires transformers)
+try:
+    from transformers import AutoTokenizer
+    tok = AutoTokenizer.from_pretrained("gpt2")
+    ids = tok.encode("Large language models predict the next token.")
+    print("Token IDs:", ids[:8], "... vocab size:", tok.vocab_size)
+except Exception as e:
+    print("Install transformers for live demo:", e)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Technique', 'How It Works', 'When to Use'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Zero-shot', 'Direct instruction with no examples', 'Simple, well-defined tasks'],
-              ['Few-shot', 'Include 2-5 input-output examples', 'Pattern-matching tasks'],
-              ['Chain-of-Thought', 'Ask model to show reasoning step-by-step', 'Math, logic, multi-step problems'],
-              ['Role prompting', 'Assign an expert persona', 'Domain-specific answers'],
-              ['Self-consistency', 'Sample multiple times, pick majority', 'High-stakes reasoning'],
-              ['ReAct', 'Reason + Act with tool use loops', 'External tool integration']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
-          heading: 'Chain-of-Thought Prompting',
-          text: 'Explicitly asking the model to "think step by step" improves reasoning accuracy by 20-50% on complex tasks.',
-          example: {
-            title: 'CoT for Arithmetic',
-            code: 'Prompt:\n  "A bat and ball cost $11.\n   The bat costs $10 more than the ball.\n   How much does the ball cost?\n\n   Let\'s solve step by step."\n\nOutput:\n  Let ball = x\n  Then bat = x + 10\n  x + (x + 10) = 11\n  2x + 10 = 11\n  2x = 1\n  x = 0.5\n\n  The ball costs $0.50',
-            output: 'Without CoT, models often blurt the intuitive but wrong answer ($1).',
-            type: 'code'
-          }
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Full fine-tuning a huge model for a small dataset (fix: use LoRA/QLoRA to avoid overfitting and forgetting)',
+            'Mistake 2: Too-high learning rate for fine-tuning (fix: use 1e-5 to 5e-5, not the pre-training rate)',
+            'Mistake 3: Forgetting to merge LoRA weights before serving (fix: W = W₀ + B·A can be folded in for zero added latency)',
+            'Mistake 4: Ignoring catastrophic forgetting (fix: replay general data or use PEFT that freezes the base)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Prompt Design Principles',
+          heading: 'Real-World Case Study',
+          text: '<strong>Anthropic — Claude training.</strong> LLMs are trained on trillions of tokens with scaling laws governing loss vs compute. Instruction tuning + RLHF align models for helpful, harmless responses at production scale.',
           list: [
-            '<strong>Be specific:</strong> Vague prompts produce inconsistent outputs. Define the exact format desired.',
-            '<strong>Use delimiters:</strong> Separate instructions, context, and input with markers like triple quotes or XML tags',
-            '<strong>Provide constraints:</strong> "Answer in one sentence" or "Use only the provided context" reduces hallucination',
-            '<strong>Test variations:</strong> Small wording changes can significantly impact output quality',
-            '<strong>Document what works:</strong> Maintain a prompt version history for reproducibility'
-          ],
-          note: 'Prompt engineering is empirical — there are few universal rules. Systematic experimentation is essential.'
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
+          ]
+        },
+        {
+          heading: 'Quick Recap',
+          list: [
+            'Full fine-tuning updates all params; highest accuracy, highest cost, risk of forgetting',
+            'LoRA adds low-rank deltas BA to frozen weights; ~0.1% params, mergeable for zero-latency serving',
+            'QLoRA = 4-bit NF4 base + LoRA; fine-tunes 70B on one GPU',
+            'Prefix/prompt tuning adds trainable soft prompts; cheapest, weakest capacity',
+            'Pick by budget and task: full (max acc), LoRA (general), QLoRA (huge model, one GPU), prefix (many tasks)'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: Why does LoRA use a low rank r rather than full-rank deltas?
+Ans: Empirically, fine-tuning updates live in a low-dimensional subspace; a rank-r factorization BA captures most of the useful update with ~0.1% of the parameters.`,
+            `Q2: What two tricks beyond 4-bit weights make QLoRA memory-feasible for 70B models?
+Ans: Double Quantization (quantize the quantization constants) and Paged Optimizers (page Adam states to CPU to avoid OOM spikes).`,
+            `Q3: Why can prefix tuning hot-swap tasks at inference with near-zero overhead?
+Ans: Only the small prefix vectors differ per task; the base model is frozen and shared, so switching tasks means swapping a few thousand vectors.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Fine-Tuning Strategies: Full, LoRA, QLoRA, Prefix Tuning")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
     'instruction-tuning': {
-      title: 'Instruction Tuning',
-      subtitle: 'Teaching models to follow human instructions',
+      title: 'Instruction Tuning and FLAN',
+      subtitle: 'Teaching pre-trained models to follow natural-language instructions',
       sections: [
         {
-          heading: 'What is Instruction Tuning?',
-          text: 'Instruction tuning fine-tunes pre-trained language models on datasets of (instruction, input, output) triples. The goal is to teach the model to understand and follow natural language instructions for a wide variety of tasks.',
+          heading: 'What Is Instruction Tuning?',
+          text: 'A pre-trained LM predicts likely text, not necessarily <strong>helpful</strong> text. <strong>Instruction tuning</strong> fine-tunes on datasets of (instruction, input, output) triples so the model learns to understand and follow natural-language instructions across many tasks. It is the step that turns a next-token predictor into an assistant.',
           example: {
-            title: 'Instruction Format',
-            code: 'Instruction: Translate the following\n         sentence to French.\n\nInput: The cat sat on the mat.\n\nOutput: Le chat s\'est assis\n         sur le tapis.\n\n---\n\nInstruction: Summarize the article\n         in one sentence.\n\nInput: [long article text]\n\nOutput: [one-sentence summary]',
+            title: 'Example: Instruction format',
+            code: `Instruction: Translate the following
+         sentence to French.
+
+Input: The cat sat on the mat.
+
+Output: Le chat s'est assis
+         sur le tapis.
+
+---
+
+Instruction: Summarize the article
+         in one sentence.
+
+Input: [long article text]
+
+Output: [one-sentence summary]`,
             output: 'Diverse instruction datasets teach generalizable obedience to commands.',
             type: 'code'
           }
         },
         {
-          heading: 'Key Instruction Datasets',
-          table: {
-            headers: ['Dataset', 'Size', 'Tasks', 'Notable Feature'],
-            rows: [
-              ['Natural Instructions', '1600+ tasks', 'Diverse NLP tasks', 'Crowdsourced templates'],
-              ['FLAN', '62M examples', '180+ tasks', 'Mixed task formats'],
-              ['Alpaca', '52K examples', 'General instruction', 'Self-instruct from GPT-3.5'],
-              ['Dolly', '15K examples', 'Open QA, coding', 'Human-generated'],
-              ['LIMA', '1K examples', 'Conversational', 'Quality over quantity']
-            ]
-          }
-        },
-        {
-          heading: 'Self-Instruct',
-          text: 'A bootstrapping method where a strong teacher model generates instruction-output pairs, which are then used to fine-tune a smaller student model.',
-          example: {
-            title: 'Self-Instruct Pipeline',
-            code: 'Step 1: Seed with 175 human-written\n         instruction examples\n\nStep 2: Prompt GPT-3 to generate\n         new instructions\n\nStep 3: Filter low-quality / duplicate\n         instructions\n\nStep 4: Use GPT-3 to generate outputs\n         for each instruction\n\nStep 5: Fine-tune LLaMA on generated data\n\nResult: Alpaca, Vicuna, etc.',
-            output: 'Self-instruct democratizes instruction tuning without massive human labeling.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Impact of Instruction Tuning',
-          text: 'Instruction tuning transforms a "next-token predictor" into a helpful assistant that follows user intent.',
-          list: [
-            '<strong>Zero-shot generalization:</strong> Models perform unseen tasks described in natural language',
-            '<strong>Format robustness:</strong> Tolerant of varied prompt styles and phrasings',
-            '<strong>Multi-task capability:</strong> Single model handles translation, summarization, QA, coding',
-            '<strong>Safer outputs:</strong> Better at refusing harmful requests when trained with safety instructions'
-          ]
-        }
-      ]
-    },
-    'rlhf': {
-      title: 'RLHF: Reinforcement Learning from Human Feedback',
-      subtitle: 'Aligning language models with human preferences',
-      sections: [
-        {
-          heading: 'The RLHF Pipeline',
-          text: 'RLHF is a three-stage process that aligns pre-trained models with human values, preferences, and safety constraints.',
-          example: {
-            title: 'RLHF Three-Stage Process',
-            code: 'Stage 1 — Supervised Fine-Tuning (SFT):\n  Train on high-quality human demonstrations\n  → Base policy model\n\nStage 2 — Reward Model Training:\n  Humans rank model outputs: A > B > C\n  Train reward model to predict preferences\n  → R(x, y) = predicted human preference\n\nStage 3 — RL Optimization (PPO):\n  Maximize: R(x, y) - KL_penalty(π || π_ref)\n  → Aligned, helpful, harmless model',
-            output: 'RLHF is the key ingredient behind ChatGPT and Claude.',
-            type: 'code'
-          },
-          diagram: {
-            caption: 'RLHF three-stage alignment pipeline',
-            chart: `flowchart LR
-    A[Pre-trained LLM] --> B[SFT on demonstrations]
-    B --> C[Policy model]
-    C --> D[Human rankings]
-    D --> E[Reward model]
-    E --> F[PPO optimization]
-    F --> G[Aligned LLM]`
-          }
-        },
-        {
-          heading: 'Why RLHF is Necessary',
-          text: 'Pre-trained models predict likely text, not helpful text. RLHF bridges this gap.',
-          example: {
-            title: 'Before vs. After RLHF',
-            code: 'Prompt: "How do I hack a computer?"\n\nBefore RLHF (pre-trained):\n  "Step 1: Find vulnerabilities...\n   Step 2: Exploit them..."\n\nAfter RLHF (aligned):\n  "I can\'t help with hacking.\n   If you\'re interested in\n   cybersecurity, I can suggest\n   ethical hacking resources."',
-            output: 'RLHF makes models helpful, harmless, and honest without losing capabilities.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'RL Algorithms for LLMs',
-          table: {
-            headers: ['Algorithm', 'Mechanism', 'Pros', 'Cons'],
-            rows: [
-              ['PPO', 'Clipped surrogate objective', 'Stable, widely used', 'Complex hyperparameters'],
-              ['DPO', 'Direct preference optimization', 'No reward model needed', 'Slightly less flexible'],
-              ['RLHF with RMs', 'Reward model + PPO', 'Best performance', 'Expensive, complex'],
-              ['Constitutional AI', 'Self-critique + revision', 'Scales without human labels', 'Requires strong base model']
-            ]
-          }
-        },
-        {
-          heading: 'Challenges in RLHF',
-          list: [
-            '<strong>Reward hacking:</strong> Models exploit flaws in the reward model to get high scores without being helpful',
-            '<strong>Distribution shift:</strong> Model explores outside training distribution, producing incoherent text',
-            '<strong>KL divergence trade-off:</strong> Too much RL training makes outputs degenerate; too little preserves unwanted behaviors',
-            '<strong>Human labeler bias:</strong> Preferences reflect the values of the labeling demographic',
-            '<strong>Scalability:</strong> High-quality human feedback is expensive and time-consuming to collect'
+          heading: 'Concept Explanation',
+          content: [
+            '<p>A pre-trained LM predicts likely text, not necessarily <strong>helpful</strong> text. <strong>Instruction tuning</strong> fine-tunes on datasets of (instruction, input, output) triples so the model learns to understand and follow natural-language instructions across many tasks. It is the step that turns a next-token predictor into an assistant. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, A pre-trained LM predicts likely text, not necessarily <strong>helpful</strong> text. <strong>Instruction tuning</strong> fine-tunes on datasets of (instruction, input, output) triples so the model learns to understand and follow natural-language instructions across many tasks. It is the step that turns a next-token predictor into an assistant.</p>',
+            '<p>You use instruction tuning and flan when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
           ],
-          note: 'RLHF is powerful but not perfect. Models can still jailbreak, hallucinate, or reflect biases in the feedback data.'
-        }
-      ]
-    },
-    'model-compression': {
-      title: 'Model Compression',
-      subtitle: 'Making large models smaller and faster',
-      sections: [
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
         {
-          heading: 'Why Compress Models?',
-          text: 'State-of-the-art LLMs have hundreds of billions of parameters, requiring massive memory and compute. Model compression reduces size while preserving capability, enabling deployment on consumer hardware, edge devices, and reducing inference costs.',
+          heading: 'Visual Representation',
+          code: `Concept map — Instruction Tuning and FLAN
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Instruction Tuning and FLAN sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Compression Impact',
-            code: 'GPT-3 (175B params):\n  Memory: 700 GB (FP32)\n  Inference: A100 GPU cluster\n  Cost: $0.02 / 1K tokens\n\nCompressed GPT-3 (INT8):\n  Memory: 175 GB\n  Inference: Single A100\n  Cost: $0.005 / 1K tokens\n\nDistilled model (1.5B):\n  Memory: 6 GB\n  Inference: Consumer GPU / CPU\n  Cost: $0.0001 / 1K tokens',
-            output: 'Compression can reduce cost by 100x with modest accuracy trade-offs.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
-          heading: 'Compression Techniques Overview',
-          table: {
-            headers: ['Technique', 'What It Does', 'Typical Savings', 'Accuracy Impact'],
-            rows: [
-              ['Quantization', 'Lower precision weights', '2-4x smaller', 'Minimal (INT8) to moderate (INT4)'],
-              ['Distillation', 'Train small model from big', '10-100x smaller', 'Moderate'],
-              ['Pruning', 'Remove unimportant weights', '2-10x smaller', 'Low to moderate'],
-              ['Low-Rank Adaptation', 'Low-rank weight updates', 'Not compression per se', 'N/A (PEFT)'],
-              ['Architecture Search', 'Find efficient architectures', '2-5x faster', 'Task-dependent']
-            ]
+          heading: 'Python Code Example',
+          example: {
+            title: 'Instruction Tuning and FLAN with Python',
+            code: `# Instruction Tuning and FLAN — tokenization sketch (requires transformers)
+try:
+    from transformers import AutoTokenizer
+    tok = AutoTokenizer.from_pretrained("gpt2")
+    ids = tok.encode("Large language models predict the next token.")
+    print("Token IDs:", ids[:8], "... vocab size:", tok.vocab_size)
+except Exception as e:
+    print("Install transformers for live demo:", e)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
           }
         },
         {
-          heading: 'Trade-offs in Compression',
-          text: 'Compression always involves balancing model size, inference speed, and task accuracy.',
+          heading: 'Step-by-Step Walkthrough',
           list: [
-            '<strong>Accuracy vs. size:</strong> Smaller models generally underperform; the goal is finding the "sweet spot"',
-            '<strong>Latency vs. throughput:</strong> Some techniques speed up single queries; others improve batch processing',
-            '<strong>Static vs. dynamic:</strong> Static compression happens once at training time; dynamic methods adapt per input',
-            '<strong>Hardware compatibility:</strong> INT8 needs TensorRT/Core ML; INT4 needs specialized kernels'
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
           ]
-        }
-      ]
-    },
-    'quantization': {
-      title: 'Quantization',
-      subtitle: 'Reducing numerical precision for efficiency',
-      sections: [
-        {
-          heading: 'What is Quantization?',
-          text: 'Quantization reduces the precision of model weights and activations, typically from 32-bit floating point (FP32) to 16-bit (FP16), 8-bit integer (INT8), or even 4-bit (INT4).',
-          example: {
-            title: 'INT8 Quantization',
-            code: 'FP32 weight:  0.003142\nScale factor: 1 / 0.000122 = 8192\nINT8 weight:  round(0.003142 / 0.000122) = 26\n\nStorage comparison (175B model):\n  FP32: 4 bytes × 175B = 700 GB\n  FP16: 2 bytes × 175B = 350 GB\n  INT8: 1 byte × 175B = 175 GB\n  INT4: 0.5 bytes × 175B = 87.5 GB\n\nSpeedup: ~2-4x on INT8-capable hardware',
-            output: 'Quantization dramatically reduces memory and increases inference speed.',
-            type: 'code'
-          }
         },
         {
-          heading: 'Quantization Methods',
+          heading: 'Important Differences',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Method', 'Precision', 'When Applied', 'Accuracy Impact', 'Best For'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Post-Training (PTQ)', 'INT8', 'After training', 'Minor (1-2%)', 'Quick deployment'],
-              ['Quantization-Aware Training (QAT)', 'INT8/INT4', 'During training', 'Minimal', 'Best accuracy'],
-              ['GPTQ', 'INT4', 'Post-training', 'Moderate', 'Consumer GPUs'],
-              ['AWQ', 'INT4', 'Post-training', 'Low', 'Edge devices'],
-              ['SmoothQuant', 'INT8', 'Post-training', 'Low', 'LLM serving'],
-              ['GGUF/GGML', 'Q4_K_M, Q5_K_M', 'Post-training', 'Low-Moderate', 'Local CPU inference']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
-          heading: 'Symmetric vs. Asymmetric Quantization',
-          text: 'Two main approaches to mapping floating-point values to integers.',
-          example: {
-            title: 'Quantization Schemes',
-            code: 'Symmetric:\n  q = round(x / scale)\n  scale = max(|x|) / 127\n  Zero point = 0\n\nAsymmetric:\n  q = round((x - zero_point) / scale)\n  scale = (max(x) - min(x)) / 255\n  zero_point = -round(min(x) / scale)\n\nSymmetric is faster.\nAsymmetric handles skewed\ndistributions better.',
-            output: 'Per-channel quantization outperforms per-tensor for activations.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Challenges in LLM Quantization',
+          heading: 'Common Mistakes',
           list: [
-            '<strong>Outlier features:</strong> A few dimensions have extreme values that dominate quantization range, hurting precision for most values',
-            '<strong>Activation quantization:</strong> Dynamic ranges vary per token; static calibration often insufficient',
-            '<strong>Layer sensitivity:</strong> Some layers (attention projections) are more sensitive to precision loss than others',
-            '<strong>4-bit degradation:</strong> Below 8 bits, accuracy drops unless using advanced grouping (GPTQ, AWQ) or mixed precision'
+            'Mistake 1: Low-quality synthetic instructions (fix: filter aggressively; dedup with ROUGE; reject incoherent outputs)',
+            'Mistake 2: Overfitting on a narrow task distribution (fix: mix many task types; FLAN-style breadth aids generalization)',
+            'Mistake 3: Expecting instruction tuning alone to produce safe behavior (fix: instruction tuning teaches format; safety needs RLHF/Constitutional AI)',
+            'Mistake 4: Ignoring format consistency across examples (fix: normalize templates so the model learns a stable instruction format)'
           ],
-          note: 'Modern frameworks like llama.cpp, vLLM, and TensorRT-LLM automate quantization pipelines for popular model families.'
-        }
-      ]
-    },
-    'distillation': {
-      title: 'Knowledge Distillation',
-      subtitle: 'Transferring knowledge from large to small models',
-      sections: [
-        {
-          heading: 'What is Knowledge Distillation?',
-          text: 'Knowledge distillation trains a small <strong>student</strong> model to mimic a large <strong>teacher</strong> model. The student learns from the teacher\'s soft probability distributions ("dark knowledge") rather than just hard labels.',
-          example: {
-            title: 'Distillation Loss',
-            code: 'Teacher output (softmax with T=4):\n  cat: 0.70, dog: 0.25, fox: 0.05\n\nHard label:\n  cat: 1.0, dog: 0.0, fox: 0.0\n\nStudent learns from soft targets:\n  L = α × CE(student, hard_labels)\n    + (1-α) × KL(student/T, teacher/T)\n\nTemperature T smooths probabilities,\nrevealing inter-class relationships.',
-            output: 'Soft targets encode rich similarity information between classes.',
-            type: 'code'
-          }
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Types of Distillation',
-          table: {
-            headers: ['Type', 'What Student Learns', 'Use Case', 'Example'],
-            rows: [
-              ['Logit distillation', 'Teacher output probabilities', 'Classification', 'Hinton et al. 2015'],
-              ['Feature distillation', 'Intermediate hidden states', 'Vision, NLP', 'FitNets, MiniLM'],
-              ['Attention distillation', 'Attention weight maps', 'Transformers', 'TinyBERT, MobileBERT'],
-              ['Self-distillation', 'Older version of itself', 'No teacher needed', 'DeepSelf'],
-              ['Online distillation', 'Peer models in ensemble', 'Distributed training', 'Deep Mutual Learning']
-            ]
-          }
-        },
-        {
-          heading: 'Distillation in Practice',
-          text: 'Distillation is widely used to create efficient, deployable variants of large models.',
-          example: {
-            title: 'DistilBERT Example',
-            code: 'Teacher: BERT-Base\n  Layers: 12, Hidden: 768\n  Params: 110M\n  Speed: 1x\n\nStudent: DistilBERT\n  Layers: 6 (removed every 2nd)\n  Hidden: 768\n  Params: 66M (40% smaller)\n  Speed: 2x faster\n  GLUE: 97% of BERT performance\n\nTraining:\n  L = 0.5 × CE + 0.5 × distillation\n    + cosine loss on hidden states',
-            output: 'DistilBERT proved distillation works at scale for transformers.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Limitations of Distillation',
+          heading: 'Real-World Case Study',
+          text: '<strong>Anthropic — Claude training.</strong> LLMs are trained on trillions of tokens with scaling laws governing loss vs compute. Instruction tuning + RLHF align models for helpful, harmless responses at production scale.',
           list: [
-            '<strong>Capacity gap:</strong> Very small students cannot capture all teacher knowledge regardless of training',
-            '<strong>Teacher quality ceiling:</strong> Student cannot exceed teacher; errors and biases are inherited',
-            '<strong>Task specificity:</strong> Distilled models are less flexible than the teacher for out-of-distribution tasks',
-            '<strong>Training cost:</strong> Requires running the large teacher during training, which is expensive'
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
-        }
-      ]
-    },
-    'pruning': {
-      title: 'Model Pruning',
-      subtitle: 'Removing redundant weights and connections',
-      sections: [
-        {
-          heading: 'What is Pruning?',
-          text: 'Pruning removes weights, neurons, or entire layers that contribute little to model output. The goal is sparsity: a model with many zero values that can be stored and computed efficiently.',
-          example: {
-            title: 'Magnitude Pruning',
-            code: 'Weight matrix (before):\n[[0.12, -0.89,  0.01,  0.34],\n [0.05,  0.02, -0.91,  0.07],\n [0.03,  0.11,  0.04, -0.82],\n [0.01, -0.03,  0.02,  0.01]]\n\nMagnitude threshold: 0.10\n\nAfter pruning (zeros highlighted):\n[[0.00, -0.89,  0.00,  0.34],\n [0.00,  0.00, -0.91,  0.00],\n [0.00,  0.11,  0.00, -0.82],\n [0.00,  0.00,  0.00,  0.00]]\n\nSparsity: 10/16 = 62.5%',
-            output: 'Simple magnitude pruning removes small weights that contribute minimally.',
-            type: 'code'
-          }
         },
         {
-          heading: 'Pruning Strategies',
-          table: {
-            headers: ['Strategy', 'What Is Pruned', 'Granularity', 'Impact'],
-            rows: [
-              ['Unstructured', 'Individual weights', 'Fine-grained', 'Highest sparsity, needs sparse kernels'],
-              ['Structured (row/col)', 'Weight rows/columns', 'Coarse', 'Natural speedup, less sparsity'],
-              ['Head pruning', 'Attention heads', 'Medium', 'Direct FLOP reduction in transformers'],
-              ['Layer pruning', 'Entire layers', 'Coarse', 'Dramatic speedup, larger accuracy hit'],
-              ['Block pruning', 'N×M weight blocks', 'Medium', 'Hardware-friendly on NVIDIA Ampere+']
-            ]
-          }
-        },
-        {
-          heading: 'Pruning Schedules',
-          text: 'When and how to remove weights matters as much as which weights to remove.',
-          example: {
-            title: 'Iterative Magnitude Pruning',
-            code: 'Step 1: Train dense model to convergence\nStep 2: Prune 10% of smallest weights\nStep 3: Fine-tune for a few epochs\nStep 4: Prune another 10%\nStep 5: Fine-tune again\n...\nRepeat until target sparsity (e.g., 80%)\n\nResult:\n  Gradual pruning + fine-tuning\n  recovers accuracy after each cut.',
-            output: 'One-shot pruning causes large accuracy drops; iterative pruning preserves performance.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Sparsity Acceleration',
-          text: 'Pruning only saves memory if hardware and software support sparse computation.',
+          heading: 'Quick Recap',
           list: [
-            '<strong>Sparse matrices:</strong> CSR/CSC formats store only non-zeros and their indices',
-            '<strong>Sparse kernels:</strong> NVIDIA cuSPARSE, Intel MKL optimize sparse matrix multiplication',
-            '<strong>2:4 structured sparsity:</strong> NVIDIA Ampere GPUs natively accelerate 50% sparsity patterns',
-            '<strong>Compiler support:</strong> ONNX Runtime, TensorRT optimize sparse transformer inference'
+            'Instruction tuning fine-tunes on (instruction, input, output) triples to teach task-following',
+            'FLAN aggregated 180+ tasks and showed zero-shot generalization to unseen tasks',
+            'Self-instruct bootstraps instruction data from a strong teacher (Alpaca, Vicuna)',
+            'Instruction tuning teaches format; RLHF/DPO teach preference and safety',
+            'Quality can beat quantity — LIMA showed ~1K strong examples go far'
           ]
-        }
-      ]
-    },
-    'efficient-inference': {
-      title: 'Efficient Inference',
-      subtitle: 'Speeding up model serving and reducing latency',
-      sections: [
-        {
-          heading: 'Inference Optimization Techniques',
-          text: 'Beyond model compression, multiple system-level techniques accelerate LLM inference.',
-          example: {
-            title: 'KV Cache',
-            code: 'Standard autoregressive generation:\n  For each new token:\n    Recompute attention for ALL tokens\n    → O(n²) per step\n\nWith KV Cache:\n  Store Key and Value vectors\n  for each previous token\n\n  For new token t:\n    Only compute Q for token t\n    Attend to cached K, V of tokens 1..t-1\n    → O(n) per step\n\nSpeedup: 10-100x for long sequences',
-            output: 'KV cache is essential for performant autoregressive generation.',
-            type: 'code'
-          }
         },
         {
-          heading: 'Advanced Inference Methods',
-          table: {
-            headers: ['Technique', 'Mechanism', 'Speedup', 'Trade-off'],
-            rows: [
-              ['KV Cache', 'Reuse past key-value pairs', '10-100x', 'Memory overhead'],
-              ['Continuous Batching', 'Dynamic batch sizing', '3-10x throughput', 'Complex scheduler'],
-              ['Speculative Decoding', 'Draft small model, verify with large', '2-3x', 'Needs draft model'],
-              ['FlashAttention', 'Tiled memory-efficient attention', '2-4x', 'None (better and faster)'],
-              ['PagedAttention', 'Block-based KV cache management', '2-4x', 'Improved memory'],
-              ['Tensor Parallelism', 'Split layers across GPUs', 'Linear scaling', 'Communication cost']
-            ]
-          }
-        },
-        {
-          heading: 'FlashAttention',
-          text: 'An I/O-aware algorithm that speeds up attention by reducing memory reads/writes, not by approximating.',
-          example: {
-            title: 'FlashAttention Tiling',
-            code: 'Standard Attention:\n  Load Q, K, V (O(N²) memory)\n  Compute S = QKᵀ\n  Compute P = softmax(S)\n  Compute O = PV\n  → Many HBM reads/writes\n\nFlashAttention:\n  1. Tile Q, K, V into SRAM-sized blocks\n  2. Compute attention incrementally\n  3. Keep running softmax statistics\n  4. Write only final output O\n\nResult: Fewer HBM accesses\n= faster + less memory',
-            output: 'FlashAttention is exact — no approximation, just better memory layout.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Serving Frameworks',
-          text: 'Production deployment of LLMs requires specialized serving infrastructure.',
+          heading: 'Practice Questions',
           list: [
-            '<strong>vLLM:</strong> PagedAttention + continuous batching for high-throughput serving',
-            '<strong>TensorRT-LLM:</strong> NVIDIA-optimized kernels, quantization, and multi-GPU support',
-            '<strong>Text Generation Inference (TGI):</strong> Hugging Face production server with sharding',
-            '<strong>llama.cpp:</strong> CPU/GPU inference with GGUF quantization for local deployment',
-            '<strong>MLC LLM:</strong> Universal deployment on diverse hardware (phone, browser, edge)'
+            `Q1: What does instruction tuning add that pre-training does not?
+Ans: It teaches the model to map natural-language instructions to outputs across many tasks, enabling zero-shot generalization to unseen instructions.`,
+            `Q2: How does self-instruct reduce the labeling burden?
+Ans: It uses a strong teacher model to generate both new instructions and their outputs, then fine-tunes a smaller student on the synthetic pairs — minimal human labeling needed.`,
+            `Q3: Why is instruction tuning considered "shallow" alignment?
+Ans: It mostly teaches format and task coverage via imitation; deeper alignment (helpfulness, harmlessness, honesty) requires preference optimization like RLHF or DPO.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Instruction Tuning and FLAN</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Instruction Tuning and FLAN")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'llm-evaluation': {
-      title: 'LLM Evaluation',
-      subtitle: 'Measuring capabilities, safety, and alignment',
+    rlhf: {
+      title: 'RLHF: Reward Model + PPO',
+      subtitle: 'Aligning language models with human preferences via reinforcement learning',
       sections: [
         {
-          heading: 'Why Evaluate LLMs?',
-          text: 'Evaluation measures what a model can do, where it fails, and how it compares to alternatives. Good evaluation spans capability, safety, efficiency, and alignment.',
-          example: {
-            title: 'Evaluation Dimensions',
-            code: 'Capability:\n  - MMLU: academic knowledge\n  - HumanEval: code generation\n  - GSM8K: math reasoning\n\nSafety:\n  - TruthfulQA: truthfulness\n  - BBQ: social bias\n  - Toxicity classifiers\n\nEfficiency:\n  - Throughput: tokens/sec\n  - Latency: time to first token\n  - Memory: GB per request',
-            output: 'No single metric captures model quality. Multi-dimensional evaluation is essential.',
-            type: 'code'
-          },
-          diagram: {
-            caption: 'LLM evaluation spans capability, safety, and efficiency',
-            chart: `flowchart TD
-    A[Evaluate LLM] --> B[Capability]
-    A --> C[Safety]
-    A --> D[Efficiency]
-    B --> B1[MMLU]
-    B --> B2[HumanEval]
-    B --> B3[GSM8K]
-    C --> C1[TruthfulQA]
-    C --> C2[BBQ]
-    D --> D1[Throughput]
-    D --> D2[Latency]`
-          }
+          heading: 'What is RLHF: Reward Model + PPO?',
+          text: 'RLHF: Reward Model + PPO is essential for large language models.',
+          list: []
         },
         {
-          heading: 'Core Benchmarks',
-          table: {
-            headers: ['Benchmark', 'What It Tests', 'Format', 'Key Metric'],
-            rows: [
-              ['MMLU', '57 subjects (STEM to humanities)', 'Multiple choice', 'Accuracy'],
-              ['HumanEval', 'Python function completion', 'Code generation', 'Pass@k'],
-              ['GSM8K', 'Grade school math word problems', 'Open-ended', 'Accuracy'],
-              ['TruthfulQA', 'Truth vs. common misconceptions', 'Open-ended', 'Truthfulness score'],
-              ['BBQ', 'Social bias in ambiguous contexts', 'Multiple choice', 'Bias score'],
-              ['HellaSwag', 'Commonsense reasoning', 'Sentence completion', 'Accuracy'],
-              ['ARC', 'Science exam questions', 'Multiple choice', 'Accuracy']
-            ]
-          }
-        },
-        {
-          heading: 'Perplexity',
-          text: 'The classic language modeling metric. Lower perplexity means the model is less "surprised" by test data.',
-          example: {
-            title: 'Perplexity Calculation',
-            code: 'PP(W) = exp(-1/N Σ log P(wᵢ | w₁..wᵢ₋₁))\n\nExample:\n  Model A: PP = 12.3 on WikiText-103\n  Model B: PP = 10.1 on WikiText-103\n\nModel B assigns higher probability\nto real text → better language model.\n\nPerplexity = 2^(cross-entropy)\n\nCaveat: Lower PP ≠ better assistant.\nA model that always predicts "the"\nhas low PP but is useless.',
-            output: 'Perplexity measures fluency, not usefulness or truthfulness.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Human Evaluation',
-          text: 'Automated benchmarks are necessary but not sufficient. Human judgment remains the gold standard for assessing helpfulness, coherence, and safety.',
-          list: [
-            '<strong>Elo ratings:</strong> Pairwise comparison of model outputs by human judges, producing a ranked leaderboard',
-            '<strong>Pointwise scoring:</strong> Humans rate single responses on 1-5 scales for helpfulness, accuracy, and safety',
-            '<strong>Red teaming:</strong> Experts deliberately probe for harmful outputs, jailbreaks, and edge-case failures',
-            '<strong>Task-specific evaluation:</strong> Domain experts assess outputs in their area (medicine, law, coding)'
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in large language models. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, RLHF: Reward Model + PPO provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use rlhf: reward model + ppo when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
           ],
-          note: 'The best evaluation combines broad benchmarks (for reproducibility), narrow expert tests (for depth), and human preferences (for real-world utility).'
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — RLHF: Reward Model + PPO
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: RLHF: Reward Model + PPO sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
+          example: {
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Python Code Example',
+          example: {
+            title: 'RLHF: Reward Model + PPO with Python',
+            code: `# RLHF: Reward Model + PPO — tokenization sketch (requires transformers)
+try:
+    from transformers import AutoTokenizer
+    tok = AutoTokenizer.from_pretrained("gpt2")
+    ids = tok.encode("Large language models predict the next token.")
+    print("Token IDs:", ids[:8], "... vocab size:", tok.vocab_size)
+except Exception as e:
+    print("Install transformers for live demo:", e)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Pick the right variant for your data type and sample size.',
+          table: {
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
+            rows: [
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Skipping the KL penalty (fix: without it the model drifts and reward-hacks; keep β > 0)',
+            'Mistake 2: Training the reward model on too few / biased comparisons (fix: collect diverse, high-quality pairwise data; validate the RM separately)',
+            'Mistake 3: Letting the policy explore too far from π_ref (fix: increase β or use early stopping based on KL)',
+            'Mistake 4: Trusting reward-model scores as ground truth (fix: the RM is a noisy proxy; always validate with held-out human eval)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>Anthropic — Claude training.</strong> LLMs are trained on trillions of tokens with scaling laws governing loss vs compute. Instruction tuning + RLHF align models for helpful, harmless responses at production scale.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
+          ]
+        },
+        {
+          heading: 'Quick Recap',
+          list: [
+            'RLHF = SFT → reward model (Bradley–Terry on rankings) → PPO with a KL penalty to the reference',
+            'The reward model is a scalar human-preference proxy trained on pairwise preferences',
+            'PPO maximizes reward while the KL penalty keeps the model close to the SFT base',
+            'It powers ChatGPT/Claude but is complex, costly, and prone to reward hacking',
+            'Alternatives include DPO (no RM), Constitutional AI (AI feedback), and GRPO'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: What is the role of the KL penalty in RLHF?
+Ans: It keeps the learned policy close to the reference (SFT) model, preventing reward hacking and preserving fluency/general capability.`,
+            `Q2: Why is the reward model trained on rankings rather than absolute scores?
+Ans: Humans are more reliable at relative comparisons than absolute scoring; Bradley–Terry on pairwise winner/loser pairs is more robust to labeler noise.`,
+            `Q3: Name two failure modes that RLHF introduces beyond pre-training/SFT.
+Ans: Reward hacking (exploiting the RM) and distribution shift (the policy leaving the RM's reliable range).`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>RLHF: Reward Model + PPO</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — RLHF: Reward Model + PPO")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
+        }
+      ]
+    },
+    dpo: {
+      title: 'DPO: Direct Preference Optimization',
+      subtitle: 'Aligning with preferences without a reward model or RL loop',
+      sections: [
+        {
+          heading: 'What Problem Does DPO Solve?',
+          text: 'RLHF is powerful but complex: it needs a separate reward model and an unstable PPO loop with a KL penalty. <strong>Direct Preference Optimization (DPO)</strong> (Rafailov et al., 2023) re-derives the RLHF objective and shows it can be optimized <strong>directly</strong> with a simple classification loss on preference pairs — no reward model, no RL, no value function.'
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>RLHF is powerful but complex: it needs a separate reward model and an unstable PPO loop with a KL penalty. <strong>Direct Preference Optimization (DPO)</strong> (Rafailov et al., 2023) re-derives the RLHF objective and shows it can be optimized <strong>directly</strong> with a simple classification loss on preference pairs — no reward model, no RL, no value function. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, RLHF is powerful but complex: it needs a separate reward model and an unstable PPO loop with a KL penalty. <strong>Direct Preference Optimization (DPO)</strong> (Rafailov et al., 2023) re-derives the RLHF objective and shows it can be optimized <strong>directly</strong> with a simple classification loss on preference pairs — no reward model, no RL, no value function.</p>',
+            '<p>You use dpo: direct preference optimization when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — DPO: Direct Preference Optimization
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: DPO: Direct Preference Optimization sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Core identity for this topic.',
+          example: {
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Python Code Example',
+          example: {
+            title: 'DPO: Direct Preference Optimization with Python',
+            code: `# DPO: Direct Preference Optimization — tokenization sketch (requires transformers)
+try:
+    from transformers import AutoTokenizer
+    tok = AutoTokenizer.from_pretrained("gpt2")
+    ids = tok.encode("Large language models predict the next token.")
+    print("Token IDs:", ids[:8], "... vocab size:", tok.vocab_size)
+except Exception as e:
+    print("Install transformers for live demo:", e)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'Pick the right variant for your data type and sample size.',
+          table: {
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
+            rows: [
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Using the wrong reference model (fix: π_ref must be the SFT model that produced the preference data; a mismatched reference breaks the derivation)',
+            'Mistake 2: Too-high β (fix: large β keeps the policy pinned to the reference and learns little; β≈0.1 is typical)',
+            'Mistake 3: Feeding DPO low-quality or inconsistent preferences (fix: DPO is offline and fully trusts the dataset; bad labels directly corrupt the policy)',
+            'Mistake 4: Forgetting to freeze the reference model (fix: π_ref must be frozen; if it moves, the implicit reward is ill-defined)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: '<strong>Anthropic — Claude training.</strong> LLMs are trained on trillions of tokens with scaling laws governing loss vs compute. Instruction tuning + RLHF align models for helpful, harmless responses at production scale.',
+          list: [
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
+          ]
+        },
+        {
+          heading: 'Quick Recap',
+          list: [
+            'DPO re-derives RLHF so the reward is implicit in the policy relative to a frozen reference',
+            'Loss: -log σ( β·(logπ(y_w)-logπ_ref(y_w)) - β·(logπ(y_l)-logπ_ref(y_l)) )',
+            'No reward model, no PPO, no value function — just BCE on preference pairs',
+            'Simpler and more stable than RLHF, but offline-only and sometimes slightly below peak RLHF',
+            'Variants: iterative DPO, IPO, KTO, SimPO, ORPO each address a DPO limitation'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: How does DPO eliminate the reward model?
+Ans: It solves the RLHF objective analytically, expressing the reward as r(x,y) = β·log(π(y|x)/π_ref(y|x)) + const, so the reward is implicit in the policy and reference — no separate RM is trained.`,
+            `Q2: What is the role of the frozen reference policy π_ref in DPO?
+Ans: It is the baseline relative to which the implicit reward is measured; it must be the SFT model whose outputs were ranked in the preference data, and it stays frozen so the implicit reward stays well-defined.`,
+            `Q3: Name one advantage and one disadvantage of DPO versus RLHF.
+Ans: Advantage: far simpler and more stable (no RL loop or RM). Disadvantage: offline only — it cannot explore on-policy, so peak performance can be slightly lower than a well-tuned PPO+RM RLHF pipeline.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>DPO: Direct Preference Optimization</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — DPO: Direct Preference Optimization")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

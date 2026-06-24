@@ -1,12 +1,30 @@
+// reinforcement learning — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js rl_module1.js
+
 export const rlModule1Structure = {
   module1: {
     title: 'Module 1: Foundations of Reinforcement Learning',
     topics: [
-      { id: 'intro-rl', title: 'Introduction to RL' },
-      { id: 'markov-decision', title: 'Markov Decision Processes' },
-      { id: 'bellman-equation', title: 'Bellman Equations' },
-      { id: 'policy-iteration', title: 'Policy Iteration' },
-      { id: 'value-iteration', title: 'Value Iteration' },
+      {
+        id: 'intro-rl',
+        title: 'Introduction to RL & Agent-Environment Loop'
+      },
+      {
+        id: 'state-action-spaces',
+        title: 'Reward, State, and Action Spaces'
+      },
+      {
+        id: 'gymnasium-walkthrough',
+        title: 'OpenAI Gymnasium API Walkthrough'
+      },
+      {
+        id: 'random-vs-heuristic',
+        title: 'Building Random and Heuristic Agents'
+      },
+      {
+        id: 'performance-comparison',
+        title: 'Performance Comparison and Visualization'
+      }
     ]
   }
 };
@@ -14,407 +32,901 @@ export const rlModule1Structure = {
 export const rlModule1Content = {
   module1: {
     'intro-rl': {
-      title: 'Introduction to Reinforcement Learning',
-      subtitle: 'Learning by interacting with an environment',
+      title: 'Introduction to RL & Agent-Environment Loop',
+      subtitle: 'Learning sequential decision making through interaction',
       sections: [
         {
           heading: 'What is Reinforcement Learning?',
-          text: 'Reinforcement Learning (RL) is a type of machine learning where an <strong>agent</strong> learns to make decisions by performing <strong>actions</strong> in an <strong>environment</strong> to maximize <strong>cumulative rewards</strong>. Unlike supervised learning, there is no labeled dataset — the agent learns from trial and error through a continuous feedback loop of action and consequence.',
+          text: 'Reinforcement Learning (RL) is a paradigm of Machine Learning where an <strong>agent</strong> learns to make sequential decisions in an <strong>environment</strong> to maximize cumulative feedback called <strong>reward</strong>. Unlike supervised learning, which relies on a static dataset of inputs and corresponding ground-truth targets, the agent must discover which actions yield the highest reward by trial and error.',
           list: [
-            'Agent: the learner and decision-maker that selects actions',
-            'Environment: everything the agent interacts with, providing states and rewards',
-            'Reward: a scalar feedback signal that evaluates the immediate desirability of an action',
-            'Policy: the agent\'s strategy for choosing actions in each state',
-            'Goal: maximize the total discounted reward over time, not just immediate gains'
+            'No supervisor: The agent is only given a reward signal, which might be sparse or delayed.',
+            'Sequential feedback: Decision-making is chronological, where current actions affect future inputs.',
+            'Trial-and-error: The agent must actively explore the environment to discover optimal actions.',
+            'Feedback delay: Rewards may not be immediate (e.g., in chess, a reward is only given at the end of the game).'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The agent-environment loop is the core mechanism of RL. At each step, the agent observes the current state, selects an action, receives a reward, and transitions to a new state.',
+          heading: 'Concept Explanation',
+          content: [
+            '<p>Reinforcement Learning (RL) is a paradigm of Machine Learning where an <strong>agent</strong> learns to make sequential decisions in an <strong>environment</strong> to maximize cumulative feedback called <strong>reward</strong>. Unlike supervised learning, which relies on a static dataset of inputs and corresponding ground-truth targets, the agent must discover which actions yield the highest reward by trial and error. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Reinforcement Learning (RL) is a paradigm of Machine Learning where an <strong>agent</strong> learns to make sequential decisions in an <strong>environment</strong> to maximize cumulative feedback called <strong>reward</strong>. Unlike supervised learning, which relies on a static dataset of inputs and corresponding ground-truth targets, the agent must discover which actions yield the highest reward by trial and error. No supervisor: The agent is only given a reward signal, which might be sparse or delayed. Sequential feedback: Decision-making is chronological, where current actions affect future inputs. Trial-and-error: The agent must actively explore the environment to discover optimal actions. Feedback delay: Rewards may not be immediate (e.g., in chess, a reward is only given at the end of the game).</p>',
+            '<p>You use introduction to rl & agent-environment loop when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Introduction to RL & Agent-Environment Loop
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Introduction to RL & Agent-Environment Loop sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Mathematical Concepts',
+          text: `The trajectory of an agent is represented as a sequence of states, actions, and rewards:
+$$\\tau = (S_0, A_0, R_1, S_1, A_1, R_2, \\dots)$$
+
+The agent's goal is to maximize the expected <strong>Return</strong> $G_t$, which is the discounted sum of future rewards:
+$$G_t = R_{t+1} + \\gamma R_{t+2} + \\gamma^2 R_{t+3} + \\dots = \\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1}$$
+where $\\gamma \\in [0, 1]$ is the discount factor.`,
+          list: [
+            'Discount Factor (gamma = 0): The agent is short-sighted and maximizes only the immediate reward R_{t+1}.',
+            'Discount Factor (gamma -> 1): The agent is far-sighted, weighting future rewards heavily.'
+          ]
+        },
+        {
+          heading: 'Python Code Example',
           example: {
-            title: 'Example: Robot Navigation',
-            code: 'Environment: maze with obstacles\nAgent: robot controller\n\nStep 1: Observe state S\n  S = [sensor_front=0.5m, sensor_left=2m]\n\nStep 2: Select action A\n  A = "turn_left" (from policy π)\n\nStep 3: Environment responds\n  New state S\' = [sensor_front=2m, sensor_left=0.5m]\n  Reward R = -1 (small step penalty)\n\nStep 4: Agent updates\n  Store transition (S, A, R, S\')\n  Update policy to favor paths that reach the goal',
-            output: 'The robot learns which sequences of actions lead to the goal with the highest cumulative reward.',
+            title: 'Introduction to RL & Agent-Environment Loop with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Introduction to RL & Agent-Environment Loop — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
             type: 'code'
           }
         },
         {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'RL differs fundamentally from supervised and unsupervised learning in how it acquires knowledge.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Aspect', 'Supervised Learning', 'Unsupervised Learning', 'Reinforcement Learning'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Data source', 'Fixed labeled dataset', 'Unlabeled dataset', 'Agent generates its own data'],
-              ['Feedback', 'Immediate correct label', 'None (finds structure)', 'Delayed scalar reward'],
-              ['Objective', 'Minimize prediction error', 'Discover patterns', 'Maximize cumulative reward'],
-              ['Exploration', 'Not applicable', 'Not applicable', 'Must explore to discover rewards'],
-              ['Example task', 'Image classification', 'Customer segmentation', 'Game playing, robotics']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Confusing immediate reward with long-term return (fix: always use discounted return G = Σ γᵗRₜ to evaluate actions, not just the single-step reward)',
-            'Mistake 2: Ignoring the exploration-exploitation tradeoff (fix: use ε-greedy or UCB to ensure the agent keeps trying new actions instead of greedily exploiting early estimates)',
-            'Mistake 3: Treating RL as supervised learning with delayed labels (fix: remember that there is no ground-truth action; the agent must discover good actions through consequences, not模仿示范)',
-            'Mistake 4: Setting γ = 1 in infinite-horizon problems (fix: use γ < 1 to ensure returns are finite and the agent does not optimistically chase rewards that are arbitrarily far in the future)'
-          ]
+            'Mistake 1: Treating RL like Supervised Learning. (Fix: Remember that there are no correct labels. The agent must explore to find out what works.)',
+            'Mistake 2: Forgetting the Discount Factor. (Fix: If the horizon is infinite and gamma = 1, the return can diverge to infinity, making optimization mathematically impossible.)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'RL powers systems that must make sequential decisions in uncertain environments.',
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
           list: [
-            'Robotics: training robots to walk, grasp, and navigate by rewarding successful movements',
-            'Game playing: AlphaGo, AlphaStar, and OpenAI Five mastered complex games through self-play and RL',
-            'Autonomous vehicles: learning driving policies that balance safety, efficiency, and passenger comfort',
-            'Recommendation systems: optimizing long-term user engagement instead of immediate clicks',
-            'Finance: algorithmic trading strategies that learn from market interactions to maximize returns'
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'RL = agent learns by interacting with an environment to maximize cumulative reward',
-            'Core elements: agent, environment, state, action, reward, policy, value function',
-            'No labeled data — the agent generates its own experience through trial and error',
-            'Key challenge: balancing exploration (trying new things) with exploitation (using known good actions)',
-            'Delayed feedback means the agent must credit actions that led to distant rewards'
+            'Introduction to RL & Agent-Environment Loop: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What is the main difference between RL and supervised learning?\nAns: RL learns from scalar reward signals and generates its own data through interaction, while supervised learning learns from fixed labeled datasets.',
-            'Q2: Why is the discount factor γ important in RL?\nAns: It controls how much future rewards matter relative to immediate rewards, ensuring finite returns and shaping the agent\'s time horizon.',
-            'Q3: What is the exploration-exploitation dilemma?\nAns: The agent must decide whether to exploit known high-reward actions or explore potentially better but uncertain alternatives.',
-            'Q4: Name the four main elements of an RL system.\nAns: Policy (behavior), reward signal (feedback), value function (long-term expectation), and model (optional environment dynamics).'
+            `Q1: How does RL differ from supervised learning?
+Ans: Supervised learning learns from a fixed, labeled dataset. RL learns from scalar reward feedback generated dynamically through interaction with an environment.`,
+            `Q2: What is the purpose of the discount factor gamma?
+Ans: It discounts future rewards, modeling the time-value of rewards, ensuring mathematical convergence in infinite horizons, and controling the agent's planning horizon.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Introduction to RL & Agent-Environment Loop</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Introduction to RL & Agent-Environment Loop")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'markov-decision': {
-      title: 'Markov Decision Processes',
-      subtitle: 'The formal mathematical framework for reinforcement learning',
+    'state-action-spaces': {
+      title: 'Reward, State, and Action Spaces',
+      subtitle: 'Formalizing the interfaces of an RL environment',
       sections: [
         {
-          heading: 'What is a Markov Decision Process?',
-          text: 'A <strong>Markov Decision Process (MDP)</strong> is the standard mathematical model for sequential decision-making under uncertainty. It formalizes the interaction between an agent and its environment using states, actions, transition probabilities, and rewards. The <strong>Markov property</strong> states that the future depends only on the present state and action, not on the full history.',
-          list: [
-            'States (S): a finite set of all possible situations the environment can be in',
-            'Actions (A): a finite set of choices available to the agent in each state',
-            'Transition probability (P): P(s\', r | s, a) — the probability of moving to state s\' with reward r',
-            'Reward function (R): the expected immediate reward for taking action a in state s',
-            'Discount factor (γ): a scalar between 0 and 1 that weights future rewards relative to immediate ones'
-          ]
+          heading: 'What is Reward, State, and Action Spaces?',
+          text: 'Reward, State, and Action Spaces is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Reward, State, and Action Spaces provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use reward, state, and action spaces when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Reward, State, and Action Spaces
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Reward, State, and Action Spaces sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'An MDP is formally defined as a tuple (S, A, P, R, γ). The Markov property ensures the transition dynamics depend only on the current state and action.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Example: GridWorld MDP',
-            code: 'States S: 16 grid cells (4×4)\nActions A: {up, down, left, right}\n\nTransition dynamics:\n  P(s\'=target | s, a) = 0.8\n  P(s\'=left-of-target | s, a) = 0.1\n  P(s\'=right-of-target | s, a) = 0.1\n\nRewards:\n  R = +10 for reaching goal cell\n  R = -1 for every other step\n  R = -10 for falling into trap cell\n\nDiscount factor: γ = 0.9\n\nGoal: find a policy that maximizes\nexpected cumulative discounted reward.',
-            output: 'Even in this simple grid, the agent must plan around stochastic transitions (80% success, 20% slip) and trade off immediate penalties against the distant goal reward.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Reward, State, and Action Spaces with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Reward, State, and Action Spaces — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'MDPs vs Markov chains vs Markov reward processes.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Aspect', 'Markov Chain', 'Markov Reward Process', 'Markov Decision Process'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Decision maker', 'None (passive)', 'None (passive)', 'Agent (active)'],
-              ['Actions', 'No actions', 'No actions', 'Actions determine transitions'],
-              ['Transitions', 'Fixed P(s\'|s)', 'Fixed P(s\'|s)', 'P(s\',r|s,a) depends on action'],
-              ['Optimization', 'Not applicable', 'Not applicable', 'Find optimal policy π*'],
-              ['Use case', 'Random walks, weather', 'Passive value prediction', 'RL, planning, control']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Assuming the environment is fully observable when it is not (fix: if the agent cannot observe the true state, use a Partially Observable MDP (POMDP) and maintain a belief distribution over states)',
-            'Mistake 2: Ignoring the stochastic nature of transitions (fix: always work with transition probabilities P(s\',r|s,a); a deterministic transition is just a special case where P = 1 for one outcome)',
-            'Mistake 3: Setting γ = 1 in infinite-horizon problems (fix: use γ < 1 to guarantee convergence and avoid unbounded returns; episodic tasks can use γ = 1 only if termination is guaranteed)',
-            'Mistake 4: Confusing the reward function with the return (fix: R(s,a) is immediate and local; the return G is the cumulative discounted sum of rewards over a trajectory)'
-          ]
+            'Mistake 1: Designing overly complex shaped rewards that lead to unintended behaviors. (Fix: Keep reward shaping aligned with the ultimate objective. For example, a robot rewarded for speed might learn to run in circles instead of walking to the goal.)',
+            'Mistake 2: Assuming full observability. (Fix: In real-world applications, states are almost always partially observable observations. Treat them as POMDPs.)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'MDPs provide the formal backbone for decision-making systems across many domains.',
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
           list: [
-            'Inventory management: states = stock levels, actions = order quantities, rewards = profit minus holding cost',
-            'Resource allocation: states = available resources, actions = assignments, rewards = task completion efficiency',
-            'Robot navigation: states = sensor readings + position, actions = motor commands, rewards = progress toward goal minus collision penalties',
-            'Healthcare treatment: states = patient vitals, actions = treatment options, rewards = health improvement minus side-effect costs',
-            'Energy systems: states = grid load + battery level, actions = charge/discharge decisions, rewards = cost savings plus grid stability'
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'MDP = (S, A, P, R, γ) — the formal model of sequential decision-making',
-            'Markov property: future depends only on the present state and action, not the past',
-            'Transition probability P(s\',r|s,a) captures environment stochasticity',
-            'Reward R(s,a) gives immediate feedback; γ discounts future rewards',
-            'The agent\'s goal is to find a policy π that maximizes expected return'
+            'Reward, State, and Action Spaces: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What are the five components of an MDP tuple?\nAns: States (S), Actions (A), Transition probabilities (P), Reward function (R), and Discount factor (γ).',
-            'Q2: What does the Markov property imply?\nAns: The next state and reward depend only on the current state and action, not on the entire history of past states and actions.',
-            'Q3: Why is the discount factor necessary in infinite-horizon MDPs?\nAns: To prevent returns from becoming infinite and to ensure the agent values immediate rewards more than distant ones.',
-            'Q4: How does an MDP differ from a Markov chain?\nAns: An MDP includes an agent that actively chooses actions, which influence state transitions; a Markov chain has no actions and passive transitions.'
+            `Q1: What is the difference between a state and an observation?
+Ans: A state is a complete description of the environment. An observation is a partial or noisy view of the state that the agent receives.`,
+            `Q2: Why is reward shaping used?
+Ans: To transform sparse rewards (e.g. win/lose) into dense rewards, providing immediate feedback that guides exploration.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Reward, State, and Action Spaces</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Reward, State, and Action Spaces")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'bellman-equation': {
-      title: 'Bellman Equations',
-      subtitle: 'Recursive relationships that define value functions in MDPs',
+    'gymnasium-walkthrough': {
+      title: 'OpenAI Gymnasium API Walkthrough',
+      subtitle: 'The industry-standard interface for reinforcement learning environments',
       sections: [
         {
-          heading: 'What are the Bellman Equations?',
-          text: 'The <strong>Bellman equations</strong> are a set of recursive equations named after mathematician Richard Bellman. They express the value of a state (or state-action pair) as the immediate reward plus the discounted expected value of the successor state. These equations are the foundation of virtually all RL algorithms — from dynamic programming to Q-learning.',
-          list: [
-            'Bellman Expectation Equation for Vπ: expresses the expected return under a fixed policy',
-            'Bellman Expectation Equation for Qπ: expresses the expected return of taking an action then following a policy',
-            'Bellman Optimality Equation for V*: expresses the maximum achievable value from any state',
-            'Bellman Optimality Equation for Q*: expresses the maximum achievable value for each state-action pair',
-            'All equations are recursive: the value of today depends on the expected value of tomorrow'
-          ]
+          heading: 'What is OpenAI Gymnasium API Walkthrough?',
+          text: 'OpenAI Gymnasium API Walkthrough is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, OpenAI Gymnasium API Walkthrough provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use openai gymnasium api walkthrough when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — OpenAI Gymnasium API Walkthrough
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: OpenAI Gymnasium API Walkthrough sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'The four core Bellman equations form the backbone of value estimation and policy optimization.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Example: Bellman Equations in a Simple Grid',
-            code: 'Bellman Expectation Equation (Vπ):\n  Vπ(s) = Σ π(a|s) Σ p(s\',r|s,a) [r + γVπ(s\')]\n\nBellman Optimality Equation (V*):\n  V*(s) = max Σ p(s\',r|s,a) [r + γV*(s\')]\n         a\n\nExample: state "start" with γ=0.9\n  Policy π: 50% up, 50% down\n  Vπ(start) = 0.5×[0 + 0.9×V(goal)]\n            + 0.5×[-1 + 0.9×V(wall)]\n            = 0.5×[0 + 0.9×10]\n            + 0.5×[-1 + 0.9×0]\n            = 4.5 - 0.5 = 4.0',
-            output: 'The Bellman equations let us decompose the value of a state into an immediate term and a discounted future term.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'OpenAI Gymnasium API Walkthrough with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("OpenAI Gymnasium API Walkthrough — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Expectation vs optimality equations, and state-value vs action-value forms.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Equation', 'For', 'Uses', 'Purpose'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Bellman Expectation (Vπ)', 'Fixed policy π', 'Σ over π(a|s)', 'Evaluate how good a policy is'],
-              ['Bellman Expectation (Qπ)', 'Fixed policy π', 'Σ over π(a\'|s\')', 'Evaluate state-action pairs under π'],
-              ['Bellman Optimality (V*)', 'Optimal policy', 'max over actions', 'Find the best possible state value'],
-              ['Bellman Optimality (Q*)', 'Optimal policy', 'max over next actions', 'Find the best possible action value']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Forgetting to discount future values (fix: always include γ when expanding the Bellman equation; omitting it implies γ=1, which is rarely correct for infinite-horizon tasks)',
-            'Mistake 2: Confusing the expectation equation with the optimality equation (fix: the expectation equation averages over the policy; the optimality equation takes the maximum over actions — they are used for different purposes)',
-            'Mistake 3: Treating the Bellman equation as a single-step lookahead only (fix: the equation is recursive; solving it means finding a fixed point where V(s) equals the right-hand side for all states simultaneously)',
-            'Mistake 4: Using the expectation equation when you want to improve the policy (fix: policy improvement requires Q-values or the optimality equation, which tell you which action is best, not just the average under the current policy)'
-          ]
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'The Bellman equations appear in every algorithm that plans or learns from delayed rewards.',
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
           list: [
-            'Dynamic programming: policy iteration and value iteration are essentially solvers for the Bellman optimality equations',
-            'Q-learning: the update rule is a sampled, bootstrapped version of the Bellman optimality equation for Q*',
-            'TD learning: TD(0) approximates the Bellman expectation equation using sampled transitions',
-            'Game AI: chess and Go engines use Bellman backups to propagate win/loss values from terminal positions backward through the game tree',
-            'Finance: option pricing and portfolio optimization use Bellman recursion to value multi-stage decisions under uncertainty'
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Bellman equations express value as immediate reward plus discounted expected future value',
-            'Expectation equations evaluate a fixed policy by averaging over its action distribution',
-            'Optimality equations find the best possible value by maximizing over actions',
-            'They are recursive: solving them requires finding a fixed point across all states',
-            'Every major RL algorithm (DP, TD, Q-learning) is a way of solving or approximating these equations'
+            'OpenAI Gymnasium API Walkthrough: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What is the key difference between the Bellman expectation and optimality equations?\nAns: The expectation equation averages over the current policy\'s actions, while the optimality equation takes the maximum over all possible actions.',
-            'Q2: Why are Bellman equations called recursive?\nAns: Because the value of a state is defined in terms of the values of successor states, creating a self-referential system.',
-            'Q3: In the Bellman optimality equation for V*, what does the max operator represent?\nAns: It represents choosing the action that yields the highest expected return from the current state.',
-            'Q4: Which Bellman equation does Q-learning approximate?\nAns: Q-learning approximates the Bellman optimality equation for Q* using sampled transitions and bootstrapping.'
+            `Q1: What are the 5 values returned by env.step()?
+Ans: observation (object), reward (float), terminated (boolean), truncated (boolean), and info (dictionary).`,
+            `Q2: How do you choose an action randomly from a Gymnasium action space?
+Ans: Use \`env.action_space.sample()\`.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>OpenAI Gymnasium API Walkthrough</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — OpenAI Gymnasium API Walkthrough")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'policy-iteration': {
-      title: 'Policy Iteration',
-      subtitle: 'Alternating between policy evaluation and policy improvement to find the optimal policy',
+    'random-vs-heuristic': {
+      title: 'Building Random and Heuristic Agents',
+      subtitle: 'Implementing and comparing baselines in python',
       sections: [
         {
-          heading: 'What is Policy Iteration?',
-          text: '<strong>Policy iteration</strong> is an algorithm that finds the optimal policy for an MDP by repeatedly performing two steps: <strong>policy evaluation</strong> (compute the value function for the current policy) and <strong>policy improvement</strong> (make the policy greedy with respect to the computed values). These two steps form a cycle that is guaranteed to converge to the optimal policy π* in a finite number of iterations for finite MDPs.',
-          list: [
-            'Policy evaluation: iteratively compute Vπ for the current policy using the Bellman expectation equation',
-            'Policy improvement: construct a new policy π\' that is greedy with respect to Vπ',
-            'Policy improvement theorem: the new policy is guaranteed to be as good as or better than the old one',
-            'Convergence: for finite MDPs, policy iteration converges to the optimal policy in finite time',
-            'Each iteration strictly improves the policy until optimality is reached'
-          ]
+          heading: 'What is Building Random and Heuristic Agents?',
+          text: 'Building Random and Heuristic Agents is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Building Random and Heuristic Agents provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use building random and heuristic agents when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Building Random and Heuristic Agents
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Building Random and Heuristic Agents sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'Policy evaluation applies the Bellman expectation equation iteratively; policy improvement selects the action with the highest Q-value.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Example: Policy Iteration in GridWorld',
-            code: 'Initialization: random policy π₀\n  π₀(up|all_states) = 0.25\n  π₀(down|all_states) = 0.25\n  π₀(left|all_states) = 0.25\n  π₀(right|all_states) = 0.25\n\nIteration 1 — Policy Evaluation:\n  Vπ₀(s) = Σ π₀(a|s) × [r + γVπ₀(s\')]\n  After convergence: Vπ₀(start) = 2.3\n\nIteration 1 — Policy Improvement:\n  π₁(s) = argmax Qπ₀(s,a)\n  Qπ₀(start, up) = 8.2  ← BEST\n  Qπ₀(start, down) = -1.0\n  π₁(start) = "up"\n\nIteration 2 — Evaluate π₁, improve to π₂...\n\nAfter 4 iterations: π = π* (optimal)',
-            output: 'Policy iteration often converges in surprisingly few iterations because each improvement step makes a large policy change.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Building Random and Heuristic Agents with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Building Random and Heuristic Agents — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Policy iteration vs value iteration vs policy gradient methods.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Aspect', 'Policy Iteration', 'Value Iteration', 'Policy Gradient'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Core idea', 'Evaluate then improve policy', 'Update values directly', 'Optimize policy parameters'],
-              ['Convergence', 'Finite steps (finite MDP)', 'Asymptotic', 'Gradient-based, stochastic'],
-              ['Per-iteration cost', 'High (full evaluation)', 'Low (single backup)', 'Medium (trajectory sampling)'],
-              ['Policy representation', 'Tabular (explicit mapping)', 'Implicit from values', 'Parameterized function'],
-              ['Best for', 'Small, discrete MDPs', 'Medium MDPs', 'Large, continuous MDPs']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Stopping policy evaluation too early (fix: run evaluation until the maximum change in V is below a small threshold θ; premature stopping gives inaccurate values and slows convergence)',
-            'Mistake 2: Forgetting to check for policy stability (fix: the algorithm stops only when the policy stops changing; if values change but the greedy policy does not, you have already reached optimality)',
-            'Mistake 3: Applying policy iteration to continuous or very large state spaces (fix: for large problems, switch to value iteration, approximate dynamic programming, or policy gradient methods)',
-            'Mistake 4: Confusing policy improvement with value improvement (fix: policy improvement changes the action selection rule; the values are updated during the separate evaluation phase)'
-          ]
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Policy iteration and its variants are used wherever explicit planning in known environments is possible.',
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
           list: [
-            'Robot path planning: computing collision-free, shortest-path policies in known maps',
-            'Inventory control: finding optimal restocking policies that balance holding costs against stockout penalties',
-            'Maintenance scheduling: determining when to service equipment to minimize downtime and repair costs',
-            'Call center routing: assigning incoming calls to agents to minimize wait time and maximize resolution rate',
-            'Game AI: retro board games and puzzles where the state space is small enough for exact tabular methods'
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Policy iteration alternates between evaluation (compute Vπ) and improvement (make policy greedy)',
-            'Policy evaluation solves the Bellman expectation equation iteratively for the current policy',
-            'Policy improvement constructs a new policy that is greedy with respect to the current values',
-            'The policy improvement theorem guarantees the new policy is better than or equal to the old one',
-            'Converges to the optimal policy π* in finite iterations for finite MDPs'
+            'Building Random and Heuristic Agents: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What are the two main steps in policy iteration?\nAns: Policy evaluation (computing the value function for the current policy) and policy improvement (making the policy greedy with respect to those values).',
-            'Q2: Why does policy iteration converge in finite steps for finite MDPs?\nAns: Because there are finitely many deterministic policies, and each improvement step strictly improves the policy unless it is already optimal.',
-            'Q3: What is the policy improvement theorem?\nAns: It states that a new policy constructed to be greedy with respect to Vπ will have values greater than or equal to Vπ in every state.',
-            'Q4: When is policy iteration preferable to value iteration?\nAns: When the state space is small enough that full policy evaluation is affordable, because policy iteration often requires fewer total iterations.'
+            `Q1: What observation variables are used by our CartPole heuristic agent?
+Ans: It uses the pole angle (observation[2]) and pole angular velocity (observation[3]) to decide the direction of push.`,
+            `Q2: Why are baseline agents useful in RL?
+Ans: They establish a benchmark score to verify if reinforcement learning algorithms are successfully learning policies that outperform simple random or rule-based decisions.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Building Random and Heuristic Agents</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Building Random and Heuristic Agents")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'value-iteration': {
-      title: 'Value Iteration',
-      subtitle: 'Finding optimal values with a single backup operation per state',
+    'performance-comparison': {
+      title: 'Performance Comparison and Visualization',
+      subtitle: 'Evaluating and plotting agent rewards over time',
       sections: [
         {
-          heading: 'What is Value Iteration?',
-          text: '<strong>Value iteration</strong> is a dynamic programming algorithm that finds the optimal value function V* by repeatedly applying the Bellman optimality equation. Unlike policy iteration, which alternates between full policy evaluation and improvement, value iteration combines both into a single update: for each state, it looks one step ahead and takes the maximum over all actions. Once the values converge, the optimal policy can be extracted by acting greedily with respect to V*.',
-          list: [
-            'Update rule: V(s) ← maxₐ Σ p(s\',r|s,a) × [r + γV(s\')] for every state',
-            'Each sweep updates every state using the most recent estimates of neighboring states',
-            'Convergence is asymptotic: V approaches V* as the number of sweeps → ∞',
-            'In practice, stop when the maximum change across all states is below a threshold θ',
-            'After convergence, the optimal policy is π*(s) = argmaxₐ Q*(s,a)'
-          ]
+          heading: 'What is Performance Comparison and Visualization?',
+          text: 'Performance Comparison and Visualization is essential for reinforcement learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in reinforcement learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Performance Comparison and Visualization provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use performance comparison and visualization when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Performance Comparison and Visualization
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Performance Comparison and Visualization sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'Value iteration is essentially turning the Bellman optimality equation into an iterative update rule.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Example: Value Iteration in a 3×3 Grid',
-            code: 'Goal state (bottom-right): V(goal) = 0\nAll other states: initial V(s) = 0\nγ = 0.9, step reward = -1\n\nSweep 1:\n  V(2,2) = max{\n    up:    -1 + 0.9×0 = -1\n    down:  -1 + 0.9×0 = -1 ← goal!\n    left:  -1 + 0.9×0 = -1\n    right: -1 + 0.9×0 = -1\n  } = -1  (down leads to goal)\n\nSweep 2:\n  V(2,1) = max{\n    up:    -1 + 0.9×(-1) = -1.9\n    down:  -1 + 0.9×0     = -1  ← goal!\n    left:  -1 + 0.9×0     = -1\n    right: -1 + 0.9×(-1) = -1.9\n  } = -1\n\nAfter 20 sweeps: V converges to V*',
-            output: 'Values propagate backward from the goal state, gradually informing earlier states how close they are to the objective.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Performance Comparison and Visualization with Python',
+            code: `import gymnasium as gym
+import numpy as np
+
+env = gym.make("CartPole-v1")
+obs, _ = env.reset(seed=42)
+total = 0
+for _ in range(200):
+    action = env.action_space.sample()
+    obs, reward, term, trunc, _ = env.step(action)
+    total += reward
+    if term or trunc: break
+print("Performance Comparison and Visualization — random agent return:", total)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Value iteration vs policy iteration, and synchronous vs asynchronous updates.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Aspect', 'Value Iteration', 'Policy Iteration', 'Asynchronous VI'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Update target', 'Values only', 'Policy + values', 'Values only'],
-              ['Per-sweep cost', 'Cheap (one max backup)', 'Expensive (full evaluation)', 'Variable'],
-              ['Convergence', 'Asymptotic', 'Finite steps', 'Asymptotic'],
-              ['Number of sweeps', 'Typically more', 'Typically fewer', 'Depends on order'],
-              ['Memory', 'Stores only V', 'Stores V + π', 'Stores only V'],
-              ['Best for', 'Medium MDPs', 'Small MDPs', 'Very large MDPs']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Extracting the policy before values have converged (fix: premature policies can be suboptimal; wait until max|V - V_old| < θ, then do one final greedy extraction)',
-            'Mistake 2: Using value iteration when the transition model is unknown (fix: value iteration requires P(s\',r|s,a); if the model is unknown, use model-free methods like Q-learning or SARSA)',
-            'Mistake 3: Setting the convergence threshold θ too loose (fix: a large θ causes premature termination and suboptimal policies; typical values are 10⁻⁴ to 10⁻⁶ for small problems)',
-            'Mistake 4: Confusing value iteration with simple greedy one-step planning (fix: value iteration propagates information across multiple steps through repeated sweeps, not just a single lookahead)'
-          ]
+            'Mistake 1: Ignoring how data was collected (fix: document sampling design before analysis).',
+            'Mistake 2: Reporting only p-values without effect size (fix: add Cohen d, R², or CI).',
+            'Mistake 3: Multiple comparisons without correction (fix: Bonferroni or FDR when testing many hypotheses).',
+            'Mistake 4: Treating non-random samples as representative (fix: limit claims to the sampled population).'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Value iteration and its relatives are used when the environment model is known and the state space is manageable.',
+          heading: 'Real-World Case Study',
+          text: '<strong>DeepMind — AlphaGo / game agents.</strong> RL agents learn policies from reward signals over millions of simulated steps. Sample efficiency and exploration strategy determine whether training converges in days vs months.',
           list: [
-            'Navigation systems: computing shortest-path or minimum-time routes in road networks with known topology',
-            'Automated manufacturing: scheduling jobs on machines to minimize makespan with known task durations',
-            'Drone flight planning: finding energy-optimal trajectories in wind fields modeled as stochastic transitions',
-            'Medical treatment protocols: optimizing sequences of interventions when clinical outcomes are modeled probabilistically',
-            'Stochastic games: solving for Nash equilibria in small turn-based games with known payoff structures'
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Value iteration updates V(s) using the Bellman optimality equation in a single backup per state',
-            'It combines evaluation and improvement into one step, making it simpler than policy iteration',
-            'Convergence is asymptotic; stop when the maximum value change across states is below θ',
-            'After convergence, extract the optimal policy greedily from V*',
-            'Best suited for medium-sized MDPs where the transition model is known and tabular storage is feasible'
+            'Performance Comparison and Visualization: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: How does value iteration differ from policy iteration?\nAns: Value iteration combines policy evaluation and improvement into a single Bellman optimality backup per state, while policy iteration alternates full evaluation sweeps with improvement steps.',
-            'Q2: Why is value iteration said to converge asymptotically?\nAns: Because the values approach V* in the limit as the number of sweeps goes to infinity; exact convergence requires infinitely many updates in general.',
-            'Q3: When should you stop value iteration?\nAns: When the maximum change in any state\'s value between sweeps falls below a small threshold θ.',
-            'Q4: Can you use value iteration without knowing the transition probabilities?\nAns: No — value iteration is a model-based method and requires P(s\',r|s,a). Use Q-learning or SARSA for model-free settings.'
+            `Q1: Why is running a single evaluation episode misleading?
+Ans: Due to environment stochasticity (e.g. random initial states or noisy transitions), an agent might perform unusually well or poorly in one trial. Multiple runs are required to compute statistical averages.`,
+            `Q2: If an agent gets a mean score of 500 in CartPole-v1, what does that indicate?
+Ans: It indicates the agent is achieving the maximum possible score for the environment, as CartPole-v1 truncates episodes at 500 steps.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Performance Comparison and Visualization</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Performance Comparison and Visualization")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

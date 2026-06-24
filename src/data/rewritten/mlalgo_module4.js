@@ -1,429 +1,1157 @@
+// machine learning — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js mlalgo_module4.js
+
 export const mlalgoModule4Structure = {
   module4: {
-    title: 'Module 4: Advanced Algorithmic Techniques',
+    title: 'Module 4: Unsupervised Learning',
     topics: [
-      { id: 'advanced-graph-algorithms', title: 'Advanced Graph Algorithms' },
-      { id: 'network-flow', title: 'Network Flow' },
-      { id: 'linear-programming', title: 'Linear Programming' },
-      { id: 'approximation-algorithms', title: 'Approximation Algorithms' },
-      { id: 'randomized-algorithms', title: 'Randomized Algorithms' },
+      {
+        id: 'k-means-clustering',
+        title: 'K-Means Clustering'
+      },
+      {
+        id: 'hierarchical-clustering',
+        title: 'Hierarchical Clustering'
+      },
+      {
+        id: 'dbscan',
+        title: 'DBSCAN'
+      },
+      {
+        id: 'principal-component-analysis',
+        title: 'Principal Component Analysis'
+      },
+      {
+        id: 'gaussian-mixture-models',
+        title: 'Gaussian Mixture Models'
+      }
     ]
   }
 };
 
 export const mlalgoModule4Content = {
   module4: {
-    'advanced-graph-algorithms': {
-      title: 'Advanced Graph Algorithms',
-      subtitle: 'Shortest paths, spanning trees, and graph traversal beyond the basics',
+    'k-means-clustering': {
+      title: 'K-Means Clustering',
+      subtitle: 'Partition data into K spherical clusters by minimizing within-cluster variance',
       sections: [
         {
-          heading: 'What Are Advanced Graph Algorithms?',
-          text: '<strong>Advanced graph algorithms</strong> extend basic traversal (BFS/DFS) to solve complex optimization problems on weighted and directed graphs. They are essential for network routing, scheduling, resource allocation, and many NP-hard problem approximations.',
+          heading: 'What is K-Means Clustering?',
+          text: '<strong>K-Means</strong> is a centroid-based clustering algorithm that partitions n observations into K disjoint groups. Each point belongs to the cluster whose centroid (mean) is nearest. It assumes clusters are roughly spherical and of similar size — making it one of the fastest and most widely used unsupervised algorithms in production ML pipelines.',
           list: [
-            'Shortest path algorithms find minimum-cost routes in weighted graphs',
-            'Minimum spanning trees connect all nodes at lowest total edge cost',
-            'Strongly connected components reveal tightly knit subgraphs',
-            'Topological sorting orders nodes respecting directed dependencies',
-            'These algorithms form the backbone of GPS navigation, network design, and compiler optimization'
+            '<strong>Hard clustering:</strong> Each point belongs to exactly one cluster',
+            '<strong>Centroid-based:</strong> Clusters are defined by their mean vectors μ₁, μ₂, …, μₖ',
+            '<strong>Iterative refinement:</strong> Alternates between assignment and update steps until convergence',
+            '<strong>Requires K upfront:</strong> The number of clusters must be specified or chosen via elbow/silhouette methods',
+            '<strong>Scale-sensitive:</strong> Features should be standardized before clustering'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'Dijkstra\'s algorithm greedily selects the minimum-distance node and relaxes all outgoing edges, guaranteeing shortest paths in graphs with non-negative weights.',
-          example: {
-            title: 'Dijkstra Relaxation Step',
-            code: `Dijkstra(G, source):
-  dist[source] = 0
-  dist[v] = ∞ for all other v
-  S = empty set (visited nodes)
-  
-  while S ≠ V:
-    u = vertex in V\S with min dist[u]
-    S = S ∪ {u}
-    
-    for each neighbor v of u:
-      if dist[v] > dist[u] + weight(u,v):
-        dist[v] = dist[u] + weight(u,v)
-        prev[v] = u
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>K-Means</strong> is a centroid-based clustering algorithm that partitions n observations into K disjoint groups. Each point belongs to the cluster whose centroid (mean) is nearest. It assumes clusters are roughly spherical and of similar size — making it one of the fastest and most widely used unsupervised algorithms in production ML pipelines. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>K-Means</strong> is a centroid-based clustering algorithm that partitions n observations into K disjoint groups. Each point belongs to the cluster whose centroid (mean) is nearest. It assumes clusters are roughly spherical and of similar size — making it one of the fastest and most widely used unsupervised algorithms in production ML pipelines. <strong>Hard clustering:</strong> Each point belongs to exactly one cluster <strong>Centroid-based:</strong> Clusters are defined by their mean vectors μ₁, μ₂, …, μₖ <strong>Iterative refinement:</strong> Alternates between assignment and update steps until convergence <strong>Requires K upfront:</strong> The number of clusters must be specified or chosen via elbow/silhouette methods <strong>Scale-sensitive:</strong> Features should be standardized before clustering</p>',
+            '<p>You use k-means clustering when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — K-Means Clustering
 
-Relaxation:
-  dist[v] = min(dist[v], dist[u] + w(u,v))`,
-            output: 'After processing all nodes, dist[v] holds the shortest path cost from source to every node v.',
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: K-Means Clustering sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'K-Means minimizes the <strong>within-cluster sum of squares (WCSS)</strong>, also called inertia.',
+          example: {
+            title: `K-Means Objective and Lloyd's Algorithm`,
+            code: `Objective (minimize inertia):
+  J = Σᵢ₌₁ⁿ Σₖ₌₁ᴷ rᵢₖ ||xᵢ - μₖ||²
+
+Where:
+  xᵢ   = data point i
+  μₖ   = centroid of cluster k
+  rᵢₖ  = 1 if xᵢ assigned to cluster k, else 0
+
+Lloyd's Algorithm:
+  1. Initialize K centroids (random, k-means++, or user-specified)
+  2. ASSIGN: rᵢₖ = 1 if k = argminⱼ ||xᵢ - μⱼ||²
+  3. UPDATE: μₖ = (Σᵢ rᵢₖ xᵢ) / (Σᵢ rᵢₖ)
+  4. Repeat steps 2–3 until assignments stop changing
+
+Elbow Method:
+  Plot inertia J vs K → look for "elbow" where marginal gain drops
+
+Silhouette Score (per point i):
+  s(i) = (b(i) - a(i)) / max(a(i), b(i))
+  a(i) = mean distance to same-cluster points
+  b(i) = mean distance to nearest other cluster
+  Range: [-1, 1]; higher is better`,
+            output: 'K-Means converges to a local minimum of J; different initializations can yield different results.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'K-Means Clustering with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("K-Means Clustering — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Different shortest-path and spanning-tree algorithms suit different graph properties and constraints.',
+          text: 'K-Means differs from other clustering families in assumptions, output, and scalability.',
           table: {
-            headers: ['Algorithm', 'Problem', 'Time Complexity', 'Constraints', 'Key Feature'],
+            headers: [
+              'Aspect',
+              'K-Means',
+              'Hierarchical',
+              'DBSCAN',
+              'GMM'
+            ],
             rows: [
-              ['Dijkstra', 'Single-source shortest path', 'O((V+E) log V) with heap', 'Non-negative weights only', 'Greedy edge relaxation'],
-              ['Bellman-Ford', 'Single-source shortest path', 'O(VE)', 'Handles negative weights', 'Detects negative cycles'],
-              ['Floyd-Warshall', 'All-pairs shortest path', 'O(V³)', 'Small dense graphs', 'Dynamic programming'],
-              ['Prim\'s', 'Minimum spanning tree', 'O(E log V)', 'Undirected weighted graph', 'Grow tree from a node'],
-              ['Kruskal\'s', 'Minimum spanning tree', 'O(E log E)', 'Undirected weighted graph', 'Sort edges, union-find'],
-              ['Kosaraju / Tarjan', 'Strongly connected components', 'O(V+E)', 'Directed graph', 'Two-pass DFS / single DFS']
+              [
+                'Cluster shape',
+                'Spherical / convex',
+                'Any (linkage-dependent)',
+                'Arbitrary density shapes',
+                'Elliptical (Gaussian)'
+              ],
+              [
+                'K required?',
+                'Yes',
+                'No (cut dendrogram)',
+                'No',
+                'Yes (number of components)'
+              ],
+              [
+                'Handles noise',
+                'No — assigns all points',
+                'No',
+                'Yes — labels noise as -1',
+                'Soft assignment via probabilities'
+              ],
+              [
+                'Scalability',
+                'O(n · K · d · i) — fast',
+                'O(n²) naive; O(n log n) optimized',
+                'O(n log n) with spatial index',
+                'O(n · K · d · i) — EM iterations'
+              ],
+              [
+                'Output',
+                'Hard labels + centroids',
+                'Dendrogram + flat labels',
+                'Core/border/noise labels',
+                'Soft probabilities per cluster'
+              ],
+              [
+                'Best for',
+                'Large, well-separated blobs',
+                'Small n, hierarchy insight',
+                'Irregular shapes, outliers',
+                'Overlapping elliptical clusters'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using Dijkstra on graphs with negative weights (fix: switch to Bellman-Ford; Dijkstra\'s greedy assumption breaks with negative edges)',
-            'Mistake 2: Running Floyd-Warshall on sparse graphs with millions of nodes (fix: use Dijkstra from each source for sparse graphs; O(VE log V) beats O(V³))',
-            'Mistake 3: Forgetting to initialize distances to infinity (fix: always set dist[v] = ∞ before relaxation; zero-initialization silently corrupts results)',
-            'Mistake 4: Using an unweighted BFS approach for weighted graphs (fix: BFS gives shortest hop count, not shortest total weight; use Dijkstra for weighted edges)',
-            'Mistake 5: Not handling disconnected components in spanning tree algorithms (fix: check if all nodes are reachable; a spanning tree requires a connected graph)'
-          ]
+            'Mistake 1: Clustering without scaling features (fix: apply StandardScaler; otherwise high-magnitude features dominate distance)',
+            'Mistake 2: Running K-Means once with a single random init (fix: set n_init=10+ and init="k-means++" for stabler local minima)',
+            'Mistake 3: Choosing K only by elbow when the elbow is ambiguous (fix: combine elbow with silhouette score and domain constraints)',
+            'Mistake 4: Using K-Means on non-spherical clusters like rings or moons (fix: use DBSCAN, spectral clustering, or GMM with full covariance)',
+            'Mistake 5: Treating cluster IDs as ordinal (fix: cluster 2 is not "more than" cluster 1 — labels are arbitrary permutations)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Advanced graph algorithms power systems we rely on every day.',
+          heading: 'Real-World Case Study',
+          text: 'K-Means is the default first-choice clusterer for large-scale segmentation.',
           list: [
-            '<strong>GPS Navigation:</strong> Dijkstra and A* compute fastest routes on road networks with millions of intersections and real-time traffic weights',
-            '<strong>Network Routing:</strong> OSPF and BGP protocols use shortest-path algorithms to route packets through the internet backbone',
-            '<strong>Compiler Optimization:</strong> Topological sort orders instructions respecting data dependencies; cycle detection prevents deadlock in resource allocation',
-            '<strong>Social Networks:</strong> Strongly connected components identify tightly knit communities; shortest paths measure degrees of separation',
-            '<strong>Supply Chain:</strong> Minimum spanning trees design cost-optimal distribution networks connecting warehouses and retail outlets'
+            '<strong>Customer segmentation:</strong> Group shoppers by RFM features (recency, frequency, monetary value) for targeted campaigns',
+            '<strong>Document clustering:</strong> Cluster TF-IDF vectors to discover topic groups in news or support tickets',
+            '<strong>Image compression:</strong> Quantize pixel colors into K palette entries (K-Means on RGB space)',
+            '<strong>Anomaly pre-screening:</strong> Flag points far from all centroids as potential outliers before supervised modeling',
+            '<strong>ML pipeline preprocessing:</strong> Vector quantization and bag-of-words codebook construction'
           ]
         },
         {
-          heading: 'Pro Tip',
-          note: 'For large-scale road networks, <strong>Contraction Hierarchies</strong> and <strong>Hub Labels</strong> pre-process the graph to answer shortest-path queries in microseconds — orders of magnitude faster than running Dijkstra from scratch.'
+          heading: 'Quick Recap',
+          list: [
+            'K-Means partitions data into K clusters by minimizing within-cluster sum of squares',
+            `Lloyd's algorithm alternates assignment (nearest centroid) and update (recompute mean)`,
+            'Use elbow method and silhouette analysis to select K when it is unknown',
+            'Always standardize features; use k-means++ initialization and multiple n_init runs',
+            'K-Means assumes spherical, similarly-sized clusters — not suitable for arbitrary shapes'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: What objective function does K-Means minimize?
+Ans: The within-cluster sum of squares (WCSS / inertia): Σᵢ ||xᵢ - μ_{c(i)}||².`,
+            `Q2: Why is k-means++ preferred over random initialization?
+Ans: It spreads initial centroids apart, reducing the chance of poor local minima and speeding convergence.`,
+            `Q3: A silhouette score of 0.65 vs 0.42 for K=3 vs K=5 — which K do you prefer?
+Ans: K=3, because higher mean silhouette indicates better-defined, well-separated clusters.`,
+            `Q4: Why must features be standardized before K-Means?
+Ans: Euclidean distance is scale-dependent; unscaled features with larger ranges dominate the distance calculation.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>K-Means Clustering</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — K-Means Clustering")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'network-flow': {
-      title: 'Network Flow',
-      subtitle: 'Modeling capacity-constrained networks and finding optimal flows',
+    'hierarchical-clustering': {
+      title: 'Hierarchical Clustering',
+      subtitle: 'Build a cluster hierarchy via agglomerative merging or divisive splitting',
       sections: [
         {
-          heading: 'What is Network Flow?',
-          text: '<strong>Network flow</strong> models problems where a commodity (data, traffic, fluid) moves through a network of pipes or channels with capacity limits. The goal is to maximize total flow from a source to a sink, or to find the minimum cost of achieving a required flow.',
+          heading: 'What is Hierarchical Clustering?',
+          text: '<strong>Hierarchical clustering</strong> builds a nested tree (dendrogram) of clusters without requiring K upfront. <strong>Agglomerative</strong> (bottom-up) starts with each point as its own cluster and iteratively merges the closest pair. <strong>Divisive</strong> (top-down) starts with one cluster and recursively splits. The dendrogram lets you cut at any height to obtain a flat partition with your chosen number of clusters.',
           list: [
-            'A flow network is a directed graph where each edge has a capacity and carries a flow',
-            'Flow conservation: total flow into a node equals total flow out (except source and sink)',
-            'The max-flow min-cut theorem states that the maximum flow equals the capacity of the minimum cut',
-            'Applications span logistics, computer networks, image segmentation, and matching problems'
+            '<strong>Dendrogram:</strong> Tree diagram showing merge/split order and linkage distances',
+            '<strong>No K required initially:</strong> Choose the cut height after inspecting the tree',
+            '<strong>Linkage criterion:</strong> Defines inter-cluster distance (single, complete, average, Ward)',
+            '<strong>Deterministic (agglomerative):</strong> Same data and linkage always produce the same tree',
+            '<strong>Does not scale to millions:</strong> O(n²) memory for the distance matrix'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Hierarchical clustering</strong> builds a nested tree (dendrogram) of clusters without requiring K upfront. <strong>Agglomerative</strong> (bottom-up) starts with each point as its own cluster and iteratively merges the closest pair. <strong>Divisive</strong> (top-down) starts with one cluster and recursively splits. The dendrogram lets you cut at any height to obtain a flat partition with your chosen number of clusters. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Hierarchical clustering</strong> builds a nested tree (dendrogram) of clusters without requiring K upfront. <strong>Agglomerative</strong> (bottom-up) starts with each point as its own cluster and iteratively merges the closest pair. <strong>Divisive</strong> (top-down) starts with one cluster and recursively splits. The dendrogram lets you cut at any height to obtain a flat partition with your chosen number of clusters. <strong>Dendrogram:</strong> Tree diagram showing merge/split order and linkage distances <strong>No K required initially:</strong> Choose the cut height after inspecting the tree <strong>Linkage criterion:</strong> Defines inter-cluster distance (single, complete, average, Ward) <strong>Deterministic (agglomerative):</strong> Same data and linkage always produce the same tree <strong>Does not scale to millions:</strong> O(n²) memory for the distance matrix</p>',
+            '<p>You use hierarchical clustering when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Hierarchical Clustering
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Hierarchical Clustering sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'The Ford-Fulkerson method repeatedly finds augmenting paths in the residual graph and increases flow along them until no path remains.',
+          text: 'Each merge step combines the two clusters with minimum <strong>linkage distance</strong>, defined by the chosen criterion.',
           example: {
-            title: 'Max-Flow Algorithm (Edmonds-Karp)',
-            code: `Initialize:
-  flow[e] = 0 for all edges
-  residual_capacity[e] = capacity[e]
+            title: 'Linkage Criteria and Dendrogram Cut',
+            code: `Linkage distances between clusters A and B:
 
-while augmenting path p exists from s to t in residual graph:
-  bottleneck = min(residual_capacity[e] for e in p)
-  
-  for each edge e in p:
-    if e is forward edge:
-      flow[e] += bottleneck
-      residual_capacity[e] -= bottleneck
-    else (backward edge):
-      flow[e] -= bottleneck
-      residual_capacity[e] += bottleneck
+  Single (min):     d(A,B) = min{d(a,b) : a∈A, b∈B}
+  Complete (max):   d(A,B) = max{d(a,b) : a∈A, b∈B}
+  Average (UPGMA):  d(A,B) = mean{d(a,b) : a∈A, b∈B}
+  Ward:             d(A,B) = increase in total WCSS if A,B merged
 
-return total_flow
+Agglomerative loop:
+  1. Start: n clusters (one per point)
+  2. Merge the pair (i,j) with minimum linkage distance
+  3. Update distance matrix / linkage matrix
+  4. Repeat until one cluster remains
 
-Residual graph:
-  Forward edge: capacity - flow (remaining capacity)
-  Backward edge: flow (amount that can be undone)`,
-            output: 'Total flow equals the sum of bottleneck values across all augmenting paths found.',
+Flat clustering:
+  Cut dendrogram at height h → clusters = connected components
+  below the cut (or set n_clusters in sklearn)
+
+Cophenetic correlation:
+  Measures how faithfully the dendrogram preserves
+  original pairwise distances (closer to 1 is better)`,
+            output: 'Ward linkage minimizes variance increase and tends to produce compact, equal-sized clusters.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Hierarchical Clustering with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("Hierarchical Clustering — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Flow algorithms differ in how they find augmenting paths and their time complexity guarantees.',
+          text: 'Linkage choice dramatically affects the cluster hierarchy produced.',
           table: {
-            headers: ['Algorithm', 'Path Selection', 'Time Complexity', 'Best For', 'Notes'],
+            headers: [
+              'Linkage',
+              'Inter-cluster distance',
+              'Cluster shape tendency',
+              'Outlier sensitivity',
+              'Best for'
+            ],
             rows: [
-              ['Ford-Fulkerson', 'Any augmenting path', 'O(E · max_flow)', 'Small integer capacities', 'Depends on path choice; can be slow'],
-              ['Edmonds-Karp', 'Shortest augmenting path (BFS)', 'O(VE²)', 'General use', 'Polynomial; widely implemented'],
-              ['Dinic\'s', 'Blocking flow (level graph + DFS)', 'O(V²E)', 'Dense networks', 'Faster in practice for many cases'],
-              ['Push-Relabel', 'Local excess pushing + height relabeling', 'O(V²√E)', 'Very large networks', 'Often fastest in practice'],
-              ['Min-Cost Max-Flow', 'Shortest path by cost (SPFA / Dijkstra)', 'O(flow · VE)', 'Cost optimization', 'Finds cheapest way to push flow']
+              [
+                'Single',
+                'Minimum pairwise distance',
+                'Chaining — elongated clusters',
+                'High — bridges outliers',
+                'Non-convex, snake-like clusters'
+              ],
+              [
+                'Complete',
+                'Maximum pairwise distance',
+                'Compact, spherical clusters',
+                'Moderate',
+                'Well-separated, compact groups'
+              ],
+              [
+                'Average',
+                'Mean pairwise distance',
+                'Balanced between single/complete',
+                'Moderate',
+                'General-purpose agglomerative'
+              ],
+              [
+                'Ward',
+                'WCSS increase on merge',
+                'Compact, similar-sized blobs',
+                'Lower — resists chaining',
+                'Numeric data, variance minimization'
+              ],
+              [
+                'Centroid',
+                'Distance between centroids',
+                'Can produce inversions in dendrogram',
+                'Moderate',
+                'Large datasets (less common)'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Forgetting backward edges in the residual graph (fix: always add reverse edges with initial capacity 0; they allow flow to be rerouted during augmentation)',
-            'Mistake 2: Using Ford-Fulkerson with DFS on graphs with large capacities (fix: use Edmonds-Karp or Dinic\'s; naive DFS can require O(max_flow) iterations)',
-            'Mistake 3: Not verifying flow conservation at intermediate nodes (fix: ensure Σ_in flow = Σ_out flow for all nodes except source and sink; debug by checking node balances)',
-            'Mistake 4: Confusing max-flow with min-cost max-flow (fix: max-flow ignores edge costs; min-cost max-flow finds the cheapest way to achieve maximum flow — use the right variant for your problem)',
-            'Mistake 5: Applying max-flow to undirected graphs without converting (fix: replace each undirected edge with two directed edges of the same capacity, or use specialized algorithms for undirected flow)'
-          ]
+            'Mistake 1: Using Ward linkage with non-Euclidean metrics (fix: Ward requires Euclidean distance; use average/complete linkage with other metrics)',
+            'Mistake 2: Running hierarchical clustering on 100K+ rows without constraints (fix: use connectivity-constrained clustering or switch to K-Means/DBSCAN)',
+            'Mistake 3: Cutting the dendrogram at an arbitrary height without inspecting gaps (fix: look for the largest vertical distance between successive merges)',
+            'Mistake 4: Expecting to predict cluster labels for new data points (fix: AgglomerativeClustering has no predict(); train a classifier on labels or use K-Means)',
+            'Mistake 5: Ignoring single-linkage chaining with noise (fix: single linkage connects through noise bridges; prefer Ward for compact clusters)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Network flow is one of the most broadly applicable algorithmic frameworks.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>Internet Traffic Engineering:</strong> Max-flow models bandwidth allocation across routers; minimum cuts identify network bottlenecks',
-            '<strong>Image Segmentation:</strong> Graph cuts (min-cut / max-flow) separate foreground from background in medical imaging and computer vision',
-            '<strong>Airline Scheduling:</strong> Crew and aircraft assignment problems reduce to network flow with additional constraints (circulation with demands)',
-            '<strong>Bipartite Matching:</strong> Maximum bipartite matching is a special case of max-flow; used for job-to-worker assignment, dating algorithms, and ad placement',
-            '<strong>Project Selection:</strong> Selecting profitable projects with prerequisite dependencies reduces to a max-flow / min-cut formulation'
+            '<strong>Taxonomy construction:</strong> Build product or species hierarchies from similarity matrices',
+            '<strong>Gene expression analysis:</strong> Cluster genes and samples simultaneously (heatmaps + dendrograms)',
+            '<strong>Social network communities:</strong> Hierarchical community detection in small networks',
+            '<strong>Document hierarchies:</strong> Organize legal clauses or policy documents into nested categories',
+            '<strong>Exploratory segmentation:</strong> Discover natural group counts before deploying K-Means at scale'
           ]
         },
         {
-          heading: 'Pro Tip',
-          note: 'The <strong>max-flow min-cut theorem</strong> is dual: the value of the maximum flow equals the capacity of the minimum s-t cut. Use this to verify your implementation — compute both and check equality.'
+          heading: 'Quick Recap',
+          list: [
+            'Hierarchical clustering builds a dendrogram without requiring K upfront',
+            'Agglomerative clustering merges closest clusters iteratively using a linkage criterion',
+            'Ward linkage minimizes variance increase and works well for compact, numeric clusters',
+            'Cut the dendrogram at a height with a large gap to obtain flat cluster labels',
+            'Use scipy dendrogram for visualization; sklearn AgglomerativeClustering for flat labels'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: What does the height of a merge in a dendrogram represent?
+Ans: The linkage distance between the two clusters being merged at that step.`,
+            `Q2: Why does single linkage produce "chaining"?
+Ans: It merges clusters based on the minimum pairwise distance, so a single bridge point can connect distant groups into one elongated cluster.`,
+            `Q3: How do you get 4 flat clusters from a dendrogram?
+Ans: Cut the tree at the height just below the merge that would reduce the number of clusters below 4, or set n_clusters=4 in AgglomerativeClustering.`,
+            `Q4: Why is hierarchical clustering impractical for n = 1,000,000?
+Ans: It requires O(n²) memory for the distance matrix and at least O(n² log n) time — infeasible at that scale.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Hierarchical Clustering</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Hierarchical Clustering")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'linear-programming': {
-      title: 'Linear Programming',
-      subtitle: 'Optimizing linear objective functions subject to linear constraints',
+    dbscan: {
+      title: 'DBSCAN',
+      subtitle: 'Density-based clustering that discovers arbitrary shapes and labels noise',
       sections: [
         {
-          heading: 'What is Linear Programming?',
-          text: '<strong>Linear Programming (LP)</strong> is a mathematical optimization technique where the goal is to maximize or minimize a linear objective function, subject to a set of linear equality and inequality constraints. It is the workhorse of operations research and appears inside many ML algorithms.',
+          heading: 'What is DBSCAN?',
+          text: '<strong>DBSCAN</strong> (Density-Based Spatial Clustering of Applications with Noise) groups points in high-density regions separated by low-density gaps. Unlike K-Means, it does not require K, can find non-spherical clusters, and explicitly marks <strong>noise points</strong> that do not belong to any cluster (label = -1).',
           list: [
-            'The objective function and all constraints must be linear in the decision variables',
-            'The feasible region is a convex polytope defined by the constraint intersections',
-            'The optimal solution always lies at a vertex (corner point) of the feasible region',
-            'LPs are solvable in polynomial time; integer variants (ILP) are NP-hard in general'
+            '<strong>Core points:</strong> Have at least minPts neighbors within distance ε (epsilon)',
+            '<strong>Border points:</strong> Within ε of a core point but not core themselves',
+            '<strong>Noise points:</strong> Neither core nor density-reachable from any core point',
+            '<strong>Density-reachable:</strong> Connected through a chain of ε-neighbors',
+            '<strong>Two hyperparameters:</strong> ε (neighborhood radius) and minPts (minimum neighbors)'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>DBSCAN</strong> (Density-Based Spatial Clustering of Applications with Noise) groups points in high-density regions separated by low-density gaps. Unlike K-Means, it does not require K, can find non-spherical clusters, and explicitly marks <strong>noise points</strong> that do not belong to any cluster (label = -1). Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>DBSCAN</strong> (Density-Based Spatial Clustering of Applications with Noise) groups points in high-density regions separated by low-density gaps. Unlike K-Means, it does not require K, can find non-spherical clusters, and explicitly marks <strong>noise points</strong> that do not belong to any cluster (label = -1). <strong>Core points:</strong> Have at least minPts neighbors within distance ε (epsilon) <strong>Border points:</strong> Within ε of a core point but not core themselves <strong>Noise points:</strong> Neither core nor density-reachable from any core point <strong>Density-reachable:</strong> Connected through a chain of ε-neighbors <strong>Two hyperparameters:</strong> ε (neighborhood radius) and minPts (minimum neighbors)</p>',
+            '<p>You use dbscan when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — DBSCAN
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: DBSCAN sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'The standard form of a linear program expresses the problem as maximizing a linear function subject to linear inequality constraints and non-negativity.',
+          text: 'DBSCAN defines clusters as connected components of <strong>density-reachable</strong> core points.',
           example: {
-            title: 'Standard Form LP',
-            code: `Maximize:
-  z = c₁x₁ + c₂x₂ + ... + cₙxₙ
+            title: 'DBSCAN Definitions and Algorithm',
+            code: `ε-neighborhood:     N_ε(p) = {q ∈ D : dist(p,q) ≤ ε}
+Core point:         |N_ε(p)| ≥ minPts
+Directly density-reachable: q ∈ N_ε(p) and p is core
+Density-reachable:  chain of directly density-reachable points
+Density-connected:  both reachable from some common core point
 
-Subject to:
-  a₁₁x₁ + a₁₂x₂ + ... + a₁ₙxₙ ≤ b₁
-  a₂₁x₁ + a₂₂x₂ + ... + a₂ₙxₙ ≤ b₂
-  ...
-  aₘ₁x₁ + aₘ₂x₂ + ... + aₘₙxₙ ≤ bₘ
-
-And:
-  x₁, x₂, ..., xₙ ≥ 0
-
-Matrix form:
-  Maximize: cᵀx
-  Subject to: Ax ≤ b, x ≥ 0`,
-            output: 'Any LP can be converted to standard form by adding slack variables and handling unrestricted variables.',
+Algorithm:
+  1. Mark all points unvisited
+  2. For each unvisited point p:
+     a. Mark p visited
+     b. If |N_ε(p)| < minPts → mark p as NOISE (may later become border)
+     c. Else start new cluster C; add p to C
+        - Add all N_ε(p) to a seed queue
+        - For each point q in queue:
+            if unvisited: mark visited; if core, add N_ε(q) to queue
+            if not in any cluster: add q to C
+  3. Output clusters + noise label (-1)`,
+            output: 'Border points are assigned to clusters but do not expand neighborhoods; noise stays at -1.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'DBSCAN with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("DBSCAN — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'LP variants differ in whether variables must be integers and what types of constraints are allowed.',
+          text: 'DBSCAN vs partition-based and hierarchical methods.',
           table: {
-            headers: ['Variant', 'Variable Type', 'Constraint Type', 'Complexity', 'Solvers'],
+            headers: [
+              'Aspect',
+              'DBSCAN',
+              'K-Means',
+              'Hierarchical',
+              'GMM'
+            ],
             rows: [
-              ['Linear Program (LP)', 'Continuous (real)', 'Linear equalities/inequalities', 'Polynomial (P)', 'Simplex, interior-point'],
-              ['Integer LP (ILP)', 'Integer', 'Linear equalities/inequalities', 'NP-hard', 'Branch-and-bound, cutting planes'],
-              ['Mixed ILP (MILP)', 'Some integer, some continuous', 'Linear equalities/inequalities', 'NP-hard', 'CPLEX, Gurobi, SCIP'],
-              ['Quadratic Program (QP)', 'Continuous', 'Linear constraints, quadratic objective', 'Polynomial (convex)', 'Interior-point, active-set'],
-              ['Semidefinite Program (SDP)', 'Matrix variables', 'Linear + positive semidefinite', 'Polynomial', 'Specialized solvers'],
-              ['Nonlinear Program', 'Continuous', 'Nonlinear constraints/objective', 'Generally hard', 'Gradient-based, heuristics']
+              [
+                'Cluster shape',
+                'Arbitrary (density-defined)',
+                'Spherical',
+                'Linkage-dependent',
+                'Elliptical'
+              ],
+              [
+                'K required',
+                'No',
+                'Yes',
+                'No (but cut needed)',
+                'Yes (components)'
+              ],
+              [
+                'Noise handling',
+                'Explicit (-1 label)',
+                'Forces assignment',
+                'Forces assignment',
+                'Low-probability points'
+              ],
+              [
+                'Varying density',
+                'Struggles — single ε',
+                'Poor',
+                'Moderate',
+                'Moderate (with many components)'
+              ],
+              [
+                'Hyperparameters',
+                'ε, minPts',
+                'K',
+                'linkage, cut',
+                'K, covariance type'
+              ],
+              [
+                'Scalability',
+                'O(n log n) with index',
+                'O(n · K · d · i)',
+                'O(n²)',
+                'O(n · K · d · i)'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Assuming LP solvers always return integer solutions (fix: LP solutions are real-valued; round carefully or switch to ILP if integrality is required)',
-            'Mistake 2: Using Simplex for very large sparse LPs without considering interior-point methods (fix: interior-point methods often scale better for large problems; benchmark both)',
-            'Mistake 3: Formulating constraints that are actually nonlinear (e.g., products of variables) (fix: check each term is linear; if not, consider NLP solvers or linearization tricks)',
-            'Mistake 4: Ignoring numerical stability in LP formulations (fix: scale constraints so coefficients are of similar magnitude; ill-conditioned matrices cause solver failures)',
-            'Mistake 5: Not verifying that the feasible region is bounded (fix: unbounded LPs have no finite optimum; add realistic upper bounds or check for unbounded rays)'
-          ]
+            'Mistake 1: Using DBSCAN in high dimensions without dimensionality reduction (fix: apply PCA to 5–15 components; distances become meaningless in high d)',
+            'Mistake 2: Setting ε without the k-distance plot (fix: plot k-distance for k = minPts; choose ε at the knee/elbow)',
+            'Mistake 3: Treating -1 labels as a valid cluster (fix: noise points need separate handling — imputation, removal, or anomaly workflow)',
+            'Mistake 4: Using minPts = 2 on noisy data (fix: rule of thumb minPts ≥ d + 1 or at least 5 for 2D/3D spatial data)',
+            'Mistake 5: Expecting DBSCAN to find clusters of very different densities with one ε (fix: try HDBSCAN or run DBSCAN at multiple ε values)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Linear programming underpins optimization in virtually every industry.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>Supply Chain Optimization:</strong> LP determines optimal production quantities across factories, minimizing cost while meeting demand and capacity constraints',
-            '<strong>Portfolio Optimization:</strong> Markowitz mean-variance optimization uses quadratic programming (QP) to allocate assets; LP handles linearized risk constraints',
-            '<strong>Machine Learning:</strong> Support Vector Machines (SVMs) solve a QP; L1-regularized regression can be cast as an LP; LP relaxation approximates combinatorial problems',
-            '<strong>Resource Allocation:</strong> Airlines use LP to schedule crews and aircraft; hospitals use it to allocate operating rooms and staff',
-            '<strong>Energy Grids:</strong> Power generation dispatch minimizes fuel cost subject to demand, transmission capacity, and environmental constraints — a classic LP'
+            '<strong>GPS hotspot detection:</strong> Cluster ride-share pickups and crime incidents by geographic density',
+            '<strong>Anomaly detection:</strong> Network intrusion points that fail to join any dense cluster are flagged as noise',
+            '<strong>Image segmentation:</strong> Cluster pixel features in color/texture space for region extraction',
+            '<strong>Astronomy:</strong> Find galaxy groups in sky-survey coordinates — non-spherical, spatially structured',
+            '<strong>IoT sensor monitoring:</strong> Identify normal operating regimes; label sensor glitches as noise (-1)'
           ]
         },
         {
-          heading: 'Pro Tip',
-          note: 'The <strong>Simplex algorithm</strong> moves along edges of the feasible polytope from vertex to vertex. While its worst-case is exponential, it performs remarkably well in practice. Modern <strong>interior-point methods</strong> (Karmarkar\'s algorithm family) guarantee polynomial time and excel on very large problems.'
+          heading: 'Quick Recap',
+          list: [
+            'DBSCAN finds density-connected clusters without specifying K',
+            'Core points have ≥ minPts neighbors within ε; border and noise points are distinguished',
+            'Noise points receive label -1 — a first-class output, not an error',
+            'Tune ε with the k-distance plot; set minPts ≥ d + 1 as a starting rule',
+            'Works best in low-to-moderate dimensions on spatial or well-scaled tabular data'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: What makes a point a "core" point in DBSCAN?
+Ans: It has at least minPts points (including itself) within distance ε.`,
+            `Q2: Can a border point become a core point if you increase ε?
+Ans: Yes — increasing ε grows neighborhoods, so border points may gain enough neighbors to become core.`,
+            `Q3: Why do most points get labeled -1 when ε is too small?
+Ans: Neighborhoods are too tight to reach minPts, so few core points form and most points are not density-reachable.`,
+            `Q4: What label does sklearn assign to noise?
+Ans: -1 (negative one), which must be handled separately from valid cluster IDs 0, 1, 2, …`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>DBSCAN</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — DBSCAN")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'approximation-algorithms': {
-      title: 'Approximation Algorithms',
-      subtitle: 'Finding near-optimal solutions when exact solutions are computationally infeasible',
+    'principal-component-analysis': {
+      title: 'Principal Component Analysis',
+      subtitle: 'Linear dimensionality reduction via orthogonal directions of maximum variance',
       sections: [
         {
-          heading: 'What Are Approximation Algorithms?',
-          text: '<strong>Approximation algorithms</strong> are polynomial-time algorithms designed for NP-hard optimization problems. They guarantee solutions within a provable factor of the optimal value, trading exact optimality for computational tractability.',
+          heading: 'What is Principal Component Analysis?',
+          text: '<strong>PCA</strong> transforms correlated features into a smaller set of uncorrelated <strong>principal components</strong> ordered by variance explained. The first component captures the direction of maximum variance; each subsequent component is orthogonal to the previous ones. PCA is used for visualization, noise reduction, speeding up downstream models, and combating the curse of dimensionality.',
           list: [
-            'Many real-world problems (TSP, vertex cover, set cover, knapsack) are NP-hard',
-            'Exact algorithms would take exponential time for large inputs',
-            'Approximation algorithms run in polynomial time with guaranteed quality bounds',
-            'The approximation ratio α means the solution is at most α times the optimal (for minimization) or at least 1/α times the optimal (for maximization)'
+            '<strong>Linear transformation:</strong> Z = X · W where columns of W are eigenvectors of the covariance matrix',
+            '<strong>Variance maximization:</strong> Each PC captures the most remaining variance under orthogonality',
+            '<strong>Unsupervised:</strong> Uses only X — no labels required',
+            '<strong>Reconstruction:</strong> Approximate X with top-k components; reconstruction error measures information loss',
+            '<strong>Preprocessing step:</strong> Often paired with clustering, classification, or visualization'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The approximation ratio formally bounds how far the algorithm\'s solution can deviate from the true optimum.',
-          example: {
-            title: 'Approximation Ratio Definition',
-            code: `For a minimization problem:
-  Approximation ratio α ≥ 1
-  
-  ALG(I) ≤ α · OPT(I)   for all instances I
-  
-  Where:
-    ALG(I) = cost of algorithm's solution
-    OPT(I) = cost of optimal solution
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>PCA</strong> transforms correlated features into a smaller set of uncorrelated <strong>principal components</strong> ordered by variance explained. The first component captures the direction of maximum variance; each subsequent component is orthogonal to the previous ones. PCA is used for visualization, noise reduction, speeding up downstream models, and combating the curse of dimensionality. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>PCA</strong> transforms correlated features into a smaller set of uncorrelated <strong>principal components</strong> ordered by variance explained. The first component captures the direction of maximum variance; each subsequent component is orthogonal to the previous ones. PCA is used for visualization, noise reduction, speeding up downstream models, and combating the curse of dimensionality. <strong>Linear transformation:</strong> Z = X · W where columns of W are eigenvectors of the covariance matrix <strong>Variance maximization:</strong> Each PC captures the most remaining variance under orthogonality <strong>Unsupervised:</strong> Uses only X — no labels required <strong>Reconstruction:</strong> Approximate X with top-k components; reconstruction error measures information loss <strong>Preprocessing step:</strong> Often paired with clustering, classification, or visualization</p>',
+            '<p>You use principal component analysis when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Principal Component Analysis
 
-Example: 2-approximation for Vertex Cover
-  Greedy: pick both endpoints of any uncovered edge
-  
-  Guarantee: |ALG| ≤ 2 · |OPT|
-  
-  Proof sketch:
-    Matching edges are vertex-disjoint
-    OPT must cover every matching edge
-    → |OPT| ≥ size of maximum matching
-    ALG picks 2 vertices per matching edge
-    → |ALG| = 2 × |matching| ≤ 2 × |OPT|`,
-            output: 'A 2-approximation guarantees the greedy vertex cover is at most twice the size of the minimum vertex cover.',
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Principal Component Analysis sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'PCA solves an eigendecomposition of the covariance matrix (or SVD of the centered data matrix).',
+          example: {
+            title: 'PCA Mathematics and Variance Explained',
+            code: `Steps:
+  1. Center data:     X̃ = X - mean(X)
+  2. Covariance:      Σ = (1/(n-1)) X̃ᵀ X̃
+  3. Eigendecompose:  Σ vⱼ = λⱼ vⱼ
+  4. Project:         Z = X̃ · Vₖ   (top-k eigenvectors)
+
+Variance explained by PC j:
+  ratio_j = λⱼ / Σᵢ λᵢ
+  cumulative_k = Σⱼ₌₁ᵏ ratio_j
+
+Reconstruction:
+  X̂ = Z · Vₖᵀ + mean(X)
+  Reconstruction error (Frobenius):
+  ||X - X̂||²_F = Σⱼ₌ₖ₊₁ᵈ λⱼ   (sum of discarded eigenvalues)
+
+SVD shortcut (numerically stable):
+  X̃ = U S Vᵀ  →  PCs are columns of V`,
+            output: 'Keeping k components preserves Σⱼ₌₁ᵏ λⱼ / Σⱼ λⱼ fraction of total variance.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Principal Component Analysis with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("Principal Component Analysis — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Approximation algorithms differ in their guarantees, techniques, and the problems they address.',
+          text: 'PCA vs other dimensionality reduction techniques.',
           table: {
-            headers: ['Problem', 'Best Known Ratio', 'Technique', 'Tight?'],
+            headers: [
+              'Method',
+              'Type',
+              'Preserves',
+              'Cost',
+              'Best for'
+            ],
             rows: [
-              ['Vertex Cover', '2 (and 2 - Θ(1/√log|V|))', 'LP rounding / greedy matching', 'Assuming UGC, hard to beat 2 - ε'],
-              ['Set Cover', 'H(n) = ln(n) + O(1)', 'Greedy (max uncovered elements)', 'Tight unless P=NP'],
-              ['Metric TSP', '3/2 (Christofides)', 'MST + minimum-weight matching', '3/2 is tight for this approach'],
-              ['Max-Cut', '0.878 (Goemans-Williamson)', 'SDP rounding', 'Best possible assuming UGC'],
-              ['Knapsack', '1 + ε (FPTAS)', 'Dynamic programming / scaling', 'Arbitrarily close to optimal'],
-              ['Max-SAT', '3/4', 'LP + randomized rounding', 'Can be improved with SDP for some variants']
+              [
+                'PCA',
+                'Linear',
+                'Global variance',
+                'O(min(n²d, nd²))',
+                'Compression, preprocessing, noise removal'
+              ],
+              [
+                'Kernel PCA',
+                'Nonlinear',
+                'Variance in feature space',
+                'O(n²) – O(n³)',
+                'Nonlinear manifolds (small n)'
+              ],
+              [
+                't-SNE',
+                'Nonlinear',
+                'Local neighborhood structure',
+                'O(n²)',
+                '2D/3D visualization only'
+              ],
+              [
+                'UMAP',
+                'Nonlinear',
+                'Local + some global structure',
+                'O(n log n)',
+                'Visualization, medium datasets'
+              ],
+              [
+                'Autoencoder',
+                'Nonlinear (neural)',
+                'Learned reconstruction',
+                'GPU training',
+                'Images, complex high-d data'
+              ],
+              [
+                'Factor Analysis',
+                'Linear latent',
+                'Shared factors + unique noise',
+                'EM iterations',
+                'Interpretable latent constructs'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Confusing approximation ratio with probability of success (fix: approximation ratio is deterministic; randomized algorithms have both approximation ratio and success probability — understand which guarantee applies)',
-            'Mistake 2: Using a greedy algorithm without proving its approximation bound (fix: always verify the approximation ratio; some greedy algorithms have unbounded approximation ratios on certain problem variants)',
-            'Mistake 3: Applying approximation algorithms when exact solutions are feasible (fix: for small instances, use exact methods like branch-and-bound or dynamic programming; reserve approximations for large or online settings)',
-            'Mistake 4: Ignoring the difference between minimization and maximization ratios (fix: for maximization, the ratio is OPT/ALG ≤ α; the reciprocal relationship matters when comparing papers)',
-            'Mistake 5: Assuming all NP-hard problems admit good approximations (fix: some problems like general TSP and clique are inapproximable within any constant factor unless P=NP — know the hardness-of-approximation landscape)'
-          ]
+            'Mistake 1: Running PCA without centering (fix: sklearn PCA centers by default; always center manually if implementing from scratch)',
+            'Mistake 2: Not scaling features with different units (fix: standardize when features have different scales; skip scaling only if all features are commensurate)',
+            'Mistake 3: Using PCA for 2D visualization then interpreting cluster separation as ground truth (fix: PCA projection can distort distances; validate with silhouette in original or PC space)',
+            'Mistake 4: Keeping too few components to save compute, losing predictive signal (fix: use cumulative variance ≥ 95% or cross-validate downstream model performance vs k)',
+            'Mistake 5: Applying PCA to categorical features (fix: PCA is for numeric data; encode categories appropriately or use methods suited to mixed data)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Approximation algorithms enable practical solutions to otherwise intractable problems.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>Network Design:</strong> Metric TSP approximation (Christofides) plans delivery routes for logistics companies with near-optimal efficiency',
-            '<strong>Facility Location:</strong> k-center and k-median approximations place warehouses and hospitals to minimize average or maximum travel distance',
-            '<strong>Ad Placement:</strong> Set cover approximations select ad campaigns that reach all target demographics at minimum cost',
-            '<strong>Wireless Networks:</strong> Independent set and dominating set approximations optimize sensor placement and transmission scheduling',
-            '<strong>Cloud Resource Allocation:</strong> Bin packing and scheduling approximations place virtual machines on physical servers with bounded resource waste'
+            '<strong>Face recognition (Eigenfaces):</strong> PCA on pixel vectors compresses facial images for efficient matching',
+            '<strong>Finance:</strong> Reduce hundreds of correlated stock returns to a few principal risk factors',
+            '<strong>Gene expression:</strong> Compress thousands of gene measurements to principal expression patterns',
+            '<strong>Clustering preprocessing:</strong> Run K-Means on PCA-reduced data to mitigate curse of dimensionality',
+            '<strong>Model speedup:</strong> Train logistic regression or SVM on 20 PCs instead of 500 raw features'
           ]
         },
         {
-          heading: 'Pro Tip',
-          note: 'A <strong>Polynomial-Time Approximation Scheme (PTAS)</strong> achieves ratio 1+ε in time polynomial in n for any fixed ε. An <strong>FPTAS</strong> is polynomial in both n and 1/ε. Knapsack has an FPTAS — you can get arbitrarily close to optimal with modest runtime increase.'
+          heading: 'Quick Recap',
+          list: [
+            'PCA finds orthogonal directions of maximum variance in centered (and usually scaled) data',
+            'Explained variance ratio tells how much information each component retains',
+            'Reconstruction error equals the sum of eigenvalues of discarded components',
+            'Use cumulative variance (e.g., 95%) to choose the number of components k',
+            'sklearn.decomposition.PCA uses SVD internally for numerical stability'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: What does the first principal component maximize?
+Ans: The variance of the projected data — it is the direction of maximum spread.`,
+            `Q2: If 10 PCs capture 95% of variance, what fraction is lost in reconstruction?
+Ans: 5% of total variance (the sum of eigenvalues of the remaining d - 10 components).`,
+            `Q3: Why use SVD instead of explicitly computing the covariance matrix?
+Ans: SVD is numerically more stable and avoids forming the d × d covariance matrix when n is large.`,
+            `Q4: Should you scale before PCA when features are income ($) and age (years)?
+Ans: Yes — without scaling, income dominates due to larger magnitude, not greater informational value.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Principal Component Analysis</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Principal Component Analysis")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'randomized-algorithms': {
-      title: 'Randomized Algorithms',
-      subtitle: 'Using randomness to achieve simplicity, speed, and provable performance bounds',
+    'gaussian-mixture-models': {
+      title: 'Gaussian Mixture Models',
+      subtitle: 'Soft clustering via probabilistic mixture of multivariate Gaussians',
       sections: [
         {
-          heading: 'What Are Randomized Algorithms?',
-          text: '<strong>Randomized algorithms</strong> use random numbers as part of their logic to make decisions during execution. They trade determinism for simplicity, speed, or the ability to handle adversarial inputs. Two main categories exist: Las Vegas algorithms (always correct, random runtime) and Monte Carlo algorithms (fixed runtime, probabilistic correctness).',
+          heading: 'What are Gaussian Mixture Models?',
+          text: 'A <strong>Gaussian Mixture Model (GMM)</strong> assumes data is generated from a mixture of K multivariate Gaussian distributions. Unlike K-Means, GMM provides <strong>soft clustering</strong> — each point has a probability of belonging to each component. Parameters (means, covariances, mixing weights) are learned via the <strong>Expectation-Maximization (EM)</strong> algorithm.',
           list: [
-            'Las Vegas: always returns the correct answer; running time is a random variable',
-            'Monte Carlo: has a fixed runtime; may return an incorrect answer with small probability',
-            'Randomness breaks symmetry, avoids worst-case inputs, and simplifies complex algorithms',
-            'Used in quicksort, hashing, primality testing, streaming algorithms, and randomized rounding'
+            '<strong>Soft assignment:</strong> γᵢₖ = P(cluster k | xᵢ) — responsibilities sum to 1 per point',
+            '<strong>Flexible shapes:</strong> Full covariance matrices allow elliptical clusters',
+            '<strong>Generative model:</strong> Can sample new data points from the learned mixture',
+            '<strong>EM algorithm:</strong> Alternates E-step (compute responsibilities) and M-step (update parameters)',
+            '<strong>Model selection:</strong> Use BIC/AIC to choose K and covariance_type'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>A <strong>Gaussian Mixture Model (GMM)</strong> assumes data is generated from a mixture of K multivariate Gaussian distributions. Unlike K-Means, GMM provides <strong>soft clustering</strong> — each point has a probability of belonging to each component. Parameters (means, covariances, mixing weights) are learned via the <strong>Expectation-Maximization (EM)</strong> algorithm. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, A <strong>Gaussian Mixture Model (GMM)</strong> assumes data is generated from a mixture of K multivariate Gaussian distributions. Unlike K-Means, GMM provides <strong>soft clustering</strong> — each point has a probability of belonging to each component. Parameters (means, covariances, mixing weights) are learned via the <strong>Expectation-Maximization (EM)</strong> algorithm. <strong>Soft assignment:</strong> γᵢₖ = P(cluster k | xᵢ) — responsibilities sum to 1 per point <strong>Flexible shapes:</strong> Full covariance matrices allow elliptical clusters <strong>Generative model:</strong> Can sample new data points from the learned mixture <strong>EM algorithm:</strong> Alternates E-step (compute responsibilities) and M-step (update parameters) <strong>Model selection:</strong> Use BIC/AIC to choose K and covariance_type</p>',
+            '<p>You use gaussian mixture models when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Gaussian Mixture Models
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Gaussian Mixture Models sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'The expected value and high-probability bounds are the primary analytical tools for randomized algorithms.',
+          text: 'GMM models the data density as a weighted sum of K Gaussian components.',
           example: {
-            title: 'Randomized Quicksort Analysis',
-            code: `Randomized Quicksort:
-  1. Pick pivot uniformly at random from subarray
-  2. Partition around pivot
-  3. Recurse on left and right subarrays
+            title: 'GMM Density and EM Algorithm',
+            code: `Mixture density:
+  p(x) = Σₖ₌₁ᴷ πₖ · N(x | μₖ, Σₖ)
 
-Expected comparisons:
-  E[T(n)] = 2n ln(n) + O(n)
-          ≈ 1.39 n log₂(n)
+Where:
+  πₖ = mixing weight (Σₖ πₖ = 1)
+  μₖ = mean of component k
+  Σₖ = covariance matrix of component k
 
-Chernoff bound (high probability):
-  P(T(n) > c · E[T(n)]) ≤ e^(-Θ(c))
-  
-  For c = 4:
-  P(T(n) > 4 · E[T(n)]) is extremely small
+E-step (responsibilities):
+  γᵢₖ = πₖ N(xᵢ|μₖ,Σₖ) / Σⱼ πⱼ N(xᵢ|μⱼ,Σⱼ)
 
-Key insight:
-  Random pivot selection makes the
-  probability of worst-case O(n²) behavior
-  exponentially small, independent of input.`,
-            output: 'Randomized quicksort runs in O(n log n) expected time with overwhelmingly high probability, regardless of input distribution.',
+M-step (update parameters):
+  Nₖ = Σᵢ γᵢₖ
+  μₖ = Σᵢ γᵢₖ xᵢ / Nₖ
+  Σₖ = Σᵢ γᵢₖ (xᵢ-μₖ)(xᵢ-μₖ)ᵀ / Nₖ
+  πₖ = Nₖ / n
+
+BIC for model selection:
+  BIC = -2 · log(L) + p · log(n)
+  Lower BIC → preferred model (penalizes complexity)`,
+            output: 'EM increases the data log-likelihood monotonically until convergence to a local optimum.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Gaussian Mixture Models with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("Gaussian Mixture Models — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Randomized algorithms differ in their guarantee types, typical use cases, and analytical frameworks.',
+          text: 'GMM vs K-Means and other clustering methods.',
           table: {
-            headers: ['Type', 'Correctness', 'Runtime', 'Example', 'When to Use'],
+            headers: [
+              'Aspect',
+              'GMM',
+              'K-Means',
+              'DBSCAN',
+              'Hierarchical'
+            ],
             rows: [
-              ['Las Vegas', 'Always correct', 'Random (bounded expected)', 'Randomized quicksort, randomized select', 'When correctness is essential'],
-              ['Monte Carlo', 'Probabilistically correct', 'Deterministic (fixed)', 'Miller-Rabin primality test, Freivalds\' matrix check', 'When speed is essential, errors tolerable'],
-              ['Monte Carlo (1-sided)', 'No false positives OR no false negatives', 'Deterministic', 'Primality test (no false negatives)', 'When one error direction is acceptable'],
-              ['Monte Carlo (2-sided)', 'Small error probability both ways', 'Deterministic', 'Freivalds\' matrix multiplication verification', 'When both errors are equally acceptable'],
-              ['Randomized rounding', 'Approximation guarantee in expectation', 'Deterministic output', 'Set cover, max-cut LP relaxations', 'Derandomizing LP solutions']
+              [
+                'Assignment',
+                'Soft (probabilities)',
+                'Hard (labels)',
+                'Hard + noise',
+                'Hard'
+              ],
+              [
+                'Cluster shape',
+                'Elliptical (covariance-dependent)',
+                'Spherical',
+                'Density-based arbitrary',
+                'Linkage-dependent'
+              ],
+              [
+                'Algorithm',
+                'EM (probabilistic)',
+                `Lloyd's (geometric)`,
+                'Density reachability',
+                'Greedy merge'
+              ],
+              [
+                'Outliers',
+                'Low γᵢₖ across all k',
+                'Forced assignment',
+                'Explicit -1 label',
+                'Forced assignment'
+              ],
+              [
+                'Generative',
+                'Yes — can sample new points',
+                'No',
+                'No',
+                'No'
+              ],
+              [
+                'Covariance types',
+                'full, tied, diag, spherical',
+                'Implicit spherical',
+                'N/A',
+                'N/A'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using a weak pseudorandom generator that destroys algorithmic guarantees (fix: use cryptographically secure RNGs or at least high-quality Mersenne Twister; poor randomness can reintroduce worst-case behavior)',
-            'Mistake 2: Running a Monte Carlo algorithm once and treating the result as certain (fix: repeat independent trials and take majority vote; error probability drops exponentially with repetitions)',
-            'Mistake 3: Confusing expected runtime with worst-case runtime (fix: report both; expected O(n log n) does not guarantee O(n log n) on every single run)',
-            'Mistake 4: Not analyzing the variance or tail bounds (fix: use Markov, Chebyshev, or Chernoff bounds to show concentration; expected value alone is insufficient for probabilistic guarantees)',
-            'Mistake 5: Implementing randomized algorithms without considering reproducibility (fix: seed the RNG for deterministic debugging and testing; use different seeds in production for true randomness)'
-          ]
+            'Mistake 1: Using full covariance in high dimensions with small n (fix: use diag or spherical; need n >> K · d² for full covariance)',
+            'Mistake 2: Ignoring soft probabilities and only using hard labels (fix: use predict_proba(); low-confidence points deserve different marketing treatment)',
+            'Mistake 3: Skipping feature scaling before GMM (fix: EM assumes comparable feature scales; always StandardScaler first)',
+            'Mistake 4: Running EM once without n_init (fix: set n_init=5–10; EM converges to local optima like K-Means)',
+            'Mistake 5: Choosing K by silhouette alone on overlapping data (fix: use BIC/AIC for GMM; silhouette favors well-separated hard clusters)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Randomized algorithms are indispensable in modern computing.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>Hashing:</strong> Universal hash families guarantee low collision probability; Bloom filters use random hash functions for space-efficient set membership testing',
-            '<strong>Streaming & Big Data:</strong> Count-Min Sketch and HyperLogLog use randomization to estimate frequencies and cardinalities in sublinear space',
-            '<strong>Cryptography:</strong> Miller-Rabin primality test randomly checks witnesses to determine if a large number is prime — essential for RSA key generation',
-            '<strong>Machine Learning:</strong> Stochastic gradient descent uses random mini-batches; random forests and dropout rely on randomization for regularization',
-            '<strong>Load Balancing:</strong> Power of two choices — assigning a task to the less loaded of two randomly chosen servers — dramatically reduces maximum load versus random assignment'
+            '<strong>Customer segmentation:</strong> RFM-based marketing segments with confidence scores for campaign targeting',
+            '<strong>Anomaly detection:</strong> Points with low mixture likelihood are outliers or fraud candidates',
+            '<strong>Speaker diarization:</strong> GMM on audio features to identify who spoke when',
+            '<strong>Density estimation:</strong> Model traffic patterns or demand distributions for simulation',
+            '<strong>Semi-supervised warm-start:</strong> Use GMM posteriors as soft labels for downstream classifiers'
           ]
         },
         {
-          heading: 'Pro Tip',
-          note: '<strong>Probability amplification</strong> is a powerful technique: if a Monte Carlo algorithm has error probability p, running it k times independently and taking the majority answer reduces error to approximately e^(-2k(1/2 - p)²) by Chernoff bounds. For p = 0.1 and k = 100, the error probability is astronomically small.'
+          heading: 'Quick Recap',
+          list: [
+            'GMM models data as a weighted mixture of K multivariate Gaussians',
+            'EM alternates E-step (responsibilities) and M-step (parameter updates)',
+            'Soft clustering: each point has a probability vector over K components',
+            'Use BIC/AIC to select K; covariance_type trades flexibility for data requirements',
+            'Customer segmentation: scale RFM features → BIC select K → profile segments → evaluate'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: How does GMM differ from K-Means in cluster assignment?
+Ans: GMM gives soft probabilities (responsibilities) per cluster; K-Means gives hard exclusive assignments.`,
+            `Q2: What happens in the M-step of EM?
+Ans: Parameters μₖ, Σₖ, and πₖ are updated using the current responsibilities γᵢₖ.`,
+            `Q3: Why use BIC instead of just log-likelihood to choose K?
+Ans: BIC penalizes model complexity (more parameters), preventing overfitting from too many components.`,
+            `Q4: In the customer segmentation project, why scale before GMM?
+Ans: total_spend and recency_days have different units and ranges; unscaled features make the Gaussian model favor high-magnitude features.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Gaussian Mixture Models</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Gaussian Mixture Models")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

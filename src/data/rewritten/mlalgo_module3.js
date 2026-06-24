@@ -1,486 +1,1001 @@
+// machine learning — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js mlalgo_module3.js
+
 export const mlalgoModule3Structure = {
   module3: {
-    title: 'Module 3: Algorithm Design Paradigms',
+    title: 'Module 3: Supervised Learning — Regression',
     topics: [
-      { id: 'divide-and-conquer', title: 'Divide and Conquer' },
-      { id: 'greedy-algorithms', title: 'Greedy Algorithms' },
-      { id: 'dynamic-programming', title: 'Dynamic Programming' },
-      { id: 'graph-algorithms', title: 'Graph Algorithms' },
-      { id: 'string-algorithms', title: 'String Algorithms' },
+      {
+        id: 'linear-regression',
+        title: 'Linear Regression'
+      },
+      {
+        id: 'polynomial-regression',
+        title: 'Polynomial Regression'
+      },
+      {
+        id: 'ridge-lasso-elastic-net',
+        title: 'Ridge, Lasso & Elastic Net'
+      },
+      {
+        id: 'regression-pipeline-eda',
+        title: 'Regression Pipeline & EDA'
+      },
+      {
+        id: 'house-price-prediction-project',
+        title: 'House Price Prediction Project'
+      }
     ]
   }
 };
 
 export const mlalgoModule3Content = {
   module3: {
-    'divide-and-conquer': {
-      title: 'Divide and Conquer',
-      subtitle: 'Break problems into smaller pieces, solve them recursively, and combine the results',
+    'linear-regression': {
+      title: 'Linear Regression',
+      subtitle: 'Predict continuous targets with a weighted linear combination of features',
       sections: [
         {
-          heading: 'What is Divide and Conquer?',
-          text: '<strong>Divide and Conquer</strong> is an algorithmic paradigm that solves a problem by breaking it into smaller sub-problems of the same type, solving each sub-problem independently, and combining their solutions to form the final answer. It is the foundation of efficient sorting, searching, and many ML preprocessing algorithms.',
+          heading: 'What is Linear Regression?',
+          text: `<strong>Linear regression</strong> models the relationship between input features <em>X</em> and a continuous target <em>y</em> as a straight line (or hyperplane in multiple dimensions). It is the baseline algorithm for regression: fast, interpretable, and surprisingly strong on tabular data. sklearn's <code>LinearRegression</code> solves the same optimization problem that statistics calls <strong>Ordinary Least Squares (OLS)</strong>.`,
           list: [
-            '<strong>Divide:</strong> Break the problem into smaller, independent sub-problems',
-            '<strong>Conquer:</strong> Solve each sub-problem recursively (or directly if small enough)',
-            '<strong>Combine:</strong> Merge the sub-problem solutions into the overall solution',
-            'Works best when sub-problems are independent and of similar size'
+            '<strong>Simple linear:</strong> one feature — ŷ = β₀ + β₁x',
+            '<strong>Multiple linear:</strong> many features — ŷ = β₀ + β₁x₁ + β₂x₂ + … + βₚxₚ',
+            '<strong>Goal:</strong> find weights β that minimize prediction error on training data',
+            '<strong>Two solvers:</strong> closed-form <em>Normal Equation</em> vs iterative <em>Gradient Descent</em>',
+            '<strong>Assumption:</strong> relationship is approximately linear in the features (after transforms)'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            `<p><strong>Linear regression</strong> models the relationship between input features <em>X</em> and a continuous target <em>y</em> as a straight line (or hyperplane in multiple dimensions). It is the baseline algorithm for regression: fast, interpretable, and surprisingly strong on tabular data. sklearn's <code>LinearRegression</code> solves the same optimization problem that statistics calls <strong>Ordinary Least Squares (OLS)</strong>. Start with intuition: ask what question this concept answers before memorizing formulas.</p>`,
+            `<p>Technically, <strong>Linear regression</strong> models the relationship between input features <em>X</em> and a continuous target <em>y</em> as a straight line (or hyperplane in multiple dimensions). It is the baseline algorithm for regression: fast, interpretable, and surprisingly strong on tabular data. sklearn's <code>LinearRegression</code> solves the same optimization problem that statistics calls <strong>Ordinary Least Squares (OLS)</strong>. <strong>Simple linear:</strong> one feature — ŷ = β₀ + β₁x <strong>Multiple linear:</strong> many features — ŷ = β₀ + β₁x₁ + β₂x₂ + … + βₚxₚ <strong>Goal:</strong> find weights β that minimize prediction error on training data <strong>Two solvers:</strong> closed-form <em>Normal Equation</em> vs iterative <em>Gradient Descent</em> <strong>Assumption:</strong> relationship is approximately linear in the features (after transforms)</p>`,
+            '<p>You use linear regression when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Linear Regression
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Linear Regression sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'The time complexity of divide-and-conquer algorithms is governed by the recurrence relation known as the <strong>Master Theorem</strong>.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Master Theorem',
-            code: `Recurrence form:
-  T(n) = a · T(n/b) + O(n^d)
-
-Where:
-  a = number of sub-problems
-  b = factor by which problem size shrinks
-  d = exponent of combine cost
-
-Cases:
-  If a < b^d:  T(n) = O(n^d)
-  If a = b^d:  T(n) = O(n^d · log n)
-  If a > b^d:  T(n) = O(n^(log_b a))`,
-            output: 'The Master Theorem gives complexity without solving the recurrence explicitly.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Linear Regression with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("Linear Regression — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Divide and Conquer is often compared with other algorithmic paradigms.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Paradigm', 'Sub-problems', 'Overlap', 'Approach', 'Example'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Divide and Conquer', 'Independent', 'No overlap', 'Top-down recursion', 'Merge sort, Quick sort'],
-              ['Dynamic Programming', 'Overlapping', 'Sub-problems reused', 'Bottom-up or memoization', 'Fibonacci, knapsack'],
-              ['Greedy', 'Single choice', 'No sub-problems', 'Local optimal choice', 'Huffman coding, Dijkstra'],
-              ['Brute Force', 'All possibilities', 'N/A', 'Exhaustive enumeration', 'Naive string search']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using divide and conquer when sub-problems overlap (fix: use dynamic programming with memoization instead)',
-            'Mistake 2: Ignoring the combine step cost (fix: the combine step must be efficient, ideally O(n) or O(n log n))',
-            'Mistake 3: Recursing too deep for small inputs (fix: switch to iterative or direct solution below a threshold)',
-            'Mistake 4: Assuming all divide-and-conquer algorithms are O(n log n) (fix: apply the Master Theorem carefully — matrix multiplication via Strassen is O(n^2.81))'
-          ]
+            'Mistake 1: Using linear regression on clearly non-linear data without transforms (fix: plot residuals; if U-shaped, try polynomial features or log transform)',
+            'Mistake 2: Not checking multicollinearity when interpreting coefficients (fix: compute VIF; if VIF > 10, coefficients are unstable — use Ridge)',
+            'Mistake 3: Extrapolating beyond training range (fix: linear models assume trends continue — limit predictions to observed x range)',
+            'Mistake 4: Ignoring feature scaling when using Gradient Descent manually (fix: StandardScaler before GD; Normal Equation does not need scaling)',
+            'Mistake 5: Treating R² = 0.99 as proof of causation (fix: correlation ≠ causation; validate with domain knowledge and held-out test data)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Divide and Conquer powers many machine learning and systems algorithms.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>Merge Sort / Quick Sort:</strong> Standard sorting for dataset preparation; quick sort is the default in most standard libraries',
-            '<strong>Fast Fourier Transform (FFT):</strong> Divides DFT into smaller DFTs — O(n log n) instead of O(n²) — critical for signal processing and spectrogram generation',
-            '<strong>Strassen Matrix Multiplication:</strong> Reduces complexity from O(n³) to O(n^2.81); used in large-scale linear algebra for ML',
-            '<strong>Closest Pair of Points:</strong> O(n log n) algorithm for finding nearest neighbors in 2D space — foundational for geometric ML',
-            '<strong>K-D Tree Construction:</strong> Divide-and-conquer spatial partitioning enables fast nearest-neighbor search in high dimensions'
+            '<strong>Real estate:</strong> Zillow Zestimate uses gradient-boosted models, but linear regression remains the interpretable baseline for price-per-sqft analysis',
+            '<strong>Finance:</strong> CAPM and factor models are linear regressions of asset returns on market factors',
+            '<strong>Healthcare:</strong> Predicting blood pressure from age, BMI, and lifestyle factors — clinicians need interpretable coefficients',
+            '<strong>Marketing:</strong> Sales response curves (spend → revenue) start with linear models before adding saturation transforms',
+            '<strong>Engineering:</strong> Sensor calibration — map raw readings to true measurements with linear fits'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Divide and Conquer breaks a problem into independent sub-problems of the same type',
-            'The Master Theorem determines complexity from the recurrence T(n) = aT(n/b) + O(n^d)',
-            'Merge sort and quick sort are classic O(n log n) divide-and-conquer sorting algorithms',
-            'FFT uses divide and conquer to achieve O(n log n) for the Discrete Fourier Transform',
-            'Use divide and conquer only when sub-problems do not overlap and combining is efficient'
+            'Linear regression predicts continuous targets: ŷ = β₀ + Σ βⱼxⱼ',
+            'OLS minimizes sum of squared residuals — same loss as MSE',
+            'Normal Equation gives exact β* in one step; Gradient Descent iterates with learning rate α',
+            'Use Normal Equation when p < 10,000; use GD/SGD for high-dimensional or streaming data',
+            'sklearn LinearRegression uses LAPACK lstsq (Normal Equation family) by default',
+            'Always check residual plots, R² on held-out data, and coefficient stability (VIF)'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What are the three steps of divide and conquer?\nAns: Divide the problem into sub-problems, conquer each sub-problem recursively, and combine the results.',
-            'Q2: What is the time complexity of merge sort using the Master Theorem?\nAns: T(n) = 2T(n/2) + O(n), so a = b^d → O(n log n).',
-            'Q3: Why does quick sort degrade to O(n²) in the worst case?\nAns: When the pivot consistently partitions into highly unbalanced sub-arrays (e.g., already sorted input with first-element pivot).'
+            `Q1: What is the closed-form solution for OLS?
+Ans: β* = (XᵀX)⁻¹Xᵀy, known as the Normal Equation.`,
+            `Q2: When should you prefer Gradient Descent over the Normal Equation?
+Ans: When the number of features p is very large (> 10,000), data arrives in streams, or XᵀX is too large to store/invert.`,
+            `Q3: Why does Gradient Descent require feature scaling but the Normal Equation does not?
+Ans: GD convergence speed depends on the condition number of the loss surface; unscaled features create elongated valleys. The Normal Equation's analytical solution is scale-invariant (though numerical stability can still benefit from scaling).`,
+            `Q4: What does a negative coefficient mean?
+Ans: Holding other features constant, increasing that feature decreases the predicted target by |βⱼ| units per unit increase in xⱼ.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Linear Regression</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Linear Regression")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'greedy-algorithms': {
-      title: 'Greedy Algorithms',
-      subtitle: 'Make the locally optimal choice at each step and hope it leads to a global optimum',
+    'polynomial-regression': {
+      title: 'Polynomial Regression',
+      subtitle: 'Model curved relationships by adding polynomial feature terms',
       sections: [
         {
-          heading: 'What is a Greedy Algorithm?',
-          text: 'A <strong>greedy algorithm</strong> builds a solution piece by piece, always choosing the next piece that offers the most immediate benefit. It never reconsiders past choices. Greedy algorithms are simple, fast, and often produce optimal or near-optimal solutions for problems with the <strong>greedy-choice property</strong> and <strong>optimal substructure</strong>.',
+          heading: 'What is Polynomial Regression?',
+          text: `<strong>Polynomial regression</strong> is still linear regression — but applied to <em>polynomial features</em> of the original inputs. By adding x², x³, and interaction terms, a linear model can fit curves, peaks, and valleys. sklearn's <code>PolynomialFeatures</code> transformer generates these terms; <code>LinearRegression</code> fits the weights. The danger: high-degree polynomials <strong>overfit</strong> training data while failing on validation data.`,
           list: [
-            '<strong>Greedy-choice property:</strong> A locally optimal choice leads to a globally optimal solution',
-            '<strong>Optimal substructure:</strong> An optimal solution contains optimal solutions to sub-problems',
-            'Fast and easy to implement — often the first approach to try',
-            'Does not backtrack or reconsider decisions once made'
+            '<strong>Degree 2:</strong> adds x² and pairwise interactions (x₁x₂) — captures parabolas',
+            '<strong>Degree 3+:</strong> captures S-curves and inflection points — overfitting risk rises fast',
+            '<strong>Still "linear":</strong> linear in the <em>parameters</em> β, non-linear in raw features x',
+            '<strong>Key tool:</strong> <code>PolynomialFeatures</code> + <code>Pipeline</code> to prevent data leakage',
+            '<strong>Diagnosis:</strong> compare train vs validation error across degrees'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            `<p><strong>Polynomial regression</strong> is still linear regression — but applied to <em>polynomial features</em> of the original inputs. By adding x², x³, and interaction terms, a linear model can fit curves, peaks, and valleys. sklearn's <code>PolynomialFeatures</code> transformer generates these terms; <code>LinearRegression</code> fits the weights. The danger: high-degree polynomials <strong>overfit</strong> training data while failing on validation data. Start with intuition: ask what question this concept answers before memorizing formulas.</p>`,
+            `<p>Technically, <strong>Polynomial regression</strong> is still linear regression — but applied to <em>polynomial features</em> of the original inputs. By adding x², x³, and interaction terms, a linear model can fit curves, peaks, and valleys. sklearn's <code>PolynomialFeatures</code> transformer generates these terms; <code>LinearRegression</code> fits the weights. The danger: high-degree polynomials <strong>overfit</strong> training data while failing on validation data. <strong>Degree 2:</strong> adds x² and pairwise interactions (x₁x₂) — captures parabolas <strong>Degree 3+:</strong> captures S-curves and inflection points — overfitting risk rises fast <strong>Still "linear":</strong> linear in the <em>parameters</em> β, non-linear in raw features x <strong>Key tool:</strong> <code>PolynomialFeatures</code> + <code>Pipeline</code> to prevent data leakage <strong>Diagnosis:</strong> compare train vs validation error across degrees</p>`,
+            '<p>You use polynomial regression when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Polynomial Regression
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Polynomial Regression sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'Greedy algorithms select the next element based on a <strong>cost or benefit heuristic</strong> that is locally optimal.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Activity Selection Problem',
-            code: `Problem: Select maximum non-overlapping activities
-
-Greedy Rule: Always pick the activity with
-  the EARLIEST FINISH TIME that does not
-  conflict with already selected activities.
-
-Example activities (start, finish):
-  (1, 4), (3, 5), (0, 6), (5, 7), (3, 8)
-
-Step 1: Pick (1, 4) — earliest finish = 4
-Step 2: Skip (3, 5) — overlaps with (1, 4)
-Step 3: Skip (0, 6) — overlaps
-Step 4: Pick (5, 7) — starts at 5 ≥ 4
-Step 5: Skip (3, 8) — overlaps
-
-Result: {(1, 4), (5, 7)} — 2 activities`,
-            output: 'The earliest-finish greedy rule guarantees the maximum number of compatible activities.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Polynomial Regression with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("Polynomial Regression — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Greedy algorithms differ from dynamic programming and brute force in fundamental ways.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Approach', 'Decision Style', 'Backtracking', 'Optimality', 'Speed'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Greedy', 'One local choice per step', 'Never', 'Optimal only for specific problems', 'Fast — usually O(n log n) or O(n)'],
-              ['Dynamic Programming', 'Considers all sub-problem choices', 'Implicit via memoization', 'Optimal when substructure holds', 'Slower — polynomial but higher constant'],
-              ['Brute Force', 'Tries all possibilities', 'Always', 'Always optimal', 'Exponential — impractical for large n'],
-              ['Backtracking', 'Builds and abandons partial solutions', 'Yes — undoes bad choices', 'Optimal', 'Exponential in worst case']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Applying greedy to problems where local choices do not lead to global optima (fix: verify the greedy-choice property mathematically before using)',
-            'Mistake 2: Assuming greedy always gives the best solution (fix: for the 0/1 knapsack problem, greedy fails — use dynamic programming instead)',
-            'Mistake 3: Choosing the wrong greedy criterion (fix: in activity selection, earliest finish works; earliest start or shortest duration do not)',
-            'Mistake 4: Not considering tie-breaking rules (fix: when multiple candidates have equal local cost, the choice can affect the final result)'
-          ]
+            'Mistake 1: Fitting PolynomialFeatures on the full dataset before train/test split (fix: always use Pipeline so transforms are fit only on training folds)',
+            'Mistake 2: Using degree > 5 without regularization (fix: add Ridge(α) in the pipeline or use cross-validation to cap degree)',
+            'Mistake 3: Forgetting to scale features before high-degree polynomials (fix: StandardScaler before PolynomialFeatures — x=1000 and x²=1,000,000 have wildly different magnitudes)',
+            'Mistake 4: Interpreting raw polynomial coefficients (fix: coefficients depend on feature scale and are not marginal effects — plot the curve instead)',
+            'Mistake 5: Choosing degree by training error alone (fix: always select degree by validation or cross-validation MSE)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Greedy algorithms are widely used in machine learning and systems.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>Huffman Coding:</strong> Greedy construction of a prefix-free binary tree for lossless data compression — used in ZIP and JPEG',
-            '<strong>Dijkstra Shortest Path:</strong> Greedy selection of the minimum-distance vertex — O((V+E) log V) with a priority queue',
-            '<strong>Kruskal Minimum Spanning Tree:</strong> Greedily adds the cheapest edge that does not form a cycle — used in network design',
-            '<strong>Feature Selection (Greedy Forward):</strong> Iteratively adds the feature that most improves model performance — common in high-dimensional ML',
-            '<strong>Gradient Boosting:</strong> At each iteration, greedily adds the weak learner that most reduces the residual loss'
+            '<strong>Economics:</strong> Diminishing returns curves (advertising spend vs sales) — degree-2 polynomial captures saturation',
+            '<strong>Physics:</strong> Kinematic equations are polynomial in time (s = ut + ½at²)',
+            '<strong>Agriculture:</strong> Crop yield vs fertilizer dose — too little and too much both reduce yield (quadratic)',
+            '<strong>Manufacturing:</strong> Temperature vs product quality — optimal temperature is a peak, not a line',
+            '<strong>Calibration:</strong> Sensor response curves that deviate from linearity at extremes'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Greedy algorithms make the locally optimal choice at each step without backtracking',
-            'They work only when the problem has the greedy-choice property and optimal substructure',
-            'Activity selection, Huffman coding, Dijkstra, and Kruskal are classic greedy algorithms',
-            'Greedy is fast but not always optimal — 0/1 knapsack requires dynamic programming',
-            'In ML, greedy feature selection and gradient boosting use greedy strategies'
+            'Polynomial regression = PolynomialFeatures + LinearRegression',
+            'It is linear in parameters but non-linear in raw features',
+            'Degree controls flexibility: low = underfit, high = overfit',
+            'Watch for the train/val error gap — the hallmark of overfitting',
+            'Always use Pipeline; always scale; select degree by cross-validation',
+            'Pair with Ridge regularization when degree or feature count is high'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What two properties must a problem have for a greedy algorithm to be optimal?\nAns: The greedy-choice property and optimal substructure.',
-            'Q2: Why does the greedy approach fail for the 0/1 knapsack problem?\nAns: Because choosing the highest value-to-weight ratio first can block a better overall combination of items.',
-            'Q3: What is the time complexity of Dijkstra algorithm with a binary heap?\nAns: O((V + E) log V), where V is vertices and E is edges.'
+            `Q1: Why is polynomial regression still called "linear"?
+Ans: It is linear in the parameters β — the model is a weighted sum of features, even though those features are powers of x.`,
+            `Q2: What pattern in the train/val error table signals overfitting?
+Ans: Training MSE keeps decreasing while validation MSE increases — a growing gap between the two.`,
+            `Q3: Why must PolynomialFeatures be inside a Pipeline?
+Ans: To ensure the transform is fit only on training data during cross-validation, preventing data leakage from the test set into feature generation.`,
+            `Q4: What is Runge's phenomenon?
+Ans: High-degree polynomials oscillate wildly at the edges of the data range, causing poor extrapolation even when they fit training points perfectly.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Polynomial Regression</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Polynomial Regression")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'dynamic-programming': {
-      title: 'Dynamic Programming',
-      subtitle: 'Solve complex problems by breaking them into overlapping sub-problems and storing their solutions',
+    'ridge-lasso-elastic-net': {
+      title: 'Ridge, Lasso & Elastic Net',
+      subtitle: 'Regularized linear regression to control overfitting and perform feature selection',
       sections: [
         {
-          heading: 'What is Dynamic Programming?',
-          text: '<strong>Dynamic Programming (DP)</strong> is a method for solving complex problems by breaking them down into simpler, overlapping sub-problems, solving each sub-problem only once, and storing the result for future reuse. It is the algorithmic backbone of many optimization problems in machine learning, bioinformatics, and operations research.',
+          heading: 'What is Regularized Regression?',
+          text: 'When features are correlated, numerous, or polynomial-expanded, plain OLS overfits and produces unstable coefficients. <strong>Regularization</strong> adds a penalty on weight magnitude to the loss function. <strong>Ridge (L2)</strong> shrinks coefficients toward zero; <strong>Lasso (L1)</strong> drives some exactly to zero (feature selection); <strong>Elastic Net</strong> combines both penalties. sklearn provides <code>Ridge</code>, <code>Lasso</code>, and <code>ElasticNet</code> with a shared <code>alpha</code> hyperparameter controlling penalty strength.',
           list: [
-            '<strong>Optimal substructure:</strong> The optimal solution can be constructed from optimal solutions to sub-problems',
-            '<strong>Overlapping sub-problems:</strong> The same sub-problems are solved multiple times in a naive recursive approach',
-            '<strong>Memoization:</strong> Top-down approach — cache results of recursive calls',
-            '<strong>Tabulation:</strong> Bottom-up approach — fill a table iteratively from base cases'
+            '<strong>Ridge:</strong> L2 penalty λ‖β‖² — keeps all features, shrinks coefficients',
+            '<strong>Lasso:</strong> L1 penalty λ‖β‖₁ — zeros out irrelevant features',
+            '<strong>Elastic Net:</strong> α·L1 + (1−α)·L2 — best of both when features are correlated',
+            '<strong>Regularization path:</strong> plot coefficients vs α to see which features survive',
+            '<strong>Always scale features</strong> before regularized regression — penalties are not scale-invariant'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>When features are correlated, numerous, or polynomial-expanded, plain OLS overfits and produces unstable coefficients. <strong>Regularization</strong> adds a penalty on weight magnitude to the loss function. <strong>Ridge (L2)</strong> shrinks coefficients toward zero; <strong>Lasso (L1)</strong> drives some exactly to zero (feature selection); <strong>Elastic Net</strong> combines both penalties. sklearn provides <code>Ridge</code>, <code>Lasso</code>, and <code>ElasticNet</code> with a shared <code>alpha</code> hyperparameter controlling penalty strength. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, When features are correlated, numerous, or polynomial-expanded, plain OLS overfits and produces unstable coefficients. <strong>Regularization</strong> adds a penalty on weight magnitude to the loss function. <strong>Ridge (L2)</strong> shrinks coefficients toward zero; <strong>Lasso (L1)</strong> drives some exactly to zero (feature selection); <strong>Elastic Net</strong> combines both penalties. sklearn provides <code>Ridge</code>, <code>Lasso</code>, and <code>ElasticNet</code> with a shared <code>alpha</code> hyperparameter controlling penalty strength. <strong>Ridge:</strong> L2 penalty λ‖β‖² — keeps all features, shrinks coefficients <strong>Lasso:</strong> L1 penalty λ‖β‖₁ — zeros out irrelevant features <strong>Elastic Net:</strong> α·L1 + (1−α)·L2 — best of both when features are correlated <strong>Regularization path:</strong> plot coefficients vs α to see which features survive <strong>Always scale features</strong> before regularized regression — penalties are not scale-invariant</p>',
+            '<p>You use ridge, lasso & elastic net when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Ridge, Lasso & Elastic Net
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Ridge, Lasso & Elastic Net sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'The Fibonacci sequence illustrates the power of DP. Naive recursion is exponential; DP reduces it to linear time.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'Fibonacci — Recursive vs DP',
-            code: `Naive Recursion:
-  fib(n) = fib(n-1) + fib(n-2)
-  T(n) = O(2^n) — exponential!
-
-Memoization (Top-Down):
-  memo = {}
-  fib(n):
-    if n in memo: return memo[n]
-    memo[n] = fib(n-1) + fib(n-2)
-    return memo[n]
-  T(n) = O(n), Space = O(n)
-
-Tabulation (Bottom-Up):
-  dp[0] = 0, dp[1] = 1
-  for i = 2 to n:
-    dp[i] = dp[i-1] + dp[i-2]
-  T(n) = O(n), Space = O(n) → can reduce to O(1)`,
-            output: 'DP reduces time from exponential to linear by avoiding redundant computation.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
-          heading: 'Important Differences',
-          text: 'Memoization and tabulation are the two implementation styles of DP.',
+          heading: 'Python Code Example',
+          example: {
+            title: 'Ridge, Lasso & Elastic Net with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("Ridge, Lasso & Elastic Net — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'L1 vs L2 Comparison',
+          text: 'The choice of penalty shape determines whether you get shrinkage, sparsity, or both.',
           table: {
-            headers: ['Aspect', 'Memoization', 'Tabulation'],
+            headers: [
+              'Property',
+              'Ridge (L2)',
+              'Lasso (L1)',
+              'Elastic Net'
+            ],
             rows: [
-              ['Approach', 'Top-down (recursive)', 'Bottom-up (iterative)'],
-              ['State computation', 'On demand — only needed states', 'All states, in order'],
-              ['Ease of implementation', 'Often closer to the recursive formula', 'Requires ordering states correctly'],
-              ['Stack overflow risk', 'Yes — recursion depth', 'No — iterative'],
-              ['Overhead', 'Function call overhead', 'Loop overhead, but faster in practice'],
-              ['When to use', 'When not all states are needed', 'When most states are needed']
+              [
+                'Penalty term',
+                'α Σ βⱼ²',
+                'α Σ |βⱼ|',
+                'α·ρ·Σ|βⱼ| + α·(1−ρ)·Σβⱼ²'
+              ],
+              [
+                'Coefficient behavior',
+                'Shrinks toward 0, never exactly 0',
+                'Shrinks to exactly 0 (sparse)',
+                'Sparse + grouped shrinkage'
+              ],
+              [
+                'Feature selection',
+                'No — keeps all features',
+                'Yes — zeros irrelevant features',
+                'Yes, but keeps correlated groups'
+              ],
+              [
+                'Multicollinearity',
+                'Handles well — distributes weight',
+                'Picks one, drops others arbitrarily',
+                'Keeps groups together'
+              ],
+              [
+                'When p > n',
+                'Works (always)',
+                'Works (selects ≤ n features)',
+                'Works best for correlated p > n'
+              ],
+              [
+                'Geometric intuition',
+                'Circular constraint → smooth shrinkage',
+                'Diamond constraint → corners at axes (zeros)',
+                'Mix of diamond + circle'
+              ],
+              [
+                'sklearn class',
+                'Ridge / RidgeCV',
+                'Lasso / LassoCV',
+                'ElasticNet / ElasticNetCV'
+              ],
+              [
+                'Typical use',
+                'Many correlated features, all relevant',
+                'Few important features, sparse truth',
+                'High-dimensional, correlated groups'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using naive recursion instead of DP for problems with overlapping sub-problems (fix: add a memo table or switch to tabulation)',
-            'Mistake 2: Incorrect state definition — not capturing all dimensions needed (fix: if the recurrence needs both index and remaining capacity, the DP table must be 2D)',
-            'Mistake 3: Off-by-one errors in tabulation base cases (fix: carefully initialize dp[0], dp[1], etc., and verify small examples by hand)',
-            'Mistake 4: Not optimizing space when possible (fix: many DP problems only need the previous row — reduce space from O(n²) to O(n) or O(1))'
-          ]
+            'Mistake 1: Applying Lasso/Ridge without scaling (fix: StandardScaler in Pipeline — L1/L2 penalties are not scale-invariant)',
+            'Mistake 2: Using Lasso when all features are truly relevant (fix: Ridge preserves all features; Lasso drops correlated ones arbitrarily)',
+            'Mistake 3: Not using CV to tune alpha (fix: RidgeCV/LassoCV search log-spaced alphas — manual guessing wastes performance)',
+            'Mistake 4: Comparing regularized models to OLS on training R² (fix: regularized models intentionally sacrifice training fit for better generalization — compare on test/cv metrics)',
+            'Mistake 5: Ignoring max_iter warnings in Lasso (fix: increase max_iter to 5000+ or scale features better; convergence failure means unreliable coefficients)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Dynamic programming is essential across machine learning and adjacent fields.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>0/1 Knapsack:</strong> Select items with maximum value without exceeding weight capacity — foundational for resource allocation',
-            '<strong>Longest Common Subsequence (LCS):</strong> Measures similarity between sequences — used in diff tools, DNA alignment, and version control',
-            '<strong>Edit Distance (Levenshtein):</strong> Minimum operations to transform one string into another — used in spell checking and OCR correction',
-            '<strong>Viterbi Algorithm:</strong> DP for finding the most likely sequence of hidden states in HMMs — core to speech recognition and NLP tagging',
-            '<strong>Sequence Alignment:</strong> Needleman-Wunsch and Smith-Waterman algorithms use DP for protein and DNA sequence matching in bioinformatics'
+            '<strong>Genomics:</strong> p = 20,000 genes, n = 200 patients — Lasso selects biomarkers for disease prediction',
+            '<strong>Finance:</strong> Ridge stabilizes factor model coefficients when economic indicators are highly correlated',
+            '<strong>Marketing mix modeling:</strong> Elastic Net handles correlated ad channels while selecting the strongest drivers',
+            '<strong>Real estate:</strong> Ridge on 50+ property features prevents overfitting in hedonic price models',
+            '<strong>Text regression:</strong> Lasso on TF-IDF features (p = 10,000+) selects the most predictive terms'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Dynamic programming solves problems by breaking them into overlapping sub-problems',
-            'Two conditions required: optimal substructure and overlapping sub-problems',
-            'Memoization is top-down (recursive with cache); tabulation is bottom-up (iterative table filling)',
-            'DP reduces exponential-time recursive solutions to polynomial time',
-            'Space can often be optimized by keeping only the most recent state rows'
+            'Ridge (L2) shrinks coefficients; Lasso (L1) zeros them; Elastic Net combines both',
+            'Alpha (α) controls penalty strength — higher α = simpler model',
+            'Regularization paths show coefficient behavior as α varies',
+            'Always scale features before L1/L2 penalties',
+            'Use RidgeCV / LassoCV / ElasticNetCV for automatic alpha tuning',
+            'Choose Ridge for correlated features; Lasso for sparse truth; Elastic Net for both'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What is the difference between divide-and-conquer and dynamic programming?\nAns: Divide-and-conquer handles independent sub-problems; DP handles overlapping sub-problems by storing and reusing results.',
-            'Q2: What are the two implementation approaches for DP?\nAns: Memoization (top-down recursive with caching) and tabulation (bottom-up iterative table filling).',
-            'Q3: What is the time and space complexity of the 0/1 knapsack DP solution?\nAns: Time = O(n · W), Space = O(n · W), where n is items and W is capacity; space can be optimized to O(W).'
+            `Q1: Why does Lasso produce sparse solutions but Ridge does not?
+Ans: The L1 penalty's diamond-shaped constraint has corners on the axes where some βⱼ = 0. The L2 circle has no corners, so coefficients shrink but rarely hit exactly zero.`,
+            `Q2: When would you choose Elastic Net over pure Lasso?
+Ans: When features are highly correlated and you want feature selection without arbitrarily dropping one from each correlated group.`,
+            `Q3: What happens as α → ∞ in Ridge regression?
+Ans: All coefficients approach zero and the model predicts the mean of y — maximum bias, minimum variance.`,
+            `Q4: Why is feature scaling mandatory for regularized regression?
+Ans: Penalties sum over raw coefficient values. A feature with large scale (e.g., income in dollars) would be penalized more than one with small scale (e.g., age), distorting the optimization.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Ridge, Lasso & Elastic Net</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Ridge, Lasso & Elastic Net")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'graph-algorithms': {
-      title: 'Graph Algorithms',
-      subtitle: 'Navigate relationships, find paths, and discover structure in connected data',
+    'regression-pipeline-eda': {
+      title: 'Regression Pipeline & EDA',
+      subtitle: 'End-to-end workflow from raw data to evaluated model using sklearn Pipeline',
       sections: [
         {
-          heading: 'What are Graph Algorithms?',
-          text: 'A <strong>graph</strong> is a collection of nodes (vertices) connected by edges. <strong>Graph algorithms</strong> are procedures for finding paths, discovering connectivity, detecting cycles, and analyzing the structure of these networks. Graphs model relationships in social networks, molecules, road maps, neural networks, and knowledge bases.',
+          heading: 'What is a Regression Pipeline?',
+          text: `A production-quality regression workflow is more than <code>model.fit(X, y)</code>. It chains <strong>EDA → cleaning → feature engineering → modeling → evaluation</strong> into a reproducible pipeline. sklearn's <code>Pipeline</code> and <code>ColumnTransformer</code> ensure every preprocessing step is fit only on training data and applied consistently at prediction time — eliminating the most common source of data leakage.`,
           list: [
-            '<strong>Vertices (V):</strong> Nodes representing entities (users, cities, neurons)',
-            '<strong>Edges (E):</strong> Connections representing relationships (friendship, road, synapse)',
-            '<strong>Weighted graphs:</strong> Edges have numerical values (distance, cost, similarity)',
-            '<strong>Directed graphs:</strong> Edges have direction (follows, dependency, hyperlink)'
+            '<strong>EDA:</strong> distributions, missing values, correlations, outliers',
+            '<strong>Feature engineering:</strong> scaling, encoding categoricals, creating interactions',
+            '<strong>Modeling:</strong> LinearRegression, Ridge, or ElasticNet inside a Pipeline',
+            '<strong>Evaluation:</strong> MAE, RMSE, R² on held-out test data',
+            '<strong>Cross-validation:</strong> robust estimates before final test evaluation'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            `<p>A production-quality regression workflow is more than <code>model.fit(X, y)</code>. It chains <strong>EDA → cleaning → feature engineering → modeling → evaluation</strong> into a reproducible pipeline. sklearn's <code>Pipeline</code> and <code>ColumnTransformer</code> ensure every preprocessing step is fit only on training data and applied consistently at prediction time — eliminating the most common source of data leakage. Start with intuition: ask what question this concept answers before memorizing formulas.</p>`,
+            `<p>Technically, A production-quality regression workflow is more than <code>model.fit(X, y)</code>. It chains <strong>EDA → cleaning → feature engineering → modeling → evaluation</strong> into a reproducible pipeline. sklearn's <code>Pipeline</code> and <code>ColumnTransformer</code> ensure every preprocessing step is fit only on training data and applied consistently at prediction time — eliminating the most common source of data leakage. <strong>EDA:</strong> distributions, missing values, correlations, outliers <strong>Feature engineering:</strong> scaling, encoding categoricals, creating interactions <strong>Modeling:</strong> LinearRegression, Ridge, or ElasticNet inside a Pipeline <strong>Evaluation:</strong> MAE, RMSE, R² on held-out test data <strong>Cross-validation:</strong> robust estimates before final test evaluation</p>`,
+            '<p>You use regression pipeline & eda when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Regression Pipeline & EDA
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Regression Pipeline & EDA sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'Graph traversal and search are foundational. BFS explores level by level; DFS dives deep first.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'BFS vs DFS Traversal',
-            code: `BFS (Breadth-First Search):
-  Uses a QUEUE
-  Explores all neighbors at current depth
-  before moving to the next depth level
-  → Finds shortest path in unweighted graphs
-
-  Time: O(V + E)
-  Space: O(V)
-
-DFS (Depth-First Search):
-  Uses a STACK (or recursion)
-  Explores as far as possible along each
-  branch before backtracking
-  → Detects cycles and finds connected components
-
-  Time: O(V + E)
-  Space: O(V) (recursive stack)`,
-            output: 'BFS is optimal for shortest path in unweighted graphs; DFS is simpler and uses less memory per layer.',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Regression Pipeline & EDA with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("Regression Pipeline & EDA — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Different graph algorithms solve different problems.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Algorithm', 'Problem', 'Approach', 'Time Complexity', 'Space Complexity'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['BFS', 'Shortest path (unweighted)', 'Queue, level-by-level', 'O(V + E)', 'O(V)'],
-              ['DFS', 'Connectivity, cycles, topological sort', 'Stack / recursion', 'O(V + E)', 'O(V)'],
-              ['Dijkstra', 'Shortest path (weighted, non-negative)', 'Greedy + priority queue', 'O((V+E) log V)', 'O(V)'],
-              ['Bellman-Ford', 'Shortest path (with negative weights)', 'Dynamic programming', 'O(V · E)', 'O(V)'],
-              ['Floyd-Warshall', 'All-pairs shortest path', 'DP on intermediate nodes', 'O(V³)', 'O(V²)'],
-              ['Kruskal / Prim', 'Minimum spanning tree', 'Greedy edge/vertex selection', 'O(E log V)', 'O(V + E)']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using Dijkstra on graphs with negative edge weights (fix: use Bellman-Ford instead; Dijkstra assumes non-negative weights)',
-            'Mistake 2: Confusing directed and undirected graph representations (fix: in adjacency lists, undirected edges must be stored in both directions)',
-            'Mistake 3: Running BFS for shortest path on weighted graphs (fix: BFS only works for unweighted graphs; use Dijkstra for weighted)',
-            'Mistake 4: Not handling disconnected components (fix: wrap traversal in a loop over all vertices to ensure every component is visited)'
-          ]
+            'Mistake 1: Fitting StandardScaler on the full dataset including test rows (fix: everything inside Pipeline, fit only on X_train)',
+            'Mistake 2: Evaluating only on training data (fix: hold out a test set; report MAE/RMSE/R² on unseen data)',
+            'Mistake 3: Using R² alone to claim success (fix: R² = 0.95 on skewed targets can still mean large dollar errors — always report MAE/RMSE in original units)',
+            'Mistake 4: Skipping EDA and going straight to modeling (fix: 30 minutes of EDA prevents hours of debugging — check distributions, missing values, and correlations first)',
+            'Mistake 5: Not persisting the full pipeline (fix: joblib.dump(pipe, "model.joblib") — not just the model object, so preprocessing is included at inference time)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Graph algorithms are fundamental to modern machine learning and systems.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>PageRank (Google):</strong> Treats the web as a directed graph and ranks pages by importance based on link structure',
-            '<strong>Social Network Analysis:</strong> Community detection, influence maximization, and friend recommendation using graph traversal',
-            '<strong>Shortest Path (Navigation):</strong> GPS systems use Dijkstra or A* on road network graphs to find optimal routes',
-            '<strong>Knowledge Graphs:</strong> Graph traversal powers question answering and reasoning in systems like Google Knowledge Graph and Wikidata',
-            '<strong>Neural Network Computation Graphs:</strong> Backpropagation is essentially a reverse traversal of the computation graph using DFS-like topological order'
+            '<strong>ML engineering:</strong> Every production regression service wraps preprocessing + model in a single serialized Pipeline',
+            '<strong>Data science interviews:</strong> "Walk me through your modeling process" expects EDA → pipeline → cross-validation → test evaluation',
+            '<strong>MLOps:</strong> Pipelines ensure training and serving use identical transforms — prevents training-serving skew',
+            '<strong>Compliance:</strong> Reproducible pipelines with fixed random seeds satisfy audit requirements in finance and healthcare',
+            '<strong>A/B testing:</strong> Compare pipelines (not just models) to measure end-to-end impact of feature engineering changes'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Graphs model entities (vertices) and their relationships (edges)',
-            'BFS finds shortest paths in unweighted graphs; DFS finds cycles and connected components',
-            'Dijkstra works for non-negative weighted shortest paths; Bellman-Ford handles negative weights',
-            'Floyd-Warshall computes all-pairs shortest paths in O(V³)',
-            'Kruskal and Prim find minimum spanning trees using greedy edge selection'
+            'Regression workflow: EDA → split → preprocess → model → evaluate',
+            'sklearn Pipeline chains all steps; ColumnTransformer handles mixed feature types',
+            'Report MAE (interpretable), RMSE (penalizes big errors), and R² (variance explained)',
+            'Cross-validate on training data; evaluate once on held-out test set',
+            'Serialize the entire Pipeline, not just the model',
+            'EDA prevents leakage, identifies transforms, and guides feature selection'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why does Dijkstra algorithm fail with negative edge weights?\nAns: Because once a vertex is marked as visited, Dijkstra assumes the shortest path to it is finalized — negative edges could provide a shorter path later.',
-            'Q2: What is the time complexity of BFS and DFS on an adjacency list representation?\nAns: O(V + E) for both.',
-            'Q3: In what scenario is Floyd-Warshall preferred over running Dijkstra from every vertex?\nAns: When the graph is dense and edge weights can be negative; Floyd-Warshall handles negatives and is simpler to implement for all-pairs.'
+            `Q1: Why must preprocessing be inside the Pipeline?
+Ans: So transforms are fit only on training data during cross-validation, preventing information leakage from the test set.`,
+            `Q2: When is RMSE much larger than MAE?
+Ans: When the model makes a few large errors (outliers in residuals). RMSE squares errors, amplifying big mistakes.`,
+            `Q3: What does R² = 0.87 mean?
+Ans: The model explains 87% of the variance in the target; 13% remains unexplained by the features.`,
+            `Q4: Why log-transform a skewed target?
+Ans: Linear models assume residuals are homoscedastic. Log transformation compresses large values, making errors more symmetric and improving model fit.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Regression Pipeline & EDA</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Regression Pipeline & EDA")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'string-algorithms': {
-      title: 'String Algorithms',
-      subtitle: 'Process, match, and transform sequences efficiently for text and biological data',
+    'house-price-prediction-project': {
+      title: 'House Price Prediction Project',
+      subtitle: 'End-to-end regression project on California-housing-style data — from problem definition to deployment',
       sections: [
         {
-          heading: 'What are String Algorithms?',
-          text: '<strong>String algorithms</strong> are techniques for processing, searching, matching, and transforming sequences of characters. They are essential in natural language processing, bioinformatics (DNA/protein sequences), compression, cryptography, and text-based machine learning.',
-          list: [
-            '<strong>Pattern matching:</strong> Find a substring within a larger string (text search, plagiarism detection)',
-            '<strong>Edit distance:</strong> Measure how different two strings are (spell checking, OCR correction)',
-            '<strong>Suffix structures:</strong> Preprocess strings for fast substring queries (genome assembly, text indexing)',
-            '<strong>String hashing:</strong> Map strings to numeric values for fast comparison and deduplication'
-          ]
+          heading: 'What is House Price Prediction Project?',
+          text: 'House Price Prediction Project is essential for machine learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in machine learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, House Price Prediction Project provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use house price prediction project when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — House Price Prediction Project
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: House Price Prediction Project sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'The <strong>KMP (Knuth-Morris-Pratt)</strong> algorithm avoids re-checking characters by using a prefix function that encodes how much of the pattern can be skipped upon a mismatch.',
+          text: 'Core identity for this topic.',
           example: {
-            title: 'KMP Prefix Function',
-            code: `Pattern: "ABABC"
-
-Prefix function lps[i] = length of longest
-proper prefix of pattern[0..i] that is also
-a suffix of pattern[0..i].
-
-  i:    0  1  2  3  4
-  pat:  A  B  A  B  C
-  lps:  0  0  1  2  0
-
-Meaning:
-  At i=3 ("ABAB"), lps=2 because "AB" is both
-  prefix and suffix.
-  On mismatch at pattern[4], we skip ahead
-  by 2 instead of restarting completely.
-
-KMP Search: O(n + m)
-  n = text length, m = pattern length`,
-            output: 'KMP achieves linear-time pattern matching by preprocessing the pattern in O(m).',
+            title: 'Worked formula',
+            code: 'See Python example below.',
+            output: 'Apply the formula before trusting software output.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'House Price Prediction Project with Python',
+            code: `import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_breast_cancer(return_X_y=True)
+pipe = Pipeline([("sc", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))])
+scores = cross_val_score(pipe, X, y, cv=5, scoring="accuracy")
+print("House Price Prediction Project — CV accuracy:", round(scores.mean(), 4), "+/-", round(scores.std(), 4))`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'String algorithms differ in preprocessing cost, query speed, and use cases.',
+          text: 'Pick the right variant for your data type and sample size.',
           table: {
-            headers: ['Algorithm', 'Problem', 'Preprocessing', 'Query / Match', 'Best For'],
+            headers: [
+              'Aspect',
+              'Option A',
+              'Option B',
+              'When to use each'
+            ],
             rows: [
-              ['Naive Search', 'Find pattern in text', 'None', 'O(n · m)', 'Very short patterns'],
-              ['KMP', 'Single pattern search', 'O(m)', 'O(n)', 'Single long pattern in long text'],
-              ['Rabin-Karp', 'Multiple pattern search', 'O(m)', 'O(n) avg', 'Multiple patterns, plagiarism'],
-              ['Boyer-Moore', 'Single pattern search', 'O(m + Σ)', 'O(n/m) best', 'Very large alphabets'],
-              ['Trie', 'Prefix search', 'O(total chars)', 'O(L) per query', 'Dictionary, autocomplete'],
-              ['Suffix Array / Tree', 'Any substring query', 'O(n log n) or O(n)', 'O(m)', 'Genomics, text indexing']
+              [
+                'Data',
+                'Numerical',
+                'Categorical',
+                'Numerical → t/ANOVA; categorical → chi-square'
+              ],
+              [
+                'Sample size',
+                'Large n',
+                'Small n',
+                'Large → z/normal; small → t or exact tests'
+              ],
+              [
+                'Goal',
+                'Estimate',
+                'Test',
+                'Estimation → CI; decision → hypothesis test'
+              ],
+              [
+                'Assumptions',
+                'Parametric',
+                'Non-parametric',
+                'Parametric when assumptions hold; else rank-based'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using naive search for long patterns or large texts (fix: use KMP, Rabin-Karp, or suffix arrays for linear or sublinear performance)',
-            'Mistake 2: Confusing edit distance with longest common subsequence (fix: edit distance counts insert/delete/substitute; LCS finds the longest shared subsequence without gaps)',
-            'Mistake 3: Not preprocessing when doing many queries on the same text (fix: build a suffix array, suffix tree, or Trie once to answer queries in O(m))',
-            'Mistake 4: Ignoring alphabet size in algorithm selection (fix: Boyer-Moore excels on large alphabets like English text; KMP is alphabet-agnostic)'
-          ]
+            'Mistake 1: Training on the full dataset and reporting training R² as final performance (fix: always hold out a test set; report test metrics)',
+            'Mistake 2: Manually scaling at inference time differently than at training (fix: save the Pipeline — scaler is embedded)',
+            'Mistake 3: Ignoring geographic features and using only demographic data (fix: Latitude/Longitude capture location premium — include them or use spatial encodings)',
+            'Mistake 4: Deploying the most complex model (polynomial) when Ridge is nearly as accurate (fix: prefer simpler model when performance difference is < 1% RMSE)',
+            'Mistake 5: Not monitoring model drift in production (fix: log predictions and actuals; retrain when RMSE exceeds a threshold over rolling windows)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'String algorithms are embedded in machine learning pipelines and everyday software.',
+          heading: 'Real-World Case Study',
+          text: '<strong>Stripe — fraud detection.</strong> Stripe scores billions of transactions with gradient-boosted trees. A <strong>0.1% recall improvement</strong> on fraud saves millions; models are retrained weekly with stratified CV and precision-recall monitoring.',
           list: [
-            '<strong>Search Engines:</strong> Inverted indices and suffix arrays enable fast full-text search across billions of documents',
-            '<strong>Plagiarism Detection:</strong> Rabin-Karp rolling hash compares document fingerprints to detect copied passages',
-            '<strong>DNA Sequencing:</strong> Suffix arrays and BWT (Burrows-Wheeler Transform) power genome alignment tools like BWA and Bowtie',
-            '<strong>Spell Checkers:</strong> Edit distance finds the closest dictionary word to a misspelled input — used in every mobile keyboard',
-            '<strong>Tokenization (NLP):</strong> Trie-based prefix matching splits text into tokens efficiently in modern LLM tokenizers'
+            'Industry: Streaming / product experimentation',
+            'Dataset: Millions of user sessions per variant',
+            'Method: Hypothesis tests + CUPED variance reduction',
+            'Results: Detect ~0.1% metric lifts reliably',
+            'Impact: Data-driven feature launches at global scale'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'String algorithms efficiently process, search, match, and transform character sequences',
-            'KMP achieves O(n + m) pattern matching by preprocessing the pattern with a prefix function',
-            'Edit distance (Levenshtein) measures string similarity using dynamic programming',
-            'Suffix arrays and trees preprocess text for fast substring queries in bioinformatics and search',
-            'Trie structures support fast prefix-based lookup for autocomplete and dictionary tasks'
+            'House price prediction is a classic regression project with real-world constraints',
+            'EDA revealed MedInc as top predictor and multicollinearity in room features',
+            'RidgeCV won with Test RMSE = 0.681 ($68K large-error scale) and R² = 0.633',
+            'Pipeline ensures preprocessing consistency from training to API serving',
+            'Deployment: joblib.dump the Pipeline, load in Flask, expose /predict endpoint',
+            'Always monitor production predictions for model drift'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What is the time complexity of KMP pattern matching?\nAns: O(n + m), where n is the text length and m is the pattern length.',
-            'Q2: What is the difference between LCS and edit distance?\nAns: LCS finds the longest shared subsequence; edit distance measures the minimum number of operations to transform one string into another.',
-            'Q3: Why are suffix arrays useful in genomics?\nAns: They preprocess the genome once (O(n log n)) so that any substring query can be answered in O(m), enabling fast alignment of millions of reads.'
+            `Q1: Why did Ridge outperform plain LinearRegression on this dataset?
+Ans: AveRooms and AveBedrms are highly correlated, making OLS coefficients unstable. Ridge's L2 penalty produces stable, generalizable weights.`,
+            `Q2: How do you convert a prediction of 2.453 to dollars?
+Ans: Multiply by $100,000 → $245,300. The target is in $100K units.`,
+            `Q3: Why serialize the Pipeline instead of just the Ridge model?
+Ans: The Pipeline includes StandardScaler. Without it, raw features would be fed to Ridge at inference time, producing wrong predictions.`,
+            `Q4: What would you do if production RMSE drifts from 0.68 to 0.95?
+Ans: Investigate data drift (feature distributions changed), retrain on recent data, and consider adding new features or switching to a more flexible model.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>House Price Prediction Project</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — House Price Prediction Project")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     }

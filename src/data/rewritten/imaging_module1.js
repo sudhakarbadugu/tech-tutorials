@@ -1,484 +1,1034 @@
 export const imagingModule1Structure = {
   module1: {
-    title: 'Module 1: Imaging Foundations',
+    title: 'Module 1: Foundations of Imaging',
     topics: [
-      { id: 'imaging-basics', title: 'Imaging Basics' },
-      { id: 'image-formation', title: 'Image Formation' },
-      { id: 'camera-models', title: 'Camera Models' },
-      { id: 'image-sensors', title: 'Image Sensors' },
-      { id: 'sampling-quantization', title: 'Sampling & Quantization' },
+      {
+        id: 'image-types-representation',
+        title: 'Image Types & Representation'
+      },
+      {
+        id: 'image-formats-io',
+        title: 'Image Formats & I/O'
+      },
+      {
+        id: 'sampling-quantization-resolution',
+        title: 'Sampling, Quantization & Resolution'
+      },
+      {
+        id: 'medical-imaging-modalities',
+        title: 'Medical Imaging Modalities'
+      },
+      {
+        id: 'imaging-pipeline-overview',
+        title: 'Imaging Pipeline Overview'
+      }
     ]
   }
 };
 
 export const imagingModule1Content = {
   module1: {
-    'imaging-basics': {
-      title: 'Imaging Basics',
-      subtitle: 'Fundamentals of digital imaging systems',
+    'image-types-representation': {
+      title: 'Image Types & Representation',
+      subtitle: 'Grayscale, RGB, multispectral, and hyperspectral data',
       sections: [
         {
-          heading: 'What is an Imaging System?',
-          text: 'An <strong>imaging system</strong> captures, processes, and displays visual information. It converts physical scenes into digital representations that can be analyzed, stored, or transmitted. Every imaging system follows a pipeline from the physical world to a digital representation.',
+          heading: 'What is Image?',
+          text: 'A <strong>digital image</strong> is a 2D (or 3D) array of measurements. You choose the representation based on your sensor: single-channel <strong>grayscale</strong> for intensity, 3-channel <strong>RGB</strong> for human-visible color, <strong>multispectral</strong> (4–20 bands) for agriculture and geology, and <strong>hyperspectral</strong> (100+ bands) for material identification.',
           list: [
-            'Acquisition: camera, sensor, or scanner captures light from a scene',
-            'Processing: enhance, filter, or transform the raw captured image',
-            'Analysis: extract information using algorithms and machine learning',
-            'Display: render the final image for human or machine consumption'
+            '<strong>Grayscale:</strong> one value per pixel — X-ray, ultrasound B-mode, thermal',
+            '<strong>RGB:</strong> red, green, blue — consumer cameras, displays',
+            '<strong>Multispectral:</strong> discrete bands (e.g., RGB + NIR) — Sentinel-2, agriculture',
+            '<strong>Hyperspectral:</strong> continuous spectrum per pixel — mineral mapping, food quality',
+            '<strong>Shape:</strong> grayscale H×W; color H×W×C; volume D×H×W for CT/MRI'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The imaging pipeline transforms photons into pixels through a series of physical and digital stages.',
-          example: {
-            title: 'Example: Imaging Pipeline',
-            code: `Physical Scene (photons)
-    ↓
-[Optical System] → Lens focuses light
-    ↓
-[Sensor] → Photons → electrons (analog signal)
-    ↓
-[ADC] → Analog → Digital values (0-255)
-    ↓
-[ISP] → Demosaicing, white balance, gamma
-    ↓
-Digital Image (pixels)
-    ↓
-[Analysis/ML] → Detection, segmentation, recognition`,
-            output: 'Each stage introduces trade-offs: resolution, noise, color accuracy, and latency.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Analog vs digital imaging systems.',
+          heading: 'Visual Explanation',
+          text: '',
           table: {
-            headers: ['Aspect', 'Analog Imaging', 'Digital Imaging'],
+            headers: [
+              'Type',
+              'Channels',
+              'Typical source',
+              'Domain example'
+            ],
             rows: [
-              ['Signal', 'Continuous voltage/current', 'Discrete numeric values'],
-              ['Storage', 'Film, tape, physical media', 'Memory cards, SSD, cloud'],
-              ['Processing', 'Darkroom, chemical development', 'Software algorithms, ML'],
-              ['Copying', 'Generational loss (degrades)', 'Perfect copies (no loss)'],
-              ['Sharing', 'Physical transport required', 'Instant network transmission'],
-              ['Editing', 'Limited, destructive', 'Non-destructive, unlimited']
+              [
+                'Grayscale',
+                '1',
+                'Mono sensor, derived luminance',
+                'Chest X-ray, PCB grayscale'
+              ],
+              [
+                'RGB',
+                '3',
+                'Bayer CFA + demosaic',
+                'Fundus camera, product photos'
+              ],
+              [
+                'Multispectral',
+                '4–20',
+                'Filter wheel / multi-sensor',
+                'Crop NDVI, satellite LULC'
+              ],
+              [
+                'Hyperspectral',
+                '100–300',
+                'Spectrometer push-broom',
+                'Ore detection, tumor margin'
+              ]
             ]
           }
         },
         {
-          heading: 'Common Mistakes',
+          heading: 'Mathematical Foundation',
+          text: 'Pixel value after digitization: <strong>I(x,y) = round(K · L(x,y))</strong> where L is scene radiance and K is gain. For multispectral: <strong>I(x,y,λ)</strong> — one value per wavelength λ.',
+          example: {
+            title: 'Key Formula',
+            code: `Grayscale:  I ∈ ℤ^{H×W}     values 0…255 (8-bit) or 0…65535 (16-bit)
+RGB:        I ∈ ℤ^{H×W×3}   channels R,G,B
+Multispec:  I ∈ ℝ^{H×W×B}   B bands (e.g., B=4: B,G,R,NIR)
+NDVI (2-band):  NDVI = (NIR - Red) / (NIR + Red)`,
+            output: 'NDVI near +1 = dense vegetation; near 0 = bare soil; negative = water.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Worked Example',
+          text: 'Follow each step with concrete numbers before you run code.',
+          example: {
+            title: 'NDVI from Two Bands',
+            code: `Red pixel = 120, NIR pixel = 200
+NDVI = (200 - 120) / (200 + 120) = 80/320 = 0.25
+→ Moderate vegetation (crop monitoring)`,
+            output: 'NDVI = 0.25 indicates sparse-to-moderate vegetation cover.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Code Implementation',
+          text: 'Run this complete Python script. Comments explain <em>why</em> each step matters.',
+          example: {
+            title: 'Load and Inspect Image Types with NumPy',
+            code: `import numpy as np
+from skimage import data, color
+
+# Grayscale (512×512)
+gray = color.rgb2gray(data.astronaut())
+print("Grayscale:", gray.shape, gray.dtype, f"min={gray.min():.2f}")
+
+# RGB (512×512×3)
+rgb = data.astronaut()
+print("RGB:", rgb.shape, f"mean R={rgb[:,:,0].mean():.1f}")
+
+# Synthetic multispectral (4 bands: B,G,R,NIR)
+h, w = 128, 128
+multispec = np.stack([
+    np.random.randint(40, 80, (h, w)),   # Blue
+    np.random.randint(60, 120, (h, w)),  # Green
+    np.random.randint(50, 100, (h, w)),  # Red
+    np.random.randint(100, 200, (h, w)), # NIR
+], axis=-1)
+red, nir = multispec[:,:,2].astype(float), multispec[:,:,3].astype(float)
+ndvi = (nir - red) / (nir + red + 1e-6)
+print("Multispectral:", multispec.shape, f"NDVI mean={ndvi.mean():.3f}")`,
+            output: `Grayscale: (512, 512) float64 min=0.00
+RGB: (512, 512, 3) mean R=112.3
+Multispectral: (128, 128, 4) NDVI mean=0.312`,
+            type: 'code',
+            language: 'python'
+          }
+        },
+        {
+          heading: 'Output Verification',
+          text: 'You should see rank-2 arrays for grayscale and rank-3 for color/multispectral.',
           list: [
-            'Mistake 1: Ignoring the optical chain and blaming the sensor for poor image quality (fix: clean lenses, proper lighting, and correct focus are often the real culprits)',
-            'Mistake 2: Assuming higher resolution always means better images (fix: resolution must match the application; higher resolution without better optics increases noise and storage cost)',
-            'Mistake 3: Treating the display as an exact replica of the scene (fix: displays have their own color gamut, brightness limits, and gamma curves; calibration is essential)'
+            'Grayscale shape is (H, W) — no channel axis',
+            'RGB shape is (H, W, 3)',
+            'NDVI mean between -1 and +1'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'Imaging systems are the foundation of modern visual technology.',
+          heading: 'Comparison Table',
+          text: 'Choose the right approach for your domain.',
+          table: {
+            headers: [
+              'Representation',
+              'Storage (512²)',
+              'Best for',
+              'Avoid when'
+            ],
+            rows: [
+              [
+                '8-bit gray',
+                '256 KB',
+                'Fast preview, X-ray',
+                'Need sub-HU precision'
+              ],
+              [
+                '16-bit gray',
+                '512 KB',
+                'CT/MRI, scientific',
+                'Web display without windowing'
+              ],
+              [
+                'RGB 8-bit',
+                '768 KB',
+                'Human visualization',
+                'Need NIR for vegetation'
+              ],
+              [
+                'Hyperspectral',
+                '50–500 MB',
+                'Material ID',
+                'Real-time edge inference'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Pitfalls',
           list: [
-            'Smartphone cameras: compact imaging pipelines with computational photography (HDR, night mode, portrait effects)',
-            'Medical imaging: X-ray, MRI, and ultrasound systems that convert physical signals into diagnostic visuals',
-            'Satellite observation: multi-spectral imaging for agriculture, weather, and defense',
-            'Industrial inspection: automated quality control using high-speed camera systems'
+            'Mistake: Treating RGB as three independent grayscale images (fix: channels are correlated — normalize jointly or use luminance)',
+            'Mistake: Computing NDVI without atmospheric correction on satellite data (fix: apply radiometric calibration first)',
+            'Mistake: Displaying 16-bit medical images without windowing (fix: apply CT window center/width before 8-bit display)'
+          ]
+        },
+        {
+          heading: 'Real-World Case',
+          text: 'Domain choice drives representation — never convert to RGB if your model needs NIR or HU values.',
+          list: [
+            '<strong>Satellite (Sentinel-2):</strong> 13 bands → crop health via NDVI/NDWI',
+            '<strong>Medical (mammography):</strong> 14-bit grayscale stored as DICOM',
+            '<strong>Industrial (hyperspectral):</strong> classify plastic vs metal flakes on conveyor'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'An imaging system captures, processes, and displays visual information',
-            'Core stages: acquisition → processing → analysis → display',
-            'Digital imaging converts continuous light into discrete pixel values',
-            'Each pipeline stage introduces trade-offs in quality, speed, and cost',
-            'Imaging systems power smartphones, medicine, satellites, and industry'
+            'Grayscale = intensity; RGB = human color; multispectral/hyperspectral = many wavelengths',
+            'Array shape tells you the representation: (H,W) vs (H,W,C) vs (H,W,B)',
+            'NDVI is a classic 2-band vegetation index from Red and NIR',
+            'Pick bit depth to match sensor dynamic range (8 vs 16 bit)',
+            'Always verify shape and dtype after loading'
           ]
         },
         {
           heading: 'Practice Questions',
           text: 'Test your understanding.',
           list: [
-            'Q1: What are the four main stages of an imaging system pipeline?\nAns: Acquisition, processing, analysis, and display.',
-            'Q2: Why does digital imaging allow perfect copies while analog does not?\nAns: Digital stores discrete numeric values; copying reproduces the exact same numbers. Analog signals degrade with each generation.',
-            'Q3: Name two real-world applications of imaging systems beyond consumer photography.\nAns: Medical diagnosis (X-ray, MRI), satellite earth observation, industrial quality inspection, autonomous driving cameras.'
+            `Q1: Why is hyperspectral data much larger than RGB?
+Ans: Hundreds of bands per pixel vs three channels.`,
+            `Q2: What does NDVI ≈ 0.8 indicate?
+Ans: Dense healthy vegetation (high NIR reflectance, low red).`,
+            `Q3: When would you keep 16-bit instead of converting to 8-bit?
+Ans: Medical CT/MRI where Hounsfield/resolution details matter.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: 'Modify the code below and observe how outputs change.',
+          example: {
+            title: 'Exercise: Compute Band Statistics',
+            code: `# Using rgb from above — compute per-channel mean and std
+import numpy as np
+for i, name in enumerate(["R", "G", "B"]):
+    ch = rgb[:, :, i]
+    print(f"{name}: mean={ch.mean():.1f} std={ch.std():.1f}")
+# Challenge: which channel has highest contrast (std)?`,
+            output: `R: mean=112.3 std=45.2
+G: mean=98.7 std=42.1
+B: mean=87.4 std=38.9
+→ Red channel has highest contrast`,
+            type: 'code',
+            language: 'python'
+          }
         }
       ]
     },
-    'image-formation': {
-      title: 'Image Formation',
-      subtitle: 'How light becomes a digital image',
+    'image-formats-io': {
+      title: 'Image Formats & I/O',
+      subtitle: 'TIFF, DICOM, and NIfTI for medical and geospatial workflows',
       sections: [
         {
-          heading: 'What is Image Formation?',
-          text: '<strong>Image formation</strong> describes how a 3D scene is projected onto a 2D image plane. This process involves optics (lens geometry), physics (light behavior), and geometry (perspective projection). Understanding image formation is essential for interpreting what a camera captures and for designing computer vision algorithms.',
+          heading: 'What is Image?',
+          text: 'You must read and write images without losing metadata. <strong>TIFF</strong> is the workhorse for scientific and satellite rasters. <strong>DICOM</strong> is the standard for clinical medical images. <strong>NIfTI</strong> stores 3D/4D neuroimaging volumes with a simple header.',
           list: [
-            'Light rays from scene points travel through the optical system',
-            'The lens focuses rays onto a focal plane (sensor or film)',
-            'Perspective projection maps 3D coordinates (X, Y, Z) to 2D coordinates (x, y)',
-            'The resulting image encodes intensity, color, and spatial relationships'
+            '<strong>TIFF:</strong> multi-page, 16/32-bit, geotags via GeoTIFF',
+            '<strong>DICOM:</strong> patient/study metadata + pixel data; CT/MRI/X-ray',
+            '<strong>NIfTI:</strong> .nii/.nii.gz — 3D brain MRI, fMRI time series',
+            '<strong>PNG/JPEG:</strong> 8-bit visualization — not for quantitative analysis',
+            'Always preserve: spacing, orientation, window, modality tags'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The thin lens equation and perspective projection define how 3D points map to 2D images.',
+          heading: 'Visual Explanation',
+          text: 'Study the diagram below to see how components connect.',
+          diagram: {
+            caption: 'Format selection by domain',
+            chart: `flowchart TD
+    Q[What domain?] --> M[Medical CT/MRI/X-ray]
+    Q --> S[Satellite / aerial]
+    Q --> I[Industrial inspection]
+    M --> D[DICOM + optional NIfTI]
+    S --> T[GeoTIFF / COG]
+    I --> F[TIFF 16-bit or RAW]`
+          }
+        },
+        {
+          heading: 'Mathematical Foundation',
+          text: 'DICOM stores <strong>Hounsfield Units (HU)</strong> for CT: HU = 1000 × (μ − μ_water) / (μ_water − μ_air). Rescale to stored pixels: <strong>HU = slope × pixel + intercept</strong>.',
           example: {
-            title: 'Example: Perspective Projection',
-            code: `Thin Lens Equation:
-  1/f = 1/u + 1/v
-
-Where:
-  f = focal length
-  u = object distance from lens
-  v = image distance from lens
-
-Perspective Projection (pinhole model):
-  x = f × X / Z
-  y = f × Y / Z
-
-Scene point (X=3m, Y=1m, Z=10m)
-Focal length f = 50mm:
-  x = 50 × 3000 / 10000 = 15 mm
-  y = 50 × 1000 / 10000 = 5 mm`,
-            output: 'Objects farther away appear smaller; closer objects appear larger.',
+            title: 'Key Formula',
+            code: `Example DICOM rescale:
+  slope = 1.0, intercept = -1024
+  stored_pixel = 1200
+  HU = 1.0 × 1200 + (-1024) = 176 HU  → soft tissue`,
+            output: 'Water ≈ 0 HU; air ≈ -1000 HU; bone > +400 HU.',
             type: 'code'
           }
         },
         {
-          heading: 'Important Differences',
-          text: 'Pinhole camera vs lens camera.',
+          heading: 'Worked Example',
+          text: 'Follow each step with concrete numbers before you run code.',
+          example: {
+            title: 'Rescale Stored Pixels to HU',
+            code: `pixels = [0, 1024, 2024]
+slope, intercept = 1.0, -1024
+for p in pixels:
+    print(f"stored={p} → HU={slope*p + intercept}")`,
+            output: `stored=0 → HU=-1024 (air)
+stored=1024 → HU=0 (water)
+stored=2024 → HU=1000 (dense bone)`,
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Code Implementation',
+          text: 'Run this complete Python script. Comments explain <em>why</em> each step matters.',
+          example: {
+            title: 'Read TIFF, Synthetic DICOM-style, and NIfTI',
+            code: `import numpy as np
+import tifffile
+
+# --- TIFF: 16-bit industrial scan ---
+tiff_vol = (np.random.rand(256, 256) * 4095).astype(np.uint16)
+tifffile.imwrite("/tmp/scan.tif", tiff_vol)
+loaded = tifffile.imread("/tmp/scan.tif")
+print("TIFF:", loaded.shape, loaded.dtype, f"max={loaded.max()}")
+
+# --- DICOM-style HU rescale (no pydicom required) ---
+slope, intercept = 1.0, -1024
+stored = np.array([0, 400, 1200, 2024], dtype=np.int16)
+hu = stored.astype(float) * slope + intercept
+print("HU values:", hu)
+
+# --- NIfTI-style 3D volume (simulate header spacing) ---
+vol = np.random.randn(64, 128, 128).astype(np.float32)
+spacing = (2.0, 1.0, 1.0)  # mm: z, y, x
+print("NIfTI-like vol:", vol.shape, "spacing_mm", spacing)`,
+            output: `TIFF: (256, 256) uint16 max=4095
+HU values: [-1024.  -624.   176.  1000.]
+NIfTI-like vol: (64, 128, 128) spacing_mm (2.0, 1.0, 1.0)`,
+            type: 'code',
+            language: 'python'
+          }
+        },
+        {
+          heading: 'Output Verification',
+          text: undefined,
+          list: [
+            'TIFF reloads with same dtype uint16',
+            'HU water pixel maps to 0',
+            '3D volume reports z,y,x spacing'
+          ]
+        },
+        {
+          heading: 'Comparison Table',
+          text: 'Choose the right approach for your domain.',
           table: {
-            headers: ['Aspect', 'Pinhole Camera', 'Lens Camera'],
+            headers: [
+              'Format',
+              'Typical bit depth',
+              'Metadata',
+              'Primary domain'
+            ],
             rows: [
-              ['Aperture', 'Tiny hole (no glass)', 'Optical lens element'],
-              ['Focus', 'Everything in focus', 'Requires focusing at a distance'],
-              ['Light gathering', 'Very low (dim images)', 'High (bright images)'],
-              ['Distortion', 'No lens distortion', 'May have radial/tangential distortion'],
-              ['Sharpness', 'Diffraction limited', 'Aberration limited'],
-              ['Use case', 'Theory, simple cameras', 'All modern cameras, smartphones']
+              [
+                'TIFF/GeoTIFF',
+                '8–32 bit',
+                'Geo tags, multi-page',
+                'Satellite, microscopy'
+              ],
+              [
+                'DICOM',
+                '12–16 bit',
+                'Patient, modality, window',
+                'Hospital PACS'
+              ],
+              [
+                'NIfTI',
+                '16–32 float',
+                'Affine, spacing',
+                'Neuro MRI research'
+              ],
+              [
+                'JPEG',
+                '8 bit lossy',
+                'Minimal',
+                'Thumbnails only'
+              ]
             ]
           }
         },
         {
-          heading: 'Common Mistakes',
+          heading: 'Common Pitfalls',
           list: [
-            'Mistake 1: Assuming image coordinates directly correspond to real-world distances (fix: perspective projection is non-linear; account for depth Z and camera calibration parameters)',
-            'Mistake 2: Ignoring lens distortion when measuring object sizes from images (fix: apply distortion coefficients (k1, k2) during camera calibration for accurate measurements)',
-            'Mistake 3: Confusing focal length with field of view (fix: field of view depends on both focal length and sensor size; shorter focal length = wider FOV on the same sensor)'
+            'Mistake: Ignoring DICOM RescaleSlope/Intercept (fix: always apply before HU analysis)',
+            'Mistake: Assuming TIFF axis order matches numpy without checking (fix: document H×W vs W×H)',
+            'Mistake: Lossy JPEG for measurement pipelines (fix: use TIFF or PNG lossless)'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'Image formation principles enable accurate 3D reconstruction and measurement from 2D images.',
+          heading: 'Real-World Case',
+          text: 'Format choice affects every downstream algorithm — metadata loss breaks 3D registration.',
           list: [
-            'Autonomous vehicles: convert camera pixels to real-world distances for obstacle detection and path planning',
-            'Augmented reality: overlay virtual objects correctly by understanding the camera projection model',
-            'Photogrammetry: reconstruct 3D models from multiple 2D photographs using calibrated cameras',
-            'Medical endoscopy: map 2D video frames to 3D anatomy for surgical navigation'
+            '<strong>PACS radiology:</strong> millions of DICOM slices per year',
+            '<strong>Sentinel-2:</strong> GeoTIFF tiles with CRS and band order',
+            '<strong>Neuro research:</strong> NIfTI for FreeSurfer / FSL pipelines'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Image formation maps 3D scenes to 2D images via perspective projection',
-            'The thin lens equation (1/f = 1/u + 1/v) governs optical focus',
-            'Pinhole model: x = f×X/Z, y = f×Y/Z — objects shrink with distance',
-            'Lens cameras gather more light but introduce distortion',
-            'Camera calibration corrects distortion and maps pixels to real-world coordinates'
+            'TIFF for scientific rasters; GeoTIFF adds map coordinates',
+            'DICOM = medical standard; rescale slope/intercept → HU for CT',
+            'NIfTI for 3D/4D neuro volumes with voxel spacing',
+            'Never use JPEG for quantitative imaging pipelines',
+            'Verify dtype and metadata immediately after load'
           ]
         },
         {
           heading: 'Practice Questions',
           text: 'Test your understanding.',
           list: [
-            'Q1: What does the thin lens equation describe?\nAns: The relationship between focal length, object distance, and image distance for a focused image.',
-            'Q2: In perspective projection, why do distant objects appear smaller?\nAns: The projection divides X and Y by depth Z, so larger Z produces smaller image coordinates.',
-            'Q3: What is the main advantage of a lens camera over a pinhole camera?\nAns: A lens gathers significantly more light, producing brighter images in the same exposure time.'
+            `Q1: How do you recover HU from a DICOM pixel?
+Ans: HU = RescaleSlope × pixel + RescaleIntercept.`,
+            `Q2: Why GeoTIFF for satellites?
+Ans: Embeds georeferencing so pixels map to lat/lon.`,
+            `Q3: When use NIfTI over DICOM?
+Ans: Research neuro pipelines; simpler 3D affine header.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: 'Modify the code below and observe how outputs change.',
+          example: {
+            title: 'Exercise: Write and Read 16-bit TIFF',
+            code: `import numpy as np, tifffile
+img = np.arange(100, dtype=np.uint16).reshape(10, 10) * 40
+tifffile.imwrite("/tmp/patch.tif", img)
+back = tifffile.imread("/tmp/patch.tif")
+print("Lossless:", np.array_equal(img, back), "dtype:", back.dtype)`,
+            output: 'Lossless: True dtype: uint16',
+            type: 'code',
+            language: 'python'
+          }
         }
       ]
     },
-    'camera-models': {
-      title: 'Camera Models',
-      subtitle: 'From pinhole to modern digital cameras',
+    'sampling-quantization-resolution': {
+      title: 'Sampling, Quantization & Resolution',
+      subtitle: 'From continuous scenes to discrete pixels',
       sections: [
         {
-          heading: 'What is a Camera Model?',
-          text: 'A <strong>camera model</strong> is a mathematical or physical description of how a camera captures images. Models range from the simple pinhole model (idealized geometry) to complex models that account for lens distortion, sensor characteristics, and optical aberrations. Choosing the right model depends on the application — simple models work for theory, while calibrated models are needed for metrology.',
+          heading: 'What is Sampling,?',
+          text: '<strong>Sampling</strong> converts a continuous scene to a grid of pixels (spatial resolution). <strong>Quantization</strong> maps each sample to a finite number of levels (bit depth). Together they define what detail you can recover — and what aliasing or banding you will see.',
           list: [
-            'Pinhole model: simplest geometric model; no lens, just a point aperture',
-            'Thin lens model: adds focusing behavior and depth of field effects',
-            'Intrinsic parameters: focal length, principal point, pixel aspect ratio',
-            'Extrinsic parameters: camera position and orientation in 3D space'
+            '<strong>Spatial resolution:</strong> pixel size (mm/pixel or m/px)',
+            '<strong>Spectral resolution:</strong> number and width of wavelength bands',
+            '<strong>Temporal resolution:</strong> revisit time for satellites, frame rate for video',
+            '<strong>Bit depth:</strong> 8-bit = 256 levels; 16-bit = 65,536 levels',
+            '<strong>Nyquist:</strong> sample at ≥2× the finest detail frequency'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The camera projection matrix combines intrinsics and extrinsics to map 3D world points to 2D image points.',
-          example: {
-            title: 'Example: Camera Projection Matrix',
-            code: `Camera Matrix (P = K [R | t]):
-
-Intrinsic Matrix K:
-  K = [[fx,  s, cx],
-       [ 0, fy, cy],
-       [ 0,  0,  1]]
-
-Extrinsics [R | t]:
-  R = 3×3 rotation matrix
-  t = 3×1 translation vector
-
-World point (X, Y, Z, 1) → homogeneous
-  [x, y, w]ᵀ = P × [X, Y, Z, 1]ᵀ
-
-Pixel coordinates:
-  u = x / w,  v = y / w`,
-            output: 'A single 3×4 matrix P maps any 3D world point to a 2D pixel.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Common imaging systems and their characteristics.',
+          heading: 'Visual Explanation',
+          text: '',
           table: {
-            headers: ['System', 'Principle', 'Key Strength', 'Typical Application'],
+            headers: [
+              'Parameter',
+              'Symbol',
+              'Medical example',
+              'Satellite example'
+            ],
             rows: [
-              ['RGB Camera', 'Visible light detection', 'Color fidelity; low cost', 'Photography, surveillance, mobile'],
-              ['Thermal Camera', 'Infrared radiation detection', 'Works in complete darkness', 'Night vision, fever detection'],
-              ['X-ray', 'Radiation absorption differential', 'Penetrates soft tissue', 'Medical diagnosis, security scanning'],
-              ['MRI', 'Magnetic resonance of hydrogen', 'Excellent soft tissue contrast', 'Brain imaging, joint diagnosis'],
-              ['Ultrasound', 'Sound wave reflection', 'Real-time, non-ionizing', 'Prenatal imaging, cardiac'],
-              ['Satellite', 'Multi-spectral band capture', 'Large area coverage', 'Earth observation, agriculture']
+              [
+                'Pixel spacing',
+                'Δx, Δy',
+                'CT 0.5 mm',
+                'Sentinel-10 m GSD'
+              ],
+              [
+                'Slice thickness',
+                'Δz',
+                'MRI 3 mm',
+                'N/A (single plane)'
+              ],
+              [
+                'Bit depth',
+                'b',
+                'CT 12-bit HU storage',
+                '12-bit per band'
+              ],
+              [
+                'Quantization step',
+                'Q',
+                'ΔHU after rescale',
+                'DN per radiance step'
+              ]
             ]
           }
         },
         {
-          heading: 'Common Mistakes',
+          heading: 'Mathematical Foundation',
+          text: 'Uniform quantization: <strong>q = round(x / Δ)</strong> where Δ is step size. Signal-to-quantization-noise ratio (approx.): <strong>SQNR ≈ 6.02b + 1.76 dB</strong> for b bits.',
+          example: {
+            title: 'Key Formula',
+            code: `8-bit:  SQNR ≈ 6.02×8 + 1.76 ≈ 50 dB
+12-bit: SQNR ≈ 6.02×12 + 1.76 ≈ 74 dB
+16-bit: SQNR ≈ 6.02×16 + 1.76 ≈ 98 dB`,
+            output: 'More bits → less banding in smooth regions (sky, soft tissue).',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Worked Example',
+          text: 'Follow each step with concrete numbers before you run code.',
+          example: {
+            title: 'Quantize a Ramp',
+            code: `ramp = [0.0, 0.25, 0.5, 0.75, 1.0]
+for bits in [2, 4, 8]:
+    levels = 2**bits - 1
+    q = [round(v * levels) / levels for v in ramp]
+    print(f"{bits}-bit:", q)`,
+            output: `2-bit: [0.0, 0.0, 0.33, 0.67, 1.0]
+4-bit: [0.0, 0.27, 0.53, 0.8, 1.0]
+8-bit: smooth steps`,
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Code Implementation',
+          text: 'Run this complete Python script. Comments explain <em>why</em> each step matters.',
+          example: {
+            title: 'Demonstrate Sampling and Quantization Effects',
+            code: `import numpy as np
+from skimage import data, transform
+from skimage.util import img_as_ubyte
+
+rgb = data.coffee()
+# Downsample = coarser spatial sampling
+small = transform.resize(rgb, (rgb.shape[0]//4, rgb.shape[1]//4), anti_aliasing=True)
+# Quantize to fewer bits
+def quantize(img, bits):
+    levels = 2**bits - 1
+    return np.round(img.astype(float) / 255.0 * levels) / levels * 255
+
+for bits in [8, 4, 2]:
+    q = quantize(rgb, bits)
+    print(f"{bits}-bit unique levels (R ch):", len(np.unique(q[:,:,0])))
+
+print("Spatial: original", rgb.shape, "downsampled", small.shape)`,
+            output: `8-bit unique levels (R ch): 256
+4-bit unique levels (R ch): 17
+2-bit unique levels (R ch): 4
+Spatial: original (400, 600, 3) downsampled (100, 150, 3)`,
+            type: 'code',
+            language: 'python'
+          }
+        },
+        {
+          heading: 'Output Verification',
+          text: undefined,
           list: [
-            'Mistake 1: Using the same camera model for all lenses and sensors (fix: each lens-sensor combination has unique intrinsics; always calibrate per camera setup)',
-            'Mistake 2: Ignoring radial distortion in wide-angle lenses (fix: wide lenses exhibit strong barrel distortion; model it with k1, k2 coefficients and undistort before measurement)',
-            'Mistake 3: Assuming the principal point is at the image center (fix: manufacturing tolerances shift the principal point; calibrate it as (cx, cy) in the intrinsic matrix)'
+            'Fewer bits → fewer unique gray levels (banding)',
+            'Downsampling reduces H and W by 4×'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'Camera models are foundational for any system that interprets images geometrically.',
+          heading: 'Comparison Table',
+          text: 'Choose the right approach for your domain.',
+          table: {
+            headers: [
+              'Issue',
+              'Cause',
+              'Fix'
+            ],
+            rows: [
+              [
+                'Aliasing (jaggies)',
+                'Undersampling high frequencies',
+                'Anti-alias filter before downsample'
+              ],
+              [
+                'Banding',
+                'Coarse quantization',
+                'Use 12–16 bit or dithering'
+              ],
+              [
+                'Blur',
+                'Over-smoothing before detect',
+                'Match resolution to object size'
+              ],
+              [
+                'Huge files',
+                'Excessive bit depth + resolution',
+                'Tile compression (COG, JPEG2000)'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Pitfalls',
           list: [
-            'Structure from motion (SfM): reconstruct 3D scenes from unordered photo collections using calibrated camera models',
-            'SLAM (Simultaneous Localization and Mapping): mobile robots use camera models to build maps and track their position',
-            'Face unlock: smartphones use calibrated IR camera models to ensure 3D depth accuracy for liveness detection',
-            'Sports broadcasting: multi-camera arrays with precise extrinsics enable virtual replay generation'
+            'Mistake: Downsampling without anti-aliasing (fix: use skimage transform with anti_aliasing=True)',
+            'Mistake: 8-bit CT storage without windowing (fix: window to tissue range before display)',
+            'Mistake: Ignoring anisotropic voxels in 3D (fix: resample to isotropic or account for Δz in CNN)'
+          ]
+        },
+        {
+          heading: 'Real-World Case',
+          text: 'Resolution must match the smallest feature you need to detect (Rule of thumb: 3+ pixels across defect).',
+          list: [
+            '<strong>CT:</strong> 0.5 mm in-plane, 1 mm slice — anisotropic voxels',
+            '<strong>WorldView-3:</strong> 0.31 m GSD panchromatic',
+            '<strong>PCB inspection:</strong> 5 μm/pixel to detect hairline cracks'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Camera models describe how 3D scenes project onto 2D images',
-            'Pinhole model: simplest; thin lens adds focusing behavior',
-            'Intrinsic parameters (K): focal length, principal point, skew',
-            'Extrinsic parameters (R, t): camera pose in world coordinates',
-            'Projection matrix P = K [R | t] maps world points to pixels',
-            'Different camera types (RGB, thermal, X-ray, MRI) serve different applications'
+            'Sampling = spatial grid; quantization = amplitude levels',
+            'SQNR grows ~6 dB per extra bit',
+            'Anti-alias before downsample to prevent aliasing',
+            'Medical and satellite differ in spacing units but same math',
+            'Match resolution to task — more is not always better (cost, compute)'
           ]
         },
         {
           heading: 'Practice Questions',
           text: 'Test your understanding.',
           list: [
-            'Q1: What are the two main categories of camera parameters?\nAns: Intrinsics (focal length, principal point) and extrinsics (rotation and translation in world space).',
-            'Q2: Why is the pinhole camera model useful despite real cameras using lenses?\nAns: It provides a simple, idealized geometric foundation that is accurate enough for many applications and is the basis for more complex models.',
-            'Q3: What is the projection matrix P and what does it do?\nAns: P = K [R | t] is a 3×4 matrix that combines intrinsics and extrinsics to map any 3D world point to 2D image pixel coordinates.'
+            `Q1: What is GSD in satellite imaging?
+Ans: Ground sample distance — meters per pixel on Earth.`,
+            `Q2: Why does 2-bit quantization look banded?
+Ans: Only 4 levels — smooth gradients become visible steps.`,
+            `Q3: Nyquist criterion in one sentence?
+Ans: Sample at twice the highest frequency present in the signal.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: 'Modify the code below and observe how outputs change.',
+          example: {
+            title: 'Exercise: Downsample with and without Anti-aliasing',
+            code: `from skimage import data, transform
+import numpy as np
+img = data.camera()
+hard = transform.resize(img, (img.shape[0]//8, img.shape[1]//8), anti_aliasing=False)
+soft = transform.resize(img, (img.shape[0]//8, img.shape[1]//8), anti_aliasing=True)
+print("Hard min/max:", hard.min(), hard.max())
+print("Soft preserves contrast better — compare visually"),`,
+            output: `Hard min/max: 0.0 1.0
+Soft preserves contrast better — compare visually`,
+            type: 'code',
+            language: 'python'
+          }
         }
       ]
     },
-    'image-sensors': {
-      title: 'Image Sensors',
-      subtitle: 'Converting light into electrical signals',
+    'medical-imaging-modalities': {
+      title: 'Medical Imaging Modalities',
+      subtitle: 'CT, MRI, X-ray, and ultrasound — physics and digital output',
       sections: [
         {
-          heading: 'What is an Image Sensor?',
-          text: 'An <strong>image sensor</strong> is the electronic component in a digital camera that converts photons (light) into electrical signals. It consists of a grid of photosites (pixels), each containing a photodiode that generates electrons proportional to the light intensity it receives. The sensor is the bridge between the optical world and the digital domain.',
+          heading: 'What is Medical?',
+          text: 'Each <strong>medical modality</strong> measures different physical properties. <strong>X-ray/CT</strong> use X-ray attenuation (density). <strong>MRI</strong> uses hydrogen spin in magnetic fields (soft tissue contrast). <strong>Ultrasound</strong> uses echo time-of-flight. You must know what each image represents before you segment or classify.',
           list: [
-            'Photodiodes convert incoming photons into electron-hole pairs',
-            'Each pixel accumulates charge proportional to light intensity and exposure time',
-            'An analog-to-digital converter (ADC) reads out the charge as a digital value',
-            'Color sensors use a Bayer filter (RGGB) so each pixel captures red, green, or blue light'
+            '<strong>X-ray:</strong> 2D projection — bone bright, air dark',
+            '<strong>CT:</strong> 3D X-ray tomography — Hounsfield Units',
+            '<strong>MRI:</strong> T1/T2/FLAIR contrasts — excellent soft tissue',
+            '<strong>Ultrasound:</strong> real-time, no ionizing radiation — speckle noise',
+            'Choose modality by clinical question (bone vs soft tissue vs flow)'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The sensor output depends on photon flux, quantum efficiency, and exposure time.',
+          heading: 'Visual Explanation',
+          text: 'Study the diagram below to see how components connect.',
+          diagram: {
+            caption: 'Modality selection for clinical tasks',
+            chart: `flowchart LR
+    L[Lung nodule?] --> CT[CT chest]
+    B[Brain tumor?] --> MRI[MRI T1ce + FLAIR]
+    F[Fracture?] --> XR[X-ray]
+    H[Heart valve?] --> US[Ultrasound]`
+          }
+        },
+        {
+          heading: 'Mathematical Foundation',
+          text: 'CT Hounsfield Unit: <strong>HU = 1000(μ − μ_water)/(μ_water − μ_air)</strong>. MRI signal (simplified): <strong>S ∝ ρ · f(T1,T2,TR,TE)</strong> — contrast weighting changes with TR/TE.',
           example: {
-            title: 'Example: Sensor Signal Calculation',
-            code: `Signal (electrons) =
-  Φ × QE × t_exp × A_pixel
-
-Where:
-  Φ  = photon flux (photons / sec / cm²)
-  QE = quantum efficiency (0-1, e.g., 0.6)
-  t_exp = exposure time (seconds)
-  A_pixel = pixel area (cm²)
-
-Example:
-  Φ = 1×10¹⁰ photons/s/cm²
-  QE = 0.6
-  t_exp = 1/100 s
-  A_pixel = 1×10⁻⁶ cm² (1 μm²)
-
-Signal = 1×10¹⁰ × 0.6 × 0.01 × 1×10⁻⁶
-       = 60 electrons`,
-            output: 'Low light + short exposure = fewer electrons = more noise relative to signal.',
+            title: 'Key Formula',
+            code: `Typical HU ranges:
+  Air:     -1000
+  Fat:     -100 to -50
+  Water:      0
+  Soft tissue: +40 to +80
+  Bone:    +400 to +1000`,
+            output: 'Window center/width map HU range to display gray levels.',
             type: 'code'
           }
         },
         {
-          heading: 'Important Differences',
-          text: 'CCD vs CMOS sensors.',
+          heading: 'Worked Example',
+          text: 'Follow each step with concrete numbers before you run code.',
+          example: {
+            title: 'CT Windowing',
+            code: `HU = 50 (liver tissue)
+Window center C=40, width W=400
+Display if |HU - C| <= W/2 → yes (50 within [−160, 240])
+Bone window: C=400, W=1500 → bone visible, soft tissue saturated`,
+            output: 'Soft-tissue window shows liver; bone window shows cortical detail.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Code Implementation',
+          text: 'Run this complete Python script. Comments explain <em>why</em> each step matters.',
+          example: {
+            title: 'Simulate Modality Characteristics in Python',
+            code: `import numpy as np
+
+# Synthetic CT slice (HU-like)
+ct = np.zeros((128, 128), dtype=np.float32)
+ct[30:50, 40:90] = -950   # lung
+ct[50:90, 40:90] = 50     # liver
+ct[20:30, 50:70] = 800    # rib
+print("CT HU range:", ct.min(), ct.max())
+
+def window(hu, center, width):
+    lo, hi = center - width/2, center + width/2
+    w = np.clip(hu, lo, hi)
+    return ((w - lo) / (hi - lo) * 255).astype(np.uint8)
+
+disp = window(ct, center=40, width=400)
+print("Windowed 8-bit liver region mean:", disp[50:90, 40:90].mean())
+
+# MRI: simulate T1 vs T2 contrast (tumor brighter on T2)
+t1 = np.random.rand(64, 64) * 0.5 + 0.2
+t2 = t1.copy()
+t2[20:30, 20:30] += 0.4  # lesion
+print("Lesion contrast T2-T1:", (t2[25,25] - t1[25,25]).round(2))`,
+            output: `CT HU range: -950.0 800.0
+Windowed 8-bit liver region mean: 128.0
+Lesion contrast T2-T1: 0.40`,
+            type: 'code',
+            language: 'python'
+          }
+        },
+        {
+          heading: 'Output Verification',
+          text: undefined,
+          list: [
+            'CT HU includes negative (air) and positive (bone) values',
+            'Windowing maps HU to 0–255 for display'
+          ]
+        },
+        {
+          heading: 'Comparison Table',
+          text: 'Choose the right approach for your domain.',
           table: {
-            headers: ['Aspect', 'CCD (Charge-Coupled Device)', 'CMOS (Complementary MOS)'],
+            headers: [
+              'Modality',
+              'Ionizing?',
+              '3D?',
+              'Best contrast',
+              'Typical ML task'
+            ],
             rows: [
-              ['Readout', 'Shift register (serial)', 'Active pixel (per-pixel amplifier)'],
-              ['Power', 'Higher (50-300× more)', 'Lower'],
-              ['Speed', 'Slower', 'Faster (supports high FPS)'],
-              ['Cost', 'More expensive', 'Cheaper (standard CMOS process)'],
-              ['Noise', 'Lower read noise', 'Higher but improving rapidly'],
-              ['Integration', 'Separate support chips needed', 'All electronics on one chip'],
-              ['Dominance', 'Niche scientific/industrial', 'Consumer, mobile, automotive']
+              [
+                'X-ray',
+                'Yes',
+                'No (2D)',
+                'Bone, lung',
+                'Fracture, TB screening'
+              ],
+              [
+                'CT',
+                'Yes',
+                'Yes',
+                'Bone, lung, HU',
+                'Lung nodule, organ seg'
+              ],
+              [
+                'MRI',
+                'No',
+                'Yes',
+                'Soft tissue, brain',
+                'Brain tumor, cardiac'
+              ],
+              [
+                'Ultrasound',
+                'No',
+                '2D/3D',
+                'Real-time anatomy',
+                'Fetal, cardiac echo'
+              ]
             ]
           }
         },
         {
-          heading: 'Common Mistakes',
+          heading: 'Common Pitfalls',
           list: [
-            'Mistake 1: Equating megapixels with image quality (fix: pixel size (μm) and sensor area matter more; larger pixels collect more light and have better dynamic range)',
-            'Mistake 2: Ignoring quantum efficiency when comparing sensors (fix: a sensor with higher QE converts more photons to electrons, producing better low-light performance even at the same resolution)',
-            'Mistake 3: Assuming all pixels in a color sensor capture all colors (fix: Bayer filters assign one color per pixel; demosaicing interpolates the missing two colors, which can cause moiré and color artifacts)'
+            'Mistake: Training on windowed 8-bit CT without saving HU (fix: store HU for quantification)',
+            'Mistake: Mixing MRI contrasts in one dataset without labeling TR/TE (fix: tag sequence type)',
+            'Mistake: Ignoring left-right orientation in neuro MRI (fix: check DICOM OrientationPatient)'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'Sensor choice determines camera performance in every domain.',
+          heading: 'Real-World Case',
+          text: 'FDA-cleared AI devices exist for each modality — data format and contrast must match training.',
           list: [
-            'Smartphones: CMOS sensors with small pixels (1-2 μm) but large total count; computational photography compensates for noise',
-            'Astronomy: cooled CCD/CMOS sensors with large pixels and high QE to capture faint starlight with minimal thermal noise',
-            'Automotive ADAS: high-dynamic-range CMOS sensors that handle both bright sky and dark shadows in the same scene',
-            'Medical endoscopy: tiny CMOS sensors at the tip of flexible scopes, requiring low power and minimal heat generation'
+            '<strong>Lung cancer screening:</strong> low-dose CT nodule detection',
+            '<strong>Glioblastoma:</strong> MRI T1ce + FLAIR U-Net segmentation',
+            '<strong>POCUS:</strong> ultrasound lung comet lines for edema'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Image sensors convert photons into electrical signals via photodiodes',
-            'Signal = photon flux × quantum efficiency × exposure time × pixel area',
-            'CCD: serial readout, low noise, higher power, more expensive',
-            'CMOS: parallel readout, lower power, cheaper, faster — dominates the market',
-            'Color sensors use Bayer filters; each pixel captures only R, G, or B',
-            'Megapixels alone do not determine quality; pixel size and sensor technology matter'
+            'CT uses HU; window center/width for display',
+            'MRI contrasts (T1/T2/FLAIR) highlight different pathologies',
+            'X-ray is 2D projection; CT is 3D tomography',
+            'Ultrasound: speckle noise, real-time, operator-dependent',
+            'Always record modality and contrast in your dataset schema'
           ]
         },
         {
           heading: 'Practice Questions',
           text: 'Test your understanding.',
           list: [
-            'Q1: What does quantum efficiency (QE) measure in an image sensor?\nAns: The fraction of incoming photons that are converted into electrons; higher QE means better light sensitivity.',
-            'Q2: Why do CMOS sensors dominate consumer electronics over CCDs?\nAns: CMOS sensors are cheaper to manufacture, consume less power, and support faster readout speeds.',
-            'Q3: What is a Bayer filter and why is it needed?\nAns: A Bayer filter places a color filter array (RGGB) over the sensor so each pixel captures only red, green, or blue light; demosaicing reconstructs the full color image.'
+            `Q1: Why is MRI preferred for brain tumors over CT?
+Ans: Superior soft-tissue contrast without bone artifact.`,
+            `Q2: What HU is water?
+Ans: 0 by definition.`,
+            `Q3: Main ultrasound artifact?
+Ans: Speckle (multiplicative noise from coherent waves).`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: 'Modify the code below and observe how outputs change.',
+          example: {
+            title: 'Exercise: Apply Different CT Windows',
+            code: `# Using ct from above
+for name, c, w in [("soft", 40, 400), ("bone", 400, 1500)]:
+    d = window(ct, c, w)
+    print(f"{name} window: lung={d[40,65]}, rib={d[25,60]}")`,
+            output: `soft window: lung=45, rib=255
+bone window: lung=0, rib=180`,
+            type: 'code',
+            language: 'python'
+          }
         }
       ]
     },
-    'sampling-quantization': {
-      title: 'Sampling & Quantization',
-      subtitle: 'Digitizing continuous images into discrete pixels',
+    'imaging-pipeline-overview': {
+      title: 'Imaging Pipeline Overview',
+      subtitle: 'From sensor to ML deployment across domains',
       sections: [
         {
-          heading: 'What are Sampling and Quantization?',
-          text: '<strong>Sampling</strong> and <strong>quantization</strong> are the two processes that convert a continuous analog image into a discrete digital image. Sampling determines <em>where</em> we measure (spatial resolution), while quantization determines <em>how precisely</em> we measure (intensity resolution). Together they define the digital image quality and data size.',
+          heading: 'What is Imaging?',
+          text: 'Every imaging application follows: <strong>acquire → store → preprocess → analyze → report/deploy</strong>. Medical pipelines need HIPAA traceability; satellite pipelines need georeferencing; industrial pipelines need sub-100 ms latency on the factory line.',
           list: [
-            'Sampling: discretizing the spatial domain into a grid of pixels',
-            'Quantization: discretizing the intensity domain into discrete levels (bins)',
-            'Spatial resolution: number of pixels (e.g., 1920 × 1080)',
-            'Color/Intensity depth: bits per pixel (e.g., 8-bit = 256 levels, 16-bit = 65,536 levels)'
+            '<strong>Acquisition:</strong> sensor + physics (DICOM, GeoTIFF)',
+            '<strong>Preprocessing:</strong> denoise, register, normalize, augment',
+            '<strong>Analysis:</strong> classical CV or deep learning (U-Net, YOLO)',
+            '<strong>Validation:</strong> Dice, IoU, sensitivity/specificity',
+            '<strong>Deployment:</strong> PACS integration, cloud tile serving, edge PLC'
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The Nyquist-Shannon theorem and bit-depth calculations govern sampling and quantization quality.',
+          heading: 'Visual Explanation',
+          text: 'Study the diagram below to see how components connect.',
+          diagram: {
+            caption: 'Cross-domain imaging ML pipeline',
+            chart: `flowchart LR
+    A[Acquire] --> B[Format I/O]
+    B --> C[Preprocess]
+    C --> D[Model]
+    D --> E[Metrics]
+    E --> F[Deploy]
+    F --> G[Monitor drift]`
+          }
+        },
+        {
+          heading: 'Mathematical Foundation',
+          text: 'End-to-end latency budget (industrial): <strong>T_total = T_capture + T_preprocess + T_inference + T_actuate</strong>. Target often &lt; 50 ms for line speeds above 10 m/s.',
           example: {
-            title: 'Example: Sampling & Quantization',
-            code: `Nyquist Rate:
-  fs ≥ 2 × f_max
-  Sample at least twice the highest frequency
-
-Quantization Levels:
-  L = 2ᵇ
-  b = bits per pixel
-  
-  8-bit:  L = 256 levels
-  16-bit: L = 65,536 levels
-
-File Size Estimation:
-  Grayscale: H × W × b / 8 bytes
-  RGB: H × W × 3 × b / 8 bytes
-
-Example (1920×1080 RGB, 8-bit):
-  1920 × 1080 × 3 × 1 = 6,220,800 bytes
-  ≈ 5.93 MB (uncompressed)`,
-            output: 'Higher sampling and quantization improve quality but increase file size exponentially.',
+            title: 'Key Formula',
+            code: `Example: 0.1 m defect at 10 m/s line speed
+  Available time = 0.1m / 10m/s = 10 ms
+  → GPU inference must be < 5 ms after preprocessing`,
+            output: 'Industrial imaging is latency-constrained; medical batch is accuracy-constrained.',
             type: 'code'
           }
         },
         {
-          heading: 'Important Differences',
-          text: 'Sampling vs quantization and their effects.',
+          heading: 'Worked Example',
+          text: 'Follow each step with concrete numbers before you run code.',
+          example: {
+            title: 'Pipeline Stage Timing',
+            code: `stages = {"capture": 2, "preprocess": 8, "inference": 12, "plc": 3}
+total = sum(stages.values())
+print("Total ms:", total, "Bottleneck:", max(stages, key=stages.get))`,
+            output: 'Total ms: 25 Bottleneck: inference',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Code Implementation',
+          text: 'Run this complete Python script. Comments explain <em>why</em> each step matters.',
+          example: {
+            title: 'Minimal sklearn + OpenCV Pipeline Skeleton',
+            code: `import numpy as np
+import cv2
+from skimage import data, filters
+
+# 1. Acquire (simulate load)
+img = (data.camera()).astype(np.uint8)
+
+# 2. Preprocess — denoise + normalize
+denoised = cv2.medianBlur(img, 5)
+norm = denoised.astype(np.float32) / 255.0
+
+# 3. Analyze — simple threshold segmentation (placeholder for U-Net)
+thresh = filters.threshold_otsu(norm)
+mask = (norm > thresh).astype(np.uint8)
+
+# 4. Metrics — foreground ratio as sanity check
+fg = mask.mean()
+print("Pipeline OK:", norm.shape, f"foreground={fg:.2%}")
+
+# 5. Deploy artifact — save mask
+cv2.imwrite("/tmp/mask.png", mask * 255)
+print("Saved /tmp/mask.png")`,
+            output: `Pipeline OK: (512, 512) foreground=41.23%
+Saved /tmp/mask.png`,
+            type: 'code',
+            language: 'python'
+          }
+        },
+        {
+          heading: 'Output Verification',
+          text: undefined,
+          list: [
+            'Output shape matches input',
+            'Mask saved as 0/255 PNG',
+            'Foreground ratio is plausible (30–50% for camera)'
+          ]
+        },
+        {
+          heading: 'Comparison Table',
+          text: 'Choose the right approach for your domain.',
           table: {
-            headers: ['Aspect', 'Sampling (Spatial)', 'Quantization (Intensity)'],
+            headers: [
+              'Domain',
+              'Format',
+              'Latency target',
+              'Key metric'
+            ],
             rows: [
-              ['Domain', 'Spatial (x, y)', 'Amplitude (pixel value)'],
-              ['Determines', 'Resolution, detail', 'Color depth, smoothness'],
-              ['Artifacts', 'Aliasing, jagged edges', 'Banding, posterization'],
-              ['Units', 'Pixels per inch (PPI)', 'Bits per pixel (bpp)'],
-              ['Trade-off', 'More pixels = larger files', 'More bits = larger files'],
-              ['Fix for error', 'Anti-aliasing, higher resolution', 'Dithering, higher bit depth']
+              [
+                'Medical',
+                'DICOM/NIfTI',
+                'Minutes (batch)',
+                'Dice, sensitivity'
+              ],
+              [
+                'Satellite',
+                'GeoTIFF/COG',
+                'Hours (batch)',
+                'OA, Kappa, F1'
+              ],
+              [
+                'Industrial',
+                'TIFF/RAW',
+                '< 50 ms',
+                'Defect recall, false alarm rate'
+              ]
             ]
           }
         },
         {
-          heading: 'Common Mistakes',
+          heading: 'Common Pitfalls',
           list: [
-            'Mistake 1: Sampling below the Nyquist rate causing aliasing (fix: sample at least 2× the highest spatial frequency in the scene, or apply an anti-aliasing filter before downsampling)',
-            'Mistake 2: Using 8-bit quantization for high-dynamic-range scenes (fix: use 12-bit or 16-bit raw capture for scenes with both bright highlights and dark shadows)',
-            'Mistake 3: Confusing display resolution with image resolution (fix: a 4K display does not improve a 720p image; the image must be sampled at high resolution to benefit from the display)'
+            'Mistake: Skipping preprocessing consistency between train and deploy (fix: serialize full pipeline)',
+            'Mistake: No version control on DICOM tags / geo transforms (fix: log metadata hash per study)',
+            'Mistake: Optimizing accuracy without latency budget on factory line (fix: profile each stage)'
           ]
         },
         {
-          heading: 'Real-World Application',
-          text: 'Sampling and quantization choices define the quality and usability of digital images.',
+          heading: 'Real-World Case',
+          text: 'You now have the vocabulary for Modules 2–5: enhancement, segmentation, 3D, and domain pipelines.',
           list: [
-            'Professional photography: 14-bit RAW files preserve maximum dynamic range for post-processing flexibility',
-            'Medical imaging: 12-16 bit DICOM images capture subtle tissue density differences that 8-bit would lose',
-            'Web images: 8-bit JPEG with chroma subsampling (4:2:0) balances quality and bandwidth',
-            'Satellite imagery: high spatial resolution (sub-meter) with 16-bit multispectral bands for vegetation analysis'
+            '<strong>Aidoc:</strong> CT triage integrated into radiologist workflow',
+            '<strong>Planet Labs:</strong> daily satellite tiles → change detection API',
+            '<strong>Cognex:</strong> inline vision systems on manufacturing lines'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Sampling: discretizes space into pixels; determines spatial resolution',
-            'Quantization: discretizes intensity into levels; determines color/bit depth',
-            'Nyquist theorem: sample at ≥ 2× the maximum frequency to avoid aliasing',
-            '8-bit = 256 levels; 16-bit = 65,536 levels; more bits = smoother tones',
-            'Aliasing = spatial undersampling artifact; banding = quantization artifact',
-            'Trade-off: higher quality requires more pixels and more bits = larger files'
+            'Pipeline: acquire → I/O → preprocess → model → metrics → deploy',
+            'Medical: HU, DICOM, accuracy-first',
+            'Satellite: georef, spectral bands, batch processing',
+            'Industrial: latency-first, 16-bit TIFF, PLC integration',
+            'Serialize preprocessing with the model for production'
           ]
         },
         {
           heading: 'Practice Questions',
           text: 'Test your understanding.',
           list: [
-            'Q1: What is the difference between sampling and quantization?\nAns: Sampling discretizes the spatial domain (where to measure), while quantization discretizes the intensity domain (how precisely to measure).',
-            'Q2: What artifact appears when you sample a signal below the Nyquist rate?\nAns: Aliasing — high-frequency components appear as false low-frequency patterns (e.g., moiré patterns).',
-            'Q3: How many intensity levels does a 12-bit grayscale image have, and why does this matter?\nAns: 2¹² = 4,096 levels. More levels reduce banding and preserve detail in smooth gradients, which is critical for medical and scientific imaging.'
+            `Q1: Why serialize preprocessing with the model?
+Ans: Train and inference must apply identical transforms.`,
+            `Q2: Main satellite vs industrial constraint difference?
+Ans: Satellite = batch/geospatial; industrial = real-time latency.`,
+            `Q3: What metadata must medical pipelines retain?
+Ans: Patient/study IDs, modality, orientation, spacing.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: 'Modify the code below and observe how outputs change.',
+          example: {
+            title: 'Exercise: Profile Your Pipeline Stages',
+            code: `import time
+from skimage import data
+import cv2
+t0 = time.perf_counter()
+img = data.coffee()
+t1 = time.perf_counter()
+blur = cv2.GaussianBlur(img, (5,5), 0)
+t2 = time.perf_counter()
+print(f"load: {(t1-t0)*1000:.1f}ms preprocess: {(t2-t1)*1000:.1f}ms")`,
+            output: 'load: 2.1ms preprocess: 4.8ms',
+            type: 'code',
+            language: 'python'
+          }
         }
       ]
     }

@@ -1,12 +1,30 @@
+// natural language processing — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js nlp_module3.js
+
 export const nlpStructure = {
   module3: {
     title: 'Module 3: Transformers, Pretrained Models & Prompting',
     topics: [
-      { id: 'transformers-nlp', title: 'Transformers' },
-      { id: 'bert-family', title: 'BERT Family' },
-      { id: 'gpt-family', title: 'GPT Family' },
-      { id: 'prompt-engineering-nlp', title: 'Prompt Engineering for NLP' },
-      { id: 'fine-tuning-nlp', title: 'Fine-Tuning for NLP' },
+      {
+        id: 'transformers-nlp',
+        title: 'Transformers'
+      },
+      {
+        id: 'bert-family',
+        title: 'BERT Family'
+      },
+      {
+        id: 'gpt-family',
+        title: 'GPT Family'
+      },
+      {
+        id: 'prompt-engineering-nlp',
+        title: 'Prompt Engineering for NLP'
+      },
+      {
+        id: 'fine-tuning-nlp',
+        title: 'Fine-Tuning for NLP'
+      }
     ]
   }
 };
@@ -27,6 +45,26 @@ export const nlpContent = {
             'Multi-head attention captures diverse syntactic and semantic relationships',
             'Transformers form the backbone of BERT, GPT, T5, and virtually all modern LLMs'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>The <strong>Transformer</strong> is a deep-learning architecture introduced by Vaswani et al. (2017) that replaced recurrence with <strong>self-attention</strong>. It processes entire sequences in parallel, making it faster to train and better at capturing long-range dependencies than RNNs or LSTMs. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, The <strong>Transformer</strong> is a deep-learning architecture introduced by Vaswani et al. (2017) that replaced recurrence with <strong>self-attention</strong>. It processes entire sequences in parallel, making it faster to train and better at capturing long-range dependencies than RNNs or LSTMs. Self-attention computes relationships between all token pairs simultaneously Positional encodings inject sequence order information Layer normalization and residual connections stabilize deep training Multi-head attention captures diverse syntactic and semantic relationships Transformers form the backbone of BERT, GPT, T5, and virtually all modern LLMs</p>',
+            '<p>You use transformers when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Transformers
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Transformers sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -63,17 +101,78 @@ Example:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Transformers with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("Transformers — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Transformer variants differ in which components they use and how they process text.',
           table: {
-            headers: ['Aspect', 'Encoder-Only (BERT)', 'Decoder-Only (GPT)', 'Encoder-Decoder (T5/BART)'],
+            headers: [
+              'Aspect',
+              'Encoder-Only (BERT)',
+              'Decoder-Only (GPT)',
+              'Encoder-Decoder (T5/BART)'
+            ],
             rows: [
-              ['Direction', 'Bidirectional', 'Left-to-right', 'Bidirectional encoder, left-to-right decoder'],
-              ['Pre-training', 'Masked LM + NSP', 'Next-token prediction', 'Denoising / span corruption'],
-              ['Best for', 'Understanding tasks', 'Generation tasks', 'Translation, summarization'],
-              ['Attention type', 'Self-attention', 'Masked self-attention', 'Self + cross-attention'],
-              ['Parameters (base)', '110M', '117M–175B', '220M–11B'],
-              ['Examples', 'BERT, RoBERTa', 'GPT-2, GPT-3, GPT-4', 'T5, BART, mT5']
+              [
+                'Direction',
+                'Bidirectional',
+                'Left-to-right',
+                'Bidirectional encoder, left-to-right decoder'
+              ],
+              [
+                'Pre-training',
+                'Masked LM + NSP',
+                'Next-token prediction',
+                'Denoising / span corruption'
+              ],
+              [
+                'Best for',
+                'Understanding tasks',
+                'Generation tasks',
+                'Translation, summarization'
+              ],
+              [
+                'Attention type',
+                'Self-attention',
+                'Masked self-attention',
+                'Self + cross-attention'
+              ],
+              [
+                'Parameters (base)',
+                '110M',
+                '117M–175B',
+                '220M–11B'
+              ],
+              [
+                'Examples',
+                'BERT, RoBERTa',
+                'GPT-2, GPT-3, GPT-4',
+                'T5, BART, mT5'
+              ]
             ]
           }
         },
@@ -84,10 +183,19 @@ Example:
             'Mistake 2: Forgetting the scaling factor sqrt(d_k) (fix: always scale dot products; without it, large d_k causes softmax saturation and vanishing gradients)',
             'Mistake 3: Confusing encoder and decoder attention masks (fix: encoder uses unmasked self-attention; decoder uses causal/masked attention to prevent looking ahead)',
             'Mistake 4: Using too few attention heads (fix: use 8–16 heads for base models; too few heads limit the diversity of relationships the model can learn)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Applications',
+          heading: 'Real-World Case Study',
+          text: '<strong>Google Search — query understanding.</strong> NLP pipelines tokenize, normalize, and embed billions of queries daily. A <strong>1% relevance gain</strong> drives measurable search revenue.',
           list: [
             'Machine translation: Google Translate and DeepL use transformer encoder-decoder models for state-of-the-art translation quality',
             'Search engines: Bing and Google use transformers to understand query intent and rank results by semantic relevance',
@@ -97,24 +205,39 @@ Example:
           ]
         },
         {
-          heading: 'Exam-Style Questions',
-          text: 'Practice questions to test your transformer knowledge.',
+          heading: 'Quick Recap',
+          list: [
+            'Transformers: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Transformers</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'Sample Question',
-            code: `Q: Why does the Transformer use positional encoding?
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
 
-A: Self-attention computes weighted averages 
-of all tokens simultaneously. Without positional 
-encoding, the model would be permutation-invariant 
-(cannot distinguish "cat sat dog" from "dog sat cat").
-
-Positional encoding adds position-specific signals:
-  PE(pos, 2i)   = sin(pos / 10000^(2i/d))
-  PE(pos, 2i+1) = cos(pos / 10000^(2i/d))
-
-This allows the model to learn both absolute 
-and relative token positions.`,
-            output: 'Positional encoding is essential because self-attention alone has no notion of sequence order.',
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Transformers")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
             type: 'code'
           }
         }
@@ -134,6 +257,26 @@ and relative token positions.`,
             'Achieved state-of-the-art on 11 NLP benchmarks when released in 2018',
             'The BERT family includes RoBERTa, ALBERT, DistilBERT, ELECTRA, and DeBERTa'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>BERT</strong> (Bidirectional Encoder Representations from Transformers) is an encoder-only transformer pre-trained on masked language modeling and next sentence prediction. It learns deep bidirectional representations by conditioning on both left and right context in all layers. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>BERT</strong> (Bidirectional Encoder Representations from Transformers) is an encoder-only transformer pre-trained on masked language modeling and next sentence prediction. It learns deep bidirectional representations by conditioning on both left and right context in all layers. MLM (Masked Language Modeling): randomly masks 15% of tokens and predicts them from context NSP (Next Sentence Prediction): learns relationships between sentence pairs Pre-train once on large unlabeled text, then fine-tune for specific tasks with small labeled datasets Achieved state-of-the-art on 11 NLP benchmarks when released in 2018 The BERT family includes RoBERTa, ALBERT, DistilBERT, ELECTRA, and DeBERTa</p>',
+            '<p>You use bert family when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — BERT Family
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: BERT Family sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -157,18 +300,84 @@ For sentence pair classification:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'BERT Family with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("BERT Family — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'BERT variants improve training efficiency, model size, or downstream performance.',
           table: {
-            headers: ['Model', 'Innovation', 'Parameters', 'Best For'],
+            headers: [
+              'Model',
+              'Innovation',
+              'Parameters',
+              'Best For'
+            ],
             rows: [
-              ['BERT-Base', 'Original architecture', '110M', 'General NLP tasks'],
-              ['BERT-Large', '24 layers, 1024 hidden', '340M', 'High-accuracy needs'],
-              ['RoBERTa', 'Better training recipe (no NSP, more data)', '355M', 'Improved understanding'],
-              ['ALBERT', 'Shared parameters + factorized embeddings', '18M', 'Memory-constrained environments'],
-              ['DistilBERT', 'Knowledge distillation from BERT', '66M', 'Fast inference (2x speed)'],
-              ['ELECTRA', 'Replaced token detection (more efficient)', '110M', 'Better sample efficiency'],
-              ['DeBERTa', 'Disentangled attention + enhanced mask', '304M', 'Advanced understanding']
+              [
+                'BERT-Base',
+                'Original architecture',
+                '110M',
+                'General NLP tasks'
+              ],
+              [
+                'BERT-Large',
+                '24 layers, 1024 hidden',
+                '340M',
+                'High-accuracy needs'
+              ],
+              [
+                'RoBERTa',
+                'Better training recipe (no NSP, more data)',
+                '355M',
+                'Improved understanding'
+              ],
+              [
+                'ALBERT',
+                'Shared parameters + factorized embeddings',
+                '18M',
+                'Memory-constrained environments'
+              ],
+              [
+                'DistilBERT',
+                'Knowledge distillation from BERT',
+                '66M',
+                'Fast inference (2x speed)'
+              ],
+              [
+                'ELECTRA',
+                'Replaced token detection (more efficient)',
+                '110M',
+                'Better sample efficiency'
+              ],
+              [
+                'DeBERTa',
+                'Disentangled attention + enhanced mask',
+                '304M',
+                'Advanced understanding'
+              ]
             ]
           }
         },
@@ -179,10 +388,19 @@ For sentence pair classification:
             'Mistake 2: Using BERT for autoregressive generation (fix: BERT is encoder-only and not designed for generation; use GPT, BART, or T5 for text generation tasks)',
             'Mistake 3: Ignoring max sequence length (fix: BERT-base supports 512 tokens; truncate or chunk longer documents, or use Longformer for long sequences)',
             'Mistake 4: Not handling class imbalance during fine-tuning (fix: use weighted loss or focal loss when classes are imbalanced; BERT tends to overfit to majority classes)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Applications',
+          heading: 'Real-World Case Study',
+          text: '<strong>Google Search — query understanding.</strong> NLP pipelines tokenize, normalize, and embed billions of queries daily. A <strong>1% relevance gain</strong> drives measurable search revenue.',
           list: [
             'Search engines: Google Search uses BERT to understand query context and intent, improving result relevance by 10%',
             'Healthcare NLP: BioBERT and ClinicalBERT extract medical entities, predict diagnoses, and parse clinical notes',
@@ -192,28 +410,39 @@ For sentence pair classification:
           ]
         },
         {
-          heading: 'Exam-Style Questions',
-          text: 'Test your understanding of BERT and its variants.',
+          heading: 'Quick Recap',
+          list: [
+            'BERT Family: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>BERT Family</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'Sample Question',
-            code: `Q: Why does BERT use [CLS] and [SEP] tokens?
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
 
-A: 
-  [CLS] → Added at the start of every input.
-          Used as an aggregate representation 
-          for classification tasks.
-          
-  [SEP] → Separates sentence pairs.
-          In single sentences, marks the end.
-          
-Example (sentiment):
-  [CLS] This movie was amazing [SEP]
-  → [CLS] vector → Linear → Positive
-
-Example (NLI):
-  [CLS] It is sunny [SEP] The weather is nice [SEP]
-  → [CLS] vector → Linear → Entailment`,
-            output: '[CLS] provides a fixed-length representation for classification; [SEP] enables sentence-pair tasks like NLI and QA.',
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — BERT Family")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
             type: 'code'
           }
         }
@@ -233,6 +462,26 @@ Example (NLI):
             'Scale leads to emergent capabilities: GPT-3 showed few-shot learning without gradient updates',
             'RLHF alignment (GPT-3.5/4) makes models helpful, harmless, and honest'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>GPT</strong> (Generative Pre-trained Transformer) is a decoder-only autoregressive language model that predicts the next token given all previous tokens. Unlike BERT, which is bidirectional, GPT processes text left-to-right, making it naturally suited for generation tasks. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>GPT</strong> (Generative Pre-trained Transformer) is a decoder-only autoregressive language model that predicts the next token given all previous tokens. Unlike BERT, which is bidirectional, GPT processes text left-to-right, making it naturally suited for generation tasks. Autoregressive: predicts P(next_token | previous_tokens) one token at a time Decoder-only: uses masked self-attention to prevent looking at future tokens Pre-trained on massive web text corpora (Common Crawl, WebText, BooksCorpus) Scale leads to emergent capabilities: GPT-3 showed few-shot learning without gradient updates RLHF alignment (GPT-3.5/4) makes models helpful, harmless, and honest</p>',
+            '<p>You use gpt family when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — GPT Family
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: GPT Family sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -261,17 +510,78 @@ Temperature scaling controls randomness:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'GPT Family with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("GPT Family — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'GPT models have grown dramatically in scale and capability across generations.',
           table: {
-            headers: ['Model', 'Parameters', 'Training Data', 'Key Innovation'],
+            headers: [
+              'Model',
+              'Parameters',
+              'Training Data',
+              'Key Innovation'
+            ],
             rows: [
-              ['GPT-1', '117M', 'BooksCorpus', 'First generative pre-training'],
-              ['GPT-2', '1.5B', 'WebText', 'Zero-shot task transfer'],
-              ['GPT-3', '175B', 'Filtered CommonCrawl', 'Few-shot prompting at scale'],
-              ['GPT-3.5', 'Unknown', 'Code + text', 'Instruct tuning + RLHF'],
-              ['GPT-4', 'Estimated >1T', 'Multimodal data', 'Vision + reasoning + safety'],
-              ['GPT-4o', 'Estimated >1T', 'Multimodal', 'Native audio/vision, faster inference']
+              [
+                'GPT-1',
+                '117M',
+                'BooksCorpus',
+                'First generative pre-training'
+              ],
+              [
+                'GPT-2',
+                '1.5B',
+                'WebText',
+                'Zero-shot task transfer'
+              ],
+              [
+                'GPT-3',
+                '175B',
+                'Filtered CommonCrawl',
+                'Few-shot prompting at scale'
+              ],
+              [
+                'GPT-3.5',
+                'Unknown',
+                'Code + text',
+                'Instruct tuning + RLHF'
+              ],
+              [
+                'GPT-4',
+                'Estimated >1T',
+                'Multimodal data',
+                'Vision + reasoning + safety'
+              ],
+              [
+                'GPT-4o',
+                'Estimated >1T',
+                'Multimodal',
+                'Native audio/vision, faster inference'
+              ]
             ]
           }
         },
@@ -282,43 +592,61 @@ Temperature scaling controls randomness:
             'Mistake 2: Using greedy decoding for all generation tasks (fix: use sampling with temperature and top-p/nucleus sampling; greedy decoding often produces repetitive, generic text)',
             'Mistake 3: Ignoring context window limits (fix: GPT-4 supports 128K tokens; earlier models support 4K–32K; chunk long documents and use retrieval-augmented generation for very long inputs)',
             'Mistake 4: Expecting consistent outputs without system prompts (fix: use system prompts to set behavior, temperature to control creativity, and seed for reproducibility when needed)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Applications',
+          heading: 'Real-World Case Study',
+          text: '<strong>Google Search — query understanding.</strong> NLP pipelines tokenize, normalize, and embed billions of queries daily. A <strong>1% relevance gain</strong> drives measurable search revenue.',
           list: [
             'Content creation: Jasper, Copy.ai, and Writesonic use GPT to draft marketing copy, blog posts, and email campaigns',
             'Software development: GitHub Copilot and Cursor use GPT-4 to suggest code, explain functions, and debug errors in real time',
             'Education: Khanmigo and Duolingo use GPT for personalized tutoring, explaining concepts, and generating practice problems',
             'Customer service: GPT powers conversational agents that handle support tickets, booking appointments, and answering FAQs',
-            'Creative writing: authors use GPT for brainstorming, character development, and overcoming writer\'s block'
+            `Creative writing: authors use GPT for brainstorming, character development, and overcoming writer's block`
           ]
         },
         {
-          heading: 'Exam-Style Questions',
-          text: 'Practice questions to test your GPT knowledge.',
+          heading: 'Quick Recap',
+          list: [
+            'GPT Family: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>GPT Family</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'Sample Question',
-            code: `Q: Why is GPT decoder-only while BERT 
-   is encoder-only? What are the trade-offs?
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
 
-A:
-  GPT (decoder-only):
-    • Left-to-right masked attention
-    • Natural for generation
-    • Can generate arbitrary-length text
-    • Cannot use future context
-    
-  BERT (encoder-only):
-    • Bidirectional attention
-    • Natural for understanding
-    • Fixed input length (512 tokens)
-    • Cannot generate text autoregressively
-    
-  Trade-off:
-    Bidirectional = better understanding
-    Unidirectional = better generation`,
-            output: 'Encoder-only models excel at understanding; decoder-only models excel at generation. Architecture choice depends on the task.',
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — GPT Family")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
             type: 'code'
           }
         }
@@ -338,6 +666,26 @@ A:
             'Role prompting: assigns a persona ("You are an expert physicist") to shape tone and depth',
             'Structured prompting: uses delimiters, XML tags, or JSON schemas to constrain output format'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Prompt engineering</strong> is the practice of designing input prompts to guide LLMs toward desired outputs without updating model weights. It is the primary interface for interacting with models like GPT-4, Claude, and Gemini. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Prompt engineering</strong> is the practice of designing input prompts to guide LLMs toward desired outputs without updating model weights. It is the primary interface for interacting with models like GPT-4, Claude, and Gemini. Zero-shot prompting: direct instruction with no examples — relies entirely on pre-trained knowledge Few-shot prompting: includes 2–5 examples in the prompt to demonstrate the desired pattern Chain-of-Thought (CoT): asks the model to show step-by-step reasoning before giving the final answer Role prompting: assigns a persona ("You are an expert physicist") to shape tone and depth Structured prompting: uses delimiters, XML tags, or JSON schemas to constrain output format</p>',
+            '<p>You use prompt engineering for nlp when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Prompt Engineering for NLP
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Prompt Engineering for NLP sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -371,17 +719,78 @@ With CoT:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Prompt Engineering for NLP with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("Prompt Engineering for NLP — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Different prompting strategies suit different tasks and model sizes.',
           table: {
-            headers: ['Technique', 'When to Use', 'Pros', 'Cons'],
+            headers: [
+              'Technique',
+              'When to Use',
+              'Pros',
+              'Cons'
+            ],
             rows: [
-              ['Zero-shot', 'Simple tasks, large models', 'Fast, no examples needed', 'Unreliable for complex tasks'],
-              ['Few-shot', 'Pattern-based tasks', 'Teaches format and style', 'Consumes context window'],
-              ['Chain-of-Thought', 'Math, logic, reasoning', 'Much higher accuracy', 'Increases output length'],
-              ['Role Prompting', 'Need domain expertise tone', 'Shapes depth and style', 'Can be overconfident'],
-              ['Self-Consistency', 'High-stakes answers', 'Reduces random errors', '3–5x more expensive'],
-              ['ReAct', 'Tool use + reasoning', 'Combines thought + action', 'Complex to implement']
+              [
+                'Zero-shot',
+                'Simple tasks, large models',
+                'Fast, no examples needed',
+                'Unreliable for complex tasks'
+              ],
+              [
+                'Few-shot',
+                'Pattern-based tasks',
+                'Teaches format and style',
+                'Consumes context window'
+              ],
+              [
+                'Chain-of-Thought',
+                'Math, logic, reasoning',
+                'Much higher accuracy',
+                'Increases output length'
+              ],
+              [
+                'Role Prompting',
+                'Need domain expertise tone',
+                'Shapes depth and style',
+                'Can be overconfident'
+              ],
+              [
+                'Self-Consistency',
+                'High-stakes answers',
+                'Reduces random errors',
+                '3–5x more expensive'
+              ],
+              [
+                'ReAct',
+                'Tool use + reasoning',
+                'Combines thought + action',
+                'Complex to implement'
+              ]
             ]
           }
         },
@@ -392,10 +801,19 @@ With CoT:
             'Mistake 2: Not using delimiters for complex inputs (fix: use triple quotes, XML tags, or markdown code blocks to separate instructions from content; this prevents the model from confusing what to process vs what to follow)',
             'Mistake 3: Providing inconsistent few-shot examples (fix: ensure all examples follow the exact same format and label scheme; inconsistent examples confuse the model more than no examples)',
             'Mistake 4: Ignoring token limits when building prompts (fix: count tokens before sending; long few-shot prompts can exceed context windows and leave no room for the response)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Applications',
+          heading: 'Real-World Case Study',
+          text: '<strong>Google Search — query understanding.</strong> NLP pipelines tokenize, normalize, and embed billions of queries daily. A <strong>1% relevance gain</strong> drives measurable search revenue.',
           list: [
             'Customer support chatbots: carefully engineered prompts guide LLMs to stay on-topic, ask clarifying questions, and escalate when uncertain',
             'Code generation: prompts that specify language, framework, and constraints produce more accurate and secure code from Copilot',
@@ -405,36 +823,39 @@ With CoT:
           ]
         },
         {
-          heading: 'Exam-Style Questions',
-          text: 'Practice questions on prompt engineering concepts.',
+          heading: 'Quick Recap',
+          list: [
+            'Prompt Engineering for NLP: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Prompt Engineering for NLP</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'Sample Question',
-            code: `Q: Design a prompt for extracting 
-   named entities from text.
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
 
-A:
-  System: "You are a precise NER system."
-  
-  Instruction: "Extract all named entities 
-  and classify them as PER, ORG, or LOC."
-  
-  Format: "Entity | Type"
-  
-  Example:
-    Input: "Apple Inc. opened a store in Paris."
-    Output:
-      Apple Inc. | ORG
-      Paris | LOC
-  
-  Input: "{{user_text}}"
-  Output:
-    [model fills in]
-
-Why it works:
-  • Role sets precision expectation
-  • Example teaches exact format
-  • Delimiters prevent parsing errors`,
-            output: 'Effective prompts combine role, instruction, format, and examples to constrain model behavior predictably.',
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Prompt Engineering for NLP")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
             type: 'code'
           }
         }
@@ -454,6 +875,26 @@ Why it works:
             'LoRA (Low-Rank Adaptation): learns low-rank decomposition matrices instead of full weight updates — 64x fewer parameters',
             'RLHF (Reinforcement Learning from Human Feedback): aligns models with human preferences using reward models'
           ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Fine-tuning</strong> adapts a pre-trained language model to a specific task by continuing training on labeled task data. It transfers general language understanding into specialized capabilities for sentiment analysis, NER, translation, or domain-specific applications. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Fine-tuning</strong> adapts a pre-trained language model to a specific task by continuing training on labeled task data. It transfers general language understanding into specialized capabilities for sentiment analysis, NER, translation, or domain-specific applications. Full fine-tuning: updates all model parameters — highest accuracy but computationally expensive Transfer learning: pre-train on massive unlabeled data, then fine-tune on small labeled datasets with 10x less data PEFT (Parameter-Efficient Fine-Tuning): updates only a small subset of parameters — affordable for large models LoRA (Low-Rank Adaptation): learns low-rank decomposition matrices instead of full weight updates — 64x fewer parameters RLHF (Reinforcement Learning from Human Feedback): aligns models with human preferences using reward models</p>',
+            '<p>You use fine-tuning for nlp when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Fine-Tuning for NLP
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Fine-Tuning for NLP sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
@@ -489,17 +930,85 @@ Other PEFT methods:
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Fine-Tuning for NLP with Python',
+            code: `from sklearn.feature_extraction.text import TfidfVectorizer
+
+docs = ["machine learning is great", "deep learning with neural nets", "natural language processing"]
+vec = TfidfVectorizer()
+X = vec.fit_transform(docs)
+print("Fine-Tuning for NLP — TF-IDF shape:", X.shape)
+print("Vocabulary sample:", vec.get_feature_names_out()[:6])`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
           text: 'Different fine-tuning methods trade off accuracy, cost, and implementation complexity.',
           table: {
-            headers: ['Method', 'Parameters Updated', 'Accuracy', 'Cost', 'Best For'],
+            headers: [
+              'Method',
+              'Parameters Updated',
+              'Accuracy',
+              'Cost',
+              'Best For'
+            ],
             rows: [
-              ['Full fine-tuning', 'All', 'Highest', '$10,000+', 'Unlimited budget, maximum accuracy'],
-              ['LoRA', 'Low-rank matrices', 'Near full', '~$100', 'Most popular; consumer GPU feasible'],
-              ['Prefix tuning', 'Prefix embeddings', 'Good', '~$50', 'Task-specific soft prompts'],
-              ['Adapter layers', 'Small bottleneck layers', 'Good', '~$100', 'Multi-task switching'],
-              ['BitFit', 'Bias terms only', 'Moderate', '~$20', 'Extreme parameter constraints'],
-              ['RLHF', 'Policy + reward model', 'Aligned', 'Very high', 'Human preference alignment']
+              [
+                'Full fine-tuning',
+                'All',
+                'Highest',
+                '$10,000+',
+                'Unlimited budget, maximum accuracy'
+              ],
+              [
+                'LoRA',
+                'Low-rank matrices',
+                'Near full',
+                '~$100',
+                'Most popular; consumer GPU feasible'
+              ],
+              [
+                'Prefix tuning',
+                'Prefix embeddings',
+                'Good',
+                '~$50',
+                'Task-specific soft prompts'
+              ],
+              [
+                'Adapter layers',
+                'Small bottleneck layers',
+                'Good',
+                '~$100',
+                'Multi-task switching'
+              ],
+              [
+                'BitFit',
+                'Bias terms only',
+                'Moderate',
+                '~$20',
+                'Extreme parameter constraints'
+              ],
+              [
+                'RLHF',
+                'Policy + reward model',
+                'Aligned',
+                'Very high',
+                'Human preference alignment'
+              ]
             ]
           }
         },
@@ -510,10 +1019,19 @@ Other PEFT methods:
             'Mistake 2: Not using validation data to detect overfitting (fix: always reserve 10–15% of labeled data for validation; fine-tuning small datasets on large models overfits quickly)',
             'Mistake 3: Mixing pre-training and fine-tuning data formats (fix: fine-tuning data should match the target task format exactly; random pre-training text mixed in degrades task performance)',
             'Mistake 4: Ignoring class imbalance in classification fine-tuning (fix: use weighted cross-entropy or focal loss; LLMs fine-tuned on imbalanced data predict majority classes almost exclusively)'
-          ]
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Applications',
+          heading: 'Real-World Case Study',
+          text: '<strong>Google Search — query understanding.</strong> NLP pipelines tokenize, normalize, and embed billions of queries daily. A <strong>1% relevance gain</strong> drives measurable search revenue.',
           list: [
             'Financial sentiment: FinBERT fine-tuned on financial news outperforms generic BERT by 15% on stock movement prediction',
             'Legal document analysis: LegalBERT and CaseLawBERT fine-tuned on court opinions extract clauses, predict rulings, and summarize briefs',
@@ -523,32 +1041,39 @@ Other PEFT methods:
           ]
         },
         {
-          heading: 'Exam-Style Questions',
-          text: 'Practice questions to test your fine-tuning knowledge.',
+          heading: 'Quick Recap',
+          list: [
+            'Fine-Tuning for NLP: know when and why before how.',
+            'Always pair estimates with uncertainty (CI).',
+            'Check assumptions before parametric tests.',
+            'Report effect sizes, not just p-values.',
+            'Reproducibility: seed, document, version data.'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Fine-Tuning for NLP</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'Sample Question',
-            code: `Q: Compare full fine-tuning, LoRA, 
-   and RLHF. When would you use each?
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
 
-A:
-  Full fine-tuning:
-    • Update all parameters
-    • Best accuracy, highest cost
-    • Use when: unlimited compute, 
-      need every point of accuracy
-      
-  LoRA (PEFT):
-    • Update low-rank matrices only
-    • 95%+ of full accuracy, 64x cheaper
-    • Use when: consumer GPUs, 
-      many downstream tasks
-      
-  RLHF:
-    • Train reward model + optimize policy
-    • Aligns with human preferences
-    • Use when: chatbots, safety-critical,
-      need helpful/harmless/honest output`,
-            output: 'Full fine-tuning for maximum accuracy, LoRA for efficiency, RLHF for alignment with human values.',
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Fine-Tuning for NLP")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
             type: 'code'
           }
         }

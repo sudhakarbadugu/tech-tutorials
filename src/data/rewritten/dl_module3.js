@@ -1,153 +1,652 @@
+// deep learning — enhanced W3Schools-style (auto-upgraded + overrides)
+// Regenerate: node scripts/upgrade-modules.js dl_module3.js
+
 export const dlModule3Content = {
   module3: {
-    'cnn-advanced': {
-      title: 'Advanced CNN Architectures',
-      subtitle: 'Beyond basic convolution: modern building blocks',
+    'convolution-arithmetic': {
+      title: 'Convolution Arithmetic',
+      subtitle: 'Kernels, strides, padding, and feature map sizes',
       sections: [
         {
-          heading: 'What are Advanced CNN Techniques?',
-          text: 'Modern CNNs use specialized layers to increase receptive field, reduce parameters, and improve efficiency without sacrificing accuracy.',
+          heading: 'What is a Convolution?',
+          text: 'A <strong>convolution</strong> slides a learnable filter (kernel) across the input and computes dot products at every location, producing a feature map. By learning many filters, a CNN detects edges, textures, shapes, and objects at increasing levels of abstraction.',
           list: [
-            'Dilated (Atrous) Convolution: expands receptive field without losing resolution',
-            'Depthwise Separable Convolution: splits standard conv into depthwise + pointwise for fewer params',
-            'Attention Mechanisms: channel and spatial attention (Squeeze-and-Excitation, CBAM)',
-            'Deformable Convolution: learns sampling offsets for geometric variations',
-            'Neural Architecture Search (NAS): automates the design of conv layers'
+            'Kernel size (K) defines the local receptive field of each output neuron',
+            'Stride (S) controls how far the kernel moves; larger strides reduce spatial dimensions faster',
+            'Padding (P) adds zeros around the input to preserve spatial size or control output shape',
+            'Output channels equal the number of independent filters applied to the input'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>A <strong>convolution</strong> slides a learnable filter (kernel) across the input and computes dot products at every location, producing a feature map. By learning many filters, a CNN detects edges, textures, shapes, and objects at increasing levels of abstraction. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, A <strong>convolution</strong> slides a learnable filter (kernel) across the input and computes dot products at every location, producing a feature map. By learning many filters, a CNN detects edges, textures, shapes, and objects at increasing levels of abstraction. Kernel size (K) defines the local receptive field of each output neuron Stride (S) controls how far the kernel moves; larger strides reduce spatial dimensions faster Padding (P) adds zeros around the input to preserve spatial size or control output shape Output channels equal the number of independent filters applied to the input</p>',
+            '<p>You use convolution arithmetic when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Convolution Arithmetic
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Convolution Arithmetic sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'Depthwise separable convolution drastically reduces computation.',
+          text: 'Feature map size: output = floor((input + 2*padding - kernel)/stride) + 1.',
           example: {
-            title: 'Depthwise Separable vs Standard Conv',
-            code: `Standard Conv (3×3, in=256, out=256):
-  Params: 3 × 3 × 256 × 256 = 589,824
-  FLOPs: 589,824 × H × W
+            title: 'Feature Map Size and Manual Convolution in NumPy',
+            code: `import numpy as np
 
-Depthwise Separable:
-  Depthwise: 3 × 3 × 256 = 2,304
-  Pointwise: 1 × 1 × 256 × 256 = 65,536
-  Total params: 67,840 (8.7× fewer!)
+# Manual 2D convolution (single channel, no bias)
+def conv2d(x, kernel, stride=1, padding=0):
+    if padding > 0:
+        x = np.pad(x, pad_width=padding, mode='constant')
+    k_h, k_w = kernel.shape
+    out_h = (x.shape[0] - k_h) // stride + 1
+    out_w = (x.shape[1] - k_w) // stride + 1
+    out = np.zeros((out_h, out_w))
+    for i in range(out_h):
+        for j in range(out_w):
+            patch = x[i*stride:i*stride+k_h, j*stride:j*stride+k_w]
+            out[i,j] = (patch * kernel).sum()
+    return out
 
-Savings increase with larger channel counts.`,
-            output: 'MobileNet and EfficientNet rely on depthwise separable convolutions.',
+x = np.array([[1,2,3,0],
+              [0,1,2,3],
+              [3,0,1,2],
+              [2,3,0,1]])
+kernel = np.array([[1,0,-1],
+                   [1,0,-1],
+                   [1,0,-1]])  # vertical edge filter
+print(conv2d(x, kernel, stride=1, padding=1))
+
+# Feature map size formula
+def output_size(n, k, p, s):
+    return (n + 2*p - k) // s + 1
+
+print(output_size(32, 3, 1, 1))   # 32 (same padding)
+print(output_size(32, 3, 0, 2))   # 15 (valid, stride 2)
+print(output_size(224, 7, 3, 2))  # 112
+
+# PyTorch equivalent
+import torch, torch.nn as nn
+conv = nn.Conv2d(1, 1, kernel_size=3, stride=1, padding=1, bias=False)
+with torch.no_grad():
+    conv.weight[:] = torch.tensor(kernel, dtype=torch.float32).view(1,1,3,3)
+xt = torch.tensor(x, dtype=torch.float32).view(1,1,4,4)
+print(conv(xt).shape)`,
+            output: 'Padding preserves spatial size for stride=1; stride and pooling reduce it.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Convolution Arithmetic with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Convolution Arithmetic — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Standard vs advanced convolution variants.',
+          text: 'Same vs valid padding and pooling effects.',
           table: {
-            headers: ['Technique', 'What It Does', 'Trade-off'],
+            headers: [
+              'Setting',
+              'Padding',
+              'Output Size',
+              'Use Case'
+            ],
             rows: [
-              ['Standard Conv', 'Full kernel over all channels', 'High accuracy, many params'],
-              ['Depthwise Separable', 'Depthwise + pointwise', 'Fewer params, slightly lower capacity'],
-              ['Dilated Conv', 'Gaps in kernel (atrous)', 'Larger receptive field, same resolution'],
-              ['Deformable Conv', 'Learns offset per pixel', 'Better for geometry, more compute'],
-              ['SE Block', 'Channel-wise recalibration', 'Small overhead, better feature usage']
+              [
+                'Valid',
+                '0',
+                'Smaller than input',
+                'No padding, simple arithmetic'
+              ],
+              [
+                'Same (stride=1)',
+                '(K-1)/2',
+                'Same as input',
+                'Preserve spatial resolution'
+              ],
+              [
+                'Same (stride>1)',
+                'Computed',
+                'ceil(input/stride)',
+                'Downsampling with aligned sizes'
+              ],
+              [
+                'Dilated conv',
+                'Effective K = K + (K-1)(d-1)',
+                'Larger receptive field',
+                'Segmentation, audio'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using dilated conv everywhere (fix: apply only in later layers where resolution is already reduced)',
-            'Mistake 2: Ignoring memory bandwidth with separable convs (fix: they reduce compute but can be memory-bound; profile before deploying)',
-            'Mistake 3: Adding attention blindly (fix: SE blocks help on harder datasets; on simple tasks, they add overhead without gain)'
-          ]
+            'Mistake 1: Forgetting the floor in output size formula (fix: always use integer division; fractional output sizes mean the kernel does not fit evenly)',
+            'Mistake 2: Mismatching padding and stride when stacking layers (fix: compute the output size of each conv before wiring the next layer)',
+            'Mistake 3: Confusing kernel size with receptive field (fix: receptive field grows with depth; two 3×3 layers have a 5×5 receptive field)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Advanced CNN blocks power mobile vision and real-time segmentation.',
+          heading: 'Real-World Case Study',
+          text: 'Convolution arithmetic governs every vision model design.',
           list: [
-            'MobileNetV3 uses depthwise separable + squeeze-and-excitation for on-device image classification',
-            'DeepLabV3+ uses atrous spatial pyramid pooling (ASPP) with dilated convs for semantic segmentation',
-            'Deformable ConvNets improve object detection for deformable objects (e.g., animals, pedestrians)'
+            'Image classification: ResNet-50 starts with 224×224 input and halves spatial size five times to reach 7×7 before the classifier',
+            'Object detection: FPN builds multi-scale feature maps by carefully tracking strides (4, 8, 16, 32)',
+            'Semantic segmentation: dilated convolutions maintain resolution while expanding receptive field',
+            'Mobile networks: depthwise separable convolutions reduce params by splitting filtering and mixing'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Advanced CNNs improve efficiency and capacity with minimal compute increase',
-            'Depthwise separable conv splits operations to reduce params ~8–9×',
-            'Dilated conv increases receptive field without pooling',
-            'Attention blocks (SE, CBAM) recalibrate channel/spatial importance',
-            'NAS automates architecture search but requires large compute budgets'
+            'Convolution applies a sliding kernel; output size depends on input, kernel, padding, and stride',
+            'Formula: output = floor((input + 2*padding - kernel)/stride) + 1',
+            'Same padding preserves size for stride=1; valid padding shrinks the output',
+            'Stacking convolutions increases receptive field without increasing kernel size',
+            'Always compute shapes before connecting layers to avoid dimension mismatches'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why is depthwise separable convolution cheaper than standard convolution?\nAns: It separates spatial filtering (depthwise) and cross-channel mixing (pointwise), avoiding the full kernel over all channels.',
-            'Q2: What does a dilated convolution achieve?\nAns: It expands the receptive field without increasing kernel size or losing spatial resolution.',
-            'Q3: What is the role of a Squeeze-and-Excitation (SE) block?\nAns: It learns per-channel scaling factors to recalibrate feature importance.'
-          ]
-        }
-      ]
-    },
-    resnet: {
-      title: 'ResNet (Residual Networks)',
-      subtitle: 'Learning residual mappings with skip connections',
-      sections: [
-        {
-          heading: 'What is ResNet?',
-          text: 'ResNet introduces <strong>skip connections</strong> (residual connections) that allow gradients to flow directly through the network, enabling training of very deep models.',
-          list: [
-            'First network to successfully train beyond 100 layers (ResNet-152, ResNet-1000+)',
-            'Core idea: learn residual mapping F(x) = H(x) - x instead of direct mapping H(x)',
-            'Skip connection: y = F(x) + x (identity shortcut)',
-            'Solves vanishing gradient and degradation problems in deep networks'
+            `Q1: What is the output size of a 7×7 conv with stride 2 and padding 3 on a 224×224 input?
+Ans: floor((224 + 6 - 7)/2) + 1 = 112.`,
+            `Q2: Why is padding used?
+Ans: Padding controls output spatial size and prevents information loss at image borders.`,
+            `Q3: What is the receptive field of two stacked 3×3 conv layers with stride 1?
+Ans: 5×5, because the second layer sees a 3×3 region of the first layer's 3×3 outputs.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'The residual block and its variants.',
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Convolution Arithmetic</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'Residual Block',
-            code: `Basic Block (ResNet-18/34):
-  y = F(x, {Wi}) + x
-  F(x) = W₂(ReLU(W₁x))
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
 
-Bottleneck Block (ResNet-50/101/152):
-  F(x) = W₃(ReLU(W₂(ReLU(W₁x))))
-  Where:
-    W₁: 1×1 conv (reduce)
-    W₂: 3×3 conv (process)
-    W₃: 1×1 conv (restore)
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Convolution Arithmetic")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
+        }
+      ]
+    },
+    'lenet-alexnet-vgg': {
+      title: 'LeNet, AlexNet, and VGG',
+      subtitle: 'Building classic CNNs step-by-step',
+      sections: [
+        {
+          heading: 'What is LeNet, AlexNet, and VGG?',
+          text: 'LeNet, AlexNet, and VGG is essential for deep learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in deep learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, LeNet, AlexNet, and VGG provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use lenet, alexnet, and vgg when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — LeNet, AlexNet, and VGG
 
-When dimensions change:
-  y = F(x, {Wi}) + Ws·x
-  Ws = 1×1 projection shortcut`,
-            output: 'Bottleneck design reduces computation while preserving depth.',
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: LeNet, AlexNet, and VGG sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'VGG insight: two 3×3 convs have the same receptive field as one 5×5 conv with fewer parameters and more non-linearity.',
+          example: {
+            title: 'LeNet, AlexNet, and VGG in PyTorch',
+            code: `import torch.nn as nn
+
+# LeNet-5 style
+class LeNet(nn.Module):
+    def __init__(self, num_classes=10):
+        super().__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(1, 6, kernel_size=5, padding=2),
+            nn.Tanh(),
+            nn.AvgPool2d(2),
+            nn.Conv2d(6, 16, kernel_size=5),
+            nn.Tanh(),
+            nn.AvgPool2d(2)
+        )
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(16*5*5, 120),
+            nn.Tanh(),
+            nn.Linear(120, 84),
+            nn.Tanh(),
+            nn.Linear(84, num_classes)
+        )
+    def forward(self, x):
+        return self.classifier(self.features(x))
+
+# VGG-style block builder
+def vgg_block(in_ch, out_ch, num_convs):
+    layers = []
+    for _ in range(num_convs):
+        layers += [nn.Conv2d(in_ch, out_ch, kernel_size=3, padding=1),
+                   nn.ReLU(inplace=True)]
+        in_ch = out_ch
+    layers.append(nn.MaxPool2d(2, 2))
+    return nn.Sequential(*layers)
+
+class VGG16(nn.Module):
+    def __init__(self, num_classes=10):
+        super().__init__()
+        self.features = nn.Sequential(
+            vgg_block(3, 64, 2),
+            vgg_block(64, 128, 2),
+            vgg_block(128, 256, 3),
+            vgg_block(256, 512, 3),
+            vgg_block(512, 512, 3)
+        )
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(512*7*7, 4096), nn.ReLU(True), nn.Dropout(0.5),
+            nn.Linear(4096, 4096), nn.ReLU(True), nn.Dropout(0.5),
+            nn.Linear(4096, num_classes)
+        )
+    def forward(self, x):
+        return self.classifier(self.features(x))`,
+            output: 'LeNet is small for MNIST; VGG shows how stacking 3×3 convs creates deep, powerful networks.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'LeNet, AlexNet, and VGG with Python',
+            code: `import torch
+import torch.nn as nn
+
+# LeNet, AlexNet, and VGG — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'ResNet variants and their characteristics.',
+          text: 'LeNet vs AlexNet vs VGG.',
           table: {
-            headers: ['Variant', 'Depth', 'Block Type', 'Top-1 ImageNet'],
+            headers: [
+              'Architecture',
+              'Year',
+              'Key Innovation',
+              'Parameters',
+              'Depth'
+            ],
             rows: [
-              ['ResNet-18', '18', 'Basic', '~69.6%'],
-              ['ResNet-34', '34', 'Basic', '~73.3%'],
-              ['ResNet-50', '50', 'Bottleneck', '~76.1%'],
-              ['ResNet-101', '101', 'Bottleneck', '~77.4%'],
-              ['ResNet-152', '152', 'Bottleneck', '~78.3%'],
-              ['ResNeXt', '50', 'Grouped conv', '~78.2%']
+              [
+                'LeNet-5',
+                '1998',
+                'First practical CNN',
+                '~60K',
+                '5 layers'
+              ],
+              [
+                'AlexNet',
+                '2012',
+                'ReLU + Dropout + GPU training',
+                '~60M',
+                '8 layers'
+              ],
+              [
+                'VGG-16',
+                '2014',
+                'Uniform 3×3 conv blocks',
+                '~138M',
+                '16 layers'
+              ],
+              [
+                'VGG-19',
+                '2014',
+                'Deeper VGG',
+                '~144M',
+                '19 layers'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Forgetting projection shortcut when channels change (fix: use 1×1 conv on the skip path when input and output dimensions differ)',
-            'Mistake 2: Stacking blocks without batch normalization (fix: BN before activation is standard in ResNet; keep the pre-activation ordering consistent)',
-            'Mistake 3: Assuming deeper always means better (fix: beyond ResNet-152, gains diminish; use pre-trained weights and fine-tune instead of training from scratch)'
+            'Mistake 1: Using large kernels in early layers (fix: stack 3×3 convs instead; they have fewer parameters and more non-linearities)',
+            'Mistake 2: Forgetting that VGG-16 expects 224×224 input (fix: adjust the first classifier linear input dimension if your image size differs)',
+            'Mistake 3: Training VGG from scratch on tiny datasets (fix: use pre-trained weights or a smaller network; VGG has 138M parameters and overfits easily)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
+          text: 'Classic architectures remain foundational.',
+          list: [
+            'MNIST teaching: LeNet is still the standard first CNN for educational datasets',
+            'Transfer learning: VGG and AlexNet backbones are used for style transfer and feature extraction',
+            'Benchmarking: VGG-style designs are baselines for comparing normalization and activation innovations',
+            'Edge devices: smaller variants of these architectures are quantized and deployed on microcontrollers'
           ]
         },
         {
-          heading: 'Real-World Application',
+          heading: 'Quick Recap',
+          list: [
+            'LeNet proved CNNs work on small digit datasets',
+            'AlexNet scaled CNNs to ImageNet using ReLU, dropout, and GPUs',
+            'VGG replaced large kernels with stacks of 3×3 convolutions',
+            'Two 3×3 convs have a 5×5 receptive field with fewer parameters and more non-linearity',
+            'These architectures share the conv → activation → pool → classifier pattern'
+          ]
+        },
+        {
+          heading: 'Practice Questions',
+          list: [
+            `Q1: Why does VGG use 3×3 convolutions instead of 5×5 or 7×7?
+Ans: Stacked 3×3 convs achieve the same receptive field with fewer parameters and more non-linear activations.`,
+            `Q2: What innovation made AlexNet successful on ImageNet?
+Ans: ReLU activations, dropout regularization, data augmentation, and efficient GPU training.`,
+            `Q3: How does LeNet differ from VGG in size?
+Ans: LeNet has tens of thousands of parameters for MNIST; VGG has ~138M parameters for ImageNet.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
+          ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>LeNet, AlexNet, and VGG</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — LeNet, AlexNet, and VGG")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
+        }
+      ]
+    },
+    resnet: {
+      title: 'ResNet',
+      subtitle: 'Residual connections and deep networks that train',
+      sections: [
+        {
+          heading: 'What is ResNet?',
+          text: '<strong>ResNet</strong> (Residual Network) introduced skip connections that allow gradients to flow directly through the network, enabling training of very deep models without degradation. Instead of learning H(x), each block learns the residual F(x) = H(x) − x.',
+          list: [
+            'ResNet-50, ResNet-101, and ResNet-152 are standard backbones for computer vision',
+            'Residual blocks add the input to the transformed output: y = F(x) + x',
+            'Identity shortcuts preserve gradient flow and combat vanishing gradients',
+            'Bottleneck blocks (1×1→3×3→1×1) make deep networks computationally feasible'
+          ]
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>ResNet</strong> (Residual Network) introduced skip connections that allow gradients to flow directly through the network, enabling training of very deep models without degradation. Instead of learning H(x), each block learns the residual F(x) = H(x) − x. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>ResNet</strong> (Residual Network) introduced skip connections that allow gradients to flow directly through the network, enabling training of very deep models without degradation. Instead of learning H(x), each block learns the residual F(x) = H(x) − x. ResNet-50, ResNet-101, and ResNet-152 are standard backbones for computer vision Residual blocks add the input to the transformed output: y = F(x) + x Identity shortcuts preserve gradient flow and combat vanishing gradients Bottleneck blocks (1×1→3×3→1×1) make deep networks computationally feasible</p>',
+            '<p>You use resnet when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — ResNet
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: ResNet sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
+          heading: 'Key Formula / Rule',
+          text: 'Residual block: y = F(x) + x. When dimensions change, use a projection shortcut Ws·x.',
+          example: {
+            title: 'ResNet Building Blocks in PyTorch',
+            code: `import torch
+import torch.nn as nn
+
+class BasicBlock(nn.Module):
+    expansion = 1
+    def __init__(self, in_ch, out_ch, stride=1):
+        super().__init__()
+        self.conv1 = nn.Conv2d(in_ch, out_ch, 3, stride, 1, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_ch)
+        self.conv2 = nn.Conv2d(out_ch, out_ch, 3, 1, 1, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_ch)
+        self.relu = nn.ReLU(inplace=True)
+        self.shortcut = nn.Sequential()
+        if stride != 1 or in_ch != out_ch:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_ch, out_ch, 1, stride, bias=False),
+                nn.BatchNorm2d(out_ch)
+            )
+    def forward(self, x):
+        out = self.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        out += self.shortcut(x)
+        return self.relu(out)
+
+class Bottleneck(nn.Module):
+    expansion = 4
+    def __init__(self, in_ch, out_ch, stride=1):
+        super().__init__()
+        mid = out_ch // self.expansion
+        self.conv1 = nn.Conv2d(in_ch, mid, 1, bias=False)
+        self.bn1 = nn.BatchNorm2d(mid)
+        self.conv2 = nn.Conv2d(mid, mid, 3, stride, 1, bias=False)
+        self.bn2 = nn.BatchNorm2d(mid)
+        self.conv3 = nn.Conv2d(mid, out_ch, 1, bias=False)
+        self.bn3 = nn.BatchNorm2d(out_ch)
+        self.relu = nn.ReLU(inplace=True)
+        self.shortcut = nn.Sequential()
+        if stride != 1 or in_ch != out_ch:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_ch, out_ch, 1, stride, bias=False),
+                nn.BatchNorm2d(out_ch)
+            )
+    def forward(self, x):
+        out = self.relu(self.bn1(self.conv1(x)))
+        out = self.relu(self.bn2(self.conv2(out)))
+        out = self.bn3(self.conv3(out))
+        out += self.shortcut(x)
+        return self.relu(out)
+
+# TensorFlow / Keras ResNet block
+def resnet_block_tf(x, filters, stride=1):
+    shortcut = x
+    if stride != 1 or x.shape[-1] != filters:
+        shortcut = tf.keras.layers.Conv2D(filters, 1, stride, use_bias=False)(x)
+        shortcut = tf.keras.layers.BatchNormalization()(shortcut)
+    out = tf.keras.layers.Conv2D(filters, 3, stride, padding='same', use_bias=False)(x)
+    out = tf.keras.layers.BatchNormalization()(out)
+    out = tf.keras.layers.ReLU()(out)
+    out = tf.keras.layers.Conv2D(filters, 3, 1, padding='same', use_bias=False)(out)
+    out = tf.keras.layers.BatchNormalization()(out)
+    return tf.keras.layers.ReLU()(out + shortcut)`,
+            output: 'Bottleneck blocks reduce computation while preserving depth; projection shortcuts align dimensions.',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Python Code Example',
+          example: {
+            title: 'ResNet with Python',
+            code: `import torch
+import torch.nn as nn
+
+# ResNet — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
+          heading: 'Important Differences',
+          text: 'ResNet variants and their characteristics.',
+          table: {
+            headers: [
+              'Variant',
+              'Depth',
+              'Block Type',
+              'Top-1 ImageNet'
+            ],
+            rows: [
+              [
+                'ResNet-18',
+                '18',
+                'Basic',
+                '~69.6%'
+              ],
+              [
+                'ResNet-34',
+                '34',
+                'Basic',
+                '~73.3%'
+              ],
+              [
+                'ResNet-50',
+                '50',
+                'Bottleneck',
+                '~76.1%'
+              ],
+              [
+                'ResNet-101',
+                '101',
+                'Bottleneck',
+                '~77.4%'
+              ],
+              [
+                'ResNet-152',
+                '152',
+                'Bottleneck',
+                '~78.3%'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Common Mistakes',
+          list: [
+            'Mistake 1: Stacking too many convolutional layers without skip connections (fix: beyond ~20 layers, always use residual connections to prevent degradation)',
+            'Mistake 2: Forgetting projection shortcut when channels change (fix: use a 1×1 conv on the skip path when input and output dimensions differ)',
+            'Mistake 3: Placing activation after the addition in pre-activation ResNet incorrectly (fix: follow the original ordering or pre-activation paper carefully; BN→ReLU→Conv is common in pre-act blocks)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
+        },
+        {
+          heading: 'Real-World Case Study',
           text: 'ResNet is the backbone of countless vision systems.',
           list: [
             'Image classification: standard pre-trained backbone for transfer learning',
@@ -168,746 +667,498 @@ When dimensions change:
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: What problem do skip connections solve?\nAns: They mitigate vanishing gradients and degradation, allowing very deep networks to train.',
-            'Q2: Why does the bottleneck block use 1×1 convolutions?\nAns: To reduce and then restore channel dimensions, cutting FLOPs while keeping representational depth.',
-            'Q3: When is a projection shortcut needed?\nAns: When the input and output dimensions (channels or spatial size) differ, a 1×1 conv aligns them.'
-          ]
-        }
-      ]
-    },
-    inception: {
-      title: 'Inception Networks (GoogLeNet)',
-      subtitle: 'Multi-scale feature extraction with parallel convolutions',
-      sections: [
-        {
-          heading: 'What is Inception?',
-          text: 'Inception modules apply multiple filter sizes (1×1, 3×3, 5×5) and pooling in parallel, letting the network choose which features matter at each layer.',
-          list: [
-            'Introduced in GoogLeNet (ILSVRC 2014 winner)',
-            'Motivation: salient features can vary wildly in size; optimal filter size is task-dependent',
-            '1×1 convolutions reduce dimensionality before expensive 3×3 and 5×5 convs',
-            'Network-in-Network design: stack Inception modules to build very deep, efficient nets'
+            `Q1: What problem do ResNet skip connections solve?
+Ans: Skip connections solve the degradation problem in very deep networks by providing an identity path that preserves gradient flow during backpropagation.`,
+            `Q2: Why does the bottleneck block use 1×1 convolutions?
+Ans: To reduce and then restore channel dimensions, cutting FLOPs while keeping representational depth.`,
+            `Q3: When is a projection shortcut needed?
+Ans: When the input and output dimensions (channels or spatial size) differ, a 1×1 conv aligns them.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'Inception module structure and dimensionality reduction.',
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>ResNet</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'Inception Module (Naïve vs Dimension-Reduced)',
-            code: `Naïve Inception (input: 28×28×256):
-  1×1 conv → 28×28×128
-  3×3 conv → 28×28×192
-  5×5 conv → 28×28×96
-  3×3 pool → 28×28×256
-  Concat = 128+192+96+256 = 672 channels
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
 
-With 1×1 reductions:
-  1×1 conv → 128
-  1×1 reduce → 96 → 3×3 conv → 192
-  1×1 reduce → 16 → 5×5 conv → 96
-  3×3 pool → 1×1 proj → 64
-  Concat = 128+192+96+64 = 480 channels
-
-→ Fewer parameters, similar capacity.`,
-            output: '1×1 convolutions are the workhorse of Inception efficiency.',
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — ResNet")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
             type: 'code'
           }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Evolution of Inception variants.',
-          table: {
-            headers: ['Variant', 'Key Improvement', 'Use Case'],
-            rows: [
-              ['Inception v1 (GoogLeNet)', 'Parallel multi-scale convs', 'General classification'],
-              ['Inception v2/v3', 'Factorized convs (7×7 → 1×7+7×1)', 'Better regularization'],
-              ['Inception v4', 'Uniform modules + ResNet connection', 'Higher accuracy'],
-              ['Inception-ResNet', 'Inception modules + residual', 'Faster convergence'],
-              ['Xception', 'Depthwise separable convs', 'Mobile efficiency']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Using Inception without auxiliary classifiers for deep training (fix: v1 uses auxiliary softmax heads at intermediate layers to combat vanishing gradients)',
-            'Mistake 2: Assuming 5×5 filters are always wasteful (fix: in early layers they capture coarse patterns; in later layers, factorize them into stacked 3×3s)',
-            'Mistake 3: Concatenating unequal spatial sizes (fix: use same padding on all branches so height/width match before concatenation)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'Inception-style multi-scale processing appears in modern detection and segmentation.',
-          list: [
-            'Object detection (SSD): uses multi-scale feature maps inspired by Inception principles',
-            'Feature pyramid networks (FPN): leverage multi-scale representations for multi-resolution object sizes',
-            'Medical image analysis: multi-scale convs help detect lesions of varying sizes in histopathology'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'Inception runs multiple convolutions in parallel and concatenates results',
-            '1×1 convolutions reduce channels before expensive 3×3 and 5×5 operations',
-            'Factorization (e.g., 5×5 → two 3×3s) further reduces compute in v2/v3',
-            'Auxiliary classifiers help train very deep Inception networks',
-            'Inception-ResNet combines multi-scale extraction with residual learning'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Q1: Why does Inception use multiple filter sizes in parallel?\nAns: Because salient features occur at different scales; the network learns which scales matter.',
-            'Q2: What is the role of 1×1 convolutions inside an Inception module?\nAns: They reduce channel dimensionality before larger convolutions, keeping computation manageable.',
-            'Q3: How does factorization reduce cost in Inception v2/v3?\nAns: A 5×5 conv is replaced by two 3×3 convs, and n×n is replaced by 1×n + n×1.'
-          ]
         }
       ]
     },
-    densenet: {
-      title: 'DenseNet (Densely Connected Networks)',
-      subtitle: 'Maximum feature reuse with dense connectivity',
-      sections: [
-        {
-          heading: 'What is DenseNet?',
-          text: 'DenseNet connects each layer to every other layer in a feed-forward fashion. Every layer receives feature maps from all preceding layers and passes its own to all subsequent layers.',
-          list: [
-            'Alleviates vanishing gradients through direct connections',
-            'Encourages feature reuse: early low-level features are available to late layers',
-            'Reduces parameters: narrow layers (small k) suffice because of dense concatenation',
-            'Growth rate (k): number of new feature maps each layer produces (typical k = 12, 24, 32)'
-          ]
-        },
-        {
-          heading: 'Key Formula / Rule',
-          text: 'Dense connectivity and composite function.',
-          example: {
-            title: 'Dense Block',
-            code: `For layer l in a dense block:
-  xl = Hl([x₀, x₁, ..., xl₋₁])
-
-Where:
-  [x₀, ..., xl₋₁] = concatenation of all previous outputs
-  Hl = BN → ReLU → 3×3 Conv (composite function)
-
-Channels after l layers:
-  k₀ + k × l
-  k₀ = initial channels
-  k = growth rate
-
-Transition layer (between dense blocks):
-  1×1 conv (compress) + 2×2 avg pool (downsample)`,
-            output: 'Concatenation preserves all previous features; growth rate controls memory.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'DenseNet vs ResNet.',
-          table: {
-            headers: ['Aspect', 'ResNet', 'DenseNet'],
-            rows: [
-              ['Connection', 'Additive skip (y = F(x) + x)', 'Concatenative (y = [x, F(x)])'],
-              ['Feature reuse', 'Limited (only immediate skip)', 'Maximum (all previous layers)'],
-              ['Parameters', 'Moderate', 'Fewer (narrow layers suffice)'],
-              ['Memory', 'Moderate', 'Higher (concatenation grows)'],
-              ['Gradient flow', 'Good', 'Excellent (direct to all layers)'],
-              ['Bottleneck', '1×1→3×3→1×1', '1×1 before 3×3 in composite fn']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Setting growth rate too high (fix: k=12–32 is standard; higher k causes memory explosion due to concatenation)',
-            'Mistake 2: Omitting bottleneck 1×1 conv in composite function (fix: DenseNet-B/C use 1×1 before 3×3 to reduce channels and memory)',
-            'Mistake 3: Using DenseNet for very high-resolution inputs without compression (fix: add transition layers with compression θ=0.5 to halve channels between blocks)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'Dense feature reuse helps tasks needing fine-grained localization.',
-          list: [
-            'Semantic segmentation: dense skip pathways improve boundary detection (DenseASPP, FC-DenseNet)',
-            'Medical imaging: small growth rates work well with limited training data',
-            'Style transfer: feature reuse across layers preserves content while transferring style'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'DenseNet concatenates outputs from all previous layers into each new layer',
-            'Growth rate (k) controls how many new features each layer adds',
-            'Feature reuse reduces the need for wide layers, cutting parameters',
-            'Transition layers compress and downsample between dense blocks',
-            'Dense connections improve gradient flow and encourage feature propagation'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Q1: How does DenseNet differ from ResNet in connectivity?\nAns: ResNet adds skips (y = F(x) + x); DenseNet concatenates all previous features (y = [x₀, ..., x]).',
-            'Q2: Why can DenseNet use fewer parameters than ResNet?\nAns: Narrow layers suffice because dense concatenation provides rich feature access to every layer.',
-            'Q3: What is the purpose of a transition layer?\nAns: To compress channels (1×1 conv) and downsample (pooling) between dense blocks.'
-          ]
-        }
-      ]
-    },
-    efficientnet: {
-      title: 'EfficientNet',
-      subtitle: 'Compound scaling of depth, width, and resolution',
-      sections: [
-        {
-          heading: 'What is EfficientNet?',
-          text: 'EfficientNet systematically scales CNNs using a compound coefficient that jointly increases depth, width, and input resolution.',
-          list: [
-            'Insight: scaling only one dimension (depth, width, or resolution) yields diminishing returns',
-            'Compound scaling: d = α^φ, w = β^φ, r = γ^φ, where φ is a user-specified scaling factor',
-            'Base network (EfficientNet-B0) found via Neural Architecture Search (NAS)',
-            'EfficientNet-B0 to B7 cover a spectrum from mobile to server-class accuracy'
-          ]
-        },
-        {
-          heading: 'Key Formula / Rule',
-          text: 'Compound scaling equations.',
-          example: {
-            title: 'Compound Scaling',
-            code: `Given base network:
-  depth: d = α^φ
-  width: w = β^φ
-  resolution: r = γ^φ
-
-Constraints:
-  α · β² · γ² ≈ 2
-  α ≥ 1, β ≥ 1, γ ≥ 1
-
-For φ = 1 (B1):
-  d = α, w = β, r = γ
-
-For φ = 2 (B2):
-  d = α², w = β², r = γ²
-
-Found via grid search on B0:
-  α = 1.2, β = 1.1, γ = 1.15`,
-            output: 'Joint scaling gives better accuracy per FLOP than scaling one dimension.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'EfficientNet family vs other CNNs.',
-          table: {
-            headers: ['Model', 'Params', 'Top-1 Acc', 'FLOPs'],
-            rows: [
-              ['MobileNetV2', '3.5M', '72.0%', '300M'],
-              ['ResNet-50', '26M', '76.0%', '4.1B'],
-              ['EfficientNet-B0', '5.3M', '77.1%', '390M'],
-              ['EfficientNet-B3', '12M', '81.1%', '1.8B'],
-              ['EfficientNet-B7', '66M', '84.3%', '37B'],
-              ['ResNet-152', '60M', '78.3%', '11.6B']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Scaling EfficientNet without adjusting input pipeline (fix: higher resolution requires larger batch augmentation and adjusted crop sizes)',
-            'Mistake 2: Assuming B7 is always best (fix: B0–B3 are usually sufficient and far faster; use accuracy/speed tradeoff to pick)',
-            'Mistake 3: Ignoring memory at higher resolutions (fix: r increases quadratically in memory; use gradient checkpointing or mixed precision)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'EfficientNet is the go-to backbone when efficiency matters.',
-          list: [
-            'Mobile apps: EfficientNet-B0 runs real-time classification on mid-tier phones',
-            'Cloud APIs: B4–B5 offer strong accuracy without the inference cost of giant transformers',
-            'Medical edge devices: B0 with quantized weights enables on-device pathology screening'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'EfficientNet scales depth, width, and resolution together via compound coefficients',
-            'Base network (B0) is discovered by NAS; larger variants scale with φ',
-            'Compound scaling outperforms single-dimension scaling in accuracy vs FLOPs',
-            'B0–B3 are practical defaults; B7 is for maximum accuracy at high compute cost',
-            'EfficientNetV2 adds progressive learning and Fused-MBConv for faster training'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Q1: What is compound scaling?\nAns: Scaling depth, width, and resolution jointly using fixed coefficients (α, β, γ) raised to a user factor φ.',
-            'Q2: Why is EfficientNet more efficient than ResNet at similar accuracy?\nAns: Better base architecture (NAS-optimized) and balanced scaling prevent diminishing returns.',
-            'Q3: What is the downside of scaling resolution too aggressively?\nAns: Memory and compute grow quadratically with resolution; training becomes unstable without adjusted pipelines.'
-          ]
-        }
-      ]
-    },
-    'neural-architecture-search': {
-      title: 'Neural Architecture Search (NAS)',
-      subtitle: 'Automating the design of neural networks',
-      sections: [
-        {
-          heading: 'What is NAS?',
-          text: 'NAS automates the discovery of optimal neural architectures by searching over a defined space of operations, connections, and hyperparameters.',
-          list: [
-            'Search space: defines allowable layers, operations, and connectivity patterns',
-            'Search strategy: how to explore the space (random, evolutionary, RL, gradient-based)',
-            'Performance estimation: how to evaluate candidate architectures quickly',
-            'Popular methods: DARTS (differentiable), ENAS (efficient with parameter sharing), Auto-Keras'
-          ]
-        },
-        {
-          heading: 'Key Formula / Rule',
-          text: 'DARTS relaxes the discrete search into a continuous weighting over operations.',
-          example: {
-            title: 'DARTS Cell',
-            code: `Discrete architecture:
-  o* = argmax_o α_o  (one operation per edge)
-
-DARTS relaxation:
-  mixed operation = Σ softmax(α_o) · o(x)
-  
-Bilevel optimization:
-  Inner: minimize w.r.t. network weights w
-    min_w L_train(w, α)
-  Outer: minimize w.r.t. architecture parameters α
-    min_α L_val(w*(α), α)
-
-After search:
-  Keep top-k operations by α to get discrete cell.`,
-            output: 'Differentiable NAS reduces search cost from thousands of GPU days to a few days.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'NAS methods compared.',
-          table: {
-            headers: ['Method', 'Search Strategy', 'Cost', 'Notable Result'],
-            rows: [
-              ['NASNet', 'RL + 800 GPUs', '22,400 GPU-days', 'State-of-the-art at launch'],
-              ['ENAS', 'RL + weight sharing', '1 GPU-day', 'Efficient via parameter reuse'],
-              ['DARTS', 'Gradient-based', '4 GPU-days', 'Differentiable relaxation'],
-              ['ProxylessNAS', 'Gradient on hardware', '8 GPU-days', 'Hardware-aware latency'],
-              ['EfficientNet', 'Compound scaling of NAS base', 'Small', 'Best accuracy/FLOP tradeoff']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Searching on CIFAR-10 and directly transferring to ImageNet (fix: search space must support scale differences; use progressive resizing or proxy tasks with care)',
-            'Mistake 2: Overlooking search cost (fix: weight sharing, one-shot supernets, and zero-cost proxies reduce evaluation cost dramatically)',
-            'Mistake 3: Optimizing only accuracy (fix: add latency/FLOPs into the objective for deployable models, as in ProxylessNAS and OFA)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'NAS-produced architectures are now mainstream backbones.',
-          list: [
-            'EfficientNet B0 is an NAS-discovered base scaled by compound coefficients',
-            'Mobile models: MNASNet and FBNet optimize for mobile latency directly',
-            'Custom hardware: NAS finds ops that map efficiently to specific accelerators (e.g., edge TPU)'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'NAS automates architecture design via search space + strategy + evaluation',
-            'Early NAS was prohibitively expensive; modern methods (DARTS, ENAS, ProxylessNAS) cut cost',
-            'Differentiable NAS (DARTS) relaxes discrete choices into continuous weights',
-            'Hardware-aware NAS optimizes accuracy and latency together',
-            'NAS-discovered cells are often transferable across tasks and datasets'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Q1: What are the three components of NAS?\nAns: Search space, search strategy, and performance estimation.',
-            'Q2: How does DARTS make NAS differentiable?\nAns: It replaces the discrete operation choice with a softmax-weighted mixture over all operations.',
-            'Q3: Why is hardware-aware NAS important?\nAns: Because accuracy alone does not guarantee deployability; latency and memory constraints vary by device.'
-          ]
-        }
-      ]
-    },
-    'transfer-learning-dl': {
-      title: 'Transfer Learning in Deep Learning',
-      subtitle: 'Leveraging pre-trained representations',
+    'transfer-learning-cnn': {
+      title: 'Transfer Learning with torchvision',
+      subtitle: 'Leveraging pre-trained CNNs for new tasks',
       sections: [
         {
           heading: 'What is Transfer Learning?',
-          text: 'Transfer learning uses a model trained on a large source dataset (e.g., ImageNet) and adapts it to a smaller target task.',
+          text: '<strong>Transfer Learning</strong> takes a neural network trained on a large, general dataset and adapts it to a new, often smaller, specific task. Instead of training from scratch, you reuse learned features from a source domain, dramatically reducing training time and data requirements while often achieving better accuracy.',
           list: [
-            'Feature extractor: freeze early layers, train only the final classifier',
-            'Fine-tuning: unfreeze all layers and train end-to-end with a low learning rate',
-            'Source and target domains should be related for transfer to work well',
-            'Pre-trained weights provide robust initial features, reducing need for massive target data'
+            'Transfer learning reuses features learned from large datasets like ImageNet, saving weeks of training time',
+            'The early layers of a pre-trained CNN learn generic features (edges, textures) that transfer well to almost any vision task',
+            'Feature extraction freezes the base and trains only a new classifier head',
+            'Fine-tuning unfreezes deeper layers and trains with a very small learning rate to adapt features subtly'
           ]
         },
         {
+          heading: 'Concept Explanation',
+          content: [
+            '<p><strong>Transfer Learning</strong> takes a neural network trained on a large, general dataset and adapts it to a new, often smaller, specific task. Instead of training from scratch, you reuse learned features from a source domain, dramatically reducing training time and data requirements while often achieving better accuracy. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, <strong>Transfer Learning</strong> takes a neural network trained on a large, general dataset and adapts it to a new, often smaller, specific task. Instead of training from scratch, you reuse learned features from a source domain, dramatically reducing training time and data requirements while often achieving better accuracy. Transfer learning reuses features learned from large datasets like ImageNet, saving weeks of training time The early layers of a pre-trained CNN learn generic features (edges, textures) that transfer well to almost any vision task Feature extraction freezes the base and trains only a new classifier head Fine-tuning unfreezes deeper layers and trains with a very small learning rate to adapt features subtly</p>',
+            '<p>You use transfer learning with torchvision when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Transfer Learning with torchvision
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Transfer Learning with torchvision sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
+        },
+        {
           heading: 'Key Formula / Rule',
-          text: 'Layer-wise transferability: early layers are more transferable than late layers.',
+          text: 'Transfer learning workflow: freeze base, replace head, retrain; optionally fine-tune with discriminative learning rates.',
           example: {
-            title: 'Transfer Learning Workflow',
-            code: `Step 1: Load pre-trained model
-  model = ResNet50(weights="imagenet")
+            title: 'Transfer Learning in PyTorch and TensorFlow',
+            code: `import torch, torchvision
+import torch.nn as nn
+import torch.optim as optim
+from torchvision import transforms, models
 
-Step 2: Replace classifier head
-  model.fc = nn.Linear(2048, num_classes)
+# PyTorch transfer learning pipeline
+train_transform = transforms.Compose([
+    transforms.RandomResizedCrop(224),
+    transforms.RandomHorizontalFlip(),
+    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406],
+                         [0.229, 0.224, 0.225])
+])
 
-Step 3: Feature extraction (option A)
-  freeze all backbone layers
-  train only fc with LR = 1e-3
+num_classes = 10
+model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
 
-Step 4: Fine-tuning (option B)
-  unfreeze backbone after a few epochs
-  use LR = 1e-5 (10× lower than head)
-  → differential learning rates per layer block`,
-            output: 'Start with frozen features, then progressively unfreeze for best results.',
+# Freeze backbone
+for param in model.parameters():
+    param.requires_grad = False
+
+# Replace classifier head
+model.fc = nn.Linear(model.fc.in_features, num_classes)
+
+# Train only the head
+optimizer = optim.Adam(model.fc.parameters(), lr=1e-3)
+
+# Fine-tune later
+for param in model.layer4.parameters():
+    param.requires_grad = True
+optimizer = optim.Adam([
+    {'params': model.layer4.parameters(), 'lr': 1e-5},
+    {'params': model.fc.parameters(), 'lr': 1e-3}
+])
+
+# TensorFlow / Keras equivalent
+import tensorflow as tf
+base = tf.keras.applications.ResNet50(weights='imagenet', include_top=False,
+                                       input_shape=(224,224,3))
+base.trainable = False
+model_tf = tf.keras.Sequential([
+    base,
+    tf.keras.layers.GlobalAveragePooling2D(),
+    tf.keras.layers.Dense(num_classes)
+])
+model_tf.compile(optimizer=tf.keras.optimizers.Adam(1e-3),
+                 loss='sparse_categorical_crossentropy',
+                 metrics=['accuracy'])`,
+            output: 'Freezing preserves generic features; fine-tuning adapts them to the target domain.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Transfer Learning with torchvision with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Transfer Learning with torchvision — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'When to freeze vs fine-tune.',
+          text: 'Feature extraction vs fine-tuning.',
           table: {
-            headers: ['Scenario', 'Approach', 'Rationale'],
+            headers: [
+              'Aspect',
+              'Feature Extraction',
+              'Fine-Tuning'
+            ],
             rows: [
-              ['Small target data, similar domain', 'Freeze backbone', 'Avoid overfitting, use generic features'],
-              ['Small target data, different domain', 'Fine-tune top layers', 'Late layers are task-specific; adjust them'],
-              ['Large target data, similar domain', 'Fine-tune all layers', 'Enough data to safely adapt all features'],
-              ['Large target data, different domain', 'Train from scratch', 'Pre-trained features may transfer poorly'],
-              ['Very large target data', 'Train from scratch', 'Pre-training adds little benefit']
+              [
+                'Layers trained',
+                'Only new classifier head',
+                'All or some pre-trained layers'
+              ],
+              [
+                'Data needed',
+                'Very small (hundreds of images)',
+                'Moderate (thousands of images)'
+              ],
+              [
+                'Training time',
+                'Minutes to hours',
+                'Hours to days'
+              ],
+              [
+                'Risk of overfitting',
+                'Very low',
+                'Moderate (use small LR)'
+              ],
+              [
+                'Accuracy potential',
+                'Good baseline',
+                'Higher ceiling'
+              ],
+              [
+                'When to use',
+                'Small dataset, similar domain',
+                'Larger dataset, different domain'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using the same learning rate for backbone and head (fix: backbone needs a smaller LR because pre-trained weights are already good; use discriminative fine-tuning)',
-            'Mistake 2: Forgetting to match normalization statistics (fix: if source uses ImageNet mean/std, apply same preprocessing to target data)',
-            'Mistake 3: Unfreezing everything immediately on tiny datasets (fix: start frozen, validate, then slowly unfreeze layer blocks)'
-          ]
+            'Mistake 1: Fine-tuning all layers immediately with a large learning rate (fix: start by training only the classifier head; only fine-tune deeper layers later with a very small LR like 1e-5)',
+            'Mistake 2: Using a pre-trained model from an unrelated domain without adaptation (fix: if your task is medical imaging, use a model pre-trained on medical data or at least fine-tune extensively)',
+            `Mistake 3: Forgetting to normalize input using the pre-trained model's mean and std (fix: always use the same preprocessing the pre-trained model was trained with, e.g., ImageNet normalization)`
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Transfer learning is the default practice in applied deep learning.',
+          heading: 'Real-World Case Study',
+          text: 'Transfer learning makes state-of-the-art vision accessible to small teams.',
           list: [
-            'Computer vision: ImageNet pre-training is standard for classification, detection, and segmentation',
-            'NLP: BERT and GPT models are fine-tuned for sentiment analysis, NER, and summarization',
-            'Medical imaging: radiology models initialized on ImageNet and fine-tuned on chest X-rays and CT scans',
-            'Audio: spectrogram-based models use vision backbones (e.g., ResNet) with audio pre-training'
+            'Startup product classification: a company with only 500 product images can build a classifier by fine-tuning ResNet-50',
+            'Medical imaging: radiology departments fine-tune ImageNet-pre-trained models on chest X-rays to detect pneumonia, tuberculosis, and COVID-19',
+            'Agriculture: farmers use transfer learning on drone imagery to detect crop diseases with just a few hundred labeled photos per class',
+            'Content moderation: social platforms fine-tune vision transformers to detect harmful imagery across cultures and languages'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Transfer learning adapts pre-trained models to new tasks with limited data',
-            'Feature extraction freezes the backbone; fine-tuning updates all weights',
-            'Early layers are more transferable than late layers',
-            'Use lower learning rates for pre-trained layers during fine-tuning',
-            'Match preprocessing and normalization between source and target datasets'
+            'Transfer learning reuses pre-trained features to save time, data, and compute on new tasks',
+            'Feature extraction: freeze base, train only the new head; best for small datasets',
+            'Fine-tuning: unfreeze and train deeper layers with small LR; best for larger datasets',
+            'Early CNN layers learn generic features that transfer across almost all vision tasks',
+            `Always match the pre-processing (normalization, image size) to the pre-trained model's training setup`
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why are early layers more transferable than late layers?\nAns: Early layers learn generic features (edges, textures); late layers learn task-specific patterns.',
-            'Q2: What is discriminative fine-tuning?\nAns: Using different learning rates for different layers, typically smaller for pre-trained backbone layers.',
-            'Q3: When should you train from scratch instead of fine-tuning?\nAns: When target data is very large and the target domain is very different from the source domain.'
+            `Q1: Why is transfer learning especially effective for small datasets?
+Ans: Pre-trained models already learned generic features from millions of images; the new task only needs to adapt the final classifier.`,
+            `Q2: What is the difference between feature extraction and fine-tuning?
+Ans: Feature extraction freezes the pre-trained base and trains only a new classifier head; fine-tuning also updates some or all pre-trained layers.`,
+            `Q3: Why must input normalization match the pre-trained model?
+Ans: The pre-trained features were learned on data with specific mean and standard deviation; feeding differently scaled inputs shifts the feature distribution.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
+        },
+        {
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Transfer Learning with torchvision</em>, and visualize the distribution. Interpret one number from the output.',
+          example: {
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
+
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Transfer Learning with torchvision")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
-    'fine-tuning': {
-      title: 'Fine-Tuning Strategies',
-      subtitle: 'How to adapt pre-trained models effectively',
+    'data-augmentation': {
+      title: 'Data Augmentation',
+      subtitle: 'Building robust training pipelines',
       sections: [
         {
-          heading: 'What is Fine-Tuning?',
-          text: 'Fine-tuning is the process of continuing training on a pre-trained model using target-domain data. Done correctly, it yields higher accuracy than training from scratch.',
-          list: [
-            'Progressive unfreezing: start frozen, unfreeze deeper layers gradually',
-            'Discriminative learning rates: lower LR for early layers, higher for new head',
-            'Layer-wise LR decay: multiply LR by a decay factor per layer block',
-            'Warm restarts: use cosine annealing to escape local minima during fine-tuning'
-          ]
+          heading: 'What is Data Augmentation?',
+          text: 'Data Augmentation is essential for deep learning.',
+          list: []
+        },
+        {
+          heading: 'Concept Explanation',
+          content: [
+            '<p>This topic is a core building block in deep learning. Start with intuition: ask what question this concept answers before memorizing formulas.</p>',
+            '<p>Technically, Data Augmentation provides formal tools for quantifying patterns and uncertainty in data.</p>',
+            '<p>You use data augmentation when you need reproducible, evidence-based decisions rather than gut feeling — A/B tests, clinical trials, forecasting, and model evaluation all depend on it.</p>'
+          ],
+          note: 'References: Casella & Berger (2002), <em>Statistical Inference</em>; Wasserman (2004), <em>All of Statistics</em>.'
+        },
+        {
+          heading: 'Visual Representation',
+          code: `Concept map — Data Augmentation
+
+  Raw data  →  Summarize / model  →  Inference  →  Decision
+     |              |                    |              |
+  sample n      estimate θ̂          CI / p-value    deploy / report
+
+  Key idea: Data Augmentation sits in the inference layer — turning noisy samples into actionable ranges.`,
+          language: 'text'
         },
         {
           heading: 'Key Formula / Rule',
-          text: 'Layer-wise learning rate decay.',
+          text: 'Augmentations should be label-preserving and applied only during training, not validation or test.',
           example: {
-            title: 'Discriminative Fine-Tuning',
-            code: `Layer groups (ResNet-50):
-  Group 1: conv1 + bn1 (most generic)
-  Group 2: layer1
-  Group 3: layer2
-  Group 4: layer3
-  Group 5: layer4 (most task-specific)
-  Group 6: fc (new head)
+            title: ' torchvision and Albumentations Augmentation Pipelines',
+            code: `import torchvision.transforms as T
 
-Learning rates:
-  lr_1 = base_lr / (decay^5)
-  lr_2 = base_lr / (decay^4)
-  ...
-  lr_6 = base_lr
+train_transform = T.Compose([
+    T.RandomResizedCrop(224, scale=(0.08, 1.0)),
+    T.RandomHorizontalFlip(),
+    T.RandomRotation(15),
+    T.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1),
+    T.RandomGrayscale(p=0.1),
+    T.ToTensor(),
+    T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
 
-Example (base_lr = 1e-3, decay = 2.6):
-  conv1:  9.4e-6
-  layer1: 2.4e-5
-  layer2: 6.3e-5
-  layer3: 1.6e-4
-  layer4: 4.2e-4
-  fc:     1.0e-3`,
-            output: 'Earlier layers change very little; the head changes the most.',
+val_transform = T.Compose([
+    T.Resize(256),
+    T.CenterCrop(224),
+    T.ToTensor(),
+    T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+
+# Albumentations (faster, more flexible)
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+
+train_aug = A.Compose([
+    A.RandomResizedCrop(224, 224, scale=(0.08, 1.0)),
+    A.HorizontalFlip(p=0.5),
+    A.ShiftScaleRotate(shift_limit=0.05, scale_limit=0.1, rotate_limit=15),
+    A.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1),
+    A.Normalize(mean=[0.485,0.456,0.406], std=[0.229,0.224,0.225]),
+    ToTensorV2()
+])
+
+# TensorFlow equivalent
+import tensorflow as tf
+augment = tf.keras.Sequential([
+    tf.keras.layers.RandomResizedCrop(224, 224, scale=(0.08, 1.0)),
+    tf.keras.layers.RandomFlip('horizontal'),
+    tf.keras.layers.RandomRotation(0.08),
+    tf.keras.layers.RandomBrightness(0.2),
+    tf.keras.layers.RandomContrast(0.2),
+])`,
+            output: 'Training gets heavy augmentation; validation only gets deterministic resizing/cropping.',
             type: 'code'
           }
         },
         {
+          heading: 'Python Code Example',
+          example: {
+            title: 'Data Augmentation with Python',
+            code: `import torch
+import torch.nn as nn
+
+# Data Augmentation — minimal tensor workflow
+x = torch.randn(8, 3, 32, 32)  # batch of "images"
+conv = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+out = conv(x)
+print("Input:", x.shape, "→ Conv output:", out.shape)`,
+            output: 'Run in a notebook; verify shapes, p-values, or metrics match expectations.',
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Step-by-Step Walkthrough',
+          list: [
+            '<strong>1. Load & inspect data:</strong> WHY — garbage in, garbage out; HOW — pandas read_csv, df.info(), check dtypes.',
+            '<strong>2. Check assumptions:</strong> WHY — invalid tests lie confidently; HOW — plots, Shapiro, VIF, or independence checks.',
+            '<strong>3. Compute statistic:</strong> WHY — quantify evidence; HOW — scipy.stats or statsmodels.',
+            '<strong>4. Interpret:</strong> WHY — p-values alone mislead; HOW — pair with effect size and confidence interval.',
+            '<strong>5. Report:</strong> HOW — state H₀/H₁, test, α, statistic, p-value, CI, and practical significance.'
+          ]
+        },
+        {
           heading: 'Important Differences',
-          text: 'Fine-tuning strategies compared.',
+          text: 'Augmentation families and when to use them.',
           table: {
-            headers: ['Strategy', 'How', 'Best For'],
+            headers: [
+              'Augmentation',
+              'Type',
+              'Best For',
+              'Caution'
+            ],
             rows: [
-              ['Full fine-tune', 'Unfreeze all, train end-to-end', 'Large target data'],
-              ['Progressive unfreeze', 'Unfreeze layer groups over epochs', 'Medium data, avoiding catastrophic forgetting'],
-              ['Head only', 'Freeze backbone, train classifier', 'Very small data, similar domain'],
-              ['Adapter layers', 'Insert small trainable layers', 'Multi-task, parameter efficiency'],
-              ['LoRA', 'Low-rank updates to weights', 'LLMs, GPU-constrained fine-tuning']
+              [
+                'RandomResizedCrop',
+                'Geometric',
+                'All image classification',
+                'Avoid too small scale for tiny objects'
+              ],
+              [
+                'HorizontalFlip',
+                'Geometric',
+                'Most natural images',
+                'Only if label is symmetric'
+              ],
+              [
+                'ColorJitter',
+                'Photometric',
+                'Real-world lighting',
+                'Too strong hurts convergence'
+              ],
+              [
+                'Cutout / RandomErasing',
+                'Occlusion',
+                'Robustness to occlusion',
+                'Use small patch size'
+              ],
+              [
+                'Mixup / CutMix',
+                'Sample mixing',
+                'Regularization',
+                'Adjust loss target distribution'
+              ],
+              [
+                'AutoAugment',
+                'Learned policy',
+                'Large datasets',
+                'Policy may overfit to dataset'
+              ]
             ]
           }
         },
         {
           heading: 'Common Mistakes',
           list: [
-            'Mistake 1: Using too high a learning rate and destroying pre-trained features (fix: start with LR 1e-4 or lower for backbone; monitor validation loss for spikes)',
-            'Mistake 2: Fine-tuning batch normalization layers on tiny batches (fix: freeze BN statistics when batch size < 16 to avoid unstable mean/variance estimates)',
-            'Mistake 3: Ignoring class imbalance in the target dataset (fix: use weighted loss or oversampling so the head does not bias toward majority classes)'
-          ]
+            'Mistake 1: Applying augmentation to validation/test sets (fix: validation should use deterministic preprocessing only; never augment evaluation data)',
+            'Mistake 2: Using label-changing augmentations without adjusting targets (fix: vertical flips change the meaning of digit "6"/"9"; bounding boxes must be transformed too)',
+            'Mistake 3: Over-augmenting small datasets (fix: strong augmentation can overwhelm limited signal; start light and increase gradually while monitoring validation loss)'
+          ],
+          code: `# WRONG: multiple t-tests without correction
+for group in groups:
+    ttest_ind(a, group)  # inflates Type I error
+
+# RIGHT: one-way ANOVA + post-hoc with correction
+f, p = f_oneway(*groups)
+# then Tukey HSD or Bonferroni-adjusted pairs`,
+          language: 'python'
         },
         {
-          heading: 'Real-World Application',
-          text: 'Fine-tuning is the workhorse of production ML.',
+          heading: 'Real-World Case Study',
+          text: 'Augmentation pipelines are essential in production vision systems.',
           list: [
-            'Retail: fine-tune image classifiers on product catalogs with only hundreds of images per class',
-            'Finance: fine-tune language models on domain-specific documents (annual reports, filings)',
-            'Autonomous driving: fine-tune detection backbones on synthetic-to-real transfer',
-            'Healthcare: fine-tune radiology models on hospital-specific scanners and protocols'
+            'ImageNet training: random resized crop, color jitter, and horizontal flip are standard for ResNet and EfficientNet',
+            'Medical imaging: random rotations, elastic deformations, and intensity shifts help models generalize across scanners',
+            'Autonomous driving: augmentation with weather effects (rain, fog) and lighting improves robustness in adverse conditions',
+            'Satellite imagery: random flips, rotations, and channel shifts help because satellites have no canonical orientation'
           ]
         },
         {
           heading: 'Quick Recap',
           list: [
-            'Fine-tuning continues training a pre-trained model on target data',
-            'Progressive unfreezing and discriminative LRs protect generic features',
-            'Batch normalization should often be frozen during fine-tuning on small batches',
-            'Adapter layers and LoRA offer parameter-efficient alternatives to full fine-tuning',
-            'Monitor validation metrics closely; pre-trained weights can degrade quickly with bad hyperparameters'
+            'Data augmentation increases effective training data with label-preserving transforms',
+            'Use geometric transforms for spatial invariance and photometric transforms for lighting invariance',
+            'Apply augmentation only during training; validation and test use deterministic preprocessing',
+            'AutoAugment, Mixup, and CutMix are advanced regularization-style augmentations',
+            'Match augmentation strength to dataset size and task difficulty'
           ]
         },
         {
           heading: 'Practice Questions',
-          text: 'Test your understanding.',
           list: [
-            'Q1: Why use a lower learning rate for the backbone during fine-tuning?\nAns: Pre-trained features are already good; aggressive updates can destroy useful representations.',
-            'Q2: When should you freeze batch normalization layers?\nAns: When target batch sizes are small (<16), to avoid unstable running statistics.',
-            'Q3: What is progressive unfreezing?\nAns: Starting with a frozen backbone and gradually unfreezing deeper layers over training epochs.'
-          ]
-        }
-      ]
-    },
-    quantization: {
-      title: 'Model Quantization',
-      subtitle: 'Reducing precision for faster, smaller inference',
-      sections: [
-        {
-          heading: 'What is Quantization?',
-          text: 'Quantization converts model weights and activations from high-precision floating point (FP32) to lower precision (FP16, INT8, INT4), reducing model size and inference latency.',
-          list: [
-            'Post-training quantization (PTQ): quantize after training without retraining; fastest to deploy',
-            'Quantization-aware training (QAT): simulate low precision during training for best accuracy',
-            'Dynamic quantization: quantize weights ahead of time, but activations on-the-fly',
-            'Static quantization: pre-compute activation ranges using calibration data'
+            `Q1: Why should you not apply random augmentation to the validation set?
+Ans: Validation measures real-world performance; random augmentation would make metrics noisy and inconsistent.`,
+            `Q2: What is the difference between Mixup and CutMix?
+Ans: Mixup blends two images and their labels pixel-wise; CutMix pastes a patch from one image into another and blends labels proportionally.`,
+            `Q3: When should you use Albumentations instead of torchvision?
+Ans: Albumentations is faster and more flexible, especially for bounding-box and segmentation augmentation.`,
+            `Challenge: Your p-value is 0.049 but the effect size is tiny. What should you report?
+Ans: Statistical significance ≠ practical importance — report the CI and effect size; the result may be significant only because n is huge.`
           ]
         },
         {
-          heading: 'Key Formula / Rule',
-          text: 'Linear quantization maps a floating-point range to integers.',
+          heading: 'Try It Yourself',
+          text: '<strong>Task:</strong> Load the seaborn <code>tips</code> dataset, compute a group summary statistic relevant to <em>Data Augmentation</em>, and visualize the distribution. Interpret one number from the output.',
           example: {
-            title: 'INT8 Quantization',
-            code: `Scale and zero-point:
-  scale = (max - min) / (2^b - 1)
-  zero_point = -round(min / scale)
+            title: 'Solution (collapsed)',
+            code: `import seaborn as sns
+import matplotlib.pyplot as plt
 
-Quantize:
-  x_int8 = round(x_fp32 / scale) + zero_point
-
-Dequantize:
-  x_fp32 ≈ scale × (x_int8 - zero_point)
-
-Example:
-  Weights in [-2.5, 2.5], b = 8
-  scale = 5.0 / 255 ≈ 0.0196
-  zero_point = 128
-
-  w = 1.0 → round(1.0/0.0196) + 128 = 179`,
-            output: 'INT8 weights take 4× less storage than FP32.',
+tips = sns.load_dataset("tips")
+print(tips.describe())
+print("Categories:", tips["day"].unique())
+tips.boxplot(column="total_bill", by="day")
+plt.title("Bill by day — Data Augmentation")
+plt.suptitle("")
+plt.show()`,
+            output: 'You should see summary stats and a boxplot by day; compare medians and spread before choosing a test.',
+            language: 'python',
             type: 'code'
           }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Quantization approaches compared.',
-          table: {
-            headers: ['Method', 'When Applied', 'Accuracy Impact', 'Effort'],
-            rows: [
-              ['FP32 baseline', 'None', 'Best', 'None'],
-              ['FP16 mixed', 'Training / inference', 'Negligible', 'Minimal'],
-              ['Dynamic INT8', 'Post-training', 'Small drop', 'Low'],
-              ['Static INT8', 'Post-training + calibration', 'Small drop', 'Medium'],
-              ['QAT INT8', 'During training', 'Minimal drop', 'High']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Quantizing all layers uniformly (fix: sensitive layers like first/last conv and attention should keep higher precision or use per-channel scales)',
-            'Mistake 2: Using too few calibration samples for static quantization (fix: 100–1000 representative samples are usually enough; use the training set, not random noise)',
-            'Mistake 3: Expecting training-time speedup from quantization (fix: quantization mainly accelerates inference; training with QAT is often slower due to fake-quant ops)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'Quantization is essential for edge and mobile deployment.',
-          list: [
-            'Mobile vision: INT8 MobileNet runs at 30+ FPS on smartphone NPUs',
-            'LLM serving: INT4/INT8 weight quantization reduces GPU memory for serving large models',
-            'Autonomous driving: quantized perception models run on embedded automotive chips',
-            'Smart cameras: INT8 face detection runs on low-power ARM Cortex cores'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'Quantization reduces weight/activation precision to shrink models and speed up inference',
-            'PTQ is fast but can hurt accuracy; QAT preserves accuracy best',
-            'INT8 offers 4× size reduction and 2–4× speedup on supported hardware',
-            'Per-channel quantization improves accuracy for convolutional layers',
-            'Calibration data should match the real input distribution for static quantization'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Q1: What is the difference between PTQ and QAT?\nAns: PTQ quantizes after training; QAT simulates quantization during training so the model learns to tolerate low precision.',
-            'Q2: Why does INT8 quantization save memory?\nAns: INT8 uses 1 byte per value vs 4 bytes for FP32 → 4× reduction.',
-            'Q3: What is a zero-point in quantization?\nAns: An integer offset that aligns the quantized range with the original floating-point range, handling asymmetric distributions.'
-          ]
-        }
-      ]
-    },
-    pruning: {
-      title: 'Model Pruning',
-      subtitle: 'Removing redundant weights and connections',
-      sections: [
-        {
-          heading: 'What is Pruning?',
-          text: 'Pruning removes weights, neurons, or entire filters that contribute little to the output, producing sparser and smaller models.',
-          list: [
-            'Unstructured pruning: zeros out individual weights (fine-grained, harder to accelerate)',
-            'Structured pruning: removes entire channels, filters, or layers (coarse-grained, hardware-friendly)',
-            'Magnitude pruning: remove weights with smallest absolute values',
-            'Movement pruning: remove weights moving toward zero during training'
-          ]
-        },
-        {
-          heading: 'Key Formula / Rule',
-          text: 'Magnitude-based pruning threshold.',
-          example: {
-            title: 'Pruning Workflow',
-            code: `Magnitude pruning:
-  mask = |w| > threshold
-  w_pruned = w ⊙ mask
-
-Global threshold (sparsity = s):
-  Sort all |w| → pick s-th percentile as threshold
-
-Example (sparsity = 80%):
-  Weights: [0.01, -0.5, 0.2, -0.02, 0.9]
-  Sorted abs: [0.01, 0.02, 0.2, 0.5, 0.9]
-  Threshold (80th percentile): 0.5
-  Mask: [0, 1, 0, 0, 1]
-  Pruned: [0, -0.5, 0, 0, 0.9]
-
-Fine-tune after pruning to recover accuracy.`,
-            output: 'Pruning + fine-tuning can retain accuracy with 90%+ sparsity.',
-            type: 'code'
-          }
-        },
-        {
-          heading: 'Important Differences',
-          text: 'Pruning strategies compared.',
-          table: {
-            headers: ['Type', 'What It Removes', 'Hardware Impact', 'Accuracy'],
-            rows: [
-              ['Unstructured', 'Individual weights', 'Needs sparse kernels', 'Highest potential compression'],
-              ['Structured (filter)', 'Whole filters', 'Direct speedup on dense ops', 'Moderate compression'],
-              ['Structured (channel)', 'Whole channels', 'Direct speedup', 'Moderate compression'],
-              ['Layer pruning', 'Entire layers', 'Large speedup', 'Risk of large accuracy drop'],
-              ['Lottery ticket', 'Subnetwork from random init', 'Same as base net', 'May match full network']
-            ]
-          }
-        },
-        {
-          heading: 'Common Mistakes',
-          list: [
-            'Mistake 1: Pruning once and never fine-tuning (fix: always fine-tune pruned models; accuracy recovery is essential)',
-            'Mistake 2: Pruning sensitive layers aggressively (fix: first and last layers are often more sensitive; prune middle layers more aggressively)',
-            'Mistake 3: Assuming unstructured pruning gives free speedup (fix: standard GPUs do not accelerate sparse matrices well; use structured pruning for real latency gains)'
-          ]
-        },
-        {
-          heading: 'Real-World Application',
-          text: 'Pruning enables large models on resource-constrained devices.',
-          list: [
-            'Mobile NLP: prune transformer attention heads to run BERT on phones',
-            'Vision on edge: structured pruning of ResNet filters for real-time camera pipelines',
-            'Federated learning: prune before sending model updates to reduce bandwidth',
-            'Cloud cost reduction: pruned models need fewer FLOPs, lowering inference bills'
-          ]
-        },
-        {
-          heading: 'Quick Recap',
-          list: [
-            'Pruning removes redundant weights to reduce model size and compute',
-            'Unstructured pruning maximizes compression but is harder to accelerate',
-            'Structured pruning removes filters/channels and yields direct speedups',
-            'Magnitude pruning is the simplest method; movement pruning often outperforms it',
-            'Always fine-tune after pruning to recover lost accuracy'
-          ]
-        },
-        {
-          heading: 'Practice Questions',
-          text: 'Test your understanding.',
-          list: [
-            'Q1: What is the difference between structured and unstructured pruning?\nAns: Unstructured zeros individual weights; structured removes whole filters or channels.',
-            'Q2: Why is fine-tuning necessary after pruning?\nAns: Removing weights disrupts the learned function; fine-tuning adjusts remaining weights to compensate.',
-            'Q3: Which pruning type is best for immediate latency reduction on standard GPUs?\nAns: Structured pruning, because it reduces the dimensions of dense matrix operations.'
-          ]
         }
       ]
     }
   }
-}
+};
