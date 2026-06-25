@@ -763,9 +763,9 @@
 }
 
 .footerInner {
-  max-width: 1320px;
+  max-width: 1520px;
   margin: 0 auto;
-  padding: 2.75rem 2rem 1.5rem;
+  padding: 2.75rem 2.5rem 1.5rem;
 }
 
 .footerGrid {
@@ -888,14 +888,19 @@
 
 .footerSubgroups {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: flex-start;
 }
 
 .footerSubgroup {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1 1 150px;
+  min-width: 150px;
+  max-width: 100%;
 }
 
 .footerSubgroupTitle {
@@ -2421,8 +2426,13 @@
 
 @media (max-width: 1200px) {
   .footerGrid {
-    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 2rem;
+  }
+
+  .footerBrandCol {
+    grid-column: 1 / -1;
+    padding-right: 0;
   }
 }
 
