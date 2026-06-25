@@ -1640,6 +1640,191 @@ Average: 1 token ≈ 4 chars ≈ 0.75 words</code></pre>
         "Non-English (Japanese, Korean, Chinese, Tamil) often needs 2-5x more tokens than English for same content",
         "Use tiktoken to count tokens before API calls; leave room for output in context window"
       ]
+    },
+    {
+      question: "What does the Temperature parameter control in an LLM, and what happens when it changes from 0.2 to 1.5?",
+      answer: `<p>The <strong>Temperature</strong> parameter in an LLM is a scaling factor applied to the logits (raw model outputs) before softmax, which directly controls the <strong>sharpness of the probability distribution</strong> over the next token. It does <strong>not</strong> affect model accuracy, creativity as a property, or context window.</p>
+<h4>What Temperature Actually Controls</h4>
+<ul>
+<li><strong>Probability distribution shape:</strong> Low temperature → sharp/peaked distribution (predictable); high temperature → flat/distributed (creative/random).</li>
+<li><strong>Token selection diversity:</strong> Higher temp → more variety in outputs; lower temp → more deterministic.</li>
+</ul>
+<h4>Technical Mechanics</h4>
+<pre><code class="language-text">logits = model_output              # raw scores (e.g., [2.1, 1.4, 0.7, 0.2])
+scaled = logits / temperature
+probs = softmax(scaled)
+
+# Temperature = 0.2:  scaled = [10.5, 7.0, 3.5, 1.0]  →  probs ≈ [0.97, 0.03, 0.00, 0.00]
+# Temperature = 1.0:  scaled = [2.1, 1.4, 0.7, 0.2]   →  probs ≈ [0.50, 0.25, 0.13, 0.08]
+# Temperature = 1.5:  scaled = [1.4, 0.93, 0.47, 0.13] → probs ≈ [0.42, 0.24, 0.16, 0.11]</code></pre>
+<h4>What Temperature Does NOT Control</h4>
+<ul>
+<li><strong>Model accuracy:</strong> Accuracy is determined by training data and architecture, not temperature.</li>
+<li><strong>Creativity as a property:</strong> The model has the same knowledge regardless of temperature; temperature only changes which token it picks.</li>
+<li><strong>Context window:</strong> Temperature does not change how many tokens the model can see.</li>
+</ul>
+<h4>What Changes from 0.2 to 1.5</h4>
+<ul>
+<li>0.2 → very peaked: model almost always picks highest-probability token (good for factual Q&amp;A, code)</li>
+<li>1.0 → default: balanced between predictability and variety</li>
+<li>1.5 → very flat: rare tokens get sampled more often (creative writing, brainstorming, but risk of incoherence)</li>
+</ul>`,
+      difficulty: "Intermediate",
+      tags: ["AI Engineer", "LLMs", "Sampling"],
+      keyPoints: [
+        "Temperature divides logits before softmax → controls sharpness of token probability distribution",
+        "Does NOT affect model accuracy, creativity-as-property, or context window — only token selection",
+        "0.2: peaked → predictable; 1.0: balanced; 1.5: flat → creative but may produce incoherent text",
+        "Use low temp for code/factual Q&A, high temp for creative writing/brainstorming"
+      ]
+    },
+    {
+      question: "Why is Temperature = 0 not always fully deterministic in production?",
+      answer: `<p>Setting temperature to 0 (or a very small value like 1e-5) makes the model pick the <strong>highest-probability token at every step</strong>, which should be deterministic <em>in theory</em>. In practice, several factors can introduce variation:</p>
+<h4>Why It Can Still Vary</h4>
+<ul>
+<li><strong>Batch effects:</strong> Some inference runtimes use <em>continuous batching</em> or dynamic batching where different requests share GPU kernels. Floating-point reductions across batches may use non-deterministic algorithms (e.g., FlashAttention).</li>
+<li><strong>GPU non-determinism:</strong> Parallel floating-point operations on GPUs (especially matrix multiplications) are not always bit-exact. Different kernel implementations (cuBLAS versions) can produce slightly different results.</li>
+<li><strong>Tied probabilities:</strong> If two tokens have identical (or near-identical) logit values, which one wins can depend on hardware-level ordering — even with greedy decoding.</li>
+<li><strong>KV cache precision:</strong> Mixed-precision inference (FP16/BF16 vs FP32) can introduce small numerical differences that compound over many tokens.</li>
+<li><strong>Prompt formatting:</strong> Whitespace, special tokens, or chat template differences (system message vs no system message) can shift logits subtly.</li>
+<li><strong>Model parallelism:</strong> Tensor parallelism splits weights across GPUs; reduction order across devices can introduce non-determinism.</li>
+</ul>
+<h4>How Production Systems Ensure Consistency</h4>
+<ul>
+<li><strong>Seed control:</strong> Set torch/numpy random seeds (but does not affect core LLM forward pass).</li>
+<li><strong>Greedy decoding + greedy sampling:</strong> Use <code>do_sample=False</code> (Hugging Face) or equivalent.</li>
+<li><strong>Deterministic kernels:</strong> Use FlashAttention with <code>deterministic=True</code> or CPU inference for reproducibility.</li>
+<li><strong>Single GPU, single batch:</strong> Avoid batching and parallelism when reproducibility matters most.</li>
+<li><strong>Pin model precision:</strong> Run inference in FP32 (slower but reproducible) instead of FP16.</li>
+<li><strong>Lock chat template:</strong> Use the exact same prompt format every time, including system message.</li>
+</ul>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "LLMs", "Sampling", "Production"],
+      keyPoints: [
+        "Temperature=0 should be greedy, but GPU parallelism, batched kernels, and tied logits introduce variation",
+        "Sources of non-determinism: FlashAttention batching, cuBLAS versions, FP16/BF16 precision, tensor parallelism",
+        "Production fixes: deterministic kernels, single-GPU no-batching, FP32, locked chat template, do_sample=False",
+        "For full reproducibility: same hardware + same precision + same prompt format + same model weights"
+      ]
+    },
+    {
+      question: "When would you choose a high temperature vs a low temperature for different LLM applications?",
+      answer: `<p>Temperature is a <strong>use-case-specific</strong> knob. The right setting depends on whether you want <strong>predictable, accurate</strong> output or <strong>creative, diverse</strong> output.</p>
+<h4>Application-by-Application Recommendations</h4>
+<table style='border-collapse:collapse;margin:10px 0;'>
+<tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Application</th><th style='padding:8px;border:1px solid #ddd;'>Recommended Temp</th><th style='padding:8px;border:1px solid #ddd;'>Reason</th></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>RAG chatbot</td><td style='padding:8px;border:1px solid #ddd;'>0.0 – 0.3</td><td style='padding:8px;border:1px solid #ddd;'>Want faithful answers grounded in retrieved docs; avoid hallucination</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Code generation</td><td style='padding:8px;border:1px solid #ddd;'>0.0 – 0.2</td><td style='padding:8px;border:1px solid #ddd;'>Correctness matters; same prompt should give same working code</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Marketing copy / Blog</td><td style='padding:8px;border:1px solid #ddd;'>0.7 – 1.0</td><td style='padding:8px;border:1px solid #ddd;'>Want creative, varied phrasing; engagement matters more than precision</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>AI agent planning</td><td style='padding:8px;border:1px solid #ddd;'>0.3 – 0.6</td><td style='padding:8px;border:1px solid #ddd;'>Balance between reliable plan structure and exploring alternative strategies</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Brainstorming / ideation</td><td style='padding:8px;border:1px solid #ddd;'>0.9 – 1.3</td><td style='padding:8px;border:1px solid #ddd;'>Want diverse, unexpected ideas</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Factual Q&amp;A / extraction</td><td style='padding:8px;border:1px solid #ddd;'>0.0</td><td style='padding:8px;border:1px solid #ddd;'>Need the single best answer; no room for variation</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Translation</td><td style='padding:8px;border:1px solid #ddd;'>0.0 – 0.3</td><td style='padding:8px;border:1px solid #ddd;'>Want accurate, idiomatic translations</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Summarization</td><td style='padding:8px;border:1px solid #ddd;'>0.2 – 0.5</td><td style='padding:8px;border:1px solid #ddd;'>Mostly faithful, but slight variation acceptable</td></tr>
+</table>
+<h4>Same Model, Different Temperatures</h4>
+<pre><code class="language-text">Prompt: "Write a tagline for a coffee shop."
+
+Temp 0.0: "Your daily brew, perfected."
+Temp 0.7: "Where every cup tells a story."
+Temp 1.2: "Sip the sunrise — coffee that whispers to your soul."</code></pre>
+<p>You would <strong>not</strong> use the same temperature for all of these. Production systems should expose temperature as a configurable parameter and tune it per use case.</p>`,
+      difficulty: "Intermediate",
+      tags: ["AI Engineer", "LLMs", "Sampling"],
+      keyPoints: [
+        "RAG/code/factual Q&A → low temp (0.0–0.3) for accuracy and faithfulness",
+        "Creative/marketing → high temp (0.7–1.3) for variety and engagement",
+        "Agent planning → mid temp (0.3–0.6) for balance between reliability and exploration",
+        "Temperature should be a configurable per-use-case parameter, not a single global setting"
+      ]
+    },
+    {
+      question: "How does Temperature interact with Top-k and Top-p sampling?",
+      answer: `<p>Temperature, Top-k, and Top-p are <strong>three independent knobs</strong> applied at different stages of token sampling. They compose multiplicatively.</p>
+<h4>Sampling Pipeline (in order)</h4>
+<pre><code class="language-text">logits = model_output                # [5.2, 3.1, 2.8, 2.4, 1.9, 1.2, 0.5]
+
+# Step 1: Apply temperature
+scaled = logits / temperature        # divides logits → flattens or sharpens distribution
+
+# Step 2: Apply Top-k (keep top k logits, set rest to -inf)
+#   Top-k = 3  →  keep 3 highest, others = -inf
+#   scaled = [5.2, 3.1, 2.8, -inf, -inf, -inf, -inf]
+
+# Step 3: Apply Top-p (keep smallest set of tokens whose cumulative prob &gt;= p)
+#   Top-p = 0.8  →  keep tokens until cumulative probability crosses 0.8
+#   probs = [0.55, 0.30, 0.10, 0.04, ...] → cumulative = [0.55, 0.85, ...] → keep first 2
+
+# Step 4: Re-normalize and sample
+probs = softmax(filtered_logits)     # sample from this final distribution</code></pre>
+<h4>Concrete Example (Temperature=1.5, Top-p=0.8)</h4>
+<pre><code class="language-text">Original logits: [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0]
+
+After temp 1.5:  [2.0, 1.67, 1.33, 1.0, 0.67, 0.33, 0.0]
+After softmax:   [0.32, 0.23, 0.16, 0.12, 0.08, 0.05, 0.04]
+Cumulative:      [0.32, 0.55, 0.71, 0.83, 0.91, 0.96, 1.00]
+
+Top-p = 0.8 → keep tokens until cumulative crosses 0.8
+   → keep first 4 tokens (cumulative 0.83)
+
+Final sampling distribution (renormalized):
+   probs = [0.32, 0.23, 0.16, 0.12]  → sample from these 4</code></pre>
+<h4>Can Top-p Restrict Randomness When Temperature Is High?</h4>
+<p><strong>Yes — partially.</strong> Top-p restricts the candidate pool to high-probability tokens, so even though temperature 1.5 makes the raw distribution flatter, Top-p 0.8 still only samples from the top 80% of probability mass. The result is a <strong>smaller effective vocabulary</strong> than pure temperature=1.5 sampling, but more variety than greedy decoding.</p>
+<h4>Common Production Combinations</h4>
+<ul>
+<li><strong>Creative writing:</strong> temp 0.9, top-p 0.9, top-k disabled</li>
+<li><strong>Factual:</strong> temp 0.0 (or very low), no top-k/top-p</li>
+<li><strong>Balanced chatbot:</strong> temp 0.7, top-p 0.9</li>
+</ul>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "LLMs", "Sampling"],
+      keyPoints: [
+        "Pipeline: logits → temperature scaling → top-k filter → top-p filter → softmax → sample",
+        "Temperature flattens/sharpens the whole distribution; top-k/top-p restrict which tokens are eligible",
+        "Top-p CAN restrict randomness even at high temperature by limiting the candidate pool",
+        "Common combos: creative (temp 0.9 + top-p 0.9), factual (temp 0.0 only), chatbot (temp 0.7 + top-p 0.9)"
+      ]
+    },
+    {
+      question: "Your RAG chatbot is hallucinating frequently. Current settings: Temperature=1.2, RAG enabled, good retrieval quality. Would reducing temperature help?",
+      answer: `<p>Reducing temperature from 1.2 to ~0.2 will <strong>reduce — but not eliminate — hallucinations</strong>. With temperature 0.2, the model is much more likely to stick to high-probability (i.e., context-grounded) tokens. However, hallucinations can still occur even at temperature 0 because of deeper issues.</p>
+<h4>What Reducing Temperature Will Fix</h4>
+<ul>
+<li><strong>Token-level randomness:</strong> At temp 1.2, the model occasionally samples low-probability tokens that aren't supported by the retrieved context. Lower temp sharply reduces this.</li>
+<li><strong>Off-topic drift:</strong> Lower temp keeps the model focused on the most relevant continuation, less likely to wander into fabricated details.</li>
+</ul>
+<h4>Why Hallucinations Still Happen at Temperature 0</h4>
+<ul>
+<li><strong>Retrieved context is incomplete:</strong> If the right document isn't in top-k retrieved chunks, the model has no ground truth to anchor to — it'll generate plausible-sounding text from prior knowledge.</li>
+<li><strong>Conflicts in context:</strong> If retrieved documents contradict each other, the model picks one — but the other (wrong) version can leak into the answer.</li>
+<li><strong>Out-of-context questions:</strong> If the user asks something the documents don't cover, the model has nothing to ground on and will improvise.</li>
+<li><strong>Model has stronger prior than context:</strong> If the LLM was heavily trained on conflicting info, its parametric memory can override retrieved context.</li>
+<li><strong>Prompt design:</strong> Weak system prompt ("answer the question") lets the model stray. Strong grounding ("answer ONLY using the context below; if not present, say 'I don't know'") is essential.</li>
+<li><strong>Chunking problems:</strong> If relevant info is split across chunks, neither chunk alone provides the full answer.</li>
+<li><strong>Embedding mismatch:</strong> User query phrased differently from documents → low similarity → wrong chunks retrieved.</li>
+</ul>
+<h4>Recommended Fixes (in order)</h4>
+<ol>
+<li><strong>Lower temperature to 0.0–0.3</strong> — first and cheapest fix.</li>
+<li><strong>Strengthen system prompt:</strong> "Answer ONLY based on the provided context. If the answer is not in the context, say 'I don't know.' Do not use outside knowledge."</li>
+<li><strong>Improve retrieval:</strong> Better embeddings, hybrid search (BM25 + vector), query rewriting, larger top-k with reranking.</li>
+<li><strong>Better chunking:</strong> Semantic chunking, larger overlap, keep related info together.</li>
+<li><strong>Cite sources:</strong> Force the model to cite which chunk each claim came from — enables verification.</li>
+<li><strong>Add a verification step:</strong> Use a second LLM call to check if the first answer is grounded in the retrieved context.</li>
+<li><strong>Log retrieval scores:</strong> If top retrieval score is below threshold, refuse to answer.</li>
+</ol>
+<h4>TL;DR</h4>
+<p>Lowering temperature from 1.2 to ~0.2 will reduce hallucinations significantly, but won't eliminate them. The remaining hallucinations are usually caused by <strong>retrieval or prompt</strong> issues, not sampling randomness. Fix retrieval + prompt before going below temp 0.2.</p>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "LLMs", "RAG", "Production"],
+      keyPoints: [
+        "Lowering temp 1.2 → 0.2 reduces token randomness but doesn't eliminate hallucinations",
+        "Hallucinations at temp 0 come from: incomplete retrieval, conflicting context, weak prompts, chunking issues",
+        "Fix order: lower temp → stronger grounding prompt → improve retrieval → chunking → citation → verification step",
+        "Strong system prompt ('answer ONLY from context') is often the highest-leverage fix after temperature"
+      ]
     }
   ]
 };
