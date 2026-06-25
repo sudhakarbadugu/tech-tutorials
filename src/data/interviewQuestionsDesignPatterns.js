@@ -288,6 +288,51 @@ export const designPatternsQuestions = {
         "Protection Proxy — Access control (security checks)",
         "Remote Proxy — Represents object in different address space (RPC, RMI)"
       ]
+    },
+    {
+      "question": "Explain Saga Pattern in detail.",
+      "answer": "<p>The <strong>Saga Pattern</strong> manages distributed transactions across microservices without two-phase commit (2PC). Each step is a local transaction that publishes events or triggers the next step; on failure, <em>compensating transactions</em> undo prior work.</p><h4>Why Not 2PC?</h4><ul><li>2PC is blocking, slow, and couples services to a coordinator — impractical at scale.</li><li>Sagas trade <strong>atomicity</strong> for <strong>availability</strong> and give eventual consistency across services.</li></ul><h4>Core Idea</h4><pre>&lt;code&gt;Step 1: Create Order  (local tx) → OrderCreated\nStep 2: Reserve Stock (local tx) → StockReserved\nStep 3: Charge Payment (local tx) → PaymentCharged\nStep 4: Ship Order   (local tx) → OrderShipped\nOn failure at any step → run compensating actions in reverse.\n</code></pre><h4>Two Implementation Styles</h4><ul><li><strong>Choreography:</strong> Each service emits events; downstream services listen and react. No central coordinator. Loosely coupled, but flow is hard to trace.</li><li><strong>Orchestration:</strong> A central orchestrator (a state machine or workflow engine) tells each service what to do next. Easier to monitor, modify, and debug — at the cost of a single coordinator.</li></ul><h4>Classic Example: Order → Payment → Inventory → Shipping</h4><ol><li>Order Service creates order (local tx, pending).</li><li>Payment Service charges card → emits <code>PaymentSucceeded</code>.</li><li>Inventory Service reserves stock → emits <code>StockReserved</code>.</li><li>Shipping Service schedules delivery → emits <code>OrderShipped</code>.</li><li>If <em>any</em> step fails, the saga runs compensations: <code>refundPayment</code>, <code>releaseStock</code>, <code>cancelOrder</code>.</li></ol><h4>Design Considerations</h4><ul><li>Compensations must be <strong>idempotent</strong> (safe to retry) and ideally commutative.</li><li>Track saga state durably; use a saga log or event store so steps can be replayed.</li><li>Use timeouts and <em>saga timeouts</em> to detect stuck sagas.</li><li>Forward recovery (retry) vs backward recovery (compensate) — pick per step.</li><li>Isolate failures with bulkheads so one slow service doesn't block the saga.</li></ul>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Design Patterns",
+        "Distributed Systems",
+        "Saga"
+      ],
+      "keyPoints": [
+        "Saga replaces 2PC with a sequence of local transactions and compensating actions.",
+        "Choreography uses events; orchestration uses a central state-machine coordinator.",
+        "Compensations must be idempotent and replayable; track saga state for recovery."
+      ]
+    },
+    {
+      "question": "Difference between Choreography and Orchestration Saga.",
+      "answer": "<p>Both are ways to coordinate a saga across services — the difference is <strong>who drives the next step</strong>.</p><h4>Choreography (Event-based, Decentralized)</h4><ul><li>Each service emits events when it completes its local transaction.</li><li>Other services subscribe and react to those events.</li><li>No central coordinator — the workflow emerges from the event graph.</li></ul><pre>&lt;code&gt;Order → OrderCreated → Payment listens → emits PaymentCompleted\n                                              ↓\n                                       Inventory listens → emits StockReserved\n                                                            ↓\n                                                     Shipping listens → Done\n</code></pre><ul><li><strong>Pros:</strong> Loosely coupled, no single point of failure, services stay independent.</li><li><strong>Cons:</strong> Business logic is scattered; harder to monitor, trace, and modify the flow; cycle/versioning risk.</li></ul><h4>Orchestration (Centralized)</h4><ul><li>A dedicated <strong>orchestrator</strong> (e.g., Camunda, Temporal, AWS Step Functions, custom state machine) tells each service what to do next.</li><li>The orchestrator holds the saga state and decides compensations on failure.</li></ul><pre>&lt;code&gt;Orchestrator → Order.create()   → wait\n             → Payment.charge()  → wait\n             → Inventory.reserve() → wait\n             → Shipping.schedule() → done\nOn failure at step N: orchestrator invokes compensations 1..N-1.\n</code></pre><ul><li><strong>Pros:</strong> Clear, visible flow; easy to monitor, audit, and modify; explicit state and timeouts.</li><li><strong>Cons:</strong> Orchestrator is a single point of failure (mitigate with HA + persistence); risks becoming a &quot;smart ESB&quot;.</li></ul><h4>When to Use Which</h4><table><tr><th>Situation</th><th>Prefer</th></tr><tr><td>Few services, simple linear flow, prefer decoupling</td><td>Choreography</td></tr><tr><td>Many steps, complex branching, need visibility/audit</td><td>Orchestration</td></tr><tr><td>Cross-team ownership and high autonomy</td><td>Choreography</td></tr><tr><td>Regulatory, retry-heavy, or compensation-heavy flows</td><td>Orchestration</td></tr><tr><td>Team new to sagas</td><td>Orchestration (easier to reason about)</td></tr></table><p>Many real systems mix both: choreography for the &quot;happy path&quot; of small integrations, and orchestration for complex business workflows.</p>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Design Patterns",
+        "Distributed Systems",
+        "Saga"
+      ],
+      "keyPoints": [
+        "Choreography: services react to events; no central coordinator; loosely coupled but hard to trace.",
+        "Orchestration: a central orchestrator drives each step; easy to monitor but is a single point of failure.",
+        "Use choreography for simple flows and orchestration when you need visibility, branching, or audit."
+      ]
+    },
+    {
+      "question": "What are Compensation Transactions?",
+      "answer": "<p>A <strong>compensation transaction</strong> is the <em>undo</em> operation for a previously committed saga step. When a later step in a saga fails, you run compensations for the steps that already succeeded to bring the system back to a consistent state.</p><h4>Why They're Needed</h4><p>Distributed sagas give up atomicity — there's no global rollback. Compensations are how you restore consistency business-logic-wise without 2PC.</p><h4>Properties of Good Compensations</h4><ul><li><strong>Idempotent:</strong> Safe to call multiple times with the same effect (network retries must not double-refund).</li><li><strong>Commutative (ideally):</strong> Order of compensations shouldn't change the outcome.</li><li><strong>Reversible in the business sense:</strong> They should restore a state equivalent to &quot;this step never happened&quot;.</li></ul><h4>Examples</h4><table><tr><th>Forward Step</th><th>Compensation</th></tr><tr><td>Charge payment</td><td>Refund payment</td></tr><tr><td>Reserve hotel room</td><td>Cancel reservation</td></tr><tr><td>Hold inventory</td><td>Release held inventory</td></tr><tr><td>Issue loyalty points</td><td>Revoke points (or negative entry in ledger)</td></tr><tr><td>Send &quot;Order Confirmed&quot; email</td><td>Send &quot;Order Cancelled&quot; email</td></tr></table><h4>Designing Compensations</h4><ul><li><strong>Semantics, not exact undo:</strong> E.g., if you charged $100, a $100 refund is the semantic undo — even if some downstream side effects can't be reversed (a sent email can't be unread).</li><li><strong>Make forward steps compensable:</strong> Don't take actions that have no possible compensation (e.g., shipping a physical package is hard to undo — instead, use a hold/cancel window).</li><li><strong>Compensation must also be reliable:</strong> If the compensation call fails, retry with backoff, then route to a <em>compensation log</em> / DLQ for manual intervention.</li><li><strong>Track state durably:</strong> The saga orchestrator or event log records which compensations have completed so retries don't double-fire.</li></ul><h4>What If Compensation Itself Fails?</h4><ol><li>Retry with exponential backoff and idempotency keys.</li><li>If still failing, park the saga in a &quot;needs manual intervention&quot; state and alert operators.</li><li>Use a <em>dead-letter / reconciliation job</em> that compares expected vs actual state and either replays the compensation or surfaces it for human review.</li><li>For some steps (e.g., third-party bank transfers), provide a manual fallback script.</li></ol><p><strong>Rule of thumb:</strong> A well-designed saga is one where every forward step has a clearly defined, idempotent compensation — and a plan for when even that fails.</p>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Design Patterns",
+        "Distributed Systems",
+        "Saga"
+      ],
+      "keyPoints": [
+        "Compensations are semantic undos for completed saga steps when a later step fails.",
+        "They must be idempotent, commutative, and reliably retried — track them in a durable saga log.",
+        "If a compensation itself fails, retry, then route to manual intervention or a reconciliation job."
+      ]
     }
   ]
 }

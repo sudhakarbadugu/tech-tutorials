@@ -717,6 +717,83 @@ export const devopsCloudRealQuestionsB = {
         "Look for OOMKilled, probe failures, and application errors.",
         "Fix the root cause rather than masking symptoms."
       ]
+    },
+    {
+      "question": "What happens when a Pod crashes in Kubernetes?",
+      "answer": "<p>When a pod crashes, the kubelet on the node detects the container exit and reacts according to the pod's <strong>restart policy</strong>.</p><ul><li><strong>Restart policies:</strong> <code>Always</code> (restart on any exit, default), <code>OnFailure</code> (restart only on non-zero exit), <code>Never</code> (do not restart).</li><li><strong>CrashLoopBackOff:</strong> if the container keeps crashing, the kubelet applies an exponential backoff delay (10s, 20s, 40s, up to 5 minutes) before each restart attempt.</li><li><strong>Logs and events:</strong> previous container logs are preserved (use <code>--previous</code>), and Kubernetes records events that can be inspected with <code>kubectl describe pod</code>.</li><li><strong>Service endpoints:</strong> if a readiness probe fails, the pod is removed from Service endpoints so traffic stops immediately, even before a restart.</li></ul><pre><code class=\"language-bash\">kubectl describe pod &lt;pod&gt;        # view restart count and events\nkubectl logs &lt;pod&gt; --previous       # inspect logs from the crashed container\nkubectl get events --sort-by='.lastTimestamp'</code></pre><p>Diagnose by inspecting the previous logs, checking exit codes, OOM events, and liveness/readiness probe results.</p>",
+      "difficulty": "Intermediate",
+      "tags": ["DevOps", "Cloud", "Kubernetes"],
+      "keyPoints": [
+        "Kubelet restarts containers based on the pod's restart policy (Always, OnFailure, Never).",
+        "CrashLoopBackOff applies exponential backoff between restart attempts.",
+        "Failed readiness probes remove the pod from Service endpoints so it stops receiving traffic."
+      ]
+    },
+    {
+      "question": "Difference between Deployment, StatefulSet, and DaemonSet?",
+      "answer": "<p>These three controllers manage pods differently based on the workload's identity and scheduling needs.</p><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Controller</th><th style='padding:8px;border:1px solid #ddd;'>Use Case</th><th style='padding:8px;border:1px solid #ddd;'>Identity</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Deployment</td><td style='padding:8px;border:1px solid #ddd;'>Stateless, identical replicas</td><td style='padding:8px;border:1px solid #ddd;'>Interchangeable pods</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>StatefulSet</td><td style='padding:8px;border:1px solid #ddd;'>Stateful apps, databases</td><td style='padding:8px;border:1px solid #ddd;'>Stable, ordered, persistent</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>DaemonSet</td><td style='padding:8px;border:1px solid #ddd;'>Node-level agents (logs, monitoring)</td><td style='padding:8px;border:1px solid #ddd;'>One pod per node</td></tr></table><ul><li><strong>Deployment:</strong> replicas are interchangeable; rolling updates and rollbacks are simple. Best for stateless web services and APIs.</li><li><strong>StatefulSet:</strong> each pod has a stable hostname (pod-0, pod-1, ...), stable network identity, and its own PersistentVolumeClaim via <code>volumeClaimTemplates</code>. Pods are created, scaled, and updated in order.</li><li><strong>DaemonSet:</strong> ensures one pod runs on every (or selected) node, ideal for log collectors (Fluentd), node exporters (Prometheus), and CNI plugins.</li></ul><pre><code class=\"language-yaml\"># DaemonSet example\napiVersion: apps/v1\nkind: DaemonSet\nmetadata:\n  name: node-exporter\nspec:\n  selector:\n    matchLabels: {app: node-exporter}\n  template:\n    metadata:\n      labels: {app: node-exporter}\n    spec:\n      containers:\n      - name: node-exporter\n        image: prom/node-exporter:latest</code></pre><p>Choose Deployment for stateless services, StatefulSet for clustered stateful services, and DaemonSet for node-level infrastructure agents.</p>",
+      "difficulty": "Intermediate",
+      "tags": ["DevOps", "Cloud", "Kubernetes"],
+      "keyPoints": [
+        "Deployment manages interchangeable stateless replicas.",
+        "StatefulSet gives pods stable identity, ordered operations, and per-pod persistent storage.",
+        "DaemonSet runs one pod per node, ideal for logging and monitoring agents."
+      ]
+    },
+    {
+      "question": "How does Kubernetes Service Discovery work?",
+      "answer": "<p>Kubernetes service discovery lets pods reliably find and reach other services even as pod IPs change.</p><ul><li><strong>DNS-based (primary):</strong> CoreDNS runs as a cluster add-on and assigns DNS records for every Service. Pods can resolve services by name (e.g., <code>my-service.my-namespace.svc.cluster.local</code>).</li><li><strong>Environment variables:</strong> when a pod starts, Kubernetes injects <code>SERVICE_HOST</code> and <code>SERVICE_PORT</code> variables for every Service in the same namespace. Older pattern; DNS is preferred.</li><li><strong>Service registry:</strong> the API server tracks Services and Endpoints/EndpointSlices, which list the IPs of pods matching the Service selector.</li><li><strong>kube-proxy:</strong> programs iptables or IPVS rules on each node so that traffic to a Service's virtual IP is load-balanced to the underlying pod IPs.</li></ul><pre><code class=\"language-bash\"># Resolve a service from inside a pod\nnslookup my-service\nnslookup my-service.default.svc.cluster.local\n\n# View endpoints\nkubectl get endpoints my-service</code></pre><p>Service types determine exposure: <strong>ClusterIP</strong> (internal), <strong>NodePort</strong> (each node, static port), <strong>LoadBalancer</strong> (cloud LB), <strong>ExternalName</strong> (CNAME to external DNS).</p>",
+      "difficulty": "Intermediate",
+      "tags": ["DevOps", "Cloud", "Kubernetes"],
+      "keyPoints": [
+        "CoreDNS provides cluster DNS for service discovery.",
+        "kube-proxy programs iptables/IPVS rules for service-to-pod load balancing.",
+        "Service types are ClusterIP, NodePort, LoadBalancer, and ExternalName."
+      ]
+    },
+    {
+      "question": "HPA vs VPA — when to use which?",
+      "answer": "<p><strong>Horizontal Pod Autoscaler (HPA)</strong> and <strong>Vertical Pod Autoscaler (VPA)</strong> solve different scaling problems and should not be used on the same resource metric.</p><ul><li><strong>HPA:</strong> changes the <em>number of pod replicas</em> based on CPU, memory, or custom/external metrics. Best for stateless services that scale out under load.</li><li><strong>VPA:</strong> changes the <em>resource requests and limits</em> of existing pods (or creates new ones) to right-size them. Best for finding optimal CPU/memory and reducing over-provisioning.</li></ul><pre><code class=\"language-yaml\"># HPA based on CPU utilization\napiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nspec:\n  scaleTargetRef:\n    kind: Deployment\n    name: web\n  minReplicas: 2\n  maxReplicas: 20\n  metrics:\n  - type: Resource\n    resource:\n      name: cpu\n      target: {type: Utilization, averageUtilization: 70}\n\n# VPA example\napiVersion: autoscaling.k8s.io/v1\nkind: VerticalPodAutoscaler\nspec:\n  targetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: web\n  updatePolicy: {updateMode: Auto}</code></pre><p>Use HPA for traffic spikes and stateless workloads. Use VPA to right-size resource requests. Do not use both on the same CPU/memory metric, or they will fight; you can run VPA in <code>recommendation</code> mode and feed values into HPA.</p>",
+      "difficulty": "Advanced",
+      "tags": ["DevOps", "Cloud", "Kubernetes"],
+      "keyPoints": [
+        "HPA scales the number of pod replicas based on metrics.",
+        "VPA adjusts CPU/memory requests and limits to right-size pods.",
+        "Do not use HPA and VPA on the same resource metric; they conflict."
+      ]
+    },
+    {
+      "question": "What causes pod eviction in Kubernetes?",
+      "answer": "<p>Pod eviction is the termination of a pod by Kubernetes, either to free resources on a node (<strong>node-pressure eviction</strong>) or as a result of an explicit API call (<strong>API-initiated eviction</strong>).</p><ul><li><strong>Node-pressure eviction:</strong> the kubelet's eviction manager monitors disk, memory, and PID pressure. When thresholds are crossed, it terminates pods to reclaim resources. Order is driven by pod priority, QoS class, and consumption relative to requests.</li><li><strong>Eviction thresholds:</strong> configured via kubelet flags or eviction signals (e.g., <code>memory.available&lt;500Mi</code>). Soft thresholds use grace periods; hard thresholds trigger immediate eviction.</li><li><strong>Graceful termination:</strong> the kubelet sends <code>SIGTERM</code>, waits <code>terminationGracePeriodSeconds</code> (default 30s), then <code>SIGKILL</code>. PreStop hooks run before termination.</li><li><strong>API-initiated eviction:</strong> triggered by <code>kubectl drain</code>, node deletion, or eviction API calls; respects <strong>PodDisruptionBudgets (PDBs)</strong>.</li><li><strong>QoS classes:</strong> BestEffort pods are evicted first, then Burstable, then Guaranteed.</li></ul><pre><code class=\"language-bash\">kubectl drain node-1 --ignore-daemonsets --delete-emptydir-data\nkubectl describe pod &lt;pod&gt;   # check reason: Evicted</code></pre><p>Use PDBs to limit voluntary disruptions, set appropriate resource requests, and run critical pods with Guaranteed QoS where eviction should be avoided.</p>",
+      "difficulty": "Advanced",
+      "tags": ["DevOps", "Cloud", "Kubernetes"],
+      "keyPoints": [
+        "Node-pressure eviction frees resources when disk, memory, or PIDs exceed thresholds.",
+        "API-initiated eviction happens via drain, node deletion, or explicit API calls.",
+        "PodDisruptionBudgets protect workloads from voluntary disruptions; QoS class affects eviction priority."
+      ]
+    },
+    {
+      "question": "How do you manage secrets securely in Kubernetes?",
+      "answer": "<p>Kubernetes <strong>Secrets</strong> store sensitive data like passwords, tokens, and keys. By default, a Secret is just base64-encoded in etcd — not encrypted — so additional controls are needed for real security.</p><ul><li><strong>Kubernetes Secrets (built-in):</strong> base64-encoded, 1 MiB limit. Enable <strong>encryption at rest</strong> in the API server with a KMS provider to actually encrypt etcd values.</li><li><strong>Sealed Secrets:</strong> a controller that encrypts Secrets so they can be safely stored in Git; the cluster holds the only key to unseal them.</li><li><strong>External Secrets Operator (ESO):</strong> syncs secrets from external managers (Vault, AWS Secrets Manager, GCP Secret Manager) into Kubernetes Secrets.</li><li><strong>HashiCorp Vault:</strong> provides dynamic short-lived secrets, leasing, and fine-grained policies.</li><li><strong>Cloud secret managers:</strong> AWS Secrets Manager, Azure Key Vault, GCP Secret Manager — integrated with IAM and audit logging.</li><li><strong>RBAC:</strong> use Roles/RoleBindings to limit which service accounts or users can read a Secret.</li></ul><pre><code class=\"language-bash\"># Encode a secret\nkubectl create secret generic db-credentials \\\n  --from-literal=username=admin \\\n  --from-literal=password='S3cret!'\n\n# Reference in pod\nenvFrom:\n- secretRef: {name: db-credentials}</code></pre><p>Avoid checking Secrets into Git in plain form, enable encryption at rest, scope access with RBAC, and prefer short-lived or dynamic secrets where possible.</p>",
+      "difficulty": "Advanced",
+      "tags": ["DevOps", "Cloud", "Kubernetes"],
+      "keyPoints": [
+        "Kubernetes Secrets are base64-encoded by default, not encrypted at rest.",
+        "Stronger options include Sealed Secrets, External Secrets Operator, and HashiCorp Vault.",
+        "Always enable encryption at rest and apply least-privilege RBAC."
+      ]
+    },
+    {
+      "question": "What happens during a rolling deployment in Kubernetes?",
+      "answer": "<p>A <strong>rolling deployment</strong> incrementally replaces old pods with new ones, keeping the application available throughout the rollout.</p><ol><li>You update the Deployment's pod template (e.g., new image tag).</li><li>Kubernetes creates a <strong>new ReplicaSet</strong> for the new version while keeping the old one.</li><li>Pods from the new ReplicaSet are scaled up incrementally based on <code>maxSurge</code> (extra pods above desired) and <code>maxUnavailable</code> (pods that can be down).</li><li>As new pods pass their <strong>readiness probes</strong>, old pods are terminated.</li><li>Once all old pods are gone, the old ReplicaSet is scaled to zero but kept for rollback history.</li></ol><pre><code class=\"language-yaml\">apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web\nspec:\n  replicas: 5\n  strategy:\n    type: RollingUpdate\n    rollingUpdate:\n      maxSurge: 1\n      maxUnavailable: 0\n  template:\n    spec:\n      containers:\n      - name: web\n        image: web:v2</code></pre><p>Use <code>kubectl rollout status</code> to monitor and <code>kubectl rollout undo</code> to roll back. If a new pod fails readiness, Kubernetes pauses the rollout so you can investigate without taking the service down.</p>",
+      "difficulty": "Intermediate",
+      "tags": ["DevOps", "Cloud", "Kubernetes"],
+      "keyPoints": [
+        "Rolling deployments create a new ReplicaSet and gradually shift pods to it.",
+        "maxSurge and maxUnavailable control the pace of the rollout.",
+        "Readiness gates and probes prevent traffic from reaching broken pods; rollback is simple via kubectl rollout undo."
+      ]
     }
   ]
 }

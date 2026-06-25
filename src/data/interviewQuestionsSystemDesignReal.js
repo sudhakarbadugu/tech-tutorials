@@ -1355,6 +1355,51 @@ export const systemDesignRealQuestions = {
         "Ingest GPS probes to compute live traffic edge weights.",
         "Render vector tiles and offer alternative routes."
       ]
+    },
+    {
+      "question": "Design a Real-Time Notification Platform",
+      "answer": "<p><strong>Real-time notification platform</strong> delivers alerts across push, email, SMS, and in-app channels with low latency, reliability, and user-level personalization.</p><h4>Architecture</h4><pre>&lt;code&gt;Producer Service → Kafka Topics (partitioned by user) → Fan-out Workers\n                          ↓                                   ↓\n                   Template Engine                  Channel Routers (FCM, APNs, SES, Twilio)\n                          ↓                                   ↓\n                   User Preferences DB            Delivery Tracker + DLQ\nUser Device ← WebSocket Gateway (millions of connections)\n</code></pre><h4>Key Components</h4><ul><li><strong>WebSocket gateway:</strong> Maintains long-lived connections for in-app real-time delivery. Use sticky sessions and a consistent hash to keep a user pinned to the same gateway node.</li><li><strong>Event-driven (Kafka):</strong> Producers publish to topics; partitioned consumer groups enable parallel processing and ordering per user.</li><li><strong>Fan-out to providers:</strong> Channel-specific workers translate the canonical event into provider payloads (APNs, FCM, SES, Twilio).</li><li><strong>Template engine:</strong> Renders localized, personalized content with versioning and A/B variants.</li><li><strong>User preferences:</strong> Per-channel opt-ins, quiet hours, frequency caps, and category filters.</li><li><strong>Rate limiting:</strong> Per-user token buckets prevent spam and provider throttling.</li><li><strong>Delivery tracking:</strong> Status callbacks from providers update a tracker; idempotency keys dedupe retries.</li><li><strong>Retry &amp; DLQ:</strong> Exponential backoff with jitter; poison messages go to a dead-letter queue for inspection.</li><li><strong>Scaling WebSockets:</strong> Use connection draining, graceful shutdown, health checks, and stateless gateways fronted by a load balancer. For millions of connections, spread across regions with geo-DNS.</li></ul><h4>Failure Handling</h4><ul><li>Provider down → fall back to alternate channel.</li><li>WebSocket dropped → store last-seen and send push as fallback.</li><li>Duplicate event → idempotency key on event ID.</li></ul>",
+      "difficulty": "Advanced",
+      "tags": [
+        "System Design",
+        "Distributed Systems",
+        "Notifications"
+      ],
+      "keyPoints": [
+        "Use Kafka with partitioned consumer groups for event-driven fan-out and ordering per user.",
+        "Maintain millions of WebSocket connections via sticky sessions, connection draining, and stateless gateways.",
+        "Apply per-user rate limits, idempotency keys, and DLQ-based retries for reliable multi-channel delivery."
+      ]
+    },
+    {
+      "question": "Design a Ride Booking System (like Uber/Ola)",
+      "answer": "<p><strong>Ride booking system</strong> matches riders with nearby drivers in real time, handles pricing, tracking, and trip lifecycle under high concurrency and geographic skew.</p><h4>Core Entities</h4><pre>&lt;code&gt;rider(id, name, payment_methods)\ndriver(id, name, vehicle, status, current_lat, current_lng, h3_cell)\ntrip(id, rider_id, driver_id, pickup, dropoff, state, fare, created_at)\nlocation_update(driver_id, lat, lng, ts)\n</code></pre><h4>Key Components</h4><ul><li><strong>Geospatial indexing:</strong> Use GeoHash, S2 cells, or H3 hexagons to bucket driver locations; a nearby-driver query scans only the rider's cell plus neighbors. H3 gives uniform cell sizes ideal for global scale.</li><li><strong>Location ingest:</strong> Drivers stream GPS over MQTT or WebSocket at 1-3 Hz; updates batched and written to Redis geo sets or a hot tier in Cassandra/DynamoDB.</li><li><strong>Matching algorithm:</strong> Score nearby drivers by distance, ETA (from road graph), rating, acceptance rate; offer to top N in parallel and accept the first to accept.</li><li><strong>Surge pricing:</strong> Compute demand/supply ratio per H3 cell over a sliding window; multiply base fare; surface to rider before confirm.</li><li><strong>Real-time tracking:</strong> WebSocket gateway pushes driver position to rider; rider's app re-renders polyline every few seconds.</li><li><strong>Trip state machine:</strong> REQUESTED → MATCHED → EN_ROUTE → IN_PROGRESS → COMPLETED → RATED. Persist transitions in an event log.</li><li><strong>Payment:</strong> Authorize at start (or estimate), capture at end; support split fare, tip, and refunds via ledger entries.</li><li><strong>Ratings:</strong> Two-sided rating after completion; aggregate to driver/rider score used in matching.</li><li><strong>Scaling:</strong> Partition by city/region; each region is an independent matching cluster. Event sourcing for trip audit log.</li><li><strong>Consistency:</strong> Strong consistency for trip state and payments; eventual consistency for analytics, ratings, and fraud signals.</li></ul>",
+      "difficulty": "Advanced",
+      "tags": [
+        "System Design",
+        "Distributed Systems",
+        "Geospatial"
+      ],
+      "keyPoints": [
+        "Index driver locations with H3/S2/GeoHash for fast nearby-driver queries.",
+        "Match via distance + ETA + rating; manage trip lifecycle as a state machine.",
+        "Shard by city/region, use event sourcing for audit, and apply surge pricing per H3 cell."
+      ]
+    },
+    {
+      "question": "Design a Distributed Cache (from scratch)",
+      "answer": "<p><strong>Distributed cache</strong> serves hot data from memory across many nodes, balancing load and surviving failures. This design treats the cache as the system under design, not just a Redis call away.</p><h4>Architecture</h4><pre>&lt;code&gt;Client (consistent hash ring) → TCP/QUIC → Cache Node\n                                       ↓\n                              Replication (R=3)\n                          ↓ miss                ↓\n                       Origin DB         Async Replicator\n</code></pre><h4>Key Components</h4><ul><li><strong>Consistent hashing:</strong> Map keys to a ring of N tokens; nodes own a contiguous range. Adding/removing a node only redistributes K/N keys (vs K for naive mod-N).</li><li><strong>Virtual nodes (vnodes):</strong> Each physical node owns many positions on the ring (e.g., 256 vnodes) for better balance and faster rebalancing.</li><li><strong>Replication:</strong> Store each key on R successors on the ring; reads prefer the primary, fall back to replicas. Use hinted handoff for transient node failures.</li><li><strong>Eviction policies:</strong> LRU (recency), LFU (frequency), TTL (expiry), or ARC (adaptive). Choose per workload; expose hit-rate metrics to tune.</li><li><strong>Write patterns:</strong> <em>Write-through</em> updates the DB synchronously then cache (strong consistency, higher write latency). <em>Write-back</em> updates cache only and asynchronously flushes (low latency, risk of loss).</li><li><strong>Cache invalidation:</strong> TTL-based, versioned keys, or pub/sub invalidation messages. Avoid write-through for highly volatile data.</li><li><strong>Hot key handling:</strong> Detect keys with disproportionate QPS (e.g., via local LRU counter); replicate across nodes, add jitter, or pre-warm replicas.</li><li><strong>Client vs server-side hashing:</strong> Client-side lets the client route directly (Memcached-style, no proxy hop). Server-side (Redis Cluster-style) uses a proxy that hashes; easier to add nodes but adds a hop.</li><li><strong>Cache stampede prevention:</strong> Use <em>single-flight</em> so only one goroutine loads a missing key; or <em>probabilistic early expiry (XFetch)</em> where each reader recomputes a random early-expiry time and refreshes before the real TTL.</li><li><strong>Monitoring:</strong> Track hit rate, eviction rate, p50/p99 latency, replica drift, ring rebalances, and key count per node.</li></ul>",
+      "difficulty": "Advanced",
+      "tags": [
+        "System Design",
+        "Distributed Systems",
+        "Caching"
+      ],
+      "keyPoints": [
+        "Use consistent hashing with virtual nodes for balanced key distribution and smooth rebalancing.",
+        "Pick eviction policy (LRU/LFU/TTL) and write pattern (write-through vs write-back) by workload.",
+        "Prevent stampedes with single-flight or probabilistic early expiry, and monitor hit rate and latency."
+      ]
     }
   ]
 }

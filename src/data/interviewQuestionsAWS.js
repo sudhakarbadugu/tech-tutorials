@@ -227,6 +227,83 @@ export const awsQuestions = {
         "Origins: S3, EC2, ELB, custom HTTP servers",
         "Distributions: Configuration for content delivery"
       ]
+    },
+    {
+      "question": "EC2 vs ECS vs EKS — when to use which?",
+      "answer": "<p>AWS gives you three main compute options for running containerized and non-containerized workloads. The right choice depends on team skills, workload type, and portability needs.</p><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Service</th><th style='padding:8px;border:1px solid #ddd;'>Type</th><th style='padding:8px;border:1px solid #ddd;'>Best For</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>EC2</td><td style='padding:8px;border:1px solid #ddd;'>Virtual machines</td><td style='padding:8px;border:1px solid #ddd;'>Full control, any workload</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>ECS</td><td style='padding:8px;border:1px solid #ddd;'>AWS-native containers</td><td style='padding:8px;border:1px solid #ddd;'>Simpler, deeply AWS-integrated</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>EKS</td><td style='padding:8px;border:1px solid #ddd;'>Managed Kubernetes</td><td style='padding:8px;border:1px solid #ddd;'>Portability, K8s ecosystem</td></tr></table><ul><li><strong>EC2:</strong> choose when you need full control of the OS, custom networking, GPUs, or run legacy or non-containerized software.</li><li><strong>ECS:</strong> choose for AWS-only deployments, simpler ops, deeper integration with ALB, IAM, and CloudFormation, and when Kubernetes is overkill.</li><li><strong>EKS:</strong> choose when you need the Kubernetes ecosystem (Helm, Operators, service mesh), multi-cloud portability, or already-standardized on K8s.</li></ul><pre><code class=\"language-yaml\"># Decision matrix\nteam_k8s_experience: EKS or ECS\ngpu_or_custom_os: EC2\naws_lock_in_ok: ECS\nmulti_cloud_needed: EKS\nsimple_web_service: ECS or EKS</code></pre><p>Avoid choosing based on hype. Most AWS-only teams find ECS faster to operate; choose EKS only when you actually need Kubernetes.</p>",
+      "difficulty": "Intermediate",
+      "tags": ["AWS", "EC2", "ECS", "EKS", "Containers"],
+      "keyPoints": [
+        "EC2 provides full VM control for any workload.",
+        "ECS is AWS-native, simpler, and tightly integrated with AWS services.",
+        "EKS is managed Kubernetes, chosen for portability and the K8s ecosystem."
+      ]
+    },
+    {
+      "question": "When would you choose Lambda over ECS?",
+      "answer": "<p>Lambda and ECS solve different problems. Pick based on workload shape, traffic pattern, and cost profile.</p><ul><li><strong>Lambda:</strong> event-driven, sporadic, short-lived (&lt;15 min) workloads. Pay per request and ms of compute. No infrastructure to manage.</li><li><strong>ECS (with Fargate or EC2):</strong> long-running, always-on services with steady or predictable traffic. Better cost for sustained load and full container control.</li></ul><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Factor</th><th style='padding:8px;border:1px solid #ddd;'>Lambda</th><th style='padding:8px;border:1px solid #ddd;'>ECS</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Duration limit</td><td style='padding:8px;border:1px solid #ddd;'>15 min max</td><td style='padding:8px;border:1px solid #ddd;'>Unlimited</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Cold start</td><td style='padding:8px;border:1px solid #ddd;'>Yes</td><td style='padding:8px;border:1px solid #ddd;'>No (always running)</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Cost shape</td><td style='padding:8px;border:1px solid #ddd;'>Per invocation</td><td style='padding:8px;border:1px solid #ddd;'>Per running task</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Best for</td><td style='padding:8px;border:1px solid #ddd;'>Bursty, event-driven</td><td style='padding:8px;border:1px solid #ddd;'>Steady, long-running</td></tr></table><pre><code class=\"language-python\"># Lambda - event handler\ndef lambda_handler(event, context):\n    process_s3_event(event)\n    return {'statusCode': 200}\n\n# ECS - long-running web service\n# Stable baseline + predictable scaling, no per-invocation overhead</code></pre><p>Choose Lambda when traffic is intermittent and you want zero ops. Choose ECS when the workload is steady, latency-sensitive, or runs longer than 15 minutes.</p>",
+      "difficulty": "Intermediate",
+      "tags": ["AWS", "Lambda", "ECS", "Serverless"],
+      "keyPoints": [
+        "Lambda suits event-driven, short-lived, sporadic workloads.",
+        "ECS suits long-running, steady-traffic services with predictable cost.",
+        "Lambda has cold starts; ECS tasks stay warm and are always-on."
+      ]
+    },
+    {
+      "question": "How does S3 achieve 11 nines of durability?",
+      "answer": "<p>Amazon S3 is designed for <strong>99.999999999% (11 nines) of object durability</strong> over a given year, meaning you expect to lose at most one object per 10 billion stored.</p><ul><li><strong>Cross-AZ replication:</strong> every object is automatically stored across at least three Availability Zones within a region, so losing one AZ does not lose data.</li><li><strong>Checksums and integrity:</strong> S3 computes and verifies checksums on every write and read, detecting and repairing silent corruption.</li><li><strong>Versioning:</strong> keeps multiple variants of an object so accidental overwrites or deletes are recoverable.</li><li><strong>MFA Delete:</strong> requires multi-factor authentication to delete objects or change versioning, protecting against malicious or accidental deletion.</li><li><strong>Cross-Region Replication (CRR):</strong> asynchronously copies objects to another region for disaster recovery and compliance.</li><li><strong>Object Lock:</strong> enforces write-once-read-many (WORM) retention for compliance use cases.</li></ul><pre><code class=\"language-bash\"># Enable versioning and replication\naws s3api put-bucket-versioning \\\n  --bucket my-bucket \\\n  --versioning-configuration Status=Enabled\n\naws s3api put-bucket-replication \\\n  --bucket my-bucket \\\n  --replication-configuration file://replication.json</code></pre><p>Durability is different from availability (which is 99.99% for S3 Standard). To protect against regional failures, pair durability with cross-region replication and a tested DR plan.</p>",
+      "difficulty": "Intermediate",
+      "tags": ["AWS", "S3", "Storage", "Reliability"],
+      "keyPoints": [
+        "S3 stores objects across at least three Availability Zones.",
+        "Checksums, versioning, and MFA Delete protect against corruption and accidental loss.",
+        "Cross-Region Replication and Object Lock add disaster recovery and compliance."
+      ]
+    },
+    {
+      "question": "RDS vs DynamoDB — when to choose which?",
+      "answer": "<p>RDS is a managed <strong>relational</strong> database; DynamoDB is a managed <strong>NoSQL key-value/document</strong> database. They are built for different access patterns.</p><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Aspect</th><th style='padding:8px;border:1px solid #ddd;'>RDS</th><th style='padding:8px;border:1px solid #ddd;'>DynamoDB</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Data model</td><td style='padding:8px;border:1px solid #ddd;'>Relational, SQL</td><td style='padding:8px;border:1px solid #ddd;'>Key-value / document</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Schema</td><td style='padding:8px;border:1px solid #ddd;'>Fixed, normalized</td><td style='padding:8px;border:1px solid #ddd;'>Flexible, denormalized</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Scaling</td><td style='padding:8px;border:1px solid #ddd;'>Vertical; read replicas</td><td style='padding:8px;border:1px solid #ddd;'>Horizontal, auto</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Latency</td><td style='padding:8px;border:1px solid #ddd;'>Millisecond</td><td style='padding:8px;border:1px solid #ddd;'>Single-digit ms at any scale</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Joins / ACID</td><td style='padding:8px;border:1px solid #ddd;'>Yes</td><td style='padding:8px;border:1px solid #ddd;'>Limited transactions only</td></tr></table><ul><li><strong>Choose RDS</strong> for complex queries, joins, transactions, fixed schemas, and when your team thinks in SQL.</li><li><strong>Choose DynamoDB</strong> for simple key-based lookups at any scale, predictable single-digit ms latency, and auto-scaling with no ops.</li></ul><pre><code class=\"language-sql\">-- RDS example\nSELECT u.name, SUM(o.total) AS revenue\nFROM users u JOIN orders o ON o.user_id = u.id\nGROUP BY u.id\nHAVING revenue &gt; 1000;\n\n# DynamoDB example\ntable.get_item(Key={'user_id': 'u123'})</code></pre><p>Many systems use both: RDS for transactional/analytical workloads, DynamoDB for session, cart, and high-throughput lookups.</p>",
+      "difficulty": "Intermediate",
+      "tags": ["AWS", "RDS", "DynamoDB", "Database"],
+      "keyPoints": [
+        "RDS is relational with SQL, joins, ACID, and fixed schema; scales vertically.",
+        "DynamoDB is key-value with single-digit ms latency at any scale; no joins.",
+        "Use RDS for complex queries and DynamoDB for simple lookups at scale."
+      ]
+    },
+    {
+      "question": "What is the difference between ALB and NLB?",
+      "answer": "<p>Both are managed load balancers in AWS, but they operate at different OSI layers and serve different protocols.</p><table style='border-collapse:collapse;margin:10px 0;'><tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Feature</th><th style='padding:8px;border:1px solid #ddd;'>ALB</th><th style='padding:8px;border:1px solid #ddd;'>NLB</th></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Layer</td><td style='padding:8px;border:1px solid #ddd;'>Layer 7 (HTTP/HTTPS)</td><td style='padding:8px;border:1px solid #ddd;'>Layer 4 (TCP/UDP/TLS)</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Routing</td><td style='padding:8px;border:1px solid #ddd;'>Path, host, header, query</td><td style='padding:8px;border:1px solid #ddd;'>Port-based</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Target types</td><td style='padding:8px;border:1px solid #ddd;'>EC2, IP, Lambda, ECS</td><td style='padding:8px;border:1px solid #ddd;'>EC2, IP, ALB, ECS</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Static IP</td><td style='padding:8px;border:1px solid #ddd;'>No</td><td style='padding:8px;border:1px solid #ddd;'>Yes (per AZ)</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>Source IP preserved</td><td style='padding:8px;border:1px solid #ddd;'>Via X-Forwarded-For</td><td style='padding:8px;border:1px solid #ddd;'>Yes (by default)</td></tr><tr><td style='padding:8px;border:1px solid #ddd;'>WebSocket / HTTP/2</td><td style='padding:8px;border:1px solid #ddd;'>Yes</td><td style='padding:8px;border:1px solid #ddd;'>Limited</td></tr></table><ul><li><strong>ALB:</strong> best for HTTP/HTTPS workloads that need path-based or host-based routing, WebSocket, gRPC, or Lambda targets.</li><li><strong>NLB:</strong> best for ultra-low latency, TCP/UDP, gaming, IoT, financial trading, or when you need static IPs or preserved client source IPs.</li></ul><pre><code class=\"language-yaml\"># ALB path-based routing\n/api/*  -&gt; api-tg\n/static -&gt; static-tg (S3 via CloudFront OAC)</code></pre><p>Choose by protocol and routing needs. Use ALB for web apps and NLB for raw TCP performance or when source IP matters.</p>",
+      "difficulty": "Intermediate",
+      "tags": ["AWS", "ELB", "ALB", "NLB", "Networking"],
+      "keyPoints": [
+        "ALB is Layer 7 for HTTP/HTTPS with path, host, and header routing.",
+        "NLB is Layer 4 for TCP/UDP with static IPs and ultra-low latency.",
+        "Choose ALB for web apps; choose NLB for performance, TCP, or static IP needs."
+      ]
+    },
+    {
+      "question": "How would you design a highly available application in AWS?",
+      "answer": "<p>High availability (HA) means the application survives AZ and (ideally) regional failures with minimal or no downtime. The design combines redundancy, automation, and monitoring.</p><ul><li><strong>Multi-AZ deployment:</strong> run compute and data in at least two AZs. AZs in a region are independent datacenters with low-latency links.</li><li><strong>Auto Scaling Groups:</strong> replace failed instances automatically and scale for load.</li><li><strong>ALB across AZs:</strong> an Application Load Balancer distributes traffic across healthy targets in multiple AZs.</li><li><strong>RDS Multi-AZ:</strong> synchronous standby replica in another AZ with automatic failover.</li><li><strong>S3 cross-region replication:</strong> durable object storage replicated to a second region for DR.</li><li><strong>Route 53 health checks and failover:</strong> DNS-level failover between regions or endpoints.</li><li><strong>CloudFront CDN:</strong> serves content from edge locations and absorbs traffic spikes.</li><li><strong>Stateless app tier:</strong> store sessions in ElastiCache/DynamoDB so any instance can serve any user.</li></ul><pre><code class=\"language-text\">User -&gt; Route 53 -&gt; CloudFront -&gt; ALB (Multi-AZ) -&gt; ASG EC2/Fargate\n                                                   |\n                                                   -&gt; ElastiCache (sessions)\n                                                   -&gt; RDS Multi-AZ\n                                                   -&gt; S3 (with CRR)</code></pre><p>For regional disaster recovery, add a warm standby in a second region with Route 53 failover routing. Always test the failover before relying on it.</p>",
+      "difficulty": "Advanced",
+      "tags": ["AWS", "Architecture", "High Availability", "Reliability"],
+      "keyPoints": [
+        "Spread compute and data across multiple Availability Zones.",
+        "Use Auto Scaling, ALB, RDS Multi-AZ, and S3 cross-region replication.",
+        "Add Route 53 health checks and CloudFront for DNS failover and edge caching."
+      ]
+    },
+    {
+      "question": "How do you troubleshoot high latency in AWS?",
+      "answer": "<p>High-latency troubleshooting starts with measuring where the time is spent, then drilling into the slowest component.</p><ol><li><strong>Measure end-to-end:</strong> use CloudWatch p99 latency metrics and X-Ray distributed traces to identify which service or hop is slow.</li><li><strong>Application tier:</strong> profile the code, check for N+1 queries, garbage collection pauses, thread pool saturation, or blocking I/O.</li><li><strong>Database tier:</strong> enable Performance Insights, check slow query logs, missing indexes, lock contention, and replica lag.</li><li><strong>Network:</strong> review VPC flow logs, look for cross-AZ traffic, NAT Gateway bottlenecks, or DNS resolution time.</li><li><strong>Cache hit ratio:</strong> low hit ratios on ElastiCache or CloudFront push load back to the origin.</li><li><strong>CDN coverage:</strong> ensure static assets are served from CloudFront edges, not the origin.</li><li><strong>Instance sizing:</strong> check CPU, memory, and network utilization; the instance type may be undersized.</li><li><strong>Concurrency limits:</strong> Lambda or API Gateway throttling, or database connection pool exhaustion.</li></ol><pre><code class=\"language-promql\"># CloudWatch Insights / Prometheus\nhistogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))\nrate(http_requests_total{status=~\"5..\"}[5m])\n\n# X-Ray service map highlights slow traces\n# Look for segments with high latency annotations</code></pre><p>Always optimize the slowest hop first. Premature optimization without data wastes effort and may not improve user experience.</p>",
+      "difficulty": "Advanced",
+      "tags": ["AWS", "CloudWatch", "X-Ray", "Performance", "Troubleshooting"],
+      "keyPoints": [
+        "Use X-Ray and CloudWatch p99 metrics to find the slowest component.",
+        "Check DB query time, network latency, cache hit ratio, and CDN coverage.",
+        "Optimize the slowest hop first, not the easiest to change."
+      ]
     }
   ]
 }

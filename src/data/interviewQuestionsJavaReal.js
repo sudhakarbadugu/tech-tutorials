@@ -1347,6 +1347,400 @@ export const javaRealQuestions = {
         "Subclasses override specific steps.",
         "Hollywood principle."
       ]
+    },
+    {
+      "question": "Explain G1 GC, ZGC, and Shenandoah. When would you choose each?",
+      "answer": "<ol>\n      <li><strong>G1 GC</strong> is the default collector since Java 9. It divides the heap into equal-sized regions and runs mostly concurrently, with short stop-the-world pauses for the evacuation phase. It balances throughput and latency and works well for heaps up to a few hundred GB.</li>\n      <li><strong>ZGC</strong> is a scalable, low-latency collector that aims for sub-millisecond pauses regardless of heap size (multi-GB to multi-TB). It uses colored pointers and load barriers to do most work concurrently. Choose ZGC when you need very predictable low pauses, e.g. trading or interactive services.</li>\n      <li><strong>Shenandoah</strong> is a Red Hat-led concurrent collector that compacts the heap while the application runs, similar goals to ZGC. It uses Brooks pointers and is the default on some Linux distributions. Choose Shenandoah when you want low pauses and run on OpenJDK distributions that ship it.</li>\n      <li>Pick <strong>G1</strong> for general-purpose workloads where pause times under ~100ms are acceptable. Pick <strong>ZGC</strong> or <strong>Shenandoah</strong> when strict pause-time SLAs dominate throughput requirements.</li>\n      <li>Enable with <code>-XX:+UseG1GC</code>, <code>-XX:+UseZGC</code>, or <code>-XX:+UseShenandoahGC</code>.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "JVM",
+        "GC"
+      ],
+      "keyPoints": [
+        "G1 is the default, balanced throughput/latency collector.",
+        "ZGC and Shenandoah aim for sub-millisecond concurrent pauses.",
+        "Choose ZGC/Shenandoah for strict latency SLAs, G1 for general use."
+      ]
+    },
+    {
+      "question": "What happens internally when a Full GC occurs?",
+      "answer": "<ol>\n      <li>A Full GC reclaims memory across the entire heap: young, old, and sometimes metaspace. It is typically a stop-the-world event, so all application threads pause.</li>\n      <li>Common <strong>triggers</strong> are an explicit <code>System.gc()</code> call, allocation failure in the old generation, promotion failure (no space to move objects from young to old), or concurrent mode failure in CMS.</li>\n      <li>The collector traverses live object graphs, marks reachable objects, sweeps unreachable ones, and compacts the old generation to reduce fragmentation. Metaspace is also collected if classloaders become unreachable.</li>\n      <li>Full GC pauses can be hundreds of milliseconds to many seconds, harming tail latency. The JVM may even fall back to single-threaded collection if the heap is large.</li>\n      <li><strong>How to avoid it</strong>: size the heap correctly, tune G1/ZGC regions, fix memory leaks, reduce object allocation rate, avoid <code>System.gc()</code>, and monitor GC logs to detect promotion failures early.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "JVM",
+        "GC"
+      ],
+      "keyPoints": [
+        "Stop-the-world collection across the whole heap.",
+        "Triggered by System.gc, allocation/promotion failure, CMS concurrent mode failure.",
+        "Can pause for seconds; tune heap and fix leaks to avoid."
+      ]
+    },
+    {
+      "question": "Explain the Java Memory Model (JMM).",
+      "answer": "<ol>\n      <li>The JMM defines how threads interact through memory and what guarantees the JVM makes about visibility, ordering, and atomicity of reads and writes.</li>\n      <li>It introduces the <strong>happens-before</strong> relationship: if action A happens-before B, then the result of A is visible to B. Without happens-before, the JVM is free to reorder operations and keep values in CPU caches or registers.</li>\n      <li><strong>Volatile</strong> writes establish a happens-before edge with subsequent reads of the same variable and prevent certain reorderings; <strong>synchronized</strong> blocks release/acquire the monitor, also creating happens-before edges.</li>\n      <li>Other happens-before sources: <code>Thread.start()</code>, <code>Thread.join()</code>, <code>final</code> field semantics (a properly constructed object's final fields are visible after the constructor finishes), and atomic/CAS operations in <code>java.util.concurrent</code>.</li>\n      <li>Memory <strong>barriers</strong> (LoadLoad, StoreStore, LoadStore, StoreLoad) are the CPU-level instructions the JVM inserts to enforce these rules.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "Multithreading",
+        "Concurrency",
+        "JMM"
+      ],
+      "keyPoints": [
+        "Happens-before defines visibility and ordering between threads.",
+        "volatile and synchronized establish happens-before edges.",
+        "Final fields are safely published after construction."
+      ]
+    },
+    {
+      "question": "What causes thread starvation and deadlocks?",
+      "answer": "<ol>\n      <li><strong>Thread starvation</strong> happens when a thread is ready to run but never gets CPU time. Causes: low thread priority, fairness issues in locks (e.g. <code>ReentrantLock(fair=false)</code>), long-running threads holding the CPU, or threads blocked on I/O while others monopolize cores.</li>\n      <li><strong>Deadlock</strong> occurs with a circular lock dependency: thread A holds lock 1 and waits for lock 2, while thread B holds lock 2 and waits for lock 1. The JVM cannot resolve this; both threads wait forever.</li>\n      <li>Other liveness issues: <strong>livelock</strong> (threads keep responding to each other without progress) and <strong>priority inversion</strong> (a low-priority thread holds a lock that a high-priority thread needs).</li>\n      <li><strong>Detection</strong>: use <code>jstack &lt;pid&gt;</code> or <code>jcmd &lt;pid&gt; Thread.print</code> to capture stack traces; Java Flight Recorder (JFR) can record deadlock events; IDE tools like JConsole/VisualVM highlight deadlocked threads.</li>\n      <li><strong>Prevention</strong>: enforce consistent global lock ordering, use <code>tryLock</code> with timeouts, prefer higher-level concurrency utilities (<code>ConcurrentHashMap</code>, <code>CompletableFuture</code>), and detect cycles with <code>ThreadMXBean.findDeadlockedThreads()</code> in tests.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "Multithreading",
+        "Concurrency"
+      ],
+      "keyPoints": [
+        "Starvation: thread never gets CPU time.",
+        "Deadlock: circular wait on locks.",
+        "Detect with jstack/JFR; prevent with lock ordering and tryLock timeouts."
+      ]
+    },
+    {
+      "question": "What is False Sharing and how can it impact performance?",
+      "answer": "<ol>\n      <li>CPUs load memory in <strong>cache lines</strong> (typically 64 bytes). If two unrelated variables used by different threads sit on the same cache line, writing one invalidates the other's cache line, causing expensive coherence traffic. This is <strong>false sharing</strong> - the data is not actually shared, but the cache line is.</li>\n      <li>It can silently destroy scalability of multi-threaded code: more cores, more slowdown. Classic example is a counter class with two adjacent <code>long</code> fields that are incremented by different threads.</li>\n      <li>Padding fields (e.g. <code>long p1, p2, p3, p4, p5, p6, p7;</code>) or extending superclasses with unused longs is a manual fix.</li>\n      <li>Java 8+ provides <code>@jdk.internal.vm.annotation.Contended</code> (and <code>@Contended</code> in popular libraries like Disruptor/LMAX). On JDK 8, run with <code>-XX:-RestrictContended</code>; on JDK 9+ the restriction is removed.</li>\n      <li>Use it sparingly because padding wastes memory. Profile first with <code>perf c2c</code> or async-profiler to confirm the problem.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "Multithreading",
+        "Concurrency",
+        "JVM"
+      ],
+      "keyPoints": [
+        "Independent variables on the same cache line invalidate each other.",
+        "Hurts scalability on multi-core CPUs.",
+        "@Contended or manual padding isolates fields to separate cache lines."
+      ]
+    },
+    {
+      "question": "How would you profile a production JVM?",
+      "answer": "<ol>\n      <li><strong>Java Flight Recorder (JFR)</strong> is the recommended built-in profiler. Enable with <code>-XX:StartFlightRecording=duration=60s,filename=app.jfr</code> or <code>jcmd &lt;pid&gt; JFR.start</code>. It has very low overhead (&lt;1%) and is safe in production.</li>\n      <li>Analyze JFR recordings with <strong>JDK Mission Control (JMC)</strong> for allocations, GC pauses, lock contention, exceptions, and CPU hotspots.</li>\n      <li><strong>async-profiler</strong> produces sampling flame graphs for CPU, allocations, and lock contention. It uses perf/eBPF on Linux and integrates with JFR. Useful for ad-hoc sampling in production.</li>\n      <li>Capture <strong>heap dumps</strong> with <code>jmap -dump:format=b,file=heap.hprof &lt;pid&gt;</code> or <code>jcmd &lt;pid&gt; GC.heap_dump</code>. Analyze in Eclipse MAT for leak suspects and retained sizes.</li>\n      <li>Enable detailed <strong>GC logs</strong> with <code>-Xlog:gc*:file=gc.log:time,uptime,level,tags</code> and feed them into GCViewer or Censum.</li>\n      <li>Prefer <strong>sampling</strong> (low overhead) over instrumentation. Always profile on production-like hardware and traffic.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "JVM",
+        "Performance"
+      ],
+      "keyPoints": [
+        "JFR + JMC is the standard safe-for-production profiler.",
+        "async-profiler gives flame graphs for CPU/allocation/locks.",
+        "Heap dumps with jmap/jcmd, analyzed in MAT."
+      ]
+    },
+    {
+      "question": "How does CompletableFuture work internally?",
+      "answer": "<ol>\n      <li><code>CompletableFuture</code> implements <code>Future</code> and <code>CompletionStage</code>. Internally it tracks dependent stages and a thread waiting on the result via a <code>WaitNode</code> stack and a result plus a status (NORMAL, EXCEPTIONAL, CANCELLED, INTERRUPTED).</li>\n      <li>Methods like <code>thenApply</code>, <code>thenCompose</code>, <code>thenAccept</code>, and <code>thenRun</code> return a new <code>CompletableFuture</code> that completes when the source stage completes and the function runs.</li>\n      <li><strong>Non-async</strong> variants (e.g. <code>thenApply</code>) may run the function in the thread that completed the previous stage. <strong>Async</strong> variants (e.g. <code>thenApplyAsync</code>) run it in the supplied executor, or the common <code>ForkJoinPool</code> by default.</li>\n      <li><code>exceptionally</code> recovers from a failed stage, <code>handle</code> runs whether the stage succeeded or failed, and <code>whenComplete</code> observes but does not transform the result.</li>\n      <li><code>allOf</code> and <code>anyOf</code> compose multiple futures; <code>allOf</code> returns a future that completes when all inputs complete, and its result is <code>Void</code> (read each input individually).</li>\n      <li>Be aware: blocking on <code>join()</code>/<code>get()</code> from a common-pool thread can starve the pool. Configure the pool size with <code>-Djava.util.concurrent.ForkJoinPool.common.parallelism=N</code> for I/O-heavy workloads.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "Concurrency",
+        "Java 8+"
+      ],
+      "keyPoints": [
+        "Implements Future and CompletionStage with stack of waiters.",
+        "Async variants use ForkJoinPool.commonPool() by default.",
+        "exceptionally/handle/whenComplete control error propagation."
+      ]
+    },
+    {
+      "question": "Explain Try-With-Resources with a practical example.",
+      "answer": "<ol>\n      <li>Try-with-resources automatically closes any resource that implements <code>java.lang.AutoCloseable</code> when the block exits, whether normally or by exception.</li>\n      <li>Resources are declared in the try header and closed in <strong>reverse order of declaration</strong>, so later resources close first - useful when one resource depends on another.</li>\n      <li>If the try block throws and <code>close()</code> also throws, the try-block exception is the primary one and the close exception is added via <code>addSuppressed()</code> so you don't lose the original cause.</li>\n      <li>Practical example with files and database connections:\n        <pre><code>try (BufferedReader br = new BufferedReader(new FileReader(\"data.txt\");\n     Connection con = DriverManager.getConnection(url, user, pwd)) {\n    String line;\n    while ((line = br.readLine()) != null) { process(line); }\n} catch (IOException | SQLException e) { log.error(e); }\n// br and con are both closed automatically, even on exception</code></pre>\n      </li>\n      <li>Prefer it over manual <code>try/finally</code> - it's shorter, safer, and handles suppressed exceptions correctly.</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "Core Java",
+        "Exception Handling"
+      ],
+      "keyPoints": [
+        "AutoCloseable resources closed automatically in reverse order.",
+        "Close() exceptions are suppressed if the try block also throws.",
+        "Use it for files, sockets, JDBC connections."
+      ]
+    },
+    {
+      "question": "How does AutoCloseable work internally?",
+      "answer": "<ol>\n      <li><code>AutoCloseable</code> defines a single method: <code>void close() throws Exception</code>. Anything implementing it can be used in try-with-resources.</li>\n      <li>Try-with-resources is desugared by the compiler into a <code>try/finally</code> block: in the finally, each resource is closed in reverse declaration order, with <code>addSuppressed()</code> called on the primary exception if <code>close()</code> also throws.</li>\n      <li><code>Closeable</code> extends <code>AutoCloseable</code> and tightens <code>close()</code> to throw <code>IOException</code> only - it's the historical interface for I/O resources.</li>\n      <li>Implementations should be idempotent (safe to call <code>close()</code> multiple times) and tolerant of being called after the resource is already closed.</li>\n      <li>You can implement your own: e.g. a custom <code>Lock</code> wrapper that releases the lock in <code>close()</code> for use in try-with-resources as a structured scope.</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "Core Java",
+        "Exception Handling"
+      ],
+      "keyPoints": [
+        "Single close() method that throws Exception.",
+        "Compiler desugars try-with-resources into try/finally.",
+        "Closeable tightens close() to throw IOException only."
+      ]
+    },
+    {
+      "question": "What is a Memory Leak in Java and what are the common causes?",
+      "answer": "<ol>\n      <li>A Java memory leak is an object that the application no longer needs but is still reachable through GC roots, so the garbage collector cannot reclaim it. The heap grows over time until <code>OutOfMemoryError</code>.</li>\n      <li>Common <strong>causes</strong>:\n        <ul>\n          <li>Static collections that grow forever (e.g. <code>public static Map&lt;K,V&gt; cache = new HashMap&lt;&gt;();</code> with no eviction).</li>\n          <li>Unclosed resources: files, sockets, JDBC connections, streams held in long-lived fields.</li>\n          <li>ThreadLocal misuse: large objects stored in <code>ThreadLocal</code> on pooled threads are never cleaned up.</li>\n          <li>Non-static inner classes (or anonymous classes) that implicitly hold the outer class reference, keeping it alive longer than expected.</li>\n          <li>Listeners and callbacks registered on long-lived objects without de-registration.</li>\n          <li>Caches without eviction (use <code>Caffeine</code> with size/time limits).</li>\n          <li>Custom classloaders in app servers that prevent classes/metaspace from being GC'd.</li>\n        </ul>\n      </li>\n      <li>Use weak/soft references (e.g. <code>WeakHashMap</code>, <code>WeakReference</code>) where appropriate, but be careful - they can be cleared at any time.</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "JVM",
+        "Memory Management"
+      ],
+      "keyPoints": [
+        "Unreachable-yet-rooted objects that the GC cannot collect.",
+        "Common causes: static collections, unclosed resources, ThreadLocal, caches.",
+        "Use weak references and bounded caches to mitigate."
+      ]
+    },
+    {
+      "question": "How do you identify Memory Leaks in production?",
+      "answer": "<ol>\n      <li>Watch the <strong>old generation occupancy</strong> trend in GC logs or JFR. A sawtooth that climbs to a higher baseline after each Full GC, or steady growth without recovery, is a strong signal of a leak.</li>\n      <li>Capture a <strong>heap dump</strong> with <code>jmap -dump:format=b,file=heap.hprof &lt;pid&gt;</code> or <code>jcmd &lt;pid&gt; GC.heap_dump &lt;file&gt;</code>. Do it on OutOfMemoryError with <code>-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps/</code>.</li>\n      <li>Analyze the dump in <strong>Eclipse MAT</strong> (or VisualVM) using the Leak Suspects report and dominator tree to find objects retaining the most memory.</li>\n      <li>Enable <strong>GC logging</strong> with <code>-Xlog:gc*:file=gc.log:time</code> and look for full GCs that don't reduce heap usage.</li>\n      <li>Use <strong>JFR</strong> with allocation profiling enabled (<code>jfr.configure --jdk.OldObjectSample</code>) to see where long-lived objects are being allocated.</li>\n      <li>Compare two heap dumps taken minutes apart using MAT's histogram comparison to identify which classes are growing.</li>\n      <li>Monitor <code>java.lang:type=Memory</code> MBeans in JConsole/VisualVM, and alert when used heap crosses thresholds.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "JVM",
+        "Memory Management",
+        "Performance"
+      ],
+      "keyPoints": [
+        "Heap dumps with jmap/jcmd on OOM with -XX:+HeapDumpOnOutOfMemoryError.",
+        "Eclipse MAT for Leak Suspects and dominator analysis.",
+        "GC logs and JFR allocation profiling to confirm growth."
+      ]
+    },
+    {
+      "question": "What tools have you used for Memory Leak analysis?",
+      "answer": "<ol>\n      <li><strong>Eclipse MAT (Memory Analyzer Tool)</strong> - the gold standard for heap dump analysis. Leak Suspects, dominator tree, retained sizes, path-to-GC-roots.</li>\n      <li><strong>VisualVM</strong> - free, bundled with the JDK (until JDK 9). Heap dump viewing, sampler, and MBean browser. Good for ad-hoc analysis.</li>\n      <li><strong>JFR + JDK Mission Control (JMC)</strong> - low-overhead production profiling. Use the Old Object Sample event to find long-lived allocations.</li>\n      <li><strong>jmap / jcmd</strong> - capture heap dumps and stats from the command line. <code>jcmd &lt;pid&gt; GC.heap_dump</code> is the modern equivalent of <code>jmap -dump</code>.</li>\n      <li><strong>async-profiler</strong> - allocation profiling flame graphs to see where objects are being allocated hot.</li>\n      <li>Commercial tools: <strong>YourKit</strong> and <strong>JProfiler</strong> - excellent UI, integrated sampling, memory views, and CPU profiling in one tool. Useful when budgets allow.</li>\n      <li><strong>HeapHero</strong> and <strong>JXRay</strong> - online/offline heap dump analyzers, handy for quick reads without installing MAT.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "JVM",
+        "Memory Management",
+        "Tools"
+      ],
+      "keyPoints": [
+        "Eclipse MAT for deep heap dump analysis.",
+        "JFR/JMC for low-overhead production profiling.",
+        "YourKit/JProfiler for commercial all-in-one profilers."
+      ]
+    },
+    {
+      "question": "Difference between Heap Dump and Thread Dump.",
+      "answer": "<ol>\n      <li>A <strong>heap dump</strong> is a snapshot of the entire JVM heap at a point in time: every live object, its class, fields, references, and shallow/retained sizes. Use it to investigate memory leaks, large allocations, and OOM.</li>\n      <li>A <strong>thread dump</strong> is a snapshot of every thread's state: stack trace, current method, held monitors, blocked-on locks, thread state (RUNNABLE, BLOCKED, WAITING). Use it to investigate deadlocks, hangs, contention, and infinite loops.</li>\n      <li><strong>Format</strong>: heap dumps are binary (HPROF, often large - hundreds of MB to GB). Thread dumps are plain text, one section per thread, easy to grep.</li>\n      <li><strong>Capture</strong>:\n        <ul>\n          <li>Heap: <code>jmap -dump:format=b,file=heap.hprof &lt;pid&gt;</code> or <code>jcmd &lt;pid&gt; GC.heap_dump heap.hprof</code>.</li>\n          <li>Thread: <code>jstack &lt;pid&gt;</code> or <code>jcmd &lt;pid&gt; Thread.print</code> (or <code>kill -3 &lt;pid&gt;</code> to print to the JVM's stdout).</li>\n        </ul>\n      </li>\n      <li>They are <strong>complementary</strong>: for a slow app, capture both. Heap shows what is in memory, thread shows what the app is doing.</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "JVM",
+        "Performance"
+      ],
+      "keyPoints": [
+        "Heap dump: snapshot of all live objects, used for memory leaks.",
+        "Thread dump: snapshot of all thread stacks, used for hangs and deadlocks.",
+        "Complementary views; capture both when triaging a slowdown."
+      ]
+    },
+    {
+      "question": "Is Spring Singleton Bean Scope thread-safe? Explain with examples.",
+      "answer": "<ol>\n      <li>Spring's default scope is <strong>singleton</strong> - one shared instance per Spring IoC container. It is <strong>not</strong> thread-safe by default: the same instance is reused across all threads.</li>\n      <li>If the bean holds mutable state (fields), concurrent requests can race on those fields. Example:\n        <pre><code>@Service\npublic class CounterService {\n    private int count = 0;  // shared, not thread-safe\n    public int increment() { return ++count; }\n}</code></pre>\n      </li>\n      <li>Two threads calling <code>increment()</code> can produce lost updates because <code>++</code> is read-modify-write and not atomic.</li>\n      <li>Safe patterns:\n        <ul>\n          <li>Keep beans <strong>stateless</strong> - methods take parameters and return values, no instance fields.</li>\n          <li>Use <code>AtomicInteger</code>, <code>AtomicLong</code>, or <code>ConcurrentHashMap</code> for shared counters/maps.</li>\n          <li>Use <code>ThreadLocal</code> for per-request state (e.g. security context, transaction-bound objects).</li>\n          <li>Synchronize critical sections with <code>synchronized</code> or <code>ReentrantLock</code>.</li>\n          <li>Switch to <strong>prototype</strong> scope or request/session scope for stateful beans when needed.</li>\n        </ul>\n      </li>\n      <li>Rule of thumb: stateless singletons are inherently thread-safe; if state is required, treat it with the same care as any shared Java object.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "Spring Boot"
+      ],
+      "keyPoints": [
+        "Default singleton scope is one shared instance - not thread-safe by default.",
+        "Keep beans stateless; use atomic vars, ThreadLocal, or concurrent collections for state.",
+        "Use prototype/request scope for genuinely stateful beans."
+      ]
+    },
+    {
+      "question": "What is the difference between the final keyword and a final variable?",
+      "answer": "<ol>\n      <li><strong>final variable</strong>: a variable whose value cannot be reassigned after initialization (must be definitely assigned exactly once).</li>\n      <li><strong>final method</strong>: a method that cannot be overridden by subclasses.</li>\n      <li><strong>final class</strong>: a class that cannot be extended (e.g., <code>String</code>, <code>Integer</code> wrappers).</li>\n      <li><strong>finally</strong> is a block used with try/catch that always executes, used for cleanup.</li>\n      <li><strong>finalize()</strong> was a method on <code>Object</code> called by the GC before reclamation; deprecated since Java 9.</li>\n      <li>final is for immutability / restriction; finally is for cleanup; finalize was for GC hooks.</li>\n    </ol>",
+      "difficulty": "Beginner",
+      "tags": [
+        "Java",
+        "Core Java"
+      ],
+      "keyPoints": [
+        "final variable = value cannot be reassigned.",
+        "final method = cannot be overridden; final class = cannot be extended.",
+        "final != finally (cleanup block) != finalize (deprecated GC hook)."
+      ]
+    },
+    {
+      "question": "How do you debug and fix OutOfMemoryError in Java?",
+      "answer": "<ol>\n      <li>Identify the OOM type from the message: <code>Java heap space</code>, <code>Metaspace</code>, <code>GC overhead limit exceeded</code>, <code>PermGen space</code> (older JVMs), or <code>unable to create new native thread</code>.</li>\n      <li>Capture a heap dump at the moment of failure: <code>-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/dump.hprof</code>.</li>\n      <li>Analyze the dump with Eclipse MAT, VisualVM, or JFR to find the largest object retainers and leak suspects.</li>\n      <li>Common leak sources: static collections that grow forever, unclosed resources (Connections, Streams), ThreadLocal entries never removed, listeners not unregistered, caches without eviction.</li>\n      <li>For Metaspace OOM, look for classloader leaks (web app redeploys, dynamic proxies).</li>\n      <li>Fix: remove the leak source. Only as a last resort, increase the heap: <code>-Xmx</code> for heap, <code>-XX:MaxMetaspaceSize</code> for metaspace.</li>\n      <li>Verify the fix with a load test that reproduces the original OOM.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "JVM",
+        "Memory Management",
+        "Troubleshooting"
+      ],
+      "keyPoints": [
+        "Capture heap dump on OOM with -XX:+HeapDumpOnOutOfMemoryError.",
+        "Analyze with MAT / VisualVM / JFR for leak suspects.",
+        "Fix the leak before increasing -Xmx."
+      ]
+    },
+    {
+      "question": "What is the difference between volatile and synchronized in Java?",
+      "answer": "<ol>\n      <li><strong>volatile</strong> guarantees <em>visibility</em>: every read goes to main memory and every write flushes to main memory, so threads see the latest value.</li>\n      <li><strong>synchronized</strong> guarantees both <em>visibility</em> AND <em>atomicity</em>: only one thread executes the block at a time, and all changes are visible on entry/exit.</li>\n      <li>volatile is NOT enough for compound operations like <code>count++</code> (read-modify-write is still racy).</li>\n      <li>synchronized is heavier: it can block, may cause context switches, and supports wait/notify.</li>\n      <li>Use <strong>volatile</strong> for simple flags, one-time publication, or when writes do not depend on the current value.</li>\n      <li>Use <strong>synchronized</strong> (or <code>AtomicInteger</code> / <code>ReentrantLock</code>) when multiple steps must happen atomically.</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "Multithreading",
+        "Concurrency"
+      ],
+      "keyPoints": [
+        "volatile = visibility only; synchronized = visibility + atomicity.",
+        "volatile does not make count++ atomic.",
+        "Prefer AtomicXxx classes or ReentrantLock for compound ops."
+      ]
+    },
+    {
+      "question": "How do you avoid performance issues caused by synchronization?",
+      "answer": "<ol>\n      <li>Use <code>ConcurrentHashMap</code> instead of <code>Collections.synchronizedMap(HashMap)</code> for fine-grained locking per bucket.</li>\n      <li>Use atomic variables (<code>AtomicInteger</code>, <code>AtomicLong</code>, <code>LongAdder</code>) instead of <code>synchronized</code> counters.</li>\n      <li>Use <code>ReadWriteLock</code> (or <code>StampedLock</code>) for read-heavy workloads so reads do not block each other.</li>\n      <li>Use <code>ConcurrentHashMap</code> stripe-based locking or Guava's <code>Striped</code> for lock striping across many locks.</li>\n      <li>Use <code>CopyOnWriteArrayList</code> for read-mostly lists where iteration outnumbers mutation.</li>\n      <li>Prefer <strong>immutable objects</strong> - they are inherently thread-safe and shareable without locks.</li>\n      <li>Use <code>ThreadLocal</code> for per-thread state to avoid sharing.</li>\n      <li>Keep synchronized blocks as short as possible - lock only the critical section, not the whole method.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "Multithreading",
+        "Concurrency",
+        "Performance"
+      ],
+      "keyPoints": [
+        "Prefer ConcurrentHashMap, atomic vars, and immutable objects.",
+        "Use ReadWriteLock for read-heavy paths; CopyOnWriteArrayList for read-mostly lists.",
+        "Keep synchronized blocks short."
+      ]
+    },
+    {
+      "question": "What is ThreadLocal and where is it used in real applications?",
+      "answer": "<ol>\n      <li><code>ThreadLocal</code> provides thread-local storage: each thread sees its own independent copy of the variable, so no synchronization is needed.</li>\n      <li>Real-world uses: per-thread <code>SimpleDateFormat</code> (not thread-safe), per-request <code>UserPrincipal</code> / security context, MDC values for logging, JDBC connection-per-thread in some frameworks, request-scoped Spring beans.</li>\n      <li>API: <code>threadLocal.set(value)</code>, <code>threadLocal.get()</code>, <code>threadLocal.remove()</code>.</li>\n      <li>Use <code>withInitial(Supplier)</code> to provide a default value computed lazily per thread.</li>\n      <li><strong>Memory-leak risk:</strong> in pooled threads (e.g., a thread pool in a web server), the value lives as long as the thread, holding references. Always call <code>remove()</code> in a <code>finally</code> block when the request ends.</li>\n      <li>Prefer scoped alternatives (request scope, <code>ScopedValue</code> in Java 21+) when possible to avoid the leak risk.</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "Multithreading",
+        "Concurrency"
+      ],
+      "keyPoints": [
+        "Each thread gets its own copy; no synchronization needed.",
+        "Common for SimpleDateFormat, security context, request-scoped data.",
+        "Always call remove() in finally to avoid leaks in pooled threads."
+      ]
+    },
+    {
+      "question": "What are different ways to ensure thread safety in Java?",
+      "answer": "<ol>\n      <li><code>synchronized</code> methods or blocks - intrinsic monitor lock.</li>\n      <li><code>volatile</code> variables for visibility of single writes/reads.</li>\n      <li>Atomic variables from <code>java.util.concurrent.atomic</code> - <code>AtomicInteger</code>, <code>AtomicLong</code>, <code>AtomicReference</code>, <code>LongAdder</code>.</li>\n      <li>Concurrent collections - <code>ConcurrentHashMap</code>, <code>ConcurrentLinkedQueue</code>, <code>CopyOnWriteArrayList</code>.</li>\n      <li>Immutable objects (final fields, no setters) - inherently thread-safe.</li>\n      <li><code>ThreadLocal</code> for per-thread state.</li>\n      <li>Explicit locks - <code>ReentrantLock</code>, <code>ReadWriteLock</code>, <code>StampedLock</code>.</li>\n      <li>Parallel streams with stateless lambdas (no shared mutable state).</li>\n      <li>Higher-level coordination: <code>CountDownLatch</code>, <code>CyclicBarrier</code>, <code>Phaser</code>, <code>Semaphore</code>, <code>CompletableFuture</code>.</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "Multithreading",
+        "Concurrency"
+      ],
+      "keyPoints": [
+        "synchronized / volatile / atomic / concurrent collections / immutable / ThreadLocal.",
+        "Locks (ReentrantLock, ReadWriteLock) for finer control.",
+        "Stateless parallel streams are inherently thread-safe."
+      ]
+    },
+    {
+      "question": "What changes did you make when migrating from Java 7 to Java 8?",
+      "answer": "<ol>\n      <li><strong>Lambda expressions</strong> - <code>(a, b) -&gt; a + b</code> replaced anonymous inner classes for functional interfaces.</li>\n      <li><strong>Stream API</strong> - <code>filter</code>, <code>map</code>, <code>reduce</code>, <code>collect</code> for collection pipelines; <code>parallelStream()</code> for parallelism.</li>\n      <li><strong>Optional</strong> - <code>Optional&lt;T&gt;</code> to model nullable values and avoid <code>null</code> checks.</li>\n      <li><strong>Default methods</strong> on interfaces - interface methods with a body, enabling API evolution without breaking implementers.</li>\n      <li><strong>Functional interfaces</strong> - <code>Function</code>, <code>Predicate</code>, <code>Supplier</code>, <code>Consumer</code> in <code>java.util.function</code>.</li>\n      <li><strong>Method references</strong> - <code>String::length</code> as a shorthand for lambdas.</li>\n      <li><strong>New Date/Time API</strong> (<code>java.time</code>) - immutable, thread-safe <code>LocalDate</code>, <code>LocalDateTime</code>, <code>ZonedDateTime</code>; replaced <code>java.util.Date</code> and <code>Calendar</code>.</li>\n      <li><strong>Nashorn</strong> JavaScript engine (later removed in Java 15).</li>\n      <li><strong>Type annotations</strong> - annotations can be applied to any use of a type (e.g., <code>List&lt;@NonNull String&gt;</code>).</li>\n      <li><strong>CompletableFuture</strong> and improvements to <code>java.util.concurrent</code>.</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "Java 8",
+        "Modern Java"
+      ],
+      "keyPoints": [
+        "Lambdas, Streams, Optional, default methods, functional interfaces.",
+        "java.time replaces Date/Calendar.",
+        "Method references and type annotations complete the upgrade."
+      ]
+    },
+    {
+      "question": "What is the load factor in HashMap and what does the default 0.75 mean?",
+      "answer": "<ol>\n      <li><strong>Load factor</strong> = the ratio of the number of entries to the current capacity at which the HashMap will resize (double its bucket array).</li>\n      <li>Default load factor is <code>0.75f</code>: resize happens when entries exceed <code>capacity * 0.75</code> (e.g., 12 entries for default capacity 16).</li>\n      <li>0.75 is a balance: lower load factor = fewer collisions and faster lookups but more memory; higher load factor = less memory but more collisions and slower lookups.</li>\n      <li>Trade-offs: too high (e.g., 0.9) -&gt; many collisions, longer chains, O(n) lookups in the worst case. Too low (e.g., 0.5) -&gt; frequent resizing and wasted buckets.</li>\n      <li>Initial capacity can be tuned to avoid resizing: <code>new HashMap&lt;&gt;(expectedSize / 2 * 3)</code> or use Guava's <code>Maps.newHashMapWithExpectedSize</code>.</li>\n      <li>After Java 8, when a bucket has 8+ entries, the linked list is converted to a balanced red-black tree so worst-case lookup becomes O(log n).</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "Collections"
+      ],
+      "keyPoints": [
+        "Load factor 0.75 = resize at 75% full, balancing time and space.",
+        "Higher load = more collisions; lower = wasted memory.",
+        "Java 8+ converts long buckets to red-black trees for O(log n) lookup."
+      ]
+    },
+    {
+      "question": "How do you verify a method is called twice in Mockito?",
+      "answer": "<ol>\n      <li>Use <code>verify(mock, times(2)).methodCall()</code> to assert the method was invoked exactly twice.</li>\n      <li>Other verification modes: <code>times(1)</code> (default), <code>never()</code>, <code>atLeast(n)</code>, <code>atMost(n)</code>, <code>atLeastOnce()</code>.</li>\n      <li>For argument matching, combine with matchers: <code>verify(mock, times(2)).save(any(User.class))</code>.</li>\n      <li>Capture arguments: <code>ArgumentCaptor</code> to inspect what was passed in.</li>\n      <li>Use <code>InOrder</code> to verify the call order of multiple methods.</li>\n      <li>Use <code>verifyNoMoreInteractions(mock)</code> to assert no other methods were called.</li>\n      <li>Verification is for <em>interaction behavior</em> - did the SUT collaborate correctly? Not for return values (use stubs/asserts for that).</li>\n    </ol>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "Java",
+        "Testing",
+        "Mockito"
+      ],
+      "keyPoints": [
+        "verify(mock, times(2)).method() for exact invocation count.",
+        "Other modes: never(), atLeast(), atMost(), atLeastOnce().",
+        "Use InOrder / ArgumentCaptor for order and argument inspection."
+      ]
+    },
+    {
+      "question": "In which situations do you use PowerMock?",
+      "answer": "<ol>\n      <li>PowerMock extends Mockito (or EasyMock) to mock things Mockito cannot: <strong>static methods</strong>, <strong>private methods</strong>, <strong>constructors</strong>, and <strong>final classes / final methods</strong>.</li>\n      <li>Common with legacy code where you cannot refactor the class under test (e.g., a static <code>UUID.randomUUID()</code> call deep inside production code).</li>\n      <li>Also used for mocking <code>System.currentTimeMillis()</code> or environment calls in unit tests.</li>\n      <li>Downsides: tightly coupled to implementation details, slow (uses bytecode manipulation), fragile across JDK upgrades.</li>\n      <li>Limited support in JUnit 5 / modern Mockito - <code>mockito-inline</code> (since 3.4) can mock statics and final classes natively, making PowerMock largely unnecessary.</li>\n      <li>Best practice: prefer <strong>refactoring</strong> the code to be testable (extract a method, inject a clock, replace statics) over using PowerMock.</li>\n    </ol>",
+      "difficulty": "Advanced",
+      "tags": [
+        "Java",
+        "Testing",
+        "Mockito",
+        "PowerMock"
+      ],
+      "keyPoints": [
+        "Use only when Mockito cannot help: statics, private, constructors, finals.",
+        "Slow, brittle, not JUnit 5 friendly - prefer mockito-inline or refactoring.",
+        "Best practice: refactor for testability over reaching for PowerMock."
+      ]
+    },
+    {
+      "question": "What is a Maven build and what does mvn clean install do?",
+      "answer": "<ol>\n      <li><strong>Maven</strong> is a build automation and dependency-management tool for Java, based on a Project Object Model (<code>pom.xml</code>).</li>\n      <li>Maven build lifecycle phases (main ones): <code>validate</code> -&gt; <code>compile</code> -&gt; <code>test</code> -&gt; <code>package</code> -&gt; <code>verify</code> -&gt; <code>install</code> -&gt; <code>deploy</code>.</li>\n      <li><strong>clean</strong> - removes the <code>target/</code> directory from the previous build.</li>\n      <li><strong>compile</strong> - compiles <code>src/main/java</code> into <code>target/classes</code>.</li>\n      <li><strong>test-compile</strong> - compiles <code>src/test/java</code>.</li>\n      <li><strong>test</strong> - runs unit tests (Surefire plugin) using the compiled test classes.</li>\n      <li><strong>package</strong> - bundles compiled code into a JAR, WAR, or EAR in <code>target/</code>.</li>\n      <li><strong>install</strong> - copies the built artifact into the local Maven repository (<code>~/.m2/repository</code>) so other local projects can depend on it.</li>\n      <li><strong>deploy</strong> - uploads the artifact to a remote repository (e.g., Nexus, Artifactory) for sharing with other developers.</li>\n      <li>So <code>mvn clean install</code> = clean + (validate -&gt; compile -&gt; test -&gt; package) + install the artifact locally.</li>\n    </ol>",
+      "difficulty": "Beginner",
+      "tags": [
+        "Java",
+        "Maven",
+        "Build Tools"
+      ],
+      "keyPoints": [
+        "clean removes target/; compile/test/package build the artifact.",
+        "install copies the artifact into ~/.m2 for local use.",
+        "deploy pushes to a shared remote repository."
+      ]
+    },
+    {
+      "question": "What is code coverage and line coverage?",
+      "answer": "<ol>\n      <li><strong>Code coverage</strong> = the percentage of code executed by the test suite. It is a measure of <em>how much</em> of your code is being exercised, not how well.</li>\n      <li><strong>Line coverage</strong> = the percentage of source lines executed by tests.</li>\n      <li><strong>Branch coverage</strong> = the percentage of decision branches (if/else, switch, ternary) taken by tests.</li>\n      <li><strong>Method / class coverage</strong> = percentage of methods or classes that were called at least once.</li>\n      <li>Common tools: JaCoCo (default in many Maven/Gradle setups), Cobertura, Emma, Clover, Istanbul (JS).</li>\n      <li>High coverage does not mean high quality - 100% line coverage with no assertions is useless. Aim for high branch coverage + meaningful assertions.</li>\n      <li>Improve coverage by writing tests for uncovered branches: error paths, null inputs, edge cases, exception handlers.</li>\n      <li>Typical production targets: 70-80% line coverage with strong branch coverage on critical paths.</li>\n    </ol>",
+      "difficulty": "Beginner",
+      "tags": [
+        "Java",
+        "Testing",
+        "Code Coverage"
+      ],
+      "keyPoints": [
+        "Coverage = % of code executed; line coverage = % of lines.",
+        "Branch coverage is more meaningful than line coverage.",
+        "Tools: JaCoCo, Cobertura. High coverage != high quality."
+      ]
     }
   ]
 };

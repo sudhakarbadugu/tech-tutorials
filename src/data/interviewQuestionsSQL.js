@@ -549,6 +549,81 @@ export const sqlQuestions = {
                 "Use CREATE INDEX CONCURRENTLY (Postgres) or ALGORITHM=INPLACE, LOCK=NONE (MySQL) to avoid blocking writes.",
                 "Keep an expand-only window of 1-2 weeks so rollback is always possible."
           ]
+    },
+    {
+      "question": "When do you use a LEFT JOIN?",
+      "answer": "<p>A <strong>LEFT JOIN</strong> (a.k.a. <strong>LEFT OUTER JOIN</strong>) returns <em>every</em> row from the left table, plus the matching columns from the right table. When there is no match, the right-side columns are filled with <code>NULL</code>.</p><h4>When to use it</h4><ul><li>You want the <em>full</em> left side preserved, even when there is no match on the right.</li><li>You want to find rows on the left that have <em>no</em> relationship with the right (LEFT JOIN ... IS NULL).</li><li>You are doing a 1-to-many fan-out where every parent must appear.</li></ul><h4>Real-world examples</h4><ul><li>All customers and their orders (including customers with zero orders).</li><li>All employees and the department they belong to (including employees not yet assigned).</li><li>All products and the latest review (products with no review still show up).</li><li>All users and their last login (users who never logged in still show with NULL timestamp).</li></ul><h4>Inner vs Left</h4><ul><li><strong>INNER JOIN</strong> drops rows that do not match on both sides.</li><li><strong>LEFT JOIN</strong> keeps every left row and only adds right-side data when present.</li><li>If you only need the matches, INNER JOIN is cheaper (no NULL padding).</li></ul><pre><code>-- All customers and their orders (including customers with no orders)\nSELECT c.id, c.name, o.id AS order_id, o.total\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nWHERE c.signup_date &gt;= '2026-01-01';\n\n-- Find customers who have never placed an order\nSELECT c.id, c.name\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nWHERE o.id IS NULL;</code></pre>",
+      "difficulty": "Beginner",
+      "tags": [
+        "SQL",
+        "Joins"
+      ],
+      "keyPoints": [
+        "LEFT JOIN keeps every row from the left table; unmatched right columns are NULL.",
+        "Use it when the left side is the 'must-show' set, e.g. all customers and their orders.",
+        "Combine with WHERE right.id IS NULL to find rows on the left that have no match on the right."
+      ]
+    },
+    {
+      "question": "How do you find records in one table that have no relationship with another?",
+      "answer": "<p>Use a <strong>LEFT JOIN</strong> from the 'must-show' table to the related table, then filter with <code>WHERE right_table.id IS NULL</code>. The <code>IS NULL</code> predicate is the giveaway: those rows are the ones that did not match.</p><h4>Recipe</h4><ol><li>Start with the table whose rows you want to keep (left side).</li><li>LEFT JOIN the other table on the relationship column.</li><li>Filter <code>WHERE other.id IS NULL</code> to keep only the non-matches.</li></ol><h4>Common examples</h4><ul><li>Customers who have never placed an order.</li><li>Products that have never been sold.</li><li>Users who have never logged in.</li><li>Employees who do not belong to any project.</li><li>Posts that have no comments.</li></ul><h4>Anti-join alternatives</h4><ul><li><strong>NOT EXISTS</strong> correlated subquery - often the most efficient and the cleanest semantically.</li><li><strong>NOT IN (SELECT ...)</strong> - works, but watch out for <code>NULL</code>s in the subquery (they make the whole predicate UNKNOWN, returning no rows).</li></ul><pre><code>-- LEFT JOIN + IS NULL approach\nSELECT c.id, c.name\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nWHERE o.id IS NULL;\n\n-- NOT EXISTS approach (often preferred, NULL-safe)\nSELECT c.id, c.name\nFROM customers c\nWHERE NOT EXISTS (\n  SELECT 1 FROM orders o WHERE o.customer_id = c.id\n);</code></pre>",
+      "difficulty": "Beginner",
+      "tags": [
+        "SQL",
+        "Joins",
+        "Anti-join"
+      ],
+      "keyPoints": [
+        "Pattern: LEFT JOIN + WHERE right_table.id IS NULL.",
+        "NOT EXISTS is often the cleanest and most NULL-safe alternative.",
+        "Avoid NOT IN when the subquery can return NULLs - the whole predicate becomes UNKNOWN."
+      ]
+    },
+    {
+      "question": "How do you map values like A to Apple, B to Banana in SQL?",
+      "answer": "<p>There are two main ways: a <strong>CASE WHEN</strong> expression (inline) or a <strong>lookup table</strong> with a JOIN (data-driven).</p><h4>CASE WHEN - inline, ad-hoc mapping</h4><pre><code>SELECT\n  student_id,\n  grade,\n  CASE grade\n    WHEN 'A' THEN 'Apple'\n    WHEN 'B' THEN 'Banana'\n    WHEN 'C' THEN 'Cherry'\n    WHEN 'D' THEN 'Date'\n    ELSE 'Unknown'\n  END AS fruit_name\nFROM students;</code></pre><h4>Lookup table - reusable, maintainable</h4><pre><code>CREATE TABLE grade_fruit_map (\n  grade CHAR(1) PRIMARY KEY,\n  fruit VARCHAR(50) NOT NULL\n);\nINSERT INTO grade_fruit_map VALUES\n  ('A', 'Apple'),\n  ('B', 'Banana'),\n  ('C', 'Cherry'),\n  ('D', 'Date');\n\nSELECT s.student_id, s.grade, m.fruit\nFROM students s\nLEFT JOIN grade_fruit_map m ON m.grade = s.grade;</code></pre><h4>When to use which</h4><ul><li><strong>CASE WHEN</strong> - small, fixed set of values, or quick one-off reports. Fast, no extra table, but scatters the mapping logic across queries.</li><li><strong>Lookup table</strong> - reusable mapping, business user can edit it, audit trail, larger or changing sets. JOIN is clean and the mapping is in one place.</li></ul><h4>Gotchas</h4><ul><li>Always provide an <code>ELSE</code> branch (or use a LEFT JOIN + COALESCE) to handle unmapped values gracefully.</li><li>Watch for whitespace and case - <code>grade = 'A'</code> does not match <code>grade = 'A '</code> or <code>grade = 'a'</code> in most engines.</li></ul>",
+      "difficulty": "Beginner",
+      "tags": [
+        "SQL",
+        "CASE",
+        "Joins"
+      ],
+      "keyPoints": [
+        "CASE WHEN grade = 'A' THEN 'Apple' ... END for inline ad-hoc mappings.",
+        "Lookup table + LEFT JOIN for reusable, data-driven mappings.",
+        "Always handle the unmapped case (ELSE branch or COALESCE) to avoid silent NULLs."
+      ]
+    },
+    {
+      "question": "How do you remove duplicates in SQL?",
+      "answer": "<p>It depends on whether you are <em>querying</em> distinct rows or <em>deleting</em> duplicate rows from a table.</p><h4>1. SELECT distinct rows - keep the data unique</h4><ul><li><strong>DISTINCT</strong> - dedupes the whole SELECT list across all columns.</li><li><strong>GROUP BY</strong> - dedupes by a chosen key and lets you aggregate the rest.</li></ul><pre><code>SELECT DISTINCT name, city FROM users;\nSELECT name, city, COUNT(*) FROM users GROUP BY name, city;</code></pre><h4>2. Remove duplicate rows from a table</h4><p>Use a window function (most engines: Postgres, SQL Server, MySQL 8+, Oracle) to assign a row number per group, then delete where the number is greater than 1.</p><pre><code>-- Keep the row with the lowest id per (name, city) group\nDELETE FROM users\nWHERE id IN (\n  SELECT id FROM (\n    SELECT id, ROW_NUMBER() OVER (\n      PARTITION BY name, city ORDER BY id\n    ) AS rn\n    FROM users\n  ) t\n  WHERE rn &gt; 1\n);</code></pre><p>In MySQL this works in one statement (no inner SELECT wrap needed if your version supports it).</p><h4>3. Other patterns</h4><ul><li><strong>Self-join</strong> - <code>DELETE a FROM users a JOIN users b ON a.name = b.name AND a.id &gt; b.id</code> (MySQL).</li><li><strong>SELECT INTO new table, TRUNCATE, INSERT DISTINCT</strong> - useful when the table is huge and you want to swap it out atomically.</li><li><strong>Unique index</strong> - prevent duplicates going forward with <code>UNIQUE (name, city)</code>.</li></ul>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "SQL",
+        "Deduplication",
+        "Window Functions"
+      ],
+      "keyPoints": [
+        "DISTINCT and GROUP BY remove duplicates from a query result.",
+        "DELETE duplicates with ROW_NUMBER() OVER (PARTITION BY ... ) and keep rn = 1.",
+        "Add a UNIQUE index to prevent duplicates going forward."
+      ]
+    },
+    {
+      "question": "How do you handle NULL values and conditional mapping in SQL?",
+      "answer": "<p>SQL has dedicated functions and operators for NULL handling, and <code>CASE WHEN</code> for conditional logic.</p><h4>NULL-handling functions</h4><ul><li><strong>COALESCE(a, b, c, ...)</strong> - returns the first non-NULL argument. ANSI standard, works in every engine.</li><li><strong>ISNULL(a, b)</strong> (SQL Server, MySQL) / <strong>IFNULL(a, b)</strong> (MySQL) / <strong>NVL(a, b)</strong> (Oracle) - two-argument version of COALESCE.</li><li><strong>NULLIF(a, b)</strong> - returns NULL if a = b, otherwise returns a. Useful to suppress 'divisor is zero' or 'no change' signals.</li></ul><h4>Filtering</h4><ul><li><code>WHERE col IS NULL</code> and <code>WHERE col IS NOT NULL</code> - the only correct way. <code>= NULL</code> is always UNKNOWN, never TRUE.</li></ul><h4>Conditional mapping</h4><ul><li><strong>CASE WHEN</strong> - the SQL if/else. Works in SELECT, WHERE, ORDER BY, and aggregations.</li></ul><pre><code>-- COALESCE: first non-null fallback\nSELECT\n  user_id,\n  COALESCE(nickname, full_name, 'Anonymous') AS display_name\nFROM users;\n\n-- NULLIF: turn a magic value into NULL\nSELECT\n  order_id,\n  total / NULLIF(items_count, 0) AS avg_item_price  -- avoid /0\nFROM orders;\n\n-- CASE WHEN: conditional bucketing\nSELECT\n  user_id,\n  age,\n  CASE\n    WHEN age &lt; 18 THEN 'minor'\n    WHEN age BETWEEN 18 AND 64 THEN 'adult'\n    ELSE 'senior'\n  END AS age_group\nFROM users;</code></pre><h4>Gotchas</h4><ul><li><code>NULL = NULL</code> is UNKNOWN, not TRUE - use <code>IS NULL</code> for equality tests with NULL.</li><li>Aggregates (<code>SUM</code>, <code>COUNT(*)</code>) ignore NULLs except <code>COUNT(*)</code>; use <code>COALESCE(SUM(x), 0)</code> to turn a NULL sum into 0.</li><li>Most JOINs treat NULLs as unequal to each other - <code>t1.a = t2.a</code> does not match two NULLs. Use <code>IS NOT DISTINCT FROM</code> (SQL standard) when you need NULL = NULL to match.</li></ul>",
+      "difficulty": "Intermediate",
+      "tags": [
+        "SQL",
+        "NULL",
+        "CASE",
+        "Functions"
+      ],
+      "keyPoints": [
+        "COALESCE returns the first non-NULL argument; ISNULL/IFNULL/NVL are 2-arg equivalents.",
+        "Always use IS NULL / IS NOT NULL for filtering; = NULL is always UNKNOWN.",
+        "CASE WHEN is the SQL if/else and is the standard way to do conditional mapping."
+      ]
     }
   ]
 }

@@ -40,11 +40,13 @@ import { aiEngineerRealQuestionsA } from './interviewQuestionsAIEngineerRealA.js
 import { aiEngineerRealQuestionsB } from './interviewQuestionsAIEngineerRealB.js'
 import { ragQuestions } from './interviewQuestionsRAG.js'
 import { microservicesQuestions } from './interviewQuestionsMicroservices.js'
+import { kafkaQuestions } from './interviewQuestionsKafka.js'
+import { llmQuestions } from './interviewQuestionsLLM.js'
 
 export const interviewCategories = {
   backend: {
     title: 'Backend Technologies',
-    subjects: ['java', 'spring-boot', 'python', 'microservices', 'design-patterns']
+    subjects: ['java', 'spring-boot', 'python', 'microservices', 'kafka', 'design-patterns']
   },
   web: {
     title: 'Web Technologies',
@@ -68,7 +70,7 @@ export const interviewCategories = {
   },
   ai: {
     title: 'AI & Machine Learning',
-    subjects: ['ai-engineer']
+    subjects: ['ai-engineer', 'llm']
   }
 }
 
@@ -96,6 +98,12 @@ const interviewSubjectMeta = {
     icon: '🔗',
     description: 'Service architecture, Spring Boot, Python (FastAPI), service discovery, resilience, Docker, and event-driven patterns.',
     topics: ['Service Discovery', 'API Gateway', 'Circuit Breaker', 'Docker', 'Spring Cloud', 'FastAPI', 'Saga', 'Kafka']
+  },
+  kafka: {
+    title: 'Kafka Interview Questions',
+    icon: '📨',
+    description: 'Kafka architecture, partitioning, consumer lag, exactly-once processing, Dead Letter Queue, and message ordering.',
+    topics: ['Architecture', 'Partitioning', 'Consumer Lag', 'Exactly-Once', 'DLQ', 'Ordering', 'Replay', 'Kafka vs RabbitMQ']
   },
   'design-patterns': {
     title: 'Design Patterns Interview Questions',
@@ -204,6 +212,12 @@ const interviewSubjectMeta = {
     icon: '🤖',
     description: 'Machine learning, deep learning, LLMs, MLOps, NLP, computer vision, RAG systems, and AI system design.',
     topics: ['LLMs', 'MLOps', 'Deep Learning', 'NLP', 'Computer Vision', 'RAG', 'System Design', 'Statistics']
+  },
+  llm: {
+    title: 'LLM & NLP Interview Questions',
+    icon: '🧠',
+    description: 'Large Language Models, Transformers, attention, tokenization, embeddings, Seq2Seq, BERT vs GPT, beam search, and NLP fundamentals.',
+    topics: ['LLMs', 'Transformers', 'Attention', 'Tokenization', 'Embeddings', 'Seq2Seq', 'Encoder/Decoder', 'Autoregressive vs Masked', 'Beam Search']
   }
 }
 
@@ -293,7 +307,9 @@ export const interviewQuestions = {
       ...ragQuestions.questions,
     ],
   },
-  microservices: { questions: microservicesQuestions.questions }
+  microservices: { questions: microservicesQuestions.questions },
+  kafka: { questions: kafkaQuestions.questions },
+  llm: { questions: llmQuestions.questions }
 }
 
 export const interviewSubjects = Object.fromEntries(

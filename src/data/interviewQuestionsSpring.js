@@ -1272,6 +1272,66 @@ export const springQuestions = {
                 "Push heavy work to async (Kafka/SQS) and cache reads (Caffeine + Redis) — the DB is the real bottleneck.",
                 "Rate-limit at the gateway, use Resilience4j bulkheads, and size HikariCP at cores*2-4, not 50."
           ]
+    },
+    {
+          "question": "Why might @Transactional fail when one method calls another method in the same class?",
+          "answer": "<p>Spring's <code>@Transactional</code> is implemented via AOP proxies. When a method is called through the proxy (e.g. from another bean, or via a controller), Spring wraps the call with transaction-management advice. But when a method in the same class calls another <code>@Transactional</code> method via <code>this</code>, the call goes through the raw object reference, <strong>bypassing the proxy</strong>, so the inner <code>@Transactional</code> is ignored.</p><h4>Why this happens</h4><ul><li>Spring uses JDK dynamic proxies (interfaces) or CGLIB proxies (classes) to wrap the bean.</li><li>The proxy is a separate object that the container injects. The bean's own internal <code>this.method()</code> calls the unproxied target directly.</li><li>Result: the inner method runs in the caller's transaction context (or none) instead of starting a new transaction as configured.</li></ul><h4>Solutions</h4><ul><li><strong>Inject self via @Autowired</strong> — <code>@Autowired private MyService self;</code> (with <code>@Lazy</code> to avoid circular injection) and call <code>self.innerMethod()</code>.</li><li><strong>AopContext.currentProxy()</strong> — Cast <code>((MyService) AopContext.currentProxy()).innerMethod()</code>. Requires <code>@EnableAspectJAutoProxy(exposeProxy = true)</code>.</li><li><strong>Split into separate beans</strong> — Move the inner method to another <code>@Service</code> and inject it. The proxy boundary is now between beans, so AOP advice applies.</li><li><strong>Programmatic transactions</strong> — Use <code>TransactionTemplate</code> inside the inner method. Bypasses AOP entirely.</li></ul><pre><code>// Problematic — inner @Transactional is ignored\n@Service\npublic class OrderService {\n    @Transactional\n    public void placeOrder() { reserveStock(); }   // this.reserveStock() bypasses proxy\n\n    @Transactional(propagation = REQUIRES_NEW)\n    public void reserveStock() { /* ... */ }\n}\n\n// Fix 1: self-injection\n@Service\npublic class OrderService {\n    @Autowired @Lazy private OrderService self;\n\n    @Transactional\n    public void placeOrder() { self.reserveStock(); }\n}\n\n// Fix 3: split beans\n@Service\npublic class OrderService {\n    @Autowired private StockService stockService;\n\n    @Transactional\n    public void placeOrder() { stockService.reserveStock(); }\n}</code></pre>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Spring",
+                "Transactions",
+                "AOP"
+          ],
+          "keyPoints": [
+                "Spring @Transactional works via AOP proxies; calling this.method() inside the same class bypasses the proxy and the inner transaction annotation is ignored.",
+                "Fix options: self-injection via @Autowired @Lazy, AopContext.currentProxy() with exposeProxy=true, splitting into separate beans, or using TransactionTemplate.",
+                "The proxy boundary exists between beans, not within them — that is the root cause."
+          ]
+    },
+    {
+          "question": "What strategies would you use to prevent cache stampede in Redis?",
+          "answer": "<p>A <strong>cache stampede</strong> (thundering herd) happens when a popular cache key expires and many concurrent requests miss at the same time, all hitting the database to recompute the value. The DB then becomes the bottleneck, latency spikes, and a single expiry can take down the backend.</p><h4>Strategies</h4><ul><li><strong>Single-flight (mutex / request coalescing)</strong> — On miss, only one thread fetches from DB; others wait for the result. Implement with <code>SET NX</code> on a short-lived lock key in Redis.</li><li><strong>Probabilistic early expiry (XFetch)</strong> — Recompute the value before it actually expires with probability that rises as expiry approaches. Spreads recomputation across time.</li><li><strong>Pre-warming the cache</strong> — Background job refreshes hot keys shortly before expiry. Common for product pages, leaderboards, configuration.</li><li><strong>Staggered TTLs</strong> — Add small random jitter to TTLs (<code>TTL ± 10%</code>) so keys expire at different times, preventing synchronized misses.</li><li><strong>Request coalescing in the application</strong> — Use <code>Caffeine</code> async cache loader; many in-flight requests for the same key share one load operation.</li><li><strong>Distributed lock (Redlock)</strong> — Stronger mutex semantics across multiple Redis nodes. Use when the lock itself is critical.</li><li><strong>Soft TTL with background refresh</strong> — Store <code>(value, computedAt, ttl)</code>. If <code>now &gt; computedAt + ttl * 0.8</code>, return cached value but trigger async refresh.</li></ul><h4>Trade-offs</h4><ul><li>Single-flight adds latency for waiters but protects the DB.</li><li>XFetch is simple and effective for hot keys; less so for cold keys with bursty traffic.</li><li>Pre-warming is the gold standard for known hot keys; needs a scheduler.</li></ul><pre><code>// Single-flight with Redis lock\npublic String getValue(String key) {\n    String cached = redis.get(key);\n    if (cached != null) return cached;\n\n    String lockKey = \"lock:\" + key;\n    boolean acquired = redis.set(lockKey, \"1\", \"NX\", \"PX\", 5000);\n    if (acquired) {\n        try {\n            String value = db.computeValue(key);   // slow\n            redis.setex(key, 300, value);\n            return value;\n        } finally {\n            redis.del(lockKey);\n        }\n    } else {\n        // Brief retry loop, then return stale or fallback\n        Thread.sleep(50);\n        return redis.get(key);\n    }\n}\n\n// XFetch: recompute early with rising probability\nboolean shouldRecompute(String key, int ttl, int delta) {\n    double expiry = (double) ttl;                // ms remaining\n    double rand = ThreadLocalRandom.current().nextDouble();\n    double xfetch = delta * Math.log(rand) * -1;\n    return xfetch &gt;= expiry;                    // recompute when probability crosses remaining TTL\n}</code></pre>",
+          "difficulty": "Advanced",
+          "tags": [
+                "Redis",
+                "Caching",
+                "Performance",
+                "Scalability"
+          ],
+          "keyPoints": [
+                "Cache stampede = many concurrent misses on the same key flooding the DB after expiry; the cure is making sure only one request rebuilds the value at a time.",
+                "Common fixes: single-flight (Redis SET NX lock), XFetch probabilistic early expiry, background pre-warming, and staggered TTLs with jitter.",
+                "Pick per workload: single-flight for correctness, pre-warming for known hot keys, staggered TTLs as a cheap default for all keys."
+          ]
+    },
+    {
+          "question": "What is the difference between constructor injection and setter injection?",
+          "answer": "<p>Spring supports two main styles of dependency injection. Each has clear trade-offs.</p><h4>Constructor injection</h4><ul><li>Dependencies are passed via the class constructor.</li><li><strong>Mandatory dependencies:</strong> the object cannot be created without them - the container has to provide all of them.</li><li>Fields can be <code>final</code>, so the bean is <strong>immutable</strong> and inherently thread-safe.</li><li>Easier to unit test - just call <code>new MyService(mockA, mockB)</code>.</li><li><strong>Fails fast:</strong> if a required bean is missing, the application refuses to start, not at first use.</li><li>Spring's documentation recommends constructor injection for mandatory dependencies.</li></ul><h4>Setter injection</h4><ul><li>Dependencies are provided through <code>setX(...)</code> methods (or fields with <code>@Autowired</code>).</li><li>Good for <strong>optional dependencies</strong> with sensible defaults.</li><li>Allows <strong>reconfiguration</strong> after construction (e.g., re-binding at runtime).</li><li>Bean must expose setters, which forces mutability and breaks immutability.</li><li>Late failure: a missing optional dependency only surfaces when the setter is first called.</li></ul><h4>When to use which</h4><ul><li><strong>Constructor</strong> for required collaborators, services, repositories, and any dependency the bean cannot function without.</li><li><strong>Setter</strong> for optional features, configuration toggles, or legacy code where adding more constructors is impractical.</li><li>Avoid field injection (<code>@Autowired</code> on a field) - it hides dependencies, makes testing harder, and prevents <code>final</code>.</li></ul>",
+          "difficulty": "Intermediate",
+          "tags": [
+                "Spring Boot",
+                "Dependency Injection"
+          ],
+          "keyPoints": [
+                "Constructor = mandatory, immutable, fails fast, testable - Spring's recommendation.",
+                "Setter = optional, allows reconfiguration, but breaks immutability.",
+                "Avoid field injection; it hides dependencies and blocks final fields."
+          ]
+    },
+    {
+          "question": "How do you perform constructor injection without @Autowired?",
+          "answer": "<p>Since <strong>Spring 4.3</strong>, a class with a <em>single</em> constructor does not need <code>@Autowired</code> on it - Spring will auto-wire it implicitly.</p><pre><code>// No @Autowired needed - Spring auto-wires the only constructor\n@Service\npublic class OrderService {\n    private final OrderRepository repo;\n    private final NotificationService notifier;\n\n    public OrderService(OrderRepository repo, NotificationService notifier) {\n        this.repo = repo;\n        this.notifier = notifier;\n    }\n}</code></pre><h4>Why this matters</h4><ul><li><strong>Less boilerplate:</strong> one annotation is enough for the class to be a managed bean (<code>@Service</code>, <code>@Component</code>, etc.) - the constructor is auto-detected.</li><li><strong>Encourages best practice:</strong> a single constructor that lists all dependencies is the recommended Spring style.</li><li><strong>Immutability:</strong> the constructor lets you mark fields <code>final</code>, so the bean is thread-safe by construction.</li></ul><h4>What about multiple constructors?</h4><ul><li>If a class has <em>more than one</em> constructor, you must mark one of them with <code>@Autowired</code> so Spring knows which to use.</li><li>Alternatively, mark the default constructor with <code>@Autowired(required = false)</code> to make dependencies optional.</li></ul><h4>Pre-Java / older Spring</h4><ul><li>Before 4.3, even a single constructor required <code>@Autowired</code>.</li><li>If you must support older versions, add <code>@Autowired</code> explicitly for clarity.</li></ul><h4>Best practice</h4><ul><li>Keep one constructor per bean, no <code>@Autowired</code> required.</li><li>Mark dependencies <code>final</code> for immutability.</li><li>Use <code>@Autowired</code> only when you genuinely have multiple constructors or want a non-default one to be chosen.</li></ul>",
+          "difficulty": "Intermediate",
+          "tags": [
+                "Spring Boot",
+                "Dependency Injection",
+                "Annotations"
+          ],
+          "keyPoints": [
+                "Spring 4.3+: a class with a single constructor is auto-wired - no @Autowired needed.",
+                "Multiple constructors require @Autowired on the one Spring should use.",
+                "Best practice: one constructor, final fields, no @Autowired."
+          ]
     }
   ]
 }
