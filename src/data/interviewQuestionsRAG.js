@@ -262,6 +262,77 @@ export const ragQuestions = {
         "Two-stage retrieval (doc-level → chunk-level) and metadata pre-filtering give the biggest latency wins.",
         "Semantic caching, smaller/quantized embeddings, and async re-indexing control cost and freshness."
       ]
+    },
+    {
+      question: "You're building a RAG system over annual reports and financial statements. Which retrieval strategy maximizes BOTH accuracy and recall — so a missed figure or a wrong value never makes it into the answer?",
+      answer: `<p>Finance RAG is <strong>high-stakes</strong>: a wrong revenue number or a flipped sign isn't a UX bug — it's a compliance issue. Pure vector search with top-k is <em>not enough</em>; it misses exact tokens like "Q3 2023" and hallucinates figures. The right strategy layers <strong>6 techniques</strong>.</p>
+<h4>1. Hybrid Retrieval (Dense + Sparse)</h4>
+<ul>
+<li><strong>Dense (vector) search</strong> excels at semantic match ("revenue growth" ≈ "top-line expansion").</li>
+<li><strong>Sparse (BM25/keyword) search</strong> excels at exact tokens like "Q3 2023", "₹4,521 Cr", company tickers.</li>
+<li>Combine scores: <code>final_score = α × dense_score + (1−α) × sparse_score</code> (typically α = 0.5–0.7).</li>
+<li>Use frameworks like <strong>Weaviate, Pinecone (sparse-dense), Qdrant, or Elasticsearch + vector</strong>.</li>
+</ul>
+<h4>2. Structure-Aware Chunking</h4>
+<ul>
+<li>Don't blindly split by 500 tokens — you'll cut a balance sheet table in half.</li>
+<li>Parse tables, line items, and statements as <strong>semantic units</strong>.</li>
+<li>Keep a figure attached to its <strong>label, period (FY/Q), and currency</strong>.</li>
+<li>Use tools like <strong>Unstructured.io, LlamaParse, or Azure Document Intelligence</strong> to preserve table structure.</li>
+</ul>
+<h4>3. Over-Retrieve + Re-rank</h4>
+<ul>
+<li>First pass: cast a wide net — retrieve top 50-100 chunks (high <strong>recall</strong>).</li>
+<li>Second pass: cross-encoder re-ranker (Cohere Rerank, BGE-reranker) pushes the truly relevant chunks to top 5-10 (high <strong>precision</strong>).</li>
+<li>Recall-first, then precision. Trade latency for accuracy.</li>
+</ul>
+<h4>4. Metadata Filtering (Pre-Retrieval)</h4>
+<ul>
+<li>Tag every chunk with: <strong>company, fiscal year, statement type, units (₹/$), period (Q3 / FY24)</strong>.</li>
+<li>Apply filters BEFORE retrieval: "2023 net income" should never pull a 2021 figure.</li>
+<li>Most vector DBs support metadata filtering natively (Pinecone, Weaviate, Qdrant, pgvector).</li>
+</ul>
+<h4>5. Grounding + Self-Verification</h4>
+<ul>
+<li>Force the LLM to cite <strong>the exact source line</strong> for every figure.</li>
+<li>Add a <strong>numeric-consistency check</strong>: every number in the answer must appear verbatim in the retrieved chunks.</li>
+<li>If a number can't be traced to retrieved evidence → reject the answer or flag it.</li>
+<li>Pattern: extract figures from answer, regex-match against retrieved text, raise alert on mismatch.</li>
+</ul>
+<h4>6. Domain-Specific Evaluation</h4>
+<ul>
+<li>Track <strong>recall@k</strong> AND <strong>faithfulness</strong> on a labeled financial Q&amp;A set.</li>
+<li>In finance, a <em>missed</em> figure (low recall) is as dangerous as a <em>wrong</em> figure (low precision).</li>
+<li>Eval metrics: <strong>Exact-Match accuracy</strong>, <strong>numeric F1</strong>, <strong>citation precision/recall</strong>, <strong>human-audited samples</strong>.</li>
+</ul>
+<h4>End-to-End Pipeline</h4>
+<pre><code class="language-text">Query: "What was TCS net income in Q3 FY24?"
+
+1. Metadata filter: company=TCS, year=FY24, period=Q3
+2. Hybrid retrieval: BM25 + dense → top 50 chunks
+3. Cross-encoder rerank → top 8 chunks
+4. Prompt with chunks + cite instructions
+5. LLM generates answer WITH citations
+6. Numeric verification: each number in answer → must appear in cited chunks
+7. Return: "TCS Q3 FY24 net income: ₹11,735 Cr [Source: TCS Q3FY24 earnings, page 4]"</code></pre>
+<h4>Why "Just Vector Search + Top-k" Fails</h4>
+<ul>
+<li>Embeddings don't preserve <strong>exact numeric values</strong> — "₹11,735 Cr" and "₹11,375 Cr" may have near-identical embeddings.</li>
+<li>Embeddings don't preserve <strong>period/currency</strong> — "Q3 FY24 ₹" and "FY23 ₹" can match similar chunks.</li>
+<li>Vector-only retrieval has <strong>~70-80% recall</strong> on financial QA — missing 20-30% is unacceptable for production.</li>
+<li>Hallucination rates jump without grounding verification.</li>
+</ul>
+<h4>TL;DR</h4>
+<p><strong>Hybrid retrieval → table-aware chunks → over-retrieve → cross-encoder re-rank → metadata filter → cite &amp; verify.</strong> "Good enough retrieval" isn't good enough in finance RAG.</p>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "RAG", "Finance"],
+      keyPoints: [
+        "Hybrid retrieval (dense + BM25) — embeddings miss exact tokens like 'Q3 FY24' or '₹4,521 Cr'",
+        "Structure-aware chunking — preserve tables, attach labels/periods/currency to each figure",
+        "Over-retrieve (50-100) → cross-encoder rerank → top 5-10: recall first, precision second",
+        "Metadata filter BEFORE retrieval (company/year/statement); ground + numeric verify in answer",
+        "Evaluate on recall@k AND faithfulness — missed figure is as bad as wrong figure in finance"
+      ]
     }
   ]
-}
+};

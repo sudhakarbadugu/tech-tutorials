@@ -1208,6 +1208,247 @@ Benjamini-Hochberg: control E[V/R]</code></pre>
         "PSI is a symmetric, practical metric for scoring stability.",
         "Both are computed per feature or on model output distributions."
       ]
+    },
+    {
+      question: "Your AI Agent keeps calling the same tool repeatedly and never reaches a final answer. What's the first thing you investigate, and how would you prevent it from happening again?",
+      answer: `<p>This is a classic <strong>agent loop</strong> — the agent doesn't know when to stop, so it keeps invoking the same tool hoping for a new result. The investigation focuses on <strong>why the model thinks more tool calls will help</strong>.</p>
+<h4>First Things to Investigate (in order)</h4>
+<ol>
+<li><strong>Inspect the trace/logs:</strong> Look at every step the agent took — which tool, what input, what output. Identify the cycle (e.g., search("X") → search("X") → search("X")).</li>
+<li><strong>Check the tool result:</strong> Is the tool returning useful information or the same unhelpful answer each time? A search tool that always returns "no results" will keep being called.</li>
+<li><strong>Check the prompt/instructions:</strong> Does the system prompt tell the agent when to stop? Is the "final answer" format clearly defined?</li>
+<li><strong>Check token/context issues:</strong> Long traces may be losing earlier reasoning context — the agent forgets it already tried this.</li>
+<li><strong>Check the model choice:</strong> Smaller/weaker models are more prone to loops because they don't recognize they've already tried something.</li>
+</ol>
+<h4>Prevention Strategies</h4>
+<ul>
+<li><strong>Max iterations cap:</strong> Hard limit (e.g., 10 steps) so the loop terminates even if the agent doesn't decide to stop.</li>
+<li><strong>Loop detection:</strong> Track last N tool calls — if the (tool_name, input) pair repeats, force a different action or end the run.</li>
+<li><strong>Explicit stop instruction:</strong> "After at most 3 searches, synthesize what you have and provide a final answer. If you don't have enough info, say so."</li>
+<li><strong>Structured outputs:</strong> Force the agent to choose a tool OR a final answer each step (not both).</li>
+<li><strong>Cost/time budget:</strong> Reject tool calls when the cumulative cost or wall time crosses a threshold.</li>
+<li><strong>Reflection step:</strong> Before each tool call, ask the agent: "Will this new tool call give me information I don't already have?"</li>
+</ul>
+<h4>Production Examples</h4>
+<pre><code class="language-text">LangGraph:   set recursion_limit=10, use Command(goto=END) on repeated state
+CrewAI:      max_iter parameter on Task
+Custom:      "If last 3 tool calls are identical, respond with 'unable to proceed'"</code></pre>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "Agents", "Production"],
+      keyPoints: [
+        "Agent loop = same tool called repeatedly, never terminates",
+        "Investigate: trace logs, tool result quality, system prompt, context length, model choice",
+        "Prevention: max-iteration cap, loop detection, explicit stop instructions, structured outputs",
+        "LangGraph has recursion_limit; CrewAI has max_iter; custom agents need explicit termination logic"
+      ]
+    },
+    {
+      question: "Your agent returns different answers for the same user query. Nothing changed in the code. What could be causing the inconsistency, and how would you debug it?",
+      answer: `<p>Non-deterministic behavior in agents usually comes from <strong>temperature/sampling</strong>, <strong>state</strong>, or <strong>external dependencies</strong> — not the code itself.</p>
+<h4>Root Causes (in order of likelihood)</h4>
+<ol>
+<li><strong>Temperature &gt; 0:</strong> Sampling from the model's token distribution gives different outputs each run. Even temp 0.3 produces variation across many tokens.</li>
+<li><strong>External tool non-determinism:</strong> Search APIs, vector DB results, time-dependent APIs (weather, news) return different data each call.</li>
+<li><strong>Session/conversation state:</strong> If the agent maintains memory across turns, a previous turn's state can influence the next — even with the same query, session context differs.</li>
+<li><strong>Rate limiting / partial responses:</strong> Slow APIs time out → truncated context → different reasoning path.</li>
+<li><strong>Parallel tool execution:</strong> Race conditions when multiple tools run concurrently and the order they complete varies.</li>
+<li><strong>GPU/server non-determinism:</strong> Floating-point reductions on GPU can produce slightly different logits across runs (especially with FlashAttention batching).</li>
+<li><strong>Prompt caching:</strong> LLM providers cache common prompt prefixes — sometimes the cache misses and a slightly different path is taken.</li>
+</ol>
+<h4>Debugging Methodology</h4>
+<ul>
+<li><strong>Reproduce with seed control:</strong> Set deterministic settings (temp=0, do_sample=False) — does the answer stabilize?</li>
+<li><strong>Mock external tools:</strong> Replace search/DB with deterministic stubs. If answers stabilize, the tool is the source.</li>
+<li><strong>Log full trace:</strong> Save every prompt, tool call, response, token logprob. Diff two runs to find the divergence point.</li>
+<li><strong>Fix session memory:</strong> Make sure each "same query" test starts from a clean session (no leftover state).</li>
+<li><strong>Add observability:</strong> LangSmith, LangFuse, Phoenix, or Arize — track input/output distribution and variance over time.</li>
+</ul>
+<h4>Production Fixes</h4>
+<ul>
+<li>Set temperature = 0 for factual tasks; allow higher only for creative tasks.</li>
+<li>Cache tool results aggressively (deterministic for short windows).</li>
+<li>Snapshot session state per request; don't bleed state between users.</li>
+<li>Add an eval suite that re-runs the same query N times and asserts variance &lt; threshold.</li>
+</ul>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "Agents", "Reliability"],
+      keyPoints: [
+        "Common causes: temperature&gt;0, non-deterministic tools, session memory, parallel tool execution, GPU non-determinism",
+        "Debug: set temp=0, mock external tools, log full trace, isolate session memory",
+        "Use LangSmith/LangFuse/Phoenix for observability; track output variance over time",
+        "Production fix: temp=0 for factual, cache tool results, snapshot sessions, eval suite checks variance"
+      ]
+    },
+    {
+      question: "How would you know if your AI agent is actually improving? What metrics would you track beyond 'it seems to work'?",
+      answer: `<p>"It seems to work" is the worst form of agent evaluation. Production agents need <strong>quantitative metrics across task success, reliability, latency, and cost</strong>.</p>
+<h4>Core Metrics to Track</h4>
+<h4>1. Task Success Metrics</h4>
+<ul>
+<li><strong>Task completion rate:</strong> % of user queries where the agent reaches a final, correct answer (vs. errors, "I don't know", or infinite loops).</li>
+<li><strong>Answer accuracy:</strong> Human-graded or auto-graded correctness against a labeled test set.</li>
+<li><strong>Faithfulness / Groundedness:</strong> Is the answer supported by retrieved context or tool results? (Especially for RAG agents.)</li>
+<li><strong>Tool selection accuracy:</strong> Did the agent pick the right tool for the job?</li>
+<li><strong>Argument accuracy:</strong> Were the tool arguments correct?</li>
+</ul>
+<h4>2. Reliability Metrics</h4>
+<ul>
+<li><strong>Loop rate:</strong> % of runs that hit the max-iteration cap.</li>
+<li><strong>Tool failure rate:</strong> % of tool calls that errored or timed out.</li>
+<li><strong>Hallucination rate:</strong> % of answers containing claims unsupported by tool output.</li>
+<li><strong>Variance:</strong> Run the same query N times, measure output consistency.</li>
+</ul>
+<h4>3. Performance &amp; Cost Metrics</h4>
+<ul>
+<li><strong>Latency (p50, p95, p99):</strong> Time from query to final answer — different percentiles reveal tail issues.</li>
+<li><strong>Tokens per query:</strong> Input + output tokens consumed (cost driver).</li>
+<li><strong>Cost per task:</strong> Total $ spent (LLM calls + tool costs + compute).</li>
+<li><strong>Steps per task:</strong> Number of agent steps/tool calls to complete a task.</li>
+</ul>
+<h4>4. User Experience Metrics</h4>
+<ul>
+<li><strong>Thumbs up/down rate:</strong> Direct user feedback.</li>
+<li><strong>Conversation length:</strong> How many turns until resolution (for chat agents).</li>
+<li><strong>Abandonment rate:</strong> Users who left without resolution.</li>
+<li><strong>Re-query rate:</strong> % of users who ask the same question again — suggests bad answers.</li>
+</ul>
+<h4>Evaluation Approaches</h4>
+<ul>
+<li><strong>Offline eval sets:</strong> Curated test cases with expected answers; run before each deploy.</li>
+<li><strong>LLM-as-judge:</strong> Use a strong model (GPT-4o) to grade outputs against rubrics. Cheap and scalable but has biases.</li>
+<li><strong>A/B testing:</strong> Route 10% of traffic to a new version, compare metrics.</li>
+<li><strong>Human review:</strong> Sample N% of production traces for manual grading weekly.</li>
+<li><strong>Regression tests:</strong> Lock down known-good answers; alert if they regress.</li>
+</ul>
+<h4>What "Improving" Looks Like</h4>
+<p>An agent is improving when its <strong>task completion rate</strong> goes up, <strong>latency/cost</strong> go down, <strong>loop/error rates</strong> drop, and <strong>user satisfaction</strong> (thumbs) rises — measured across a representative eval set, not just one demo query.</p>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "Agents", "Evaluation"],
+      keyPoints: [
+        "Track 4 categories: task success, reliability, performance/cost, user experience",
+        "Task success: completion rate, accuracy, groundedness, tool selection accuracy",
+        "Reliability: loop rate, tool failure rate, hallucination rate, output variance",
+        "Eval methods: offline sets, LLM-as-judge, A/B testing, human review, regression tests"
+      ]
+    },
+    {
+      question: "A user asks a task that requires retrieval, planning, reasoning, and multiple tool calls. How would you design the workflow — single agent, multi-agent, or orchestrator? Why?",
+      answer: `<p>This depends on task complexity, latency budget, and maintainability. Here's the decision framework.</p>
+<h4>Decision Matrix</h4>
+<table style='border-collapse:collapse;margin:10px 0;'>
+<tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Approach</th><th style='padding:8px;border:1px solid #ddd;'>Best for</th><th style='padding:8px;border:1px solid #ddd;'>Avoid when</th></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Single agent</td><td style='padding:8px;border:1px solid #ddd;'>Tasks where one reasoning loop can hold all context; &lt; 10 steps</td><td style='padding:8px;border:1px solid #ddd;'>Context overflow, conflicting instructions</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Multi-agent (peer)</td><td style='padding:8px;border:1px solid #ddd;'>Tasks needing parallel expertise (researcher + coder)</td><td style='padding:8px;border:1px solid #ddd;'>You need deterministic control flow</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Orchestrator + workers</td><td style='padding:8px;border:1px solid #ddd;'>Complex tasks with clear subtasks; need control &amp; observability</td><td style='padding:8px;border:1px solid #ddd;'>Latency-critical; simple tasks</td></tr>
+</table>
+<h4>Option A: Single Agent with Tools</h4>
+<pre><code class="language-text">User → Agent → [decides] → tool: search / code / db → result → Agent → ... → final answer
+
+Pros: simpler, lower latency, fewer moving parts
+Cons: long context, all logic in one prompt, hard to debug</code></pre>
+<p>Good for: tasks under 10 steps, where one model can hold all the state.</p>
+<h4>Option B: Orchestrator + Specialized Workers</h4>
+<pre><code class="language-text">User → Orchestrator → Planner (decomposes task)
+                       ↓
+                     Workers (in parallel):
+                       - Researcher: searches web/docs
+                       - Coder: writes/executes code
+                       - Analyst: processes data
+                       - Critic: reviews output
+                     Planner aggregates → Orchestrator → final answer
+
+Pros: each agent has focused prompt/context, easier to test, better observability
+Cons: more complex, more LLM calls (higher cost/latency)</code></pre>
+<p>Good for: production systems, complex domains, when you need to swap/upgrade agents independently.</p>
+<h4>Option C: Multi-Agent (Peer-to-Peer)</h4>
+<pre><code class="language-text">User → Agent A ↔ Agent B ↔ Agent C (all talk to each other)
+                     ↓
+                 Consensus → final answer
+
+Pros: emergent collaboration, debate/verification patterns
+Cons: hard to control flow, can loop, hard to debug</code></pre>
+<p>Good for: research/exploration; rarely the right production choice.</p>
+<h4>Recommended Pattern (Production)</h4>
+<p><strong>Orchestrator + workers with explicit handoffs</strong>. Why:</p>
+<ul>
+<li><strong>Observability:</strong> Each step is a discrete graph node — easy to log, trace, replay.</li>
+<li><strong>Testability:</strong> Each worker can be unit-tested independently.</li>
+<li><strong>Reliability:</strong> Control flow is deterministic; agent decides only "what to do next", not "how to coordinate".</li>
+<li><strong>Cost control:</strong> Different workers can use different model sizes (small for research, big for synthesis).</li>
+</ul>
+<p>Implement in <strong>LangGraph</strong> (state machine), <strong>CrewAI</strong> (role-based), or <strong>Temporal/Airflow</strong> (durable workflows).</p>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "Agents", "System Design"],
+      keyPoints: [
+        "Single agent: simple, low latency, fine for < 10 steps with one context",
+        "Orchestrator + workers: best for production — explicit control flow, observability, testability",
+        "Multi-agent peer-to-peer: hard to control, can loop, good for research not production",
+        "Use LangGraph (state machine), CrewAI (roles), or Temporal (durable workflows) to implement orchestrator pattern"
+      ]
+    },
+    {
+      question: "Your agent works perfectly with 100 users. Now it must support 100,000 users. What breaks first — latency, cost, memory, or tool reliability? And how would you redesign the architecture?",
+      answer: `<p>Scaling an agent 1000x exposes constraints that don't show up in dev. Here's what typically breaks and how to fix it.</p>
+<h4>What Breaks First (in order)</h4>
+<ol>
+<li><strong>LLM API rate limits &amp; cost:</strong> Most agents at 100 users cost &lt; $100/day. At 100K users, naive design = $100K+/day.</li>
+<li><strong>Latency p95/p99:</strong> Sequential agent steps (5 LLM calls × 2 sec each = 10 sec) become unacceptable at scale.</li>
+<li><strong>Tool API rate limits:</strong> Search, code exec, DBs all have throttling — 100K concurrent agents will hammer them.</li>
+<li><strong>Vector DB QPS:</strong> Retrieval throughput becomes the bottleneck.</li>
+<li><strong>Memory of state:</strong> Long-running agent state in memory doesn't survive restarts and doesn't scale horizontally.</li>
+<li><strong>Observability storage:</strong> 100K × 10 steps × 5 logs = 5B log lines/day. Tracing breaks.</li>
+</ol>
+<h4>Architecture Redesign</h4>
+<h4>1. Cost Optimization (highest leverage)</h4>
+<ul>
+<li><strong>Caching layer:</strong> Cache identical/near-identical queries. Cache tool results for short TTLs.</li>
+<li><strong>Model cascading:</strong> Try a small model first; escalate to big model only when needed. Saves 70%+ on cost.</li>
+<li><strong>Token optimization:</strong> Compress long tool outputs, summarize intermediate state, use smaller context windows per call.</li>
+<li><strong>Batch processing:</strong> Group similar queries; process asynchronously where possible.</li>
+</ul>
+<h4>2. Latency Reduction</h4>
+<ul>
+<li><strong>Parallelize independent tool calls:</strong> Run search + db lookup concurrently instead of sequentially.</li>
+<li><strong>Speculative execution:</strong> Start the next likely step before the current one completes.</li>
+<li><strong>Streaming responses:</strong> Show partial output as soon as it starts — perceived latency drops dramatically.</li>
+<li><strong>Pre-warming:</strong> Keep models loaded in GPU memory; avoid cold-start delays.</li>
+</ul>
+<h4>3. Throughput Scaling</h4>
+<ul>
+<li><strong>Horizontal scaling:</strong> Stateless workers behind a load balancer. Use Kubernetes or serverless (Lambda/Cloud Run).</li>
+<li><strong>Queue-based architecture:</strong> Decouple request intake from execution (SQS/Kafka/Pulsar). Workers pull jobs.</li>
+<li><strong>Persistent state:</strong> Move agent state to Redis or Postgres, not in-process. Enables recovery and scaling.</li>
+</ul>
+<h4>4. Tool Reliability</h4>
+<ul>
+<li><strong>Circuit breakers:</strong> If a tool fails X times, stop calling it and use a fallback.</li>
+<li><strong>Retries with backoff:</strong> Exponential backoff on transient errors.</li>
+<li><strong>Tool result caching:</strong> Same query within window → cached result. Critical for read-heavy tools.</li>
+<li><strong>Bulkheads:</strong> Isolate failures — slow search API shouldn't block DB queries.</li>
+<li><strong>Rate limit aware clients:</strong> Token bucket / leaky bucket per tool.</li>
+</ul>
+<h4>5. Observability at Scale</h4>
+<ul>
+<li><strong>Sampling:</strong> Log full trace for 1% of requests, lightweight metrics for the rest.</li>
+<li><strong>Distributed tracing:</strong> OpenTelemetry to correlate steps across services.</li>
+<li><strong>Dedicated log infra:</strong> Datadog, Honeycomb, Grafana Cloud — not stdout.</li>
+</ul>
+<h4>6. Memory Architecture</h4>
+<ul>
+<li><strong>Short-term:</strong> Redis for per-session state.</li>
+<li><strong>Long-term:</strong> Vector DB (Pinecone, Weaviate) for user preferences, history, knowledge.</li>
+<li><strong>Shared knowledge:</strong> Pre-computed embeddings + cache, not on-demand compute.</li>
+</ul>
+<h4>TL;DR Priority Order</h4>
+<p>Cost &gt; latency &gt; tool reliability &gt; memory &gt; observability. Most agents at this scale need a <strong>queue-based architecture with model cascading, aggressive caching, and circuit breakers on every external dependency</strong>.</p>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "Agents", "Scalability"],
+      keyPoints: [
+        "Bottleneck order: LLM API rate limits/cost → latency p95 → tool rate limits → vector DB → memory → observability",
+        "Cost: caching + model cascading (small→big) saves 70%+; token compression; batch processing",
+        "Throughput: queue-based architecture (SQS/Kafka), stateless workers, persistent state in Redis/Postgres",
+        "Reliability: circuit breakers, retries with backoff, tool result caching, bulkheads, rate-limit aware clients"
+      ]
     }
   ]
-}
+};
