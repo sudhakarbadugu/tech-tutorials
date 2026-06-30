@@ -12777,86 +12777,194 @@ public class RectangleTest {
         }
       ]
     },
-  'jdbc': {
-      title: 'JDBC (Java Database Connectivity)',
+
+};
+const javaModule7Content = {
+  'java-jdbc-intro': {
+      title: "JDBC Introduction & Architecture",
       sections: [
         {
-          heading: 'What is JDBC?',
+          heading: "What is JDBC?",
           content: [
-            "<strong>JDBC (Java Database Connectivity)</strong> is Java's standard API for connecting to databases.",
-            'It provides a set of classes and interfaces that let Java programs interact with relational databases like MySQL, PostgreSQL, Oracle, and SQL Server.',
-            'With JDBC, you can:',
-            '<ul><li>Connect to a database</li><li>Execute SQL queries</li><li>Insert, update, and delete data</li><li>Retrieve and process results</li></ul>',
-            'JDBC uses <strong>drivers</strong> — database-specific libraries that handle the communication between Java and the database.'
+            '<strong>JDBC (Java Database Connectivity)</strong> is Java\'s standard API for connecting to relational databases.',
+            "Defined under JSR-54, the API provides a set of classes and interfaces in <code>java.sql</code> and <code>javax.sql</code> packages.",
+            "JDBC is a vendor-neutral abstraction — the same Java code works against MySQL, PostgreSQL, Oracle, SQL Server, or any other RDBMS that provides a JDBC driver.",
+            "With JDBC, applications can:",
+            "<ul><li>Establish a connection to a database</li><li>Execute SQL statements (DDL, DML, queries)</li><li>Retrieve and process result sets</li><li>Manage transactions and connection pooling</li><li>Inspect database metadata (tables, schemas, supported features)</li></ul>"
           ]
         },
         {
-          heading: 'JDBC Setup: Connecting to a Database',
+          heading: "JDBC Architecture",
           content: [
-            'Before using JDBC, you need:',
-            '<ol><li>A database server running (e.g., MySQL, PostgreSQL)</li><li>The JDBC driver JAR file for your database</li><li>The database URL, username, and password</li></ol>',
-            'The <code>Connection</code> object represents a session with the database.',
-            'You obtain a connection using <code>DriverManager.getConnection()</code>.'
+            "JDBC has a layered architecture with four key components:",
+            "<ul><li><strong>Application</strong> — your Java code that calls the JDBC API</li><li><strong>JDBC API</strong> — <code>java.sql</code> / <code>javax.sql</code> interfaces (Connection, Statement, ResultSet, DataSource)</li><li><strong>JDBC Driver Manager / DataSource</strong> — chooses the right driver for the JDBC URL</li><li><strong>JDBC Driver</strong> — vendor-specific implementation that translates JDBC calls into database-native protocol</li></ul>",
+            "Different drivers handle the database communication differently. The JDBC API stays the same — only the driver changes."
+          ]
+        },
+        {
+          heading: "JDBC Driver Types",
+          content: [
+            "There are four driver types, classified by how they communicate with the database:",
+            "<ul>",
+            "<li><strong>Type 1 — JDBC-ODBC Bridge</strong>: Translates JDBC to ODBC, then ODBC talks to the DB. Requires ODBC driver installed. Removed from JDK 8+.</li>",
+            "<li><strong>Type 2 — Native-API Driver</strong>: Converts JDBC calls to database-specific native calls (e.g., Oracle OCI). Requires native library on the client.</li>",
+            "<li><strong>Type 3 — Network Protocol Driver</strong>: Sends JDBC calls to a middleware server, which then talks to the DB. No native code on the client.</li>",
+            "<li><strong>Type 4 — Thin Driver (Pure Java)</strong>: Converts JDBC calls directly to the database-specific network protocol. Pure Java, portable, no native code. Most modern drivers are Type 4.</li>",
+            "</ul>",
+            "In practice, you should always choose a <strong>Type 4 driver</strong> for new projects."
+          ]
+        },
+        {
+          heading: "JDBC URL Format",
+          content: [
+            "Every database has a JDBC URL that the driver uses to connect.",
+            "The format is vendor-specific but follows the pattern <code>jdbc:&lt;subprotocol&gt;:&lt;subname&gt;</code>.",
+            "Common JDBC URLs:"
+          ],
+          code: `// MySQL
+"jdbc:mysql://hostname:3306/databaseName"
+
+// MySQL with parameters
+"jdbc:mysql://localhost:3306/mydb?useSSL=false&serverTimezone=UTC"
+
+// PostgreSQL
+"jdbc:postgresql://localhost:5432/mydb"
+
+// Oracle (thin)
+"jdbc:oracle:thin:@hostname:1521:sid"
+
+// SQL Server
+"jdbc:sqlserver://localhost:1433;databaseName=mydb"
+
+// H2 (in-memory)
+"jdbc:h2:mem:testdb"
+
+// SQLite
+"jdbc:sqlite:./mydb.db"`
+        },
+        {
+          heading: "Core JDBC Classes and Interfaces",
+          content: [
+            "The most important types in <code>java.sql</code>:",
+            "<ul>",
+            "<li><code>DriverManager</code> — service for selecting a driver and creating connections (older approach)</li>",
+            "<li><code>DataSource</code> — modern, JNDI-friendly alternative to <code>DriverManager</code></li>",
+            "<li><code>Connection</code> — represents a session with a specific database</li>",
+            "<li><code>Statement</code> — executes static SQL statements</li>",
+            "<li><code>PreparedStatement</code> — precompiled SQL with bind parameters (recommended)</li>",
+            "<li><code>CallableStatement</code> — invokes stored procedures</li>",
+            "<li><code>ResultSet</code> — represents the result of a SELECT query</li>",
+            "<li><code>ResultSetMetaData</code> — information about the columns in a ResultSet</li>",
+            "<li><code>DatabaseMetaData</code> — information about the database itself</li>",
+            "<li><code>SQLException</code> — checked exception for all database errors</li>",
+            "</ul>"
+          ]
+        },
+        {
+          heading: "The Connection Lifecycle",
+          content: [
+            "A typical JDBC interaction follows this lifecycle:",
+            "<ol>",
+            "<li><strong>Load the driver</strong> (now automatic via SPI in modern drivers — JDBC 4.0+)</li>",
+            "<li><strong>Open a connection</strong> with <code>DriverManager.getConnection()</code> or from a <code>DataSource</code></li>",
+            "<li><strong>Create a statement</strong> (<code>Connection.createStatement()</code> or <code>prepareStatement()</code>)</li>",
+            "<li><strong>Execute the statement</strong> — <code>executeQuery()</code> for SELECT, <code>executeUpdate()</code> for INSERT/UPDATE/DELETE, <code>execute()</code> for both</li>",
+            "<li><strong>Process the ResultSet</strong> (for SELECT) or check the affected-row count (for DML)</li>",
+            "<li><strong>Close the resources</strong> in reverse order: ResultSet → Statement → Connection. Use try-with-resources to do this automatically.</li>",
+            "</ol>",
+            "Failing to close connections leaks database resources and can quickly exhaust the connection pool."
+          ]
+        },
+        {
+          heading: "When to Use Raw JDBC vs ORM",
+          content: [
+            "JDBC is the foundation — JPA, Hibernate, MyBatis, and Spring Data all sit on top of it.",
+            "Use raw JDBC when:",
+            "<ul><li>You need full control over the SQL and execution plan</li><li>Performance is critical (no ORM overhead)</li><li>You are building a small utility or batch job</li><li>You are doing bulk operations that are awkward in ORM (mass updates, COPY)</li><li>You need stored-procedure calls with complex cursor/REF cursor handling</li></ul>",
+            "Use an ORM (Hibernate/JPA) when:",
+            "<ul><li>You have many CRUD-style operations on object graphs</li><li>You want database portability across vendors</li><li>You want automatic schema migrations and lazy loading</li><li>Application complexity is high and writing SQL for every operation is tedious</li></ul>",
+            "Many real-world applications mix both — JDBC for hot paths and reporting, JPA for the bulk of CRUD."
+          ]
+        },
+        {
+          heading: "Try it Yourself",
+          content: [
+            "Setup tasks:",
+            "<ol>",
+            "<li>Install a database (e.g., PostgreSQL or MySQL — or use H2 for an in-memory zero-install option).</li>",
+            '<li>Add the JDBC driver for your database to your project\'s classpath (via Maven/Gradle or JAR).</li>',
+            "<li>Write a small program that opens a connection and prints the database version using <code>DatabaseMetaData.getDatabaseProductVersion()</code>.</li>",
+            "<li>Identify the driver type (Type 1-4) for your database of choice and explain why.</li>",
+            "</ol>"
+          ]
+        }
+      ]
+    },
+  'java-jdbc-connections': {
+      title: "Establishing Connections",
+      sections: [
+        {
+          heading: "DriverManager vs DataSource",
+          content: [
+            "JDBC offers two primary ways to obtain a <code>Connection</code>:",
+            "<ul>",
+            "<li><strong>DriverManager</strong> — the original, pre-JDBC 4 approach. You call <code>DriverManager.getConnection(url, user, password)</code> and it picks a driver that recognizes the URL.</li>",
+            "<li><strong>DataSource</strong> — the modern, recommended approach (since JDBC 2.0, formalized in JDBC 4). A DataSource is an object you look up (often via JNDI) that encapsulates connection details and supports connection pooling.</li>",
+            "</ul>",
+            "DataSource is preferred because it decouples the application from connection details, supports pooling transparently, and is the standard for container-managed environments (Tomcat, WildFly, Spring)."
+          ]
+        },
+        {
+          heading: "Using DriverManager.getConnection()",
+          content: [
+            "The simplest way to connect — pass the URL, username, and password.",
+            "The driver is loaded automatically via the ServiceLoader mechanism (JDBC 4.0+) if the driver JAR is on the classpath.",
+            `For older drivers or to be explicit, you can load the driver class manually: <code>Class.forName("com.mysql.cj.jdbc.Driver")</code>.`,
+            "Connections are physical, expensive resources — must be closed when done."
           ],
           code: `import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class JDBCDemo {
+public class DriverManagerExample {
     public static void main(String[] args) {
-        // Database connection details
         String url = "jdbc:mysql://localhost:3306/mydb";
-        String username = "root";
-        String password = "password";
+        String user = "root";
+        String password = "secret";
         
-        try {
-            // Establish connection
-            Connection conn = DriverManager.getConnection(url, username, password);
-            System.out.println("Connected to the database!");
-            
-            // Always close the connection when done
-            conn.close();
+        // Try-with-resources auto-closes the connection
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            System.out.println("Connected to: " + conn.getMetaData().getDatabaseProductName());
+            System.out.println("Driver: " + conn.getMetaData().getDriverName());
+            System.out.println("Version: " + conn.getMetaData().getDatabaseProductVersion());
         } catch (SQLException e) {
-            System.out.println("Connection failed: " + e.getMessage());
+            System.err.println("Connection failed: " + e.getMessage());
         }
+        // Connection auto-closed here
     }
 }`
         },
         {
-          heading: 'Executing SQL Queries',
+          heading: "Using Properties with getConnection()",
           content: [
-            'Once connected, you use a <code>Statement</code> or <code>PreparedStatement</code> to execute SQL.',
-            '<ul><li><code>Statement</code> — for simple, static SQL queries</li><li><code>PreparedStatement</code> — for queries with parameters (safer, prevents SQL injection)</li></ul>',
-            'For SELECT queries, use <code>executeQuery()</code> which returns a <code>ResultSet</code>.',
-            'For INSERT, UPDATE, DELETE, use <code>executeUpdate()</code> which returns the number of rows affected.'
+            "You can also pass a <code>Properties</code> object for more control over connection properties.",
+            "Useful for setting vendor-specific flags (SSL, timezone, character encoding, etc.) without baking them into the URL."
           ],
           code: `import java.sql.*;
+import java.util.Properties;
 
-public class QueryDemo {
+public class PropertiesExample {
     public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/mydb";
-        String user = "root";
-        String pass = "password";
+        String url = "jdbc:postgresql://localhost:5432/mydb";
+        Properties props = new Properties();
+        props.setProperty("user", "app_user");
+        props.setProperty("password", "secret");
+        props.setProperty("ssl", "true");
+        props.setProperty("ApplicationName", "MyApp");
+        props.setProperty("options", "-c statement_timeout=30000");  // 30s query timeout
         
-        try (Connection conn = DriverManager.getConnection(url, user, pass)) {
-            
-            // Create a statement
-            Statement stmt = conn.createStatement();
-            
-            // Execute a SELECT query
-            ResultSet rs = stmt.executeQuery("SELECT id, name, age FROM users");
-            
-            // Process results
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int age = rs.getInt("age");
-                System.out.println(id + ": " + name + " (" + age + ")");
-            }
-            
-            rs.close();
-            stmt.close();
-            
+        try (Connection conn = DriverManager.getConnection(url, props)) {
+            System.out.println("Connected with custom properties");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -12864,44 +12972,49 @@ public class QueryDemo {
 }`
         },
         {
-          heading: 'Using PreparedStatement',
+          heading: "Connection Properties (MySQL Example)",
           content: [
-            '<code>PreparedStatement</code> is the recommended way to execute SQL with dynamic values.',
-            'It protects against <strong>SQL injection</strong> — a security attack where malicious input alters your SQL.',
-            'You write the SQL with <code>?</code> placeholders, then set values using <code>setInt()</code>, <code>setString()</code>, etc.'
+            "Vendor-specific connection properties are typically appended to the URL as query parameters.",
+            "Examples for MySQL Connector/J:"
           ],
-          code: `import java.sql.*;
+          code: `// Modern MySQL Connector/J 8.x URL with common properties
+"jdbc:mysql://localhost:3306/mydb"
+    + "?useSSL=false"
+    + "&serverTimezone=UTC"
+    + "&allowPublicKeyRetrieval=true"
+    + "&useUnicode=true"
+    + "&characterEncoding=UTF-8"
+    + "&connectTimeout=10000"
+    + "&socketTimeout=60000"
 
-public class PreparedStatementDemo {
+// PostgreSQL URL
+"jdbc:postgresql://localhost:5432/mydb?ApplicationName=MyApp&sslmode=require"`
+        },
+        {
+          heading: "Using DataSource (Preferred)",
+          content: [
+            "<code>DataSource</code> is an interface in <code>javax.sql</code> — implementations are provided by JDBC drivers and pooling libraries.",
+            "Benefits over DriverManager:",
+            "<ul><li>Connection details externalized (no URL/password in code)</li><li>Transparent pooling (with <code>ConnectionPoolDataSource</code>)</li><li>JNDI lookup for container-managed environments</li><li>Better testability — easy to mock</li></ul>",
+            "A simple implementation: the MySQL driver provides <code>MysqlDataSource</code>."
+          ],
+          code: `import com.mysql.cj.jdbc.MysqlDataSource;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class DataSourceExample {
     public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/mydb";
-        String user = "root";
-        String pass = "password";
+        // Build a DataSource programmatically
+        MysqlDataSource ds = new MysqlDataSource();
+        ds.setUrl("jdbc:mysql://localhost:3306/mydb");
+        ds.setUser("root");
+        ds.setPassword("secret");
+        ds.setUseSSL(false);
+        ds.setServerTimezone("UTC");
         
-        try (Connection conn = DriverManager.getConnection(url, user, pass)) {
-            
-            // Insert with PreparedStatement
-            String insertSQL = "INSERT INTO users (name, age) VALUES (?, ?)";
-            PreparedStatement pstmt = conn.prepareStatement(insertSQL);
-            
-            pstmt.setString(1, "Alice");
-            pstmt.setInt(2, 25);
-            int rowsInserted = pstmt.executeUpdate();
-            System.out.println(rowsInserted + " row(s) inserted.");
-            
-            // Search with PreparedStatement
-            String searchSQL = "SELECT * FROM users WHERE age > ?";
-            PreparedStatement searchStmt = conn.prepareStatement(searchSQL);
-            searchStmt.setInt(1, 20);
-            
-            ResultSet rs = searchStmt.executeQuery();
-            while (rs.next()) {
-                System.out.println(rs.getString("name"));
-            }
-            
-            pstmt.close();
-            searchStmt.close();
-            
+        try (Connection conn = ds.getConnection()) {
+            System.out.println("Got connection from DataSource");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -12909,96 +13022,1586 @@ public class PreparedStatementDemo {
 }`
         },
         {
-          heading: 'Try-with-Resources for JDBC',
+          heading: "JNDI Lookup (Container-Managed)",
           content: [
-            'Database resources like <code>Connection</code>, <code>Statement</code>, and <code>ResultSet</code> must be closed after use.',
-            "Java's <strong>try-with-resources</strong> statement automatically closes these objects.",
-            'Any object that implements <code>AutoCloseable</code> can be used in try-with-resources.'
+            "In Tomcat, WildFly, or any Java EE / Jakarta EE server, you typically declare a DataSource in the container configuration and look it up by name.",
+            "This means your application code has no database credentials — they live in server config (and can differ between dev, staging, prod)."
           ],
-          code: `import java.sql.*;
+          code: `// In your application code
+import javax.sql.DataSource;
+import javax.naming.InitialContext;
 
-public class TryWithResourcesDemo {
-    public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/mydb";
-        String user = "root";
-        String pass = "password";
-        
-        // All resources in parentheses are closed automatically
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM products")) {
-            
-            while (rs.next()) {
-                String productName = rs.getString("name");
-                double price = rs.getDouble("price");
-                System.out.println(productName + " costs $" + price);
-            }
-            
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+DataSource ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/mydb");
+try (Connection conn = ds.getConnection()) {
+    // ...
+}
+
+// In Tomcat's context.xml or server.xml:
+// <Resource name="jdbc/mydb"
+//           auth="Container"
+//           type="javax.sql.DataSource"
+//           maxTotal="100"
+//           maxIdle="30"
+//           maxWaitMillis="10000"
+//           username="app_user"
+//           password="secret"
+//           driverClassName="com.mysql.cj.jdbc.Driver"
+//           url="jdbc:mysql://localhost:3306/mydb" />
+
+// In web.xml (or via @Resource annotation):
+// <resource-ref>
+//     <res-ref-name>jdbc/mydb</res-ref-name>
+//     <res-type>javax.sql.DataSource</res-type>
+//     <res-auth>Container</res-auth>
+// </resource-ref>`
+        },
+        {
+          heading: "Connection Validation and Health Checks",
+          content: [
+            "Before using a connection, especially one obtained from a pool, you may want to validate it is still alive.",
+            "JDBC provides <code>Connection.isValid(int timeoutSeconds)</code> — the driver sends a lightweight ping to the DB.",
+            "Connection pools use this to test idle connections before handing them out, and to drop stale ones."
+          ],
+          code: `import java.sql.Connection;
+
+public boolean isConnectionHealthy(Connection conn) {
+    try {
+        if (conn == null || conn.isClosed()) {
+            return false;
         }
-        // conn, stmt, and rs are all closed automatically here!
+        // Driver-specific check, timeout in seconds
+        return conn.isValid(2);
+    } catch (SQLException e) {
+        return false;
+    }
+}
+
+// Typical use in a connection pool wrapper:
+public Connection getConnection() throws SQLException {
+    Connection conn = dataSource.getConnection();
+    if (!isConnectionHealthy(conn)) {
+        conn.close();
+        conn = dataSource.getConnection();  // try again
+    }
+    return conn;
+}`
+        },
+        {
+          heading: "Connection Information and Metadata",
+          content: [
+            "A <code>Connection</code> object exposes useful information via its metadata:"
+          ],
+          code: `try (Connection conn = ds.getConnection()) {
+    DatabaseMetaData meta = conn.getMetaData();
+    
+    System.out.println("DB Product:   " + meta.getDatabaseProductName());
+    System.out.println("DB Version:   " + meta.getDatabaseProductVersion());
+    System.out.println("Driver Name:  " + meta.getDriverName());
+    System.out.println("Driver Ver:   " + meta.getDriverVersion());
+    System.out.println("JDBC Version: " + meta.getJDBCMajorVersion() + "." + meta.getJDBCMinorVersion());
+    System.out.println("URL:          " + meta.getURL());
+    System.out.println("User:         " + meta.getUserName());
+    
+    System.out.println("Auto-commit:  " + conn.getAutoCommit());
+    System.out.println("Read-only:    " + conn.isReadOnly());
+    System.out.println("Catalog:      " + conn.getCatalog());
+    System.out.println("Schema:       " + conn.getSchema());
+    System.out.println("Txn Level:    " + conn.getTransactionIsolation());
+    
+    // List all tables
+    try (ResultSet tables = meta.getTables(null, "public", "%", new String[]{"TABLE"})) {
+        while (tables.next()) {
+            System.out.println("Table: " + tables.getString("TABLE_NAME"));
+        }
     }
 }`
         },
         {
-          heading: 'Try it Yourself',
+          heading: "Try it Yourself",
           content: [
-            'Write a program that connects to a database and performs these operations:',
-            '<ol><li>Create a table called <code>students</code> with <code>id</code>, <code>name</code>, and <code>grade</code></li><li>Insert at least 3 students</li><li>Query and print all students with grade above 80</li></ol>',
-            'Use <code>PreparedStatement</code> for all parameterized queries.'
-          ],
-          code: `import java.sql.*;
-
-public class StudentDatabase {
-    public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/school";
-        String user = "root";
-        String pass = "password";
-        
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             Statement stmt = conn.createStatement()) {
-            
-            // Create table
-            stmt.executeUpdate(
-                "CREATE TABLE IF NOT EXISTS students (" +
-                "id INT PRIMARY KEY AUTO_INCREMENT, " +
-                "name VARCHAR(50), " +
-                "grade INT)"
-            );
-            System.out.println("Table created.");
-            
-            // Insert students
-            String insert = "INSERT INTO students (name, grade) VALUES (?, ?)";
-            try (PreparedStatement ps = conn.prepareStatement(insert)) {
-                ps.setString(1, "Alice"); ps.setInt(2, 85); ps.executeUpdate();
-                ps.setString(1, "Bob");   ps.setInt(2, 72); ps.executeUpdate();
-                ps.setString(1, "Carol"); ps.setInt(2, 91); ps.executeUpdate();
-            }
-            System.out.println("Students inserted.");
-            
-            // Query high achievers
-            String query = "SELECT * FROM students WHERE grade > ?";
-            try (PreparedStatement ps = conn.prepareStatement(query)) {
-                ps.setInt(1, 80);
-                ResultSet rs = ps.executeQuery();
-                System.out.println("High achievers:");
-                while (rs.next()) {
-                    System.out.println(rs.getString("name") + ": " + rs.getInt("grade"));
-                }
-            }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}`
+            "Exercises:",
+            "<ol>",
+            "<li>Connect to a database using <code>DriverManager</code> in a try-with-resources block and print <code>DatabaseMetaData</code>.</li>",
+            "<li>Refactor the same code to use a <code>MysqlDataSource</code> or <code>HikariDataSource</code>.</li>",
+            '<li>Configure a <code>DataSource</code> in Tomcat\'s <code>context.xml</code> and look it up with <code>InitialContext</code>.</li>',
+            "<li>Use <code>conn.isValid(5)</code> to verify a connection is alive.</li>",
+            "<li>List all tables in the database schema using <code>DatabaseMetaData.getTables()</code>.</li>",
+            "</ol>"
+          ]
         }
       ]
     },
+  'java-jdbc-statements': {
+      title: "Statements, PreparedStatements & Batching",
+      sections: [
+        {
+          heading: "The Three Statement Types",
+          content: [
+            "JDBC provides three interfaces for executing SQL, each with different use cases:",
+            "<ul>",
+            "<li><strong><code>Statement</code></strong> — for static SQL with no parameters. Simplest, but vulnerable to SQL injection.</li>",
+            "<li><strong><code>PreparedStatement</code></strong> — for SQL with bind parameters. Pre-compiled, cached, secure, faster for repeated execution. Use this in 95% of cases.</li>",
+            "<li><strong><code>CallableStatement</code></strong> — for calling stored procedures and functions. Supports IN, OUT, and INOUT parameters.</li>",
+            "</ul>"
+          ]
+        },
+        {
+          heading: "Statement — Static SQL",
+          content: [
+            "Use <code>Connection.createStatement()</code> to create a Statement.",
+            "Three execution methods:",
+            "<ul>",
+            "<li><code>executeQuery(String sql)</code> — returns a <code>ResultSet</code> for SELECT statements</li>",
+            "<li><code>executeUpdate(String sql)</code> — returns rows affected, for INSERT/UPDATE/DELETE (and DDL)</li>",
+            "<li><code>execute(String sql)</code> — returns <code>true</code> if the first result is a ResultSet, <code>false</code> if it is an update count. Use for unknown/mixed SQL.</li>",
+            "</ul>",
+            "Statement is rarely appropriate — any user input concatenated into SQL is a SQL injection vulnerability."
+          ],
+          code: `import java.sql.*;
+
+public class StatementExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/mydb";
+        try (Connection conn = DriverManager.getConnection(url, "root", "secret");
+             Statement stmt = conn.createStatement()) {
+            
+            // executeUpdate for DML
+            int rows = stmt.executeUpdate("UPDATE users SET active = true WHERE last_login < NOW()");
+            System.out.println("Activated " + rows + " users");
+            
+            // executeQuery for SELECT
+            try (ResultSet rs = stmt.executeQuery("SELECT id, name FROM users LIMIT 10")) {
+                while (rs.next()) {
+                    System.out.println(rs.getInt("id") + " - " + rs.getString("name"));
+                }
+            }
+            
+            // execute() for unknown SQL
+            boolean isResultSet = stmt.execute("SELECT 1");
+            if (isResultSet) {
+                try (ResultSet rs = stmt.getResultSet()) {
+                    // process
+                }
+            } else {
+                int count = stmt.getUpdateCount();
+                // process count
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}`
+        },
+        {
+          heading: "PreparedStatement — Parameterized SQL",
+          content: [
+            "<code>PreparedStatement</code> is the recommended way to execute SQL with parameters.",
+            "You write the SQL with <code>?</code> placeholders, then bind values with <code>setXxx</code> methods.",
+            "Benefits:",
+            "<ul>",
+            "<li><strong>Security</strong> — bind values are escaped by the driver; SQL injection is impossible.</li>",
+            "<li><strong>Performance</strong> — the database caches the parsed/compiled SQL plan. Repeated execution with different parameters skips the parse step.</li>",
+            "<li><strong>Readability</strong> — parameter binding is clearer than string concatenation.</li>",
+            "<li><strong>Type safety</strong> — the driver handles type conversions (e.g., Date → timestamp).</li>",
+            "</ul>"
+          ],
+          code: `import java.sql.*;
+
+public class PreparedStatementExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/mydb";
+        
+        try (Connection conn = DriverManager.getConnection(url, "root", "secret")) {
+            
+            // INSERT with named positional parameters
+            String insertSQL = "INSERT INTO users (name, email, age) VALUES (?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(insertSQL)) {
+                ps.setString(1, "Alice");
+                ps.setString(2, "alice@example.com");
+                ps.setInt(3, 28);
+                int rows = ps.executeUpdate();
+                System.out.println("Inserted: " + rows);
+            }
+            
+            // SELECT with parameters
+            String selectSQL = "SELECT id, name FROM users WHERE age > ? AND active = ?";
+            try (PreparedStatement ps = conn.prepareStatement(selectSQL)) {
+                ps.setInt(1, 18);
+                ps.setBoolean(2, true);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        System.out.println(rs.getInt("id") + ": " + rs.getString("name"));
+                    }
+                }
+            }
+            
+            // Reusing the PreparedStatement with different parameters
+            String updateSQL = "UPDATE users SET active = ? WHERE id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(updateSQL)) {
+                ps.setBoolean(1, true);
+                ps.setInt(2, 5);
+                ps.executeUpdate();
+                
+                ps.setBoolean(1, false);
+                ps.setInt(2, 7);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}`
+        },
+        {
+          heading: "SQL Injection — Why PreparedStatement Matters",
+          content: [
+            "SQL injection is a top-10 web vulnerability. It happens when user input is concatenated into SQL strings.",
+            `Example attack — user types <code>" OR 1=1 --</code> as their "name":`
+          ],
+          code: `// VULNERABLE CODE — DO NOT USE
+String name = request.getParameter("name");  // user input
+String sql = "SELECT * FROM users WHERE name = '" + name + "'";
+Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery(sql);
+
+// If name = " ' OR '1'='1 ", the SQL becomes:
+// SELECT * FROM users WHERE name = '' OR '1'='1'
+// Returns ALL users — auth bypass!
+
+// If name = " '; DROP TABLE users; -- ", the SQL becomes:
+// SELECT * FROM users WHERE name = ''; DROP TABLE users; --'
+// Deletes the entire users table!
+
+// SAFE CODE — USE THIS
+String sql = "SELECT * FROM users WHERE name = ?";
+PreparedStatement ps = conn.prepareStatement(sql);
+ps.setString(1, name);  // Driver escapes, no SQL injection possible
+ResultSet rs = ps.executeQuery();`
+        },
+        {
+          heading: "setXxx Methods for Parameter Binding",
+          content: [
+            "JDBC provides type-specific setters:"
+          ],
+          code: `PreparedStatement ps = conn.prepareStatement(
+    "INSERT INTO orders (id, customer, total, shipped_at, metadata, status) " +
+    "VALUES (?, ?, ?, ?, ?, ?)"
+);
+
+// Common setXxx methods
+ps.setLong(1, 12345L);
+ps.setString(2, "Sudhakar");
+ps.setBigDecimal(3, new BigDecimal("99.95"));
+ps.setTimestamp(4, Timestamp.from(Instant.now()));
+ps.setBytes(5, new byte[]{1, 2, 3});
+ps.setObject(6, OrderStatus.PENDING);   // driver maps Java type to SQL type
+
+// Null handling — use setNull() with a type code, or setObject(index, null, Types.TYPE)
+ps.setString(2, null);  // works, but type might be ambiguous
+ps.setNull(2, Types.VARCHAR);  // explicit type
+
+// setObject is the most flexible — handles LocalDate, LocalDateTime, UUID, etc.
+ps.setObject(4, LocalDateTime.now());
+ps.setObject(5, UUID.randomUUID());
+ps.setObject(6, true);  // → BOOLEAN
+
+// Retrieving generated keys (auto-increment IDs)
+String sql = "INSERT INTO users (name) VALUES (?)";
+try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    ps.setString(1, "Bob");
+    ps.executeUpdate();
+    try (ResultSet keys = ps.getGeneratedKeys()) {
+        if (keys.next()) {
+            long id = keys.getLong(1);
+            System.out.println("New user ID: " + id);
+        }
+    }
+}`
+        },
+        {
+          heading: "Batch Updates",
+          content: [
+            "For bulk inserts/updates, batching dramatically reduces round-trips.",
+            "Add N statements with <code>addBatch()</code>, then execute them all with <code>executeBatch()</code>.",
+            "Most drivers send the batch as a single multi-row INSERT/UPDATE, which is much faster than N separate round-trips."
+          ],
+          code: `import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
+
+public class BatchUpdateExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/mydb";
+        try (Connection conn = DriverManager.getConnection(url, "root", "secret")) {
+            
+            // Optionally wrap in a transaction for atomicity + speed
+            conn.setAutoCommit(false);
+            
+            String sql = "INSERT INTO products (name, price, sku) VALUES (?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                List<Product> products = Arrays.asList(
+                    new Product("Widget", 9.99, "WID-001"),
+                    new Product("Gadget", 19.99, "GAD-001"),
+                    new Product("Gizmo", 29.99, "GIZ-001"),
+                    new Product("Thingamajig", 39.99, "THG-001")
+                );
+                
+                for (Product p : products) {
+                    ps.setString(1, p.name());
+                    ps.setDouble(2, p.price());
+                    ps.setString(3, p.sku());
+                    ps.addBatch();
+                }
+                
+                int[] results = ps.executeBatch();
+                System.out.println("Inserted " + results.length + " products");
+                
+                // Check individual results — some drivers return Statement.SUCCESS_NO_INFO
+                for (int i = 0; i < results.length; i++) {
+                    if (results[i] == Statement.SUCCESS_NO_INFO) {
+                        System.out.println("Row " + i + ": success (count unknown)");
+                    } else if (results[i] >= 0) {
+                        System.out.println("Row " + i + ": " + results[i] + " affected");
+                    } else if (results[i] == Statement.EXECUTE_FAILED) {
+                        System.out.println("Row " + i + ": FAILED");
+                    }
+                }
+            }
+            
+            conn.commit();  // Commit all at once
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    record Product(String name, double price, String sku) {}
+}`
+        },
+        {
+          heading: "CallableStatement — Stored Procedures",
+          content: [
+            "<code>CallableStatement</code> invokes stored procedures and functions.",
+            "Use the JDBC escape syntax <code>{call proc_name(?, ?)}</code> or database-specific syntax like <code>{? = call func_name(?)}</code> for functions.",
+            "Parameters can be IN (input), OUT (output), or INOUT (both).",
+            "OUT and INOUT parameters must be registered with <code>registerOutParameter()</code> before execution."
+          ],
+          code: `import java.sql.*;
+
+public class CallableStatementExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/mydb";
+        try (Connection conn = DriverManager.getConnection(url, "root", "secret")) {
+            
+            // Call a stored procedure that takes an IN param and returns an OUT param
+            // CREATE PROCEDURE get_user_count(IN active BOOLEAN, OUT total INT)
+            try (CallableStatement cs = conn.prepareCall("{call get_user_count(?, ?)}")) {
+                cs.setBoolean(1, true);
+                cs.registerOutParameter(2, Types.INTEGER);
+                cs.execute();
+                int count = cs.getInt(2);
+                System.out.println("Active users: " + count);
+            }
+            
+            // Call a stored function: CREATE FUNCTION get_full_name(fname VARCHAR, lname VARCHAR) RETURNS VARCHAR
+            try (CallableStatement cs = conn.prepareCall("{? = call get_full_name(?, ?)}")) {
+                cs.registerOutParameter(1, Types.VARCHAR);
+                cs.setString(2, "Sudhakar");
+                cs.setString(3, "Badugu");
+                cs.execute();
+                String fullName = cs.getString(1);
+                System.out.println("Full name: " + fullName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}`
+        },
+        {
+          heading: "Statement Caching and Reuse",
+          content: [
+            "JDBC drivers and the database cache prepared statements automatically.",
+            "Reusing a <code>PreparedStatement</code> across many executions (with different parameter values) is the most efficient pattern.",
+            'Many connection pools also cache PreparedStatements at the pool level (e.g., HikariCP\'s <code>cachePrepStmts=true</code> and <code>prepStmtCacheSize=250</code>).',
+            "Always close PreparedStatements when done — they hold database resources (cursors, locks)."
+          ]
+        },
+        {
+          heading: "Try it Yourself",
+          content: [
+            "Exercises:",
+            "<ol>",
+            "<li>Write a method that takes a <code>List&lt;User&gt;</code> and inserts all of them using a single batch.</li>",
+            "<li>Refactor a method that uses <code>Statement</code> with string concatenation to use <code>PreparedStatement</code> with bind parameters.</li>",
+            "<li>Use <code>RETURN_GENERATED_KEYS</code> to retrieve the auto-increment ID after an insert.</li>",
+            "<li>Call a stored procedure (or function) in your database of choice using <code>CallableStatement</code>.</li>",
+            "<li>Try to <strong>deliberately</strong> inject SQL into a Statement-based query to see the vulnerability — then fix it with PreparedStatement.</li>",
+            "</ol>"
+          ]
+        }
+      ]
+    },
+  'java-jdbc-resultset': {
+      title: "ResultSet & Data Retrieval",
+      sections: [
+        {
+          heading: "What is a ResultSet?",
+          content: [
+            "A <code>ResultSet</code> is a Java object that represents the result of executing a SELECT query.",
+            "It maintains a cursor pointing to the current row of data. Initially the cursor is positioned <strong>before the first row</strong>.",
+            "You call <code>next()</code> to move the cursor forward — it returns <code>true</code> if there is a row, <code>false</code> when there are no more rows.",
+            "You call <code>getXxx(columnIndexOrLabel)</code> to read column values from the current row."
+          ]
+        },
+        {
+          heading: "Basic ResultSet Navigation",
+          content: [
+            "The default ResultSet type is <code>TYPE_FORWARD_ONLY</code> and concurrency is <code>CONCUR_READ_ONLY</code>.",
+            "In this mode, you can only move forward with <code>next()</code>, and you cannot update values through the ResultSet."
+          ],
+          code: `try (Connection conn = ds.getConnection();
+     PreparedStatement ps = conn.prepareStatement("SELECT id, name, email, age FROM users");
+     ResultSet rs = ps.executeQuery()) {
+    
+    // Process each row
+    while (rs.next()) {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        String email = rs.getString("email");
+        int age = rs.getInt("age");
+        System.out.println(id + " | " + name + " | " + email + " | " + age);
+    }
+    // After the loop, rs.next() returned false — no more rows
+}
+
+// getXxx by index is slightly faster than by label
+// Note: column index is 1-based, not 0-based!
+int id = rs.getInt(1);  // first column
+String name = rs.getString(2);  // second column`
+        },
+        {
+          heading: "getXxx Methods for All SQL Types",
+          content: [
+            "JDBC provides a <code>getXxx</code> method for every common SQL type:"
+          ],
+          code: `// Common getXxx methods (use the one matching the column type)
+int i = rs.getInt("count");
+long l = rs.getLong("big_number");
+double d = rs.getDouble("price");
+float f = rs.getFloat("ratio");
+boolean b = rs.getBoolean("is_active");
+String s = rs.getString("name");
+byte[] bytes = rs.getBytes("file_data");
+java.sql.Date date = rs.getDate("birth_date");
+java.sql.Time time = rs.getTime("start_time");
+java.sql.Timestamp ts = rs.getTimestamp("created_at");
+java.math.BigDecimal bd = rs.getBigDecimal("amount");
+
+// getObject — returns the most natural Java type for the column
+Object value = rs.getObject("some_column");
+
+// For modern Java types, use getObject with a target class (Java 8+)
+String name = rs.getObject("name", String.class);
+LocalDate birthDate = rs.getObject("birth_date", LocalDate.class);
+LocalDateTime createdAt = rs.getObject("created_at", LocalDateTime.class);
+UUID id = rs.getObject("id", UUID.class);
+
+// Handle SQL NULL — getXxx returns Java primitive default (0, false) for primitives,
+// or null for object types
+String nullable = rs.getString("optional_column");
+if (rs.wasNull()) {
+    // The actual value was SQL NULL
+    System.out.println("Value was NULL");
+}`
+        },
+        {
+          heading: "Scrollable and Updatable ResultSets",
+          content: [
+            "You can create a ResultSet that supports arbitrary navigation and even in-place updates.",
+            "To do so, specify the type and concurrency when creating the statement:"
+          ],
+          code: `// Scrollable (forward + backward) but read-only
+PreparedStatement ps = conn.prepareStatement(
+    "SELECT id, name FROM users",
+    ResultSet.TYPE_SCROLL_INSENSITIVE,
+    ResultSet.CONCUR_READ_ONLY
+);
+
+ResultSet rs = ps.executeQuery();
+
+// Move the cursor
+rs.next();                  // forward
+rs.previous();              // backward
+rs.first();                 // first row
+rs.last();                  // last row
+rs.beforeFirst();           // before first row
+rs.afterLast();             // after last row
+rs.absolute(5);             // 5th row
+rs.relative(-2);            // 2 rows back from current
+
+// Inspect cursor state
+int currentRow = rs.getRow();  // 1-based, 0 if not on a row
+boolean isFirst = rs.isFirst();
+boolean isLast = rs.isLast();
+boolean isBeforeFirst = rs.isBeforeFirst();
+boolean isAfterLast = rs.isAfterLast();
+
+// Updatable ResultSet
+PreparedStatement upStmt = conn.prepareStatement(
+    "SELECT id, name, status FROM users",
+    ResultSet.TYPE_SCROLL_INSENSITIVE,
+    ResultSet.CONCUR_UPDATABLE
+);
+ResultSet urs = upStmt.executeQuery();
+
+while (urs.next()) {
+    if (urs.getString("name").startsWith("A")) {
+        urs.updateString("status", "VIP");
+        urs.updateRow();  // write changes to the DB
+    }
+}`
+        },
+        {
+          heading: "ResultSetMetaData — Inspecting Columns",
+          content: [
+            "<code>ResultSetMetaData</code> tells you about the columns in a ResultSet — useful for building generic table UIs, dynamic export, and ORM code.",
+            "Available via <code>ResultSet.getMetaData()</code>."
+          ],
+          code: `try (ResultSet rs = ps.executeQuery()) {
+    ResultSetMetaData meta = rs.getMetaData();
+    int columnCount = meta.getColumnCount();
+    System.out.println("Columns: " + columnCount);
+    
+    for (int i = 1; i <= columnCount; i++) {
+        System.out.println("Column " + i + ":");
+        System.out.println("  Label:     " + meta.getColumnLabel(i));
+        System.out.println("  Name:      " + meta.getColumnName(i));
+        System.out.println("  Type:      " + meta.getColumnTypeName(i) + 
+                           " (" + meta.getColumnClassName(i) + ")");
+        System.out.println("  Size:      " + meta.getColumnDisplaySize(i));
+        System.out.println("  Nullable:  " + meta.isNullable(i));
+        System.out.println("  Auto Inc:  " + meta.isAutoIncrement(i));
+        System.out.println("  Table:     " + meta.getTableName(i));
+    }
+    
+    // Print all rows with column headers
+    while (rs.next()) {
+        for (int i = 1; i <= columnCount; i++) {
+            System.out.print(rs.getString(i) + "	");
+        }
+        System.out.println();
+    }
+}`
+        },
+        {
+          heading: "DatabaseMetaData — Inspecting the Database",
+          content: [
+            "<code>DatabaseMetaData</code> provides information about the database as a whole — server version, supported features, schemas, tables, etc.",
+            "Get it from <code>Connection.getMetaData()</code>.",
+            "Used by tools like DBeaver, Liquibase, and Hibernate to introspect schemas at runtime."
+          ],
+          code: `DatabaseMetaData meta = conn.getMetaData();
+
+System.out.println("DB: " + meta.getDatabaseProductName() + " " + meta.getDatabaseProductVersion());
+System.out.println("Driver: " + meta.getDriverName() + " " + meta.getDriverVersion());
+System.out.println("Max connections: " + meta.getMaxConnections());
+System.out.println("Supports transactions: " + meta.supportsTransactions());
+System.out.println("Supports batch updates: " + meta.supportsBatchUpdates());
+System.out.println("Supports stored procedures: " + meta.supportsStoredProcedures());
+System.out.println("Read-only: " + meta.isReadOnly());
+
+// List schemas
+try (ResultSet schemas = meta.getSchemas()) {
+    while (schemas.next()) {
+        System.out.println("Schema: " + schemas.getString("TABLE_SCHEM"));
+    }
+}
+
+// List tables in a schema
+try (ResultSet tables = meta.getTables("mydb", "public", "%", new String[]{"TABLE"})) {
+    while (tables.next()) {
+        System.out.println("Table: " + tables.getString("TABLE_NAME") + 
+                           " (" + tables.getString("TABLE_TYPE") + ")");
+    }
+}
+
+// List columns of a specific table
+try (ResultSet cols = meta.getColumns("mydb", "public", "users", "%")) {
+    while (cols.next()) {
+        System.out.println(cols.getString("COLUMN_NAME") + " : " + 
+                           cols.getString("TYPE_NAME") + 
+                           (cols.getInt("NULLABLE") == DatabaseMetaData.columnNullable ? " NULL" : " NOT NULL"));
+    }
+}`
+        },
+        {
+          heading: "Mapping ResultSet Rows to Java Objects",
+          content: [
+            "In real applications, you usually map each row to a domain object (DTO/entity).",
+            "There are several common patterns:"
+          ],
+          code: `record User(long id, String name, String email, int age) {}
+
+// Pattern 1: Inline mapping in the consumer
+try (ResultSet rs = ps.executeQuery()) {
+    List<User> users = new ArrayList<>();
+    while (rs.next()) {
+        users.add(new User(
+            rs.getLong("id"),
+            rs.getString("name"),
+            rs.getString("email"),
+            rs.getInt("age")
+        ));
+    }
+    return users;
+}
+
+// Pattern 2: RowMapper function (used by JdbcTemplate-style helpers)
+@FunctionalInterface
+interface RowMapper<T> {
+    T map(ResultSet rs, int rowNum) throws SQLException;
+}
+
+RowMapper<User> userMapper = (rs, rowNum) -> new User(
+    rs.getLong("id"),
+    rs.getString("name"),
+    rs.getString("email"),
+    rs.getInt("age")
+);
+
+List<User> users = new ArrayList<>();
+try (ResultSet rs = ps.executeQuery()) {
+    int rowNum = 0;
+    while (rs.next()) {
+        users.add(userMapper.map(rs, rowNum++));
+    }
+}
+
+// Pattern 3: Reflection-based mapping (used by MyBatis, Spring JDBC)
+// BeanPropertyRowMapper<User> mapper = new BeanPropertyRowMapper<>(User.class);
+// List<User> users = jdbcTemplate.query("SELECT * FROM users", mapper);
+`
+        },
+        {
+          heading: "Handling Large ResultSets and Streaming",
+          content: [
+            "For very large results, you do not want to load everything into memory.",
+            "Options:",
+            "<ul>",
+            "<li>Use <code>Statement.setFetchSize(int)</code> — hints the driver to stream rows in batches rather than buffering all</li>",
+            "<li>Use <code>Statement.setMaxRows(int)</code> — limit the number of rows the database will return</li>",
+            "<li>Use database cursors / keyset pagination</li>",
+            "<li>Process rows in a stream as they arrive</li>",
+            "</ul>",
+            "Note: <code>fetchSize</code> behavior varies by driver. MySQL needs <code>useCursorFetch=true</code> + <code>fetchSize</code>; PostgreSQL respects fetchSize as-is."
+          ],
+          code: `try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM huge_table")) {
+    ps.setFetchSize(1000);  // hint: stream 1000 rows at a time
+    ps.setMaxRows(1_000_000);  // safety: never return more than this
+    
+    try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            // process one row at a time
+        }
+    }
+}`
+        },
+        {
+          heading: "Try it Yourself",
+          content: [
+            "Exercises:",
+            "<ol>",
+            "<li>Create a scrollable, read-only ResultSet and navigate to the 5th, last, and 2nd-from-last rows.</li>",
+            "<li>Print all column names and types of a <code>SELECT * FROM your_table</code> query using <code>ResultSetMetaData</code>.</li>",
+            "<li>List all tables in the <code>public</code> schema using <code>DatabaseMetaData.getTables()</code>.</li>",
+            "<li>Map a <code>SELECT</code> result set into a list of records using a <code>RowMapper</code>.</li>",
+            "<li>Use <code>setFetchSize(100)</code> and time a query against a large table to feel the streaming difference.</li>",
+            "</ol>"
+          ]
+        }
+      ]
+    },
+  'java-jdbc-transactions': {
+      title: "Transactions & Isolation Levels",
+      sections: [
+        {
+          heading: "What is a Transaction?",
+          content: [
+            "A <strong>transaction</strong> is a unit of work that is either fully completed or has no effect at all — never partially applied.",
+            "Transactions are governed by the <strong>ACID</strong> properties:",
+            "<ul>",
+            "<li><strong>Atomicity</strong> — all operations succeed, or none do</li>",
+            "<li><strong>Consistency</strong> — the database moves from one valid state to another</li>",
+            "<li><strong>Isolation</strong> — concurrent transactions do not interfere with each other</li>",
+            "<li><strong>Durability</strong> — committed changes survive crashes</li>",
+            "</ul>",
+            "In JDBC, transactions are managed by the <code>Connection</code> object."
+          ]
+        },
+        {
+          heading: "Auto-Commit Mode",
+          content: [
+            "By default, every SQL statement is committed immediately in its own transaction.",
+            "This is set by <code>Connection.setAutoCommit(true)</code>, which is the default.",
+            "To execute multiple statements as one transaction, disable auto-commit, execute the statements, then call <code>commit()</code> or <code>rollback()</code>."
+          ],
+          code: `try (Connection conn = ds.getConnection()) {
+    conn.setAutoCommit(false);  // begin a transaction
+    
+    try {
+        // ... execute multiple statements ...
+        
+        conn.commit();  // success — make all changes permanent
+    } catch (SQLException e) {
+        conn.rollback();  // failure — undo all changes
+        throw e;
+    } finally {
+        conn.setAutoCommit(true);  // restore default for connection pool
+    }
+}
+
+// Typical "service-layer" pattern
+public void transferCredits(int fromId, int toId, int amount) throws SQLException {
+    try (Connection conn = ds.getConnection()) {
+        conn.setAutoCommit(false);
+        try {
+            debit(conn, fromId, amount);
+            credit(conn, toId, amount);
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+    }
+}`
+        },
+        {
+          heading: "The Read Phenomena",
+          content: [
+            "When two transactions run concurrently, several anomalies can occur:",
+            "<ul>",
+            "<li><strong>Dirty read</strong> — Tx A reads data written by Tx B that has not been committed. If B rolls back, A has read data that never existed.</li>",
+            "<li><strong>Non-repeatable read</strong> — Tx A reads the same row twice and sees different values because Tx B modified and committed between the two reads.</li>",
+            "<li><strong>Phantom read</strong> — Tx A runs the same query twice and gets a different set of rows because Tx B inserted and committed matching rows in between.</li>",
+            "</ul>",
+            "JDBC isolation levels control which anomalies are allowed."
+          ]
+        },
+        {
+          heading: "JDBC Isolation Levels",
+          content: [
+            "Set the isolation level with <code>Connection.setTransactionIsolation(int)</code>.",
+            "Constants in <code>Connection</code>:"
+          ],
+          code: `// In order from weakest to strongest
+conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);  // allows dirty reads
+conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);     // default in PostgreSQL, Oracle
+conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);   // default in MySQL InnoDB
+conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);       // strictest, prevents all anomalies
+
+// Get the current level
+int level = conn.getTransactionIsolation();
+
+// Check what the database supports
+DatabaseMetaData meta = conn.getMetaData();
+System.out.println("Supports READ_UNCOMMITTED: " + meta.supportsTransactionIsolationLevel(Connection.TRANSACTION_READ_UNCOMMITTED));
+System.out.println("Supports REPEATABLE_READ: " + meta.supportsTransactionIsolationLevel(Connection.TRANSACTION_REPEATABLE_READ));
+System.out.println("Default: " + meta.getDefaultTransactionIsolation());`
+        },
+        {
+          heading: "What Each Isolation Level Prevents",
+          content: [
+            "Reference table for the standard SQL isolation levels (note: behavior varies slightly by database):"
+          ],
+          code: `// Phenomenon:    DIRTY    NON-REPEATABLE   PHANTOM
+// READ_UNCOMMITTED:  yes        yes          yes
+// READ_COMMITTED:     no         yes          yes
+// REPEATABLE_READ:    no         no           yes  (MySQL: also prevents phantoms with InnoDB + next-key locks)
+// SERIALIZABLE:       no         no           no
+
+// In summary:
+// - READ_UNCOMMITTED: Almost no isolation. Use only for approximate counts (rare).
+// - READ_COMMITTED:   Good default for most OLTP apps. Most databases default to this.
+// - REPEATABLE_READ:  Stronger; reports/snapshots within a single transaction are stable.
+// - SERIALIZABLE:     Strictest; expect lower concurrency and more lock contention.`
+        },
+        {
+          heading: "Savepoints — Partial Rollback",
+          content: [
+            "A <strong>savepoint</strong> marks a point within a transaction that you can roll back to without rolling back the entire transaction.",
+            "Useful when you want to try an operation, and if it fails, undo only that part."
+          ],
+          code: `try (Connection conn = ds.getConnection()) {
+    conn.setAutoCommit(false);
+    
+    // Statement 1 — always commit
+    try (PreparedStatement ps = conn.prepareStatement("INSERT INTO orders ...")) {
+        ps.executeUpdate();
+    }
+    
+    // Savepoint before the risky part
+    Savepoint sp = conn.setSavepoint("before_risky_op");
+    try {
+        // Statement 2 — might fail
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO risky_table ...")) {
+            ps.executeUpdate();
+        }
+    } catch (SQLException e) {
+        // Undo only statement 2, keep statement 1
+        conn.rollback(sp);
+    }
+    
+    // Release the savepoint (optional but frees resources)
+    conn.releaseSavepoint(sp);
+    
+    // Statement 3 — always commit
+    try (PreparedStatement ps = conn.prepareStatement("UPDATE inventory ...")) {
+        ps.executeUpdate();
+    }
+    
+    conn.commit();
+}`
+        },
+        {
+          heading: "Optimistic vs Pessimistic Locking",
+          content: [
+            "Beyond isolation levels, you can use explicit locking for fine-grained control:",
+            "<ul>",
+            "<li><strong>Pessimistic locking</strong> — acquire a database lock before reading, preventing others from modifying. Use when conflicts are likely. <code>SELECT ... FOR UPDATE</code> in SQL.</li>",
+            "<li><strong>Optimistic locking</strong> — do not lock, but check a version number on update. If the version changed since you read, retry or fail. Use when conflicts are rare.</li>",
+            "</ul>"
+          ],
+          code: `// Pessimistic: SELECT FOR UPDATE
+try (PreparedStatement ps = conn.prepareStatement(
+        "SELECT balance FROM accounts WHERE id = ? FOR UPDATE")) {
+    ps.setInt(1, accountId);
+    try (ResultSet rs = ps.executeQuery()) {
+        // Row is now locked — no other transaction can modify it
+        // until this transaction commits or rolls back
+        if (rs.next()) {
+            int balance = rs.getInt("balance");
+            // ... check balance, make changes ...
+        }
+    }
+}
+
+// Optimistic: version column
+// Schema: id BIGINT, name VARCHAR, version INT
+try (PreparedStatement ps = conn.prepareStatement(
+        "UPDATE products SET name = ?, version = version + 1 " +
+        "WHERE id = ? AND version = ?")) {
+    ps.setString(1, newName);
+    ps.setLong(2, productId);
+    ps.setInt(3, expectedVersion);  // read earlier
+    
+    int updated = ps.executeUpdate();
+    if (updated == 0) {
+        throw new OptimisticLockException(
+            "Product " + productId + " was modified by another transaction");
+    }
+    // Otherwise, our update succeeded
+}`
+        },
+        {
+          heading: "Deadlocks",
+          content: [
+            "A <strong>deadlock</strong> occurs when two transactions each hold a lock the other needs, causing both to wait forever.",
+            "Most databases detect deadlocks and roll back one of the transactions, throwing a <code>SQLException</code> with a specific SQLState (e.g., <code>40001</code> for serialization failure, vendor-specific codes for deadlocks).",
+            "To handle: catch the exception, retry the transaction."
+          ],
+          code: `// Detecting deadlock: SQLState codes
+catch (SQLException e) {
+    String sqlState = e.getSQLState();
+    if ("40001".equals(sqlState) ||                  // serialization failure
+        "40P01".equals(sqlState) ||                  // PostgreSQL deadlock
+        "1213".equals(sqlState)) {                    // MySQL deadlock
+        // Retry the transaction
+        return retryTransaction();
+    }
+    throw e;
+}
+
+// General retry pattern
+public <T> T executeWithRetry(int maxRetries, Supplier<T> action) {
+    int attempt = 0;
+    while (true) {
+        try {
+            return action.get();
+        } catch (SQLException e) {
+            if (isTransient(e) && attempt < maxRetries) {
+                attempt++;
+                try { Thread.sleep(100L * attempt); } catch (InterruptedException ie) { 
+                    Thread.currentThread().interrupt(); 
+                    throw new RuntimeException(ie);
+                }
+            } else {
+                throw new RuntimeException("Transaction failed after " + attempt + " retries", e);
+            }
+        }
+    }
+}`
+        },
+        {
+          heading: "Try it Yourself",
+          content: [
+            "Exercises:",
+            "<ol>",
+            "<li>Write a <code>transfer(fromId, toId, amount)</code> method that uses a transaction — debit one account, credit another, rollback if either fails.</li>",
+            "<li>Test different isolation levels: open two connections, run a long transaction in one, and observe what the other can see.</li>",
+            "<li>Use a savepoint to make statement 3 conditional on statement 2 succeeding, without losing statement 1.</li>",
+            "<li>Implement optimistic locking with a <code>version</code> column and demonstrate it catching concurrent updates.</li>",
+            "<li>Deliberately cause a deadlock (e.g., two threads that lock table A then B vs. table B then A) and verify the database detects and aborts one.</li>",
+            "</ol>"
+          ]
+        }
+      ]
+    },
+  'java-jdbc-dao-pattern': {
+      title: "DAO Pattern & Best Practices",
+      sections: [
+        {
+          heading: "Why the DAO Pattern?",
+          content: [
+            "The <strong>Data Access Object (DAO)</strong> pattern abstracts data persistence behind a clean interface.",
+            "Business code (services, controllers) calls DAO methods like <code>findById</code> or <code>save</code> without knowing whether the data comes from JDBC, JPA, a web service, or a file.",
+            "Benefits:",
+            "<ul>",
+            "<li><strong>Separation of concerns</strong> — business logic does not know SQL</li>",
+            "<li><strong>Testability</strong> — easy to mock the DAO interface</li>",
+            "<li><strong>Flexibility</strong> — swap JDBC for JPA without changing business code</li>",
+            "<li><strong>Centralized SQL</strong> — all data access in one place</li>",
+            "</ul>"
+          ]
+        },
+        {
+          heading: "A Simple DAO Interface",
+          content: [
+            "Start with an interface that defines the persistence operations for one entity."
+          ],
+          code: `// DAO interface — defines the contract
+public interface UserDao {
+    Optional<User> findById(long id);
+    List<User> findAll();
+    List<User> findByName(String namePattern);
+    User save(User user);    // returns persisted entity (with generated ID)
+    boolean update(User user);
+    boolean deleteById(long id);
+    long count();
+}
+
+// Entity — the domain object
+public record User(
+    Long id,
+    String name,
+    String email,
+    int age,
+    boolean active
+) {}`
+        },
+        {
+          heading: "DAO Implementation with JDBC",
+          content: [
+            "Implement the interface using JDBC.",
+            "Centralize the mapping logic in a <code>RowMapper</code> — used by every read method."
+          ],
+          code: `import java.sql.*;
+import java.util.*;
+import javax.sql.DataSource;
+
+public class JdbcUserDao implements UserDao {
+    
+    private final DataSource dataSource;
+    
+    public JdbcUserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    
+    // RowMapper — converts a ResultSet row into a User
+    private static final RowMapper<User> USER_MAPPER = (rs, rowNum) -> new User(
+        rs.getLong("id"),
+        rs.getString("name"),
+        rs.getString("email"),
+        rs.getInt("age"),
+        rs.getBoolean("active")
+    );
+    
+    @FunctionalInterface
+    interface RowMapper<T> {
+        T map(ResultSet rs, int rowNum) throws SQLException;
+    }
+    
+    @FunctionalInterface
+    interface SqlAction<T> {
+        T execute(Connection conn) throws SQLException;
+    }
+    
+    // Helper to run a query and map results
+    private <T> List<T> query(String sql, RowMapper<T> mapper, Object... params) throws SQLException {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            bindParams(ps, params);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<T> list = new ArrayList<>();
+                int rowNum = 0;
+                while (rs.next()) {
+                    list.add(mapper.map(rs, rowNum++));
+                }
+                return list;
+            }
+        }
+    }
+    
+    private Optional<User> queryOne(String sql, RowMapper<User> mapper, Object... params) throws SQLException {
+        List<User> list = query(sql, mapper, params);
+        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
+    }
+    
+    private int update(String sql, Object... params) throws SQLException {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            bindParams(ps, params);
+            return ps.executeUpdate();
+        }
+    }
+    
+    private void bindParams(PreparedStatement ps, Object... params) throws SQLException {
+        for (int i = 0; i < params.length; i++) {
+            ps.setObject(i + 1, params[i]);
+        }
+    }
+    
+    @Override
+    public Optional<User> findById(long id) throws SQLException {
+        return queryOne("SELECT * FROM users WHERE id = ?", USER_MAPPER, id);
+    }
+    
+    @Override
+    public List<User> findAll() throws SQLException {
+        return query("SELECT * FROM users ORDER BY id", USER_MAPPER);
+    }
+    
+    @Override
+    public List<User> findByName(String namePattern) throws SQLException {
+        return query("SELECT * FROM users WHERE name ILIKE ?", USER_MAPPER, namePattern);
+    }
+    
+    @Override
+    public User save(User user) throws SQLException {
+        String sql = "INSERT INTO users (name, email, age, active) VALUES (?, ?, ?, ?)";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, user.name());
+            ps.setString(2, user.email());
+            ps.setInt(3, user.age());
+            ps.setBoolean(4, user.active());
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) {
+                    return new User(keys.getLong(1), user.name(), user.email(), user.age(), user.active());
+                }
+            }
+            throw new SQLException("Insert succeeded but no generated key returned");
+        }
+    }
+    
+    @Override
+    public boolean update(User user) throws SQLException {
+        return update("UPDATE users SET name = ?, email = ?, age = ?, active = ? WHERE id = ?",
+                     user.name(), user.email(), user.age(), user.active(), user.id()) > 0;
+    }
+    
+    @Override
+    public boolean deleteById(long id) throws SQLException {
+        return update("DELETE FROM users WHERE id = ?", id) > 0;
+    }
+    
+    @Override
+    public long count() throws SQLException {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM users");
+             ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? rs.getLong(1) : 0;
+        }
+    }
+}`
+        },
+        {
+          heading: "Custom DAO Exception",
+          content: [
+            "Raw <code>SQLException</code> is a checked exception that leaks JDBC specifics into business code.",
+            "Best practice: wrap it in a custom unchecked exception so the service layer does not need to know about SQL."
+          ],
+          code: `// Custom unchecked exception
+public class DaoException extends RuntimeException {
+    public DaoException(String message, SQLException cause) {
+        super(message, cause);
+    }
+}
+
+// Wrap SQLException at the DAO boundary
+public class JdbcUserDao implements UserDao {
+    private <T> T withConn(SqlAction<T> action) {
+        try (Connection conn = dataSource.getConnection()) {
+            return action.execute(conn);
+        } catch (SQLException e) {
+            throw new DaoException("Database error in " + action.getClass().getSimpleName(), e);
+        }
+    }
+    
+    @Override
+    public Optional<User> findById(long id) {
+        return withConn(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE id = ?")) {
+                ps.setLong(1, id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    return rs.next() ? Optional.of(USER_MAPPER.map(rs, 0)) : Optional.empty();
+                }
+            }
+        });
+    }
+    // ...
+}
+
+// Now service code can catch DaoException, not SQLException:
+try {
+    User user = userDao.findById(123).orElseThrow();
+} catch (DaoException e) {
+    log.error("Failed to load user", e);
+    throw new ServiceException("User lookup failed", e);
+}`
+        },
+        {
+          heading: "Generic DAO Base Class",
+          content: [
+            "Most DAOs share the same CRUD pattern. Extract the common logic into a generic base class."
+          ],
+          code: `import java.sql.*;
+import java.util.*;
+import java.util.function.Function;
+import javax.sql.DataSource;
+
+// Base CRUD DAO for any entity with a Long primary key
+public abstract class AbstractJdbcDao<T, ID> {
+    
+    protected final DataSource dataSource;
+    
+    protected AbstractJdbcDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    
+    // Subclasses provide these
+    protected abstract String tableName();
+    protected abstract String idColumn();
+    protected abstract String[] columns();
+    protected abstract String insertSql();
+    protected abstract String updateSql();
+    protected abstract void bindInsertParams(PreparedStatement ps, T entity) throws SQLException;
+    protected abstract void bindUpdateParams(PreparedStatement ps, T entity) throws SQLException;
+    protected abstract T mapRow(ResultSet rs, int rowNum) throws SQLException;
+    protected abstract ID extractId(T entity);
+    
+    // Generic CRUD operations
+    public Optional<T> findById(ID id) {
+        String sql = "SELECT * FROM " + tableName() + " WHERE " + idColumn() + " = ?";
+        return queryOne(sql, this::mapRow, id);
+    }
+    
+    public List<T> findAll() {
+        return query("SELECT * FROM " + tableName(), this::mapRow);
+    }
+    
+    public T save(T entity) {
+        // INSERT and return entity with generated ID
+        // ...
+    }
+    
+    public boolean deleteById(ID id) {
+        return update("DELETE FROM " + tableName() + " WHERE " + idColumn() + " = ?", id) > 0;
+    }
+    
+    // Reusable helpers
+    protected <R> List<R> query(String sql, RowMapper<R> mapper, Object... params) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (int i = 0; i < params.length; i++) ps.setObject(i + 1, params[i]);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<R> list = new ArrayList<>();
+                int rowNum = 0;
+                while (rs.next()) list.add(mapper.map(rs, rowNum++));
+                return list;
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Query failed: " + sql, e);
+        }
+    }
+    
+    protected Optional<T> queryOne(String sql, RowMapper<T> mapper, Object... params) {
+        List<T> list = query(sql, mapper, params);
+        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
+    }
+    
+    protected int update(String sql, Object... params) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (int i = 0; i < params.length; i++) ps.setObject(i + 1, params[i]);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Update failed: " + sql, e);
+        }
+    }
+    
+    protected interface RowMapper<R> {
+        R map(ResultSet rs, int rowNum) throws SQLException;
+    }
+}
+
+// Then a UserDao is just the user-specific bits:
+public class JdbcUserDao extends AbstractJdbcDao<User, Long> implements UserDao {
+    public JdbcUserDao(DataSource ds) { super(ds); }
+    
+    @Override protected String tableName() { return "users"; }
+    @Override protected String idColumn() { return "id"; }
+    @Override protected String[] columns() { return new String[]{"name", "email", "age", "active"}; }
+    @Override protected String insertSql() { return "INSERT INTO users (name, email, age, active) VALUES (?, ?, ?, ?)"; }
+    @Override protected String updateSql() { return "UPDATE users SET name=?, email=?, age=?, active=? WHERE id=?"; }
+    @Override protected void bindInsertParams(PreparedStatement ps, User u) throws SQLException { /* ... */ }
+    @Override protected void bindUpdateParams(PreparedStatement ps, User u) throws SQLException { /* ... */ }
+    @Override protected User mapRow(ResultSet rs, int rowNum) throws SQLException { /* ... */ }
+    @Override protected Long extractId(User u) { return u.id(); }
+}`
+        },
+        {
+          heading: "Transactional Methods Across DAOs",
+          content: [
+            "Sometimes a business operation spans multiple DAOs (e.g., create a user, log an audit event, update a counter).",
+            "A transaction service coordinates them in one transaction."
+          ],
+          code: `public class UserService {
+    private final UserDao userDao;
+    private final AuditDao auditDao;
+    private final DataSource dataSource;
+    
+    public UserService(UserDao userDao, AuditDao auditDao, DataSource dataSource) {
+        this.userDao = userDao;
+        this.auditDao = auditDao;
+        this.dataSource = dataSource;
+    }
+    
+    public User registerUser(String name, String email) {
+        try (Connection conn = dataSource.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                User newUser = new User(null, name, email, 0, true);
+                User saved = userDao.save(conn, newUser);   // pass the connection
+                auditDao.log(conn, "USER_REGISTERED", saved.id());
+                conn.commit();
+                return saved;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw new DaoException("Registration failed", e);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Could not obtain connection", e);
+        }
+    }
+}
+
+// DAO methods that take a Connection (overloaded variants) allow
+// the service layer to control the transaction boundary.
+public interface UserDao {
+    User save(Connection conn, User user) throws SQLException;
+}`
+        },
+        {
+          heading: "Other Best Practices",
+          content: [
+            "Additional JDBC best practices:",
+            "<ul>",
+            "<li><strong>Always use try-with-resources</strong> for Connection, Statement, ResultSet.</li>",
+            "<li><strong>Never concatenate user input into SQL</strong> — always use bind parameters.</li>",
+            "<li><strong>Log SQL exceptions with the SQL state and error code</strong> for diagnosability.</li>",
+            "<li><strong>Validate input at the DAO boundary</strong> — do not let invalid data reach the database.</li>",
+            '<li><strong>Index frequently-queried columns</strong> at the database level (not the DAO\'s job).</li>',
+            "<li><strong>Use a connection pool in production</strong> — never create a connection per request.</li>",
+            "<li><strong>Set query timeouts</strong> with <code>Statement.setQueryTimeout(seconds)</code> to avoid runaway queries.</li>",
+            "<li><strong>Use batch updates for bulk operations</strong> — orders of magnitude faster.</li>",
+            '<li><strong>Profile slow queries</strong> with the database\'s EXPLAIN tool.</li>',
+            "<li><strong>Use database transactions</strong> for any multi-statement operation that must be atomic.</li>",
+            "</ul>"
+          ]
+        },
+        {
+          heading: "Try it Yourself",
+          content: [
+            "Exercises:",
+            "<ol>",
+            "<li>Build a <code>UserDao</code> interface and JDBC implementation with <code>findById</code>, <code>findAll</code>, <code>save</code>, <code>update</code>, <code>deleteById</code>.</li>",
+            "<li>Extract the common CRUD logic into an <code>AbstractJdbcDao</code> generic base class.</li>",
+            "<li>Wrap <code>SQLException</code> in a custom <code>DaoException</code> at the DAO boundary.</li>",
+            "<li>Write a <code>UserService</code> that performs a user-registration operation spanning <code>UserDao</code> + <code>AuditDao</code> in one transaction.</li>",
+            "<li>Write a unit test for <code>UserService</code> using a mocked DAO interface — prove you can swap JDBC for an in-memory implementation.</li>",
+            "</ol>"
+          ]
+        }
+      ]
+    },
+  'java-jdbc-connection-pooling': {
+      title: "Connection Pooling & Performance",
+      sections: [
+        {
+          heading: "Why Pool Connections?",
+          content: [
+            "Opening a database connection is <strong>expensive</strong> — TCP handshake, TLS negotiation, authentication, and on the database side, allocating a session and loading session state.",
+            "Typical connection cost: 50-200ms; a typical simple query: 1-10ms.",
+            "If you open a new connection for every request, your app spends most of its time on overhead, not on real work.",
+            "A <strong>connection pool</strong> keeps a set of connections open and lends them out on demand, dramatically reducing latency."
+          ]
+        },
+        {
+          heading: "Connection Pool Concepts",
+          content: [
+            "Key terms:",
+            "<ul>",
+            "<li><strong>Initial size</strong> — number of connections opened at pool startup</li>",
+            "<li><strong>Min idle</strong> — minimum connections kept open (even if unused)</li>",
+            "<li><strong>Max size</strong> — maximum connections the pool will ever open</li>",
+            "<li><strong>Max wait time</strong> — how long a caller will block waiting for a connection when the pool is full</li>",
+            "<li><strong>Max lifetime</strong> — recycle connections after this long (helps with stale state, server-side timeouts)</li>",
+            "<li><strong>Idle timeout</strong> — close idle connections after this long</li>",
+            "<li><strong>Validation</strong> — periodically test idle connections with <code>isValid()</code> or a custom query</li>",
+            "<li><strong>Connection acquisition / leak detection</strong> — track how long each connection has been held</li>",
+            "</ul>"
+          ]
+        },
+        {
+          heading: "HikariCP — The Industry Standard",
+          content: [
+            "HikariCP is the fastest, most reliable JDBC connection pool — used in Spring Boot by default, and the de-facto choice for high-performance Java apps.",
+            "Add the dependency: <code>com.zaxxer:HikariCP</code> (or <code>com.zaxxer:HikariCP:5.x</code> for recent versions).",
+            "You configure a <code>HikariDataSource</code> and use it just like a regular <code>DataSource</code>."
+          ],
+          code: `<dependency>
+    <groupId>com.zaxxer</groupId>
+    <artifactId>HikariCP</artifactId>
+    <version>5.1.0</version>
+</dependency>`
+        },
+        {
+          heading: "HikariCP Configuration",
+          content: [
+            "HikariCP has a simple, fluent configuration via <code>HikariConfig</code> or a properties file.",
+            "Recommended pool sizes depend on workload — a common rule is (number of CPU cores * 2) + effective_spindle_count."
+          ],
+          code: `import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
+
+public class DataSourceFactory {
+    public static DataSource createHikariDataSource() {
+        HikariConfig config = new HikariConfig();
+        
+        // Connection details
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/mydb");
+        config.setUsername("app_user");
+        config.setPassword("secret");
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        
+        // Pool sizing
+        config.setMaximumPoolSize(20);
+        config.setMinimumIdle(5);
+        
+        // Timeouts
+        config.setConnectionTimeout(10_000);  // 10s
+        config.setIdleTimeout(300_000);       // 5 min
+        config.setMaxLifetime(1_800_000);     // 30 min
+        config.setKeepaliveTime(60_000);      // test every 60s
+        
+        // Pool name (for logging)
+        config.setPoolName("MyAppPool");
+        
+        // Performance
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("useServerPrepStmts", "true");
+        
+        // Health check
+        config.setConnectionTestQuery("SELECT 1");
+        // Or rely on JDBC4 isValid() — better
+        
+        // Leak detection — log warnings if connection held too long
+        config.setLeakDetectionThreshold(60_000);
+        
+        return new HikariDataSource(config);
+    }
+}`
+        },
+        {
+          heading: "HikariCP Configuration File",
+          content: [
+            "Alternatively, configure HikariCP via a properties file:"
+          ],
+          code: `# hikari.properties
+jdbcUrl=jdbc:mysql://localhost:3306/mydb
+username=app_user
+password=secret
+driverClassName=com.mysql.cj.jdbc.Driver
+
+maximumPoolSize=20
+minimumIdle=5
+connectionTimeout=10000
+idleTimeout=300000
+maxLifetime=1800000
+keepaliveTime=60000
+
+poolName=MyAppPool
+
+# Statement caching
+dataSource.cachePrepStmts=true
+dataSource.prepStmtCacheSize=250
+dataSource.prepStmtCacheSqlLimit=2048
+dataSource.useServerPrepStmts=true
+
+# Leak detection
+leakDetectionThreshold=60000
+
+# Health check (or rely on JDBC4 isValid)
+connectionTestQuery=SELECT 1\`
+
+// Load it:
+HikariConfig config = new HikariConfig("hikari.properties");
+HikariDataSource ds = new HikariDataSource(config);`
+        },
+        {
+          heading: "Using a Pooled DataSource",
+          content: [
+            "Once you have a <code>HikariDataSource</code> (or any pooled DataSource), you use it the same as an unpooled one — <code>getConnection()</code>, do work, close.",
+            "The pool handles the lifecycle behind the scenes."
+          ],
+          code: `// Singleton — typically created once at app startup
+public class Database {
+    private static final DataSource dataSource = DataSourceFactory.createHikariDataSource();
+    
+    public static DataSource getDataSource() {
+        return dataSource;
+    }
+    
+    // Shutdown hook — close pool when app stops
+    public static void close() {
+        if (dataSource instanceof HikariDataSource) {
+            ((HikariDataSource) dataSource).close();
+        }
+    }
+}
+
+// In a DAO or service:
+try (Connection conn = Database.getDataSource().getConnection()) {
+    // ...
+}  // close() returns the connection to the pool instead of actually closing it
+
+// DAO code is identical whether pooled or not
+public class JdbcUserDao implements UserDao {
+    private final DataSource dataSource;
+    public JdbcUserDao(DataSource ds) { this.dataSource = ds; }
+    // ... methods work the same ...
+}`
+        },
+        {
+          heading: "Pool Metrics and Monitoring",
+          content: [
+            "HikariCP exposes a MBean that reports pool statistics.",
+            "You can also use Dropwizard Metrics, Micrometer, or JMX to monitor them.",
+            "Key metrics:",
+            "<ul>",
+            "<li><code>activeConnections</code> — currently in-use connections</li>",
+            "<li><code>idleConnections</code> — open but unused</li>",
+            "<li><code>totalConnections</code> — open total</li>",
+            "<li><code>threadsAwaitingConnection</code> — callers waiting for a connection (if > 0, your pool is too small)</li>",
+            "<li><code>connectionAcquireNanos</code> — time to acquire a connection (should be sub-millisecond)</li>",
+            "</ul>"
+          ],
+          code: `// Get pool stats via the MBean
+HikariDataSource ds = (HikariDataSource) Database.getDataSource();
+HikariPoolMXBean pool = ds.getHikariPoolMXBean();
+
+System.out.println("Active:   " + pool.getActiveConnections());
+System.out.println("Idle:     " + pool.getIdleConnections());
+System.out.println("Total:    " + pool.getTotalConnections());
+System.out.println("Waiting:  " + pool.getThreadsAwaitingConnection());
+
+// Expose via JMX (HikariCP does this automatically)
+// You can scrape with Prometheus JMX exporter, JConsole, etc.
+
+// Or programmatically:
+pool.getActiveConnections();  // current check
+
+// For continuous monitoring, use HikariCP's built-in logger
+// or wire up a MetricsTrackerFactory (Dropwizard / Micrometer)`
+        },
+        {
+          heading: "Tuning Pool Size",
+          content: [
+            "Common mistakes: pool too small (caller blocks) or too large (database overloaded).",
+            "PostgreSQL formula (assuming all connections do CPU + I/O work):",
+            "<code>connections = ((core_count * 2) + effective_spindle_count)</code>",
+            "For HikariCP, typical defaults work well:",
+            "<ul>",
+            "<li>Web app with 4 cores: <code>maximumPoolSize=10-20</code></li>",
+            "<li>Heavy reporting app: may need <code>30-50</code></li>",
+            "<li>Serverless / one-request-at-a-time apps: <code>5-10</code> is enough</li>",
+            "</ul>",
+            "Watch the <code>threadsAwaitingConnection</code> metric. If consistently > 0, increase pool size."
+          ]
+        },
+        {
+          heading: "Alternatives to HikariCP",
+          content: [
+            "Other connection pools you may encounter:",
+            "<ul>",
+            "<li><strong>Vibur DBCP</strong> — modern, supports statement caching, async connection acquisition</li>",
+            '<li><strong>Tomcat JDBC Pool</strong> — Tomcat\'s pool, also used in non-Tomcat apps</li>',
+            "<li><strong>Apache Commons DBCP</strong> — older, less performant, but still common in legacy code</li>",
+            "<li><strong>c3p0</strong> — older, but found in many Hibernate tutorials. Avoid for new projects.</li>",
+            "<li><strong>Oracle Universal Connection Pool (UCP)</strong> — Oracle-specific, used with Oracle DB features</li>",
+            "</ul>",
+            "In 2024+, HikariCP is the default choice for nearly all new Java applications."
+          ]
+        },
+        {
+          heading: "Connection Pool Anti-Patterns",
+          content: [
+            "Things to avoid:",
+            "<ul>",
+            "<li><strong>Setting a huge pool size</strong> — most apps need 10-20 connections, not 200. The database also has connection limits.</li>",
+            "<li><strong>Holding connections during slow operations</strong> — long HTTP calls, file uploads, blocking I/O. Do them outside the connection scope.</li>",
+            "<li><strong>Forgetting to close</strong> — always use try-with-resources, or set <code>leakDetectionThreshold</code>.</li>",
+            "<li><strong>Creating a pool per request</strong> — pools are expensive to create. One per app, singleton-style.</li>",
+            '<li><strong>Disabling prepared-statement caching</strong> — HikariCP\'s <code>cachePrepStmts</code> gives huge performance wins.</li>',
+            "<li><strong>No validation</strong> — stale connections in the pool cause random failures. Use <code>isValid</code> or a test query.</li>",
+            "</ul>"
+          ]
+        },
+        {
+          heading: "Try it Yourself",
+          content: [
+            "Exercises:",
+            "<ol>",
+            "<li>Set up a <code>HikariDataSource</code> programmatically and use it from a DAO.</li>",
+            "<li>Add <code>leakDetectionThreshold=10000</code> and write a method that intentionally forgets to close a connection — observe the warning log.</li>",
+            "<li>Run a load test (e.g., JMeter, wrk) against a small endpoint that hits the DB, and observe the pool stats as load increases.</li>",
+            "<li>Tune <code>maximumPoolSize</code> and compare average response time at different values.</li>",
+            "<li>Expose HikariCP metrics to JMX or Prometheus and graph <code>activeConnections</code> over time.</li>",
+            "<li>Compare HikariCP performance to a no-pool implementation by toggling the pool on and off in a stress test.</li>",
+            "</ol>"
+          ]
+        }
+      ]
+    }
 };
 
+
 export const javaContent = {
+  module7: javaModule7Content,
   module1: javaModule1Content,
   module2: javaModule2Content,
   module3: javaModule3Content,

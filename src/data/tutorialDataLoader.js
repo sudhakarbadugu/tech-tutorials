@@ -159,13 +159,24 @@ export const javaStructure = {
     ],
   },
   module6: {
-    title: "Module 6: Enterprise & Beyond",
+    title: "Module 6: Enterprise Java",
     topics: [
       { id: "jvm-basics", title: "JVM Basics" },
       { id: "garbage-collection", title: "Garbage Collection" },
       { id: "build-tools", title: "Build Tools (Maven, Gradle)" },
       { id: "unit-testing-junit", title: "Unit Testing with JUnit" },
-      { id: "jdbc", title: "JDBC and Database Connectivity" },
+    ],
+  },
+  module7: {
+    title: "Module 7: Database & Persistence (JDBC)",
+    topics: [
+      { id: "java-jdbc-intro", title: "JDBC Introduction & Architecture" },
+      { id: "java-jdbc-connections", title: "Establishing Connections" },
+      { id: "java-jdbc-statements", title: "Statements, PreparedStatements & Batching" },
+      { id: "java-jdbc-resultset", title: "ResultSet & Data Retrieval" },
+      { id: "java-jdbc-transactions", title: "Transactions & Isolation Levels" },
+      { id: "java-jdbc-dao-pattern", title: "DAO Pattern & Best Practices" },
+      { id: "java-jdbc-connection-pooling", title: "Connection Pooling & Performance" },
     ],
   },
 };
