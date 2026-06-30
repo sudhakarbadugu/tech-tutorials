@@ -12368,187 +12368,297 @@ class Test2 {
       ]
     },
   'build-tools': {
-      title: 'Build Tools',
-      sections: [
-        {
-          heading: 'What are Build Tools?',
-          content: [
-            'A <strong>build tool</strong> automates the process of compiling, testing, and packaging your Java code.',
-            'As your project grows, manually compiling files with <code>javac</code> becomes impractical.',
-            'Build tools handle dependencies (external libraries), run tests, and create deployable files like <code>.jar</code> or <code>.war</code>.',
-            '<strong>Popular Java build tools:</strong>',
-            '<ul><li><strong>Maven</strong> — uses XML configuration (<code>pom.xml</code>), convention over configuration</li><li><strong>Gradle</strong> — uses Groovy or Kotlin DSL scripts, very flexible and fast</li></ul>'
-          ]
-        },
-        {
-          heading: 'Introduction to Maven',
-          content: [
-            '<strong>Maven</strong> is a widely-used build tool that simplifies Java project management.',
-            'Maven uses a <code>pom.xml</code> file (Project Object Model) to define your project structure, dependencies, and build steps.',
-            'It follows the principle of <strong>convention over configuration</strong> — it assumes standard folder layouts so you do not have to specify everything manually.',
-            '<strong>Standard Maven directory structure:</strong>',
-            '<ul><li><code>src/main/java</code> — Java source code</li><li><code>src/main/resources</code> — configuration files</li><li><code>src/test/java</code> — test code</li><li><code>target/</code> — compiled output and packaged files</li></ul>'
-          ],
-          code: `<!-- pom.xml — Maven project configuration -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    
-    <groupId>com.example</groupId>
-    <artifactId>my-first-app</artifactId>
-    <version>1.0.0</version>
-    
-    <dependencies>
-        <!-- Adding an external library -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-        </dependency>
-    </dependencies>
-</project>`
-        },
-        {
-          heading: 'Common Maven Commands',
-          content: [
-            'Maven provides simple commands to perform common tasks:',
-            `<table border="1"><tr><th>Command</th><th>What it does</th></tr><tr><td><code>mvn compile</code></td><td>Compiles the source code</td></tr><tr><td><code>mvn test</code></td><td>Runs all tests in the project</td></tr><tr><td><code>mvn package</code></td><td>Compiles and packages into a JAR/WAR file</td></tr><tr><td><code>mvn clean</code></td><td>Deletes the <code>target/</code> directory</td></tr><tr><td><code>mvn install</code></td><td>Packages and installs the JAR to local repository</td></tr></table>`,
-            'You can chain commands: <code>mvn clean package</code> cleans and then rebuilds everything.'
-          ],
-          code: `// Example Java class at src/main/java/com/example/App.java
-package com.example;
-
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello from Maven!");
-        
-        // Using Apache Commons Lang (if added as dependency)
-        // StringUtils is from the external library
-        // String reversed = StringUtils.reverse("Maven");
-        // System.out.println(reversed);
-    }
-}
-
-// Commands to run in terminal:
-// mvn compile   → compiles the code
-// mvn package   → creates my-first-app-1.0.0.jar in target/
-// java -jar target/my-first-app-1.0.0.jar`
-        },
-        {
-          heading: 'Introduction to Gradle',
-          content: [
-            '<strong>Gradle</strong> is another powerful build tool that uses a script-based approach instead of XML.',
-            'Gradle scripts are written in <strong>Groovy</strong> or <strong>Kotlin</strong> and are more concise than Maven XML.',
-            'Gradle is known for being fast thanks to <strong>incremental builds</strong> — it only recompiles what changed.',
-            'Gradle also uses a standard directory layout similar to Maven.'
-          ],
-          code: `// build.gradle — Gradle project configuration
-plugins {
-    id 'java'
-    id 'application'
-}
-
-// Project information
-group = 'com.example'
-version = '1.0.0'
-
-// Java version
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-// Dependencies
-repositories {
-    mavenCentral()  // where to download libraries from
-}
-
-dependencies {
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
-}
-
-// Main class for running
-application {
-    mainClass = 'com.example.App'
-}
-
-// Enable JUnit Platform for tests
-test {
-    useJUnitPlatform()
-}`
-        },
-        {
-          heading: 'Common Gradle Commands',
-          content: [
-            'Gradle commands are similar to Maven but use the <code>gradle</code> or <code>./gradlew</code> command:',
-            `<table border="1"><tr><th>Command</th><th>What it does</th></tr><tr><td><code>gradle compileJava</code></td><td>Compiles the source code</td></tr><tr><td><code>gradle test</code></td><td>Runs all tests</td></tr><tr><td><code>gradle build</code></td><td>Compiles, tests, and packages the project</td></tr><tr><td><code>gradle clean</code></td><td>Deletes the <code>build/</code> directory</td></tr><tr><td><code>gradle run</code></td><td>Compiles and runs the main application</td></tr></table>`,
-            'Gradle wrapper (<code>gradlew</code>) lets you run Gradle without installing it globally.'
-          ],
-          code: `// Example Java class at src/main/java/com/example/App.java
-package com.example;
-
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello from Gradle!");
-    }
-}
-
-// Terminal commands:
-// ./gradlew build    → full build
-// ./gradlew run      → compile and run the app
-// ./gradlew clean    → remove build directory`
-        },
-        {
-          heading: 'Try it Yourself',
-          content: [
-            'Create a simple Maven or Gradle project with one dependency.',
-            'Write a small program that uses the dependency, then compile and run it.'
-          ],
-          code: `// Create a Maven project with this pom.xml:
-// Add JUnit dependency for testing
-
-/*
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter</artifactId>
-    <version>5.9.0</version>
-    <scope>test</scope>
-</dependency>
-*/
-
-// src/main/java/com/example/Calculator.java
-package com.example;
-
-public class Calculator {
-    public int add(int a, int b) {
-        return a + b;
-    }
-}
-
-// src/test/java/com/example/CalculatorTest.java
-package com.example;
-
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-public class CalculatorTest {
-    @Test
-    public void testAdd() {
-        Calculator calc = new Calculator();
-        assertEquals(5, calc.add(2, 3));
-    }
-}
-
-// Run: mvn test`
-        }
-      ]
-    },
-
+    "title": "Build Tools (Maven & Gradle)",
+    "sections": [
+      {
+        "heading": "What are Build Tools?",
+        "content": [
+          "A <strong>build tool</strong> automates compiling, testing, packaging, and distributing your Java code.",
+          "As projects grow, manually running <code>javac</code>, then tests, then assembling JARs becomes impractical.",
+          "Modern build tools handle this declaratively:",
+          "<ul>",
+          "<li><strong>Compilation</strong> — incremental Java compilation</li>",
+          "<li><strong>Dependency management</strong> — download, version, and resolve external libraries transitively</li>",
+          "<li><strong>Test execution</strong> — run unit, integration, and end-to-end tests</li>",
+          "<li><strong>Packaging</strong> — produce JARs, WARs, fat JARs, native images</li>",
+          "<li><strong>Distribution</strong> — upload artifacts to repositories (Maven Central, Nexus, Artifactory)</li>",
+          "<li><strong>Reproducibility</strong> — anyone can build the project identically</li>",
+          "</ul>",
+          "<strong>Popular Java build tools:</strong>",
+          "<ul>",
+          "<li><strong>Maven</strong> — XML configuration (pom.xml), convention over configuration. Enterprise standard.</li>",
+          "<li><strong>Gradle</strong> — Groovy/Kotlin DSL, flexible and fast. Default for Android, popular for Spring Boot.</li>",
+          "<li><strong>Ant</strong> — older, XML-based, imperative. Legacy projects.</li>",
+          "</ul>",
+          "We go deep on <strong>Maven</strong>, then compare with <strong>Gradle</strong>."
+        ]
+      },
+      {
+        "heading": "Introduction to Maven",
+        "content": [
+          "<strong>Maven</strong> simplifies Java project management through an opinionated model.",
+          "Maven uses a <code>pom.xml</code> — the <strong>Project Object Model</strong> — to declaratively define structure, dependencies, plugins, and build steps.",
+          "It follows <strong>convention over configuration</strong> — Maven assumes standard folders so you do not specify everything manually.",
+          "<strong>Standard Maven directory structure:</strong>",
+          "<ul>",
+          "<li><code>src/main/java</code> — Java source code</li>",
+          "<li><code>src/main/resources</code> — configuration files</li>",
+          "<li><code>src/test/java</code> — test source code</li>",
+          "<li><code>target/</code> — generated output (compiled classes, JARs). Safe to delete.</li>",
+          "</ul>",
+          "The minimum pom.xml needs is the three <em>coordinates</em>: <strong>groupId</strong>, <strong>artifactId</strong>, <strong>version</strong>."
+        ],
+        "code": "<!-- pom.xml — minimal Maven project -->\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0\n                             http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n\n    <groupId>com.example</groupId>\n    <artifactId>my-first-app</artifactId>\n    <version>1.0.0</version>\n\n    <properties>\n        <maven.compiler.source>17</maven.compiler.source>\n        <maven.compiler.target>17</maven.compiler.target>\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n    </properties>\n\n    <dependencies>\n        <dependency>\n            <groupId>org.apache.commons</groupId>\n            <artifactId>commons-lang3</artifactId>\n            <version>3.14.0</version>\n        </dependency>\n        <dependency>\n            <groupId>org.junit.jupiter</groupId>\n            <artifactId>junit-jupiter</artifactId>\n            <version>5.10.2</version>\n            <scope>test</scope>\n        </dependency>\n    </dependencies>\n</project>"
+      },
+      {
+        "heading": "Common Maven Commands",
+        "content": [
+          "Maven commands map to <strong>phases</strong> in the build lifecycle:",
+          "<table border=\"1\"><tr><th>Command</th><th>What it does</th></tr>",
+          "<tr><td><code>mvn compile</code></td><td>Compiles main source to target/classes</td></tr>",
+          "<tr><td><code>mvn test</code></td><td>Runs all unit tests</td></tr>",
+          "<tr><td><code>mvn package</code></td><td>Compiles, tests, packages into JAR/WAR</td></tr>",
+          "<tr><td><code>mvn install</code></td><td>Packages + installs to local repo (~/.m2/repository)</td></tr>",
+          "<tr><td><code>mvn clean</code></td><td>Deletes target/ directory</td></tr>",
+          "<tr><td><code>mvn clean package</code></td><td>Clean rebuild — most common combo</td></tr>",
+          "<tr><td><code>mvn -pl module-a -am package</code></td><td>Build module-a and its dependencies</td></tr>",
+          "<tr><td><code>mvn -DskipTests package</code></td><td>Build but skip tests (use sparingly!)</td></tr>",
+          "</table>"
+        ],
+        "code": "// Example: src/main/java/com/example/App.java\npackage com.example;\n\nimport org.apache.commons.lang3.StringUtils;\n\npublic class App {\n    public static void main(String[] args) {\n        String greeting = StringUtils.reverse(\"Hello Maven!\");\n        System.out.println(greeting);\n    }\n}\n\n// Terminal workflow:\n// mvn compile      → compiles code\n// mvn test         → runs tests\n// mvn package      → creates JAR in target/\n// java -jar target/my-first-app-1.0.0.jar"
+      },
+      {
+        "heading": "The Maven Build Lifecycle",
+        "content": [
+          "A <strong>lifecycle</strong> is an ordered sequence of <strong>phases</strong>. Running a phase executes all prior phases too.",
+          "Maven has <strong>three lifecycles</strong>: default (main build), clean, and site.",
+          "The <strong>default lifecycle</strong> has 23 phases. Key ones:",
+          "<ul>",
+          "<li><code>validate</code> — check project is correct</li>",
+          "<li><code>compile</code> — compile main source</li>",
+          "<li><code>test-compile</code> — compile tests</li>",
+          "<li><code>test</code> — run unit tests (via maven-surefire-plugin)</li>",
+          "<li><code>package</code> — bundle into JAR/WAR</li>",
+          "<li><code>integration-test</code> — run integration tests (via maven-failsafe-plugin)</li>",
+          "<li><code>verify</code> — verify package is valid</li>",
+          "<li><code>install</code> — install to local repo</li>",
+          "<li><code>deploy</code> — upload to remote repo</li>",
+          "</ul>",
+          "A <strong>goal</strong> is a specific task by a plugin. Each phase binds to zero or more goals. Running <code>mvn package</code> executes all goals bound to package and all prior phases."
+        ],
+        "code": "<!-- How a phase binds to a plugin goal: -->\n<build>\n    <plugins>\n        <plugin>\n            <groupId>org.apache.maven.plugins</groupId>\n            <artifactId>maven-jar-plugin</artifactId>\n            <version>3.4.1</version>\n            <executions>\n                <execution>\n                    <phase>package</phase>\n                    <goals><goal>jar</goal></goals>\n                </execution>\n            </executions>\n        </plugin>\n    </plugins>\n</build>\n\n# Run a specific goal directly:\n# mvn compiler:compile    → runs ONLY compile goal\n# mvn jar:jar             → runs ONLY jar goal\n\n# See what plugins are bound:\n# mvn help:effective-pom\n# mvn dependency:tree"
+      },
+      {
+        "heading": "POM in Depth",
+        "content": [
+          "The pom.xml is the heart of Maven. Beyond basic GAV coordinates:",
+          "<strong>Super POM and Effective POM</strong>",
+          "<ul>",
+          "<li>Every pom.xml inherits from a <strong>Super POM</strong> — defaults bundled in Maven.</li>",
+          "<li>The <strong>effective POM</strong> merges your POM, parent(s), and Super POM. Use <code>mvn help:effective-pom</code> to inspect it.</li>",
+          "</ul>",
+          "<strong>Inheritance vs Aggregation</strong>",
+          "<ul>",
+          "<li><strong>Inheritance</strong> — child inherits config from parent via &lt;parent&gt; block.</li>",
+          "<li><strong>Aggregation</strong> — parent lists child modules via &lt;modules&gt; for multi-module builds.</li>",
+          "</ul>",
+          "<strong>Common POM elements</strong>",
+          "<ul>",
+          "<li><code>&lt;properties&gt;</code> — named constants referenced as ${prop.name}</li>",
+          "<li><code>&lt;dependencyManagement&gt;</code> — pin versions for all children</li>",
+          "<li><code>&lt;pluginManagement&gt;</code> — same for plugins</li>",
+          "<li><code>&lt;build&gt;</code> — build defaults (finalName, plugins)</li>",
+          "</ul>"
+        ],
+        "code": "<!-- Child POM inheriting from parent -->\n<project>\n    <modelVersion>4.0.0</modelVersion>\n    <parent>\n        <groupId>com.example.parent</groupId>\n        <artifactId>my-parent-pom</artifactId>\n        <version>1.5.0</version>\n    </parent>\n    <artifactId>my-service</artifactId>\n    <!-- groupId and version inherited from parent -->\n    <dependencies>\n        <dependency>\n            <groupId>com.fasterxml.jackson.core</groupId>\n            <artifactId>jackson-databind</artifactId>\n            <!-- version from parent dependencyManagement -->\n        </dependency>\n    </dependencies>\n</project>"
+      },
+      {
+        "heading": "Maven Dependency Management",
+        "content": [
+          "<strong>The 6 dependency scopes</strong>",
+          "<ul>",
+          "<li><strong>compile</strong> (default) — compile, test, runtime classpaths, and in packaged artifact.</li>",
+          "<li><strong>provided</strong> — compile and test only; runtime container provides it (e.g., servlet API). NOT in JAR.</li>",
+          "<li><strong>runtime</strong> — runtime only (e.g., JDBC driver implementation).</li>",
+          "<li><strong>test</strong> — test classpath only (JUnit, Mockito).</li>",
+          "<li><strong>system</strong> — like provided but with explicit JAR path. Avoid.</li>",
+          "<li><strong>import</strong> — only in dependencyManagement to import a BOM.</li>",
+          "</ul>",
+          "<strong>Transitive dependencies</strong>",
+          "When you depend on library A, you get A's dependencies too. Maven resolves the entire tree.",
+          "<strong>Version conflict resolution</strong>",
+          "When two deps want different versions of the same library, <strong>\"nearest wins\"</strong>. Use <code>&lt;dependencyManagement&gt;</code> to override.",
+          "<strong>Exclusions</strong>",
+          "Use <code>&lt;exclusions&gt;</code> to block unwanted transitive deps."
+        ],
+        "code": "<!-- Dependency with exclusions -->\n<dependency>\n    <groupId>org.springframework</groupId>\n    <artifactId>spring-core</artifactId>\n    <version>6.1.5</version>\n    <exclusions>\n        <exclusion>\n            <groupId>commons-logging</groupId>\n            <artifactId>commons-logging</artifactId>\n        </exclusion>\n    </exclusions>\n</dependency>\n\n# Inspect dependency tree:\n# mvn dependency:tree\n# mvn dependency:tree -Dincludes=commons-logging\n\n# Detect unused deps:\n# mvn dependency:analyze"
+      },
+      {
+        "heading": "Maven Repositories",
+        "content": [
+          "Maven stores artifacts in <strong>repositories</strong>:",
+          "<ul>",
+          "<li><strong>Local</strong> — ~/.m2/repository, cache on your machine.</li>",
+          "<li><strong>Remote</strong> — servers like Maven Central (repo.maven.apache.org).</li>",
+          "</ul>",
+          "Maven searches local first, then remotes. Downloaded artifacts are cached locally.",
+          "<strong>Mirrors</strong>",
+          "A <strong>mirror</strong> in settings.xml redirects all requests to a different URL. Corporate shops use mirrors to route through internal Nexus/Artifactory.",
+          "<strong>Repository types</strong>",
+          "<ul>",
+          "<li><strong>Release</strong> — immutable versions (1.4.2).</li>",
+          "<li><strong>Snapshot</strong> — mutable versions (1.5.0-SNAPSHOT). Re-checked periodically.</li>",
+          "</ul>"
+        ],
+        "code": "<!-- ~/.m2/settings.xml — repo config -->\n<settings>\n    <mirrors>\n        <mirror>\n            <id>company-nexus</id>\n            <url>https://nexus.company.internal/maven-central/</url>\n            <mirrorOf>central</mirrorOf>\n        </mirror>\n    </mirrors>\n    <servers>\n        <server>\n            <id>company-releases</id>\n            <username>${env.NEXUS_USER}</username>\n            <password>${env.NEXUS_PASSWORD}</password>\n        </server>\n    </servers>\n</settings>\n\n# Download all deps for offline:\n# mvn dependency:go-offline"
+      },
+      {
+        "heading": "Maven Plugins",
+        "content": [
+          "<strong>Plugins are where Maven does its work.</strong> Every action is a <strong>goal</strong> of some plugin.",
+          "<strong>Plugins you use constantly</strong>",
+          "<ul>",
+          "<li><strong>maven-compiler-plugin</strong> — compiles Java. Use &lt;release&gt;17&lt;/release&gt;.</li>",
+          "<li><strong>maven-surefire-plugin</strong> — runs unit tests (*Test.java).</li>",
+          "<li><strong>maven-failsafe-plugin</strong> — runs integration tests (*IT.java).</li>",
+          "<li><strong>maven-jar-plugin</strong> — produces JAR.</li>",
+          "<li><strong>maven-shade-plugin</strong> — produces fat JAR for java -jar.</li>",
+          "<li><strong>maven-enforcer-plugin</strong> — fails build on rule violations (Java version, etc.).</li>",
+          "</ul>"
+        ],
+        "code": "<build>\n    <plugins>\n        <plugin>\n            <groupId>org.apache.maven.plugins</groupId>\n            <artifactId>maven-compiler-plugin</artifactId>\n            <version>3.13.0</version>\n            <configuration>\n                <release>17</release>\n            </configuration>\n        </plugin>\n        <plugin>\n            <groupId>org.apache.maven.plugins</groupId>\n            <artifactId>maven-surefire-plugin</artifactId>\n            <version>3.2.5</version>\n        </plugin>\n        <plugin>\n            <groupId>org.apache.maven.plugins</groupId>\n            <artifactId>maven-shade-plugin</artifactId>\n            <version>3.5.3</version>\n            <executions>\n                <execution>\n                    <phase>package</phase>\n                    <goals><goal>shade</goal></goals>\n                    <configuration>\n                        <transformers>\n                            <transformer implementation=\"org.apache.maven.plugins.shade.resource.ManifestResourceTransformer\">\n                                <mainClass>com.example.App</mainClass>\n                            </transformer>\n                        </transformers>\n                    </configuration>\n                </execution>\n            </executions>\n        </plugin>\n    </plugins>\n</build>"
+      },
+      {
+        "heading": "Maven Profiles",
+        "content": [
+          "<strong>Profiles</strong> customize builds for different environments (dev, test, prod).",
+          "<strong>Activation methods</strong>",
+          "<ul>",
+          "<li><strong>Command line</strong>: mvn package -Pprod</li>",
+          "<li><strong>Default active</strong>: &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;</li>",
+          "<li><strong>By environment</strong>: JDK version, OS, system property, file presence</li>",
+          "</ul>",
+          "<strong>Common uses</strong>",
+          "<ul>",
+          "<li>Different database URLs in dev vs prod</li>",
+          "<li>Extra source folders in dev</li>",
+          "<li>Disabling optimizations in dev, enabling in prod</li>",
+          "</ul>"
+        ],
+        "code": "<profiles>\n    <profile>\n        <id>dev</id>\n        <activation><activeByDefault>true</activeByDefault></activation>\n        <properties>\n            <env>dev</env>\n            <db.url>jdbc:h2:mem:devdb</db.url>\n        </properties>\n    </profile>\n    <profile>\n        <id>prod</id>\n        <properties>\n            <env>prod</env>\n            <db.url>jdbc:postgresql://prod-db:5432/app</db.url>\n        </properties>\n    </profile>\n</profiles>\n\n# Activate:\n# mvn package -Pprod\n# mvn help:active-profiles"
+      },
+      {
+        "heading": "Multi-Module Projects",
+        "content": [
+          "Real applications are <strong>multi-module builds</strong>: a parent aggregating child modules.",
+          "<strong>Why multi-module?</strong>",
+          "<ul>",
+          "<li>Logical separation (billing-api, billing-core, billing-web)</li>",
+          "<li>Share dependencyManagement and plugin config</li>",
+          "<li>Incremental builds — Maven reactor builds only changed modules</li>",
+          "</ul>",
+          "<strong>The Reactor</strong>",
+          "Maven's reactor determines build order across modules. Running <code>mvn install</code> at root builds everything correctly.",
+          "<strong>Layout</strong>",
+          "Modules are sibling directories of the parent."
+        ],
+        "code": "# Directory layout:\nmy-app/\n  ├── pom.xml              (parent, packaging=pom)\n  ├── common/\n  ├── core/\n  ├── api/\n  └── it/\n\n# my-app/pom.xml — parent\n<project>\n    <groupId>com.example.myapp</groupId>\n    <artifactId>my-app-parent</artifactId>\n    <version>1.0.0</version>\n    <packaging>pom</packaging>\n    <modules>\n        <module>common</module>\n        <module>core</module>\n        <module>api</module>\n    </modules>\n</project>\n\n# Useful commands:\n# mvn install              (build all)\n# mvn -pl api -am install  (build api + deps)\n# mvn -T 1C install        (parallel, 1 thread/core)"
+      },
+      {
+        "heading": "Maven Wrapper (mvnw)",
+        "content": [
+          "The <strong>Maven Wrapper</strong> (mvnw) downloads and runs a specific Maven version pinned in your repo.",
+          "<strong>Why it matters</strong>",
+          "<ul>",
+          "<li>Reproducibility — everyone uses same Maven version</li>",
+          "<li>Zero install — new devs run ./mvnw, no Maven install needed</li>",
+          "<li>CI consistency — dev and CI use same Maven</li>",
+          "</ul>",
+          "Generated by <code>mvn wrapper:wrapper -Dmaven=3.9.6</code>. Commit mvnw, mvnw.cmd, and .mvn/wrapper/."
+        ],
+        "code": "# Install wrapper:\n# mvn wrapper:wrapper -Dmaven=3.9.6\n\n# Creates:\n# .mvn/wrapper/maven-wrapper.properties\n# .mvn/wrapper/maven-wrapper.jar\n# mvnw (Unix), mvnw.cmd (Windows)\n\n# Usage:\n# ./mvnw clean install\n# ./mvnw test\n\n# Commit these:\n# git add .mvn mvnw mvnw.cmd"
+      },
+      {
+        "heading": "Build Performance",
+        "content": [
+          "<strong>1. Parallel builds</strong>",
+          "<code>mvn -T 1C install</code> — one thread per CPU core.",
+          "<strong>2. Incremental compilation</strong>",
+          "maven-compiler-plugin only recompiles changed files (default). Do not disable.",
+          "<strong>3. Skip unneeded work</strong>",
+          "<ul>",
+          "<li>mvn -DskipTests package — skip tests</li>",
+          "<li>mvn -Dmaven.javadoc.skip=true — skip Javadoc</li>",
+          "<li>mvn -pl module -am install — build one module</li>",
+          "</ul>",
+          "<strong>4. Offline mode</strong>",
+          "<code>mvn -o install</code> — use local repo only.",
+          "<strong>5. Local repo on SSD</strong>",
+          "Put ~/.m2 on fast storage."
+        ],
+        "code": "# Performance cheatsheet:\n# mvn -T 1C clean install    (parallel)\n# mvn -DskipTests package    (skip tests)\n# mvn -pl :api -am package   (one module)\n# mvn -o install             (offline)\n# mvn dependency:go-offline  (prep for offline)"
+      },
+      {
+        "heading": "Introduction to Gradle",
+        "content": [
+          "<strong>Gradle</strong> uses Groovy or Kotlin DSL scripts. Default for Android, popular for Spring Boot.",
+          "Gradle's philosophy: convention over configuration with flexibility.",
+          "A Gradle project has build.gradle (Groovy) or build.gradle.kts (Kotlin), and settings.gradle for modules."
+        ],
+        "code": "// settings.gradle\nrootProject.name = 'my-gradle-app'\n\n// build.gradle\nplugins {\n    id 'java'\n    id 'application'\n}\njava {\n    sourceCompatibility = JavaVersion.VERSION_17\n}\nrepositories {\n    mavenCentral()\n}\ndependencies {\n    implementation 'org.apache.commons:commons-lang3:3.14.0'\n    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'\n}\napplication {\n    mainClass = 'com.example.App'\n}\ntest {\n    useJUnitPlatform()\n}"
+      },
+      {
+        "heading": "Common Gradle Commands",
+        "content": [
+          "<table border=\"1\"><tr><th>Command</th><th>What it does</th></tr>",
+          "<tr><td><code>./gradlew build</code></td><td>Full build: compile, test, package</td></tr>",
+          "<tr><td><code>./gradlew test</code></td><td>Run tests</td></tr>",
+          "<tr><td><code>./gradlew compileJava</code></td><td>Compile main source</td></tr>",
+          "<tr><td><code>./gradlew run</code></td><td>Run main class</td></tr>",
+          "<tr><td><code>./gradlew clean</code></td><td>Delete build/</td></tr>",
+          "<tr><td><code>./gradlew tasks</code></td><td>List all tasks</td></tr>",
+          "<tr><td><code>./gradlew dependencies</code></td><td>Show dependency tree</td></tr>",
+          "</table>",
+          "Use <code>./gradlew</code> (wrapper) instead of global gradle."
+        ],
+        "code": "// Terminal workflow:\n// ./gradlew compileJava\n// ./gradlew test\n// ./gradlew build\n// ./gradlew run\n// ./gradlew clean"
+      },
+      {
+        "heading": "Maven vs Gradle — When to Choose",
+        "content": [
+          "<table border=\"1\"><tr><th>Dimension</th><th>Maven</th><th>Gradle</th></tr>",
+          "<tr><td>Config language</td><td>XML (declarative)</td><td>Groovy/Kotlin (programmable)</td></tr>",
+          "<tr><td>Learning curve</td><td>Steeper initial, then easy</td><td>Lower initial, then steep</td></tr>",
+          "<tr><td>Incremental builds</td><td>Decent</td><td>Excellent</td></tr>",
+          "<tr><td>Flexibility</td><td>Convention-bound</td><td>Highly flexible</td></tr>",
+          "<tr><td>Ecosystem</td><td>Stable, conservative</td><td>Vast, rapid evolution</td></tr>",
+          "<tr><td>Common use</td><td>Enterprise Java, Spring Boot</td><td>Android, Kotlin, new Spring</td></tr>",
+          "</table>",
+          "<strong>Pick Maven if</strong> you value stability and declarative config.",
+          "<strong>Pick Gradle if</strong> you want faster incremental builds or are doing Android/Kotlin."
+        ]
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Run <code>mvn help:describe -Dcmd=compile -Ddetail</code> — see which goals bind to which phases.</li>",
+          "<li>Add spring-core 5.x and 6.x to dependencyManagement. Run <code>mvn dependency:tree</code> to see which wins.</li>",
+          "<li>Create a <code>prod</code> profile that overrides database URL. Run <code>mvn -Pprod help:active-profiles</code>.</li>",
+          "<li>Add maven-shade-plugin to build a fat JAR. Verify <code>java -jar target/*-shaded.jar</code> runs.</li>",
+          "<li>Create a 3-module project (common, core, api). Run <code>mvn install</code> and watch reactor order.</li>",
+          "<li>Run <code>mvn wrapper:wrapper -Dmaven=3.9.6</code>. Commit mvnw files.</li>",
+          "<li>Time <code>mvn clean package</code> vs <code>mvn -T 1C clean package</code> on a multi-module project.</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  },
 
 };
+
+
 const javaModule7Content = {
   'java-jdbc-intro': {
       title: "JDBC Introduction & Architecture",
