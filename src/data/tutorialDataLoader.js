@@ -136,8 +136,7 @@ export const javaStructure = {
   module4: {
     title: "Module 4: Collections, Functional Programming & Concurrency",
     topics: [
-      { id: "collections-deep-dive", title: "Collections Deep Dive (Java 1.5+)" },
-      { id: "collections", title: "Collections Framework" },
+      { id: "collections-deep-dive", title: "Collections Deep Dive" },
       { id: "generics", title: "Generics" },
       { id: "lambda-expressions", title: "Lambda Expressions" },
       { id: "streams", title: "Streams API" },

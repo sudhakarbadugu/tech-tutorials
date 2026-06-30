@@ -47,8 +47,7 @@ export const javaStructure = {
   module4: {
     title: 'Module 4: Collections, Functional Programming & Concurrency',
     topics: [
-      { id: 'collections-deep-dive', title: 'Collections Deep Dive (Java 1.5+)' },
-      { id: 'collections', title: 'Collections Framework' },
+      { id: 'collections-deep-dive', title: 'Collections Deep Dive' },
       { id: 'generics', title: 'Generics' },
       { id: 'lambda-expressions', title: 'Lambda Expressions' },
       { id: 'streams', title: 'Streams API' },
@@ -7784,9 +7783,128 @@ class DateTimeFormatDemo {
 };
 
 const javaModule4Content = {
-  'collections-deep-dive': {
-      title: 'Collections Deep Dive (Java 1.5+)',
+    'collections-deep-dive': {
+      title: 'Collections Deep Dive',
       sections: [
+        {
+          heading: 'What are Collections?',
+          content: [
+            'The Java Collections Framework is a set of classes and interfaces that help you store and manage groups of objects.',
+            'Think of collections like different types of containers — some are like lists (ordered), some are like sets (no duplicates), and some are like maps (key-value pairs).',
+            '<strong>Why use collections?</strong>',
+            '<ul><li>They grow and shrink automatically</li><li>They provide ready-made methods for sorting, searching, and filtering</li><li>They are more flexible than regular arrays</li></ul>',
+            '<strong>Main types:</strong>',
+            '<ul><li><code>List</code> — ordered, allows duplicates</li><li><code>Set</code> — no duplicates, no guaranteed order</li><li><code>Map</code> — key-value pairs</li><li><code>Queue</code> — first-in, first-out (FIFO)</li></ul>'
+          ]
+        },
+        {
+          heading: 'ArrayList',
+          content: [
+            '<code>ArrayList</code> is the most commonly used List. It is like an array that can grow in size.',
+            'You can add, remove, and access elements by index.',
+            'Unlike arrays, you do not need to specify the size when you create it.'
+          ],
+          code: `import java.util.ArrayList;
+
+public class ArrayListExample {
+    public static void main(String[] args) {
+        ArrayList<String> fruits = new ArrayList<>();
+
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Cherry");
+
+        System.out.println(fruits);           // [Apple, Banana, Cherry]
+        System.out.println(fruits.get(0));    // Apple
+
+        fruits.remove("Banana");
+        System.out.println(fruits);           // [Apple, Cherry]
+        System.out.println(fruits.size());    // 2
+    }
+}`
+        },
+        {
+          heading: 'HashSet',
+          content: [
+            '<code>HashSet</code> stores unique elements only — no duplicates allowed.',
+            'It does not keep elements in any specific order.',
+            'Great for when you need to check if something exists quickly.'
+          ],
+          code: `import java.util.HashSet;
+
+public class HashSetExample {
+    public static void main(String[] args) {
+        HashSet<Integer> numbers = new HashSet<>();
+
+        numbers.add(10);
+        numbers.add(20);
+        numbers.add(10);  // duplicate, ignored
+
+        System.out.println(numbers);          // [20, 10] (order may vary)
+        System.out.println(numbers.contains(20)); // true
+        System.out.println(numbers.contains(30)); // false
+    }
+}`
+        },
+        {
+          heading: 'HashMap',
+          content: [
+            '<code>HashMap</code> stores data as key-value pairs.',
+            'Each key is unique. You use the key to look up the value.',
+            'It is like a dictionary or a phone book.'
+          ],
+          code: `import java.util.HashMap;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        HashMap<String, Integer> ages = new HashMap<>();
+
+        ages.put("Alice", 25);
+        ages.put("Bob", 30);
+        ages.put("Charlie", 22);
+
+        System.out.println(ages.get("Bob"));      // 30
+        System.out.println(ages.containsKey("Alice")); // true
+
+        // Loop through all entries
+        for (String name : ages.keySet()) {
+            System.out.println(name + " is " + ages.get(name) + " years old");
+        }
+    }
+}`
+        },
+        {
+          heading: 'Iterating Over Collections',
+          content: [
+            'You can loop through collections using a for-each loop.',
+            'This works for all Collection types: List, Set, Queue, and Map keys/values.'
+          ],
+          code: `import java.util.ArrayList;
+import java.util.HashMap;
+
+public class IterateExample {
+    public static void main(String[] args) {
+        ArrayList<String> colors = new ArrayList<>();
+        colors.add("Red");
+        colors.add("Green");
+        colors.add("Blue");
+
+        // Loop through a List
+        for (String color : colors) {
+            System.out.println(color);
+        }
+
+        // Loop through a Map
+        HashMap<String, String> capitals = new HashMap<>();
+        capitals.put("India", "New Delhi");
+        capitals.put("USA", "Washington D.C.");
+
+        for (String country : capitals.keySet()) {
+            System.out.println(country + ": " + capitals.get(country));
+        }
+    }
+}`
+        },
         {
           heading: 'Limitations of Object Arrays',
           content: [
@@ -8268,130 +8386,6 @@ class MyComparator implements Comparator {
             '<code>SortedMap</code> is used by <code>TreeMap</code> and adds methods reflecting that a TreeMap is sorted:',
             '<ul><li><code>comparator()</code> — returns the Comparator used to compare keys; <code>null</code> for natural ordering.</li><li><code>firstKey()</code> — key of the first (in sorted order) element</li><li><code>lastKey()</code> — key of the last (in sorted order) element</li><li><code>headMap(toKey)</code> — returns SortedMap of all elements with key <strong>less than</strong> <code>toKey</code></li><li><code>tailMap(fromKey)</code> — returns SortedMap of all elements with key <strong>greater than or equal to</strong> <code>fromKey</code></li><li><code>subMap(fromKey, toKey)</code> — returns SortedMap of all elements <code>&gt;= fromKey</code> and <code>&lt; toKey</code></li></ul>'
           ]
-        }
-      ]
-    },
-  'collections': {
-      title: 'Java Collections Framework',
-      sections: [
-        {
-          heading: 'What are Collections?',
-          content: [
-            'The Java Collections Framework is a set of classes and interfaces that help you store and manage groups of objects.',
-            'Think of collections like different types of containers — some are like lists (ordered), some are like sets (no duplicates), and some are like maps (key-value pairs).',
-            '<strong>Why use collections?</strong>',
-            '<ul><li>They grow and shrink automatically</li><li>They provide ready-made methods for sorting, searching, and filtering</li><li>They are more flexible than regular arrays</li></ul>',
-            '<strong>Main types:</strong>',
-            '<ul><li><code>List</code> — ordered, allows duplicates</li><li><code>Set</code> — no duplicates, no guaranteed order</li><li><code>Map</code> — key-value pairs</li><li><code>Queue</code> — first-in, first-out (FIFO)</li></ul>'
-          ]
-        },
-        {
-          heading: 'ArrayList',
-          content: [
-            '<code>ArrayList</code> is the most commonly used List. It is like an array that can grow in size.',
-            'You can add, remove, and access elements by index.',
-            'Unlike arrays, you do not need to specify the size when you create it.'
-          ],
-          code: `import java.util.ArrayList;
-
-public class ArrayListExample {
-    public static void main(String[] args) {
-        ArrayList<String> fruits = new ArrayList<>();
-
-        fruits.add("Apple");
-        fruits.add("Banana");
-        fruits.add("Cherry");
-
-        System.out.println(fruits);           // [Apple, Banana, Cherry]
-        System.out.println(fruits.get(0));    // Apple
-
-        fruits.remove("Banana");
-        System.out.println(fruits);           // [Apple, Cherry]
-        System.out.println(fruits.size());    // 2
-    }
-}`
-        },
-        {
-          heading: 'HashSet',
-          content: [
-            '<code>HashSet</code> stores unique elements only — no duplicates allowed.',
-            'It does not keep elements in any specific order.',
-            'Great for when you need to check if something exists quickly.'
-          ],
-          code: `import java.util.HashSet;
-
-public class HashSetExample {
-    public static void main(String[] args) {
-        HashSet<Integer> numbers = new HashSet<>();
-
-        numbers.add(10);
-        numbers.add(20);
-        numbers.add(10);  // duplicate, ignored
-
-        System.out.println(numbers);          // [20, 10] (order may vary)
-        System.out.println(numbers.contains(20)); // true
-        System.out.println(numbers.contains(30)); // false
-    }
-}`
-        },
-        {
-          heading: 'HashMap',
-          content: [
-            '<code>HashMap</code> stores data as key-value pairs.',
-            'Each key is unique. You use the key to look up the value.',
-            'It is like a dictionary or a phone book.'
-          ],
-          code: `import java.util.HashMap;
-
-public class HashMapExample {
-    public static void main(String[] args) {
-        HashMap<String, Integer> ages = new HashMap<>();
-
-        ages.put("Alice", 25);
-        ages.put("Bob", 30);
-        ages.put("Charlie", 22);
-
-        System.out.println(ages.get("Bob"));      // 30
-        System.out.println(ages.containsKey("Alice")); // true
-
-        // Loop through all entries
-        for (String name : ages.keySet()) {
-            System.out.println(name + " is " + ages.get(name) + " years old");
-        }
-    }
-}`
-        },
-        {
-          heading: 'Iterating Over Collections',
-          content: [
-            'You can loop through collections using a for-each loop.',
-            'This works for all Collection types: List, Set, Queue, and Map keys/values.'
-          ],
-          code: `import java.util.ArrayList;
-import java.util.HashMap;
-
-public class IterateExample {
-    public static void main(String[] args) {
-        ArrayList<String> colors = new ArrayList<>();
-        colors.add("Red");
-        colors.add("Green");
-        colors.add("Blue");
-
-        // Loop through a List
-        for (String color : colors) {
-            System.out.println(color);
-        }
-
-        // Loop through a Map
-        HashMap<String, String> capitals = new HashMap<>();
-        capitals.put("India", "New Delhi");
-        capitals.put("USA", "Washington D.C.");
-
-        for (String country : capitals.keySet()) {
-            System.out.println(country + ": " + capitals.get(country));
-        }
-    }
-}`
         },
         {
           heading: 'Try it Yourself',
