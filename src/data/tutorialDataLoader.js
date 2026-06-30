@@ -144,11 +144,18 @@ export const javaStructure = {
     ],
   },
   module5: {
-    title: "Module 5: Java 1.5+ New Features",
+    title: "Module 5: Java New Features",
     topics: [
       { id: "java-1-5-features", title: "Java 1.5 New Features" },
       { id: "var-arg-methods", title: "Var-Arg Methods" },
       { id: "command-line-args", title: "Command-Line Arguments & main" },
+      { id: "java-1-7-new-features", title: "Java 1.7 New Features" },
+      { id: "java-1-8-new-features", title: "Java 1.8 New Features" },
+      { id: "java-9-new-features", title: "Java 9 New Features" },
+      { id: "java-10-new-features", title: "Java 10 New Features" },
+      { id: "java-11-new-features", title: "Java 11 New Features (LTS)" },
+      { id: "java-17-new-features", title: "Java 17 New Features (LTS)" },
+      { id: "java-21-new-features", title: "Java 21 New Features (LTS)" },
     ],
   },
   module6: {

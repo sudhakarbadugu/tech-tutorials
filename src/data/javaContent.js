@@ -55,11 +55,18 @@ export const javaStructure = {
     ]
   },
   module5: {
-    title: 'Module 5: Java 1.5+ New Features',
+    title: 'Module 5: Java New Features',
     topics: [
       { id: 'java-1-5-features', title: 'Java 1.5 New Features' },
       { id: 'var-arg-methods', title: 'Var-Arg Methods' },
       { id: 'command-line-args', title: 'Command-Line Arguments & main' },
+      { id: 'java-1-7-new-features', title: 'Java 1.7 New Features' },
+      { id: 'java-1-8-new-features', title: 'Java 1.8 New Features' },
+      { id: 'java-9-new-features', title: 'Java 9 New Features' },
+      { id: 'java-10-new-features', title: 'Java 10 New Features' },
+      { id: 'java-11-new-features', title: 'Java 11 New Features (LTS)' },
+      { id: 'java-17-new-features', title: 'Java 17 New Features (LTS)' },
+      { id: 'java-21-new-features', title: 'Java 21 New Features (LTS)' },
     ]
   },
   module6: {
@@ -10498,6 +10505,1500 @@ class Test2 {
         }
       ]
     },
+  'java-1-7-new-features': {
+      title: 'Java 1.7 New Features',
+      sections: [
+        {
+          heading: 'Overview of Java 1.7 (Dolphin) Features',
+          content: [
+            `Java 1.7, codenamed "Dolphin," was released in July 2011. Major language and library enhancements:`,
+            '<ul><li><strong>try-with-resources</strong> — automatic resource management</li><li><strong>Diamond operator</strong> — type inference for generics</li><li><strong>Strings in switch</strong> — use String values in switch statements</li><li><strong>Multi-catch exceptions</strong> — catch multiple exception types in one block</li><li><strong>Binary literals</strong> — binary number representation with <code>0b</code> prefix</li><li><strong>Numeric literals with underscores</strong> — improve readability of large numbers</li><li><strong>NIO.2</strong> — new file I/O API (<code>java.nio.file</code>)</li></ul>'
+          ]
+        },
+        {
+          heading: 'try-with-resources',
+          content: [
+            'Automatically closes resources (anything implementing <code>java.lang.AutoCloseable</code>) at the end of a block.',
+            'Eliminates boilerplate <code>finally</code> blocks for closing streams, connections, etc.',
+            'Resources are declared in parentheses after <code>try</code>, separated by <code>;</code>.',
+            'Resources are closed in reverse order of creation.'
+          ],
+          code: `// Before Java 1.7 — manual close in finally
+BufferedReader br = null;
+try {
+    br = new BufferedReader(new FileReader("data.txt"));
+    System.out.println(br.readLine());
+} catch (IOException e) {
+    e.printStackTrace();
+} finally {
+    if (br != null) {
+        try { br.close(); } catch (IOException e) { }
+    }
+}
+
+// Java 1.7 — try-with-resources
+try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
+    System.out.println(br.readLine());
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+// Multiple resources
+try (
+    FileInputStream in = new FileInputStream("input.txt");
+    FileOutputStream out = new FileOutputStream("output.txt")
+) {
+    int data;
+    while ((data = in.read()) != -1) {
+        out.write(data);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}`
+        },
+        {
+          heading: 'Diamond Operator',
+          content: [
+            'Type inference for generics — let the compiler infer the type parameters.',
+            'Use empty angle brackets <code>&lt;&gt;</code> on the right side of a generic instantiation.',
+            'Available only for non-anonymous class types and only when the inferred type is denotable.'
+          ],
+          code: `// Before Java 1.7 — verbose
+Map<String, List<String>> map = new HashMap<String, List<String>>();
+
+// Java 1.7 — diamond operator
+Map<String, List<String>> map = new HashMap<>();
+
+// Works with nested generics
+List<Map<String, Integer>> list = new ArrayList<>();`
+        },
+        {
+          heading: 'Strings in switch',
+          content: [
+            'Switch statements can now use String values (previously only int, char, enum).',
+            'The switch expression is compared using <code>String.equals()</code>.',
+            'A <code>case</code> label must be a constant String expression (literal or final variable).'
+          ],
+          code: `String day = "MONDAY";
+
+switch (day) {
+    case "MONDAY":
+    case "TUESDAY":
+    case "WEDNESDAY":
+    case "THURSDAY":
+    case "FRIDAY":
+        System.out.println("Weekday");
+        break;
+    case "SATURDAY":
+    case "SUNDAY":
+        System.out.println("Weekend");
+        break;
+    default:
+        System.out.println("Unknown");
+}`
+        },
+        {
+          heading: 'Multi-catch Exceptions',
+          content: [
+            'Catch multiple exception types in a single catch block using <code>|</code>.',
+            'The exception variable is effectively final — you cannot reassign it.',
+            'Useful when different exceptions require the same handling logic.'
+          ],
+          code: `try {
+    // Some risky code
+} catch (IOException | SQLException | ClassNotFoundException e) {
+    // e is effectively final
+    System.out.println("Error: " + e.getMessage());
+    e.printStackTrace();
+    // Cannot do: e = new IOException();  // compile error
+}
+
+// Before 1.7 — duplicate code
+} catch (IOException e) { handle(e); }
+catch (SQLException e) { handle(e); }`
+        },
+        {
+          heading: 'Binary Literals and Underscores in Numbers',
+          content: [
+            'Binary literals use the <code>0b</code> or <code>0B</code> prefix.',
+            'Underscores <code>_</code> can be placed between digits in any numeric literal for readability.',
+            'Underscores cannot start/end a literal or be placed adjacent to a decimal point, type suffix, or in radix specifier.'
+          ],
+          code: `// Binary literals
+int binary = 0b1010;           // 10 in decimal
+long bigBinary = 0b1000_0001_1000_0000L;  // 33152
+
+// Underscores for readability
+int million = 1_000_000;
+long creditCard = 1234_5678_9012_3456L;
+double pi = 3.14_15_92_65_35;
+int hex = 0xFF_EC_DE_5E;
+
+// Invalid placements
+// int bad1 = _1000;     // cannot start
+// int bad2 = 1000_;     // cannot end
+// int bad3 = 0x_FF;     // cannot be after prefix
+// double bad4 = 3._14;  // cannot be before decimal point`
+        },
+        {
+          heading: 'NIO.2 (java.nio.file)',
+          content: [
+            'The new file I/O API (<code>java.nio.file</code>) provides:',
+            '<ul><li><code>Path</code> interface — replaces <code>java.io.File</code></li><li><code>Files</code> class — utility methods (read, write, copy, move, delete)</li><li><code>Paths</code> class — factory methods for creating Path instances</li><li>Better exception handling with <code>NoSuchFileException</code>, <code>AccessDeniedException</code>, etc.</li><li>Walking file trees with <code>Files.walk()</code></li></ul>',
+            'Use <code>Path</code> instead of <code>File</code> for new code — <code>File</code> still works but Path is more feature-rich.'
+          ],
+          code: `import java.nio.file.*;
+import java.nio.file.attribute.*;
+
+Path path = Paths.get("data", "config.txt");
+
+// Read all lines
+List<String> lines = Files.readAllLines(path);
+
+// Write lines
+Files.write(path, Arrays.asList("line1", "line2"), StandardOpenOption.CREATE);
+
+// Copy and move
+Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+Files.move(source, target);
+
+// Check existence and properties
+boolean exists = Files.exists(path);
+boolean isDir = Files.isDirectory(path);
+long size = Files.size(path);
+
+// Walk a directory tree
+Stream<Path> walk = Files.walk(Paths.get("."));`
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Exercises to practice Java 1.7 features:',
+            '<ol><li>Write a method that reads a file using try-with-resources, even if an exception occurs mid-read.</li><li>Refactor an old piece of code that uses <code>java.io.File</code> to use <code>Path</code> and <code>Files</code>.</li><li>Create a multi-catch block for three different custom exceptions.</li><li>Use a binary literal to set bit flags and underscores to make them readable.</li><li>Use a String in a switch statement to map a status code to a message.</li></ol>'
+          ]
+        }
+      ]
+    },
+  'java-1-8-new-features': {
+      title: 'Java 1.8 New Features',
+      sections: [
+        {
+          heading: 'Overview of Java 1.8 Features',
+          content: [
+            'Java 1.8, released in March 2014, was the biggest change to the language since generics.',
+            'Major features:',
+            '<ul><li><strong>Lambda expressions</strong> — treat functionality as a method argument</li><li><strong>Functional interfaces</strong> — interfaces with a single abstract method</li><li><strong>Stream API</strong> — functional-style operations on collections</li><li><strong>Default methods</strong> — methods with implementation in interfaces</li><li><strong>Static methods in interfaces</strong> — utility methods at interface level</li><li><strong>Method references</strong> — shorthand for lambdas calling existing methods</li><li><strong>Optional</strong> — better handling of null values</li><li><strong>New Date/Time API</strong> (<code>java.time</code>) — modern, immutable date handling</li></ul>',
+            'Note: Lambda and Streams are covered in depth in M4 (Collections, FP & Concurrency). This page covers the rest.'
+          ]
+        },
+        {
+          heading: 'Functional Interfaces',
+          content: [
+            'A functional interface is an interface with exactly one abstract method (SAM — Single Abstract Method).',
+            'The <code>@FunctionalInterface</code> annotation is optional but recommended — it makes the compiler enforce the SAM rule.',
+            'Java 1.8 added <code>java.util.function</code> package with built-in functional interfaces.',
+            'Common built-in functional interfaces:'
+          ],
+          code: `// Common built-in functional interfaces
+Predicate<T>      // T -> boolean  (test)
+Function<T, R>    // T -> R         (apply)
+Consumer<T>       // T -> void      (accept)
+Supplier<T>       // () -> T        (get)
+BiFunction<T, U, R>   // T, U -> R
+BiPredicate<T, U>     // T, U -> boolean
+BiConsumer<T, U>      // T, U -> void
+UnaryOperator<T>      // T -> T
+BinaryOperator<T>     // T, T -> T
+
+// Example — custom functional interface
+@FunctionalInterface
+interface StringTransformer {
+    String transform(String s);
+}
+
+StringTransformer upper = s -> s.toUpperCase();
+StringTransformer shout = s -> s + "!";
+
+System.out.println(upper.transform("hello"));  // HELLO
+System.out.println(shout.transform("hello"));   // hello!`
+        },
+        {
+          heading: 'Default Methods in Interfaces',
+          content: [
+            'Interfaces can now have methods with a default implementation using the <code>default</code> keyword.',
+            `Solves the "interface evolution" problem — adding methods to an interface used to break all implementers.`,
+            'Implementing classes can override the default method or inherit it as-is.',
+            'If a class implements two interfaces that both define a default method with the same signature, the class must override it.'
+          ],
+          code: `interface Vehicle {
+    void start();
+    
+    // Default method
+    default void honk() {
+        System.out.println("Beep beep!");
+    }
+    
+    // Static method in interface
+    static Vehicle createElectric() {
+        return new ElectricCar();
+    }
+}
+
+class Car implements Vehicle {
+    @Override
+    public void start() {
+        System.out.println("Car started");
+    }
+    // honk() is inherited
+}
+
+Car car = new Car();
+car.start();   // Car started
+car.honk();    // Beep beep!
+
+// Diamond problem resolution — must override
+interface A { default void hello() { System.out.println("A"); } }
+interface B { default void hello() { System.out.println("B"); } }
+
+class C implements A, B {
+    @Override
+    public void hello() {
+        A.super.hello();  // or B.super.hello()
+        System.out.println("C");
+    }
+}`
+        },
+        {
+          heading: 'Method References',
+          content: [
+            'A shorthand for a lambda expression that calls an existing method.',
+            'Four kinds of method references:'
+          ],
+          code: `// 1. Reference to a static method
+//   ClassName::staticMethod
+Function<String, Integer> parser = Integer::parseInt;
+int n = parser.apply("42");
+
+// 2. Reference to an instance method of a particular object
+//   instance::method
+String prefix = "Hello, ";
+Function<String, String> greeter = prefix::concat;
+String msg = greeter.apply("World");
+
+// 3. Reference to an instance method of an arbitrary object of a given type
+//   ClassName::instanceMethod
+Function<String, String> upper = String::toUpperCase;
+String result = upper.apply("hello");
+
+// 4. Reference to a constructor
+//   ClassName::new
+Supplier<ArrayList<String>> listFactory = ArrayList::new;
+ArrayList<String> list = listFactory.get();`
+        },
+        {
+          heading: 'Optional Class',
+          content: [
+            'A container object that may or may not contain a non-null value.',
+            'Helps design APIs that make it clear whether a value may be absent.',
+            'Should be used as a return type, not as a field type in most cases.',
+            'Common methods:'
+          ],
+          code: `import java.util.Optional;
+
+Optional<String> empty = Optional.empty();
+Optional<String> present = Optional.of("hello");
+Optional<String> nullable = Optional.ofNullable(getValue());
+
+// Checking presence
+boolean has = present.isPresent();
+boolean empty_ = present.isEmpty();  // Java 11+
+
+// Getting the value
+String value = present.get();           // throws if empty
+String val = present.orElse("default");
+String val2 = present.orElseGet(() -> "computed default");
+String val3 = present.orElseThrow();    // throws NoSuchElementException
+
+// Transforming
+Optional<Integer> length = present.map(String::length);
+Optional<String> upper = present.filter(s -> s.length() > 3)
+                                .map(String::toUpperCase);
+
+// Chaining
+Optional<User> user = findUser(id);
+String city = user.flatMap(User::getAddress)
+                  .flatMap(Address::getCity)
+                  .orElse("Unknown");
+
+// Bad usage — do not use Optional.get() without checking
+// Bad:  findUser(id).get()
+// Good: findUser(id).orElseThrow(IllegalStateException::new)`
+        },
+        {
+          heading: 'New Date/Time API (java.time)',
+          content: [
+            'Replaces the old <code>java.util.Date</code> and <code>java.util.Calendar</code> classes.',
+            'All classes in <code>java.time</code> are immutable and thread-safe.',
+            'Designed after the Joda-Time library, led by Stephen Colebourne (JSR-310).',
+            'Key classes:'
+          ],
+          code: `import java.time.*;
+import java.time.format.*;
+import java.time.temporal.*;
+
+// Current date/time
+LocalDate today = LocalDate.now();
+LocalTime now = LocalTime.now();
+LocalDateTime dateTime = LocalDateTime.now();
+ZonedDateTime zoned = ZonedDateTime.now();
+Instant instant = Instant.now();   // UTC milliseconds since epoch
+
+// Creating specific dates
+LocalDate birthday = LocalDate.of(1990, Month.JANUARY, 15);
+LocalDate parsed = LocalDate.parse("2024-03-15");
+
+// Formatting
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+String formatted = today.format(formatter);
+
+// Calculations
+LocalDate nextWeek = today.plusWeeks(1);
+LocalDate prevMonth = today.minusMonths(1);
+long daysBetween = ChronoUnit.DAYS.between(birthday, today);
+
+// Comparing
+boolean isAfter = today.isAfter(LocalDate.of(2020, 1, 1));
+boolean isLeap = today.isLeapYear();
+
+// Durations and Periods
+Duration duration = Duration.between(time1, time2);
+Period period = Period.between(date1, date2);
+
+// Time zones
+ZoneId tokyo = ZoneId.of("Asia/Tokyo");
+ZonedDateTime tokyoTime = ZonedDateTime.now(tokyo);`
+        },
+        {
+          heading: 'Other Java 1.8 Enhancements',
+          content: [
+            '<ul>',
+            '<li><strong>Type annotations</strong> — use annotations on any type use (not just declarations), e.g. <code>List<@NonNull String></code></li>',
+            '<li><strong>Repeating annotations</strong> — apply the same annotation multiple times to a declaration with <code>@Repeatable</code></li>',
+            '<li><strong>Method parameter reflection</strong> — get parameter names at runtime via <code>-parameters</code> compiler flag</li>',
+            '<li><strong>Base64 encoding/decoding</strong> — <code>java.util.Base64</code> class</li>',
+            '<li><strong>Parallel array sorting</strong> — <code>Arrays.parallelSort()</code></li>',
+            '<li><strong>CompletableFuture</strong> — improved Future API for asynchronous programming (covered in concurrency)</li>',
+            '<li><strong>StampedLock</strong> — new lock implementation with optimistic reads</li>',
+            '<li><strong>Concurrency improvements</strong> — <code>ConcurrentHashMap</code> enhancements, <code>fork/join</code> improvements</li>',
+            '</ul>'
+          ]
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Exercises for Java 1.8 features:',
+            '<ol>',
+            '<li>Create a <code>@FunctionalInterface</code> for a custom operation and use it as a lambda.</li>',
+            '<li>Write a default method in an interface and override it in a class that implements the interface.</li>',
+            '<li>Use method references in 4 different ways (static, instance, arbitrary object, constructor).</li>',
+            '<li>Refactor a method that returns <code>null</code> to return <code>Optional</code> and update all callers.</li>',
+            '<li>Calculate your age in years, months, and days using <code>Period.between()</code>.</li>',
+            '<li>Format the current date in 3 different formats using <code>DateTimeFormatter</code>.</li>',
+            '</ol>'
+          ]
+        }
+      ]
+    },
+  'java-9-new-features': {
+      title: 'Java 9 New Features',
+      sections: [
+        {
+          heading: 'Overview of Java 9 Features',
+          content: [
+            'Java 9, released in September 2017, was a major modular release. Key features:',
+            '<ul><li><strong>Module System (Project Jigsaw / JPMS)</strong> — formal modularization of the JDK and applications</li><li><strong>Private methods in interfaces</strong> — helper methods that are not part of the public API</li><li><strong>Factory methods for collections</strong> — <code>List.of()</code>, <code>Set.of()</code>, <code>Map.of()</code></li><li><strong>Stream API improvements</strong> — <code>takeWhile</code>, <code>dropWhile</code>, <code>ofNullable</code>, <code>iterate</code> with predicate</li><li><strong>Optional improvements</strong> — <code>stream()</code>, <code>ifPresentOrElse()</code>, <code>or()</code></li><li><strong>JShell (REPL)</strong> — interactive Java shell</li><li><strong>Improved try-with-resources</strong> — can use effectively-final variables</li><li><strong>Reactive Streams (Flow API)</strong> — <code>java.util.concurrent.Flow</code></li><li><strong>Multi-release JAR files</strong> — JARs that contain class files for multiple Java versions</li></ul>'
+          ]
+        },
+        {
+          heading: 'Module System (JPMS / Project Jigsaw)',
+          content: [
+            'Introduces a formal module system to organize large applications and the JDK itself.',
+            'A <strong>module</strong> is a named, self-describing collection of code and data.',
+            'Defined in <code>module-info.java</code> at the root of the module.',
+            'Keywords: <code>module</code>, <code>requires</code>, <code>exports</code>, <code>opens</code>, <code>provides</code>, <code>uses</code>.',
+            'Benefits: strong encapsulation, reliable configuration, smaller runtime footprint.'
+          ],
+          code: `// module-info.java
+module com.example.myapp {
+    requires java.base;          // implicit but explicit for clarity
+    requires java.sql;
+    requires com.example.utils;  // another module
+    
+    exports com.example.myapp.api;
+    exports com.example.myapp.dto;
+    
+    // Open for reflection (e.g., Spring, Hibernate)
+    opens com.example.myapp.entities;
+    
+    // Service provider pattern
+    provides com.example.myapp.spi.Plugin
+        with com.example.myapp.plugins.DefaultPlugin;
+    
+    uses com.example.utils.Logger;
+}
+
+// Running modular application
+// javac --module-source-path src -d out module-info.java src/com/example/myapp/*.java
+// java --module-path out -m com.example.myapp/com.example.myapp.Main`
+        },
+        {
+          heading: 'Factory Methods for Collections',
+          content: [
+            'Create immutable collections concisely using static factory methods.',
+            'List, Set, Map have <code>of()</code> methods for up to 10 elements.',
+            'Beyond 10, use <code>of(...).toArray()</code> with your own values or use <code>ofEntries()</code> for maps.',
+            'The returned collections are immutable — modifying them throws <code>UnsupportedOperationException</code>.',
+            'They do not allow null elements.'
+          ],
+          code: `// List
+List<String> list = List.of("a", "b", "c");
+List<Integer> empty = List.of();
+
+// Set
+Set<Integer> set = Set.of(1, 2, 3);
+
+// Map
+Map<String, Integer> map = Map.of(
+    "apple", 1,
+    "banana", 2,
+    "cherry", 3
+);
+
+// For > 10 entries, use ofEntries
+Map.Entry<String, Integer> e1 = Map.entry("a", 1);
+Map.Entry<String, Integer> e2 = Map.entry("b", 2);
+Map<String, Integer> bigMap = Map.ofEntries(e1, e2);
+
+// Immutable — this throws
+// list.add("d");  // UnsupportedOperationException
+// list.contains(null);  // NullPointerException`
+        },
+        {
+          heading: 'Stream API Improvements',
+          content: [
+            'New methods added for more expressive stream pipelines:',
+            '<ul><li><code>takeWhile(Predicate)</code> — take elements while predicate is true (like break)</li><li><code>dropWhile(Predicate)</code> — drop elements while predicate is true (then take the rest)</li><li><code>ofNullable(T)</code> — create a stream of 0 or 1 elements</li><li><code>iterate(T, Predicate&lt;T&gt;, UnaryOperator&lt;T&gt;)</code> — finite iteration with a stop condition</li><li><code>Optional.stream()</code> — convert to stream (0 or 1 elements)</li></ul>'
+          ],
+          code: `// takeWhile — take while condition holds
+Stream.of(1, 2, 3, 4, 5, 1, 2)
+      .takeWhile(n -> n < 4)     // 1, 2, 3
+      .forEach(System.out::println);
+
+// dropWhile — drop while condition holds, then take rest
+Stream.of(1, 2, 3, 4, 5, 1, 2)
+      .dropWhile(n -> n < 4)    // 4, 5, 1, 2
+      .forEach(System.out::println);
+
+// ofNullable — handle null gracefully
+String value = maybeNull();
+Stream<String> stream = Stream.ofNullable(value);
+
+// iterate with stop condition
+Stream.iterate(1, n -> n < 100, n -> n * 2)
+      .forEach(System.out::println);  // 1, 2, 4, 8, 16, 32, 64
+
+// Optional.stream
+Optional<String> opt = Optional.of("hello");
+opt.stream().forEach(System.out::println);  // hello
+
+Optional.empty().stream().count();  // 0`
+        },
+        {
+          heading: 'Private Methods in Interfaces',
+          content: [
+            'Interfaces can now have <code>private</code> methods to share code between default methods.',
+            'Private methods are not visible to implementing classes.',
+            'Helps avoid code duplication in interfaces with multiple default methods.'
+          ],
+          code: `interface Logger {
+    default void logInfo(String msg) {
+        log("INFO", msg);
+    }
+    
+    default void logError(String msg) {
+        log("ERROR", msg);
+    }
+    
+    default void logDebug(String msg) {
+        if (isDebugEnabled()) {
+            log("DEBUG", msg);
+        }
+    }
+    
+    // Private helper — not part of the API
+    private void log(String level, String msg) {
+        System.out.println(LocalDateTime.now() + " [" + level + "] " + msg);
+    }
+    
+    private boolean isDebugEnabled() {
+        return false;  // placeholder
+    }
+}`
+        },
+        {
+          heading: 'JShell (REPL)',
+          content: [
+            'An interactive Read-Eval-Print-Loop (REPL) tool for Java.',
+            'Launched with <code>jshell</code> command in the terminal.',
+            'Allows you to try code snippets without writing a full class/main method.',
+            'Great for learning, prototyping, and quick experimentation.',
+            'Supports tab completion, automatic variable declaration, history, and saved scripts.'
+          ],
+          code: `$ jshell
+|  Welcome to JShell -- Version 17
+|  For an introduction type: /help intro
+
+jshell> int x = 10
+x ==> 10
+
+jshell> System.out.println("x = " + x)
+x = 10
+
+jshell> List<String> list = List.of("a", "b", "c")
+list ==> [a, b, c]
+
+jshell> list.stream().map(String::toUpperCase).forEach(System.out::println)
+A
+B
+C
+
+jshell> /exit
+|  Goodbye`
+        },
+        {
+          heading: 'Reactive Streams (Flow API)',
+          content: [
+            'Java 9 standardized reactive stream concepts with <code>java.util.concurrent.Flow</code>.',
+            'Contains four nested interfaces: <code>Publisher</code>, <code>Subscriber</code>, <code>Subscription</code>, <code>Processor</code>.',
+            'Backed by the Reactive Streams initiative (also used by RxJava, Reactor, Akka Streams).',
+            'Used heavily in modern reactive frameworks like Spring WebFlux and Project Reactor.'
+          ],
+          code: `import java.util.concurrent.Flow.*;
+import java.util.concurrent.SubmissionPublisher;
+
+// Simple publisher-subscriber example
+SubmissionPublisher<Integer> publisher = new SubmissionPublisher<>();
+
+// Subscriber
+Subscriber<Integer> subscriber = new Subscriber<>() {
+    private Subscription subscription;
+    @Override
+    public void onSubscribe(Subscription s) {
+        this.subscription = s;
+        s.request(1);  // request 1 item
+    }
+    @Override
+    public void onNext(Integer item) {
+        System.out.println("Received: " + item);
+        subscription.request(1);  // request next
+    }
+    @Override
+    public void onError(Throwable t) { t.printStackTrace(); }
+    @Override
+    public void onComplete() { System.out.println("Done"); }
+};
+
+publisher.subscribe(subscriber);
+publisher.submit(1);
+publisher.submit(2);
+publisher.submit(3);
+publisher.close();`
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Exercises for Java 9:',
+            '<ol><li>Create an immutable <code>List</code>, <code>Set</code>, and <code>Map</code> using factory methods, then try to modify them and observe the exception.</li><li>Use <code>takeWhile</code> and <code>dropWhile</code> on a sorted stream of numbers.</li><li>Create an interface with two default methods that share a private helper method.</li><li>Launch <code>jshell</code> and try out a few statements and expressions.</li><li>Refactor a class to declare a <code>module-info.java</code> with the proper <code>exports</code> and <code>requires</code>.</li></ol>'
+          ]
+        }
+      ]
+    },
+  'java-10-new-features': {
+      title: 'Java 10 New Features',
+      sections: [
+        {
+          heading: 'Overview of Java 10 Features',
+          content: [
+            'Java 10 was a short-term release in March 2018 (six-month release cadence started).',
+            'Main features:',
+            `<ul><li><strong>Local variable type inference (<code>var</code>)</strong> — the biggest language change</li><li><strong>Unmodifiable collections</strong> — <code>List.copyOf()</code>, <code>Set.copyOf()</code>, <code>Map.copyOf()</code></li><li><strong>Optional.orElseThrow()</strong> — parameterless method that throws <code>NoSuchElementException</code> if empty</li><li><strong>Garbage collector improvements</strong> — G1 parallel full GC, experimental ZGC</li><li><strong>Application class-data sharing</strong> — improved startup with CDS archives</li><li><strong>Container awareness</strong> — JVM detects container limits (CPU, memory) automatically</li><li><strong>Root certificates</strong> — bundled cacerts in the JDK (no more "trust anchor not found")</li></ul>`
+          ]
+        },
+        {
+          heading: 'Local Variable Type Inference (var)',
+          content: [
+            'The <code>var</code> keyword lets the compiler infer the type of a local variable from its initializer.',
+            'Available only for local variables (including loop variables, try-with-resources).',
+            'NOT available for: fields, method parameters, method return types, catch parameters (catch was added in Java 1.7, so it works there).',
+            'The variable still has a static type — <code>var</code> is not dynamic typing; it is just shorter syntax.',
+            'Use it when the type is obvious from the right-hand side, not just to save typing.'
+          ],
+          code: `// Before Java 10
+String name = "Sudhakar";
+List<String> items = new ArrayList<>();
+Map<String, Integer> counts = new HashMap<>();
+
+// Java 10 with var
+var name = "Sudhakar";         // inferred as String
+var items = new ArrayList<String>();  // inferred as ArrayList<String>
+var counts = new HashMap<String, Integer>();
+
+// Use in for loops
+for (var entry : map.entrySet()) {
+    System.out.println(entry.getKey() + ": " + entry.getValue());
+}
+
+// Use in try-with-resources
+try (var reader = new BufferedReader(new FileReader("file.txt"))) {
+    return reader.readLine();
+}
+
+// NOT allowed:
+// var x;              // no initializer
+// var null = null;    // cannot infer
+// var lambda = () -> System.out.println();  // target type needed
+// public var getName() { ... }  // method return type not allowed
+// class Foo { var x; }  // field not allowed
+
+// Good usage — type is obvious
+var list = new ArrayList<User>();
+var stream = users.stream();
+
+// Bad usage — type is unclear
+var result = process(input);  // What type? Hard to read.
+var temp = 3.14;              // Could be double or float — explicit is better`
+        },
+        {
+          heading: 'Unmodifiable Collection Copies',
+          content: [
+            '<code>List.copyOf</code>, <code>Set.copyOf</code>, and <code>Map.copyOf</code> return unmodifiable copies.',
+            'Similar to <code>Collections.unmodifiableList()</code> but work with any Iterable or Map.',
+            'Null elements are not allowed in the copy.',
+            'The returned collection is a separate copy — modifications to the source do not affect the copy.'
+          ],
+          code: `List<String> mutable = new ArrayList<>();
+mutable.add("a");
+mutable.add("b");
+
+List<String> immutable = List.copyOf(mutable);
+immutable.add("c");  // UnsupportedOperationException
+
+// The original is unaffected
+mutable.add("d");
+// immutable still contains only "a", "b"
+
+// Useful when returning from methods
+public List<String> getNames() {
+    return List.copyOf(internalNames);
+}`
+        },
+        {
+          heading: 'Optional.orElseThrow() (No-Arg)',
+          content: [
+            'Before Java 10, you had to write <code>Optional.get()</code> or <code>orElseThrow(NoSuchElementException::new)</code>.',
+            'Java 10 adds a parameterless <code>orElseThrow()</code> that throws <code>NoSuchElementException</code>.',
+            'Now equivalent to <code>get()</code> but with a more descriptive name (and no longer deprecated for this use).',
+            'Prefer it over <code>get()</code> for clarity.'
+          ],
+          code: `Optional<String> opt = findValue("key");
+
+// Before Java 10
+String value = opt.orElseThrow(NoSuchElementException::new);
+// or (less preferred)
+String value = opt.get();
+
+// Java 10+
+String value = opt.orElseThrow();
+String value = opt.orElseThrow(() -> new CustomException("not found"));`
+        },
+        {
+          heading: 'Garbage Collector and Performance Improvements',
+          content: [
+            'Java 10 brought several under-the-hood performance improvements:',
+            '<ul><li><strong>G1 parallel full GC</strong> — full G1 collections now use multiple threads by default, reducing pause times</li><li><strong>Experimental ZGC</strong> — a new low-latency concurrent garbage collector (production-ready in Java 15+)</li><li><strong>Application class-data sharing (AppCDS)</strong> — improve startup time and memory footprint by archiving loaded classes</li><li><strong>Container awareness</strong> — JVMs now default to using container-defined CPU and memory limits instead of host system values</li></ul>',
+            'These are mostly JVM tuning / deployment changes; your code usually does not need to change.'
+          ]
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Exercises for Java 10:',
+            '<ol><li>Refactor a method with verbose type declarations to use <code>var</code>. Then refactor a different method where var makes it harder to read, and use explicit types instead.</li><li>Take a mutable <code>List</code>, make a copy with <code>List.copyOf()</code>, and verify the copy cannot be modified.</li><li>Use <code>orElseThrow()</code> in place of <code>get()</code> on an Optional.</li><li>Enable G1 parallel full GC and check the GC log output.</li></ol>'
+          ]
+        }
+      ]
+    },
+  'java-11-new-features': {
+      title: 'Java 11 New Features (LTS)',
+      sections: [
+        {
+          heading: 'Overview of Java 11 (LTS) Features',
+          content: [
+            'Java 11 (September 2018) was the first LTS release after the new six-month cadence.',
+            'Main features:',
+            '<ul><li><strong><code>var</code> in lambda parameters</strong> — implicit type for lambda parameters</li><li><strong>HTTP Client API (standard)</strong> — <code>java.net.http.HttpClient</code></li><li><strong>String new methods</strong> — <code>isBlank</code>, <code>strip</code>, <code>lines</code>, <code>repeat</code></li><li><strong>Files readString / writeString</strong> — quick read/write of small files</li><li><strong>Optional enhancements</strong> — <code>isEmpty()</code></li><li><strong>Collection factory methods for > 10 elements</strong> — <code>List.of(...20 args)</code> overloads</li><li><strong>Running single-file source-code</strong> — <code>java HelloWorld.java</code> without compiling first</li><li><strong>Nest-based access control</strong> — bridge between nested classes and reflection</li><li><strong>Removed Java EE and CORBA modules</strong> — <code>java.xml.ws</code>, <code>java.xml.bind</code>, <code>java.activation</code></li></ul>'
+          ]
+        },
+        {
+          heading: 'var in Lambda Parameters',
+          content: [
+            'Java 10 introduced <code>var</code> for local variables. Java 11 extends it to lambda parameters.',
+            'Useful when applying annotations to lambda parameters.',
+            'The inferred type is treated like an explicitly declared type.'
+          ],
+          code: `// Without annotations — same as before
+Predicate<String> p1 = s -> s.isEmpty();
+
+// With var (only useful when annotating)
+Predicate<String> p2 = (@NonNull var s) -> s.isEmpty();
+
+// Mixing var and non-var is allowed but both must be explicit
+BiFunction<String, String, String> f = (var a, var b) -> a + b;`
+        },
+        {
+          heading: 'Standard HTTP Client API',
+          content: [
+            'The incubator HTTP Client from Java 9 became standard in Java 11.',
+            'Supports HTTP/1.1 and HTTP/2, synchronous and asynchronous requests.',
+            'Replaces the older <code>HttpURLConnection</code> for most use cases.',
+            'Fluent builder API: <code>HttpClient.newBuilder()</code>, <code>HttpRequest.newBuilder()</code>.'
+          ],
+          code: `import java.net.URI;
+import java.net.http.*;
+import java.time.Duration;
+
+HttpClient client = HttpClient.newBuilder()
+    .version(HttpClient.Version.HTTP_2)
+    .connectTimeout(Duration.ofSeconds(10))
+    .build();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.example.com/users"))
+    .header("Content-Type", "application/json")
+    .timeout(Duration.ofSeconds(30))
+    .GET()
+    .build();
+
+// Synchronous
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.statusCode());
+System.out.println(response.body());
+
+// Asynchronous
+client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+    .thenApply(HttpResponse::body)
+    .thenAccept(System.out::println)
+    .join();
+
+// POST with body
+HttpRequest post = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.example.com/users"))
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString("{\\"name\\":\\"Sudhakar\\"}"))
+    .build();`
+        },
+        {
+          heading: 'String New Methods',
+          content: [
+            'Several new methods were added to <code>String</code> in Java 11:',
+            '<ul><li><code>isBlank()</code> — true if the string is empty or contains only whitespace</li><li><code>strip()</code> / <code>stripLeading()</code> / <code>stripTrailing()</code> — Unicode-aware whitespace trimming (better than <code>trim()</code>)</li><li><code>lines()</code> — split by line terminators into a <code>Stream&lt;String&gt;</code></li><li><code>repeat(int)</code> — concatenate the string to itself N times</li></ul>'
+          ],
+          code: `// isBlank
+"   ".isBlank();         // true
+"hello".isBlank();       // false
+
+// strip — better than trim (handles Unicode whitespace)
+" hello ".strip();     // "hello"
+" hello ".trim();      // " hello "  (trim misses this)
+
+// lines
+"line1
+line2
+line3".lines()
+    .forEach(System.out::println);
+
+// repeat
+"=".repeat(10);  // "=========="
+"ab".repeat(3);  // "ababab"
+
+// combine
+"  hello  ".strip().repeat(2).toUpperCase();  // "HELLOHELLO"`
+        },
+        {
+          heading: 'Files readString and writeString',
+          content: [
+            'Quick utility methods for reading and writing small files as Strings or byte arrays.',
+            'Internally uses <code>Files.readAllBytes</code> / <code>write</code>.',
+            'Should only be used for files that fit comfortably in memory.'
+          ],
+          code: `// Read as String
+String content = Files.readString(Path.of("data.txt"));
+String content2 = Files.readString(Path.of("data.txt"), StandardCharsets.UTF_8);
+
+// Write String
+Files.writeString(Path.of("output.txt"), "Hello, World!");
+
+// Append
+Files.writeString(
+    Path.of("log.txt"),
+    "New entry
+",
+    StandardOpenOption.CREATE,
+    StandardOpenOption.APPEND
+);
+
+// Read as bytes
+byte[] bytes = Files.readAllBytes(Path.of("image.png"));`
+        },
+        {
+          heading: 'Running Single-File Source-Code',
+          content: [
+            'Java 11 can run a single .java file directly with the <code>java</code> command — no explicit compile step.',
+            'Limited to single-file programs — useful for scripts, examples, and quick experiments.',
+            'The <code>source-file</code> launcher (used by <code>java Hello.java</code>) compiles the file in memory and runs the first class whose name matches the filename (or the class with the <code>public static void main(String[])</code> method).'
+          ],
+          code: `// Hello.java
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, " + args[0] + "!");
+    }
+}
+
+// Before Java 11
+$ javac Hello.java
+$ java Hello World
+// Output: Hello, World!
+
+// Java 11 — single-file source execution
+$ java Hello.java World
+// Output: Hello, World!
+
+// Works for shebang scripts too
+#!/usr/bin/java --source 11
+public class Greet {
+    public static void main(String[] args) {
+        System.out.println("Hello from a script!");
+    }
+}`
+        },
+        {
+          heading: 'Removed and Deprecated APIs',
+          content: [
+            'Java 11 removed several APIs that were deprecated since Java 1.5–1.9:',
+            '<ul><li>Java EE modules: <code>java.xml.ws</code> (JAX-WS), <code>java.xml.bind</code> (JAXB), <code>java.activation</code> (JAF), <code>java.xml.ws.annotation</code></li><li>CORBA modules: <code>java.corba</code>, <code>org.omg.*</code></li><li>JavaFX was removed from the JDK (now a separate project)</li></ul>',
+            'If you depend on these, add external dependencies (e.g., <code>jakarta.xml.bind:jakarta.xml.bind-api</code>).'
+          ]
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Exercises for Java 11:',
+            '<ol><li>Use the standard <code>HttpClient</code> to fetch a public API and print the response body.</li><li>Use <code>String.repeat</code>, <code>String.strip</code>, and <code>String.isBlank</code> on sample inputs.</li><li>Use <code>Files.readString</code> and <code>Files.writeString</code> to copy a file.</li><li>Create a small <code>Hello.java</code> and run it with <code>java Hello.java</code> (no compile step).</li><li>Use <code>var</code> in a lambda parameter to apply a custom annotation.</li></ol>'
+          ]
+        }
+      ]
+    },
+  'java-17-new-features': {
+      title: 'Java 17 New Features (LTS)',
+      sections: [
+        {
+          heading: 'Overview of Java 17 (LTS) Features',
+          content: [
+            'Java 17 (September 2021) is the current widely-used LTS release. Many of its features were previewed in earlier versions and became standard in 17.',
+            'Main features:',
+            '<ul><li><strong>Sealed classes and interfaces</strong> — restrict which classes can extend/implement</li><li><strong>Pattern matching for instanceof</strong> — combine check and cast</li><li><strong>Records</strong> — concise immutable data carriers</li><li><strong>Switch expressions</strong> — switch as an expression that returns a value (standard in 14, refined in 17)</li><li><strong>Text blocks</strong> — multi-line string literals (standard in 15)</li><li><strong>Helpful NullPointerExceptions</strong> — precise NPE messages showing which variable was null</li><li><strong>Pattern matching for switch (preview)</strong> — switch can match on patterns</li><li><strong>Strong encapsulation of JDK internals</strong> — by default, internal APIs are not accessible</li><li><strong>Removed Nashorn JavaScript engine</strong></li></ul>'
+          ]
+        },
+        {
+          heading: 'Sealed Classes and Interfaces',
+          content: [
+            'A sealed class or interface restricts which other classes or interfaces can extend or implement it.',
+            'Defined using the <code>sealed</code> modifier; permitted subclasses declared with the <code>permits</code> clause.',
+            'Permitted subclasses must be in the same module (or same package if not in a module).',
+            'Each permitted subclass must be <code>final</code>, <code>sealed</code>, or <code>non-sealed</code>.',
+            'Enables exhaustive pattern matching and clearer domain modeling.'
+          ],
+          code: `// Sealed interface — only these three shapes are allowed
+public sealed interface Shape
+    permits Circle, Rectangle, Triangle {
+    double area();
+}
+
+public final class Circle implements Shape {
+    private final double radius;
+    public Circle(double r) { this.radius = r; }
+    @Override
+    public double area() { return Math.PI * radius * radius; }
+}
+
+public final class Rectangle implements Shape {
+    private final double width, height;
+    public Rectangle(double w, double h) { this.width = w; this.height = h; }
+    @Override
+    public double area() { return width * height; }
+}
+
+public non-sealed class Triangle implements Shape {
+    private final double base, height;
+    public Triangle(double b, double h) { this.base = b; this.height = h; }
+    @Override
+    public double area() { return 0.5 * base * height; }
+}
+
+// Sealed class
+public sealed class Vehicle
+    permits Car, Truck, Motorcycle {
+    // common fields/methods
+}
+
+public final class Car extends Vehicle { }
+public final class Truck extends Vehicle { }
+public non-sealed class Motorcycle extends Vehicle { }  // can be extended further`
+        },
+        {
+          heading: 'Pattern Matching for instanceof',
+          content: [
+            'A long-standing annoyance was the need to cast after an instanceof check.',
+            'The pattern variable binds the cast result directly in the condition, in scope for the true branch.',
+            'No explicit cast needed; the variable is already the correct type.',
+            'Standard since Java 16.'
+          ],
+          code: `// Before Java 16
+if (obj instanceof String) {
+    String s = (String) obj;       // manual cast
+    System.out.println(s.length());
+}
+
+// Java 16+
+if (obj instanceof String s) {     // bind and check in one
+    System.out.println(s.length());
+}
+
+// Can combine with other conditions
+if (obj instanceof String s && s.length() > 5) {
+    System.out.println("Long string: " + s);
+}
+
+// Negation
+if (!(obj instanceof String s)) {
+    return;
+}
+// s is in scope here
+System.out.println(s.toLowerCase());`
+        },
+        {
+          heading: 'Records',
+          content: [
+            'A record is a concise way to declare an immutable data carrier class.',
+            'Auto-generates a constructor, accessor methods, <code>equals()</code>, <code>hashCode()</code>, and <code>toString()</code>.',
+            'Accessors are named after the components (no <code>get</code> prefix): <code>person.name()</code>, not <code>person.getName()</code>.',
+            'Components are <code>final</code> by default; the whole record is implicitly final.',
+            'You can add static fields, static methods, and instance methods. You can also override canonical methods if needed.'
+          ],
+          code: `// Verbose class — 50+ lines
+public final class Person {
+    private final String name;
+    private final int age;
+    public Person(String name, int age) { this.name = name; this.age = age; }
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    // equals, hashCode, toString...
+}
+
+// Record — one line
+public record Person(String name, int age) { }
+
+Person p = new Person("Sudhakar", 30);
+p.name();    // "Sudhakar"
+p.age();     // 30
+p.toString();  // Person[name=Sudhakar, age=30]
+
+// Records can have additional members
+public record Point(int x, int y) {
+    public double distanceFromOrigin() {
+        return Math.sqrt(x * x + y * y);
+    }
+    
+    // Compact constructor for validation
+    public Point {
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException("Coordinates must be non-negative");
+        }
+    }
+}
+
+// Records implement interfaces
+public record User(String username, String email) implements Comparable<User> {
+    @Override
+    public int compareTo(User other) {
+        return this.username.compareTo(other.username);
+    }
+}
+
+// Records are great for DTOs, value objects, and tuple-like data`
+        },
+        {
+          heading: 'Switch Expressions',
+          content: [
+            'Switch can now be used as an expression that returns a value (standard in 14, refined with pattern matching in 17).',
+            'Arrow-form <code>case X -&gt; ...</code> avoids fall-through and does not need <code>break</code>.',
+            `Multiple labels can be combined: <code>case MONDAY, TUESDAY -&gt; "Weekday";</code>`,
+            'Exhaustiveness is checked for enums and sealed types — no <code>default</code> needed when all cases are covered.'
+          ],
+          code: `// Traditional switch statement
+String label;
+switch (day) {
+    case MONDAY: case TUESDAY: case WEDNESDAY: case THURSDAY: case FRIDAY:
+        label = "Weekday";
+        break;
+    case SATURDAY: case SUNDAY:
+        label = "Weekend";
+        break;
+    default:
+        label = "Unknown";
+        break;
+}
+
+// Java 14+ switch expression (arrow form)
+String label = switch (day) {
+    case MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY -> "Weekday";
+    case SATURDAY, SUNDAY -> "Weekend";
+};
+
+// Use as expression directly
+int days = switch (month) {
+    case JANUARY, MARCH, MAY, JULY, AUGUST, OCTOBER, DECEMBER -> 31;
+    case APRIL, JUNE, SEPTEMBER, NOVEMBER -> 30;
+    case FEBRUARY -> 28;  // ignoring leap years for simplicity
+};
+
+// Yield a value from a block
+String result = switch (value) {
+    case 1 -> "one";
+    case 2 -> "two";
+    default -> {
+        if (value > 0) yield "many";
+        else yield "negative";
+    }
+};`
+        },
+        {
+          heading: 'Text Blocks',
+          content: [
+            'Multi-line string literals using triple-quote delimiters.',
+            'Standard since Java 15.',
+            'Indentation and line breaks are preserved; incidental whitespace is automatically stripped.',
+            'Useful for HTML, JSON, SQL, and other multi-line content.'
+          ],
+          code: `// Without text blocks
+String json = "{
+" +
+              "  "name": "Sudhakar",
+" +
+              "  "age": 30,
+" +
+              "  "city": "Hyderabad"
+" +
+              "}";
+
+// With text blocks
+String json = """
+        {
+          "name": "Sudhakar",
+          "age": 30,
+          "city": "Hyderabad"
+        }
+        """;
+
+// SQL example
+String query = """
+        SELECT id, name, email
+        FROM users
+        WHERE active = true
+        ORDER BY name
+        """;
+
+// HTML example
+String html = """
+        <html>
+            <body>
+                <h1>Hello, %s!</h1>
+            </body>
+        </html>
+        """.formatted(name);
+
+// String formatting still works
+String greeting = """
+        Hello,
+        %s!
+        Welcome to %s.
+        """.formatted(name, appName);`
+        },
+        {
+          heading: 'Helpful NullPointerExceptions',
+          content: [
+            `Before Java 14, an NPE just said "NullPointerException" with no clue which variable was null.`,
+            'Java 14+ (and standard in 17) NPEs now pinpoint the exact variable that was null.',
+            'Works for both field accesses and chained method calls.',
+            'Can be disabled with <code>-XX:-ShowCodeDetailsInExceptionMessages</code> JVM flag.'
+          ],
+          code: `// Before — unhelpful
+User user = null;
+System.out.println(user.getName());
+// Exception in thread "main" java.lang.NullPointerException
+
+// After — helpful
+User user = null;
+System.out.println(user.getName());
+// Exception in thread "main" java.lang.NullPointerException:
+//   Cannot invoke "User.getName()" because "user" is null
+
+// Chained
+Address a = user.getAddress();
+System.out.println(a.getCity().toUpperCase());
+// Exception: Cannot invoke "String.toUpperCase()" because the return
+// value of "Address.getCity()" is null`
+        },
+        {
+          heading: 'Other Java 17 Features',
+          content: [
+            'Other notable features and changes in Java 17:',
+            '<ul>',
+            '<li><strong>Pattern matching for switch (preview)</strong> — switch can match on type patterns, like <code>case String s -&gt; ...</code></li>',
+            '<li><strong>Strong encapsulation of JDK internals by default</strong> — <code>sun.misc.Unsafe</code> and similar internal APIs require <code>--add-opens</code> flags</li>',
+            '<li><strong>Removed Nashorn JavaScript engine</strong> — the embedded JS engine was removed (use GraalVM instead if needed)</li>',
+            '<li><strong>New macOS rendering pipeline (preview)</strong> — replaced the old Java2D pipeline on macOS</li>',
+            '<li><strong>Deprecate the Applet API for removal</strong> — applets are finally being phased out</li>',
+            '<li><strong>Foreign Function & Memory API (incubator)</strong> — improved JNI replacement for native code</li>',
+            '</ul>'
+          ]
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Exercises for Java 17:',
+            '<ol>',
+            '<li>Define a sealed interface <code>Payment</code> with permitted implementations <code>CreditCard</code>, <code>UPI</code>, and <code>NetBanking</code>.</li>',
+            '<li>Create a record <code>Employee(String name, int id, double salary)</code> and add a custom <code>annualSalary()</code> method.</li>',
+            '<li>Use pattern matching for instanceof to handle a List of mixed types.</li>',
+            `<li>Write a switch expression that converts an enum Day to "Weekday" / "Weekend".</li>`,
+            '<li>Convert a multi-line JSON literal to a text block.</li>',
+            '<li>Trigger an NPE in a chained expression and read the helpful message.</li>',
+            '</ol>'
+          ]
+        }
+      ]
+    },
+  'java-21-new-features': {
+      title: 'Java 21 New Features (LTS)',
+      sections: [
+        {
+          heading: 'Overview of Java 21 (LTS) Features',
+          content: [
+            'Java 21 (September 2023) is the most recent LTS release. It includes features that have been in preview/incubator for several releases.',
+            'Main features:',
+            '<ul><li><strong>Virtual threads (Project Loom)</strong> — lightweight threads for high-throughput concurrent apps</li><li><strong>Pattern matching for switch (standard)</strong> — finalize the switch pattern feature</li><li><strong>Record patterns (standard)</strong> — destructure records in instanceof and switch</li><li><strong>Sequenced collections</strong> — first/last element methods on List, Set, Map</li><li><strong>String templates (preview)</strong> — embedded expressions in strings</li><li><strong>Unnamed patterns and variables (preview)</strong> — <code>_</code> for unused variables and patterns</li><li><strong>Scoped values (incubator)</strong> — immutable thread-local-like values</li><li><strong>Structured concurrency (incubator)</strong> — treat groups of tasks as a single unit</li><li><strong>Generational ZGC</strong> — improves ZGC performance for typical workloads</li></ul>'
+          ]
+        },
+        {
+          heading: 'Virtual Threads (Project Loom)',
+          content: [
+            'Lightweight threads that dramatically reduce the cost of writing concurrent code.',
+            'Each virtual thread is a separate unit of execution, but they share the underlying OS thread pool.',
+            'Millions of virtual threads can run on a single OS thread — perfect for I/O-bound workloads (HTTP servers, DB calls).',
+            'Use <code>Thread.startVirtualThread(Runnable)</code> or <code>Executors.newVirtualThreadPerTaskExecutor()</code>.',
+            'Use <code>Executors.newFixedThreadPool</code> if you have a CPU-bound task — virtual threads are for blocking I/O.'
+          ],
+          code: `// Old way — platform threads, expensive
+ExecutorService executor = Executors.newFixedThreadPool(200);
+// Each thread uses ~1 MB of stack space
+
+// Java 21 — virtual threads
+ExecutorService vExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
+// Submit a million virtual threads — works fine
+List<Future<String>> futures = new ArrayList<>();
+for (int i = 0; i < 1_000_000; i++) {
+    futures.add(vExecutor.submit(() -> {
+        // Do blocking I/O — this is where virtual threads shine
+        return httpClient.fetch("https://api.example.com/data");
+    }));
+}
+
+// Direct creation
+Thread.startVirtualThread(() -> {
+    System.out.println("Running on a virtual thread");
+});
+
+// Builder
+Thread.ofVirtual()
+    .name("my-virtual-thread")
+    .start(() -> doWork());
+
+// Use with try-with-resources for auto-shutdown
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    executor.submit(() -> handleRequest());
+    executor.submit(() -> handleAnother());
+}  // Waits for all tasks to complete`
+        },
+        {
+          heading: 'Pattern Matching for switch (Standard)',
+          content: [
+            'Switch can now match on type patterns — a much cleaner way to handle polymorphic data.',
+            'Especially powerful with sealed types — the compiler verifies exhaustiveness.',
+            'When all cases are covered (no <code>default</code>), the switch is exhaustive.',
+            'Use a <code>when</code> clause (guarded pattern) for additional conditions.'
+          ],
+          code: `// Sealed type with permits
+sealed interface Shape permits Circle, Rectangle, Triangle {}
+record Circle(double radius) implements Shape {}
+record Rectangle(double width, double height) implements Shape {}
+record Triangle(double base, double height) implements Shape {}
+
+// Pattern matching switch
+double area(Shape s) {
+    return switch (s) {
+        case Circle c        -> Math.PI * c.radius() * c.radius();
+        case Rectangle r     -> r.width() * r.height();
+        case Triangle t      -> 0.5 * t.base() * t.height();
+    };  // No default needed — exhaustive for sealed type
+}
+
+// Null case
+String describe(Object obj) {
+    return switch (obj) {
+        case null             -> "null";
+        case Integer i        -> "Integer: " + i;
+        case String s         -> "String: " + s;
+        case int[] arr        -> "Array of ints, length " + arr.length;
+        default               -> "Something else";
+    };
+}
+
+// Guarded pattern
+String size(Category cat) {
+    return switch (cat) {
+        case Category c when c.size() < 10  -> "small";
+        case Category c when c.size() < 100 -> "medium";
+        case Category c                     -> "large";
+    };
+}`
+        },
+        {
+          heading: 'Record Patterns',
+          content: [
+            'Destructure records inline — extract components without calling accessors.',
+            'Can be nested — match on records that contain other records.',
+            'Works with both <code>instanceof</code> and switch pattern matching.'
+          ],
+          code: `record Point(int x, int y) {}
+record Line(Point start, Point end) {}
+record Shape(Line outline, String color) {}
+
+// Without record patterns
+if (obj instanceof Line line) {
+    Point s = line.start();
+    Point e = line.end();
+    if (s.x() == 0 && e.x() == 0) {
+        System.out.println("Vertical line");
+    }
+}
+
+// With record patterns — destructure in one step
+if (obj instanceof Line(Point(int x1, int y1), Point(int x2, int y2))) {
+    System.out.println("Line from (" + x1 + "," + y1 + ") to (" + x2 + "," + y2 + ")");
+}
+
+// Nested record patterns
+if (obj instanceof Shape(Line(Point s, Point e), String color)) {
+    System.out.println("Colored " + color + " shape");
+}
+
+// In switch
+String describe(Object obj) {
+    return switch (obj) {
+        case Point(int x, int y) when x == 0 && y == 0 -> "origin";
+        case Point(int x, int y)                       -> "point at (" + x + "," + y + ")";
+        case Line(Point s, Point e)                    -> "line from " + s + " to " + e;
+        default                                        -> "other";
+    };
+}`
+        },
+        {
+          heading: 'Sequenced Collections',
+          content: [
+            'A new family of collection interfaces that define an encounter order with first/last elements.',
+            'New interfaces: <code>SequencedCollection</code>, <code>SequencedSet</code>, <code>SequencedMap</code>.',
+            'Default methods: <code>addFirst</code>, <code>addLast</code>, <code>getFirst</code>, <code>getLast</code>, <code>removeFirst</code>, <code>removeLast</code>, <code>reversed</code>.',
+            'Reversed view returns a live view — modifications to the reverse view reflect in the original.'
+          ],
+          code: `// List implements SequencedCollection
+List<String> list = new ArrayList<>(List.of("a", "b", "c"));
+
+list.getFirst();   // "a"
+list.getLast();    // "c"
+list.addFirst("z");
+list.addLast("d");
+list.removeFirst();  // removes "z"
+list.removeLast();   // removes "d"
+
+List<String> reversed = list.reversed();
+reversed.forEach(System.out::println);  // c, b, a
+
+// LinkedHashSet implements SequencedSet
+Set<Integer> seqSet = new LinkedHashSet<>(List.of(3, 1, 4, 1, 5));
+seqSet.getFirst();  // 3 (insertion order)
+seqSet.getLast();   // 5
+
+// LinkedHashMap implements SequencedMap
+SequencedMap<String, Integer> map = new LinkedHashMap<>();
+map.put("one", 1);
+map.put("two", 2);
+map.put("three", 3);
+map.firstEntry();   // one=1
+map.lastEntry();    // three=3
+map.reversed().forEach((k, v) -> System.out.println(k + "=" + v));`
+        },
+        {
+          heading: 'String Templates (Preview)',
+          content: [
+            'A new way to embed expressions inside string literals.',
+            'Uses template processors — built-in <code>STR</code>, <code>FMT</code>, and <code>RAW</code>, plus custom processors.',
+            'Solves the long-standing ugliness of string concatenation, <code>String.format</code>, and <code>StringBuilder</code>.',
+            'Currently in preview — requires <code>--enable-preview</code> and possibly <code>--source 21</code>.',
+            'NOTE: This feature was withdrawn from Java 21 before release. It will likely return in a future version with refinements. Check the current status before relying on it.'
+          ],
+          code: `// Note: String templates were withdrawn from the final Java 21 release.
+// The syntax shown here reflects the pre-withdrawal preview.
+
+// Basic — STR template
+String name = "Sudhakar";
+int age = 30;
+String greeting = STR."Hello, {name}! You are {age} years old.";
+// Result: "Hello, Sudhakar! You are 30 years old."
+
+// Arithmetic in templates
+int x = 10, y = 20;
+String sum = STR."{x} + {y} = {x + y}";
+
+// FMT — formatted (like String.format)
+String formatted = FMT."%.2f{Math.PI}";   // "3.14"
+
+// Multi-line
+String multi = STR."""
+        Name: {name}
+        Age:  {age}
+        """;
+
+// Custom processor
+interface JsonProcessor {
+    String STR."""{"name": "{name}", "age": {age}}""";
+}`
+        },
+        {
+          heading: 'Unnamed Patterns and Variables (Preview)',
+          content: [
+            'The underscore <code>_</code> can now be used for unused parameters, pattern variables, and exception variables.',
+            `Replaces the previous meaning of <code>_</code> as a "do not care" identifier (which was just a normal variable name).`,
+            'Enables cleaner code where you do not need the value but the syntax requires a name.'
+          ],
+          code: `// Catch with unused exception
+try {
+    Files.readString(Path.of("file.txt"));
+} catch (IOException _) {       // ignore the exception
+    System.out.println("File not found");
+}
+
+// Unused lambda parameter
+list.forEach(_ -> System.out.println("called"));
+
+// Unused pattern variable
+if (obj instanceof Point _) {   // we just want to know it's a Point
+    System.out.println("Got a point");
+}
+
+// Unused record component
+if (obj instanceof Line(Point _, Point end)) {
+    System.out.println("End at " + end);
+}
+
+// Unused loop variable
+for (var _ : items) {
+    count++;
+}`
+        },
+        {
+          heading: 'Structured Concurrency and Scoped Values (Incubator)',
+          content: [
+            '<strong>Structured concurrency</strong> (incubator) — treat a group of related tasks as a single unit of work. If any task fails, others are cancelled.',
+            'Uses <code>StructuredTaskScope</code> to spawn subtasks and wait for them collectively.',
+            'Replaces ad-hoc thread management with a structured approach (similar to goroutines, Kotlin coroutines, etc.).',
+            '<strong>Scoped values</strong> (incubator) — immutable values scoped to a thread or virtual thread, used like ThreadLocal but with better semantics for virtual threads.',
+            'Both are incubator APIs in Java 21 — may change before being standardized.'
+          ],
+          code: `// Structured concurrency example
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    Subtask<User> userTask = scope.fork(() -> fetchUser(id));
+    Subtask<List<Order>> ordersTask = scope.fork(() -> fetchOrders(id));
+    
+    scope.join();           // wait for both
+    scope.throwIfFailed();  // propagate any failure
+    
+    User user = userTask.get();
+    List<Order> orders = ordersTask.get();
+    return new Profile(user, orders);
+}  // All subtasks are joined or cancelled here
+
+// Scoped value
+static final ScopedValue<UserContext> CURRENT_USER = ScopedValue.newInstance();
+
+ScopedValue.where(CURRENT_USER, new UserContext("sudhakar"))
+    .run(() -> {
+        UserContext ctx = CURRENT_USER.get();
+        System.out.println("User: " + ctx.name());
+    });`
+        },
+        {
+          heading: 'Other Java 21 Features',
+          content: [
+            'Other notable features:',
+            '<ul>',
+            '<li><strong>Generational ZGC</strong> — improves ZGC performance by separating young and old generations</li>',
+            '<li><strong>JEP 451: Prepare to Disallow the Dynamic Loading of Agents</strong> — future versions will disallow dynamic agent loading by default</li>',
+            '<li><strong>Key Encapsulation Mechanism API</strong> — quantum-resistant key exchange</li>',
+            '<li><strong>Foreign Function & Memory API (preview)</strong> — third preview, improving JNI replacement</li>',
+            '<li><strong>Pattern matching for switch (final)</strong> — see dedicated section above</li>',
+            '<li><strong>Removed RMI Activation</strong> — the RMI activation mechanism has been removed</li>',
+            '</ul>'
+          ]
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Exercises for Java 21:',
+            '<ol>',
+            '<li>Spawn 100,000 virtual threads and verify they all complete successfully.</li>',
+            '<li>Define a sealed interface <code>Vehicle</code> with permitted records and exhaustively match on it with pattern switch.</li>',
+            '<li>Destructure a nested record pattern in an instanceof check.</li>',
+            '<li>Use <code>getFirst()</code> and <code>reversed()</code> on a <code>LinkedHashSet</code>.</li>',
+            '<li>Use <code>_</code> as an unused pattern variable in a switch.</li>',
+            '<li>Enable preview features and try the (withdrawn) string template syntax in a test file.</li>',
+            '</ol>'
+          ]
+        }
+      ]
+    },
+
 };
 
 const javaModule6Content = {
