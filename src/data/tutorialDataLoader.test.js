@@ -8,12 +8,12 @@ import {
 const ALL_SUBJECTS = Object.keys(subjectMeta)
 
 const SUBJECTS_WITH_FIVE_MODULES = ALL_SUBJECTS.filter(
-  (subject) => !['java', 'css'].includes(subject)
+  (subject) => !['css', 'java'].includes(subject)
 )
 
-const SIX_MODULE_SUBJECTS = ['css']
+const SIX_MODULE_SUBJECTS = ['css', 'java']
 
-const LEGACY_FOUR_MODULE_SUBJECTS = ['java']
+const LEGACY_FOUR_MODULE_SUBJECTS = []
 
 function expectedModuleKeys(subject) {
   if (subject === 'multimodal') {

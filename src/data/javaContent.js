@@ -4,11 +4,14 @@ export const javaStructure = {
     topics: [
       { id: 'intro-java', title: 'Introduction to Java' },
       { id: 'variables-data-types', title: 'Variables and Data Types' },
+      { id: 'literals', title: 'Literals' },
+      { id: 'identifiers-reserved-words', title: 'Identifiers & Reserved Words' },
+      { id: 'declaration-access-control', title: 'Declaration & Access Control' },
       { id: 'operators-expressions', title: 'Operators and Expressions' },
       { id: 'control-flow', title: 'Control Flow (if, switch, loops)' },
       { id: 'methods-functions', title: 'Methods and Functions' },
       { id: 'arrays', title: 'Arrays' },
-      { id: 'strings', title: 'String Handling' }
+      { id: 'strings', title: 'String Handling' },
     ]
   },
   module2: {
@@ -20,90 +23,115 @@ export const javaStructure = {
       { id: 'polymorphism', title: 'Polymorphism' },
       { id: 'encapsulation', title: 'Encapsulation' },
       { id: 'abstraction', title: 'Abstraction' },
-      { id: 'interfaces', title: 'Interfaces' }
+      { id: 'interfaces', title: 'Interfaces' },
+      { id: 'inner-classes', title: 'Inner Classes' },
+      { id: 'oop-concepts', title: 'OOPS Concepts (SCJP Deep Dive)' },
+      { id: 'packages', title: 'Packages and Access Modifiers' },
+      { id: 'object-class', title: 'Object Class' },
     ]
   },
   module3: {
-    title: 'Module 3: Advanced Java',
+    title: 'Module 3: Strings, Exceptions & java.lang',
     topics: [
-      { id: 'collections', title: 'Collections Framework' },
+      { id: 'stringbuffer-stringbuilder', title: 'StringBuffer & StringBuilder' },
+      { id: 'wrapper-classes', title: 'Wrapper Classes' },
+      { id: 'math-class', title: 'Math Class' },
       { id: 'exception-handling', title: 'Exception Handling' },
+      { id: 'assertions', title: 'Assertions' },
+      { id: 'java-coding-standards', title: 'Java Coding Standards' },
       { id: 'file-io', title: 'File I/O' },
-      { id: 'generics', title: 'Generics' },
-      { id: 'lambda-expressions', title: 'Lambda Expressions' },
-      { id: 'streams', title: 'Streams API' }
+      { id: 'serialization', title: 'Serialization' },
+      { id: 'internationalization', title: 'Internationalization (i18n)' },
     ]
   },
   module4: {
-    title: 'Module 4: Java Ecosystem',
+    title: 'Module 4: Collections, Functional Programming & Concurrency',
+    topics: [
+      { id: 'collections-deep-dive', title: 'Collections Deep Dive (Java 1.5+)' },
+      { id: 'collections', title: 'Collections Framework' },
+      { id: 'generics', title: 'Generics' },
+      { id: 'lambda-expressions', title: 'Lambda Expressions' },
+      { id: 'streams', title: 'Streams API' },
+      { id: 'multithreading', title: 'Multithreading' },
+    ]
+  },
+  module5: {
+    title: 'Module 5: Java 1.5+ New Features',
+    topics: [
+      { id: 'java-1-5-features', title: 'Java 1.5 New Features' },
+      { id: 'var-arg-methods', title: 'Var-Arg Methods' },
+      { id: 'command-line-args', title: 'Command-Line Arguments & main' },
+    ]
+  },
+  module6: {
+    title: 'Module 6: Enterprise & Beyond',
     topics: [
       { id: 'jvm-basics', title: 'JVM Basics' },
-      { id: 'packages', title: 'Packages and Access Modifiers' },
+      { id: 'garbage-collection', title: 'Garbage Collection' },
       { id: 'build-tools', title: 'Build Tools (Maven, Gradle)' },
       { id: 'unit-testing-junit', title: 'Unit Testing with JUnit' },
       { id: 'jdbc', title: 'JDBC and Database Connectivity' },
-      { id: 'multithreading', title: 'Multithreading' }
     ]
-  }
+  },
 };
 
 
 const javaModule1Content = {
   'intro-java': {
-    title: 'Introduction to Java',
-    sections: [
-      {
-        heading: 'What is Java?',
-        content: [
-          'Java is a popular, high-level programming language originally developed by Sun Microsystems in 1995.',
-          'It is used for building desktop applications, web servers, Android apps, enterprise software, and more.',
-          'Java follows the principle of <strong>"Write Once, Run Anywhere"</strong> — code compiled on one platform can run on any other platform that has a Java Virtual Machine (JVM).',
-          '<strong>Key features:</strong>',
-          '<ul><li>Object-oriented — everything is organized around objects</li><li>Platform independent — runs on Windows, Mac, Linux, and more</li><li>Strongly typed — variables must have declared types</li><li>Garbage collected — automatic memory management</li><li>Secure and robust — used by banks and large enterprises</li></ul>'
-        ]
-      },
-      {
-        heading: 'How Java Works',
-        content: [
-          'Java code goes through two main steps before running:',
-          '<ol><li><strong>Compilation:</strong> Java source code (`.java`) is compiled into bytecode (`.class`) by the Java compiler (`javac`)</li><li><strong>Execution:</strong> The Java Virtual Machine (JVM) reads the bytecode and translates it into machine code for your specific platform</li></ol>',
-          'This two-step process is what makes Java platform independent.'
-        ]
-      },
-      {
-        heading: 'Your First Java Program',
-        content: [
-          'Every Java program starts with a <strong>class</strong>.',
-          'The <code>main</code> method is the entry point — where the program begins executing.',
-          '<code>public static void main(String[] args)</code> looks complex, but it is the standard signature for the main method.',
-          '<code>System.out.println()</code> prints text to the console followed by a new line.'
-        ],
-        code: `public class HelloWorld {
+      title: 'Introduction to Java',
+      sections: [
+        {
+          heading: 'What is Java?',
+          content: [
+            'Java is a popular, high-level programming language originally developed by Sun Microsystems in 1995.',
+            'It is used for building desktop applications, web servers, Android apps, enterprise software, and more.',
+            `Java follows the principle of <strong>"Write Once, Run Anywhere"</strong> — code compiled on one platform can run on any other platform that has a Java Virtual Machine (JVM).`,
+            '<strong>Key features:</strong>',
+            '<ul><li>Object-oriented — everything is organized around objects</li><li>Platform independent — runs on Windows, Mac, Linux, and more</li><li>Strongly typed — variables must have declared types</li><li>Garbage collected — automatic memory management</li><li>Secure and robust — used by banks and large enterprises</li></ul>'
+          ]
+        },
+        {
+          heading: 'How Java Works',
+          content: [
+            'Java code goes through two main steps before running:',
+            '<ol><li><strong>Compilation:</strong> Java source code (`.java`) is compiled into bytecode (`.class`) by the Java compiler (`javac`)</li><li><strong>Execution:</strong> The Java Virtual Machine (JVM) reads the bytecode and translates it into machine code for your specific platform</li></ol>',
+            'This two-step process is what makes Java platform independent.'
+          ]
+        },
+        {
+          heading: 'Your First Java Program',
+          content: [
+            'Every Java program starts with a <strong>class</strong>.',
+            'The <code>main</code> method is the entry point — where the program begins executing.',
+            '<code>public static void main(String[] args)</code> looks complex, but it is the standard signature for the main method.',
+            '<code>System.out.println()</code> prints text to the console followed by a new line.'
+          ],
+          code: `public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
         System.out.println("I am learning Java.");
     }
 }`
-      },
-      {
-        heading: 'Understanding the Structure',
-        content: [
-          '<code>public class HelloWorld</code> — defines a class named HelloWorld (must match the filename).',
-          '<code>public static void main(String[] args)</code> — the starting point of the program.',
-          '<code>System.out.println()</code> — prints output to the console.',
-          'Curly braces <code>{}</code> define blocks of code. Every opening brace must have a matching closing brace.',
-          'Statements end with a semicolon <code>;</code> — this is required in Java.'
-        ]
-      },
-      {
-        heading: 'Comments in Java',
-        content: [
-          'Comments are notes for humans — Java ignores them.',
-          '<code>//</code> creates a single-line comment.',
-          '<code>/* */</code> creates a multi-line comment.',
-          '<code>/** */</code> creates a documentation comment (used by tools to generate docs).'
-        ],
-        code: `// This is a single-line comment
+        },
+        {
+          heading: 'Understanding the Structure',
+          content: [
+            '<code>public class HelloWorld</code> — defines a class named HelloWorld (must match the filename).',
+            '<code>public static void main(String[] args)</code> — the starting point of the program.',
+            '<code>System.out.println()</code> — prints output to the console.',
+            'Curly braces <code>{}</code> define blocks of code. Every opening brace must have a matching closing brace.',
+            'Statements end with a semicolon <code>;</code> — this is required in Java.'
+          ]
+        },
+        {
+          heading: 'Comments in Java',
+          content: [
+            'Comments are notes for humans — Java ignores them.',
+            '<code>//</code> creates a single-line comment.',
+            '<code>/* */</code> creates a multi-line comment.',
+            '<code>/** */</code> creates a documentation comment (used by tools to generate docs).'
+          ],
+          code: `// This is a single-line comment
 
 /*
  * This is a multi-line comment.
@@ -120,16 +148,16 @@ public class CommentsExample {
         System.out.println("Hello!"); // inline comment
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a file named <code>HelloWorld.java</code>.',
-          'Compile it with: <code>javac HelloWorld.java</code>',
-          'Run it with: <code>java HelloWorld</code>',
-          'Experiment: change the message and recompile.'
-        ],
-        code: `public class HelloWorld {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a file named <code>HelloWorld.java</code>.',
+            'Compile it with: <code>javac HelloWorld.java</code>',
+            'Run it with: <code>java HelloWorld</code>',
+            'Experiment: change the message and recompile.'
+          ],
+          code: `public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, Java!");
         System.out.println("Today is a great day to learn.");
@@ -138,43 +166,87 @@ public class CommentsExample {
         // System.out.println("Your message here");
     }
 }`
-      }
-    ]
-  },
-
+        }
+      ]
+    },
   'variables-data-types': {
-    title: 'Variables and Data Types',
-    sections: [
-      {
-        heading: 'What are Variables?',
-        content: [
-          'Variables are containers for storing data values.',
-          'In Java, you <strong>must declare</strong> the type of a variable before using it.',
-          '<strong>Syntax:</strong> <code>type variableName = value;</code>',
-          '<strong>Rules for variable names:</strong>',
-          '<ul><li>Must start with a letter, underscore <code>_</code>, or dollar sign <code>$</code></li><li>Cannot start with a number</li><li>Can contain letters, digits, underscores, and dollar signs</li><li>Case-sensitive (<code>age</code> and <code>Age</code> are different)</li><li>Cannot use Java reserved words like <code>class</code>, <code>public</code>, <code>static</code></li></ul>'
-        ]
-      },
-      {
-        heading: 'Primitive Data Types',
-        content: [
-          'Java has 8 primitive data types built into the language:',
-          '<ul><li><strong>byte</strong> — whole numbers, -128 to 127 (1 byte)</li><li><strong>short</strong> — whole numbers, -32,768 to 32,767 (2 bytes)</li><li><strong>int</strong> — whole numbers, -2 billion to 2 billion (4 bytes) — most common</li><li><strong>long</strong> — very large whole numbers (8 bytes) — add <code>L</code> suffix</li><li><strong>float</strong> — decimal numbers with ~7 digits precision (4 bytes) — add <code>F</code> suffix</li><li><strong>double</strong> — decimal numbers with ~15 digits precision (8 bytes) — most common for decimals</li><li><strong>char</strong> — a single character in single quotes (2 bytes)</li><li><strong>boolean</strong> — <code>true</code> or <code>false</code> (1 bit)</li></ul>'
-        ],
-        table: {
-          headers: ['Type', 'Size', 'Range / Values', 'Example'],
-          rows: [
-            ['byte', '1 byte', '-128 to 127', 'byte b = 100;'],
-            ['short', '2 bytes', '-32,768 to 32,767', 'short s = 1000;'],
-            ['int', '4 bytes', '-2³¹ to 2³¹-1', 'int age = 25;'],
-            ['long', '8 bytes', '-2⁶³ to 2⁶³-1', 'long l = 100L;'],
-            ['float', '4 bytes', '~7 decimal digits', 'float f = 3.14F;'],
-            ['double', '8 bytes', '~15 decimal digits', 'double d = 3.14;'],
-            ['char', '2 bytes', 'Single Unicode character', "char c = 'A';"],
-            ['boolean', '1 bit', 'true or false', 'boolean ok = true;']
+      title: 'Variables and Data Types',
+      sections: [
+        {
+          heading: 'What are Variables?',
+          content: [
+            'Variables are containers for storing data values.',
+            'In Java, you <strong>must declare</strong> the type of a variable before using it.',
+            '<strong>Syntax:</strong> <code>type variableName = value;</code>',
+            '<strong>Rules for variable names:</strong>',
+            '<ul><li>Must start with a letter, underscore <code>_</code>, or dollar sign <code>$</code></li><li>Cannot start with a number</li><li>Can contain letters, digits, underscores, and dollar signs</li><li>Case-sensitive (<code>age</code> and <code>Age</code> are different)</li><li>Cannot use Java reserved words like <code>class</code>, <code>public</code>, <code>static</code></li></ul>'
           ]
         },
-        code: `public class DataTypes {
+        {
+          heading: 'Primitive Data Types',
+          content: [
+            'Java has 8 primitive data types built into the language:',
+            '<ul><li><strong>byte</strong> — whole numbers, -128 to 127 (1 byte)</li><li><strong>short</strong> — whole numbers, -32,768 to 32,767 (2 bytes)</li><li><strong>int</strong> — whole numbers, -2 billion to 2 billion (4 bytes) — most common</li><li><strong>long</strong> — very large whole numbers (8 bytes) — add <code>L</code> suffix</li><li><strong>float</strong> — decimal numbers with ~7 digits precision (4 bytes) — add <code>F</code> suffix</li><li><strong>double</strong> — decimal numbers with ~15 digits precision (8 bytes) — most common for decimals</li><li><strong>char</strong> — a single character in single quotes (2 bytes)</li><li><strong>boolean</strong> — <code>true</code> or <code>false</code> (1 bit)</li></ul>'
+          ],
+          table: {
+            headers: [
+              'Type',
+              'Size',
+              'Range / Values',
+              'Example'
+            ],
+            rows: [
+              [
+                'byte',
+                '1 byte',
+                '-128 to 127',
+                'byte b = 100;'
+              ],
+              [
+                'short',
+                '2 bytes',
+                '-32,768 to 32,767',
+                'short s = 1000;'
+              ],
+              [
+                'int',
+                '4 bytes',
+                '-2³¹ to 2³¹-1',
+                'int age = 25;'
+              ],
+              [
+                'long',
+                '8 bytes',
+                '-2⁶³ to 2⁶³-1',
+                'long l = 100L;'
+              ],
+              [
+                'float',
+                '4 bytes',
+                '~7 decimal digits',
+                'float f = 3.14F;'
+              ],
+              [
+                'double',
+                '8 bytes',
+                '~15 decimal digits',
+                'double d = 3.14;'
+              ],
+              [
+                'char',
+                '2 bytes',
+                'Single Unicode character',
+                "char c = 'A';"
+              ],
+              [
+                'boolean',
+                '1 bit',
+                'true or false',
+                'boolean ok = true;'
+              ]
+            ]
+          },
+          code: `public class DataTypes {
     public static void main(String[] args) {
         byte smallNumber = 100;
         short mediumNumber = 1000;
@@ -193,16 +265,16 @@ public class CommentsExample {
         System.out.println("Active: " + isActive);
     }
 }`
-      },
-      {
-        heading: 'Strings',
-        content: [
-          'A <strong>String</strong> is a sequence of characters enclosed in double quotes.',
-          'String is <strong>not</strong> a primitive type — it is a class (reference type).',
-          'But it is so commonly used that it gets special treatment.',
-          'You can combine strings with the <code>+</code> operator — this is called concatenation.'
-        ],
-        code: `public class StringExample {
+        },
+        {
+          heading: 'Strings',
+          content: [
+            'A <strong>String</strong> is a sequence of characters enclosed in double quotes.',
+            'String is <strong>not</strong> a primitive type — it is a class (reference type).',
+            'But it is so commonly used that it gets special treatment.',
+            'You can combine strings with the <code>+</code> operator — this is called concatenation.'
+          ],
+          code: `public class StringExample {
     public static void main(String[] args) {
         String name = "Alice";
         String greeting = "Hello, " + name + "!";
@@ -214,15 +286,15 @@ public class CommentsExample {
         System.out.println(name + " is " + age + " years old.");
     }
 }`
-      },
-      {
-        heading: 'Declaring vs Initializing',
-        content: [
-          'You can declare a variable first, then assign a value later.',
-          'A variable must have a value before you use it.',
-          'You can also declare multiple variables of the same type in one line.'
-        ],
-        code: `public class DeclareInitialize {
+        },
+        {
+          heading: 'Declaring vs Initializing',
+          content: [
+            'You can declare a variable first, then assign a value later.',
+            'A variable must have a value before you use it.',
+            'You can also declare multiple variables of the same type in one line.'
+          ],
+          code: `public class DeclareInitialize {
     public static void main(String[] args) {
         // Declare first, initialize later
         int score;
@@ -237,15 +309,15 @@ public class CommentsExample {
         System.out.println("Sum: " + (x + y + z));  // 60
     }
 }`
-      },
-      {
-        heading: 'Type Casting',
-        content: [
-          '<strong>Widening (Implicit):</strong> converting a smaller type to a larger type — Java does this automatically.',
-          '<strong>Narrowing (Explicit):</strong> converting a larger type to a smaller type — you must specify with parentheses.',
-          'Narrowing can cause data loss (e.g., converting <code>double</code> to <code>int</code> drops the decimal part).'
-        ],
-        code: `public class TypeCasting {
+        },
+        {
+          heading: 'Type Casting',
+          content: [
+            '<strong>Widening (Implicit):</strong> converting a smaller type to a larger type — Java does this automatically.',
+            '<strong>Narrowing (Explicit):</strong> converting a larger type to a smaller type — you must specify with parentheses.',
+            'Narrowing can cause data loss (e.g., converting <code>double</code> to <code>int</code> drops the decimal part).'
+          ],
+          code: `public class TypeCasting {
     public static void main(String[] args) {
         // Widening — automatic
         int small = 10;
@@ -263,15 +335,15 @@ public class CommentsExample {
         System.out.println("With cast: " + ((double) a / b)); // 2.5
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create variables of different types and print them.',
-          'Try implicit and explicit casting.',
-          'Calculate the average of three integers and make sure the result is a decimal.'
-        ],
-        code: `public class Practice {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create variables of different types and print them.',
+            'Try implicit and explicit casting.',
+            'Calculate the average of three integers and make sure the result is a decimal.'
+          ],
+          code: `public class Practice {
     public static void main(String[] args) {
         String name = "Bob";
         int birthYear = 1995;
@@ -292,29 +364,1017 @@ public class CommentsExample {
         System.out.println("Average: " + average);  // 20.0
     }
 }`
-      }
-    ]
-  },
+        },
+        {
+          heading: 'Strongly Typed Language',
+          content: [
+            'In Java, every variable has a type, every expression has a type, and all types are strictly defined.',
+            'All assignments are checked by the compiler for type compatibility. This makes Java a <strong>strongly typed language</strong>.',
+            'You cannot assign a value of one type to a variable of an incompatible type without explicit casting.',
+            '<strong>Example type compatibility errors:</strong>',
+            '<code>byte b = 130;  // CE: possible loss of precision</code>',
+            '<code>byte b = true; // CE: incompatible types: boolean required: byte</code>'
+          ]
+        },
+        {
+          heading: 'Signed vs Unsigned',
+          content: [
+            'Except for <code>boolean</code> and <code>char</code>, <strong>all remaining datatypes are signed</strong>.',
+            'Signed means a variable can represent both positive (+) and negative (−) numbers.',
+            "Negative numbers are represented internally using <strong>2's complement</strong> form.",
+            '<code>char</code> is the only unsigned integral type in Java (range 0 to 65535, no negative values).',
+            '<code>boolean</code> is neither signed nor unsigned — it only accepts <code>true</code> or <code>false</code>.'
+          ]
+        },
+        {
+          heading: 'Detailed Data Type Reference',
+          content: [
+            '<strong>byte</strong> — Size 1 byte (8 bits), Range -128 to 127. Best suitable when handling data from files or the network (streams of raw bytes).',
+            '<strong>short</strong> — Size 2 bytes, Range -2^15 to 2^15-1 (-32,768 to 32,767). Best suitable for 16-bit processors but these are completely outdated today.',
+            "<strong>int</strong> — Size 4 bytes, Range -2^31 to 2^31-1 (-2,147,483,648 to 2,147,483,647). The most commonly used datatype. Size is fixed irrespective of platform — this is why Java is considered <strong>Robust</strong> (programs don't break when moved between platforms).",
+            '<strong>long</strong> — Size 8 bytes, Range -2^63 to 2^63-1. Use when int is not enough. Example: the distance traveled by light in 1000 days requires a long — int is not sufficient.',
+            '<strong>float</strong> — Size 4 bytes, Range -3.4e38 to 3.4e38. Single precision (about 6–7 decimal digits of accuracy). Add <code>f</code> or <code>F</code> suffix.',
+            '<strong>double</strong> — Size 8 bytes, Range -1.7e308 to 1.7e308. Double precision (about 14–15 decimal digits). Most commonly used for real numbers.',
+            '<strong>boolean</strong> — Size: not applicable (JVM-dependent). Only allowed values are <code>true</code> and <code>false</code>.',
+            '<strong>char</strong> — Size 2 bytes, Range 0 to 65535. Java uses Unicode (supports all worldwide alphabets), which is why char is 2 bytes (not 1 like in C).'
+          ]
+        },
+        {
+          heading: 'Why Java is NOT a Pure OOP Language',
+          content: [
+            'Several OOP features are <strong>not</strong> supported by Java:',
+            '<ul><li>No <strong>multiple inheritance</strong> (a class can extend only one parent)</li><li>No <strong>operator overloading</strong> (you cannot redefine + for custom types, except for String concatenation)</li><li>Java contains <strong>non-object primitive datatypes</strong> (everything is not an object)</li></ul>',
+            'Because of these limitations, Java is considered an <strong>object-oriented</strong> language but <strong>not a pure OOP</strong> language.'
+          ]
+        },
+        {
+          heading: 'Default Values for Data Types',
+          content: [
+            'When a variable is declared but not initialized, the JVM provides a default value. This applies to instance and static variables, not local variables.',
+            "<ul><li>All numeric types: <code>0</code> (or <code>0.0</code> for float/double)</li><li><code>char</code>: <code>'\\u0000'</code> (blank space, Unicode 0)</li><li><code>boolean</code>: <code>false</code></li><li>Object references: <code>null</code></li></ul>"
+          ],
+          table: {
+            headers: [
+              'Datatype',
+              'Size',
+              'Range',
+              'Default Value',
+              'Wrapper Class'
+            ],
+            rows: [
+              [
+                'byte',
+                '1 byte',
+                '-128 to 127',
+                '0',
+                'Byte'
+              ],
+              [
+                'short',
+                '2 bytes',
+                '-32,768 to 32,767',
+                '0',
+                'Short'
+              ],
+              [
+                'int',
+                '4 bytes',
+                '-2^31 to 2^31-1',
+                '0',
+                'Integer'
+              ],
+              [
+                'long',
+                '8 bytes',
+                '-2^63 to 2^63-1',
+                '0',
+                'Long'
+              ],
+              [
+                'float',
+                '4 bytes',
+                '-3.4e38 to 3.4e38',
+                '0.0',
+                'Float'
+              ],
+              [
+                'double',
+                '8 bytes',
+                '-1.7e308 to 1.7e308',
+                '0.0',
+                'Double'
+              ],
+              [
+                'boolean',
+                'NA',
+                'true or false',
+                'false',
+                'Boolean'
+              ],
+              [
+                'char',
+                '2 bytes',
+                '0 to 65535',
+                "'\\u0000' (blank)",
+                'Character'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Type Compatibility Errors — Common Pitfalls',
+          content: [
+            '<strong>Which of the following are valid boolean declarations?</strong>',
+            '<ul><li><code>boolean b1 = true;</code> ✅ valid</li><li><code>boolean b2 = 0;</code> ❌ <em>CE: Incompatible types found: int required: boolean</em></li><li><code>boolean b3 = TRUE;</code> ❌ capital TRUE is not valid (Java is case-sensitive)</li></ul>',
+            '<strong>if statement with int condition:</strong>',
+            '<code>int x = 0; if (x) { ... }</code> ❌ <em>CE: Incompatible types found: int required: boolean</em> — unlike C/C++, integers cannot be used as conditions in Java.',
+            '<strong>byte range violations:</strong>',
+            '<code>byte b = 130;</code> ❌ <em>CE: possible loss of precision</em> (130 is out of byte range -128 to 127)',
+            '<code>short s = 65535;</code> ❌ <em>CE: possible loss of precision</em> (out of short range -32,768 to 32,767)'
+          ]
+        },
+        {
+          heading: 'SCJP: Types of Variables (Based on Value Type)',
+          content: [
+            'Based on the type of <strong>value</strong> a variable represents, Java has two categories:',
+            '<strong>1. Primitive variables</strong> — store primitive values directly in memory',
+            '<code>int a = 10;</code> → the value <code>10</code> is stored in the variable <code>a</code>',
+            '<strong>2. Reference variables</strong> — store a reference (memory address) to an object',
+            `<code>String s = new String("raju");</code> → <code>s</code> holds a reference to the String object in the heap`
+          ],
+          code: `public class VariableTypesDemo {
+    int a = 10;             // primitive variable
+    String s = "Hello";     // reference variable
+    int[] arr = {1, 2, 3};  // reference variable (arrays are objects)
+}`
+        },
+        {
+          heading: 'SCJP: Types of Variables (Based on Declaration Position)',
+          content: [
+            'Based on the <strong>purpose and position of declaration</strong>, Java has three types:',
+            '<ul><li><strong>Instance variables</strong> — value varies per object</li><li><strong>Static variables</strong> — shared single copy across all objects</li><li><strong>Local variables</strong> — declared inside a method, constructor, or block</li></ul>'
+          ]
+        },
+        {
+          heading: 'Instance Variables',
+          content: [
+            'If the value of a variable is <strong>varied from object to object</strong>, it is an instance variable.',
+            'A <strong>separate copy</strong> of instance variables is created for every object.',
+            "<strong>Lifecycle:</strong> created at object creation, destroyed at object destruction — scope is the same as the object's scope.",
+            '<strong>Declaration:</strong> inside the class but outside any method, constructor, or block.',
+            '<strong>Initialization:</strong> not required — the JVM always provides default values (0, false, null, etc.).',
+            'Also known as <strong>attributes</strong>.'
+          ],
+          code: `class Student {
+    int id;           // instance variable
+    String name;      // instance variable
+    
+    public static void main(String[] args) {
+        Student s1 = new Student();
+        Student s2 = new Student();
+        s1.id = 101;
+        s1.name = "Alice";
+        s2.id = 102;
+        s2.name = "Bob";
+        
+        // Each object has its own copy
+        System.out.println(s1.id + " " + s1.name);  // 101 Alice
+        System.out.println(s2.id + " " + s2.name);  // 102 Bob
+    }
+}`
+        },
+        {
+          heading: 'Static Variables',
+          content: [
+            'If the value of a variable is <strong>fixed for all objects</strong>, it should be a static variable.',
+            'A <strong>single copy</strong> is created at the class level and <strong>shared by all objects</strong> of that class.',
+            '<strong>Declaration:</strong> inside the class but outside any method, constructor, or block, with the <code>static</code> keyword.',
+            '<strong>Lifecycle:</strong> created at class loading, destroyed at class unloading.',
+            '<strong>Access:</strong> use the class name (recommended) or an object reference.',
+            '<strong>Initialization:</strong> not required — the JVM always provides default values.'
+          ],
+          code: `class Test {
+    int i;                    // instance variable
+    static int j = 10;        // static variable
+    
+    public static void main(String[] args) {
+        Test t1 = new Test();
+        t1.i = 888;
+        t1.j = 999;           // modifying static via t1
+        
+        Test t2 = new Test();
+        // t2.i is default 0, t2.j is now 999 (shared!)
+        System.out.println(t2.i + " ---- " + t2.j);
+        // Output: 0 ---- 999
+        
+        // Recommended: access static via class name
+        System.out.println("Test.j = " + Test.j);  // 999
+    }
+}`
+        },
+        {
+          heading: 'Local Variables',
+          content: [
+            'Variables declared <strong>within a method, constructor, or block</strong> are local variables.',
+            'Also known as <strong>temporary</strong> or <strong>automatic</strong> variables.',
+            '<strong>Lifecycle:</strong> created when the method/block starts executing, destroyed when it completes.',
+            '<strong>Initialization:</strong> <strong>required</strong> — the JVM does NOT provide default values. Using an uninitialized local variable is a compile-time error.',
+            '<strong>Only applicable modifier:</strong> <code>final</code>. Using any other modifier (public, static, private, etc.) is a compile-time error.'
+          ],
+          code: `public class LocalVariableDemo {
+    public static void main(String[] args) {
+        int i;                  // declared but not initialized
+        // System.out.println(i);  // CE: variable i might not have been initialized
+        
+        int x = 10;             // OK - initialized before use
+        System.out.println(x);
+        
+        if (args.length > 0) {
+            int y = 20;         // local to this block
+            System.out.println(y);
+        }
+        // System.out.println(y);  // CE - y is out of scope here
+        
+        // for loop variable is also local
+        for (int k = 0; k < 3; k++) {
+            System.out.println(k);
+        }
+    }
+}`
+        },
+        {
+          heading: 'Local Variable Initialization — Conditional Cases',
+          content: [
+            'The compiler checks all possible paths to determine if a local variable is definitely assigned:',
+            '<strong>Case 1: Only one branch initializes → CE</strong>',
+            '<code>int i; if (args.length > 0) { i = 10; } System.out.println(i);</code> ❌ <em>CE: variable i might not have been initialized</em>',
+            '<strong>Case 2: All branches initialize → OK</strong>',
+            '<code>int i; if (args.length > 0) { i = 10; } else { i = 20; } System.out.println(i);</code> ✅ valid',
+            'It is generally <strong>not good practice</strong> to perform initialization of local variables in logical blocks because they may not execute at runtime.'
+          ]
+        },
+        {
+          heading: 'Uninitialized Arrays — Null vs Default Values',
+          content: [
+            'For <strong>instance</strong> and <strong>static</strong> array variables, the JVM provides default values:',
+            '<strong>Instance level: array reference declared, not allocated</strong>',
+            '<code>int[] a;</code> in a class → <code>System.out.println(objRef.a);</code> prints <code>null</code>, but <code>objRef.a[0];</code> throws <code>NullPointerException</code>',
+            '<strong>Instance level: array reference declared AND allocated</strong>',
+            '<code>int[] a = new int[6];</code> in a class → <code>objRef.a</code> prints something like <code>[I@123</code>, and <code>objRef.a[0]</code> prints <code>0</code>',
+            'This is different from local array variables — for locals, you must always initialize before use.'
+          ],
+          code: `class Test {
+    int[] a;                     // instance array reference - default null
+    
+    public static void main(String[] args) {
+        Test t = new Test();
+        System.out.println(t.a);        // null
+        // System.out.println(t.a[0]);   // NullPointerException at runtime
+        
+        t.a = new int[6];
+        System.out.println(t.a);        // [I@123abc
+        System.out.println(t.a[0]);     // 0
+    }
+}`
+        },
+        {
+          heading: 'Quick Comparison Table',
+          content: [
+            ''
+          ],
+          table: {
+            headers: [
+              'Aspect',
+              'Instance Variable',
+              'Static Variable',
+              'Local Variable'
+            ],
+            rows: [
+              [
+                'Keyword',
+                'none',
+                'static',
+                'none'
+              ],
+              [
+                'Location',
+                'class (outside methods)',
+                'class (outside methods)',
+                'inside method/constructor/block'
+              ],
+              [
+                'Copies per object',
+                'one per object',
+                'one per class (shared)',
+                'one per method call'
+              ],
+              [
+                'Default value',
+                'yes (JVM provides)',
+                'yes (JVM provides)',
+                'NO (must initialize)'
+              ],
+              [
+                'Modifiers allowed',
+                'all',
+                'all (except for some)',
+                'only final'
+              ],
+              [
+                'Lifetime',
+                'object lifetime',
+                'class lifetime',
+                'method/block lifetime'
+              ],
+              [
+                'Also called',
+                'attribute / field',
+                'class variable',
+                'temporary / automatic'
+              ],
+              [
+                'Access',
+                'object reference',
+                'class name (preferred) or object',
+                'just the name in scope'
+              ]
+            ]
+          }
+        }
+      ]
+    },
+  'literals': {
+      title: 'Literals',
+      sections: [
+        {
+          heading: 'What is a Literal?',
+          content: [
+            'A <strong>literal</strong> is a constant value that can be assigned to a variable.',
+            'For example, in <code>int x = 10;</code>, the value <code>10</code> is a literal.',
+            'Java supports several categories of literals: integral, floating-point, boolean, character, and string.',
+            'Every literal has a type, and Java is strict about which literal types can be assigned to which variable types.'
+          ]
+        },
+        {
+          heading: 'Integral Literals',
+          content: [
+            'Integral literals represent whole numbers. There are <strong>three ways</strong> to specify them:',
+            '<strong>1. Decimal literals</strong> — allowed digits 0 to 9',
+            '<code>int x = 10;</code>',
+            '<strong>2. Octal literals</strong> — allowed digits 0 to 7, must be prefixed with <code>0</code> (zero)',
+            '<code>int x = 010;</code> — this is 8 in decimal, not 10!',
+            '<strong>3. Hexadecimal literals</strong> — allowed digits 0 to 9 and A–F (uppercase or lowercase), prefixed with <code>0x</code> or <code>0X</code>',
+            '<code>int x = 0x10;</code> — this is 16 in decimal',
+            '<strong>Except decimal, octal, and hexadecimal, there is no other way to represent integral constants.</strong>',
+            'By default, every integral literal is of type <code>int</code>. You can make it a <code>long</code> by suffixing with <code>l</code> or <code>L</code>.'
+          ],
+          code: `public class IntegralLiterals {
+    public static void main(String[] args) {
+        int x = 10;      // decimal
+        int y = 010;     // octal (leading 0) = 8 in decimal
+        int z = 0x10;    // hexadecimal (0x prefix) = 16 in decimal
+        int a = 0X10;    // same as above (uppercase X is also valid)
+        int b = 0xFace;  // hex digits can be uppercase or lowercase
+        
+        long big = 10L;  // long literal (L suffix)
+        long big2 = 10l; // long literal (lowercase l also works but is hard to read)
+        
+        // int i = 10L; // CE: possible loss of precision (long literal cannot be assigned to int)
+        
+        System.out.println(x + "..." + y + "..." + z);  // 10...8...16
+        System.out.println(big);
+    }
+}`
+        },
+        {
+          heading: 'byte and short Literals',
+          content: [
+            'There is no direct way to specify a literal as <code>byte</code> or <code>short</code> type.',
+            'However, if an integral literal value is within the range of <code>byte</code> (or <code>short</code>), the JVM automatically treats it as that type when assigned.',
+            '<code>byte b = 10;</code> — works because 10 is within byte range',
+            '<code>byte b = 130;</code> — compile error (out of range)',
+            '<code>short s = 32767;</code> — works because 32767 is within short range',
+            '<code>short s = 65535;</code> — compile error (out of range)'
+          ]
+        },
+        {
+          heading: 'Floating-Point Literals',
+          content: [
+            'Floating-point literals represent real numbers (with decimal points).',
+            'By default, every floating-point literal is of type <code>double</code>.',
+            'You can explicitly mark a literal as <code>float</code> by suffixing with <code>f</code> or <code>F</code>.',
+            'You can explicitly mark a literal as <code>double</code> by suffixing with <code>d</code> or <code>D</code> (optional, since double is the default).',
+            'You can use <strong>scientific notation</strong> for very large or small numbers (e.g., <code>10e23</code> means 10 × 10^23).',
+            '<strong>Important:</strong> floating-point literals can only be specified in <strong>decimal form</strong>. You cannot use octal or hexadecimal for floating-point values.'
+          ],
+          code: `public class FloatLiterals {
+    public static void main(String[] args) {
+        // Valid declarations
+        float f = 10.5f;       // float (F suffix required)
+        float f2 = 10.5F;      // same (uppercase F also works)
+        double d = 10.5;       // double (default)
+        double d2 = 10.5d;     // double (D suffix optional)
+        double d3 = 10.5D;     // double (uppercase D also works)
+        double d4 = 10.5f;     // float literal can be assigned to double (widening)
+        
+        // Scientific notation
+        double sci = 10e23;    // 10 × 10^23
+        double sci2 = 1.2e36;  // valid
+        
+        // Invalid: out of range or wrong type
+        // float bad = 10.5;  // CE: possible loss of precision (double literal → float)
+        // int bad2 = 10e23;  // CE: possible loss of precision (double literal → int)
+        
+        // Invalid: octal/hex for float
+        // double bad3 = 0x123.456;  // CE: malformed floating-point literal
+        
+        System.out.println("f: " + f);
+        System.out.println("d: " + d);
+        System.out.println("sci: " + sci);
+    }
+}`
+        },
+        {
+          heading: 'Boolean Literals',
+          content: [
+            'The only allowed values for the <code>boolean</code> data type are <code>true</code> and <code>false</code>.',
+            'There is no other representation — unlike C/C++, integers (0 or 1) cannot be used as boolean values.',
+            '<code>boolean b = true;</code> ✅ valid',
+            '<code>boolean b = false;</code> ✅ valid',
+            '<code>boolean b = TRUE;</code> ❌ invalid (uppercase — Java is case-sensitive)',
+            '<code>boolean b = 0;</code> ❌ invalid (<em>CE: incompatible types found: int required: boolean</em>)',
+            '<code>boolean b = 1;</code> ❌ invalid (same reason)'
+          ]
+        },
+        {
+          heading: 'Character Literals',
+          content: [
+            "A character literal represents a single character and is enclosed in <strong>single quotes</strong> (<code>' '</code>).",
+            "<code>char ch = 'a';</code> ✅ valid",
+            "<code>char ch = 'ab';</code> ❌ invalid — <em>CE: unclosed character literal</em> (more than one character)",
+            '<code>char ch = a;</code> ❌ invalid — <em>cannot find symbol</em> (a without quotes is treated as an identifier)',
+            'Character literals can also be specified in <strong>three other ways</strong>:',
+            "<ul><li><strong>Integral value:</strong> <code>char ch = 97;</code> prints <code>a</code> (the ASCII/Unicode value of 'a')</li><li><strong>Unicode representation:</strong> <code>char ch = '\\u0061';</code> also prints <code>a</code></li><li><strong>Escape characters:</strong> special sequences like <code>\\n</code> (newline), <code>\\t</code> (tab)</li></ul>"
+          ]
+        },
+        {
+          heading: 'Character Literals — Integral Form',
+          content: [
+            'You can assign an integer to a char if the value is in the valid char range (0 to 65535).',
+            '<code>char ch = 97;</code> → prints <code>a</code>',
+            '<code>char ch = 65535;</code> ✅ valid (max char value)',
+            '<code>char ch = 65536;</code> ❌ <em>CE: possible loss of precision found: int required: char</em> (one above max range)'
+          ],
+          code: `public class CharLiterals {
+    public static void main(String[] args) {
+        char ch1 = 'a';          // direct character
+        char ch2 = 97;           // ASCII value of 'a'
+        char ch3 = '\\u0061';    // Unicode representation of 'a'
+        
+        System.out.println(ch1); // a
+        System.out.println(ch2); // a
+        System.out.println(ch3); // a
+        
+        // Valid hex unicode
+        char ch4 = '\\ubeef';
+        char ch5 = '\\uface';
+        
+        // Invalid: more than 4 hex digits
+        // char ch6 = '\\uanuska';  // CE: illegal line start in unicode escape
+        
+        // Max char value
+        char max = 65535;        // valid
+        // char tooBig = 65536;   // CE: possible loss of precision
+    }
+}`
+        },
+        {
+          heading: 'Escape Characters',
+          content: [
+            `Escape characters are special sequences prefixed with a backslash (<code>\\</code>) that represent characters that cannot be typed directly.`,
+            '<strong>Common Java escape characters:</strong>',
+            `<ul><li><code>\\n</code> — newline (line feed)</li><li><code>\\t</code> — horizontal tab</li><li><code>\\r</code> — carriage return</li><li><code>\\b</code> — backspace</li><li><code>\\f</code> — form feed</li><li><code>\\'</code> — single quote</li><li><code>\\"</code> — double quote</li><li><code>\\\\</code> — backslash</li></ul>`,
+            'Every escape character is a valid char literal.',
+            "<code>char ch = '\\n';</code> ✅ valid — represents the newline character",
+            "<code>char ch = '\\d';</code> ❌ invalid — <code>\\d</code> is not a defined escape sequence"
+          ]
+        },
+        {
+          heading: 'String Literals',
+          content: [
+            `A string literal is a sequence of characters enclosed in <strong>double quotes</strong> (<code>" "</code>).`,
+            `<code>String s = "Durga";</code> ✅ valid`,
+            `<code>String s = "software";</code> ✅ valid`,
+            `<code>String s = "a";</code> ✅ valid (single character in double quotes is a String, not a char)`,
+            "<code>String s = 'software';</code> ❌ invalid — <em>CE: unclosed character literal</em> (single quotes are for char, not String)",
+            `String literals can contain escape characters: <code>"Hello\\nWorld"</code> — the \\n is a newline.`,
+            `Strings are covered in detail in the <a href="#/java/strings">String Handling</a> topic.`
+          ]
+        },
+        {
+          heading: 'Quick Reference — Literal Types',
+          content: [
+            `<ul><li><strong>Decimal integral:</strong> <code>int x = 10;</code> (0-9)</li><li><strong>Octal integral:</strong> <code>int x = 010;</code> (0-7, leading 0)</li><li><strong>Hex integral:</strong> <code>int x = 0x10;</code> (0-9, A-F, leading 0x or 0X)</li><li><strong>long literal:</strong> <code>long l = 10L;</code> (suffix l or L)</li><li><strong>float literal:</strong> <code>float f = 10.5f;</code> (suffix f or F)</li><li><strong>double literal:</strong> <code>double d = 10.5;</code> (or 10.5d, 10.5D)</li><li><strong>Scientific notation:</strong> <code>double d = 1.2e23;</code></li><li><strong>boolean literal:</strong> <code>boolean b = true;</code> (only true/false)</li><li><strong>char literal:</strong> <code>char c = 'a';</code> (single quotes)</li><li><strong>char by value:</strong> <code>char c = 97;</code> (0 to 65535)</li><li><strong>char by unicode:</strong> <code>char c = '\\u0061';</code></li><li><strong>String literal:</strong> <code>String s = "hello";</code> (double quotes)</li></ul>`
+          ]
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Write a program that prints the same value (e.g., 100) using decimal, octal, and hexadecimal literal forms — what does each print?',
+            'Try assigning <code>char ch = 65;</code> and printing it — what character do you get?',
+            'Experiment with <code>double d = 1.5e3;</code> — what value does it hold?',
+            'Try <code>boolean b = 1;</code> — what error do you get?'
+          ],
+          code: `public class LiteralPractice {
+    public static void main(String[] args) {
+        // Same value in different literal forms
+        int decimal = 100;
+        int octal = 0100;
+        int hex = 0x100;
+        
+        System.out.println("Decimal 100: " + decimal);  // 100
+        System.out.println("Octal 0100: " + octal);    // 64 (8*8)
+        System.out.println("Hex 0x100: " + hex);        // 256 (16*16)
+        
+        // char by value
+        char letterA = 65;  // ASCII code for 'A'
+        System.out.println("char 65: " + letterA);
+        
+        // Scientific notation
+        double big = 1.5e3;
+        System.out.println("1.5e3: " + big);  // 1500.0
+        
+        // char escape characters
+        char newline = '\\n';
+        char tab = '\\t';
+        System.out.println("Escape chars work: yes");
+    }
+}`
+        }
+      ]
+    },
+  'identifiers-reserved-words': {
+      title: 'Identifiers & Reserved Words',
+      sections: [
+        {
+          heading: 'What is an Identifier?',
+          content: [
+            'An <strong>identifier</strong> is a name in a Java program — it can be a class name, method name, variable name, or label name.',
+            'Anything you name in Java is an identifier.',
+            'Java has strict rules about what characters are allowed in identifiers. Following these rules is mandatory, not a style choice.'
+          ]
+        },
+        {
+          heading: 'Rules for Valid Identifiers',
+          content: [
+            'A Java identifier is a sequence of characters, where each character may be:',
+            '<ul><li>A letter from <code>a-z</code> or <code>A-Z</code></li><li>A digit from <code>0-9</code></li><li>A currency symbol <code>$</code></li><li>A connecting punctuation <code>_</code> (underscore)</li></ul>',
+            '<strong>Key rules:</strong>',
+            '<ul><li>The identifier should <strong>not start with a digit</strong> — <code>123total</code> is invalid.</li><li>If you use any other symbol (e.g. <code>#</code>, <code>@</code>, <code>!</code>), you get a compile-time error: <code>IllegalCharacter</code>.</li><li>There is no length limit for Java identifiers, but it is not recommended to use more than 15 characters.</li><li>Java identifiers are <strong>case sensitive</strong> — <code>total</code> and <code>Total</code> are different names.</li></ul>',
+            'You can use a reserved word as part of an identifier in some cases, but you cannot use a reserved word as the whole identifier.',
+            '<code>String</code> is not a keyword — it is a class name — so you <strong>can</strong> use it as a variable name. (Trick question favorite!)'
+          ],
+          code: `class FundaDemo {
+    public static void main(String[] args) {
+        int String = 10;            // legal — String is a class name, not a keyword
+        System.out.println(String); // prints 10
+    }
+}`
+        },
+        {
+          heading: 'Valid vs Invalid Identifiers — Quick Check',
+          content: [
+            'Quick checklist for the most commonly asked questions:',
+            '<ul><li><code>total#</code> — <strong>Invalid</strong> (contains <code>#</code>)</li><li><code>all@hands</code> — <strong>Invalid</strong> (contains <code>@</code>)</li><li><code>123total</code> — <strong>Invalid</strong> (starts with digit)</li><li><code>break</code> — <strong>Invalid</strong> (reserved keyword)</li><li><code>String</code> — <strong>Valid</strong> (it is a class name)</li><li><code>total_number</code> — <strong>Valid</strong></li><li><code>$_$</code> — <strong>Valid</strong> (letters, digits, <code>$</code>, <code>_</code>)</li><li><code>$ca$h</code> — <strong>Valid</strong></li></ul>'
+          ]
+        },
+        {
+          heading: 'Reserved Words (53 Total)',
+          content: [
+            'Java has <strong>53 reserved words</strong> — these names are reserved by the language and cannot be used as identifiers.',
+            'They are split into two groups: <strong>50 keywords</strong> and <strong>3 reserved literals</strong>.',
+            '<strong>Important rule:</strong> all reserved words in Java contain <strong>only lower case alphabet symbols</strong>.'
+          ]
+        },
+        {
+          heading: 'Keywords (50)',
+          content: [
+            'Java has 50 keywords. 48 are currently used and 2 are reserved for future use (unused).'
+          ],
+          table: {
+            headers: [
+              'Category',
+              'Keywords',
+              'Notes'
+            ],
+            rows: [
+              [
+                'Data types (8)',
+                'byte, short, int, long, float, double, boolean, char',
+                'Primitive type keywords'
+              ],
+              [
+                'Flow control (11)',
+                'if, else, switch, case, default, while, do, for, break, continue, return',
+                'Control program flow'
+              ],
+              [
+                'Exception handling (6)',
+                'try, catch, finally, throw, throws, assert',
+                'assert added in 1.4'
+              ],
+              [
+                'Modifiers (11)',
+                'public, private, protected, final, abstract, static, native, synchronized, volatile, transient, strictfp',
+                'strictfp added in 1.2'
+              ],
+              [
+                'Class-related (6)',
+                'class, interface, package, extends, implements, import',
+                'Define structure'
+              ],
+              [
+                'Object-related (4)',
+                'new, instanceof, super, this',
+                'Object behavior'
+              ],
+              [
+                'Void return (1)',
+                'void',
+                'Marks methods that return nothing'
+              ],
+              [
+                'Unused (2)',
+                'goto, const',
+                'Reserved but not used — goto considered harmful, const replaced by final'
+              ],
+              [
+                'Enum (1, since 1.5)',
+                'enum',
+                'For user-defined data types'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Reserved Literals (3)',
+          content: [
+            'These three are not keywords but are reserved words — you cannot use them as identifiers:',
+            '<ul><li><code>true</code> — allowed value for boolean data type</li><li><code>false</code> — allowed value for boolean data type</li><li><code>null</code> — default value for object reference</li></ul>'
+          ]
+        },
+        {
+          heading: 'Reserved Words vs Literals vs Keywords — Common Interview Questions',
+          content: [
+            'Which of the following are valid Java reserved words?',
+            '<ol><li><code>int, float, signed, double</code> — only <code>int</code>, <code>float</code>, <code>double</code>. <code>signed</code> is not (Java does not have a <code>signed</code> keyword — all numeric types except char and boolean are signed by default).</li><li><code>abstract, final, volatile, virtual</code> — <code>virtual</code> is not a Java keyword (C++ keyword).</li><li><code>new, delete</code> — only <code>new</code>. <code>delete</code> is not a Java keyword (Java uses garbage collection, no manual delete).</li><li><code>goto, constant, static</code> — <code>goto</code> is reserved (unused), <code>static</code> is a keyword. <code>constant</code> is not reserved.</li><li><code>byte, short, int, long</code> — all four are valid keywords.</li></ol>',
+            '<strong>Final valid Java reserved words (53):</strong>',
+            '<code>abstract, assert, boolean, break, byte, case, catch, char, class, const, continue, default, do, double, else, enum, extends, final, finally, float, for, goto, if, implements, import, instanceof, int, interface, long, native, new, package, private, protected, public, return, short, static, strictfp, super, switch, synchronized, this, throw, throws, transient, true, false, null, try, void, volatile, while</code>'
+          ]
+        },
+        {
+          heading: 'Note About `const` and `goto`',
+          content: [
+            '<code>const</code> and <code>goto</code> are reserved but unused. In Java:',
+            '<ul><li><code>goto</code> — usage is considered harmful; Java intentionally omits it. You cannot use <code>goto</code> in code.</li><li><code>const</code> — use <code>final</code> instead to declare constants.</li></ul>',
+            '<code>enum</code> was introduced in Java 1.5 to let you define user-defined data types (covered in the Java 1.5 Features topic).'
+          ]
+        }
+      ]
+    },
+  'declaration-access-control': {
+      title: 'Declaration & Access Control',
+      sections: [
+        {
+          heading: 'Java Source File Structure',
+          content: [
+            'A Java source file can contain <strong>any number of classes</strong>, but at most <strong>one class</strong> can be declared as <code>public</code>.',
+            'If there is a public class, the <strong>filename must match the public class name</strong>, otherwise it is a compile-time error.',
+            'If there is no public class, any filename is allowed.',
+            '<strong>It is recommended to have only one class per source file.</strong>',
+            'The structure of a Java source file is:',
+            '<ul><li><strong>package</strong> statement (at most one, must be the first non-comment statement)</li><li><strong>import</strong> statements (any number)</li><li><strong>class/interface/enum</strong> declarations (any number, but at most one public)</li></ul>'
+          ],
+          code: `// File must be named B.java (matches public class)
+class A { }
+public class B {
+    public static void main(String[] args) {
+        System.out.println("Hello");
+    }
+}
+class C { }`
+        },
+        {
+          heading: 'Import Statements',
+          content: [
+            'The <code>import</code> statement is a <strong>compile-time shortcut</strong> that lets you use short class names instead of fully qualified names.',
+            'Without imports: <code>java.util.ArrayList l = new java.util.ArrayList();</code> (verbose)',
+            'With imports: <code>import java.util.ArrayList;</code> then <code>ArrayList l = new ArrayList();</code>',
+            '<strong>Two types of imports:</strong>',
+            '<ul><li><strong>Implicit (wildcard) import:</strong> <code>import java.util.*;</code> — imports all classes in the package. Not recommended in production code (reduces readability).</li><li><strong>Explicit (single-class) import:</strong> <code>import java.util.ArrayList;</code> — recommended (improves readability).</li></ul>',
+            '<strong>Important:</strong> importing a package does NOT import sub-packages. To use <code>java.util.regex.Pattern</code>, you need <code>import java.util.regex.*;</code> explicitly.'
+          ],
+          code: `// Valid imports
+import java.util.*;               // wildcard - imports all classes in util
+import java.util.ArrayList;       // explicit - imports only ArrayList
+import java.util.regex.*;         // needed for Pattern, Matcher, etc.
 
+// INVALID imports
+// import java.util;              // CE - cannot import a package directly
+// import java.util.ArrayList.*;   // CE - cannot wildcard a single class
+// import static java.util.*;      // not a class import`
+        },
+        {
+          heading: 'Import Resolution Order',
+          content: [
+            'When the compiler sees a class name reference, it searches in this order:',
+            '<ol><li><strong>Explicit class imports</strong> (highest priority)</li><li><strong>Classes in the current working directory</strong> (default package)</li><li><strong>Implicit class imports</strong> (wildcard)</li></ol>',
+            '<strong>Ambiguity case:</strong> if the same class is available in two wildcard imports, the compiler reports an ambiguity error.',
+            '<code>import java.util.*; import java.sql.*; Date d = new Date();</code> ❌ <em>CE: reference to Date is ambiguous</em> (java.util.Date and java.sql.Date both exist)',
+            'To fix, use an explicit import: <code>import java.util.Date;</code>'
+          ]
+        },
+        {
+          heading: 'Static Imports (Java 1.5+)',
+          content: [
+            'Static imports let you use static members (methods and fields) of a class <strong>without the class name prefix</strong>.',
+            'Two forms: <code>import static java.lang.Math.sqrt;</code> or <code>import static java.lang.Math.*;</code>',
+            'Note: <code>java.lang.*</code> is NOT implicitly imported. You must explicitly use <code>import java.lang.*;</code> if needed.',
+            '<strong>When to use:</strong> sparingly, only when there is a specific need.',
+            '<strong>Static import resolution order:</strong> current class static member → explicit static import → implicit static import',
+            '<strong>Ambiguity case:</strong> <code>import static java.lang.Integer.*; import static java.lang.Byte.*; System.out.println(MAX_VALUE);</code> ❌ <em>CE: reference to MAX_VALUE is ambiguous</em>'
+          ],
+          code: `// Without static import
+System.out.println(Math.sqrt(4));
+System.out.println(Math.max(10, 20));
+
+// With static import
+import static java.lang.Math.sqrt;
+import static java.lang.Math.max;
+import static java.lang.System.out;
+
+out.println(sqrt(4));      // 2.0
+out.println(max(10, 20));  // 20`
+        },
+        {
+          heading: 'Package Statement',
+          content: [
+            'A <strong>package</strong> in Java is an encapsulation mechanism to group related classes and interfaces into a single module.',
+            'The main purpose of packages is to <strong>resolve naming conflicts</strong> and to organize code.',
+            'The universally accepted naming convention is to use the <strong>internet domain name in reverse</strong> (e.g., <code>com.ibm</code>, <code>com.icicibank</code>, <code>com.airtelindia</code>).',
+            '<strong>Rules:</strong>',
+            '<ul><li>At most <strong>one package statement</strong> per source file (more than one is CE)</li><li>Package statement must be the <strong>first non-comment statement</strong></li><li>If no package is specified, the <strong>current working directory</strong> acts as the default package</li></ul>',
+            "<strong>Compiling with packages:</strong> <code>javac -d . Test.java</code> — the <code>-d .</code> option places the .class file in the corresponding package directory. If the package structure doesn't exist, it is created automatically."
+          ]
+        },
+        {
+          heading: 'Class Modifiers (Top-Level Classes)',
+          content: [
+            'When you declare a class, you provide information to the JVM about how the class can be used. The <strong>only applicable modifiers for top-level classes</strong> are:',
+            '<ul><li><code>public</code> — accessible from anywhere</li><li><code>&lt;default&gt;</code> (no modifier) — accessible only within the current package (package-level access)</li><li><code>final</code> — cannot be subclassed (no inheritance)</li><li><code>abstract</code> — cannot be instantiated, may contain abstract methods</li><li><code>strictfp</code> — all floating-point calculations follow IEEE 754 standard</li></ul>',
+            'Using any other modifier (like <code>private</code>, <code>protected</code>, <code>static</code>) on a top-level class is a <strong>compile-time error</strong>.',
+            '<strong>For inner classes</strong>, the additional modifiers <code>private</code>, <code>protected</code>, and <code>static</code> are also allowed.'
+          ]
+        },
+        {
+          heading: 'Access Modifiers — Visibility Summary',
+          content: [
+            'Java has four access levels, ranked from most restrictive to most permissive:',
+            '<strong>private < default < protected < public</strong>',
+            '<strong>The most restricted modifier is private. The most open is public.</strong>'
+          ],
+          table: {
+            headers: [
+              'Visibility',
+              'public',
+              'protected',
+              'default',
+              'private'
+            ],
+            rows: [
+              [
+                'Within the same class',
+                '✅',
+                '✅',
+                '✅',
+                '✅'
+              ],
+              [
+                'Same package, outside class',
+                '✅',
+                '✅',
+                '✅',
+                '❌'
+              ],
+              [
+                'Outside package, from child class',
+                '✅',
+                '✅',
+                '❌',
+                '❌'
+              ],
+              [
+                'Outside package, from non-child class',
+                '✅',
+                '❌',
+                '❌',
+                '❌'
+              ]
+            ]
+          },
+          content_2: [
+            '<strong>Recommended:</strong> <code>private</code> for data members, <code>public</code> for methods.',
+            '<strong>protected = default + kids</strong> — accessible from any class in the same package AND from child classes in any package (but only through child class reference, not parent reference from outside).'
+          ]
+        },
+        {
+          heading: 'final Modifier',
+          content: [
+            '<code>final</code> can be applied to <strong>classes, methods, and variables</strong>:',
+            '<ul><li><strong>final class</strong> — cannot be extended (no inheritance). <code>final class P {} class C extends P {}</code> ❌ CE</li><li><strong>final method</strong> — cannot be overridden in child classes</li><li><strong>final variable</strong> — cannot be reassigned (constant)</li></ul>',
+            '<strong>Final + Abstract is an illegal combination</strong> (they are opposites).',
+            '<code>public abstract final void m1() {}</code> ❌ <em>CE: illegal combination of modifiers: abstract, final</em>',
+            '<strong>Final classes cannot contain abstract methods</strong>, but <strong>abstract classes can contain final methods</strong>.'
+          ],
+          code: `final class Constants {
+    public static final double PI = 3.14159;
+    public static final int MAX_SIZE = 100;
+    
+    public final void display() {  // cannot be overridden
+        System.out.println("Final method");
+    }
+}`
+        },
+        {
+          heading: 'abstract Modifier',
+          content: [
+            '<code>abstract</code> applies only to <strong>classes and methods</strong>, not to variables.',
+            "If you don't know the implementation, you can declare a method as <code>abstract</code>. Abstract methods have <strong>only a declaration, not a body</strong> (must end with <code>;</code>).",
+            '<strong>Rules:</strong>',
+            '<ul><li>A class with at least one abstract method <strong>must</strong> be declared abstract</li><li>An abstract class <strong>can contain zero abstract methods</strong> (e.g., <code>HttpServlet</code>)</li><li>Abstract classes <strong>cannot be instantiated</strong></li><li>The first concrete subclass <strong>must</strong> implement all abstract methods, or be declared abstract itself</li></ul>',
+            '<strong>Illegal combinations with abstract</strong> (6 total): <code>final</code>, <code>synchronized</code>, <code>native</code>, <code>static</code>, <code>strictfp</code>, <code>private</code>',
+            '<strong>Common CE examples:</strong>',
+            "<ul><li><code>class Test { public abstract void m1() {} }</code> ❌ <em>CE: abstract methods can't have a body</em></li><li><code>class Test { public abstract void m1(); }</code> ❌ <em>CE: Test is not abstract and doesn't override abstract method m1()</em></li><li><code>abstract class Test { public static void main(String[] a) { Test t = new Test(); } }</code> ❌ <em>CE: Test is abstract; cannot be instantiated</em></li></ul>"
+          ],
+          code: `abstract class Vehicle {
+    public abstract int getNoOfWheels();
+    
+    public void start() {  // concrete method in abstract class is OK
+        System.out.println("Starting vehicle");
+    }
+}
+
+class Bus extends Vehicle {
+    @Override
+    public int getNoOfWheels() {
+        return 6;  // Bus has 6 wheels
+    }
+}
+
+class Bike extends Vehicle {
+    @Override
+    public int getNoOfWheels() {
+        return 2;
+    }
+}`
+        },
+        {
+          heading: 'strictfp Modifier',
+          content: [
+            '<code>strictfp</code> applies to <strong>classes and methods</strong>, not to variables.',
+            'It ensures all floating-point calculations follow the <strong>IEEE 754 standard</strong>, giving platform-independent results.',
+            '<strong>Rules:</strong>',
+            '<ul><li>If a method is declared <code>strictfp</code>, all FP calculations in that method follow IEEE 754</li><li>If a class is declared <code>strictfp</code>, all its concrete methods follow IEEE 754</li><li><code>strictfp</code> and <code>abstract</code> is <strong>legal for classes but illegal for methods</strong></li></ul>'
+          ]
+        },
+        {
+          heading: 'Member Modifiers — Final Variables',
+          content: [
+            '<strong>Final Instance Variables:</strong> JVM does NOT provide default values — you must initialize before the constructor completes. Valid places to initialize:',
+            '<ol><li>At the time of declaration: <code>final int i = 0;</code></li><li>Inside an instance initialization block: <code>{ i = 0; }</code></li><li>Inside the constructor: <code>Test() { i = 0; }</code></li></ol>',
+            'Initializing in a regular method is a CE.',
+            '<strong>Final Static Variables:</strong> same rule — must be initialized. Valid places:',
+            '<ol><li>At the time of declaration: <code>final static int i = 0;</code></li><li>Inside a static block: <code>static { i = 0; }</code></li></ol>',
+            'Initializing in <code>main</code> or any other method is a CE.',
+            '<strong>Final Local Variables:</strong> must be initialized before use. If never used, initialization is optional (even with <code>final</code>).',
+            '<strong>Formal parameters</strong> declared as <code>final</code> cannot be reassigned inside the method.'
+          ],
+          code: `class Test {
+    final int x = 10;                    // OK: at declaration
+    
+    final int y;
+    { y = 20; }                          // OK: instance initializer
+    
+    final int z;
+    Test() { z = 30; }                   // OK: in constructor
+    
+    // final int w;
+    // void setW() { w = 40; }           // CE: cannot assign in method
+}`
+        },
+        {
+          heading: 'Interface Methods and Variables',
+          content: [
+            '<strong>Interface methods</strong> are by default <code>public</code> and <code>abstract</code>. These declarations are equivalent:',
+            '<code>void m1();</code> = <code>public void m1();</code> = <code>public abstract void m1();</code>',
+            'These modifiers are <strong>NOT allowed</strong> on interface methods: <code>private</code>, <code>protected</code>, <code>static</code>, <code>final</code>, <code>native</code>, <code>strictfp</code>, <code>synchronized</code>.',
+            '<strong>Interface variables</strong> are by default <code>public static final</code> (constants). These are equivalent:',
+            '<code>int i = 10;</code> = <code>public int i = 10;</code> = <code>public static int i = 10;</code> = <code>public static final int i = 10;</code>',
+            'Not allowed: <code>private</code>, <code>protected</code>, <code>volatile</code>, <code>transient</code>.',
+            'Interface variables <strong>must be initialized at the time of declaration</strong>.',
+            'Interface variables are inherited by implementing classes and can be accessed but <strong>cannot be reassigned</strong> (because they are final).'
+          ],
+          code: `interface Constants {
+    int MAX = 100;          // public static final
+    void show();             // public abstract
+}
+
+class MyClass implements Constants {
+    public void show() {
+        System.out.println("MAX = " + MAX);  // accessible
+        // MAX = 200;  // CE: cannot assign to final variable
+    }
+}`
+        },
+        {
+          heading: 'extends vs implements',
+          content: [
+            '<strong>extends</strong> is used for inheritance (class-to-class or interface-to-interface).',
+            '<strong>implements</strong> is used for class-to-interface relationship.',
+            'Rules:',
+            '<ul><li>A <strong>class can extend only one class</strong> at a time (no multiple inheritance for classes)</li><li>A <strong>class can implement any number of interfaces</strong></li><li>An <strong>interface can extend any number of interfaces</strong></li><li>An <strong>interface CANNOT implement another interface</strong></li><li>A <strong>class CANNOT extend an interface</strong></li></ul>',
+            'When implementing an interface method, the method <strong>must be declared public</strong>. Reducing visibility is a CE.'
+          ],
+          code: `interface A { void m1(); }
+interface B { void m2(); }
+interface C extends A, B { void m3(); }  // interface extending 2 interfaces
+
+class Parent { }
+class Child extends Parent implements A, B {  // extends 1 class, implements 2 interfaces
+    public void m1() { }
+    public void m2() { }
+}`
+        },
+        {
+          heading: 'Naming Conflicts in Interfaces',
+          content: [
+            '<strong>Case 1: Same signature in both interfaces</strong> — one implementation is enough.',
+            '<strong>Case 2: Same name, different arguments</strong> — must implement both (overloaded methods).',
+            '<strong>Case 3: Same signature, different return types</strong> — CANNOT implement both interfaces simultaneously (return type is part of method signature for overriding).',
+            '<strong>Variable conflicts:</strong> if two interfaces have a variable with the same name, access it using the interface name: <code>Left.i</code> or <code>Right.i</code>. Direct reference to <code>i</code> is ambiguous.'
+          ],
+          code: `interface Left { int x = 10; }
+interface Right { int x = 100; }
+
+class Test implements Left, Right {
+    public static void main(String[] args) {
+        // System.out.println(x);  // CE: reference to x is ambiguous
+        System.out.println(Left.x);   // 10
+        System.out.println(Right.x);  // 100
+    }
+}`
+        },
+        {
+          heading: 'Marker Interfaces',
+          content: [
+            'A <strong>marker interface</strong> (or tag interface) has no methods or fields. It marks a class to provide some special ability to its objects.',
+            'Common examples: <code>Serializable</code>, <code>Cloneable</code>, <code>Remote</code>.',
+            'By implementing a marker interface, your objects gain a specific capability recognized by the JVM or framework.'
+          ],
+          code: `import java.io.Serializable;
+
+class Employee implements Serializable {
+    private static final long serialVersionUID = 1L;
+    int id;
+    String name;
+    
+    Employee(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+}`
+        }
+      ]
+    },
   'operators-expressions': {
-    title: 'Operators and Expressions',
-    sections: [
-      {
-        heading: 'What are Operators?',
-        content: [
-          'Operators are special symbols used to perform operations on variables and values.',
-          'Java divides operators into several groups:',
-          '<ul><li>Arithmetic operators</li><li>Assignment operators</li><li>Comparison (relational) operators</li><li>Logical operators</li><li>Increment and decrement operators</li></ul>'
-        ]
-      },
-      {
-        heading: 'Arithmetic Operators',
-        content: [
-          'Used for mathematical operations:',
-          '<ul><li><code>+</code> Addition</li><li><code>-</code> Subtraction</li><li><code>*</code> Multiplication</li><li><code>/</code> Division (integer division for ints)</li><li><code>%</code> Modulo (remainder)</li></ul>',
-          '<strong>Note:</strong> dividing two integers drops the decimal part. To get a decimal result, at least one operand must be a <code>double</code> or <code>float</code>.'
-        ],
-        code: `public class Arithmetic {
+      title: 'Operators and Expressions',
+      sections: [
+        {
+          heading: 'What are Operators?',
+          content: [
+            'Operators are special symbols used to perform operations on variables and values.',
+            'Java divides operators into several groups:',
+            '<ul><li>Arithmetic operators</li><li>Assignment operators</li><li>Comparison (relational) operators</li><li>Logical operators</li><li>Increment and decrement operators</li></ul>'
+          ]
+        },
+        {
+          heading: 'Arithmetic Operators',
+          content: [
+            'Used for mathematical operations:',
+            '<ul><li><code>+</code> Addition</li><li><code>-</code> Subtraction</li><li><code>*</code> Multiplication</li><li><code>/</code> Division (integer division for ints)</li><li><code>%</code> Modulo (remainder)</li></ul>',
+            '<strong>Note:</strong> dividing two integers drops the decimal part. To get a decimal result, at least one operand must be a <code>double</code> or <code>float</code>.'
+          ],
+          code: `public class Arithmetic {
     public static void main(String[] args) {
         int a = 17;
         int b = 5;
@@ -329,15 +1389,15 @@ public class CommentsExample {
         System.out.println("True division: " + ((double) a / b));  // 3.4
     }
 }`
-      },
-      {
-        heading: 'Assignment Operators',
-        content: [
-          '<code>=</code> is the basic assignment operator.',
-          'Shorthand operators combine an operation with assignment:',
-          '<ul><li><code>+=</code> add and assign</li><li><code>-=</code> subtract and assign</li><li><code>*=</code> multiply and assign</li><li><code>/=</code> divide and assign</li><li><code>%=</code> modulo and assign</li></ul>'
-        ],
-        code: `public class Assignment {
+        },
+        {
+          heading: 'Assignment Operators',
+          content: [
+            '<code>=</code> is the basic assignment operator.',
+            'Shorthand operators combine an operation with assignment:',
+            '<ul><li><code>+=</code> add and assign</li><li><code>-=</code> subtract and assign</li><li><code>*=</code> multiply and assign</li><li><code>/=</code> divide and assign</li><li><code>%=</code> modulo and assign</li></ul>'
+          ],
+          code: `public class Assignment {
     public static void main(String[] args) {
         int score = 10;
         score += 5;   // score = score + 5;  → 15
@@ -349,15 +1409,15 @@ public class CommentsExample {
         System.out.println("Final score: " + score);
     }
 }`
-      },
-      {
-        heading: 'Comparison Operators',
-        content: [
-          'Comparison operators return <code>true</code> or <code>false</code>:',
-          '<ul><li><code>==</code> Equal to</li><li><code>!=</code> Not equal to</li><li><code>></code> Greater than</li><li><code><</code> Less than</li><li><code>>=</code> Greater than or equal to</li><li><code><=</code> Less than or equal to</li></ul>',
-          'These are essential for making decisions with <code>if</code> statements.'
-        ],
-        code: `public class Comparison {
+        },
+        {
+          heading: 'Comparison Operators',
+          content: [
+            'Comparison operators return <code>true</code> or <code>false</code>:',
+            '<ul><li><code>==</code> Equal to</li><li><code>!=</code> Not equal to</li><li><code>></code> Greater than</li><li><code><</code> Less than</li><li><code>>=</code> Greater than or equal to</li><li><code><=</code> Less than or equal to</li></ul>',
+            'These are essential for making decisions with <code>if</code> statements.'
+          ],
+          code: `public class Comparison {
     public static void main(String[] args) {
         int x = 5;
         int y = 10;
@@ -370,15 +1430,15 @@ public class CommentsExample {
         System.out.println("y >= 10: " + (y >= 10));  // true
     }
 }`
-      },
-      {
-        heading: 'Logical Operators',
-        content: [
-          'Logical operators combine multiple conditions:',
-          '<ul><li><code>&&</code> AND — both conditions must be true</li><li><code>||</code> OR — at least one condition must be true</li><li><code>!</code> NOT — reverses the result</li></ul>',
-          'Short-circuit evaluation: <code>&&</code> stops if the first condition is false; <code>||</code> stops if the first condition is true.'
-        ],
-        code: `public class Logical {
+        },
+        {
+          heading: 'Logical Operators',
+          content: [
+            'Logical operators combine multiple conditions:',
+            '<ul><li><code>&&</code> AND — both conditions must be true</li><li><code>||</code> OR — at least one condition must be true</li><li><code>!</code> NOT — reverses the result</li></ul>',
+            'Short-circuit evaluation: <code>&&</code> stops if the first condition is false; <code>||</code> stops if the first condition is true.'
+          ],
+          code: `public class Logical {
     public static void main(String[] args) {
         int age = 25;
         boolean hasLicense = true;
@@ -403,17 +1463,17 @@ public class CommentsExample {
         System.out.println("Passed: " + passed);  // true
     }
 }`
-      },
-      {
-        heading: 'Increment and Decrement',
-        content: [
-          '<code>++</code> increases a value by 1.',
-          '<code>--</code> decreases a value by 1.',
-          '<strong>Prefix (++x):</strong> increment first, then use the value.',
-          '<strong>Postfix (x++):</strong> use the value first, then increment.',
-          'These are very common in loops.'
-        ],
-        code: `public class IncrementDecrement {
+        },
+        {
+          heading: 'Increment and Decrement',
+          content: [
+            '<code>++</code> increases a value by 1.',
+            '<code>--</code> decreases a value by 1.',
+            '<strong>Prefix (++x):</strong> increment first, then use the value.',
+            '<strong>Postfix (x++):</strong> use the value first, then increment.',
+            'These are very common in loops.'
+          ],
+          code: `public class IncrementDecrement {
     public static void main(String[] args) {
         int a = 5;
         
@@ -431,15 +1491,15 @@ public class CommentsExample {
         System.out.println("After c--: " + c); // 9
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Calculate the area of a rectangle and check if it exceeds 100.',
-          'Check if a number is even using the modulo operator.',
-          'Combine comparison and logical operators to test if a number is in a range.'
-        ],
-        code: `public class Practice {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Calculate the area of a rectangle and check if it exceeds 100.',
+            'Check if a number is even using the modulo operator.',
+            'Combine comparison and logical operators to test if a number is in a range.'
+          ],
+          code: `public class Practice {
     public static void main(String[] args) {
         // Rectangle area
         int length = 12;
@@ -459,23 +1519,377 @@ public class CommentsExample {
         System.out.println(value + " is between 10 and 20: " + inRange);
     }
 }`
-      }
-    ]
-  },
+        },
+        {
+          heading: 'SCJP Deep Dive: Increment & Decrement — Rules',
+          content: [
+            'Increment (<code>++</code>) and decrement (<code>--</code>) operators have four variants: pre-increment (<code>++x</code>), post-increment (<code>x++</code>), pre-decrement (<code>--x</code>), and post-decrement (<code>x--</code>).',
+            '<strong>Pre-increment (++x):</strong> increments first, then returns the value.',
+            '<code>x = 1; y = ++x;</code> → y = 2, x = 2',
+            '<strong>Post-increment (x++):</strong> returns the value first, then increments.',
+            '<code>x = 1; y = x++;</code> → y = 1, x = 2',
+            '<strong>Key Rules:</strong>',
+            "<ul><li>You <strong>cannot</strong> apply ++/-- to a <strong>constant</strong>: <code>int y = ++4;</code> ❌ CE: <em>unexpected type found: value required: variable</em></li><li>You <strong>cannot nest</strong> increment/decrement: <code>int y = ++(++x);</code> ❌ CE</li><li>You <strong>cannot apply</strong> to <strong>final variables</strong>: <code>final int x = 4; x++;</code> ❌ CE: <em>can't assign a value to final variable x</em></li><li>You <strong>can</strong> apply to <strong>floating-point</strong> variables: <code>double d = 10.5; d++;</code> ✅</li></ul>",
+            '<strong>Difference between b++ and b = b+1:</strong> <code>b++</code> performs an increment on the variable in-place, while <code>b = b+1</code> creates a new value. <code>b++</code> works on all numeric types including byte, while <code>b = b+1</code> requires a cast when b is byte or short.'
+          ],
+          code: `public class IncrementRules {
+    public static void main(String[] args) {
+        int x = 4;
+        int y = ++x;        // pre-increment: y=5, x=5
+        System.out.println("y = " + y + ", x = " + x);
+        
+        int a = 4;
+        int b = a++;        // post-increment: b=4, a=5
+        System.out.println("b = " + b + ", a = " + a);
+        
+        // Works on floating-point
+        double d = 10.5;
+        d++;
+        System.out.println("d after ++: " + d);  // 11.5
+        
+        // Invalid - constant
+        // int z = ++5;    // CE: unexpected type
+        
+        // Invalid - nesting
+        // int n = ++(++x); // CE: unexpected type
+        
+        // Invalid - final
+        final int f = 4;
+        // f++;             // CE: can't assign a value to final variable
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Arithmetic Operators (8 Total)',
+          content: [
+            'Java has <strong>8 arithmetic operators</strong>:',
+            '<ul><li><code>+</code> Addition</li><li><code>-</code> Subtraction</li><li><code>*</code> Multiplication</li><li><code>/</code> Division</li><li><code>%</code> Modulo (remainder)</li><li><code>++</code> Increment (unary)</li><li><code>--</code> Decrement (unary)</li><li><code>-</code> Unary minus (negation)</li></ul>',
+            '<strong>Binary numeric promotion rules:</strong>',
+            '<ul><li>If mixed floating-point and integer types, floating-point arithmetic is used and a floating-point value is returned</li><li>If mixed integer types, the wider type is returned (e.g., int + long → long)</li><li>If double and float are mixed, double is returned</li></ul>',
+            '<strong>Special cases with division by zero:</strong>',
+            '<ul><li><code>4.0 / 0.0</code> → prints <code>Infinity</code></li><li><code>-4.0 / 0.0</code> → prints <code>-Infinity</code></li><li><code>0.0 / 0.0</code> → prints <code>NaN</code></li><li>Integer division by zero → <code>ArithmeticException</code></li></ul>',
+            '<strong>Integer overflow wraps around:</strong>',
+            '<code>int tooBig = Integer.MAX_VALUE + 1;</code> → becomes <code>Integer.MIN_VALUE</code> (-2147483648)',
+            '<code>int tooSmall = Integer.MIN_VALUE - 1;</code> → becomes <code>Integer.MAX_VALUE</code> (2147483647)',
+            '<strong>Modulo special cases:</strong>',
+            '<ul><li>FP arithmetic: if y = 0.0 or infinity, result is NaN</li><li>Integer arithmetic: <code>ArithmeticException</code> if y = 0</li></ul>'
+          ],
+          code: `public class ArithmeticAdvanced {
+    public static void main(String[] args) {
+        // Special floating-point cases
+        System.out.println(4.0 / 0.0);     // Infinity
+        System.out.println(-4.0 / 0.0);    // -Infinity
+        System.out.println(0.0 / 0.0);     // NaN
+        
+        // Integer overflow wraps
+        int tooBig = Integer.MAX_VALUE + 1;   // becomes Integer.MIN_VALUE
+        int tooSmall = Integer.MIN_VALUE - 1; // becomes Integer.MAX_VALUE
+        System.out.println("tooBig = " + tooBig);
+        System.out.println("tooSmall = " + tooSmall);
+        
+        // Mixed type promotion
+        double d1 = 12 / 8;       // 1.0 (integer division first, then promoted)
+        double d2 = 12.0F / 8;    // 1.5 (float division)
+        System.out.println("d1 = " + d1 + ", d2 = " + d2);
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: String Concatenation Operator (+)',
+          content: [
+            'The binary <code>+</code> operator is <strong>overloaded</strong> in Java — its behavior depends on the operand types.',
+            'When <strong>at least one operand is a String</strong>, the other operand is implicitly converted to its string representation, and string concatenation is performed.',
+            `<code>String message = 100 + " Messages";</code> → <code>"100 Messages"</code>`,
+            '<strong>This is the ONLY case of operator overloading in Java.</strong> You cannot overload operators for your own classes.',
+            'The <code>+=</code> operator also performs string concatenation when the left operand is a String.',
+            '<strong>Order of evaluation matters in mixed expressions:</strong>',
+            `<code>System.out.println(10 + 20 + "Hello");</code> → <code>"30Hello"</code> (left-to-right: 10+20=30, then 30+"Hello")`,
+            `<code>System.out.println("Hello" + 10 + 20);</code> → <code>"Hello1020"</code> (left-to-right: "Hello"+10="Hello10", then +20)`
+          ],
+          code: `public class StringConcat {
+    public static void main(String[] args) {
+        // Concatenation when either operand is String
+        String s1 = "Hello" + "World";      // "HelloWorld"
+        String s2 = "Value: " + 100;        // "Value: 100"
+        String s3 = 100 + " Messages";      // "100 Messages"
+        
+        // Left-to-right evaluation
+        System.out.println(10 + 20 + "Hello");  // 30Hello
+        System.out.println("Hello" + 10 + 20);  // Hello1020
+        System.out.println("Hello" + (10 + 20)); // Hello30 (parentheses)
+        
+        // += also concatenates
+        String s = "Start";
+        s += 123;       // s = "Start123"
+        s += true;      // s = "Start123true"
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Bitwise Operators (7 Total)',
+          content: [
+            'Java provides <strong>7 bitwise operators</strong> for manipulating individual bits:',
+            '<ul><li><code>&</code> Bitwise AND</li><li><code>|</code> Bitwise inclusive OR</li><li><code>^</code> Bitwise exclusive OR (XOR)</li><li><code>~</code> Bitwise complement (NOT)</li><li><code><<</code> Signed left shift</li><li><code>>></code> Signed right shift (preserves sign)</li><li><code>>>></code> Unsigned right shift (fills with 0)</li></ul>',
+            'Operands must be of numeric data type (<code>char</code>, <code>short</code>, <code>int</code>, or <code>long</code>).',
+            'There is <strong>NO unsigned left shift</strong> operator in Java.',
+            '<strong>Operations on byte/short may give unexpected results</strong> because operands are promoted to <code>int</code> during intermediate operations. For example, <code>(byte)0xFF >>> 1</code> gives <code>0xFF</code> (not <code>0x7F</code>) because the byte is first sign-extended to <code>int</code> (becomes <code>0xFFFFFFFF</code>) before shifting.',
+            '<strong>Bitwise truth table:</strong>',
+            '<ul><li><code>&</code>: 1&1=1, otherwise 0</li><li><code>|</code>: 0|0=0, otherwise 1</li><li><code>^</code>: same bits=0, different bits=1</li><li><code>~</code>: flips every bit (1→0, 0→1)</li></ul>'
+          ],
+          code: `public class BitwiseDemo {
+    public static void main(String[] args) {
+        int x = 0xFAEF;  // 1111 1010 1110 1111
+        int y = 0xF8E9;  // 1111 1000 1110 1001
+        
+        System.out.println("x & y:  " + (x & y));   // AND
+        System.out.println("x | y:  " + (x | y));   // OR
+        System.out.println("x ^ y:  " + (x ^ y));   // XOR
+        System.out.println("~x:     " + (~x));      // complement
+        
+        // Shifts
+        System.out.println("x << 4: " + (x << 4));   // signed left shift
+        System.out.println("x >> 4: " + (x >> 4));   // signed right shift
+        System.out.println("x >>> 4:" + (x >>> 4));  // unsigned right shift
+        
+        // byte/short pitfall
+        byte b = (byte) 0xFF;     // 0xFF as signed byte = -1
+        int result = b >>> 1;     // promotes to 0xFFFFFFFF, then shifts → 0x7FFFFFFF
+        System.out.println("b >>> 1 = " + result);
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Short-Circuit vs Boolean Operators',
+          content: [
+            'Java has two pairs of logical operators that look similar but behave differently:',
+            '<strong>Short-circuit (&&, ||):</strong>',
+            '<ul><li><code>&&</code>: if the first operand is false, the second is <strong>NOT evaluated</strong></li><li><code>||</code>: if the first operand is true, the second is <strong>NOT evaluated</strong></li></ul>',
+            '<strong>Non-short-circuit (&, |, ^):</strong>',
+            '<ul><li><code>&</code> Boolean AND: both operands are <strong>always evaluated</strong></li><li><code>|</code> Boolean OR: both operands are <strong>always evaluated</strong></li><li><code>^</code> Boolean XOR: both operands are always evaluated</li></ul>',
+            '<strong>Why it matters:</strong> short-circuit evaluation can prevent runtime errors. For example, <code>str != null && str.length() > 0</code> avoids a <code>NullPointerException</code>.',
+            '<strong>Truth table:</strong>',
+            '<ul><li><code>x & y</code> = true only if both are true</li><li><code>x | y</code> = true if at least one is true</li><li><code>x ^ y</code> = true if exactly one is true</li><li><code>!x</code> = inverts the boolean</li></ul>'
+          ],
+          code: `public class ShortCircuit {
+    public static void main(String[] args) {
+        int a = 5, b = 10;
+        
+        // Short-circuit: second part not evaluated if first is false
+        if (a > 10 && b++ > 5) {  // a>10 is false, b++ never runs
+            System.out.println("Inside");
+        }
+        System.out.println("b = " + b);  // b is still 10
+        
+        // Non-short-circuit: both parts always evaluated
+        if (a > 10 & b++ > 5) {  // a>10 is false, but b++ still runs
+            System.out.println("Inside");
+        }
+        System.out.println("b after &: " + b);  // b is now 11
+        
+        // Safety with short-circuit
+        String str = null;
+        if (str != null && str.length() > 0) {  // safe: second part not evaluated
+            System.out.println("Non-empty");
+        }
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: instanceof Operator',
+          content: [
+            'The <code>instanceof</code> operator checks whether an object is an instance of a specific class or implements an interface.',
+            '<strong>Syntax:</strong> <code>objectReference instanceof ClassOrInterface</code>',
+            '<strong>Returns:</strong> <code>true</code> if the object is an instance of the type (or a subclass/sub-interface), <code>false</code> otherwise.',
+            '<code>if (x instanceof String) { ... }</code> ✅ — checks if x is a String',
+            '<code>if (x instanceof Runnable) { ... }</code> ✅ — checks if x implements Runnable',
+            '<strong>After Java 16 (Pattern Matching):</strong>',
+            '<code>if (x instanceof String s) { System.out.println(s.length()); }</code> — declares and casts in one step.'
+          ],
+          code: `class Animal {}
+class Dog extends Animal {}
+interface Pet {}
+class Cat extends Animal implements Pet {}
 
+public class InstanceOfDemo {
+    public static void main(String[] args) {
+        Animal a = new Dog();
+        
+        System.out.println(a instanceof Animal);  // true
+        System.out.println(a instanceof Dog);     // true
+        System.out.println(a instanceof Pet);     // false (Dog doesn't implement Pet)
+        
+        Animal b = new Cat();
+        System.out.println(b instanceof Pet);     // true (Cat implements Pet)
+        
+        Object obj = "Hello";
+        if (obj instanceof String) {
+            String s = (String) obj;
+            System.out.println(s.length());  // 5
+        }
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Ternary (Conditional) Operator',
+          content: [
+            'The <code>? :</code> operator is the <strong>only ternary operator</strong> (takes 3 operands) in Java.',
+            '<strong>Syntax:</strong> <code>booleanExpression ? valueIfTrue : valueIfFalse</code>',
+            'It is the expression equivalent of the <code>if-else</code> statement.',
+            'The conditional operator <strong>associates from right to left</strong>: <code>a ? b ? c ? d : e : f : g</code> evaluates as <code>a ? (b ? (c ? d : e) : f) : g</code>',
+            'Both <code>valueIfTrue</code> and <code>valueIfFalse</code> must be assignment-compatible (same type or one can be promoted to the other).'
+          ],
+          code: `public class TernaryDemo {
+    public static void main(String[] args) {
+        int x = 10, y = 12;
+        int z = x > y ? x : y;  // z = 12
+        System.out.println("z = " + z);
+        
+        // Nested ternary (right-to-left associativity)
+        boolean t1 = false ? false : true ? false : true ? false : true;
+        // Evaluates as: false ? false : (true ? false : (true ? false : true))
+        //             = false ? false : (true ? false : true)
+        //             = false ? false : false
+        //             = false
+        System.out.println("t1 = " + t1);
+        
+        // Type promotion
+        int a = 5;
+        double b = 3.14;
+        double result = (a > 3) ? a : b;  // int promoted to double
+        System.out.println("result = " + result);
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: new Operator',
+          content: [
+            'The <code>new</code> operator is used to <strong>create instances of classes (objects)</strong>.',
+            '<strong>Syntax:</strong> <code>new ClassName(arguments)</code>',
+            'It calls the appropriate constructor based on the arguments provided.',
+            'The <code>new</code> operator returns a reference to the newly created object.',
+            'For arrays: <code>new int[10]</code> creates an int array of size 10.',
+            'For inner classes: <code>outer.new InnerClass()</code> requires an instance of the outer class.'
+          ],
+          code: `public class NewOperator {
+    public static void main(String[] args) {
+        // Creating objects
+        String s = new String("Hello");
+        Integer i = new Integer(42);
+        
+        // Array creation
+        int[] arr = new int[5];
+        int[][] matrix = new int[3][2];
+        int[][] jagged = new int[3][];  // 2D with only first dim
+        
+        // Anonymous array (SCJP detail)
+        int total = sum(new int[]{1, 2, 3, 4, 5});
+    }
+    
+    static int sum(int[] nums) {
+        int t = 0;
+        for (int n : nums) t += n;
+        return t;
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: [] Array Element Access',
+          content: [
+            'The <code>[]</code> operator is used to <strong>access elements of an array</strong>.',
+            'The index inside the brackets must be an <strong>int-compatible value</strong> (byte, short, char, int are promoted to int).',
+            '<code>long</code>, <code>float</code>, <code>double</code>, and <code>boolean</code> are <strong>NOT allowed</strong> as array indices — compile-time error.',
+            'Accessing an out-of-range index throws <code>ArrayIndexOutOfBoundsException</code> at runtime.',
+            'In Java, arrays are objects (unlike C/C++), but the bracket operator works similarly.'
+          ],
+          code: `public class ArrayAccess {
+    public static void main(String[] args) {
+        int[] arr = {10, 20, 30, 40, 50};
+        
+        // Valid indices
+        System.out.println(arr[0]);      // 10
+        System.out.println(arr[2 + 1]);  // 40 (expression evaluated)
+        
+        // char promoted to int
+        char c = 2;
+        System.out.println(arr[c]);      // 30
+        
+        // Invalid: long as index
+        long l = 2L;
+        // System.out.println(arr[l]);   // CE: possible lossy conversion
+        
+        // Runtime error: out of range
+        // System.out.println(arr[10]);  // ArrayIndexOutOfBoundsException
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Operators Precedence',
+          content: [
+            'Operators with <strong>higher precedence</strong> are applied first. If two operators have the same precedence, they are applied left-to-right (except assignment, which is right-to-left).',
+            'You can use parentheses <code>()</code> to override the default precedence.',
+            '<strong>Precedence table (high to low):</strong>',
+            '<ul><li><strong>Postfix:</strong> <code>[] . () expr++ expr--</code></li><li><strong>Unary:</strong> <code>++expr --expr +expr -expr ! ~</code></li><li><strong>Creation/Cast:</strong> <code>new (type)expr</code></li><li><strong>Multiplicative:</strong> <code>* / %</code></li><li><strong>Additive:</strong> <code>+ -</code></li><li><strong>Shift:</strong> <code><< >> >>></code></li><li><strong>Relational:</strong> <code>< <= > >= instanceof</code></li><li><strong>Equality:</strong> <code>== !=</code></li><li><strong>Bitwise AND:</strong> <code>&</code></li><li><strong>Bitwise XOR:</strong> <code>^</code></li><li><strong>Bitwise OR:</strong> <code>|</code></li><li><strong>Logical AND:</strong> <code>&&</code></li><li><strong>Logical OR:</strong> <code>||</code></li><li><strong>Ternary:</strong> <code>?:</code></li><li><strong>Assignment:</strong> <code>= += -= *= /= %= &= |= ^= <<= >>= >>>=</code></li></ul>',
+            '<strong>Example:</strong> In <code>4 + 5 * 3</code>, multiplication is applied first: <code>5 * 3 = 15</code>, then <code>4 + 15 = 19</code>.'
+          ],
+          code: `public class Precedence {
+    public static void main(String[] args) {
+        int a = 4 + 5 * 3;            // 4 + 15 = 19
+        int b = (4 + 5) * 3;          // 9 * 3 = 27 (parentheses)
+        int c = 10 - 2 + 3;           // 8 + 3 = 11 (left-to-right for same precedence)
+        int d = 20 / 4 * 2;           // 5 * 2 = 10
+        
+        // Ternary has lower precedence than most operators
+        int x = 10, y = 5;
+        boolean result = x > y && y > 0;  // (x > y) && (y > 0) = true && true = true
+        System.out.println("a=" + a + ", b=" + b + ", c=" + c + ", d=" + d);
+        System.out.println("result=" + result);
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Evaluation Order of Operands',
+          content: [
+            'Java guarantees that operands are evaluated from <strong>left to right</strong> before the operator is applied.',
+            'This is especially important for short-circuit operators and method calls with side effects.',
+            '<strong>Example — method calls with side effects:</strong>',
+            '<code>int a = 5; int b = (a++) + (a++) + a;</code> → <code>b = 5 + 6 + 7 = 18</code>, <code>a = 7</code>',
+            '<strong>Rule:</strong> each operand is fully evaluated to a value before the operator combines them. The order is left-to-right.'
+          ],
+          code: `public class EvaluationOrder {
+    public static void main(String[] args) {
+        int a = 5;
+        int b = (a++) + (a++) + a;  // 5 + 6 + 7 = 18
+        System.out.println("a = " + a + ", b = " + b);
+        
+        // Short-circuit affects evaluation order
+        int x = 5;
+        if (x++ > 5 && ++x > 10) {  // x=5, x++=5 then x=6; first is false, ++x not evaluated
+            // not entered
+        }
+        System.out.println("x = " + x);  // 6 (only post-increment ran)
+        
+        // Function call side effects
+        int i = 0;
+        int result = i++ + i++ + i++;  // 0 + 1 + 2 = 3
+        System.out.println("i = " + i + ", result = " + result);
+    }
+}`
+        }
+      ]
+    },
   'control-flow': {
-    title: 'Control Flow',
-    sections: [
-      {
-        heading: 'What is Control Flow?',
-        content: [
-          'Control flow refers to the order in which individual statements are executed.',
-          'Java provides three main structures for controlling flow:',
-          '<ul><li><code>if</code> statements — for decision making</li><li><code>for</code> loops — for iterating a known number of times</li><li><code>while</code> and <code>do-while</code> loops — for repeating while a condition is true</li><li><code>switch</code> — for choosing among many options</li></ul>'
-        ],
-        diagram: {
-          caption: 'Choosing the right Java control structure',
-          chart: `flowchart TD
+      title: 'Control Flow',
+      sections: [
+        {
+          heading: 'What is Control Flow?',
+          content: [
+            'Control flow refers to the order in which individual statements are executed.',
+            'Java provides three main structures for controlling flow:',
+            '<ul><li><code>if</code> statements — for decision making</li><li><code>for</code> loops — for iterating a known number of times</li><li><code>while</code> and <code>do-while</code> loops — for repeating while a condition is true</li><li><code>switch</code> — for choosing among many options</li></ul>'
+          ],
+          diagram: {
+            caption: 'Choosing the right Java control structure',
+            chart: `flowchart TD
     A[Need to control flow?] --> B{One condition or a few?}
     B -->|Yes| C[Use if-else if-else]
     B -->|Many exact values| D[Use switch]
@@ -484,18 +1898,18 @@ public class CommentsExample {
     E -->|Unknown count| G{Check before each iteration?}
     G -->|Yes| H[Use while loop]
     G -->|No| I[Use do-while loop]`
-        }
-      },
-      {
-        heading: 'if, else if, else',
-        content: [
-          'Use <code>if</code> to test a condition.',
-          'Use <code>else if</code> to test another condition.',
-          'Use <code>else</code> to run code when no condition is true.',
-          'Curly braces <code>{}</code> define the block of code for each condition.',
-          'If the block is only one line, braces are optional — but using them is recommended.'
-        ],
-        code: `public class IfElse {
+          }
+        },
+        {
+          heading: 'if, else if, else',
+          content: [
+            'Use <code>if</code> to test a condition.',
+            'Use <code>else if</code> to test another condition.',
+            'Use <code>else</code> to run code when no condition is true.',
+            'Curly braces <code>{}</code> define the block of code for each condition.',
+            'If the block is only one line, braces are optional — but using them is recommended.'
+          ],
+          code: `public class IfElse {
     public static void main(String[] args) {
         int score = 85;
         char grade;
@@ -515,15 +1929,15 @@ public class CommentsExample {
         System.out.println("Score: " + score + ", Grade: " + grade);  // Grade: B
     }
 }`
-      },
-      {
-        heading: 'Ternary Operator',
-        content: [
-          'A shorthand for simple <code>if-else</code> statements.',
-          '<strong>Syntax:</strong> <code>condition ? valueIfTrue : valueIfFalse;</code>',
-          'Great for simple assignments, but do not overuse — complex ternaries are hard to read.'
-        ],
-        code: `public class Ternary {
+        },
+        {
+          heading: 'Ternary Operator',
+          content: [
+            'A shorthand for simple <code>if-else</code> statements.',
+            '<strong>Syntax:</strong> <code>condition ? valueIfTrue : valueIfFalse;</code>',
+            'Great for simple assignments, but do not overuse — complex ternaries are hard to read.'
+          ],
+          code: `public class Ternary {
     public static void main(String[] args) {
         int age = 20;
         
@@ -537,17 +1951,17 @@ public class CommentsExample {
         System.out.println("Max: " + max);  // 20
     }
 }`
-      },
-      {
-        heading: 'switch Statement',
-        content: [
-          'Use <code>switch</code> when you have many conditions based on a single value.',
-          '<code>case</code> labels define possible values.',
-          '<code>break</code> exits the switch — without it, execution "falls through" to the next case.',
-          '<code>default</code> is like <code>else</code> — it runs when no case matches.',
-          'In Java 12+, you can use arrow syntax <code>-></code> for cleaner code.'
-        ],
-        code: `public class SwitchExample {
+        },
+        {
+          heading: 'switch Statement',
+          content: [
+            'Use <code>switch</code> when you have many conditions based on a single value.',
+            '<code>case</code> labels define possible values.',
+            `<code>break</code> exits the switch — without it, execution "falls through" to the next case.`,
+            '<code>default</code> is like <code>else</code> — it runs when no case matches.',
+            'In Java 12+, you can use arrow syntax <code>-></code> for cleaner code.'
+          ],
+          code: `public class SwitchExample {
     public static void main(String[] args) {
         int day = 3;
         String dayName;
@@ -581,17 +1995,17 @@ public class CommentsExample {
         System.out.println("Day " + day + " is " + dayName);  // Wednesday
     }
 }`
-      },
-      {
-        heading: 'for Loops',
-        content: [
-          'A <code>for</code> loop repeats a block of code a specific number of times.',
-          '<strong>Syntax:</strong> <code>for (initialize; condition; update) { ... }</code>',
-          '<strong>Initialize:</strong> runs once before the loop starts (usually declare a counter).',
-          '<strong>Condition:</strong> checked before each iteration — if false, the loop stops.',
-          '<strong>Update:</strong> runs after each iteration (usually increment the counter).'
-        ],
-        code: `public class ForLoop {
+        },
+        {
+          heading: 'for Loops',
+          content: [
+            'A <code>for</code> loop repeats a block of code a specific number of times.',
+            '<strong>Syntax:</strong> <code>for (initialize; condition; update) { ... }</code>',
+            '<strong>Initialize:</strong> runs once before the loop starts (usually declare a counter).',
+            '<strong>Condition:</strong> checked before each iteration — if false, the loop stops.',
+            '<strong>Update:</strong> runs after each iteration (usually increment the counter).'
+          ],
+          code: `public class ForLoop {
     public static void main(String[] args) {
         // Count from 1 to 5
         for (int i = 1; i <= 5; i++) {
@@ -613,15 +2027,15 @@ public class CommentsExample {
         System.out.println("Sum: " + sum);  // 55
     }
 }`
-      },
-      {
-        heading: 'while and do-while Loops',
-        content: [
-          '<code>while</code> checks the condition <strong>before</strong> each iteration — the loop may never run.',
-          '<code>do-while</code> checks the condition <strong>after</strong> each iteration — the loop always runs at least once.',
-          'Be careful to update the condition variable, or you will create an infinite loop.'
-        ],
-        code: `public class WhileLoops {
+        },
+        {
+          heading: 'while and do-while Loops',
+          content: [
+            '<code>while</code> checks the condition <strong>before</strong> each iteration — the loop may never run.',
+            '<code>do-while</code> checks the condition <strong>after</strong> each iteration — the loop always runs at least once.',
+            'Be careful to update the condition variable, or you will create an infinite loop.'
+          ],
+          code: `public class WhileLoops {
     public static void main(String[] args) {
         // while loop
         int count = 1;
@@ -644,15 +2058,15 @@ public class CommentsExample {
         } while (x <= 5);
     }
 }`
-      },
-      {
-        heading: 'break and continue',
-        content: [
-          '<code>break</code> — immediately exits the entire loop.',
-          '<code>continue</code> — skips the rest of the current iteration and goes to the next.',
-          'These are useful for controlling loop flow without complex nested conditions.'
-        ],
-        code: `public class BreakContinue {
+        },
+        {
+          heading: 'break and continue',
+          content: [
+            '<code>break</code> — immediately exits the entire loop.',
+            '<code>continue</code> — skips the rest of the current iteration and goes to the next.',
+            'These are useful for controlling loop flow without complex nested conditions.'
+          ],
+          code: `public class BreakContinue {
     public static void main(String[] args) {
         // break — stop the loop
         System.out.println("--- break example ---");
@@ -673,15 +2087,15 @@ public class CommentsExample {
         }
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Print all even numbers from 0 to 20 using a for loop.',
-          'Write a while loop that counts down from 10 to 1.',
-          'Use a switch statement to print the season based on a month number (1-12).'
-        ],
-        code: `public class Practice {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Print all even numbers from 0 to 20 using a for loop.',
+            'Write a while loop that counts down from 10 to 1.',
+            'Use a switch statement to print the season based on a month number (1-12).'
+          ],
+          code: `public class Practice {
     public static void main(String[] args) {
         // Even numbers 0-20
         for (int i = 0; i <= 20; i += 2) {
@@ -715,29 +2129,179 @@ public class CommentsExample {
         System.out.println("Month " + month + " is " + season);
     }
 }`
-      }
-    ]
-  },
+        },
+        {
+          heading: 'Selection Statements: if-else',
+          content: [
+            'In an <code>if-else</code> statement, the <code>else</code> part and curly braces are <strong>optional</strong>.',
+            'Without curly braces, only <strong>1 statement</strong> is allowed under the <code>if</code>. That statement <strong>cannot be a declarative statement</strong> — otherwise it is a CE.',
+            '<code>if(true) int i = 10;</code> ❌ CE — declarative statement not allowed.',
+            '<code>if(true) { int i = 10; }</code> ✅ OK.'
+          ]
+        },
+        {
+          heading: 'Switch Statement — Valid Argument Types',
+          content: [
+            'Curly braces around the switch body are <strong>mandatory</strong>.',
+            'The following are the <strong>valid argument types</strong> for a <code>switch</code> statement: <code>byte</code>, <code>short</code>, <code>char</code>, <code>int</code>, and (since Java 7) <code>String</code>. <strong>Wrapper types</strong> like <code>Byte</code>, <code>Short</code>, <code>Character</code>, <code>Integer</code> are also valid via auto-unboxing.',
+            '<strong>Not allowed</strong> as switch arguments: <code>long</code>, <code>float</code>, <code>double</code>, <code>boolean</code>.'
+          ]
+        },
+        {
+          heading: 'Switch Statement — case and default Rules',
+          content: [
+            'Inside a switch, both <code>case</code> and <code>default</code> are <strong>optional</strong>. Empty switch is valid: <code>switch(i) {}</code> ✅',
+            `Every statement inside switch must belong to some <code>case</code> or <code>default</code>. <strong>Independent statements are not allowed</strong>: <code>switch(i) { System.out.println("Hello"); }</code> ❌ <em>CE: case or default expected</em>.`,
+            '<strong>Case label rules:</strong>',
+            '<ul><li>Case labels must be <strong>compile-time constants</strong>. Using a non-final variable as a case label is a CE.</li><li>Case labels must be in the <strong>range of the switch argument type</strong> (e.g., for <code>byte</code>, must be -128 to 127).</li><li>Case labels can be constant expressions like <code>30+40</code>.</li><li><strong>Duplicate case labels are not allowed</strong>.</li></ul>',
+            '<strong>Default case</strong> can be placed anywhere in the switch. Convention is to place it at the end. If matched case has no <code>break</code>, execution falls through to subsequent cases (and default) until a break or end of switch.'
+          ],
+          code: `int x = 2;
+switch (x) {
+    case 0: System.out.println("0");
+    case 1: System.out.println("1"); break;
+    case 2: System.out.println("2");
+    default: System.out.println("default");
+}
+// Output: 2, default   (no break before default)
 
+switch (x) {
+    default: System.out.println("default");
+    case 0: System.out.println("0"); break;
+    case 1: System.out.println("1");
+    case 2: System.out.println("2");
+}
+// x=0 -> "0"
+// x=1 -> "1", "2"
+// x=2 -> "2"
+// x=3 -> "default"`
+        },
+        {
+          heading: 'Iterative Statements: while loop',
+          content: [
+            '<strong>Unreachable statement after while</strong> — if the compiler can determine the loop never exits, any code after the loop is a CE:',
+            `<ul><li><code>while(true) { } System.out.println("Hello");</code> ❌ CE — unreachable</li><li><code>while(false) { } System.out.println("Hello");</code> ❌ CE — unreachable</li><li><code>while(10 &lt; 20) { } System.out.println("Hello");</code> ❌ CE — constant expression, unreachable</li></ul>`,
+            'If variables are involved, the compiler cannot determine reachability, so no error:',
+            `<code>int a=10,b=20; while(a&lt;b) { } System.out.println("Hello");</code> ✅ — infinite loop, but no CE.`,
+            `If the variables are <code>final</code>, the compiler treats them as constants again: <code>final int a=10,b=20; while(a&lt;b) { } System.out.println("Hello");</code> ❌ CE.`
+          ]
+        },
+        {
+          heading: 'Iterative Statements: do-while loop',
+          content: [
+            'Use <code>do-while</code> when the loop body must execute at least once.',
+            'The <strong>semicolon after <code>while</code> is mandatory</strong> in Java (unlike C++).',
+            'Curly braces are optional. Without braces, only 1 statement is allowed between <code>do</code> and <code>while</code>, and it must not be declarative.',
+            '<strong>Unreachable rules for do-while</strong> (opposite of while):',
+            `<ul><li><code>do { } while(true); System.out.println("Hello");</code> ❌ CE — unreachable</li><li><code>do { } while(false); System.out.println("Hello");</code> ✅ — runs once, "Hello" prints</li></ul>`,
+            'Same final-variable rule: <code>final int a=10,b=20; do { } while(a&lt;b);</code> ❌ CE.'
+          ],
+          code: `// Semicolon after do is allowed (empty statement)
+int a = 10, b = 20;
+do;
+while (a > b);
+
+// do-while with unreachable code
+do {
+    System.out.println("Hi");
+} while (false);
+System.out.println("Hello");
+// Output: Hi, Hello   (loop runs once)`
+        },
+        {
+          heading: 'Iterative Statements: for loop',
+          content: [
+            'Syntax: <code>for(initialization; condition; increment/decrement) { }</code>',
+            '<strong>Initialization section:</strong> Only variables of the <strong>same type</strong> can be declared. <code>for(int i=10, j=20)</code> ✅. <code>for(int i=0, long j=0)</code> ❌ CE. Any valid Java statement (including <code>sop</code>) is allowed.',
+            '<strong>Condition section:</strong> Must evaluate to a <code>boolean</code>. It is <strong>optional</strong> — default is <code>true</code>. <code>for(int i=0; ; i++) { }</code> — infinite loop, no CE.',
+            '<strong>Increment/decrement section:</strong> Any valid Java statement is allowed (including <code>sop</code>).',
+            '<strong>All 3 parts of the for loop are independent and optional.</strong> <code>for(;;);</code> is a valid infinite loop.',
+            `Unreachable-code rules apply: <code>for(int i=0; true; i++) { } System.out.println("Hi");</code> ❌ CE. <code>for(int i=0; false; i++) { }</code> ❌ CE.`
+          ],
+          code: `// All 3 parts are independent and optional
+for (System.out.println("Hi"); ; System.out.println("Hello")) {
+    System.out.println("xyz");
+    break;  // avoid true infinite
+}
+// Output: Hi, xyz, Hello
+
+// Mixed type in init -> CE
+// for (int i = 0, long j = 0; ; ) { }    // CE: different types
+
+// sop in init and increment
+int i;
+for (System.out.println("init"); i < 3; System.out.println("inc")) {
+    i++;
+}`
+        },
+        {
+          heading: 'Iterative Statements: for-each loop (Java 1.5+)',
+          content: [
+            'The <strong>for-each</strong> (enhanced for) loop is the most convenient loop for accessing elements of <strong>arrays and collections</strong>. It was introduced in Java 1.5.',
+            'Syntax: <code>for (type var : arrayOrCollection) { ... }</code>',
+            '<strong>Limitation:</strong> it works <strong>only for arrays and collections</strong>. It is not a general-purpose loop and does not give access to the index.',
+            'For multidimensional arrays, you can nest for-each loops.'
+          ],
+          code: `// 1D array
+int[] a = {10, 20, 30};
+for (int x : a) {
+    System.out.println(x);
+}
+
+// 2D array
+String[][] s = { {"A", "B"}, {"C", "D", "E"} };
+for (String[] row : s) {
+    for (String y : row) {
+        System.out.println(y);
+    }
+}`
+        },
+        {
+          heading: 'Transfer Statements: break',
+          content: [
+            'The <code>break</code> statement can be used in <strong>three places only</strong>:',
+            '<ol><li>Inside a loop to come out of the loop</li><li>Inside a <code>switch</code> to come out of the switch</li><li>Inside a <strong>labeled block</strong> (rare; to break out of a labeled block)</li></ol>',
+            'Using <code>break</code> <strong>anywhere else</strong> is a CE:',
+            '<code>int x = 0; if (x != 5) break;</code> ❌ <em>CE: break outside switch or loop</em>'
+          ]
+        },
+        {
+          heading: 'Transfer Statements: continue',
+          content: [
+            'The <code>continue</code> statement can be used <strong>only inside loops</strong> to skip the current iteration and move to the next one.',
+            `Using <code>continue</code> outside a loop is a CE: <em>"continue outside of loop"</em>.`,
+            '<code>continue</code> is <strong>not allowed inside a <code>switch</code></strong> by itself — it is only valid when the switch is inside a loop.'
+          ],
+          code: `// Print only odd numbers from 0 to 9
+for (int i = 0; i < 10; i++) {
+    if ((i % 2) == 0) {
+        continue;   // skip even numbers
+    }
+    System.out.print(i);
+}
+// Output: 13579`
+        }
+      ]
+    },
   'methods-functions': {
-    title: 'Methods and Functions',
-    sections: [
-      {
-        heading: 'What is a Method?',
-        content: [
-          'A method is a reusable block of code that runs only when it is called.',
-          'Methods help organize code, reduce repetition, and make programs easier to read.',
-          'In Java, every method belongs to a class.',
-          'You have already seen one method: <code>public static void main(String[] args)</code>.'
-        ]
-      },
-      {
-        heading: 'Method Syntax',
-        content: [
-          '<strong>Syntax:</strong> <code>accessModifier returnType methodName(parameters) { ... }</code>',
-          '<ul><li><strong>accessModifier</strong> — <code>public</code>, <code>private</code>, etc. (usually <code>public</code> or <code>private</code>)</li><li><strong>returnType</strong> — the data type the method returns; use <code>void</code> if it returns nothing</li><li><strong>methodName</strong> — follow camelCase naming (e.g., <code>calculateSum</code>)</li><li><strong>parameters</strong> — values you pass into the method (can be empty)</li></ul>'
-        ],
-        code: `public class MethodExample {
+      title: 'Methods and Functions',
+      sections: [
+        {
+          heading: 'What is a Method?',
+          content: [
+            'A method is a reusable block of code that runs only when it is called.',
+            'Methods help organize code, reduce repetition, and make programs easier to read.',
+            'In Java, every method belongs to a class.',
+            'You have already seen one method: <code>public static void main(String[] args)</code>.'
+          ]
+        },
+        {
+          heading: 'Method Syntax',
+          content: [
+            '<strong>Syntax:</strong> <code>accessModifier returnType methodName(parameters) { ... }</code>',
+            '<ul><li><strong>accessModifier</strong> — <code>public</code>, <code>private</code>, etc. (usually <code>public</code> or <code>private</code>)</li><li><strong>returnType</strong> — the data type the method returns; use <code>void</code> if it returns nothing</li><li><strong>methodName</strong> — follow camelCase naming (e.g., <code>calculateSum</code>)</li><li><strong>parameters</strong> — values you pass into the method (can be empty)</li></ul>'
+          ],
+          code: `public class MethodExample {
     // A simple method with no parameters and no return value
     public static void sayHello() {
         System.out.println("Hello!");
@@ -765,24 +2329,24 @@ public class CommentsExample {
         System.out.println("10 + 20 = " + add(10, 20));
     }
 }`
-      },
-      {
-        heading: 'static Methods',
-        content: [
-          'The <code>static</code> keyword means the method belongs to the class, not to any specific object.',
-          'You can call a static method without creating an object: <code>ClassName.methodName()</code>.',
-          'If a method is not <code>static</code>, you must create an object (instance) before calling it.',
-          'For now, we will use <code>static</code> methods so we can call them directly from <code>main</code>.'
-        ]
-      },
-      {
-        heading: 'Method Overloading',
-        content: [
-          '<strong>Method overloading</strong> means having multiple methods with the same name but different parameters.',
-          'Java distinguishes them by the number, type, or order of parameters.',
-          'This makes your code cleaner — you do not need different names for similar operations.'
-        ],
-        code: `public class Overloading {
+        },
+        {
+          heading: 'static Methods',
+          content: [
+            'The <code>static</code> keyword means the method belongs to the class, not to any specific object.',
+            'You can call a static method without creating an object: <code>ClassName.methodName()</code>.',
+            'If a method is not <code>static</code>, you must create an object (instance) before calling it.',
+            'For now, we will use <code>static</code> methods so we can call them directly from <code>main</code>.'
+          ]
+        },
+        {
+          heading: 'Method Overloading',
+          content: [
+            '<strong>Method overloading</strong> means having multiple methods with the same name but different parameters.',
+            'Java distinguishes them by the number, type, or order of parameters.',
+            'This makes your code cleaner — you do not need different names for similar operations.'
+          ],
+          code: `public class Overloading {
     // Method to add two integers
     public static int add(int a, int b) {
         return a + b;
@@ -804,13 +2368,13 @@ public class CommentsExample {
         System.out.println(add(2.5, 3.5));     // 6.0 (double version)
     }
 }`
-      },
-      {
-        heading: 'Examples',
-        content: [
-          'Here are practical methods: calculating area, checking even numbers, and finding the maximum.'
-        ],
-        code: `public class MethodExamples {
+        },
+        {
+          heading: 'Examples',
+          content: [
+            'Here are practical methods: calculating area, checking even numbers, and finding the maximum.'
+          ],
+          code: `public class MethodExamples {
     public static double calculateArea(double length, double width) {
         return length * width;
     }
@@ -833,15 +2397,15 @@ public class CommentsExample {
         System.out.println("Max of 10, 25, 15: " + findMax(10, 25, 15)); // 25
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Write a method called <code>multiply</code> that takes two integers and returns their product.',
-          'Write a method <code>getGrade</code> that takes a score (0-100) and returns a letter grade.',
-          'Call your methods from <code>main</code> and print the results.'
-        ],
-        code: `public class Practice {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Write a method called <code>multiply</code> that takes two integers and returns their product.',
+            'Write a method <code>getGrade</code> that takes a score (0-100) and returns a letter grade.',
+            'Call your methods from <code>main</code> and print the results.'
+          ],
+          code: `public class Practice {
     public static int multiply(int a, int b) {
         return a * b;
     }
@@ -863,30 +2427,29 @@ public class CommentsExample {
         System.out.println("Score 95: Grade " + getGrade(95));  // A
     }
 }`
-      }
-    ]
-  },
-
+        }
+      ]
+    },
   'arrays': {
-    title: 'Arrays',
-    sections: [
-      {
-        heading: 'What is an Array?',
-        content: [
-          'An <strong>array</strong> is a container that stores multiple values of the <strong>same type</strong>.',
-          'Think of it as a row of boxes — each box holds one value, and every box is the same size.',
-          'Arrays have a <strong>fixed size</strong> — once created, you cannot add or remove slots.',
-          'Array indexes start at <strong>0</strong> — the first element is at position 0.'
-        ]
-      },
-      {
-        heading: 'Creating Arrays',
-        content: [
-          '<strong>Method 1:</strong> Declare, then allocate memory.',
-          '<strong>Method 2:</strong> Declare and initialize with values.',
-          'All elements are automatically initialized: <code>0</code> for numbers, <code>false</code> for booleans, <code>\\u0000</code> for chars.'
-        ],
-        code: `public class ArrayBasics {
+      title: 'Arrays',
+      sections: [
+        {
+          heading: 'What is an Array?',
+          content: [
+            'An <strong>array</strong> is a container that stores multiple values of the <strong>same type</strong>.',
+            'Think of it as a row of boxes — each box holds one value, and every box is the same size.',
+            'Arrays have a <strong>fixed size</strong> — once created, you cannot add or remove slots.',
+            'Array indexes start at <strong>0</strong> — the first element is at position 0.'
+          ]
+        },
+        {
+          heading: 'Creating Arrays',
+          content: [
+            '<strong>Method 1:</strong> Declare, then allocate memory.',
+            '<strong>Method 2:</strong> Declare and initialize with values.',
+            `All elements are automatically initialized: <code>0</code> for numbers, <code>false</code> for booleans, <code>\\u0000</code> for chars.`
+          ],
+          code: `public class ArrayBasics {
     public static void main(String[] args) {
         // Method 1: declare and allocate
         int[] numbers = new int[5];  // array of 5 integers, all set to 0
@@ -906,15 +2469,15 @@ public class CommentsExample {
         System.out.println("Default double: " + prices[0]);  // 0.0
     }
 }`
-      },
-      {
-        heading: 'Looping Through Arrays',
-        content: [
-          'Use a <code>for</code> loop with an index to access each element.',
-          'Or use the enhanced <code>for</code> loop (for-each) for cleaner code when you do not need the index.',
-          'The enhanced for loop: <code>for (type element : array) { ... }</code>'
-        ],
-        code: `public class ArrayLoops {
+        },
+        {
+          heading: 'Looping Through Arrays',
+          content: [
+            'Use a <code>for</code> loop with an index to access each element.',
+            'Or use the enhanced <code>for</code> loop (for-each) for cleaner code when you do not need the index.',
+            'The enhanced for loop: <code>for (type element : array) { ... }</code>'
+          ],
+          code: `public class ArrayLoops {
     public static void main(String[] args) {
         int[] scores = {85, 92, 78, 90, 88};
         
@@ -936,15 +2499,15 @@ public class CommentsExample {
         System.out.println("\\nAverage: " + average);  // 86.6
     }
 }`
-      },
-      {
-        heading: 'Common Array Operations',
-        content: [
-          'Finding the maximum, minimum, and searching for a value.',
-          'You can also sort arrays using <code>Arrays.sort()</code> from the <code>java.util</code> package.',
-          'To use a class from another package, you must import it.'
-        ],
-        code: `import java.util.Arrays;
+        },
+        {
+          heading: 'Common Array Operations',
+          content: [
+            'Finding the maximum, minimum, and searching for a value.',
+            'You can also sort arrays using <code>Arrays.sort()</code> from the <code>java.util</code> package.',
+            'To use a class from another package, you must import it.'
+          ],
+          code: `import java.util.Arrays;
 
 public class ArrayOperations {
     public static void main(String[] args) {
@@ -970,16 +2533,16 @@ public class ArrayOperations {
         // [12, 23, 34, 45, 67, 78, 89]
     }
 }`
-      },
-      {
-        heading: 'Multidimensional Arrays',
-        content: [
-          'A <strong>2D array</strong> is like a table with rows and columns.',
-          '<code>int[][] matrix = new int[rows][columns];</code>',
-          'You can also initialize with nested curly braces.',
-          'A 2D array is actually an array of arrays — each row can have a different length (jagged array).'
-        ],
-        code: `public class TwoDArray {
+        },
+        {
+          heading: 'Multidimensional Arrays',
+          content: [
+            'A <strong>2D array</strong> is like a table with rows and columns.',
+            '<code>int[][] matrix = new int[rows][columns];</code>',
+            'You can also initialize with nested curly braces.',
+            'A 2D array is actually an array of arrays — each row can have a different length (jagged array).'
+          ],
+          code: `public class TwoDArray {
     public static void main(String[] args) {
         // Create a 3x3 matrix
         int[][] matrix = {
@@ -1015,15 +2578,15 @@ public class ArrayOperations {
         }
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create an array of 5 doubles and calculate the average.',
-          'Find the largest number in an array.',
-          'Create a 2x2 matrix and calculate the sum of all elements.'
-        ],
-        code: `public class Practice {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create an array of 5 doubles and calculate the average.',
+            'Find the largest number in an array.',
+            'Create a 2x2 matrix and calculate the sum of all elements.'
+          ],
+          code: `public class Practice {
     public static void main(String[] args) {
         // Average of doubles
         double[] temps = {23.5, 25.0, 22.8, 24.2, 26.1};
@@ -1052,22 +2615,196 @@ public class ArrayOperations {
         System.out.println("Sum of grid: " + total);  // 10
     }
 }`
-      }
-    ]
-  },
+        },
+        {
+          heading: 'SCJP Deep Dive: Array Declaration',
+          content: [
+            'There are multiple valid ways to declare an array:',
+            '<ul><li><code>int[] a;</code> — <strong>recommended</strong> (type clearly separated from name)</li><li><code>int a[];</code> — legal but not recommended</li></ul>',
+            'At the time of <strong>declaration only</strong>, you are <strong>not allowed to specify the size</strong>:',
+            '<code>int[] a;</code> ✅ valid',
+            '<code>int[6] a;</code> ❌ <em>CE: illegal start of type</em> — size is only allowed at construction with <code>new</code>',
+            'Arrays are internally implemented as <strong>objects</strong> in Java, so the <code>new</code> keyword is used to construct them.'
+          ]
+        },
+        {
+          heading: 'SCJP Deep Dive: Array Construction Rules',
+          content: [
+            'When constructing an array with <code>new</code>, you must specify the size. Violation gives a compile-time error.',
+            '<ul><li><code>int[] a = new int[10];</code> ✅ valid</li><li><code>int[] a = new int[];</code> ❌ CE (size required)</li><li><code>int[] a = new int[0];</code> ✅ valid (zero-length array is legal — no CE or RE)</li><li><code>int[] a = new int[-10];</code> ❌ <em>RE: NegativeArraySizeException</em> at runtime</li></ul>',
+            '<strong>Allowed data types for the size:</strong> <code>byte</code>, <code>short</code>, <code>char</code>, <code>int</code> only.',
+            '<ul><li><code>int[] a = new int[10l];</code> ❌ <em>CE: possible loss of precision found: long required: int</em> (long not allowed)</li><li><code>int[] a = new int[10.5];</code> ❌ CE (double not allowed)</li><li><code>int[] a = new int[true];</code> ❌ <em>CE: Incompatible types found: boolean required: int</em></li></ul>',
+            '<strong>Maximum allowed array size:</strong> 2,147,483,648 (just over 2^31).',
+            'Printing an array reference gives output like <code>[I@10b62c9</code> — <code>[I</code> means one-dimensional int array, followed by the hash code.'
+          ],
+          code: `public class ArrayConstruction {
+    public static void main(String[] args) {
+        // Valid constructions
+        int[] a = new int[10];
+        int[] zero = new int[0];      // legal zero-length array
+        // int[] neg = new int[-10];  // RE: NegativeArraySizeException
 
+        // Default values after construction
+        System.out.println(a[0]);     // 0 (default for int)
+        System.out.println(a);        // [I@10b62c9 (class name + hashcode)
+
+        // Multi-dim: 2D implemented as array of arrays
+        int[][] matrix = new int[3][2];  // 3 rows, 2 cols
+        System.out.println(matrix[0][0]); // 0
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Default Values & ArrayIndexOutOfBounds',
+          content: [
+            'Once you create an array, all elements are initialized to <strong>default values</strong>:',
+            `<ul><li>Numeric types: <code>0</code></li><li><code>boolean</code>: <code>false</code></li><li><code>char</code>: <code>\\u0000</code> (blank)</li><li>Object references: <code>null</code></li></ul>`,
+            'Accessing an index outside the valid range (0 to length-1) throws <code>ArrayIndexOutOfBoundsException</code> at <strong>runtime</strong> (no compile-time error).',
+            '<ul><li><code>a[10] = 100;</code> ❌ RE if 10 is out of range</li><li><code>a[-10] = 100;</code> ❌ RE if -10 is out of range</li><li><code>a[10.5] = 100;</code> ❌ <em>CE: PossibleLossOfPrecision found: double required: int</em> (only int-compatible index allowed)</li></ul>',
+            'You can use <code>byte</code>, <code>short</code>, or <code>char</code> as the index (they are promoted to <code>int</code>).',
+            'You <strong>cannot</strong> use <code>float</code>, <code>double</code>, <code>long</code>, or <code>boolean</code> as an index — these give a compile-time error.'
+          ]
+        },
+        {
+          heading: 'SCJP Deep Dive: Declaration + Construction + Initialization in One Line',
+          content: [
+            'You can declare, construct, and initialize an array in a single line using the <strong>shortcut syntax</strong>:',
+            '<code>int[] a = {10, 20, 30};</code>',
+            `<code>String[] s = {"Chiru", "Allu", "Ram", "Akil"};</code>`,
+            '<strong>Rule:</strong> the shortcut syntax only works when <strong>all three actions are done in the same statement</strong>. You cannot split them across lines:',
+            '<code>int[] a; a = {10, 20, 30, 40};</code> ❌ <em>CE: illegal start of expression</em>',
+            'Multidimensional shortcut example: <code>int[][] a = {{10, 20}, {30, 40, 50}};</code>'
+          ],
+          code: `public class ArrayInit {
+    public static void main(String[] args) {
+        // Valid: all three in one line
+        int[] a = {10, 20, 30};
+        String[] names = {"Alice", "Bob", "Charlie"};
+
+        // Multidimensional shortcut
+        int[][] matrix = {{1, 2}, {3, 4, 5}};
+
+        // Invalid: shortcut on second line
+        int[] b;
+        // b = {10, 20, 30};  // CE: illegal start of expression
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: length vs length()',
+          content: [
+            'This is one of the most commonly confused concepts.',
+            '<strong>length</strong> (no parentheses):',
+            '<ul><li>It is a <strong>final variable</strong> applicable for <strong>array objects</strong></li><li>It represents the <strong>size of the array</strong></li><li><code>int[] a = new int[5]; System.out.println(a.length);</code> prints 5</li><li><code>System.out.println(a.length());</code> ❌ CE (cannot call method on length)</li></ul>',
+            '<strong>length()</strong> (with parentheses):',
+            `<ul><li>It is a <strong>final method</strong> applicable only for <strong>String objects</strong></li><li>It represents the <strong>number of characters</strong> in the String</li><li><code>String s = "raju"; System.out.println(s.length());</code> prints 4</li><li><code>System.out.println(s.length);</code> ❌ CE (length is a method, not a field)</li></ul>`,
+            '<strong>For multidimensional arrays:</strong> <code>length</code> always represents the <strong>base size</strong> (number of rows in a 2D array), not the total number of elements. There is <strong>no variable</strong> that gives the total count of elements in a multidimensional array.'
+          ],
+          code: `public class LengthDemo {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        String str = "hello";
+        int[][] matrix = {{1, 2}, {3, 4}, {5, 6}};
+
+        // Array length (final variable)
+        System.out.println("arr.length: " + arr.length);      // 5
+
+        // String length() (final method)
+        System.out.println("str.length(): " + str.length());  // 5
+
+        // 2D array length = base size (rows), not total elements
+        System.out.println("matrix.length: " + matrix.length);        // 3 (rows)
+        System.out.println("matrix[0].length: " + matrix[0].length);  // 2 (cols in row 0)
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Anonymous Arrays',
+          content: [
+            'Sometimes you need an array without giving it a name — for one-time use, such as passing to a method.',
+            'These are called <strong>anonymous arrays</strong>.',
+            '<code>new int[]{10, 20, 30}</code> — creates an array literal with no name assigned.',
+            'You cannot specify a size with anonymous arrays — the size is inferred from the values.'
+          ],
+          code: `public class AnonymousArrays {
+    public static void main(String[] args) {
+        // Pass anonymous array to method
+        System.out.println("Sum: " + sum(new int[]{10, 20, 30, 40}));
+    }
+
+    public static int sum(int[] a) {
+        int total = 0;
+        for (int i = 0; i < a.length; i++) {
+            total += a[i];
+        }
+        return total;
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Array Element Assignments',
+          content: [
+            'In <strong>primitive type arrays</strong>, any value that can be implicitly promoted to the declared type is allowed:',
+            "<ul><li>For <code>int[]</code>: <code>byte</code>, <code>short</code>, <code>char</code>, <code>int</code> are all valid</li><li><code>a[0] = 10;</code> ✅ (int)</li><li><code>a[1] = 'a';</code> ✅ (char → int)</li><li><code>a[2] = b;</code> ✅ (byte → int)</li><li><code>a[3] = 10.5;</code> ❌ <em>CE: possible loss of precision found: double required: int</em></li></ul>",
+            'In <strong>object type arrays</strong>, you can assign either the declared type or any of its <strong>child class</strong> objects:',
+            '<code>Number[] n = new Number[6];</code>',
+            '<code>n[0] = new Integer(10);</code> ✅ (Integer is a child of Number)',
+            '<code>n[1] = new Long(10L);</code> ✅ (Long is a child of Number)',
+            `<code>n[2] = new String("raju");</code> ❌ <em>CE: Incompatible types found: String required: Number</em>`,
+            'For <strong>interface type arrays</strong>, you can assign any implementation class:',
+            '<code>Runnable[] r = new Runnable[10];</code>',
+            '<code>r[0] = new Thread();</code> ✅ (Thread implements Runnable)'
+          ]
+        },
+        {
+          heading: 'SCJP Deep Dive: Array Variable Assignments',
+          content: [
+            'When you assign one array to another, the <strong>compiler checks only the type, not the size</strong>.',
+            '<code>int[] a = {10, 20, 30, 40};</code>',
+            '<code>int[] b = {60, 70};</code>',
+            '<code>a = b;</code> ✅ valid (sizes can differ)',
+            '<code>b = a;</code> ✅ valid',
+            'A <strong>char</strong> element can be promoted to <strong>int</strong>, but a <strong>char[] cannot be promoted to int[]</strong> (array types are not compatible):',
+            '<code>int[] c = new int[6]; int[] d = c;</code> ✅ valid',
+            "<code>char[] ch = {'a', 'b', 'c'}; int[] c = ch;</code> ❌ <em>CE: Incompatible types found: char[] required: int[]</em>",
+            'Quick check — which of these are valid?',
+            '<ul><li><code>int → double</code> ✅ element-wise promotion</li><li><code>float → long</code> ✅ element-wise promotion</li><li><code>int[] → float[]</code> ❌ array types are not compatible</li><li><code>char[] → int[]</code> ❌ array types are not compatible</li><li><code>boolean → int</code> ❌ no promotion (boolean is not numeric)</li><li><code>int → Boolean</code> ❌ no promotion (Boolean is wrapper for boolean, not int)</li></ul>',
+            'For multidimensional arrays, row assignment is checked by type, not size:',
+            '<code>int[][] a = new int[3][]; a[0] = new int[4];</code> ✅ valid',
+            '<code>a[1] = new int[4][5];</code> ❌ <em>CE: Incompatible types found: int[][] required: int[]</em>',
+            '<code>a[2] = 10;</code> ❌ <em>CE: Incompatible types found: int required: int[]</em>'
+          ],
+          code: `public class ArrayAssignment {
+    public static void main(String[] args) {
+        int[] a = {10, 20, 30, 40};
+        int[] b = {60, 70};
+
+        // Sizes can differ - only types checked
+        a = b;  // valid
+        b = a;  // valid
+
+        // For multi-dim, row assignment is checked by type
+        int[][] matrix = new int[3][];
+        matrix[0] = new int[4];             // ✅ int[] assigned to int[] slot
+        // matrix[1] = new int[4][5];       // ❌ CE: int[][] required: int[]
+        // matrix[2] = 10;                  // ❌ CE: int required: int[]
+    }
+}`
+        }
+      ]
+    },
   'strings': {
-    title: 'Strings',
-    sections: [
-      {
-        heading: 'What is a String?',
-        content: [
-          'A <strong>String</strong> is a sequence of characters enclosed in double quotes.',
-          'In Java, String is a <strong>class</strong>, not a primitive type.',
-          'Strings are <strong>immutable</strong> — once created, they cannot be changed. Any "modification" creates a new String.',
-          'Java stores string literals in a special memory area called the <strong>String Pool</strong> for efficiency.'
-        ],
-        code: `public class StringIntro {
+      title: 'Strings',
+      sections: [
+        {
+          heading: 'What is a String?',
+          content: [
+            'A <strong>String</strong> is a sequence of characters enclosed in double quotes.',
+            'In Java, String is a <strong>class</strong>, not a primitive type.',
+            `Strings are <strong>immutable</strong> — once created, they cannot be changed. Any "modification" creates a new String.`,
+            'Java stores string literals in a special memory area called the <strong>String Pool</strong> for efficiency.'
+          ],
+          code: `public class StringIntro {
     public static void main(String[] args) {
         // Creating strings
         String greeting = "Hello, World!";
@@ -1080,15 +2817,15 @@ public class ArrayOperations {
         System.out.println("Length: " + greeting.length());  // 13
     }
 }`
-      },
-      {
-        heading: 'String Concatenation',
-        content: [
-          'Combine strings using the <code>+</code> operator.',
-          'When combining a string with a number, Java automatically converts the number to a string.',
-          'For building strings in a loop, use <code>StringBuilder</code> instead — it is much faster.'
-        ],
-        code: `public class StringConcat {
+        },
+        {
+          heading: 'String Concatenation',
+          content: [
+            'Combine strings using the <code>+</code> operator.',
+            'When combining a string with a number, Java automatically converts the number to a string.',
+            'For building strings in a loop, use <code>StringBuilder</code> instead — it is much faster.'
+          ],
+          code: `public class StringConcat {
     public static void main(String[] args) {
         String first = "Hello";
         String second = "World";
@@ -1110,14 +2847,14 @@ public class ArrayOperations {
         System.out.println(sb.toString());  // Hello Java
     }
 }`
-      },
-      {
-        heading: 'Common String Methods',
-        content: [
-          'Java provides many useful methods for working with strings:',
-          '<ul><li><code>length()</code> — number of characters</li><li><code>charAt(index)</code> — character at a position</li><li><code>substring(start, end)</code> — extract part of a string</li><li><code>toUpperCase()</code> — convert to uppercase</li><li><code>toLowerCase()</code> — convert to lowercase</li><li><code>trim()</code> — remove leading and trailing spaces</li><li><code>replace(old, new)</code> — replace characters</li><li><code>contains(text)</code> — check if string contains text</li><li><code>startsWith(text)</code> — check beginning</li><li><code>endsWith(text)</code> — check ending</li><li><code>indexOf(text)</code> — find position of text</li><li><code>split(delimiter)</code> — break into array</li></ul>'
-        ],
-        code: `public class StringMethods {
+        },
+        {
+          heading: 'Common String Methods',
+          content: [
+            'Java provides many useful methods for working with strings:',
+            '<ul><li><code>length()</code> — number of characters</li><li><code>charAt(index)</code> — character at a position</li><li><code>substring(start, end)</code> — extract part of a string</li><li><code>toUpperCase()</code> — convert to uppercase</li><li><code>toLowerCase()</code> — convert to lowercase</li><li><code>trim()</code> — remove leading and trailing spaces</li><li><code>replace(old, new)</code> — replace characters</li><li><code>contains(text)</code> — check if string contains text</li><li><code>startsWith(text)</code> — check beginning</li><li><code>endsWith(text)</code> — check ending</li><li><code>indexOf(text)</code> — find position of text</li><li><code>split(delimiter)</code> — break into array</li></ul>'
+          ],
+          code: `public class StringMethods {
     public static void main(String[] args) {
         String text = "  Hello, Java!  ";
         
@@ -1143,16 +2880,16 @@ public class ArrayOperations {
         }
     }
 }`
-      },
-      {
-        heading: 'Comparing Strings',
-        content: [
-          'Use <code>equals()</code> to compare the content of two strings.',
-          '<strong>Never use <code>==</code></strong> to compare strings — it compares memory addresses, not content.',
-          '<code>equalsIgnoreCase()</code> compares without considering uppercase/lowercase.',
-          '<code>compareTo()</code> returns a number: negative if first string comes before, positive if after, 0 if equal.'
-        ],
-        code: `public class StringCompare {
+        },
+        {
+          heading: 'Comparing Strings',
+          content: [
+            'Use <code>equals()</code> to compare the content of two strings.',
+            '<strong>Never use <code>==</code></strong> to compare strings — it compares memory addresses, not content.',
+            '<code>equalsIgnoreCase()</code> compares without considering uppercase/lowercase.',
+            '<code>compareTo()</code> returns a number: negative if first string comes before, positive if after, 0 if equal.'
+          ],
+          code: `public class StringCompare {
     public static void main(String[] args) {
         String a = "Hello";
         String b = "Hello";
@@ -1176,16 +2913,16 @@ public class ArrayOperations {
         System.out.println("banana vs apple: " + "banana".compareTo("apple"));  // positive
     }
 }`
-      },
-      {
-        heading: 'String Formatting',
-        content: [
-          '<code>String.format()</code> creates formatted strings, similar to printf in C.',
-          '<strong>Format specifiers:</strong>',
-          '<ul><li><code>%s</code> — string</li><li><code>%d</code> — integer</li><li><code>%f</code> — floating point (decimal)</li><li><code>%.2f</code> — float with 2 decimal places</li><li><code>%n</code> — new line</li></ul>',
-          'Java 15+ also supports text blocks with <code>"""</code> for multi-line strings.'
-        ],
-        code: `public class StringFormat {
+        },
+        {
+          heading: 'String Formatting',
+          content: [
+            '<code>String.format()</code> creates formatted strings, similar to printf in C.',
+            '<strong>Format specifiers:</strong>',
+            '<ul><li><code>%s</code> — string</li><li><code>%d</code> — integer</li><li><code>%f</code> — floating point (decimal)</li><li><code>%.2f</code> — float with 2 decimal places</li><li><code>%n</code> — new line</li></ul>',
+            `Java 15+ also supports text blocks with <code>"""</code> for multi-line strings.`
+          ],
+          code: `public class StringFormat {
     public static void main(String[] args) {
         String name = "Alice";
         int age = 30;
@@ -1212,16 +2949,16 @@ public class ArrayOperations {
         System.out.println(html);
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Ask the user for their name (simulate with a variable), then print it in uppercase and lowercase.',
-          'Check if a string starts with the letter "A".',
-          'Count how many vowels are in a string.',
-          'Reverse a string.'
-        ],
-        code: `public class Practice {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Ask the user for their name (simulate with a variable), then print it in uppercase and lowercase.',
+            `Check if a string starts with the letter "A".`,
+            'Count how many vowels are in a string.',
+            'Reverse a string.'
+          ],
+          code: `public class Practice {
     public static void main(String[] args) {
         String name = "Alexander";
         
@@ -1253,24 +2990,195 @@ public class ArrayOperations {
         System.out.println("Reversed: " + reversed);  // gnimmargorP
     }
 }`
-      }
-    ]
-  }
+        },
+        {
+          heading: 'String Immutability',
+          content: [
+            'Once a <code>String</code> object is created, you <strong>cannot perform any changes</strong> on it. If you try, a <strong>new</strong> <code>String</code> object is created. This is the <strong>immutability of String</strong>.',
+            `<code>s1.concat("Lesto")</code> does <strong>not</strong> modify <code>s1</code>; it returns a new String. The reference <code>s1</code> is still pointing to the original "raju".`
+          ],
+          code: `String s1 = new String("raju");
+s1.concat("Lesto");
+System.out.println(s1);   // raju (unchanged - immutability)
+
+// To capture the change, reassign:
+s1 = s1.concat("Lesto");
+System.out.println(s1);   // rajuLesto`
+        },
+        {
+          heading: 'String Constant Pool (SCP)',
+          content: [
+            'The <strong>String Constant Pool (SCP)</strong> is a special memory area in the heap that stores string literals.',
+            `<code>String s = new String("raju")</code> — 2 objects: one on the <strong>heap</strong>, one in the <strong>SCP</strong>. <code>s</code> refers to the heap object.`,
+            `<code>String s = "raju"</code> — 1 object in the SCP. If the object is already available in the SCP, the new reference points to the existing object.`,
+            '<strong>Key rules:</strong>',
+            '<ul><li>No duplicate objects exist in the SCP — the same content refers to the same object.</li><li>Duplicate objects <strong>can</strong> exist in the heap.</li><li>SCP objects are not eligible for garbage collection (even without references); they are destroyed only at JVM shutdown.</li></ul>',
+            '<strong>Importance of SCP:</strong> if a string is repeatedly used, only one object is created in SCP and shared by many references — this improves performance and memory utilization.',
+            '<strong>Why Strings are immutable:</strong> SCP is the only reason. If SCP objects were mutable, a change via one reference would affect all other references pointing to the same object.'
+          ],
+          code: `String s1 = new String("You cannot change me");
+String s2 = new String("You cannot change me");
+System.out.println(s1 == s2);    // false (different heap objects)
+
+String s3 = "You cannot change me";
+System.out.println(s1 == s3);    // false (s1=heap, s3=SCP)
+
+String s4 = "You cannot change me";
+System.out.println(s3 == s4);    // true (both point to same SCP object)
+
+String s5 = "You cannot" + " change me";   // compile-time constant
+System.out.println(s4 == s5);    // true
+
+String s6 = "You cannot";
+String s7 = s6 + " change me";   // runtime concatenation
+System.out.println(s4 == s7);    // false (new heap object)
+
+final String s8 = "You cannot";           // final, treated as constant at compile-time
+String s9 = s8 + " change me";
+System.out.println(s4 == s9);    // true`
+        },
+        {
+          heading: 'String interning — intern() method',
+          content: [
+            'If you have a heap object reference, you can find its equivalent SCP object using <code>intern()</code>.',
+            'If the equivalent SCP object is not already available, <code>intern()</code> creates a new object in the SCP.'
+          ],
+          code: `String s1 = new String("raju");
+String s2 = s1.intern();
+String s3 = "raju";
+System.out.println(s2 == s3);   // true (both refer to the SCP object)
+
+// Case 2: intern creates a new SCP object if missing
+String s1b = new String("raju");
+String s2b = s1b.concat("lesto");
+String s3b = s2b.intern();
+String s4 = "rajulesto";
+System.out.println(s3b == s4);  // true (intern() created/found the SCP object)`
+        },
+        {
+          heading: 'String Constructors',
+          content: [
+            'The <code>String</code> class provides these constructors:'
+          ],
+          code: `// 1) Empty String
+String s1 = new String();
+System.out.println("[" + s1 + "]");  // []
+
+// 2) From String literal
+String s2 = new String("raju");
+System.out.println(s2);  // raju
+
+// 3) From StringBuffer
+StringBuffer sb = new StringBuffer("Lesto");
+String s3 = new String(sb);
+System.out.println(s3);  // Lesto
+
+// 4) From char array
+char[] ch = {'a', 'b', 'c', 'd'};
+String s4 = new String(ch);
+System.out.println(s4);  // abcd
+
+// 5) From byte array
+byte[] b = {100, 101, 102, 103, 104};
+String s5 = new String(b);
+System.out.println(s5);  // defgh`
+        },
+        {
+          heading: 'Important Methods of the String Class',
+          content: [
+            'The most commonly used <code>String</code> methods:'
+          ],
+          code: `// 1) charAt(int index)
+String s = "raju";
+System.out.println(s.charAt(2));        // j
+System.out.println(s.charAt(10));       // RE: StringIndexOutOfBoundsException
+
+// 2) concat(String) and overloaded + / +=
+s = s.concat("Lesto");
+s = s + "Lesto";
+s += "Lesto";
+
+// 3a) equals(Object)
+System.out.println("lesto".equals("LESTO"));   // false (case-sensitive)
+System.out.println("lesto".equals("lesto"));   // true
+
+// 3b) equalsIgnoreCase(String) - useful for usernames, not passwords
+System.out.println("lesto".equalsIgnoreCase("LESTO"));  // true
+
+// 4) length() (note: method, not property)
+String s2 = "lesto";
+System.out.println(s2.length);   // CE: length is a method, not field
+System.out.println(s2.length()); // 5
+// For arrays, use 'length' (variable). For Strings, use 'length()' (method).
+
+// 5) replace(char old, char new)
+System.out.println("ababa".replace('a', 'b'));  // bbbbb
+
+// 6a) substring(int begin)
+System.out.println("abcdefgh".substring(3));    // defgh
+// 6b) substring(int begin, int end) - returns chars from begin to end-1
+System.out.println("abcdefgh".substring(3, 6));  // def
+
+// 7) toLowerCase() and toUpperCase()
+String s3 = "RoyalChallange";
+System.out.println(s3.toLowerCase());  // royalchallange
+System.out.println(s3.toUpperCase());  // ROYALCHALLANGE
+
+// 8) trim() - removes blank spaces ONLY at the beginning and end (not middle)
+System.out.println(" raju 12 ".trim());  // raju 12
+
+// 9) indexOf(char) and lastIndexOf(char)
+String s4 = "golden drop";
+System.out.println(s4.indexOf('o'));      // 1 (first occurrence)
+System.out.println(s4.lastIndexOf('o'));  // 8 (last occurrence)`
+        },
+        {
+          heading: 'String vs StringBuffer — equals() Behavior',
+          content: [
+            '<code>String.equals()</code> is overridden for <strong>content comparison</strong> — two Strings with the same content are equal.',
+            '<code>StringBuffer.equals()</code> is <strong>NOT overridden</strong> — it still uses <code>Object.equals()</code> which compares references. Two StringBuffer objects with the same content are <strong>not equal</strong> unless they are the same object.'
+          ],
+          code: `// String: equals() checks content
+String s1 = new String("lesto");
+String s2 = new String("lesto");
+System.out.println(s1 == s2);         // false (different objects)
+System.out.println(s1.equals(s2));    // true (overridden for content)
+
+// StringBuffer: equals() checks reference
+StringBuffer sb1 = new StringBuffer("lesto");
+StringBuffer sb2 = new StringBuffer("lesto");
+System.out.println(sb1 == sb2);       // false
+System.out.println(sb1.equals(sb2));  // false (uses Object.equals())`
+        },
+        {
+          heading: 'toUpperCase()/toLowerCase() and SCP',
+          content: [
+            'Because <code>toUpperCase()</code> and <code>toLowerCase()</code> are <strong>runtime operations</strong>, any new String object created by them is placed on the <strong>heap</strong> (never the SCP).',
+            'If the content is unchanged by the operation, no new object is created (existing reference is returned).'
+          ],
+          code: `String s1 = "golden drop";
+String s2 = s1.toUpperCase();   // runtime op -> new heap object
+String s3 = s1.toLowerCase();   // no change -> returns same object s1
+System.out.println(s1 == s2);   // false (different heap object)
+System.out.println(s1 == s3);   // true (no new object, returns s1)`
+        }
+      ]
+    },
 };
 
 const javaModule2Content = {
   'classes-objects': {
-    title: 'Classes and Objects',
-    sections: [
-      {
-        heading: 'What is a Class?',
-        content: [
-          'A <strong>class</strong> is a blueprint or template for creating <strong>objects</strong>.',
-          'Think of a class like a blueprint for a house — it defines what the house will have (rooms, doors) but it is not a house itself.',
-          'An <strong>object</strong> is an actual instance of a class — a real "thing" built from that blueprint.',
-          'Classes bundle <strong>data</strong> (attributes/fields) and <strong>behavior</strong> (methods) together into a single unit.'
-        ],
-        code: `// Define a class
+      title: 'Classes and Objects',
+      sections: [
+        {
+          heading: 'What is a Class?',
+          content: [
+            'A <strong>class</strong> is a blueprint or template for creating <strong>objects</strong>.',
+            'Think of a class like a blueprint for a house — it defines what the house will have (rooms, doors) but it is not a house itself.',
+            `An <strong>object</strong> is an actual instance of a class — a real "thing" built from that blueprint.`,
+            'Classes bundle <strong>data</strong> (attributes/fields) and <strong>behavior</strong> (methods) together into a single unit.'
+          ],
+          code: `// Define a class
 public class Dog {
     // Attributes (fields)
     String name;
@@ -1295,9 +3203,9 @@ public class Main {
         // Output: Buddy says: Woof! Woof!
     }
 }`,
-        diagram: {
-          caption: 'A Java class defines attributes and methods; objects are instances',
-          chart: `classDiagram
+          diagram: {
+            caption: 'A Java class defines attributes and methods; objects are instances',
+            chart: `classDiagram
     class Dog {
       +String name
       +int age
@@ -1305,17 +3213,17 @@ public class Main {
       +bark() void
     }
     Dog --> myDog : instance`
-        }
-      },
-      {
-        heading: 'Class vs Object',
-        content: [
-          '<strong>Class:</strong> The abstract idea — a template.',
-          '<strong>Object:</strong> The concrete thing — built from the class.',
-          'One class can create <strong>many objects</strong> (instances).',
-          'Each object has its own copy of the attributes but shares the same methods.'
-        ],
-        code: `public class Car {
+          }
+        },
+        {
+          heading: 'Class vs Object',
+          content: [
+            '<strong>Class:</strong> The abstract idea — a template.',
+            '<strong>Object:</strong> The concrete thing — built from the class.',
+            'One class can create <strong>many objects</strong> (instances).',
+            'Each object has its own copy of the attributes but shares the same methods.'
+          ],
+          code: `public class Car {
     String color;
     String brand;
     int speed;
@@ -1341,16 +3249,16 @@ public class Main {
         car2.drive();  // Output: Honda is driving at 80 km/h
     }
 }`
-      },
-      {
-        heading: 'Anatomy of a Java Class',
-        content: [
-          '<strong>Fields (Attributes):</strong> Variables that store data about the object.',
-          '<strong>Methods:</strong> Functions that define what the object can do.',
-          '<strong>Constructor:</strong> A special method that runs when an object is created (we will cover this next).',
-          'Java classes are usually defined in their own file with the same name as the class.'
-        ],
-        code: `public class Student {
+        },
+        {
+          heading: 'Anatomy of a Java Class',
+          content: [
+            '<strong>Fields (Attributes):</strong> Variables that store data about the object.',
+            '<strong>Methods:</strong> Functions that define what the object can do.',
+            '<strong>Constructor:</strong> A special method that runs when an object is created (we will cover this next).',
+            'Java classes are usually defined in their own file with the same name as the class.'
+          ],
+          code: `public class Student {
     // Fields
     String name;
     int rollNumber;
@@ -1378,15 +3286,15 @@ public class Main {
         // Marks: 85.5
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a <code>Book</code> class with <code>title</code>, <code>author</code>, and <code>pages</code> fields.',
-          'Add a method <code>displayInfo()</code> that prints all the book details.',
-          'Create two book objects in the main method and call their <code>displayInfo()</code> methods.'
-        ],
-        code: `public class Book {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a <code>Book</code> class with <code>title</code>, <code>author</code>, and <code>pages</code> fields.',
+            'Add a method <code>displayInfo()</code> that prints all the book details.',
+            'Create two book objects in the main method and call their <code>displayInfo()</code> methods.'
+          ],
+          code: `public class Book {
     String title;
     String author;
     int pages;
@@ -1414,21 +3322,21 @@ public class Main {
         book2.displayInfo();
     }
 }`
-      }
-    ]
-  },
+        }
+      ]
+    },
   'constructors': {
-    title: 'Constructors',
-    sections: [
-      {
-        heading: 'What is a Constructor?',
-        content: [
-          'A <strong>constructor</strong> is a special method that runs automatically when an object is created.',
-          'It has <strong>the same name as the class</strong> and <strong>no return type</strong> (not even void).',
-          'Constructors are used to <strong>initialize</strong> (set up) an object when it is created.',
-          'Think of it like filling out a form when you open a new bank account — the constructor sets up the initial state.'
-        ],
-        code: `public class Person {
+      title: 'Constructors',
+      sections: [
+        {
+          heading: 'What is a Constructor?',
+          content: [
+            'A <strong>constructor</strong> is a special method that runs automatically when an object is created.',
+            'It has <strong>the same name as the class</strong> and <strong>no return type</strong> (not even void).',
+            'Constructors are used to <strong>initialize</strong> (set up) an object when it is created.',
+            'Think of it like filling out a form when you open a new bank account — the constructor sets up the initial state.'
+          ],
+          code: `public class Person {
     String name;
     int age;
 
@@ -1452,15 +3360,15 @@ public class Main {
         p2.introduce();  // Output: Hi, I'm Bob and I'm 30 years old.
     }
 }`
-      },
-      {
-        heading: 'Default Constructor',
-        content: [
-          'If you do not write any constructor, Java provides a <strong>default constructor</strong> automatically.',
-          'The default constructor has no parameters and gives default values to fields (0, null, false).',
-          'Once you create your own constructor, the default constructor <strong>disappears</strong> — you must write it yourself if you still want it.'
-        ],
-        code: `public class Student {
+        },
+        {
+          heading: 'Default Constructor',
+          content: [
+            'If you do not write any constructor, Java provides a <strong>default constructor</strong> automatically.',
+            'The default constructor has no parameters and gives default values to fields (0, null, false).',
+            'Once you create your own constructor, the default constructor <strong>disappears</strong> — you must write it yourself if you still want it.'
+          ],
+          code: `public class Student {
     String name;
     int rollNumber;
 
@@ -1490,15 +3398,15 @@ public class Main {
         s2.display();  // Output: Alice - 101
     }
 }`
-      },
-      {
-        heading: 'Constructor Overloading',
-        content: [
-          'You can have <strong>multiple constructors</strong> in the same class with different parameters.',
-          'This is called <strong>constructor overloading</strong>.',
-          'Java figures out which constructor to use based on the arguments you pass.'
-        ],
-        code: `public class Rectangle {
+        },
+        {
+          heading: 'Constructor Overloading',
+          content: [
+            'You can have <strong>multiple constructors</strong> in the same class with different parameters.',
+            'This is called <strong>constructor overloading</strong>.',
+            'Java figures out which constructor to use based on the arguments you pass.'
+          ],
+          code: `public class Rectangle {
     int width;
     int height;
 
@@ -1536,15 +3444,15 @@ public class Main {
         r3.display();  // Output: Width: 4, Height: 6
     }
 }`
-      },
-      {
-        heading: 'The this Keyword',
-        content: [
-          '<code>this</code> refers to the <strong>current object</strong>.',
-          'It is used when a parameter has the <strong>same name</strong> as a field.',
-          'It makes your code clearer and avoids naming confusion.'
-        ],
-        code: `public class Employee {
+        },
+        {
+          heading: 'The this Keyword',
+          content: [
+            '<code>this</code> refers to the <strong>current object</strong>.',
+            'It is used when a parameter has the <strong>same name</strong> as a field.',
+            'It makes your code clearer and avoids naming confusion.'
+          ],
+          code: `public class Employee {
     String name;
     double salary;
 
@@ -1565,17 +3473,17 @@ public class Main {
         emp.display();  // Output: Alice earns 50000.0
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a <code>Circle</code> class with a <code>radius</code> field.',
-          'Add a default constructor that sets radius to 1.',
-          'Add a parameterized constructor that accepts a radius.',
-          'Add a method <code>getArea()</code> that returns the area (π × r²). Use <code>Math.PI</code>.',
-          'Create circles using both constructors and print their areas.'
-        ],
-        code: `public class Circle {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a <code>Circle</code> class with a <code>radius</code> field.',
+            'Add a default constructor that sets radius to 1.',
+            'Add a parameterized constructor that accepts a radius.',
+            'Add a method <code>getArea()</code> that returns the area (π × r²). Use <code>Math.PI</code>.',
+            'Create circles using both constructors and print their areas.'
+          ],
+          code: `public class Circle {
     double radius;
 
     Circle() {
@@ -1603,21 +3511,21 @@ public class Main {
         // Output: Circle 2 Area: 78.5398...
     }
 }`
-      }
-    ]
-  },
+        }
+      ]
+    },
   'inheritance': {
-    title: 'Inheritance',
-    sections: [
-      {
-        heading: 'What is Inheritance?',
-        content: [
-          '<strong>Inheritance</strong> lets a new class (child/subclass) get all the fields and methods from an existing class (parent/superclass).',
-          'Think of it like a family — a child inherits traits from their parents but can also have their own unique traits.',
-          'Inheritance promotes <strong>code reuse</strong> — write common code once in the parent, then extend it in the child.',
-          'Use the <code>extends</code> keyword to create inheritance in Java.'
-        ],
-        code: `// Parent class
+      title: 'Inheritance',
+      sections: [
+        {
+          heading: 'What is Inheritance?',
+          content: [
+            '<strong>Inheritance</strong> lets a new class (child/subclass) get all the fields and methods from an existing class (parent/superclass).',
+            'Think of it like a family — a child inherits traits from their parents but can also have their own unique traits.',
+            'Inheritance promotes <strong>code reuse</strong> — write common code once in the parent, then extend it in the child.',
+            'Use the <code>extends</code> keyword to create inheritance in Java.'
+          ],
+          code: `// Parent class
 class Animal {
     String name;
 
@@ -1652,9 +3560,9 @@ public class Main {
         // Buddy says: Woof!
     }
 }`,
-        diagram: {
-          caption: 'Dog inherits fields and methods from Animal',
-          chart: `classDiagram
+          diagram: {
+            caption: 'Dog inherits fields and methods from Animal',
+            chart: `classDiagram
     Animal <|-- Dog
     class Animal {
       +String name
@@ -1664,17 +3572,17 @@ public class Main {
     class Dog {
       +bark() void
     }`
-        }
-      },
-      {
-        heading: 'Why Use Inheritance?',
-        content: [
-          '<strong>Code Reuse:</strong> Write common code once, use it in many classes.',
-          '<strong>Organization:</strong> Group related classes together logically.',
-          '<strong>Extensibility:</strong> Add new features without changing existing code.',
-          '<strong>Polymorphism:</strong> Use child classes wherever the parent class is expected.'
-        ],
-        code: `class Vehicle {
+          }
+        },
+        {
+          heading: 'Why Use Inheritance?',
+          content: [
+            '<strong>Code Reuse:</strong> Write common code once, use it in many classes.',
+            '<strong>Organization:</strong> Group related classes together logically.',
+            '<strong>Extensibility:</strong> Add new features without changing existing code.',
+            '<strong>Polymorphism:</strong> Use child classes wherever the parent class is expected.'
+          ],
+          code: `class Vehicle {
     String brand;
     int speed;
 
@@ -1716,16 +3624,16 @@ public class Main {
         myCar.openTrunk();   // Own method
     }
 }`
-      },
-      {
-        heading: 'The super Keyword',
-        content: [
-          '<code>super</code> is used to access the <strong>parent class</strong> members from the child class.',
-          'Common uses:',
-          '<ul><li>Call the parent constructor: <code>super()</code></li><li>Call a parent method: <code>super.methodName()</code></li><li>Access a parent field: <code>super.fieldName</code></li></ul>',
-          'This is useful when the child wants to extend (not replace) the parent behavior.'
-        ],
-        code: `class Person {
+        },
+        {
+          heading: 'The super Keyword',
+          content: [
+            '<code>super</code> is used to access the <strong>parent class</strong> members from the child class.',
+            'Common uses:',
+            '<ul><li>Call the parent constructor: <code>super()</code></li><li>Call a parent method: <code>super.methodName()</code></li><li>Access a parent field: <code>super.fieldName</code></li></ul>',
+            'This is useful when the child wants to extend (not replace) the parent behavior.'
+          ],
+          code: `class Person {
     String name;
     int age;
 
@@ -1762,16 +3670,16 @@ public class Main {
         // I'm in grade 10.
     }
 }`
-      },
-      {
-        heading: 'Types of Inheritance in Java',
-        content: [
-          '<strong>Single Inheritance:</strong> A child class extends one parent class.',
-          '<strong>Multilevel Inheritance:</strong> A child class extends another child class (grandparent → parent → child).',
-          '<strong>Hierarchical Inheritance:</strong> Multiple children extend the same parent.',
-          'Java does NOT support multiple inheritance with classes (a class cannot extend two classes). Use interfaces for that.'
-        ],
-        code: `class Animal {
+        },
+        {
+          heading: 'Types of Inheritance in Java',
+          content: [
+            '<strong>Single Inheritance:</strong> A child class extends one parent class.',
+            '<strong>Multilevel Inheritance:</strong> A child class extends another child class (grandparent → parent → child).',
+            '<strong>Hierarchical Inheritance:</strong> Multiple children extend the same parent.',
+            'Java does NOT support multiple inheritance with classes (a class cannot extend two classes). Use interfaces for that.'
+          ],
+          code: `class Animal {
     void breathe() {
         System.out.println("Breathing...");
     }
@@ -1797,16 +3705,16 @@ public class Main {
         d.bark();      // From Dog
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a <code>Shape</code> parent class with a <code>color</code> field and a <code>displayColor()</code> method.',
-          'Create a <code>Circle</code> child class with a <code>radius</code> field and an <code>getArea()</code> method.',
-          'Create a <code>Rectangle</code> child class with <code>width</code> and <code>height</code> fields and a <code>getArea()</code> method.',
-          'Create objects of both child classes and call all their methods.'
-        ],
-        code: `class Shape {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a <code>Shape</code> parent class with a <code>color</code> field and a <code>displayColor()</code> method.',
+            'Create a <code>Circle</code> child class with a <code>radius</code> field and an <code>getArea()</code> method.',
+            'Create a <code>Rectangle</code> child class with <code>width</code> and <code>height</code> fields and a <code>getArea()</code> method.',
+            'Create objects of both child classes and call all their methods.'
+          ],
+          code: `class Shape {
     String color;
 
     void displayColor() {
@@ -1849,21 +3757,21 @@ public class Main {
         System.out.println("Rectangle Area: " + r.getArea());
     }
 }`
-      }
-    ]
-  },
+        }
+      ]
+    },
   'polymorphism': {
-    title: 'Polymorphism',
-    sections: [
-      {
-        heading: 'What is Polymorphism?',
-        content: [
-          '<strong>Polymorphism</strong> means "many forms" — the same method can behave differently depending on the object.',
-          'Think of a <code>+</code> operator: it adds numbers but concatenates strings. Same symbol, different behavior.',
-          'In OOP, polymorphism lets you use a <strong>single interface</strong> to control access to a <strong>general class</strong> of actions.',
-          'Java supports two types: <strong>method overloading</strong> (compile-time) and <strong>method overriding</strong> (runtime).'
-        ],
-        code: `class Animal {
+      title: 'Polymorphism',
+      sections: [
+        {
+          heading: 'What is Polymorphism?',
+          content: [
+            `<strong>Polymorphism</strong> means "many forms" — the same method can behave differently depending on the object.`,
+            'Think of a <code>+</code> operator: it adds numbers but concatenates strings. Same symbol, different behavior.',
+            'In OOP, polymorphism lets you use a <strong>single interface</strong> to control access to a <strong>general class</strong> of actions.',
+            'Java supports two types: <strong>method overloading</strong> (compile-time) and <strong>method overriding</strong> (runtime).'
+          ],
+          code: `class Animal {
     void makeSound() {
         System.out.println("Some generic animal sound");
     }
@@ -1892,16 +3800,16 @@ public class Main {
         myCat.makeSound();  // Output: Meow!
     }
 }`
-      },
-      {
-        heading: 'Method Overriding (Runtime Polymorphism)',
-        content: [
-          '<strong>Method overriding</strong> means a child class provides a new implementation for a method that is already defined in the parent class.',
-          'Use the <code>@Override</code> annotation to tell Java you are intentionally overriding.',
-          'The method in the child must have the <strong>same name, return type, and parameters</strong> as the parent method.',
-          'When you call the method on a child object, the child version runs — even if you reference it through a parent variable.'
-        ],
-        code: `class Shape {
+        },
+        {
+          heading: 'Method Overriding (Runtime Polymorphism)',
+          content: [
+            '<strong>Method overriding</strong> means a child class provides a new implementation for a method that is already defined in the parent class.',
+            'Use the <code>@Override</code> annotation to tell Java you are intentionally overriding.',
+            'The method in the child must have the <strong>same name, return type, and parameters</strong> as the parent method.',
+            'When you call the method on a child object, the child version runs — even if you reference it through a parent variable.'
+          ],
+          code: `class Shape {
     double getArea() {
         return 0;   // Default implementation
     }
@@ -1943,15 +3851,15 @@ public class Main {
         System.out.println("Rectangle Area: " + s2.getArea()); // Uses Rectangle's version
     }
 }`
-      },
-      {
-        heading: 'Method Overloading (Compile-Time Polymorphism)',
-        content: [
-          '<strong>Method overloading</strong> means having <strong>multiple methods with the same name</strong> but different parameters.',
-          'Java decides which method to call based on the <strong>number and type of arguments</strong>.',
-          'Return type alone does not create overloading — the parameter list must be different.'
-        ],
-        code: `class Calculator {
+        },
+        {
+          heading: 'Method Overloading (Compile-Time Polymorphism)',
+          content: [
+            '<strong>Method overloading</strong> means having <strong>multiple methods with the same name</strong> but different parameters.',
+            'Java decides which method to call based on the <strong>number and type of arguments</strong>.',
+            'Return type alone does not create overloading — the parameter list must be different.'
+          ],
+          code: `class Calculator {
     // Method with 2 int parameters
     int add(int a, int b) {
         return a + b;
@@ -1977,15 +3885,15 @@ public class Main {
         System.out.println(calc.add(2.5, 3.5));   // 6.0 (2 doubles)
     }
 }`
-      },
-      {
-        heading: 'Using Polymorphism with Arrays',
-        content: [
-          'You can store objects of different child classes in a <strong>parent class array</strong>.',
-          'This lets you loop through different types and call the same method — each object responds in its own way.',
-          'This is one of the most powerful uses of polymorphism.'
-        ],
-        code: `class Animal {
+        },
+        {
+          heading: 'Using Polymorphism with Arrays',
+          content: [
+            'You can store objects of different child classes in a <strong>parent class array</strong>.',
+            'This lets you loop through different types and call the same method — each object responds in its own way.',
+            'This is one of the most powerful uses of polymorphism.'
+          ],
+          code: `class Animal {
     void makeSound() {
         System.out.println("Animal sound");
     }
@@ -2029,16 +3937,16 @@ public class Main {
         // Moo!
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a <code>Payment</code> parent class with a <code>processPayment(double amount)</code> method.',
-          'Create <code>CreditCardPayment</code>, <code>PayPalPayment</code>, and <code>CashPayment</code> child classes.',
-          'Override <code>processPayment</code> in each child to print a different message.',
-          'Store all payment objects in an array and loop through them, calling <code>processPayment(100.0)</code> on each.'
-        ],
-        code: `class Payment {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a <code>Payment</code> parent class with a <code>processPayment(double amount)</code> method.',
+            'Create <code>CreditCardPayment</code>, <code>PayPalPayment</code>, and <code>CashPayment</code> child classes.',
+            'Override <code>processPayment</code> in each child to print a different message.',
+            'Store all payment objects in an array and loop through them, calling <code>processPayment(100.0)</code> on each.'
+          ],
+          code: `class Payment {
     void processPayment(double amount) {
         System.out.println("Processing generic payment of " + amount);
     }
@@ -2077,21 +3985,21 @@ public class Main {
         }
     }
 }`
-      }
-    ]
-  },
+        }
+      ]
+    },
   'encapsulation': {
-    title: 'Encapsulation',
-    sections: [
-      {
-        heading: 'What is Encapsulation?',
-        content: [
-          '<strong>Encapsulation</strong> means wrapping data (fields) and the methods that work on that data together in a class.',
-          'It also means <strong>hiding</strong> the internal details so the outside world cannot accidentally break things.',
-          'Think of a TV remote — you press buttons (methods) but you cannot directly touch the internal circuits (private fields).',
-          'Encapsulation protects data integrity and makes code easier to maintain.'
-        ],
-        code: `public class BankAccount {
+      title: 'Encapsulation',
+      sections: [
+        {
+          heading: 'What is Encapsulation?',
+          content: [
+            '<strong>Encapsulation</strong> means wrapping data (fields) and the methods that work on that data together in a class.',
+            'It also means <strong>hiding</strong> the internal details so the outside world cannot accidentally break things.',
+            'Think of a TV remote — you press buttons (methods) but you cannot directly touch the internal circuits (private fields).',
+            'Encapsulation protects data integrity and makes code easier to maintain.'
+          ],
+          code: `public class BankAccount {
     // Private fields — hidden from outside
     private String accountNumber;
     private double balance;
@@ -2142,15 +4050,15 @@ public class Main {
         // Current Balance: 1300.0
     }
 }`
-      },
-      {
-        heading: 'Access Modifiers in Java',
-        content: [
-          'Java uses <strong>access modifiers</strong> to control who can access class members:',
-          '<ul><li><code>public</code> — Anyone can access from anywhere</li><li><code>private</code> — Only accessible within the same class</li><li><code>protected</code> — Accessible within the same class, package, and subclasses</li><li><code>default</code> (no modifier) — Accessible within the same package only</li></ul>',
-          'For encapsulation, fields are usually <code>private</code> and methods are <code>public</code>.'
-        ],
-        code: `public class Student {
+        },
+        {
+          heading: 'Access Modifiers in Java',
+          content: [
+            'Java uses <strong>access modifiers</strong> to control who can access class members:',
+            '<ul><li><code>public</code> — Anyone can access from anywhere</li><li><code>private</code> — Only accessible within the same class</li><li><code>protected</code> — Accessible within the same class, package, and subclasses</li><li><code>default</code> (no modifier) — Accessible within the same package only</li></ul>',
+            'For encapsulation, fields are usually <code>private</code> and methods are <code>public</code>.'
+          ],
+          code: `public class Student {
     private String name;       // Private — hidden
     private int age;           // Private — hidden
     public String school;      // Public — accessible anywhere
@@ -2181,16 +4089,16 @@ public class Main {
         }
     }
 }`
-      },
-      {
-        heading: 'Getters and Setters',
-        content: [
-          '<strong>Getters</strong> (accessors) are methods that return the value of a private field.',
-          '<strong>Setters</strong> (mutators) are methods that modify the value of a private field.',
-          'They provide <strong>controlled access</strong> to private data.',
-          'You can add validation, logging, or other logic inside getters and setters.'
-        ],
-        code: `public class Temperature {
+        },
+        {
+          heading: 'Getters and Setters',
+          content: [
+            '<strong>Getters</strong> (accessors) are methods that return the value of a private field.',
+            '<strong>Setters</strong> (mutators) are methods that modify the value of a private field.',
+            'They provide <strong>controlled access</strong> to private data.',
+            'You can add validation, logging, or other logic inside getters and setters.'
+          ],
+          code: `public class Temperature {
     private double celsius;
 
     // Getter
@@ -2225,17 +4133,17 @@ public class Main {
         // Output: Temperature cannot be below absolute zero!
     }
 }`
-      },
-      {
-        heading: 'Benefits of Encapsulation',
-        content: [
-          '<strong>Data Hiding:</strong> Internal state is protected from accidental modification.',
-          '<strong>Validation:</strong> You can enforce rules before changing data.',
-          '<strong>Flexibility:</strong> You can change internal implementation without breaking external code.',
-          '<strong>Read-only fields:</strong> Provide a getter but no setter.',
-          '<strong>Write-only fields:</strong> Provide a setter but no getter (less common).'
-        ],
-        code: `public class User {
+        },
+        {
+          heading: 'Benefits of Encapsulation',
+          content: [
+            '<strong>Data Hiding:</strong> Internal state is protected from accidental modification.',
+            '<strong>Validation:</strong> You can enforce rules before changing data.',
+            '<strong>Flexibility:</strong> You can change internal implementation without breaking external code.',
+            '<strong>Read-only fields:</strong> Provide a getter but no setter.',
+            '<strong>Write-only fields:</strong> Provide a setter but no getter (less common).'
+          ],
+          code: `public class User {
     private final String id;      // Read-only (final + no setter)
     private String email;         // Read and write
     private String password;      // Write-only (no getter)
@@ -2262,16 +4170,16 @@ public class Main {
 
     // No getPassword() — write-only
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create an <code>Employee</code> class with <code>private</code> fields: <code>name</code>, <code>salary</code>, and <code>employeeId</code> (read-only).',
-          'Add getters and setters with validation: salary cannot be negative.',
-          'Add a method <code>raiseSalary(double percentage)</code> that increases salary by a given percentage.',
-          'Create an employee object and test all methods.'
-        ],
-        code: `public class Employee {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create an <code>Employee</code> class with <code>private</code> fields: <code>name</code>, <code>salary</code>, and <code>employeeId</code> (read-only).',
+            'Add getters and setters with validation: salary cannot be negative.',
+            'Add a method <code>raiseSalary(double percentage)</code> that increases salary by a given percentage.',
+            'Create an employee object and test all methods.'
+          ],
+          code: `public class Employee {
     private String name;
     private double salary;
     private final int employeeId;
@@ -2326,21 +4234,21 @@ public class Main {
         emp.setSalary(-1000);  // Invalid
     }
 }`
-      }
-    ]
-  },
+        }
+      ]
+    },
   'abstraction': {
-    title: 'Abstraction',
-    sections: [
-      {
-        heading: 'What is Abstraction?',
-        content: [
-          '<strong>Abstraction</strong> means hiding complex implementation details and showing only the essential features.',
-          'Think of a car: you turn the key to start — you do not need to understand how the engine works.',
-          'In Java, abstraction is achieved through <strong>abstract classes</strong> and <strong>interfaces</strong>.',
-          'Abstraction helps reduce complexity and lets you focus on what an object does instead of how it does it.'
-        ],
-        code: `// Abstract class
+      title: 'Abstraction',
+      sections: [
+        {
+          heading: 'What is Abstraction?',
+          content: [
+            '<strong>Abstraction</strong> means hiding complex implementation details and showing only the essential features.',
+            'Think of a car: you turn the key to start — you do not need to understand how the engine works.',
+            'In Java, abstraction is achieved through <strong>abstract classes</strong> and <strong>interfaces</strong>.',
+            'Abstraction helps reduce complexity and lets you focus on what an object does instead of how it does it.'
+          ],
+          code: `// Abstract class
 abstract class Animal {
     // Regular method
     void sleep() {
@@ -2377,16 +4285,16 @@ public class Main {
         dog.sleep();      // Output: Sleeping...
     }
 }`
-      },
-      {
-        heading: 'Abstract Classes',
-        content: [
-          'An <strong>abstract class</strong> is a class that cannot be instantiated (you cannot create objects directly).',
-          'It is declared with the <code>abstract</code> keyword.',
-          'It can have both <strong>abstract methods</strong> (no body) and <strong>concrete methods</strong> (with body).',
-          'Child classes <strong>must implement</strong> all abstract methods, or they must also be declared abstract.'
-        ],
-        code: `abstract class Shape {
+        },
+        {
+          heading: 'Abstract Classes',
+          content: [
+            'An <strong>abstract class</strong> is a class that cannot be instantiated (you cannot create objects directly).',
+            'It is declared with the <code>abstract</code> keyword.',
+            'It can have both <strong>abstract methods</strong> (no body) and <strong>concrete methods</strong> (with body).',
+            'Child classes <strong>must implement</strong> all abstract methods, or they must also be declared abstract.'
+          ],
+          code: `abstract class Shape {
     String color;
 
     // Concrete method
@@ -2448,16 +4356,16 @@ public class Main {
         }
     }
 }`
-      },
-      {
-        heading: 'Abstract Class vs Regular Class',
-        content: [
-          '<strong>Regular Class:</strong> Can be instantiated. All methods must have a body.',
-          '<strong>Abstract Class:</strong> Cannot be instantiated. Can have abstract methods (no body).',
-          'Use abstract classes when you want to provide some common code but force children to implement specific behavior.',
-          'Use regular classes when you want to create fully functional objects directly.'
-        ],
-        code: `class RegularClass {
+        },
+        {
+          heading: 'Abstract Class vs Regular Class',
+          content: [
+            '<strong>Regular Class:</strong> Can be instantiated. All methods must have a body.',
+            '<strong>Abstract Class:</strong> Cannot be instantiated. Can have abstract methods (no body).',
+            'Use abstract classes when you want to provide some common code but force children to implement specific behavior.',
+            'Use regular classes when you want to create fully functional objects directly.'
+          ],
+          code: `class RegularClass {
     void method1() { }
     void method2() { }
 }
@@ -2469,14 +4377,14 @@ abstract class AbstractClass {
 
 // RegularClass obj = new RegularClass();  // Works!
 // AbstractClass obj = new AbstractClass(); // Error!`
-      },
-      {
-        heading: 'When to Use Abstraction',
-        content: [
-          'Use abstraction when:',
-          '<ul><li>You have a common base that should not exist on its own</li><li>Different subclasses share a common interface but have different implementations</li><li>You want to enforce certain methods in all subclasses</li><li>You want to hide complex logic behind a simple interface</li></ul>'
-        ],
-        code: `abstract class DatabaseConnection {
+        },
+        {
+          heading: 'When to Use Abstraction',
+          content: [
+            'Use abstraction when:',
+            '<ul><li>You have a common base that should not exist on its own</li><li>Different subclasses share a common interface but have different implementations</li><li>You want to enforce certain methods in all subclasses</li><li>You want to hide complex logic behind a simple interface</li></ul>'
+          ],
+          code: `abstract class DatabaseConnection {
     // Common method for all databases
     void log(String message) {
         System.out.println("[LOG] " + message);
@@ -2521,17 +4429,17 @@ class PostgreSQLConnection extends DatabaseConnection {
         System.out.println("Executing on PostgreSQL: " + query);
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create an abstract <code>Appliance</code> class with:',
-          '<ul><li>A concrete method <code>turnOn()</code> that prints "Appliance is on"</li><li>An abstract method <code>operate()</code></li></ul>',
-          'Create <code>WashingMachine</code> and <code>Refrigerator</code> classes that extend <code>Appliance</code>.',
-          'Implement <code>operate()</code> differently in each.',
-          'Create objects and call both methods on each.'
-        ],
-        code: `abstract class Appliance {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create an abstract <code>Appliance</code> class with:',
+            `<ul><li>A concrete method <code>turnOn()</code> that prints "Appliance is on"</li><li>An abstract method <code>operate()</code></li></ul>`,
+            'Create <code>WashingMachine</code> and <code>Refrigerator</code> classes that extend <code>Appliance</code>.',
+            'Implement <code>operate()</code> differently in each.',
+            'Create objects and call both methods on each.'
+          ],
+          code: `abstract class Appliance {
     void turnOn() {
         System.out.println("Appliance is on");
     }
@@ -2565,21 +4473,21 @@ public class Main {
         fridge.operate();
     }
 }`
-      }
-    ]
-  },
+        }
+      ]
+    },
   'interfaces': {
-    title: 'Interfaces',
-    sections: [
-      {
-        heading: 'What is an Interface?',
-        content: [
-          'An <strong>interface</strong> is a contract that defines a set of methods a class must implement.',
-          'Think of it like a job description — it lists the skills (methods) required, but does not provide them.',
-          'Interfaces contain only <strong>method signatures</strong> (before Java 8) — no method bodies.',
-          'A class <strong>implements</strong> an interface using the <code>implements</code> keyword.'
-        ],
-        code: `// Define an interface
+      title: 'Interfaces',
+      sections: [
+        {
+          heading: 'What is an Interface?',
+          content: [
+            'An <strong>interface</strong> is a contract that defines a set of methods a class must implement.',
+            'Think of it like a job description — it lists the skills (methods) required, but does not provide them.',
+            'Interfaces contain only <strong>method signatures</strong> (before Java 8) — no method bodies.',
+            'A class <strong>implements</strong> an interface using the <code>implements</code> keyword.'
+          ],
+          code: `// Define an interface
 interface Animal {
     void makeSound();    // Method signature only
     void eat();
@@ -2620,16 +4528,16 @@ public class Main {
         cat.makeSound();  // Meow!
     }
 }`
-      },
-      {
-        heading: 'Interface vs Abstract Class',
-        content: [
-          '<strong>Interface:</strong>',
-          '<ul><li>All methods are abstract (before Java 8, except static/default methods)</li><li>A class can implement <strong>multiple</strong> interfaces</li><li>No instance fields (only constants)</li><li>Represents a "can-do" relationship</li></ul>',
-          '<strong>Abstract Class:</strong>',
-          '<ul><li>Can have both abstract and concrete methods</li><li>A class can extend only <strong>one</strong> abstract class</li><li>Can have instance fields</li><li>Represents an "is-a" relationship</li></ul>'
-        ],
-        code: `interface Flyable {
+        },
+        {
+          heading: 'Interface vs Abstract Class',
+          content: [
+            '<strong>Interface:</strong>',
+            `<ul><li>All methods are abstract (before Java 8, except static/default methods)</li><li>A class can implement <strong>multiple</strong> interfaces</li><li>No instance fields (only constants)</li><li>Represents a "can-do" relationship</li></ul>`,
+            '<strong>Abstract Class:</strong>',
+            `<ul><li>Can have both abstract and concrete methods</li><li>A class can extend only <strong>one</strong> abstract class</li><li>Can have instance fields</li><li>Represents an "is-a" relationship</li></ul>`
+          ],
+          code: `interface Flyable {
     void fly();
 }
 
@@ -2657,15 +4565,15 @@ public class Main {
         duck.swim();
     }
 }`
-      },
-      {
-        heading: 'Default and Static Methods (Java 8+)',
-        content: [
-          'Since Java 8, interfaces can have:',
-          '<ul><li><strong>Default methods:</strong> Methods with a body, using the <code>default</code> keyword</li><li><strong>Static methods:</strong> Methods that belong to the interface itself</li></ul>',
-          'Default methods let you add new methods to interfaces without breaking existing implementations.'
-        ],
-        code: `interface Vehicle {
+        },
+        {
+          heading: 'Default and Static Methods (Java 8+)',
+          content: [
+            'Since Java 8, interfaces can have:',
+            '<ul><li><strong>Default methods:</strong> Methods with a body, using the <code>default</code> keyword</li><li><strong>Static methods:</strong> Methods that belong to the interface itself</li></ul>',
+            'Default methods let you add new methods to interfaces without breaking existing implementations.'
+          ],
+          code: `interface Vehicle {
     void start();   // Abstract method
 
     // Default method
@@ -2695,15 +4603,15 @@ public class Main {
         Vehicle.checkEngine();  // Static method
     }
 }`
-      },
-      {
-        heading: 'Real-World Analogy',
-        content: [
-          'Think of interfaces like USB ports:',
-          '<ul><li>USB defines a standard (shape, pins, voltage)</li><li>Any device that implements USB can connect to any USB port</li><li>The port does not care what the device is — phone, mouse, keyboard — as long as it follows the USB standard</li></ul>',
-          'Similarly, Java interfaces define a standard. Any class that implements the interface can be used wherever that interface is expected.'
-        ],
-        code: `interface USBDevice {
+        },
+        {
+          heading: 'Real-World Analogy',
+          content: [
+            'Think of interfaces like USB ports:',
+            '<ul><li>USB defines a standard (shape, pins, voltage)</li><li>Any device that implements USB can connect to any USB port</li><li>The port does not care what the device is — phone, mouse, keyboard — as long as it follows the USB standard</li></ul>',
+            'Similarly, Java interfaces define a standard. Any class that implements the interface can be used wherever that interface is expected.'
+          ],
+          code: `interface USBDevice {
     void connect();
     void disconnect();
 }
@@ -2746,17 +4654,17 @@ public class Main {
         port.plugIn(new Keyboard());  // Keyboard connected.
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a <code>PaymentMethod</code> interface with:',
-          '<ul><li><code>void processPayment(double amount)</code></li><li><code>void refund(double amount)</code></li></ul>',
-          'Create <code>CreditCard</code>, <code>DebitCard</code>, and <code>UPI</code> classes that implement the interface.',
-          'Each class should print different messages for both methods.',
-          'Store all payment methods in an array and loop through them, calling both methods on each.'
-        ],
-        code: `interface PaymentMethod {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a <code>PaymentMethod</code> interface with:',
+            '<ul><li><code>void processPayment(double amount)</code></li><li><code>void refund(double amount)</code></li></ul>',
+            'Create <code>CreditCard</code>, <code>DebitCard</code>, and <code>UPI</code> classes that implement the interface.',
+            'Each class should print different messages for both methods.',
+            'Store all payment methods in an array and loop through them, calling both methods on each.'
+          ],
+          code: `interface PaymentMethod {
     void processPayment(double amount);
     void refund(double amount);
 }
@@ -2811,186 +4719,1640 @@ public class Main {
         }
     }
 }`
-      }
-    ]
-  }
+        },
+        {
+          heading: 'SCJP Deep Dive: Interface as a Contract',
+          content: [
+            "From the <strong>client's point of view</strong>, an interface defines the <strong>set of services</strong> they are getting. From the <strong>service provider's point of view</strong>, an interface defines the <strong>set of services</strong> they are offering.",
+            'Hence an interface acts as a <strong>contract</strong> between client and service provider.',
+            '<strong>Main advantages of interfaces:</strong>',
+            '<ul><li><strong>Security:</strong> The third party cannot know the internal implementation details</li><li><strong>Enhancement:</strong> Without affecting end users, we can modify the internal implementation</li><li><strong>Improves Maintainability</strong></li><li><strong>Cross-system communication:</strong> A Java application can communicate with .NET through interfaces</li></ul>',
+            'An interface is <strong>never allowed to contain any implementation details</strong>. Hence all the methods declared inside interfaces must be abstract, and the interface is considered as a <strong>100% pure abstract class</strong> (until Java 8 added default and static methods).'
+          ]
+        },
+        {
+          heading: 'SCJP Deep Dive: Declaring an Interface — Allowed Modifiers',
+          content: [
+            'The <strong>only allowed modifiers for interfaces</strong> are:',
+            '<ul><li><code>public</code></li><li><code>abstract</code> (implicit; interface is abstract by default)</li><li><code>strictfp</code></li><li><code>&lt;default&gt;</code> (no modifier)</li></ul>',
+            'Any other modifier on an interface declaration is a compile-time error.',
+            `When a class <code>implements</code> an interface, it must provide implementation for <strong>all</strong> the interface methods. Otherwise, the class must be declared <code>abstract</code> — violation results in a CE like <em>"Test is not abstract and does not override abstract methods"</em>.`
+          ],
+          code: `interface Sample {
+    public void m1();
+    public void m2();
+}
+
+// CE: Test is not abstract and does not override abstract methods
+// class Test implements Sample {}
+
+// OK: Test is declared abstract; child class must implement methods
+abstract class Test implements Sample { }
+
+class SubTest extends Test {
+    public void m1() { System.out.println("m1"); }
+    public void m2() { System.out.println("m2"); }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Interface Methods — Default Modifiers',
+          content: [
+            'Every interface method is by default <code>public</code> and <code>abstract</code> whether you declare it or not. These three declarations are <strong>equivalent</strong>:',
+            '<code>void m1();</code> = <code>public void m1();</code> = <code>public abstract void m1();</code>',
+            'Since interface methods are already public and abstract, you <strong>cannot</strong> use the following modifiers on them:',
+            '<ul><li><code>private</code> — CE</li><li><code>protected</code> — CE</li><li><code>static</code> — CE (in older Java; allowed in Java 8+ with body)</li><li><code>final</code> — CE (cannot be final AND abstract)</li><li><code>native</code> — CE</li><li><code>strictfp</code> — CE (legal only with Java 8+ static methods)</li><li><code>synchronized</code> — CE</li></ul>',
+            '<strong>Valid method declarations inside an interface:</strong>',
+            '<ul><li><code>void m1();</code> ✅</li><li><code>public void m1();</code> ✅</li><li><code>public abstract void m1();</code> ✅</li></ul>',
+            '<strong>Invalid declarations:</strong>',
+            '<ul><li><code>private void m1();</code> ❌</li><li><code>void m1() {}</code> ❌ (no body allowed in pre-Java 8; legal for <code>default</code> or <code>static</code> in Java 8+)</li><li><code>final void m1();</code> ❌</li><li><code>static synchronized void m1();</code> ❌</li><li><code>native void m1();</code> ❌</li></ul>'
+          ]
+        },
+        {
+          heading: 'SCJP Deep Dive: Interface Variables — Default Modifiers',
+          content: [
+            'Every interface variable is by default <code>public static final</code> whether you declare it or not. These four declarations are <strong>equivalent</strong>:',
+            '<code>int i = 10;</code> = <code>public int i = 10;</code> = <code>public static int i = 10;</code> = <code>public static final int i = 10;</code>',
+            'Not allowed on interface variables: <code>private</code>, <code>protected</code>, <code>volatile</code>, <code>transient</code>.',
+            '<strong>Interface variables must be initialized at the time of declaration.</strong> <code>int i;</code> inside an interface is a CE.',
+            'Interface variables are <strong>inherited</strong> by implementing classes and can be accessed (e.g., <code>InterfaceName.i</code> or just <code>i</code> in the implementation), but <strong>cannot be reassigned</strong> because they are final.',
+            '<strong>Note:</strong> <code>int i = 20;</code> inside a method of the implementing class is fine — that is a <strong>local variable</strong>, not the interface variable.'
+          ],
+          code: `interface Constants {
+    int MAX = 100;          // implicitly: public static final
+    // int MIN;             // CE: variable MIN might not have been initialized
+}
+
+class Use implements Constants {
+    public static void main(String[] args) {
+        System.out.println(MAX);      // 100
+        System.out.println(Constants.MAX);  // 100
+        // MAX = 200;                  // CE: cannot assign a value to final variable MAX
+
+        int MAX = 50;                  // OK: this is a local variable that shadows the constant
+        System.out.println(MAX);       // 50
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Implementing Interface Methods',
+          content: [
+            'When you implement an interface method, you <strong>must declare it as <code>public</code></strong>. Reducing visibility is a CE.',
+            '<code>void m1() {}</code> in the implementing class ❌ <em>CE: attempting to assign weaker access privileges; was public</em>',
+            '<code>public void m1() {}</code> ✅ — no error',
+            'You can also add attributes like <code>@Override</code> to ensure compile-time verification of correct implementation.'
+          ],
+          code: `interface Sample {
+    void m1();
+}
+
+// CE: m1() in Test cannot implement m1() in Sample
+// attempting to assign weaker access privileges; was public
+// class Test implements Sample {
+//     void m1() { System.out.println("hi"); }
+// }
+
+// CORRECT version:
+class Test implements Sample {
+    @Override
+    public void m1() { System.out.println("hi"); }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Naming Conflicts in Interfaces',
+          content: [
+            '<strong>Case 1: Same signature, same return type</strong> in both interfaces — only one implementation is enough in the implementing class.',
+            '<strong>Case 2: Same method name but different arguments</strong> — the implementing class must provide both methods; they act as <strong>overloaded</strong> methods.',
+            '<strong>Case 3: Same signature but different return types</strong> — <strong>CANNOT implement both interfaces simultaneously</strong>. Return type is part of the override contract; a class cannot have two methods with the same signature and different return types.',
+            '<strong>Variable conflicts:</strong> if two interfaces declare a variable with the same name, accessing the unqualified name causes a CE for ambiguity. You must qualify with the interface name (<code>Left.i</code> or <code>Right.i</code>).'
+          ],
+          code: `interface Left { int x = 10; }
+interface Right { int x = 100; }
+
+class Ambiguous implements Left, Right {
+    public static void main(String[] args) {
+        // System.out.println(x);    // CE: reference to x is ambiguous
+        System.out.println(Left.x);   // 10
+        System.out.println(Right.x);  // 100
+    }
+}`
+        },
+        {
+          heading: 'SCJP Deep Dive: Marker (Tag) Interfaces',
+          content: [
+            'A <strong>marker interface</strong> (or tag interface) is an interface with <strong>no methods and no fields</strong>. It marks a class to provide some special ability to its objects.',
+            'Common examples in the Java standard library:',
+            '<ul><li><code>java.io.Serializable</code> — marks a class whose objects can be serialized</li><li><code>java.lang.Cloneable</code> — marks a class whose objects can be cloned via <code>Object.clone()</code></li><li><code>java.rmi.Remote</code> — marks an interface whose methods can be called from a remote JVM</li></ul>',
+            'By implementing a marker interface, your objects <strong>gain a specific capability</strong> recognized by the JVM or framework. If a class is not marked <code>Serializable</code>, attempting to serialize it throws <code>java.io.NotSerializableException</code> at runtime.'
+          ],
+          code: `import java.io.Serializable;
+
+class Employee implements Serializable {
+    private static final long serialVersionUID = 1L;
+    String name;
+    int id;
+    Employee(String n, int i) { name = n; id = i; }
+}
+
+class NonSerializable {
+    String data;
+}
+
+// Usage:
+// ObjectOutputStream out = new ObjectOutputStream(...);
+// out.writeObject(new Employee("Alice", 1));  // OK
+// out.writeObject(new NonSerializable());     // throws NotSerializableException`
+        },
+        {
+          heading: 'SCJP Deep Dive: extends vs implements — Valid Combinations',
+          content: [
+            'The following are the <strong>only valid</strong> class/interface relationship statements in Java:',
+            '<ul><li>A class can <strong>extend only one class</strong> at a time (no multiple class inheritance)</li><li>A class can <strong>implement any number of interfaces</strong></li><li>An interface can <strong>extend any number of interfaces</strong> simultaneously</li></ul>',
+            '<strong>Invalid combinations:</strong>',
+            '<ul><li>A class cannot extend more than one class ❌</li><li>A class cannot extend an interface ❌ (must use <code>implements</code>)</li><li>An interface cannot extend a class ❌ (interfaces can only extend other interfaces)</li><li>An interface cannot implement another interface ❌</li></ul>'
+          ],
+          code: `interface A { void mA(); }
+interface B { void mB(); }
+interface C extends A, B { void mC(); }   // interface extending multiple interfaces
+
+class Parent { void p() {} }
+
+class Child extends Parent implements A, B {   // extends 1 class + implements 2 interfaces
+    public void mA() {}
+    public void mB() {}
+}`
+        }
+      ]
+    },
+  'inner-classes': {
+      title: 'Inner Classes',
+      sections: [
+        {
+          heading: 'What is an Inner Class?',
+          content: [
+            'An <strong>inner class</strong> is a class defined inside another class.',
+            'Inner classes can access the members of the outer class, including private members.',
+            'Inner classes are mainly used to group classes logically and to write cleaner code.',
+            'Java supports four types of inner classes:',
+            '<ul><li><strong>Normal/Regular inner classes</strong> — defined directly inside a class</li><li><strong>Method-local inner classes</strong> — defined inside a method</li><li><strong>Anonymous inner classes</strong> — defined without a name, often for one-time use</li><li><strong>Static nested classes</strong> — like a regular inner class but marked static</li></ul>'
+          ]
+        },
+        {
+          heading: 'Normal (Regular) Inner Class',
+          content: [
+            'A class defined directly inside another class.',
+            'An object of the inner class must be associated with an object of the outer class.',
+            'The inner class can access all members of the outer class (including private).',
+            'To create an instance of the inner class, you need an instance of the outer class first.'
+          ],
+          code: `class Outer {
+    int x = 10;
+    
+    class Inner {
+        int y = 20;
+        void display() {
+            System.out.println("Outer x: " + x); // can access outer member
+            System.out.println("Inner y: " + y);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        Outer.Inner inner = outer.new Inner(); // create inner via outer
+        inner.display();
+    }
+}`
+        },
+        {
+          heading: 'Method-Local Inner Class',
+          content: [
+            'An inner class defined inside a method.',
+            'Its scope is limited to that method — you cannot access it from outside.',
+            'It can access local variables of the method only if they are <code>final</code> or <strong>effectively final</strong>.'
+          ],
+          code: `class Outer {
+    void myMethod() {
+        class LocalInner {
+            void display() {
+                System.out.println("Inside method-local inner class");
+            }
+        }
+        LocalInner li = new LocalInner();
+        li.display();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        outer.myMethod();
+    }
+}`
+        },
+        {
+          heading: 'Anonymous Inner Class',
+          content: [
+            'A class without a name, created at the same time it is instantiated.',
+            'Commonly used for implementing interfaces or extending classes on the fly.',
+            'You define the class body inline, where you create the object.',
+            'Very common with event listeners in GUI programming.'
+          ],
+          code: `interface Greeting {
+    void sayHello();
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Anonymous class implementing Greeting interface
+        Greeting greeting = new Greeting() {
+            @Override
+            public void sayHello() {
+                System.out.println("Hello from anonymous class!");
+            }
+        };
+        greeting.sayHello();
+        
+        // Another example: extending a class anonymously
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                System.out.println("Running in anonymous thread");
+            }
+        };
+        t.start();
+    }
+}`
+        },
+        {
+          heading: 'Static Nested Class',
+          content: [
+            'A static class defined inside another class.',
+            'It behaves like a top-level class but is logically grouped inside the outer class.',
+            'It <strong>cannot</strong> access non-static members of the outer class directly.',
+            'You create instances using the outer class name directly (no outer object needed).'
+          ],
+          code: `class Outer {
+    static int staticVar = 10;
+    int instanceVar = 20;
+    
+    static class StaticInner {
+        void display() {
+            System.out.println("Static var: " + staticVar); // OK
+            // System.out.println(instanceVar); // Error! Cannot access non-static
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Outer.StaticInner inner = new Outer.StaticInner();
+        inner.display();
+    }
+}`
+        },
+        {
+          heading: 'Quick Comparison',
+          content: [
+            '<ul><li><strong>Regular inner class:</strong> needs outer object, can access all members, has a name</li><li><strong>Method-local:</strong> scoped to a method, can access final/effectively final locals</li><li><strong>Anonymous:</strong> no name, defined inline, very concise</li><li><strong>Static nested:</strong> behaves like top-level, no access to outer instance members, uses <code>Outer.Inner</code> syntax</li></ul>',
+            '<strong>When to use:</strong> use regular inner for clean encapsulation, anonymous for one-time listeners/callbacks, static nested for utility classes that logically belong inside another class.'
+          ]
+        }
+      ]
+    },
+  'oop-concepts': {
+      title: 'OOPS Concepts (SCJP Deep Dive)',
+      sections: [
+        {
+          heading: 'Data Hiding',
+          content: [
+            '<strong>Data hiding</strong> means the data should not go out directly — outside persons are not allowed to access the data directly.',
+            'The <strong>main advantage</strong> is <strong>security</strong>.',
+            'We achieve data hiding by using the <code>private</code> modifier on data members.',
+            'It is <strong>highly recommended</strong> to declare data members with <code>private</code>.'
+          ],
+          code: `class DataDemo {
+    private double amount;   // hidden from outside
+    private String password; // hidden from outside
+
+    public void setAmount(double amount) {
+        if (amount > 0) this.amount = amount;  // controlled access
+    }
+    public double getAmount() {
+        return amount;
+    }
+}`
+        },
+        {
+          heading: 'Abstraction',
+          content: [
+            '<strong>Abstraction</strong> means <strong>hiding implementation details</strong>.',
+            'Advantages: <strong>security</strong> (internal implementation is not highlighted), <strong>easy enhancement</strong> (change internal implementation without affecting the outside person), and <strong>improved maintainability</strong>.',
+            'When to use which construct for abstraction:',
+            "<ul><li><strong>Interface</strong> — when you don't know the implementation at all, only the specification</li><li><strong>Abstract class</strong> — when you have partial implementation</li><li><strong>Concrete class</strong> — when you know the complete implementation and are ready to provide the service</li></ul>"
+          ],
+          code: `// Interface: pure specification (100% abstract)
+interface Shape {
+    double area();
+    double perimeter();
+}
+
+// Abstract class: partial implementation
+abstract class Animal {
+    public void eat() { System.out.println("Animal is eating"); }  // concrete
+    public abstract void makeSound();  // abstract
+}
+
+// Concrete class: full implementation
+class Circle implements Shape {
+    private double radius;
+    Circle(double r) { radius = r; }
+    public double area() { return Math.PI * radius * radius; }
+    public double perimeter() { return 2 * Math.PI * radius; }
+}`
+        },
+        {
+          heading: 'Encapsulation',
+          content: [
+            '<strong>Encapsulation = Data Hiding + Abstraction</strong>.',
+            'If a class follows both data hiding (private fields) and abstraction (controlled access through methods), it is an <strong>encapsulated class</strong>.',
+            'Hiding data behind methods (setters/getters) is the central concept of encapsulation.',
+            'Advantages: <strong>security</strong>, <strong>enhancement</strong>, <strong>maintainability</strong>.'
+          ],
+          code: `class Account {
+    private int balance;   // data hiding
+
+    public void setBalance(int balance) {  // abstraction
+        // validate user and permissions
+        if (balance >= 0) this.balance = balance;
+    }
+    public int getBalance() {
+        // validate user and permissions
+        return balance;
+    }
+}`
+        },
+        {
+          heading: 'Tightly Encapsulated Class',
+          content: [
+            'A class is said to be <strong>tightly encapsulated</strong> iff <strong>all</strong> its data members are declared as <code>private</code>.',
+            '<strong>Rule:</strong> if the parent class is not tightly encapsulated, then <strong>no</strong> child class is tightly encapsulated either.',
+            'Adding <code>private</code> data members in the child class does NOT make the child class tightly encapsulated if the parent has non-private members.'
+          ],
+          code: `// Tightly encapsulated - all data members private
+class Student {
+    private String name;
+    private int rollNo;
+    public void setName(String n) { this.name = n; }
+    public String getName() { return name; }
+}
+
+// NOT tightly encapsulated - non-private member in parent
+class X {
+    int i = 10;          // default (not private)
+}
+class Y extends X {
+    private int j = 20;
+}
+// Y is NOT tightly encapsulated because X is not.`
+        },
+        {
+          heading: 'IS-A Relationship (Inheritance)',
+          content: [
+            'IS-A relationship is also known as <strong>inheritance</strong>. It is implemented using the <code>extends</code> keyword.',
+            'The <strong>main advantage</strong> is <strong>code reusability</strong>.',
+            '<strong>Key rule:</strong> a parent class reference can be used to hold a child class object, but you <strong>cannot</strong> call child-specific methods using that reference.',
+            'A child class reference <strong>cannot</strong> be used to hold a parent object (CE).',
+            'A class can extend only <strong>one</strong> class at a time, but an interface can extend any number of interfaces.'
+          ],
+          code: `class P {
+    public void m1() { System.out.println("P.m1"); }
+    public void m2() { System.out.println("P.m2"); }
+}
+class C extends P {
+    public void m3() { System.out.println("C.m3"); }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        P p1 = new P();
+        p1.m1(); p1.m2();
+        // p1.m3();   // CE: cannot find symbol m3
+
+        C c1 = new C();
+        c1.m1(); c1.m2(); c1.m3();
+
+        P p2 = new C();   // OK: parent ref holding child object
+        p2.m1(); p2.m2();
+        // p2.m3();   // CE: child-specific method not accessible
+
+        // C c2 = new P();  // CE: parent cannot be assigned to child
+    }
+}`
+        },
+        {
+          heading: 'HAS-A Relationship (Composition/Aggregation)',
+          content: [
+            'HAS-A relationship is also known as <strong>Composition</strong> or <strong>Aggregation</strong>.',
+            'There is <strong>no specific keyword</strong> for it; in most cases it is implemented using the <code>new</code> keyword.',
+            'The <strong>main advantage</strong> is <strong>code reusability</strong>.',
+            '<strong>Drawback:</strong> HAS-A relationship <strong>increases dependency</strong> between components and creates <strong>maintainability problems</strong>.'
+          ],
+          code: `class Engine {
+    public void start() { System.out.println("Engine started"); }
+    public void stop()  { System.out.println("Engine stopped"); }
+}
+
+class Car {
+    // Car HAS-A Engine (composition)
+    private Engine e = new Engine();
+
+    public void drive() {
+        e.start();
+        System.out.println("Car is driving");
+        e.stop();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Car c = new Car();
+        c.drive();
+    }
+}`
+        },
+        {
+          heading: 'Method Signature',
+          content: [
+            'In Java, a <strong>method signature</strong> consists of the <strong>method name and the argument list (including order)</strong>.',
+            'The <strong>return type is NOT part of the method signature</strong> in Java.',
+            'The <strong>compiler uses the method signature to resolve method calls</strong>.',
+            'Two methods with the <strong>same signature</strong> are <strong>not allowed</strong> in any Java class — violation is a CE.'
+          ],
+          code: `class Test {
+    public void m1(int i)    { }   // signature: m1(int)
+    public int  m1(int i)    { }   // CE: m1(int) is already defined in Test
+    public void m2()         { }   // signature: m2()
+}
+
+// Method name m1 + arg list (int) = signature m1(int)
+// Return type 'int' vs 'void' does NOT make a new signature.`
+        },
+        {
+          heading: 'Overloading',
+          content: [
+            'Two methods are said to be <strong>overloaded</strong> iff they have the <strong>same name but different argument lists</strong> (at least in order).',
+            'Lack of overloading increases program complexity (as in C, where different names like <code>abs</code>, <code>fabs</code>, <code>labs</code> are needed for different types).',
+            'In Java, the same method name is allowed for different argument types: <code>abs(int)</code>, <code>abs(float)</code>, <code>abs(long)</code>.',
+            '<strong>Overloading method resolution</strong> is the responsibility of the <strong>compiler</strong>, based on the <strong>reference type</strong> and the <strong>method arguments</strong>. Hence overloading is considered <strong>compile-time polymorphism</strong> (static polymorphism / early binding).'
+          ],
+          code: `class Test {
+    public void m1()        { System.out.println("no-args"); }
+    public void m1(int i)   { System.out.println("int-args"); }
+    public void m1(float f) { System.out.println("float-args"); }
+
+    public static void main(String[] args) {
+        Test t = new Test();
+        t.m1();         // no-args
+        t.m1(10);       // int-args
+        t.m1('a');      // int-args (char promoted to int)
+        t.m1(10l);      // long-args -> matches int? No -> matches long via promotion? No overload -> CE
+        t.m1(10f);      // float-args
+        t.m1(10.5);     // CE: no method m1(double) and no promotion path
+    }
+}`
+        },
+        {
+          heading: 'Automatic Promotion in Overloading',
+          content: [
+            'If there is no method matching the exact argument type, the compiler <strong>promotes</strong> the argument to the next level and checks again. It continues this until a match is found or all possibilities are exhausted.',
+            'Promotion order: <code>byte → short → int → long → float → double</code>. <code>char</code> also promotes to <code>int</code>.',
+            'If no match is found after all possible promotions, the compiler raises a CE.',
+            `<strong>More specific type wins:</strong> if multiple overloads match, the more specific one is chosen (e.g., <code>String</code> over <code>Object</code> when passing <code>"hello"</code>).`,
+            'If two overloads are equally specific (e.g., <code>m1(String)</code> and <code>m1(StringBuffer)</code> with <code>null</code>), it is an <strong>ambiguity error</strong>.',
+            '<strong>Var-arg methods get lowest priority:</strong> if a non-var-arg method matches, the var-arg method is not chosen.'
+          ],
+          code: `class Test {
+    public void m1(String s)        { System.out.println("String version"); }
+    public void m1(StringBuffer sb) { System.out.println("StringBuffer version"); }
+
+    public static void main(String[] args) {
+        Test t = new Test();
+        t.m1("raju");   // String version
+        // t.m1(null);  // CE: reference to m1 is ambiguous
+    }
+}
+
+// Single method to accept any primitive
+class Math {
+    public static double sqrt(double d) { return Math.sqrt(d); }
+    // char, byte, short, int, long, float are all promoted to double.
+}
+
+// Var-arg vs exact match
+class Test2 {
+    public void m1(int i)         { System.out.println("int-arg"); }
+    public void m1(int... i)      { System.out.println("var-arg"); }
+
+    public static void main(String[] args) {
+        Test2 t = new Test2();
+        t.m1();         // var-arg
+        t.m1(10, 20);   // var-arg
+        t.m1(10);       // int-arg (exact match wins)
+    }
+}`
+        },
+        {
+          heading: 'Overriding',
+          content: [
+            "Whatever the parent class has is by default available to the child through inheritance. If the child is not satisfied with the parent's implementation, the child is allowed to <strong>overwrite</strong> that method to provide its own implementation. This is <strong>overriding</strong>.",
+            'Overriding method resolution is the responsibility of the <strong>JVM</strong> based on the <strong>runtime object</strong>. Hence overriding is considered <strong>runtime polymorphism</strong> (dynamic polymorphism / late binding). The process is also called <strong>dynamic method dispatch</strong>.'
+          ],
+          code: `class P {
+    public void property() { System.out.println("Land, gold, cash"); }
+    public void marry()    { System.out.println("Subbalakshmi"); }
+}
+class C extends P {
+    @Override
+    public void marry()    { System.out.println("Priyanka"); }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        P p1 = new P();
+        p1.mary();            // Subbalakshmi
+
+        C c1 = new C();
+        c1.mary();            // Priyanka
+
+        P p2 = new C();
+        p2.mary();            // Priyanka  (JVM uses runtime object)
+    }
+}`
+        },
+        {
+          heading: 'Rules for Overriding',
+          content: [
+            '1. <strong>Method names and arguments (including order) must be the same</strong> — i.e., signatures must match.',
+            '2. <strong>Return types must be the same</strong> until Java 1.4. From Java 1.5 onwards, <strong>co-variant return types</strong> are allowed: the child return type can be the <strong>same</strong> as parent OR a <strong>subtype</strong> of the parent return type. Co-variant returns work for <strong>objects only</strong> — not for primitives.',
+            '3. <code>final</code> methods <strong>cannot be overridden</strong>. <code>private</code> methods are not visible in the child class, so they do not participate in overriding (a same-signature method in the child is a new method, not an override).',
+            '4. <code>native</code> methods can be overridden as non-native, <code>abstract</code> methods can be overridden, <code>synchronized</code> methods can be overridden, and a non-abstract method can be overridden as abstract.',
+            '5. While overriding, you <strong>cannot decrease access privileges</strong>, but you <strong>can increase</strong> them. <code>public > protected > default > private</code>.',
+            '6. While overriding, you <strong>cannot increase the size of checked exceptions</strong> in the throws clause, but you can decrease. <strong>No restrictions on unchecked exceptions</strong>.'
+          ],
+          code: `// Co-variant return types (Java 1.5+)
+class P {
+    public Object m1() { return null; }      // parent returns Object
+}
+class C extends P {
+    @Override
+    public String m1() { return "hello"; }   // child can return String (subtype)
+}
+
+// Not co-variant: String -> Object is the wrong direction
+class P2 { public String m1() { return ""; } }
+class C2 extends P2 {
+    // public Object m1() { return null; }    // CE: not a co-variant return
+}
+
+// Decreasing access is illegal
+class P3 { public void m() {} }
+class C3 extends P3 {
+    // void m() {}  // CE: attempting to assign weaker access privileges
+    protected void m() {} // OK: increasing access
+}
+
+// Throws clause
+class P4 { public void m() throws IOException {} }
+class C4 extends P4 {
+    @Override
+    public void m() throws FileNotFoundException {} // OK (subclass of IOException)
+    // public void m() throws Exception {}             // CE: cannot widen checked exception
+    @Override
+    public void m() throws ArithmeticException {}    // OK: unchecked, no restriction
+}`
+        },
+        {
+          heading: 'Method Hiding (static methods)',
+          content: [
+            'A <code>static</code> method <strong>cannot</strong> be overridden as a non-static method, and a non-static method <strong>cannot</strong> be overridden as a static method.',
+            'If both parent and child class methods are <code>static</code>, it <strong>looks like overriding</strong> but it is <strong>NOT overriding</strong> — this concept is called <strong>method hiding</strong>.',
+            '<strong>All rules of method hiding are exactly similar to overriding</strong>, except that both methods are declared <code>static</code>.',
+            '<strong>Method resolution</strong> is taken care of by the <strong>compiler</strong> based on the <strong>reference type</strong> (not the runtime object). Hence method hiding is <strong>static polymorphism</strong> / <strong>compile-time polymorphism</strong> / <strong>early binding</strong>.',
+            '<strong>Variables are not overridden</strong> — variable resolution is also based on reference type (compile-time).'
+          ],
+          code: `class P {
+    public static void m1() { System.out.println("parent"); }
+    int i = 888;
+}
+class C extends P {
+    public static void m1() { System.out.println("child"); }
+    int i = 999;
+}
+
+public class Test {
+    public static void main(String[] args) {
+        P p = new C();
+        p.m1();   // parent (compiler uses reference type P)
+        System.out.println(p.i);  // 888 (variables are not overridden)
+
+        C c = new C();
+        c.m1();   // child
+        System.out.println(c.i);  // 999
+    }
+}`
+        },
+        {
+          heading: 'Overloading vs Overriding — Comparison',
+          content: [
+            'Use the table below to compare the two key polymorphism mechanisms:'
+          ],
+          table: {
+            headers: [
+              'Property',
+              'Overloading',
+              'Overriding'
+            ],
+            rows: [
+              [
+                'Method names',
+                'Same',
+                'Same'
+              ],
+              [
+                'Arguments',
+                'Different (at least in order)',
+                'Same (including order)'
+              ],
+              [
+                'Signature',
+                'Different',
+                'Same'
+              ],
+              [
+                'Return type',
+                'No restriction',
+                'Must be same until 1.4; co-variant from 1.5+'
+              ],
+              [
+                'throws clause',
+                'No restriction',
+                'Cannot increase checked exception size'
+              ],
+              [
+                'Access modifier',
+                'No restriction',
+                'Cannot decrease'
+              ],
+              [
+                'private/final/static',
+                'Can be overloaded',
+                'Cannot be overridden'
+              ],
+              [
+                'Method resolution',
+                'Compiler (reference type + args)',
+                'JVM (runtime object)'
+              ],
+              [
+                'Other names',
+                'Compile-time / static polymorphism / early binding',
+                'Runtime / dynamic polymorphism / late binding'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Static Control Flow',
+          content: [
+            'The static control flow happens <strong>once</strong> at the time of class loading. The order is:',
+            '<ol><li><strong>Identification of static members</strong> from top to bottom. All static variables get default values (0/0.0/false/null) — this is the <strong>RIWO (Read Indirect Write Only)</strong> state.</li><li><strong>Execution of static variable assignments and static blocks</strong> from top to bottom. Variables move from RIWO to R&W (Read & Write).</li><li><strong>Execution of <code>main</code> method</strong>.</li></ol>',
+            `In the RIWO state, you <strong>cannot read the variable directly</strong> — violation is a CE: <em>"Illegal forward reference"</em>.`,
+            '<strong>In inheritance:</strong> identification and execution of static members happen from <strong>parent to child</strong>. If you run <code>java Child</code>, both parent and child class static initializations run. If you run <code>java Parent</code>, only the parent runs.',
+            '<strong>Static blocks</strong> run at the time of class loading. They are used to load native libraries (<code>System.loadLibrary</code>) and to register database drivers. You can print to the console from a static block <strong>without a <code>main</code> method</strong> if you call <code>System.exit(0)</code>.'
+          ],
+          code: `class StaticDemo {
+    static int i = m1();   // step 2: assigned first
+
+    public static int m1() {
+        System.out.println("Hello... I am able to print");
+        System.exit(0);    // avoids needing main
+        return 1;
+    }
+}
+// Output: Hello... I am able to print
+// (no main, exits after static init)`
+        },
+        {
+          heading: 'Instance Control Flow',
+          content: [
+            'Instance control flow runs <strong>for every object creation</strong> (unlike static, which runs once). Order:',
+            '<ol><li><strong>Identification of instance members</strong> from top to bottom (default values, RIWO state).</li><li><strong>Execution of instance variable assignments and instance blocks</strong> from top to bottom (R&W state).</li><li><strong>Execution of the constructor</strong>.</li></ol>',
+            '<strong>In inheritance</strong> when you create a child object:',
+            '<ol><li>Identify instance members <strong>parent to child</strong>.</li><li>Execute instance variable assignments and instance blocks in the <strong>parent class only</strong>.</li><li>Execute the <strong>parent constructor</strong>.</li><li>Execute instance variable assignments and instance blocks in the <strong>child class</strong>.</li><li>Execute the <strong>child constructor</strong>.</li></ol>',
+            '<strong>Object creation is the most costly operation</strong> — avoid creating unnecessary objects because it hurts performance.'
+          ]
+        },
+        {
+          heading: 'Coupling',
+          content: [
+            'The <strong>degree of dependency between components</strong> is called <strong>coupling</strong>.',
+            'Tightly coupled components cannot be modified independently — a change in one forces changes in others. <strong>Tight coupling is NOT recommended</strong>.',
+            'We should always maintain <strong>loose coupling</strong>.',
+            'Advantages of loose coupling: <strong>improved maintainability</strong>, <strong>easy enhancement</strong>, and <strong>better reusability</strong>.',
+            'In Java, loose coupling is achieved through <strong>interfaces</strong> and <strong>dependency injection</strong>.'
+          ],
+          code: `// Tightly coupled — A directly depends on B's static method
+class A {
+    static int i = B.m2();   // A depends on B
+}
+class B {
+    static int m2() { return C.j; }   // B depends on C
+}
+class C {
+    static int j = D.l;   // C depends on D
+}
+// Changing D requires changes in C, B, and A.
+
+// Loosely coupled — use interfaces
+interface Service { void execute(); }
+class Client {
+    private Service service;   // depends on interface, not implementation
+    public Client(Service s) { this.service = s; }
+    public void doWork() { service.execute(); }
+}`
+        },
+        {
+          heading: 'Cohesion',
+          content: [
+            'Every component should have a <strong>well-defined single purpose</strong>. Components that follow this principle are said to have <strong>high cohesion</strong>.',
+            '<strong>Low cohesion</strong> example: a single servlet handling login, validation, and inbox display. Any small change disturbs the entire component and reduces reusability.',
+            '<strong>High cohesion</strong> example: separate components for each task — <code>login.jsp</code>, <code>ValidateServlet</code>, <code>InboxServlet</code>. Each can be modified independently.',
+            'Advantages of high cohesion: <strong>improved maintainability</strong>, <strong>easy enhancement</strong>, <strong>promotes reusability</strong>.'
+          ]
+        },
+        {
+          heading: 'TypeCasting — Compile-Time and Runtime Checks',
+          content: [
+            'General syntax: <code>A b = (c) d;</code>',
+            'For a valid typecast, <strong>three checks</strong> are performed:',
+            `<ol><li><strong>Compile-time check 1:</strong> there must be some relationship between the type of <code>d</code> and the cast type <code>c</code>. Otherwise CE: <em>"inconvertible types"</em>.</li><li><strong>Compile-time check 2:</strong> <code>c</code> must be the same as or a derived type of <code>A</code>. Otherwise CE: <em>"incompatible types"</em>.</li><li><strong>Runtime check:</strong> the actual object type of <code>d</code> must be the same as or a derived type of <code>c</code>. Otherwise <code>ClassCastException</code> at runtime.</li></ol>`
+          ],
+          code: `// Pass compile-time checks 1 & 2; fails runtime check
+Object o = new String("raju");
+StringBuffer sb = (StringBuffer) o;   // RE: ClassCastException
+
+// Passes all checks
+Object o2 = new String("raju");
+String s = (String) o2;                // OK
+
+// CE: incompatible types
+String s2 = "raju";
+StringBuffer sb2 = (Object) s2;        // CE: Object is not a StringBuffer
+
+// Multi-step downcasting
+Object   ob1 = new Derived2();
+Base     ob2 = (Base) ob1;
+Derived2 ob3 = (Derived2) ob2;
+Base     ob4 = (Derived2) ob3;
+Derived2 ob5 = (Derived1) ob4;         // RE ClassCastException at runtime`
+        }
+      ]
+    },
+  'packages': {
+      title: 'Packages',
+      sections: [
+        {
+          heading: 'What is a Package?',
+          content: [
+            'A <strong>package</strong> in Java is a way to group related classes and interfaces together.',
+            'Think of a package like a folder on your computer — it helps you organize files so they are easier to find and manage.',
+            'Packages also prevent naming conflicts. Two classes can have the same name if they are in different packages.',
+            '<strong>Benefits of packages:</strong>',
+            '<ul><li><strong>Organization</strong> — group related classes logically</li><li><strong>Avoid Conflicts</strong> — same class name can exist in different packages</li><li><strong>Access Control</strong> — default access means package-private visibility</li><li><strong>Reusability</strong> — packages can be imported and reused across projects</li></ul>'
+          ]
+        },
+        {
+          heading: 'Declaring a Package',
+          content: [
+            'The <code>package</code> keyword is used at the very top of a Java file to declare which package the class belongs to.',
+            'Package names are usually written in lowercase and follow a reverse domain name convention.',
+            'For example, if your website is <code>example.com</code>, your package might be <code>com.example.myapp</code>.'
+          ],
+          code: `// File: com/example/myapp/Utils.java
+package com.example.myapp;
+
+public class Utils {
+    public static void greet(String name) {
+        System.out.println("Hello, " + name + "!");
+    }
+}`
+        },
+        {
+          heading: 'Importing Packages',
+          content: [
+            'To use a class from another package, you need to <strong>import</strong> it.',
+            'The <code>import</code> statement comes after the <code>package</code> declaration and before the class definition.',
+            'You can import a single class or use a wildcard <code>*</code> to import all classes from a package.'
+          ],
+          code: `// Import a single class
+import java.util.Scanner;
+
+// Import all classes from a package
+import java.util.*;
+
+public class ImportDemo {
+    public static void main(String[] args) {
+        // Using Scanner from java.util package
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+        
+        System.out.println("Welcome, " + name + "!");
+        scanner.close();
+    }
+}`
+        },
+        {
+          heading: 'The java.lang Package',
+          content: [
+            'The <code>java.lang</code> package is special — it is <strong>automatically imported</strong> in every Java program.',
+            'It contains fundamental classes that Java programs use all the time:',
+            '<ul><li><code>String</code> — for text</li><li><code>System</code> — for input/output (e.g., <code>System.out.println</code>)</li><li><code>Math</code> — for mathematical operations</li><li><code>Object</code> — the root class of all Java classes</li><li><code>Integer</code>, <code>Double</code>, <code>Boolean</code> — wrapper classes</li></ul>',
+            'You never need to write <code>import java.lang.*;</code> — Java does it for you.'
+          ],
+          code: `public class LangPackageDemo {
+    public static void main(String[] args) {
+        // String is from java.lang — no import needed
+        String message = "Hello from java.lang!";
+        
+        // Math is from java.lang
+        double result = Math.sqrt(25);
+        
+        // System is from java.lang
+        System.out.println(message);
+        System.out.println("Square root of 25: " + result);
+        
+        // Integer wrapper class is from java.lang
+        Integer num = 100;
+        System.out.println("Integer value: " + num);
+    }
+}`
+        },
+        {
+          heading: 'Creating Your Own Package',
+          content: [
+            'Let us create a simple package with two classes and use them in another program.',
+            'The directory structure must match the package name. For package <code>com.myapp.tools</code>, the path should be <code>com/myapp/tools/</code>.'
+          ],
+          code: `// File: com/myapp/tools/Calculator.java
+package com.myapp.tools;
+
+public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+    
+    public int multiply(int a, int b) {
+        return a * b;
+    }
+}
+
+// File: com/myapp/tools/Printer.java
+package com.myapp.tools;
+
+public class Printer {
+    public static void printLine(String text) {
+        System.out.println("==> " + text);
+    }
+}
+
+// File: MainApp.java (in the root directory)
+import com.myapp.tools.Calculator;
+import com.myapp.tools.Printer;
+
+public class MainApp {
+    public static void main(String[] args) {
+        Calculator calc = new Calculator();
+        int sum = calc.add(5, 3);
+        int product = calc.multiply(4, 7);
+        
+        Printer.printLine("Sum: " + sum);
+        Printer.printLine("Product: " + product);
+    }
+}`
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a package called <code>myPackage</code> with a class named <code>Greeter</code> that has a method <code>sayHello()</code>.',
+            'Then create a main class outside the package that imports and uses it.'
+          ],
+          code: `// myPackage/Greeter.java
+package myPackage;
+
+public class Greeter {
+    public void sayHello(String name) {
+        System.out.println("Hello, " + name + "!");
+    }
+}
+
+// Main.java (outside the package)
+import myPackage.Greeter;
+
+public class Main {
+    public static void main(String[] args) {
+        Greeter g = new Greeter();
+        g.sayHello("Student");
+    }
+}
+
+// Compile: javac myPackage/Greeter.java Main.java
+// Run: java Main`
+        }
+      ]
+    },
+  'object-class': {
+      title: 'Object Class',
+      sections: [
+        {
+          heading: 'What is the Object Class?',
+          content: [
+            'The <code>Object</code> class is the <strong>root of all Java classes</strong>.',
+            'Every class in Java directly or indirectly extends <code>Object</code>.',
+            'If a class does not explicitly extend another class, it automatically extends <code>Object</code>.',
+            'The <code>Object</code> class defines methods that are available to every Java object.'
+          ]
+        },
+        {
+          heading: 'Key Methods of Object Class',
+          content: [
+            'The <code>Object</code> class provides these important methods:',
+            '<ul><li><code>toString()</code> — returns a string representation of the object (default: class name + @ + hashcode)</li><li><code>equals(Object obj)</code> — compares two objects for reference equality (default uses ==)</li><li><code>hashCode()</code> — returns an integer hash code for the object</li><li><code>getClass()</code> — returns the runtime class of the object</li><li><code>clone()</code> — creates and returns a copy of the object (class must implement Cloneable)</li><li><code>finalize()</code> — called by GC before destroying the object (deprecated since Java 9)</li><li><code>wait()</code>, <code>notify()</code>, <code>notifyAll()</code> — thread coordination methods</li></ul>'
+          ],
+          code: `class Student {
+    int id;
+    String name;
+    
+    Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    // Override toString for meaningful output
+    @Override
+    public String toString() {
+        return "Student[id=" + id + ", name=" + name + "]";
+    }
+    
+    // Override equals for content comparison
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Student student = (Student) obj;
+        return id == student.id;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
+}
+
+public class ObjectDemo {
+    public static void main(String[] args) {
+        Student s1 = new Student(1, "Alice");
+        Student s2 = new Student(1, "Bob");
+        
+        System.out.println(s1);  // Uses toString()
+        System.out.println("s1.equals(s2): " + s1.equals(s2)); // true (same id)
+        System.out.println("s1.hashCode(): " + s1.hashCode());
+        System.out.println("Class: " + s1.getClass().getName());
+    }
+}`
+        },
+        {
+          heading: 'Contract: equals() and hashCode()',
+          content: [
+            'If you override <code>equals()</code>, you should also override <code>hashCode()</code>.',
+            '<strong>Contract:</strong>',
+            "<ul><li>If two objects are equal (equals returns true), they must have the same hashCode</li><li>If two objects have the same hashCode, they may or may not be equal</li><li>The hashCode must remain consistent across multiple calls (if object state doesn't change)</li></ul>",
+            'This contract is critical for hash-based collections like <code>HashMap</code> and <code>HashSet</code>.'
+          ]
+        },
+        {
+          heading: '== operator vs .equals() — Comparison',
+          content: [
+            'The comparison between the <code>==</code> operator and the <code>equals()</code> method:'
+          ],
+          table: {
+            headers: [
+              'Property',
+              '== operator',
+              '.equals() method'
+            ],
+            rows: [
+              [
+                'Type',
+                'Operator, applicable for both primitives and Object references',
+                'Method, applicable only for Object references'
+              ],
+              [
+                'Comparison',
+                'For Object refs, r1 == r2 is true iff both point to the same object on the heap (reference comparison)',
+                'Default implementation in Object class is meant for reference comparison'
+              ],
+              [
+                'Overridable?',
+                'Cannot be overridden',
+                'Can be overridden for content comparison'
+              ],
+              [
+                'Incompatible types',
+                'r1 == r2 results in CE',
+                'r1.equals(r2) is always false (no exception)'
+              ],
+              [
+                'Comparison with null',
+                'r == null returns false',
+                'r.equals(null) returns false'
+              ]
+            ]
+          },
+          content_2: [
+            '<strong>Relationship:</strong>',
+            '<ul><li>If <code>r1 == r2</code> is true, then <code>r1.equals(r2)</code> is always true.</li><li>If <code>r1.equals(r2)</code> is true, then <code>r1 == r2</code> is <strong>NOT necessarily</strong> true (after overriding equals for content comparison).</li></ul>'
+          ]
+        },
+        {
+          heading: 'Overriding equals() — 3 Important Cases',
+          content: [
+            'When overriding <code>equals()</code>, you must consider these three cases:',
+            `<ol><li><strong>Case 1: The meaning of equality</strong> — define what "equal" means for your class (e.g., same name and rollno).</li><li><strong>Case 2: Heterogeneous objects</strong> — if the argument is not of the expected class, return false. Handle <code>ClassCastException</code> internally.</li><li><strong>Case 3: null argument</strong> — if the argument is <code>null</code>, return false. Handle <code>NullPointerException</code> internally.</li></ol>`,
+            '<strong>Default <code>Object.equals()</code>:</strong> returns <code>true</code> only when both references point to the same object on the heap. For <strong>content comparison</strong>, override <code>equals()</code>.'
+          ],
+          code: `class Student {
+    String name;
+    int rollno;
+    Student(String name, int rollno) {
+        this.name = name;
+        this.rollno = rollno;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        try {
+            String name1 = this.name;
+            int rollno1 = this.rollno;
+            Student s2 = (Student) obj;
+            String name2 = s2.name;
+            int rollno2 = s2.rollno;
+            return (name1.equals(name2) && rollno1 == rollno2);
+        } catch (ClassCastException c) {
+            return false;   // Case 2: heterogeneous object
+        } catch (NullPointerException e) {
+            return false;   // Case 3: null argument
+        }
+    }
+
+    public static void main(String[] args) {
+        Student s1 = new Student("raju", 101);
+        Student s2 = new Student("giri", 102);
+        Student s3 = new Student("giri", 102);
+        System.out.println(s1.equals(s2));   // false
+        System.out.println(s2.equals(s3));   // true
+        System.out.println(s1.equals(null)); // false
+    }
+}`
+        },
+        {
+          heading: 'clone() and the Cloneable Marker Interface',
+          content: [
+            '<strong>Cloning</strong> is the process of creating an exactly duplicate object.',
+            'The <code>Object</code> class provides <code>protected native Object clone() throws CloneNotSupportedException</code>.',
+            'Not every object has the capability to produce a cloned object. A class is said to be <strong>cloneable</strong> iff the corresponding class implements the <code>java.lang.Cloneable</code> interface.',
+            '<code>Cloneable</code> is a <strong>marker interface</strong> — it does not contain any methods. If you try to <code>clone()</code> an object whose class does not implement <code>Cloneable</code>, <code>CloneNotSupportedException</code> is thrown.',
+            'By default, Java performs <strong>shallow cloning</strong> (all fields are copied bit-by-bit, including references to mutable objects).',
+            '<strong>Protected clone access rule:</strong> protected members can be accessed from outside the package in child classes, but you must invoke them <strong>using the child class reference</strong>, not a parent reference.'
+          ],
+          code: `class Test implements Cloneable {
+    int i = 10;
+    int j = 20;
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Test t1 = new Test();
+        Test t2 = (Test) t1.clone();   // shallow clone
+        t1.i = 100;
+        t1.j = 200;
+        System.out.println(t2.i + "----" + t2.j);  // 10----20
+    }
+}
+
+// Reference type matters for protected clone
+class Test2 implements Cloneable {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        // Case 1: Object o = new Object();
+        //         Object o2 = o.clone();   // CE: cannot access protected clone() of Object
+        // Case 2: Object o = new Test2();
+        //         Object o2 = o.clone();   // CE: parent ref cannot access protected
+        // Case 3: Test2 t = new Test2();
+        //         Object o = t.clone();    // OK: child class ref
+    }
+}`
+        },
+        {
+          heading: 'hashCode() and Its Relation to equals()',
+          content: [
+            'The <code>hashCode()</code> method returns a random number that can be used by the JVM while saving/adding objects into <code>HashSet</code>, <code>Hashtable</code>, or <code>HashMap</code>.',
+            'The default <code>Object.hashCode()</code> is based on the <strong>address</strong> of the object, but it can be overridden to generate a custom hash code.',
+            '<strong>Contract between equals() and hashCode():</strong>',
+            '<ol><li>If two objects are equal by <code>equals()</code>, then their hashCodes <strong>must be equal</strong>. (If r1.equals(r2) is true, then r1.hashCode() == r2.hashCode() is also true.)</li><li>If two objects are <strong>not equal</strong> by <code>equals()</code>, their hashCodes may or may not be the same.</li><li>If the hashCodes of two objects are equal, then the objects may or may not be equal by <code>equals()</code>.</li><li>If the hashCodes of two objects are not equal, then the objects are <strong>always not equal</strong> by <code>equals()</code>.</li></ol>',
+            '<strong>Recommendation:</strong> whenever you override <code>equals()</code>, override <code>hashCode()</code> as well to satisfy the contract.'
+          ],
+          code: `class hashCodeDemo {
+    int i;
+    hashCodeDemo(int i) { this.i = i; }
+    @Override
+    public int hashCode() { return i; }
+    @Override
+    public String toString() { return i + ""; }
+
+    public static void main(String[] args) {
+        hashCodeDemo h1 = new hashCodeDemo(100);
+        hashCodeDemo h2 = new hashCodeDemo(110);
+        System.out.println(h1);  // 100
+        System.out.println(h2);  // 110
+    }
+}`
+        }
+      ]
+    },
 };
 
 const javaModule3Content = {
-  'collections': {
-    title: 'Java Collections Framework',
-    sections: [
-      {
-        heading: 'What are Collections?',
-        content: [
-          'The Java Collections Framework is a set of classes and interfaces that help you store and manage groups of objects.',
-          'Think of collections like different types of containers — some are like lists (ordered), some are like sets (no duplicates), and some are like maps (key-value pairs).',
-          '<strong>Why use collections?</strong>',
-          '<ul><li>They grow and shrink automatically</li><li>They provide ready-made methods for sorting, searching, and filtering</li><li>They are more flexible than regular arrays</li></ul>',
-          '<strong>Main types:</strong>',
-          '<ul><li><code>List</code> — ordered, allows duplicates</li><li><code>Set</code> — no duplicates, no guaranteed order</li><li><code>Map</code> — key-value pairs</li><li><code>Queue</code> — first-in, first-out (FIFO)</li></ul>'
-        ]
-      },
-      {
-        heading: 'ArrayList',
-        content: [
-          '<code>ArrayList</code> is the most commonly used List. It is like an array that can grow in size.',
-          'You can add, remove, and access elements by index.',
-          'Unlike arrays, you do not need to specify the size when you create it.'
-        ],
-        code: `import java.util.ArrayList;
-
-public class ArrayListExample {
+  'stringbuffer-stringbuilder': {
+      title: 'StringBuffer & StringBuilder',
+      sections: [
+        {
+          heading: 'StringBuffer vs StringBuilder',
+          content: [
+            'Both <code>StringBuffer</code> and <code>StringBuilder</code> are mutable string classes — unlike <code>String</code>, they can be modified after creation.',
+            '<strong>StringBuffer</strong>: Thread-safe (all methods are synchronized) but slower.',
+            '<strong>StringBuilder</strong>: Not thread-safe but faster. Added in Java 1.5.',
+            "Use <code>StringBuilder</code> when you don't need thread safety — it is the preferred choice for single-threaded code.",
+            'Use <code>StringBuffer</code> only when multiple threads modify the same string.'
+          ],
+          code: `public class StringBufferBuilderDemo {
     public static void main(String[] args) {
-        ArrayList<String> fruits = new ArrayList<>();
-
-        fruits.add("Apple");
-        fruits.add("Banana");
-        fruits.add("Cherry");
-
-        System.out.println(fruits);           // [Apple, Banana, Cherry]
-        System.out.println(fruits.get(0));    // Apple
-
-        fruits.remove("Banana");
-        System.out.println(fruits);           // [Apple, Cherry]
-        System.out.println(fruits.size());    // 2
+        // StringBuilder - preferred for single-threaded use
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hello");
+        sb.append(" ").append("World");
+        System.out.println(sb.toString());  // Hello World
+        
+        // StringBuffer - thread-safe
+        StringBuffer sbf = new StringBuffer("Java");
+        sbf.insert(0, "I love ");
+        sbf.append(" Programming");
+        System.out.println(sbf.toString()); // I love Java Programming
+        
+        // Method chaining
+        StringBuilder result = new StringBuilder()
+            .append("A")
+            .append("B")
+            .append("C")
+            .reverse();
+        System.out.println(result);  // CBA
     }
 }`
-      },
-      {
-        heading: 'HashSet',
-        content: [
-          '<code>HashSet</code> stores unique elements only — no duplicates allowed.',
-          'It does not keep elements in any specific order.',
-          'Great for when you need to check if something exists quickly.'
-        ],
-        code: `import java.util.HashSet;
+        },
+        {
+          heading: 'Constructors',
+          content: [
+            'Both classes offer the same constructors:',
+            '<ul><li><code>new StringBuffer()</code> — empty, default capacity 16</li><li><code>new StringBuffer(int capacity)</code> — empty with specified capacity</li><li><code>new StringBuffer(String s)</code> — initialized with string content + 16 extra capacity</li></ul>',
+            'When capacity is exceeded, a new internal array is created with double the previous capacity plus 2.'
+          ]
+        },
+        {
+          heading: 'Important Methods',
+          content: [
+            '<ul><li><code>append(x)</code> — adds at the end (overloaded for all types)</li><li><code>insert(int index, x)</code> — inserts at given index</li><li><code>delete(int start, int end)</code> — removes characters in range</li><li><code>deleteCharAt(int index)</code> — removes character at index</li><li><code>reverse()</code> — reverses the sequence</li><li><code>replace(int start, int end, String str)</code> — replaces substring</li><li><code>capacity()</code> — returns current capacity</li><li><code>ensureCapacity(int min)</code> — ensures at least min capacity</li><li><code>trimToSize()</code> — reduces capacity to match length</li></ul>'
+          ]
+        },
+        {
+          heading: 'String vs StringBuffer vs StringBuilder',
+          content: [
+            '<ul><li><strong>String:</strong> immutable, thread-safe (implicitly), slow for modifications, stored in String Pool</li><li><strong>StringBuffer:</strong> mutable, thread-safe (synchronized), slower, heap memory</li><li><strong>StringBuilder:</strong> mutable, NOT thread-safe, fastest, heap memory</li></ul>',
+            '<strong>When to use:</strong>',
+            '<ul><li>Use <code>String</code> for text that never changes</li><li>Use <code>StringBuilder</code> for single-threaded string manipulation</li><li>Use <code>StringBuffer</code> for multi-threaded string manipulation</li></ul>'
+          ]
+        },
+        {
+          heading: 'StringBuffer Constructors and Default Capacity',
+          content: [
+            'The default <strong>initial capacity</strong> of a <code>StringBuffer</code> is <code>16</code>.',
+            'When the maximum capacity is reached, a new <code>StringBuffer</code> object is created with new capacity = <code>(currentCapacity + 1) * 2</code>.',
+            'Three valid constructors: <code>StringBuffer()</code>, <code>StringBuffer(int capacity)</code>, and <code>StringBuffer(String s)</code>.'
+          ],
+          code: `// Default capacity = 16
+StringBuffer sb1 = new StringBuffer();
+System.out.println(sb1.capacity());  // 16
 
-public class HashSetExample {
-    public static void main(String[] args) {
-        HashSet<Integer> numbers = new HashSet<>();
+// Adding 17 chars -> capacity = (16+1)*2 = 34
+sb1.append("abcdefghijklmnop");
+sb1.append("q");
+System.out.println(sb1.capacity());  // 34
 
-        numbers.add(10);
-        numbers.add(20);
-        numbers.add(10);  // duplicate, ignored
+// Custom initial capacity
+StringBuffer sb2 = new StringBuffer(40);
+System.out.println(sb2.capacity());  // 40
 
-        System.out.println(numbers);          // [20, 10] (order may vary)
-        System.out.println(numbers.contains(20)); // true
-        System.out.println(numbers.contains(30)); // false
-    }
-}`
-      },
-      {
-        heading: 'HashMap',
-        content: [
-          '<code>HashMap</code> stores data as key-value pairs.',
-          'Each key is unique. You use the key to look up the value.',
-          'It is like a dictionary or a phone book.'
-        ],
-        code: `import java.util.HashMap;
+// From String -> capacity = s.length() + 16
+StringBuffer sb3 = new StringBuffer("Lesto");
+System.out.println(sb3.capacity());  // 16 + 5 = 21`
+        },
+        {
+          heading: 'Important Methods of StringBuffer',
+          content: [
+            'The key methods of <code>StringBuffer</code> are:'
+          ],
+          code: `// 1) length() and capacity()
+StringBuffer sb = new StringBuffer("Lesto");
+System.out.println(sb.length());     // 5
+System.out.println(sb.capacity());   // 21
 
-public class HashMapExample {
-    public static void main(String[] args) {
-        HashMap<String, Integer> ages = new HashMap<>();
+// 2) charAt(int index) and setCharAt(int index, char ch)
+System.out.println(sb.charAt(3));    // t
+// sb.setCharAt(3, 'a');
+// System.out.println(sb);           // Lesa
 
-        ages.put("Alice", 25);
-        ages.put("Bob", 30);
-        ages.put("Charlie", 22);
+// 3) append(String) - many overloads: int, float, byte, boolean, char[], byte[], etc.
+sb.append("XYZ");
+System.out.println(sb);  // LestoXYZ
 
-        System.out.println(ages.get("Bob"));      // 30
-        System.out.println(ages.containsKey("Alice")); // true
+// 4) insert(int index, String)
+sb.insert(2, "raju");
+System.out.println(sb);  // LeraJuestoXYZ (inserted at index 2)
 
-        // Loop through all entries
-        for (String name : ages.keySet()) {
-            System.out.println(name + " is " + ages.get(name) + " years old");
+// 5) delete(int start, int end) - removes chars from start to end-1
+StringBuffer sb2 = new StringBuffer("abcdefgh");
+sb2.delete(2, 6);
+System.out.println(sb2);  // abgh
+
+// 6) deleteCharAt(int index)
+StringBuffer sb3 = new StringBuffer("abcdefgh");
+sb3.deleteCharAt(2);
+System.out.println(sb3);  // abdefgh
+
+// 7) reverse()
+StringBuffer sb4 = new StringBuffer("raju");
+System.out.println(sb4.reverse());  // ujar
+
+// 8) setLength(int requiredLength) - truncates or pads with null chars
+StringBuffer sb5 = new StringBuffer("aishwaryaabhishak");
+sb5.setLength(8);
+System.out.println(sb5);  // aishwarya
+
+// Note: All StringBuffer methods are synchronized, which can affect performance.
+// Use StringBuilder for non-thread-safe but faster operations.`
+        },
+        {
+          heading: 'Chaining of Methods',
+          content: [
+            'For most methods in <code>String</code> and <code>StringBuffer</code>, the return types are the same (String or StringBuffer). After applying a method, you can call another method on the result, forming a method chain.',
+            'All chained method calls execute from <strong>left to right</strong>.'
+          ],
+          code: `StringBuffer sb = new StringBuffer("raju");
+sb.append("software").reverse().insert(2, "abc").delete(2, 5).append("xyz");
+System.out.println(sb);
+
+// Execution order:
+// 1) append("software")   -> "rajusoftware"
+// 2) reverse()             -> "erawftosujar"
+// 3) insert(2, "abc")      -> "erabcawftosujar"  (insert "abc" at index 2)
+// 4) delete(2, 5)          -> "eraawftosujar"    (remove chars from index 2 to 4)
+// 5) append("xyz")         -> "eraawftosujarxyz"`
+        },
+        {
+          heading: 'StringBuilder vs StringBuffer',
+          content: [
+            '<code>StringBuilder</code> is exactly similar to <code>StringBuffer</code> (including constructors and methods) except for:'
+          ],
+          table: {
+            headers: [
+              'Property',
+              'StringBuilder',
+              'StringBuffer'
+            ],
+            rows: [
+              [
+                'Synchronization',
+                'No method is synchronized',
+                'All methods are synchronized'
+              ],
+              [
+                'Thread safety',
+                'Not thread safe',
+                'Thread safe'
+              ],
+              [
+                'Performance',
+                'High (faster)',
+                'Low (slower due to synchronization overhead)'
+              ],
+              [
+                'Available since',
+                'Java 1.5',
+                'Java 1.0'
+              ]
+            ]
+          },
+          content_2: [
+            '<strong>Decision rule:</strong>',
+            '<ul><li>If the content is <strong>not changing frequently</strong>, use <code>String</code>.</li><li>If the content <strong>changes frequently</strong> and <strong>thread safety is required</strong>, use <code>StringBuffer</code>.</li><li>If the content <strong>changes frequently</strong> and <strong>thread safety is not required</strong>, use <code>StringBuilder</code>.</li></ul>'
+          ]
         }
-    }
-}`
-      },
-      {
-        heading: 'Iterating Over Collections',
-        content: [
-          'You can loop through collections using a for-each loop.',
-          'This works for all Collection types: List, Set, Queue, and Map keys/values.'
-        ],
-        code: `import java.util.ArrayList;
-import java.util.HashMap;
+      ]
+    },
+  'wrapper-classes': {
+      title: 'Wrapper Classes',
+      sections: [
+        {
+          heading: 'What are Wrapper Classes?',
+          content: [
+            'Java provides a <strong>wrapper class</strong> for every primitive data type.',
+            'Wrapper classes allow primitives to be treated as objects — essential for collections, which only store objects.',
+            '<ul><li><code>byte</code> → <code>Byte</code></li><li><code>short</code> → <code>Short</code></li><li><code>int</code> → <code>Integer</code></li><li><code>long</code> → <code>Long</code></li><li><code>float</code> → <code>Float</code></li><li><code>double</code> → <code>Double</code></li><li><code>char</code> → <code>Character</code></li><li><code>boolean</code> → <code>Boolean</code></li></ul>'
+          ]
+        },
+        {
+          heading: 'Autoboxing and Unboxing',
+          content: [
+            '<strong>Autoboxing</strong>: Java automatically converts a primitive to its wrapper class.',
+            '<strong>Unboxing</strong>: Java automatically converts a wrapper to its primitive.',
+            'This was introduced in Java 1.5 — before that, you had to manually wrap and unwrap.'
+          ],
+          code: `import java.util.ArrayList;
+import java.util.List;
 
-public class IterateExample {
+public class WrapperDemo {
     public static void main(String[] args) {
-        ArrayList<String> colors = new ArrayList<>();
-        colors.add("Red");
-        colors.add("Green");
-        colors.add("Blue");
-
-        // Loop through a List
-        for (String color : colors) {
-            System.out.println(color);
-        }
-
-        // Loop through a Map
-        HashMap<String, String> capitals = new HashMap<>();
-        capitals.put("India", "New Delhi");
-        capitals.put("USA", "Washington D.C.");
-
-        for (String country : capitals.keySet()) {
-            System.out.println(country + ": " + capitals.get(country));
-        }
+        // Autoboxing: int -> Integer
+        Integer num = 10;  // equivalent to Integer.valueOf(10)
+        
+        // Unboxing: Integer -> int
+        int primitive = num;  // equivalent to num.intValue()
+        
+        // Collections require objects
+        List<Integer> numbers = new ArrayList<>();
+        numbers.add(100);  // autoboxing: int 100 -> Integer
+        numbers.add(200);
+        
+        int first = numbers.get(0);  // unboxing: Integer -> int
+        System.out.println("First: " + first);
+        
+        // Parsing strings
+        int parsed = Integer.parseInt("123");
+        double d = Double.parseDouble("3.14");
+        System.out.println("Parsed: " + parsed + ", " + d);
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create an <code>ArrayList</code> of your favorite movies.',
-          'Add 3 movies, print the list, then remove one and print again.',
-          'Create a <code>HashMap</code> with student names as keys and scores as values. Print each student and their score.'
-        ],
-        code: `import java.util.ArrayList;
-import java.util.HashMap;
+        },
+        {
+          heading: 'Useful Wrapper Methods',
+          content: [
+            `<ul><li><code>Integer.valueOf(int)</code> — returns cached Integer (-128 to 127)</li><li><code>Integer.parseInt(String)</code> — converts string to int</li><li><code>Integer.toBinaryString(int)</code> — binary representation</li><li><code>Integer.toHexString(int)</code> — hex representation</li><li><code>Integer.MAX_VALUE</code>, <code>Integer.MIN_VALUE</code> — constants</li><li><code>Character.isDigit(char)</code>, <code>Character.isLetter(char)</code> — character checks</li><li><code>Character.toUpperCase(char)</code>, <code>Character.toLowerCase(char)</code></li><li><code>Boolean.parseBoolean(String)</code> — converts "true"/"false" string</li></ul>`
+          ]
+        },
+        {
+          heading: 'Wrapper Class Constructors',
+          content: [
+            '<strong>Main objectives of wrapper classes:</strong>',
+            '<ol><li>Wrap primitives into <strong>object form</strong> so primitives can be handled like objects (e.g., in collections).</li><li>Define <strong>utility functions</strong> for primitives (converting primitive to string, parsing, etc.).</li></ol>',
+            'Every wrapper class (except <code>Character</code>) contains two constructors: one that takes the corresponding primitive, and one that takes a String. The <code>Character</code> class has <strong>only one</strong> constructor that takes a <code>char</code>.',
+            'If a String cannot be converted to a number, a runtime <code>NumberFormatException</code> is thrown.',
+            '<strong>Special notes:</strong>',
+            `<ul><li><code>Float</code> has 3 constructors: <code>float</code>, <code>String</code>, and <code>double</code> argument.</li><li><code>Character</code> does <strong>not</strong> have a constructor that takes a String.</li><li><code>Boolean(String)</code>: case is <strong>not important</strong>. If the content is "true" (any case), the wrapper holds true; otherwise (any other content, including null), it holds false.</li></ul>`,
+            '<code>new Boolean(FALSE)</code> ❌ <em>CE: cannot find symbol</em> — <code>FALSE</code> is not a Java keyword; it must be <code>false</code>.'
+          ],
+          table: {
+            headers: [
+              'Wrapper Class',
+              'Constructor Arguments'
+            ],
+            rows: [
+              [
+                'Byte',
+                'byte (or) String'
+              ],
+              [
+                'Short',
+                'short (or) String'
+              ],
+              [
+                'Integer',
+                'int (or) String'
+              ],
+              [
+                'Long',
+                'long (or) String'
+              ],
+              [
+                'Float',
+                'float (or) String (or) double'
+              ],
+              [
+                'Double',
+                'double (or) String'
+              ],
+              [
+                'Character',
+                'char (only)'
+              ],
+              [
+                'Boolean',
+                'boolean (or) String'
+              ]
+            ]
+          },
+          code: `Integer I1 = new Integer(10);     // OK: int argument
+Integer I2 = new Integer("10");    // OK: String argument
+// Integer I3 = new Integer("ten"); // RE: NumberFormatException
 
-public class TryCollections {
+Float f1 = new Float(10.5f);
+Float f2 = new Float("10.5f");
+Float f3 = new Float(10.5);        // double -> float (widening)
+
+Character ch1 = new Character('a');     // OK
+// Character ch2 = new Character("a"); // CE: no String constructor
+
+Boolean b1 = new Boolean(true);          // OK
+// Boolean b2 = new Boolean(FALSE);      // CE: cannot find symbol FALSE
+Boolean b3 = new Boolean("false");       // OK -> false
+Boolean b4 = new Boolean("TrUE");        // OK -> true (case-insensitive)
+Boolean b5 = new Boolean("raju");        // OK -> false (not "true")
+Boolean b6 = new Boolean("yes");         // OK -> false
+
+Boolean b1q = new Boolean("yes");
+Boolean b2q = new Boolean("No");
+System.out.println(b1q.equals(b2q));    // true (both wrappers hold false)`
+        },
+        {
+          heading: 'valueOf() Methods — 3 Versions',
+          content: [
+            `All wrapper classes (except <code>Character</code>) have static <code>valueOf(String)</code> to convert a String to the corresponding wrapper object. <code>Character.valueOf("10")</code> ❌ <em>CE</em>.`,
+            '<strong>Version 2 — with radix:</strong> integral wrappers (<code>Byte</code>, <code>Short</code>, <code>Integer</code>, <code>Long</code>) have <code>valueOf(String s, int radix)</code>. The allowed radix range is <strong>1 to 36</strong> (10 digits + 26 letters).',
+            '<strong>Version 3 — from primitive:</strong> every wrapper class (including <code>Character</code>) has <code>valueOf(primitive p)</code> to convert a primitive to a wrapper object.',
+            '<strong>Version 1 & 2:</strong> String to wrapper object. <strong>Version 3:</strong> primitive to wrapper object.'
+          ],
+          code: `// Version 1: String to wrapper
+Integer I1 = Integer.valueOf("10");
+Float F1 = Float.valueOf("10.5");
+Boolean B1 = Boolean.valueOf("raju");   // false
+// Character ch = Character.valueOf("10");   // CE: no String version for Character
+
+// Version 2: String to wrapper with radix (integral wrappers only)
+Integer I2 = Integer.valueOf("101011", 2);   // 43 in binary = 43 in decimal
+System.out.println(I2);   // 43
+
+// Version 3: primitive to wrapper
+Integer I3 = Integer.valueOf(10);
+Character ch2 = Character.valueOf('a');
+Boolean B2 = Boolean.valueOf(true);`
+        },
+        {
+          heading: 'xxxValue() Methods — Wrapper to Primitive',
+          content: [
+            'Every wrapper class (except <code>Character</code> and <code>Boolean</code>) contains <code>xxxValue()</code> methods to convert the wrapper object back to a primitive: <code>intValue()</code>, <code>byteValue()</code>, <code>shortValue()</code>, <code>longValue()</code>, <code>floatValue()</code>, <code>doubleValue()</code>.',
+            '<code>Character</code> has <code>charValue()</code>; <code>Boolean</code> has <code>booleanValue()</code>.',
+            '<strong>Total of 38 xxxValue() methods</strong> are possible: (6 × 6) + 1 + 1 = 38, covering the 6 numeric wrappers × 6 primitive types + Character + Boolean.'
+          ],
+          code: `Integer I = Integer.valueOf(130);
+System.out.println(I.byteValue());    // -126 (overflow, byte range is -128 to 127)
+System.out.println(I.shortValue());   // 130
+System.out.println(I.intValue());     // 130
+System.out.println(I.longValue());    // 130
+System.out.println(I.floatValue());   // 130.0
+System.out.println(I.doubleValue());  // 130.0
+
+Character ch = new Character('a');
+char c = ch.charValue();
+System.out.println(c);   // a
+
+Boolean B = Boolean.valueOf("Tea Break");
+boolean b = B.booleanValue();
+System.out.println(b);   // false`
+        },
+        {
+          heading: 'parseXxx() Methods — String to Primitive',
+          content: [
+            'Every wrapper class (except <code>Character</code>) has a static <code>parseXxx(String)</code> method to convert a String directly to the corresponding primitive (without creating a wrapper object).',
+            '<strong>Version 2 — with radix:</strong> integral wrappers (<code>Byte</code>, <code>Short</code>, <code>Integer</code>, <code>Long</code>) have <code>parseXxx(String s, int radix)</code>.'
+          ],
+          code: `// Version 1: String to primitive
+int i = Integer.parseInt("10");
+boolean b = Boolean.parseBoolean("true");
+double d = Double.parseDouble("3.14");
+
+// Version 2: with radix
+int bin = Integer.parseInt("101011", 2);
+System.out.println(bin);   // 43`
+        },
+        {
+          heading: 'toString() Methods — 4 Versions',
+          content: [
+            'All wrapper classes have an instance <code>toString()</code> method to convert a wrapper object to a String. This <strong>overrides</strong> <code>Object.toString()</code>.',
+            '<strong>Version 2:</strong> static <code>toString(primitive p)</code> converts a primitive directly to a String.',
+            '<strong>Version 3:</strong> <code>Integer</code> and <code>Long</code> have <code>toString(int/long, int radix)</code> to return a String in the specified radix.',
+            '<strong>Version 4:</strong> <code>Integer</code> and <code>Long</code> have <code>toBinaryString()</code>, <code>toOctalString()</code>, and <code>toHexString()</code> static methods.'
+          ],
+          code: `// Version 1: wrapper object to String (instance)
+Integer I1 = new Integer(10);
+String s1 = I1.toString();
+System.out.println(s1);   // "10"
+
+// Version 2: primitive to String (static)
+String s2 = Integer.toString(10);
+String s3 = Boolean.toString(true);
+System.out.println(s2);   // "10"
+System.out.println(s3);   // "true"
+
+// Version 3: primitive to String with radix
+String s4 = Integer.toString(43, 2);
+System.out.println(s4);   // "101011" (binary)
+String s5 = Integer.toString(43, 8);
+System.out.println(s5);   // "53" (octal)
+
+// Version 4: radix-specific helpers
+String s6 = Integer.toBinaryString(43);
+System.out.println(s6);   // "101011"
+String s7 = Integer.toOctalString(43);
+System.out.println(s7);   // "53"
+String s8 = Integer.toHexString(43);
+System.out.println(s8);   // "2b" (note: 43 in hex is 2b, not 262!)`
+        }
+      ]
+    },
+  'math-class': {
+      title: 'Math Class',
+      sections: [
+        {
+          heading: 'What is the Math Class?',
+          content: [
+            'The <code>java.lang.Math</code> class provides static methods for common mathematical operations.',
+            'You cannot create an instance of <code>Math</code> — its constructor is private.',
+            'All methods are static, so you call them directly on the class: <code>Math.methodName()</code>.'
+          ]
+        },
+        {
+          heading: 'Common Math Methods',
+          content: [
+            '<ul><li><code>Math.abs(x)</code> — absolute value</li><li><code>Math.max(a, b)</code> — larger of two values</li><li><code>Math.min(a, b)</code> — smaller of two values</li><li><code>Math.sqrt(x)</code> — square root</li><li><code>Math.cbrt(x)</code> — cube root</li><li><code>Math.pow(a, b)</code> — a raised to power b</li><li><code>Math.ceil(x)</code> — smallest integer >= x</li><li><code>Math.floor(x)</code> — largest integer <= x</li><li><code>Math.round(x)</code> — round to nearest integer</li><li><code>Math.random()</code> — random double between 0.0 (inclusive) and 1.0 (exclusive)</li><li><code>Math.PI</code> — constant π (3.14159...)</li><li><code>Math.E</code> — constant e (2.71828...)</li></ul>'
+          ],
+          code: `public class MathDemo {
     public static void main(String[] args) {
-        ArrayList<String> movies = new ArrayList<>();
-        movies.add("Inception");
-        movies.add("The Matrix");
-        movies.add("Interstellar");
-        System.out.println(movies);
-        movies.remove(1);
-        System.out.println(movies);
-
-        HashMap<String, Integer> scores = new HashMap<>();
-        scores.put("Alice", 85);
-        scores.put("Bob", 92);
-        for (String name : scores.keySet()) {
-            System.out.println(name + ": " + scores.get(name));
-        }
+        System.out.println("abs(-10): " + Math.abs(-10));        // 10
+        System.out.println("max(5, 10): " + Math.max(5, 10));    // 10
+        System.out.println("min(5, 10): " + Math.min(5, 10));    // 5
+        System.out.println("sqrt(16): " + Math.sqrt(16));        // 4.0
+        System.out.println("pow(2, 3): " + Math.pow(2, 3));      // 8.0
+        System.out.println("ceil(4.2): " + Math.ceil(4.2));      // 5.0
+        System.out.println("floor(4.8): " + Math.floor(4.8));    // 4.0
+        System.out.println("round(4.5): " + Math.round(4.5));    // 5
+        System.out.println("random: " + Math.random());          // e.g., 0.7342
+        System.out.println("PI: " + Math.PI);                    // 3.14159...
+        
+        // Generate random int between 1 and 100
+        int randomInt = (int)(Math.random() * 100) + 1;
+        System.out.println("Random 1-100: " + randomInt);
     }
 }`
-      }
-    ]
-  },
+        }
+      ]
+    },
   'exception-handling': {
-    title: 'Exception Handling',
-    sections: [
-      {
-        heading: 'What is an Exception?',
-        content: [
-          'An exception is an event that disrupts the normal flow of a program.',
-          'It happens when something goes wrong — like dividing by zero, accessing an invalid array index, or trying to open a file that does not exist.',
-          'Without handling, exceptions crash your program.',
-          '<strong>Common exceptions:</strong>',
-          '<ul><li><code>ArithmeticException</code> — math errors like divide by zero</li><li><code>NullPointerException</code> — using a null object</li><li><code>ArrayIndexOutOfBoundsException</code> — invalid index</li><li><code>NumberFormatException</code> — converting bad strings to numbers</li></ul>'
-        ]
-      },
-      {
-        heading: 'try and catch',
-        content: [
-          'Wrap risky code inside a <code>try</code> block.',
-          'If an exception occurs, Java jumps to the <code>catch</code> block.',
-          'The program keeps running instead of crashing.'
-        ],
-        code: `public class TryCatchExample {
+      title: 'Exception Handling',
+      sections: [
+        {
+          heading: 'What is an Exception?',
+          content: [
+            'An exception is an event that disrupts the normal flow of a program.',
+            'It happens when something goes wrong — like dividing by zero, accessing an invalid array index, or trying to open a file that does not exist.',
+            'Without handling, exceptions crash your program.',
+            '<strong>Common exceptions:</strong>',
+            '<ul><li><code>ArithmeticException</code> — math errors like divide by zero</li><li><code>NullPointerException</code> — using a null object</li><li><code>ArrayIndexOutOfBoundsException</code> — invalid index</li><li><code>NumberFormatException</code> — converting bad strings to numbers</li></ul>'
+          ]
+        },
+        {
+          heading: 'try and catch',
+          content: [
+            'Wrap risky code inside a <code>try</code> block.',
+            'If an exception occurs, Java jumps to the <code>catch</code> block.',
+            'The program keeps running instead of crashing.'
+          ],
+          code: `public class TryCatchExample {
     public static void main(String[] args) {
         int a = 10;
         int b = 0;
@@ -3005,14 +6367,14 @@ public class TryCollections {
         System.out.println("Program continues...");
     }
 }`
-      },
-      {
-        heading: 'Multiple catch Blocks',
-        content: [
-          'You can catch different types of exceptions separately.',
-          'This lets you handle each problem in the right way.'
-        ],
-        code: `public class MultipleCatchExample {
+        },
+        {
+          heading: 'Multiple catch Blocks',
+          content: [
+            'You can catch different types of exceptions separately.',
+            'This lets you handle each problem in the right way.'
+          ],
+          code: `public class MultipleCatchExample {
     public static void main(String[] args) {
         String[] names = {"Alice", "Bob"};
 
@@ -3026,14 +6388,14 @@ public class TryCollections {
         }
     }
 }`
-      },
-      {
-        heading: 'finally Block',
-        content: [
-          'The <code>finally</code> block always runs — whether an exception happened or not.',
-          'It is useful for cleanup: closing files, releasing resources, etc.'
-        ],
-        code: `public class FinallyExample {
+        },
+        {
+          heading: 'finally Block',
+          content: [
+            'The <code>finally</code> block always runs — whether an exception happened or not.',
+            'It is useful for cleanup: closing files, releasing resources, etc.'
+          ],
+          code: `public class FinallyExample {
     public static void main(String[] args) {
         try {
             int[] numbers = {1, 2, 3};
@@ -3045,15 +6407,15 @@ public class TryCollections {
         }
     }
 }`
-      },
-      {
-        heading: 'throw and throws',
-        content: [
-          '<code>throw</code> lets you create your own exception manually.',
-          '<code>throws</code> in a method signature warns that this method might throw an exception.',
-          'This is useful when you want the caller to handle the problem.'
-        ],
-        code: `public class ThrowExample {
+        },
+        {
+          heading: 'throw and throws',
+          content: [
+            '<code>throw</code> lets you create your own exception manually.',
+            '<code>throws</code> in a method signature warns that this method might throw an exception.',
+            'This is useful when you want the caller to handle the problem.'
+          ],
+          code: `public class ThrowExample {
     static void checkAge(int age) {
         if (age < 18) {
             throw new IllegalArgumentException("Age must be 18 or older");
@@ -3069,14 +6431,14 @@ public class TryCollections {
         }
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Write a program that divides two numbers. Use try-catch to handle divide-by-zero.',
-          'Create a method that throws an exception if a password is shorter than 6 characters.'
-        ],
-        code: `public class TryExceptionHandling {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Write a program that divides two numbers. Use try-catch to handle divide-by-zero.',
+            'Create a method that throws an exception if a password is shorter than 6 characters.'
+          ],
+          code: `public class TryExceptionHandling {
     static void checkPassword(String password) {
         if (password.length() < 6) {
             throw new IllegalArgumentException("Password too short!");
@@ -3101,29 +6463,474 @@ public class TryCollections {
         }
     }
 }`
-      }
-    ]
-  },
+        },
+        {
+          heading: 'Introduction to Exception Handling',
+          content: [
+            'An <strong>exception</strong> is an unexpected, unwanted event that disturbs the normal flow of the program.',
+            'Real-time examples: <code>SleepingException</code>, <code>TirePuncturedException</code>.',
+            'If we do not handle an exception, the program may terminate <strong>abnormally</strong> without releasing allocated resources — this is <strong>not graceful termination</strong>. As a good programming practice, we should always handle exceptions for graceful termination.',
+            '<strong>Exception handling</strong> does NOT repair an exception. It provides an <strong>alternative way</strong> to continue the program normally. Example: if a program needs to read from a remote file but the file is unavailable, we provide a local file as a fallback so the rest of the program continues.'
+          ]
+        },
+        {
+          heading: 'Runtime Stack Mechanism',
+          content: [
+            'For <strong>every thread</strong>, the JVM creates a <strong>runtime stack</strong>.',
+            'All method calls performed by the thread are stored in the corresponding runtime stack. If a method terminates normally, its entry is removed from the stack.',
+            'After all method calls complete, the stack is empty. Just before the thread terminates, the JVM destroys its stack.'
+          ],
+          code: `class ExceptionDemo {
+    public static void main(String[] args) {
+        doStuff();
+    }
+    public static void doStuff() {
+        doMoreStuff();
+    }
+    public static void doMoreStuff() {
+        System.out.println("Hi this is Exception...Thread");
+    }
+}
+// Stack (top to bottom): doMoreStuff() -> doStuff() -> main()
+// After main finishes, stack is destroyed.`
+        },
+        {
+          heading: 'Default Exception Handling',
+          content: [
+            'When an exception is raised, the method in which it is raised is responsible for preparing an <strong>exception object</strong> with:',
+            '<ul><li>Name of Exception</li><li>Description</li><li>Location of Exception (stack trace)</li></ul>',
+            'The method hands the object to the JVM. The JVM checks for an exception handler in that method. If none, the JVM <strong>terminates the method abnormally</strong> and removes its stack entry.',
+            'The JVM then checks the caller method, then its caller, and so on up to <code>main</code>. If <code>main</code> also has no handler, the JVM hands responsibility to the <strong>default exception handler</strong>, which prints the error in the format: <code>Name of Exception : Description</code> followed by the <code>stackTrace</code>.'
+          ]
+        },
+        {
+          heading: 'Exception Hierarchy',
+          content: [
+            '<code>Throwable</code> is the <strong>parent of the entire Java exception hierarchy</strong>. It has two child classes: <code>Exception</code> and <code>Error</code>.',
+            '<strong>Exception</strong>: these are <strong>recoverable</strong>. Most cases are due to program code.',
+            '<strong>Error</strong>: these are <strong>non-recoverable</strong>. Most cases are due to lack of system resources, not program code.'
+          ]
+        },
+        {
+          heading: 'Checked vs Unchecked Exceptions',
+          content: [
+            '<strong>Checked exceptions</strong>: the compiler checks these for smooth execution of the program. Examples: <code>IOException</code>, <code>ServletException</code>, <code>InterruptedException</code>.',
+            '<strong>Unchecked exceptions</strong>: the compiler does NOT check these. Includes <code>RuntimeException</code> and its child classes, plus <code>Error</code> and its child classes.',
+            '<strong>Whether checked or unchecked, exceptions always occur at runtime only.</strong>',
+            '<strong>Fully checked</strong> exception: a checked exception whose ALL child classes are also checked. Example: <code>IOException</code>.',
+            '<strong>Partially checked</strong> exception: a checked exception with some unchecked child classes. Examples: <code>Exception</code>, <code>Throwable</code>.'
+          ],
+          code: `// Hierarchy:
+// Throwable
+//   ├── Exception
+//   │     ├── RuntimeException (unchecked)
+//   │     │     ├── ArithmeticException
+//   │     │     ├── NullPointerException
+//   │     │     ├── ClassCastException
+//   │     │     ├── IndexOutOfBoundsException
+//   │     │     │     ├── ArrayIndexOutOfBoundsException
+//   │     │     │     └── StringIndexOutOfBoundsException
+//   │     │     └── IllegalArgumentException
+//   │     │           └── NumberFormatException
+//   │     ├── IOException (checked)
+//   │     │     ├── FileNotFoundException
+//   │     │     └── EOFException
+//   │     └── InterruptedException (checked)
+//   └── Error (unchecked)
+//         ├── VirtualMachineError
+//         │     ├── StackOverflowError
+//         │     └── OutOfMemoryError
+//         ├── AssertionError
+//         └── LinkageError`
+        },
+        {
+          heading: 'Control Flow in try-catch',
+          content: [
+            'Consider: <code>try { s1; s2; s3; } catch (X e) { s4; } s5;</code>',
+            '<strong>Case 1: No exception</strong> — <code>s1, s2, s3, s5</code> execute with normal termination.',
+            '<strong>Case 2: Exception at s2 and catch matches</strong> — <code>s1, s4, s5</code> execute with normal termination.',
+            '<strong>Case 3: Exception at s2 and catch does NOT match</strong> — <code>s1</code> executes, then abnormal termination.',
+            '<strong>Case 4: Exception at s4 or s5</strong> — always abnormal termination.'
+          ]
+        },
+        {
+          heading: 'Methods to Display Exception Information',
+          content: [
+            'The <code>Throwable</code> class contains three methods to display error information:',
+            '<ul><li><code>printStackTrace()</code> — displays: <em>Name of Exception : Description</em> followed by the stack trace. <strong>This is what the default exception handler uses.</strong></li><li><code>toString()</code> — displays: <em>Name of Exception : Description</em></li><li><code>getMessage()</code> — displays only the <em>Description</em></li></ul>'
+          ],
+          code: `try {
+    System.out.println(10 / 0);
+} catch (ArithmeticException e) {
+    e.printStackTrace();           // Name + Description + stack trace
+    System.out.println(e);         // Name + Description
+    System.out.println(e.getMessage());  // Description only
+}`
+        },
+        {
+          heading: 'try with Multiple catch Blocks',
+          content: [
+            'Since exception handling varies by exception type, a separate <code>catch</code> block is needed for each exception. Hence <strong>try with multiple catch blocks</strong> is allowed.',
+            `<strong>Order of catch blocks is important</strong>: it must be from <strong>child to parent</strong>, otherwise the compiler reports <em>"Exception XXX has already been caught"</em>.`,
+            'A parent catch block before a child catch block makes the child block <strong>unreachable</strong>.',
+            '<strong>Unreachable catch rule:</strong> if there is no chance of raising an exception of a particular type inside the try block, then maintaining a catch block for a <strong>fully checked</strong> exception is a CE. (This rule does not apply to unchecked or partially checked exceptions.)'
+          ],
+          code: `// VALID: child to parent
+try {
+    riskyCode();
+} catch (ArithmeticException e) {
+    // handle AE
+} catch (NullPointerException e) {
+    // handle NPE
+} catch (IOException e) {
+    // handle IOE
+} catch (Exception e) {
+    // generic handler
+}
+
+// INVALID: parent first makes child unreachable
+try { }
+catch (Exception e) { }
+catch (ArithmeticException e) { }  // CE: ArithmeticException has already been caught
+
+// CE: IOException is never thrown in try body (fully checked)
+try {
+    System.out.println("Hi");
+} catch (IOException e) { }         // CE`
+        },
+        {
+          heading: 'The finally Block',
+          content: [
+            'Cleanup code should NOT be placed in <code>try</code> (no guarantee all statements execute) or in <code>catch</code> (only runs if the matching exception is caught).',
+            'We need a block that runs <strong>always</strong> — regardless of whether an exception is raised or handled. That block is the <strong>finally block</strong>.',
+            'The <strong>main objective of finally is to maintain cleanup code</strong> (e.g., closing a database connection).',
+            '<strong>The finally block will NOT execute only if the system itself exits</strong> (e.g., calling <code>System.exit()</code>).'
+          ],
+          code: `// Case 1: no exception
+// Output: try, finally   (Normal termination)
+try { System.out.println("try"); }
+catch (ArithmeticException e) { System.out.println("catch"); }
+finally { System.out.println("finally"); }
+
+// Case 2: caught exception
+// Output: catch, finally   (Normal termination)
+try { System.out.println(10 / 0); }
+catch (ArithmeticException e) { System.out.println("catch"); }
+finally { System.out.println("finally"); }
+
+// Case 3: uncaught exception
+// Output: finally   (Abnormal termination)
+try { System.out.println(10 / 0); }
+catch (NullPointerException e) { System.out.println("catch"); }
+finally { System.out.println("finally"); }
+
+// System.exit() skips finally
+try {
+    System.out.println("Hi");
+    System.exit(0);
+} finally {
+    System.out.println("finally");   // does NOT print
+}`
+        },
+        {
+          heading: 'final vs finally vs finalize',
+          content: [
+            '<strong>final</strong>: a keyword/modifier applicable to classes, methods, and variables. Final classes cannot be extended, final methods cannot be overridden, final variables cannot be reassigned (they are constants).',
+            '<strong>finally</strong>: a block associated with try-catch. The main objective is to maintain cleanup code that should always execute.',
+            '<strong>finalize</strong>: a method called by the Garbage Collector just before destroying an object. The main objective is to maintain cleanup code.',
+            '<strong>Note:</strong> <code>finally</code> is always <strong>recommended</strong> over <code>finalize</code> for cleanup, because the exact behavior of the Garbage Collector is JVM-dependent and not guaranteed.'
+          ]
+        },
+        {
+          heading: 'Possible Combinations of try-catch-finally',
+          content: [
+            'The only valid combinations of try, catch, and finally blocks are:',
+            '<ul><li><code>try-catch-finally</code> ✅</li><li><code>try-catch</code> (multiple) ✅</li><li><code>try-finally</code> (no catch; exception propagates) ✅</li></ul>',
+            '<strong>Invalid combinations (CE):</strong>',
+            '<ul><li><code>catch</code> without <code>try</code> ❌</li><li><code>finally</code> without <code>try</code> ❌</li><li><code>try</code> without <code>catch</code> or <code>finally</code> ❌</li><li>Statement between <code>try</code> and <code>catch</code> ❌</li><li>Statement between <code>try</code>/<code>catch</code> and <code>finally</code> ❌</li><li>Multiple <code>finally</code> blocks for the same <code>try</code> ❌</li></ul>'
+          ]
+        },
+        {
+          heading: 'Control Flow in try-catch-finally (Various Cases)',
+          content: [
+            'For: <code>try { s1; s2; s3; } catch (X e) { s4; } finally { s5; } s6;</code>',
+            '<strong>Case 1: No exception</strong> — <code>s1, s2, s3, s5, s6</code> (normal termination).',
+            '<strong>Case 2: Exception at s2, catch matches</strong> — <code>s1, s4, s5, s6</code> (normal termination).',
+            '<strong>Case 3: Exception at s2, catch does NOT match</strong> — <code>s1, s5, s6</code> (abnormal termination).',
+            '<strong>Case 4: Exception at s4 (inside catch) or at s5/s6</strong> — abnormal termination (finally still runs if reached).',
+            '<strong>Case 5: Exception at s4</strong> — <code>s1, s5</code> (abnormal termination).'
+          ]
+        },
+        {
+          heading: 'The throw Keyword',
+          content: [
+            'By using <code>throw</code>, we can hand over an exception object to the JVM programmatically.',
+            `<code>System.out.println(10/0);</code> automatically throws <code>ArithmeticException</code>; <code>throw new ArithmeticException("/ by zero!");</code> does the same explicitly.`,
+            '<strong>Syntax:</strong> <code>throw e;</code> — where <code>e</code> is a Throwable object.',
+            '<strong>Rules:</strong>',
+            '<ol><li>To hand over an exception object to the JVM</li><li><code>e</code> must be of type <code>Throwable</code>, otherwise CE</li><li>If <code>e</code> does not point to any object (i.e., <code>null</code>), then we get <code>NullPointerException</code></li><li>After <code>throw</code>, we cannot place any statement <strong>directly</strong>, otherwise CE. (Indirectly, e.g., inside <code>if/else</code>, is OK because the compiler cannot prove the throw is unconditional.)</li></ol>'
+          ],
+          code: `// CE: unreachable statement
+class Test {
+    public static void main(String[] args) {
+        throw new ArithmeticException();
+        System.out.println("After throw");   // CE: unreachable
+    }
+}
+
+// VALID: throw is conditional
+class Test {
+    public static void main(String[] args) {
+        if (false) {
+            throw new ArithmeticException();
+        } else {
+            System.out.println("After throw statement...!");  // OK
+        }
+    }
+}
+
+// CE: Test is not Throwable
+class Test {
+    public static void main(String[] args) {
+        throw new Test();   // CE: incompatible types
+    }
+}`
+        },
+        {
+          heading: 'The throws Keyword',
+          content: [
+            `If our code may raise a <strong>checked exception</strong>, we must either handle it with try-catch or delegate the responsibility to the caller using the <code>throws</code> keyword. Violation results in a CE: <em>"UnreportedException: XXXException must be caught or declared to be thrown"</em>.`,
+            '<strong>Main objective of throws:</strong> to delegate the responsibility of exception handling to the caller.',
+            'Rules:',
+            '<ul><li><code>throws</code> can be used only for <code>Throwable</code> types, otherwise CE</li><li>We can use <code>throws</code> keyword only for checked exceptions — using it for unchecked is allowed but useless</li><li>If a parent class constructor throws a checked exception, the child class constructor must throw the same checked exception or its parent, otherwise CE</li></ul>'
+          ],
+          code: `// CE: unreported exception
+class Test {
+    public static void main(String[] args) {
+        Thread.sleep(1000);   // CE: must catch or declare InterruptedException
+    }
+}
+
+// OK: delegated to caller
+class Test {
+    public static void main(String[] args) throws InterruptedException {
+        Thread.sleep(1000);
+    }
+}
+
+// Chained throws
+class Test {
+    public static void main(String[] args) throws InterruptedException {
+        doStuff();
+    }
+    public static void doStuff() throws InterruptedException {
+        doMoreStuff();
+    }
+    public static void doMoreStuff() throws InterruptedException {
+        Thread.sleep(500);
+    }
+}`
+        },
+        {
+          heading: 'Customized (User-Defined) Exceptions',
+          content: [
+            'Sometimes we need to create our own exception classes based on program requirements. These are called <strong>customized exceptions</strong>.',
+            'Examples: <code>TooYoungException</code>, <code>TooOldException</code>, <code>InSufficientFundsException</code>.',
+            '<strong>Recommended:</strong> define customized exceptions as <strong>unchecked</strong> — i.e., extend <code>RuntimeException</code> directly or indirectly.',
+            'Always pass a meaningful <code>String</code> message to the <code>super</code> constructor for the exception description.'
+          ],
+          code: `class TooYoungException extends RuntimeException {
+    TooYoungException(String s) { super(s); }
+}
+
+class TooOldException extends RuntimeException {
+    TooOldException(String s) { super(s); }
+}
+
+class CustomExceptionDemo {
+    public static void main(String[] args) {
+        int age = Integer.parseInt(args[0]);
+        if (age > 60) {
+            throw new TooOldException("Younger age is already over");
+        } else if (age < 18) {
+            throw new TooYoungException("Please wait some more time");
+        }
+        System.out.println("Thanks for registering");
+    }
+}`
+        },
+        {
+          heading: 'Top 10 Common Exceptions and Errors',
+          content: [
+            'All exceptions fall into two categories: <strong>JVM Exceptions</strong> (raised automatically by the JVM) and <strong>Programmatic Exceptions</strong> (raised by programmer or API code).',
+            '<strong>1. NullPointerException</strong> — child of RuntimeException, unchecked. Thrown automatically when performing any operation on <code>null</code>. <code>String s = null; s.length();</code> throws NPE.',
+            '<strong>2. StackOverflowError</strong> — child of Error, unchecked. Raised on <strong>recursive method invocation</strong> without a base case.',
+            '<strong>3. ArrayIndexOutOfBoundsException</strong> — child of RuntimeException, unchecked. Thrown when accessing an array element with an out-of-range int index.',
+            '<strong>4. ClassCastException</strong> — child of RuntimeException, unchecked. Thrown when trying to cast a parent class object to a child type.',
+            '<strong>5. ArithmeticException</strong> — child of RuntimeException, unchecked. Thrown on integer division by zero.',
+            `<strong>6. NumberFormatException</strong> — child of IllegalArgumentException, unchecked. Thrown when converting a bad string to a number: <code>Integer.parseInt("abc")</code>.`,
+            '<strong>7. IllegalArgumentException</strong> — child of RuntimeException, unchecked. Thrown when an invalid argument is passed to a method.',
+            '<strong>8. AssertionError</strong> — child of Error, unchecked. Thrown when an <code>assert</code> statement fails (used with <code>-ea</code> flag).',
+            '<strong>9. OutOfMemoryError</strong> — child of Error, unchecked. Raised when the JVM runs out of heap memory.',
+            '<strong>10. IOException / FileNotFoundException</strong> — checked exceptions, raised on I/O failures (file not found, network failure, etc.).'
+          ],
+          code: `// 1. NPE
+String s = null;
+System.out.println(s.length());   // NullPointerException
+
+// 2. StackOverflowError
+class Test {
+    public static void m1() { m1(); }
+    public static void main(String[] a) { m1(); }
+}
+
+// 3. AIOOBE
+int[] a = {10, 20, 30};
+System.out.println(a[20]);   // ArrayIndexOutOfBoundsException
+
+// 4. ClassCastException
+Object o = new Object();
+String s2 = (String) o;       // ClassCastException at runtime
+
+// 6. NumberFormatException
+int n = Integer.parseInt("abc");   // NumberFormatException`
+        }
+      ]
+    },
+  'assertions': {
+      title: 'Assertions',
+      sections: [
+        {
+          heading: 'What is an Assertion?',
+          content: [
+            'An <strong>assertion</strong> is a statement that lets you test your assumptions about the program during development.',
+            'It was introduced in Java 1.4 as a debugging aid.',
+            'Use assertions to check internal invariants — things that should <strong>never</strong> be false if the code is correct.',
+            'Assertions should <strong>not</strong> be used to validate user input or to handle expected runtime errors — use exceptions for those.'
+          ]
+        },
+        {
+          heading: 'Assertion Syntax',
+          content: [
+            '<strong>Two forms:</strong>',
+            '<ul><li><code>assert condition;</code> — throws AssertionError if condition is false</li><li><code>assert condition : message;</code> — throws AssertionError with a custom message</li></ul>',
+            'By default, assertions are <strong>disabled</strong> at runtime. You must enable them with the <code>-ea</code> (enable assertions) JVM flag.',
+            'If assertions are disabled, the assertion statement is skipped entirely — zero overhead.'
+          ],
+          code: `public class AssertionDemo {
+    public static void main(String[] args) {
+        int age = 15;
+        
+        // This assertion checks that age is positive
+        assert age > 0 : "Age must be positive, got: " + age;
+        
+        // This will throw AssertionError if grade is out of range
+        int grade = 105;
+        assert grade >= 0 && grade <= 100 : "Invalid grade: " + grade;
+        
+        System.out.println("Assertions passed (if enabled)");
+    }
+}`
+        },
+        {
+          heading: 'When to Use Assertions',
+          content: [
+            '<ul><li><strong>Internal invariants:</strong> checking something that should always be true during normal execution</li><li><strong>Control-flow invariants:</strong> verifying that a certain code path is never reached (e.g., default case in a switch that should handle all values)</li><li><strong>Post-conditions:</strong> checking the state after a method completes</li></ul>',
+            '<strong>Do NOT use assertions for:</strong>',
+            '<ul><li>Validating user input — use exceptions or return codes</li><li>Checking conditions in public API methods — throw IllegalArgumentException instead</li><li>Controlling program flow — assertions may be disabled</li></ul>'
+          ]
+        },
+        {
+          heading: 'Enabling and Disabling Assertions',
+          content: [
+            'Assertions are disabled by default.',
+            'To enable them, run your program with the <code>-ea</code> flag:',
+            '<code>java -ea AssertionDemo</code>',
+            'To disable: <code>java -da AssertionDemo</code> (default)',
+            'You can also enable/disable per-class or per-package:',
+            '<ul><li><code>java -ea:com.example.MyClass MyApp</code></li><li><code>java -ea:com.example... MyApp</code></li></ul>'
+          ]
+        }
+      ]
+    },
+  'java-coding-standards': {
+      title: 'Java Coding Standards',
+      sections: [
+        {
+          heading: 'Java Naming Conventions',
+          content: [
+            'Following consistent naming conventions makes code more readable and maintainable.',
+            '<ul><li><strong>Class/Interface names:</strong> PascalCase — <code>StudentRecord</code>, <code>PaymentGateway</code></li><li><strong>Method/variable names:</strong> camelCase — <code>calculateTotal()</code>, <code>studentName</code></li><li><strong>Constants:</strong> UPPER_SNAKE_CASE — <code>MAX_SIZE</code>, <code>PI_VALUE</code></li><li><strong>Package names:</strong> all lowercase, reverse domain — <code>com.company.project</code></li></ul>',
+            'Names should be descriptive — avoid single-letter names except in small loops.'
+          ]
+        },
+        {
+          heading: 'Source File Structure',
+          content: [
+            'A Java source file should follow this order:',
+            '<ol><li>Package declaration (if any)</li><li>Import statements</li><li>Class/interface declarations</li><li>Inside a class: fields → constructors → methods</li></ol>',
+            'Only one public class per file, and the filename must match the public class name.'
+          ],
+          code: `package com.example.utils;
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class DataProcessor {
+    // Constants
+    public static final int MAX_ITEMS = 100;
+    
+    // Fields
+    private List<String> items;
+    private boolean isActive;
+    
+    // Constructors
+    public DataProcessor() {
+        this.items = new ArrayList<>();
+        this.isActive = true;
+    }
+    
+    // Public methods
+    public void addItem(String item) {
+        if (items.size() < MAX_ITEMS) {
+            items.add(item);
+        }
+    }
+    
+    // Private helper methods
+    private boolean isValid(String item) {
+        return item != null && !item.isEmpty();
+    }
+}`
+        },
+        {
+          heading: 'Best Practices',
+          content: [
+            '<ul><li>Keep methods short and focused — one responsibility per method</li><li>Use meaningful variable names — <code>customerAge</code> instead of <code>ca</code></li><li>Avoid magic numbers — use named constants</li><li>Always use braces for if/else, even for single-line blocks</li><li>Document public APIs with Javadoc comments</li><li>Use <code>final</code> for variables that do not change</li><li>Prefer interfaces over concrete types in declarations</li><li>Handle exceptions properly — do not swallow them</li><li>Close resources (files, connections) in finally or use try-with-resources</li></ul>'
+          ]
+        }
+      ]
+    },
   'file-io': {
-    title: 'File Input and Output',
-    sections: [
-      {
-        heading: 'What is File I/O?',
-        content: [
-          'File I/O (Input/Output) means reading from and writing to files on your computer.',
-          'Java provides classes in the <code>java.io</code> and <code>java.nio</code> packages for this.',
-          '<strong>Common use cases:</strong>',
-          '<ul><li>Saving user data</li><li>Reading configuration files</li><li>Writing logs</li><li>Processing CSV or text files</li></ul>'
-        ]
-      },
-      {
-        heading: 'Writing to a File',
-        content: [
-          'Use <code>FileWriter</code> to write text to a file.',
-          'Wrap it in a <code>BufferedWriter</code> for better performance.',
-          'Always close the file when done (or use try-with-resources).'
-        ],
-        code: `import java.io.FileWriter;
+      title: 'File Input and Output',
+      sections: [
+        {
+          heading: 'What is File I/O?',
+          content: [
+            'File I/O (Input/Output) means reading from and writing to files on your computer.',
+            'Java provides classes in the <code>java.io</code> and <code>java.nio</code> packages for this.',
+            '<strong>Common use cases:</strong>',
+            '<ul><li>Saving user data</li><li>Reading configuration files</li><li>Writing logs</li><li>Processing CSV or text files</li></ul>'
+          ]
+        },
+        {
+          heading: 'Writing to a File',
+          content: [
+            'Use <code>FileWriter</code> to write text to a file.',
+            'Wrap it in a <code>BufferedWriter</code> for better performance.',
+            'Always close the file when done (or use try-with-resources).'
+          ],
+          code: `import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
@@ -3138,14 +6945,14 @@ public class WriteFileExample {
         }
     }
 }`
-      },
-      {
-        heading: 'Reading from a File',
-        content: [
-          'Use <code>FileReader</code> and <code>BufferedReader</code> to read text line by line.',
-          'The <code>readLine()</code> method returns null when the end of the file is reached.'
-        ],
-        code: `import java.io.FileReader;
+        },
+        {
+          heading: 'Reading from a File',
+          content: [
+            'Use <code>FileReader</code> and <code>BufferedReader</code> to read text line by line.',
+            'The <code>readLine()</code> method returns null when the end of the file is reached.'
+          ],
+          code: `import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -3161,14 +6968,14 @@ public class ReadFileExample {
         }
     }
 }`
-      },
-      {
-        heading: 'File and Directory Info',
-        content: [
-          'The <code>File</code> class helps you check if a file exists, get its size, or list directory contents.',
-          'It does not read or write data — it only works with file paths and metadata.'
-        ],
-        code: `import java.io.File;
+        },
+        {
+          heading: 'File and Directory Info',
+          content: [
+            'The <code>File</code> class helps you check if a file exists, get its size, or list directory contents.',
+            'It does not read or write data — it only works with file paths and metadata.'
+          ],
+          code: `import java.io.File;
 
 public class FileInfoExample {
     public static void main(String[] args) {
@@ -3187,15 +6994,15 @@ public class FileInfoExample {
         }
     }
 }`
-      },
-      {
-        heading: 'Try-with-Resources',
-        content: [
-          'Try-with-resources automatically closes files when the block ends.',
-          'You declare the resource inside the try parentheses.',
-          'This is the cleanest and safest way to handle files.'
-        ],
-        code: `import java.io.BufferedReader;
+        },
+        {
+          heading: 'Try-with-Resources',
+          content: [
+            'Try-with-resources automatically closes files when the block ends.',
+            'You declare the resource inside the try parentheses.',
+            'This is the cleanest and safest way to handle files.'
+          ],
+          code: `import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -3209,14 +7016,14 @@ public class TryWithResources {
         // br is automatically closed here
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Write a program that creates a file named "notes.txt" and writes 3 lines to it.',
-          'Then read the file back and print each line with line numbers.'
-        ],
-        code: `import java.io.*;
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            `Write a program that creates a file named "notes.txt" and writes 3 lines to it.`,
+            'Then read the file back and print each line with line numbers.'
+          ],
+          code: `import java.io.*;
 
 public class TryFileIO {
     public static void main(String[] args) {
@@ -3244,29 +7051,1399 @@ public class TryFileIO {
         }
     }
 }`
-      }
-    ]
-  },
+        },
+        {
+          heading: 'The File Class — Names vs Actual Files',
+          content: [
+            'A <code>java.io.File</code> object represents just the <strong>name</strong> of a file or directory — it does <strong>not</strong> represent the contents of the file. Whether the physical file exists or not, creating a <code>File</code> object will not create the physical file.',
+            'If the file does not exist, the <code>File</code> object simply represents the name; if it does exist, the object represents the physical file.'
+          ],
+          code: `import java.io.*;
+class FileDemo {
+    public static void main(String[] args) throws IOException {
+        File f = new File("cba.txt");
+        System.out.println(f.exists());   // false (first run)
+        f.createNewFile();
+        System.out.println(f.exists());   // true
+    }
+}
+
+// File objects can also represent directories
+class FileDirDemo {
+    public static void main(String[] args) {
+        File f = new File("bbc");
+        System.out.println(f.exists());
+        f.mkdir();
+        System.out.println(f.exists());
+    }
+}`
+        },
+        {
+          heading: 'File Class Constructors',
+          content: [
+            'The <code>File</code> class has three constructors:'
+          ],
+          code: `// 1) From a name string
+File f1 = new File("abc.txt");
+
+// 2) From subdirectory and name
+File f2 = new File("raju123", "file1.txt");
+
+// 3) From a parent File and name
+File parent = new File("raju123");
+File f3 = new File(parent, "file1.txt");`
+        },
+        {
+          heading: 'Important File Class Methods',
+          content: [
+            'The most commonly used <code>File</code> methods:'
+          ],
+          code: `import java.io.*;
+class FileMethods {
+    public static void main(String[] args) throws IOException {
+        // 1) exists() — whether physical file/directory exists
+        File f = new File("xyz.txt");
+        System.out.println(f.exists());   // false
+        f.createNewFile();
+        System.out.println(f.exists());   // true
+
+        // 2) createNewFile() — returns true if a new file was created
+        //                      false if the file already exists
+        System.out.println(f.createNewFile());   // false (already exists)
+
+        // 3) mkdir() — create a directory
+        File dir = new File("mydir");
+        System.out.println(dir.mkdir());
+
+        // 4) isFile() / isDirectory()
+        System.out.println(f.isFile());           // true
+        System.out.println(dir.isDirectory());   // true
+
+        // 5) list() — returns String[] of names in a directory
+        //             returns null if File represents a file
+        File jdk = new File("jdk");
+        if (jdk.isDirectory()) {
+            String[] names = jdk.list();
+            for (String s : names) {
+                System.out.println(s);
+            }
+        }
+
+        // 6) delete() — deletes the file or directory
+        System.out.println(f.delete());
+
+        // 7) length() — size in bytes
+        System.out.println(f.length());
+
+        // 8) renameTo(File dest) — rename
+        // 9) getName(), getPath(), getAbsolutePath(), getParent()
+        // 10) canRead(), canWrite(), canExecute() — permission checks
+    }
+}`
+        },
+        {
+          heading: 'FileWriter — Writing Character Data',
+          content: [
+            '<code>FileWriter</code> is used for writing <strong>character data</strong> to a file.',
+            'Constructors: <code>new FileWriter(String name)</code>, <code>new FileWriter(File f)</code>, <code>new FileWriter(String name, boolean append)</code>, <code>new FileWriter(File f, boolean append)</code>.',
+            'If the file already contains data, it will be <strong>overwritten</strong> unless the append-mode constructor is used.',
+            'If the underlying physical file does not exist, these constructors will <strong>create</strong> the required file automatically.',
+            '<strong>Methods:</strong> <code>write(int ch)</code>, <code>write(String s)</code>, <code>write(char[] ch)</code>, <code>flush()</code> (guarantees the last character is written to the file), <code>close()</code>.'
+          ],
+          code: `import java.io.*;
+class FileWriterDemo {
+    public static void main(String[] args) throws Exception {
+        File f = new File("pongal.txt");
+        System.out.println(f.exists());   // false (initially)
+        FileWriter fw = new FileWriter(f, true);  // append mode
+        System.out.println(f.exists());   // true (created)
+
+        fw.write(97);                      // writes 'a'
+        fw.write("run
+software
+");       // writes "run", newline, "software", newline
+        char[] ch = {'a', 'b', 'c'};
+        fw.write(ch);                      // writes abc
+        fw.flush();
+        fw.close();
+    }
+}`
+        },
+        {
+          heading: 'FileReader — Reading Character Data',
+          content: [
+            '<code>FileReader</code> is used for reading <strong>character data</strong> from a file.',
+            'Constructors: <code>new FileReader(String name)</code>, <code>new FileReader(File f)</code>.',
+            '<strong>Methods:</strong> <code>int read()</code> (returns the next character, or <code>-1</code> if end of file), <code>int read(char[] ch)</code>, <code>close()</code>.',
+            '<strong>Drawback</strong>: with <code>FileWriter</code>, the programmer must insert line separators manually. With <code>FileReader</code>, data can be read only character-by-character, increasing I/O operations and hurting performance.',
+            'To overcome these problems, use <code>BufferedReader</code> and <code>BufferedWriter</code>.'
+          ],
+          code: `import java.io.*;
+class FileReaderDemo {
+    public static void main(String[] args) throws Exception {
+        File f = new File("pongal.txt");
+        FileReader fr = new FileReader(f);
+        System.out.println(fr.read());         // first character (int)
+
+        char[] ch = new char[(int) f.length()];
+        fr.read(ch);
+        for (char c : ch) System.out.print(c);
+
+        fr.close();
+    }
+}`
+        },
+        {
+          heading: 'BufferedWriter — Buffered Writing',
+          content: [
+            '<code>BufferedWriter</code> never communicates directly with the file. It must communicate through a <code>Writer</code> object only.',
+            'Constructors: <code>new BufferedWriter(Writer w)</code>, <code>new BufferedWriter(Writer w, int size)</code>.',
+            `<strong>Valid declarations:</strong> <code>new BufferedWriter(new FileWriter("abc.txt"))</code> and <code>new BufferedWriter(new BufferedWriter(new FileWriter("abc.txt")))</code>.`,
+            `<strong>Invalid declarations:</strong> passing a String or a <code>File</code> object directly — <code>new BufferedWriter("abc.txt")</code> and <code>new BufferedWriter(new File("abc.txt"))</code> are <em>compile-time errors</em>.`,
+            '<strong>Methods:</strong> <code>write(int ch)</code>, <code>write(String s)</code>, <code>write(char[] ch)</code>, <code>newLine()</code>, <code>flush()</code>, <code>close()</code>.',
+            '<strong>Key feature</strong>: <code>newLine()</code> is available in <code>BufferedWriter</code> but <strong>not</strong> in <code>FileWriter</code>. This is the main reason to prefer <code>BufferedWriter</code>.',
+            'When you close <code>BufferedWriter</code>, the underlying <code>FileWriter</code> object is also closed automatically.'
+          ],
+          code: `import java.io.*;
+class BufferedWriterDemo {
+    public static void main(String[] args) throws Exception {
+        File f = new File("pongal.txt");
+        FileWriter fw = new FileWriter(f);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        bw.write(97);
+        bw.newLine();
+        char[] ch = {'a', 'b', 'c', 'd'};
+        bw.write(ch);
+        bw.newLine();
+        bw.write("raju");
+        bw.newLine();
+        bw.write("software");
+        bw.flush();
+        bw.close();   // also closes fw
+    }
+}`
+        },
+        {
+          heading: 'BufferedReader — Buffered Reading',
+          content: [
+            '<code>BufferedReader</code> must communicate through a <code>Reader</code> object only — it never communicates directly with the file.',
+            'Constructors: <code>new BufferedReader(Reader r)</code>, <code>new BufferedReader(Reader r, int bufferSize)</code>.',
+            '<strong>Methods:</strong> <code>read()</code>, <code>read(char[] ch)</code>, <code>readLine()</code> (returns the next line, or <code>null</code> at end of file), <code>close()</code>.',
+            'When you close <code>BufferedReader</code>, the underlying <code>FileReader</code> object is also closed automatically.'
+          ],
+          code: `import java.io.*;
+class BufferedReaderDemo {
+    public static void main(String[] args) throws Exception {
+        FileReader fr = new FileReader("pongal.txt");
+        BufferedReader br = new BufferedReader(fr);
+        String s = br.readLine();
+        while (s != null) {
+            System.out.println(s);
+            s = br.readLine();
+        }
+        br.close();
+    }
+}`
+        },
+        {
+          heading: 'PrintWriter — The Most Enhanced Writer',
+          content: [
+            '<code>PrintWriter</code> is the most enhanced writer for character data — it supports direct file paths and auto-flushing on <code>println</code>.',
+            'Constructors: <code>new PrintWriter(String fname)</code>, <code>new PrintWriter(File f)</code>, <code>new PrintWriter(Writer w)</code>.',
+            '<strong>Methods:</strong> <code>write(int ch)</code>, <code>write(char[] ch)</code>, <code>write(String s)</code>, <code>print(...)</code> (int, double, char, boolean, char[]), <code>println(...)</code>, <code>flush()</code>, <code>close()</code>.'
+          ],
+          code: `import java.io.*;
+class PrintWriterDemo {
+    public static void main(String[] args) throws Exception {
+        FileWriter fw = new FileWriter("pongal.txt");
+        PrintWriter out = new PrintWriter(fw);
+        out.write(97);        // 'a'
+        out.println(100);     // 100
+        out.println(true);    // true
+        out.println('c');     // c
+        out.println("FDGH");  // FDGH
+        out.flush();
+        out.close();
+    }
+}`
+        }
+      ]
+    },
+  'serialization': {
+      title: 'Serialization',
+      sections: [
+        {
+          heading: 'What is Serialization?',
+          content: [
+            'Serialization is the process of saving an object to a file — or more generally, converting an object into a byte stream.',
+            'The reverse process — reading the byte stream back into an object — is called deserialization.',
+            'Serialization is used for:',
+            '<ul><li>Saving object state to disk (persistence)</li><li>Sending objects over a network (RMI, sockets)</li><li>Storing objects in databases as binary data (BLOBs)</li><li>Deep copying objects</li></ul>'
+          ]
+        },
+        {
+          heading: 'How to Make a Class Serializable',
+          content: [
+            'A class must implement the <code>java.io.Serializable</code> interface to be serializable.',
+            'This interface has no methods — it is a marker interface.',
+            'If a class contains non-serializable members, mark them with <code>transient</code> to skip them during serialization.'
+          ],
+          code: `import java.io.*;
+
+class Employee implements Serializable {
+    int id;
+    String name;
+    transient String password; // won't be saved
+    
+    Employee(int id, String name, String password) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+    }
+}
+
+public class SerializationDemo {
+    public static void main(String[] args) throws Exception {
+        Employee emp = new Employee(1, "Alice", "secret123");
+        
+        // Serialize
+        ObjectOutputStream oos = new ObjectOutputStream(
+            new FileOutputStream("emp.ser"));
+        oos.writeObject(emp);
+        oos.close();
+        System.out.println("Serialized successfully");
+        
+        // Deserialize
+        ObjectInputStream ois = new ObjectInputStream(
+            new FileInputStream("emp.ser"));
+        Employee restored = (Employee) ois.readObject();
+        ois.close();
+        
+        System.out.println("ID: " + restored.id);
+        System.out.println("Name: " + restored.name);
+        System.out.println("Password: " + restored.password); // null (transient)
+    }
+}`
+        },
+        {
+          heading: 'Serial Version UID',
+          content: [
+            'When serializing, Java stores a version ID in the stream.',
+            'If the class changes after serialization, deserialization may fail with <code>InvalidClassException</code>.',
+            'To avoid this, explicitly declare <code>serialVersionUID</code> in your class.',
+            '<code>private static final long serialVersionUID = 1L;</code>'
+          ]
+        },
+        {
+          heading: 'Serialization of Object Graphs',
+          content: [
+            'If an object contains references to other objects, Java serializes the entire object graph (all referenced objects) automatically.',
+            'All objects in the graph must also implement <code>Serializable</code>, or you will get <code>NotSerializableException</code>.'
+          ]
+        },
+        {
+          heading: 'Strict Definition and Classes Used',
+          content: [
+            '<strong>Serialization</strong> is the process of converting an object from a <strong>Java-supported format</strong> to a <strong>network- or file-supported format</strong>. <strong>Deserialization</strong> is the reverse process — converting from a file/network format back to a Java-supported format.',
+            'Implemented using <code>FileOutputStream</code> + <code>ObjectOutputStream</code> (for serialization) and <code>FileInputStream</code> + <code>ObjectInputStream</code> (for deserialization).'
+          ],
+          code: `class Dog implements Serializable {
+    int i = 10;
+    int j = 20;
+}
+
+class SerializeDemo {
+    public static void main(String[] args) throws Exception {
+        Dog d = new Dog();
+        FileOutputStream fos = new FileOutputStream("abc.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(d);
+
+        FileInputStream fis = new FileInputStream("abc.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Dog d1 = (Dog) ois.readObject();
+        System.out.println(d1.i + "---" + d1.j);   // 10---20
+    }
+}`
+        },
+        {
+          heading: 'transient Keyword — Excluding Fields from Serialization',
+          content: [
+            'If you do not want to serialize the value of a particular variable (e.g., to meet security constraints), declare it as <code>transient</code>. The JVM ignores transient variables and saves <strong>default values</strong> instead of original values.',
+            '<strong>static</strong> variables are not part of object state and do <strong>not</strong> participate in serialization. Hence declaring <code>static</code> as <code>transient</code> has no impact, and similarly for <code>final</code> fields.'
+          ],
+          table: {
+            headers: [
+              'Declaration',
+              'Output after deserialization (i, j)'
+            ],
+            rows: [
+              [
+                'int i = 10; int j = 20;',
+                '10, 20'
+              ],
+              [
+                'static int i = 10; static transient int j = 20;',
+                '10, 20 (static not serialized)'
+              ],
+              [
+                'transient int i = 10; static transient int j = 20;',
+                '0, 20'
+              ],
+              [
+                'transient static int i = 10; transient int j = 20;',
+                '10, 0'
+              ],
+              [
+                'transient int i = 10; transient final int j = 20;',
+                '0, 20'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Object Graphs in Serialization',
+          content: [
+            'When saving an object to a file, all objects <strong>reachable from</strong> that object are saved by default. This group of objects is called the <strong>Object Graph</strong>.',
+            'If <strong>any</strong> object in the graph is non-serializable, a runtime <code>NotSerializableException</code> is thrown.'
+          ],
+          code: `import java.io.*;
+class Dog implements Serializable {
+    Cat c = new Cat();
+}
+class Cat implements Serializable {
+    Rat r = new Rat();
+}
+class Rat implements Serializable {
+    int j = 20;
+}
+
+class SerializeDemo {
+    public static void main(String[] args) throws Exception {
+        Dog d = new Dog();
+        FileOutputStream fos = new FileOutputStream("abc.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(d);
+
+        FileInputStream fis = new FileInputStream("abc.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Dog d1 = (Dog) ois.readObject();
+        System.out.println(d1.c.r.j);   // 20
+    }
+}
+// If any of Dog/Cat/Rat is not Serializable -> java.io.NotSerializableException`
+        },
+        {
+          heading: 'Customized Serialization — writeObject and readObject',
+          content: [
+            'During default serialization, information can be <strong>lost</strong> because of transient variables. To recover this information, customize the serialization process.',
+            'Two special <code>private</code> methods are recognized by the JVM and called automatically at the time of serialization / deserialization:',
+            '<ul><li><code>private void writeObject(ObjectOutputStream os) throws IOException</code> — invoked automatically by the JVM at serialization time.</li><li><code>private void readObject(ObjectInputStream is) throws IOException, ClassNotFoundException</code> — invoked automatically at deserialization time.</li></ul>',
+            "<strong>Key pattern</strong>: in <code>writeObject</code>, capture the transient field's data into a primitive and write it. In <code>readObject</code>, read the primitive, call <code>defaultReadObject()</code> first, then reconstruct the transient object."
+          ],
+          code: `import java.io.*;
+class Dog implements Serializable {
+    transient Cat c = new Cat();
+
+    private void writeObject(ObjectOutputStream os) throws IOException {
+        int x = c.j;       // capture the lost information
+        os.writeInt(x);
+    }
+
+    private void readObject(ObjectInputStream is) throws IOException, ClassNotFoundException {
+        is.defaultReadObject();
+        int k = is.readInt();
+        c = new Cat();
+        c.j = k;           // restore the lost information
+    }
+}
+class Cat {
+    int j = 20;
+}
+
+class SerializeDemo {
+    public static void main(String[] args) throws Exception {
+        Dog d = new Dog();
+        System.out.println("Before Serialization: " + d.c.j);   // 20
+        FileOutputStream fos = new FileOutputStream("abc.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(d);
+
+        FileInputStream fis = new FileInputStream("abc.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Dog d1 = (Dog) ois.readObject();
+        System.out.println(d1.c.j);   // 20 (recovered)
+    }
+}`
+        },
+        {
+          heading: 'Inheritance in Serialization',
+          content: [
+            '<strong>Case 1: Parent is Serializable</strong> — by default, all child classes are also Serializable. Serializable nature is inherited from parent to child.',
+            '<strong>Case 2: Child is Serializable, Parent is NOT</strong> — you are still allowed to serialize child objects. During serialization, the JVM <strong>ignores the inherited variables</strong> from non-serializable parents. During deserialization, the JVM checks whether any parent is non-serializable; if so, it creates an object for <strong>every</strong> non-serializable parent (using its no-argument constructor) and shares its instance variables with the current child object.',
+            '<strong>Rule</strong>: every non-serializable parent class <strong>must</strong> contain a no-argument constructor — otherwise <code>InvalidClassException</code> is thrown at runtime.'
+          ],
+          code: `// Case 1: Serializable parent, child inherits
+import java.io.*;
+class Animal implements Serializable {
+    int i = 10;
+}
+class Dog extends Animal {
+    int j = 20;
+}
+class SerializeDemo {
+    public static void main(String[] args) throws Exception {
+        Dog d = new Dog();
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("abc.ser"));
+        oos.writeObject(d);
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("abc.ser"));
+        Dog d1 = (Dog) ois.readObject();
+        System.out.println(d1.i + "-----" + d1.j);   // 10-----20
+    }
+}
+
+// Case 2: Non-serializable parent, serializable child
+class Animal2 {
+    int i = 10;
+    Animal2() { System.out.println("Animal Constructor"); }   // required no-arg
+}
+class Dog2 extends Animal2 implements Serializable {
+    int j = 20;
+    Dog2() { System.out.println("Dog Constructor"); }
+}
+class SerializeDemo2 {
+    public static void main(String[] args) throws Exception {
+        Dog2 d = new Dog2();
+        d.i = 888;
+        d.j = 999;
+        System.out.println(d.i + "-----" + d.j);   // 888-----999
+
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("abc.ser"));
+        oos.writeObject(d);
+
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("abc.ser"));
+        Dog2 d1 = (Dog2) ois.readObject();
+        // 'i' was inherited from non-serializable parent - JVM creates Animal2
+        // and shares the default value of i=10 (not 888). 'j' is preserved.
+        System.out.println(d1.i + "-----" + d1.j);   // 10-----999
+    }
+}`
+        }
+      ]
+    },
+  'internationalization': {
+      title: 'Internationalization (i18n)',
+      sections: [
+        {
+          heading: 'What is Internationalization?',
+          content: [
+            'Internationalization (i18n) is the process of designing applications to support multiple languages and regions.',
+            'Java provides built-in support through the <code>java.util</code> and <code>java.text</code> packages.',
+            'Key classes:',
+            '<ul><li><code>Locale</code> — represents a specific geographic, political, or cultural region</li><li><code>NumberFormat</code> — formats numbers for different locales</li><li><code>DateFormat</code> — formats dates for different locales</li><li><code>ResourceBundle</code> — loads locale-specific strings/resources</li></ul>'
+          ]
+        },
+        {
+          heading: 'Locale',
+          content: [
+            'A <code>Locale</code> object represents a region.',
+            'You create one using language code and optional country code:',
+            `<code>Locale.US</code>, <code>Locale.UK</code>, <code>Locale.JAPAN</code>, <code>new Locale("en", "IN")</code>`
+          ],
+          code: `import java.util.Locale;
+import java.text.NumberFormat;
+import java.text.DateFormat;
+import java.util.Date;
+
+public class I18nDemo {
+    public static void main(String[] args) {
+        // Available locales
+        Locale us = Locale.US;
+        Locale india = new Locale("en", "IN");
+        Locale japan = Locale.JAPAN;
+        
+        System.out.println("US: " + us.getDisplayName());
+        System.out.println("India: " + india.getDisplayName());
+        System.out.println("Japan: " + japan.getDisplayName());
+        
+        // Number formatting
+        double amount = 1234567.89;
+        NumberFormat usFormat = NumberFormat.getCurrencyInstance(us);
+        NumberFormat indiaFormat = NumberFormat.getCurrencyInstance(india);
+        
+        System.out.println("US: " + usFormat.format(amount));      // $1,234,567.89
+        System.out.println("India: " + indiaFormat.format(amount)); // ₹1,234,567.89
+        
+        // Date formatting
+        Date now = new Date();
+        DateFormat usDate = DateFormat.getDateInstance(DateFormat.FULL, us);
+        DateFormat jpDate = DateFormat.getDateInstance(DateFormat.FULL, japan);
+        
+        System.out.println("US Date: " + usDate.format(now));
+        System.out.println("Japan Date: " + jpDate.format(now));
+    }
+}`
+        },
+        {
+          heading: 'ResourceBundle for Text',
+          content: [
+            'Store localized strings in <code>.properties</code> files:',
+            '<code>Messages_en.properties</code> — English text',
+            '<code>Messages_fr.properties</code> — French text',
+            "Load the right bundle based on the user's locale."
+          ],
+          code: `import java.util.ResourceBundle;
+import java.util.Locale;
+
+public class ResourceBundleDemo {
+    public static void main(String[] args) {
+        // Load French resources
+        Locale french = new Locale("fr", "FR");
+        ResourceBundle bundle = ResourceBundle.getBundle("Messages", french);
+        
+        System.out.println(bundle.getString("greeting"));  // Bonjour
+        System.out.println(bundle.getString("farewell"));  // Au revoir
+    }
+}`
+        },
+        {
+          heading: 'i18n Classes Used in the SCJP Syllabus',
+          content: [
+            'Internationalization is the process of developing an application so that it can be used in any environment — supporting various languages and countries <strong>without making any changes in the application</strong>. This is achieved by using the following three classes:',
+            '<ul><li><code>Locale</code> — to represent a particular region</li><li><code>NumberFormat</code> — for formatting numbers</li><li><code>DateFormat</code> — for formatting dates</li></ul>'
+          ]
+        },
+        {
+          heading: 'Locale Class — Full API',
+          content: [
+            'A <code>Locale</code> object represents a particular region with respect to country (or) language. It is a <code>final</code> class available in <code>java.util</code> and implements <code>Serializable</code> and <code>Cloneable</code>.',
+            '<strong>Constructors:</strong>',
+            '<ul><li><code>Locale l = new Locale(String language);</code></li><li><code>Locale l = new Locale(String language, String country);</code></li></ul>',
+            'Standard locale objects are defined as constants, e.g. <code>Locale.UK</code>, <code>Locale.ITALY</code>, <code>Locale.US</code>, <code>Locale.CHINA</code>.'
+          ],
+          code: `import java.util.*;
+class LocaleDemo1 {
+    public static void main(String[] args) {
+        Locale l = Locale.getDefault();
+        System.out.println(l.getCountry() + "..." + l.getLanguage());
+        System.out.println(l.getDisplayCountry() + "..." + l.getDisplayLanguage());
+
+        Locale l2 = new Locale("pa", "IN");
+        Locale.setDefault(l2);
+
+        String[] s3 = Locale.getISOLanguages();
+        for (String s4 : s3) System.out.println(s4);
+
+        String[] s5 = Locale.getISOCountries();
+        for (String s6 : s5) System.out.println(s6);
+
+        Locale[] l3 = Locale.getAvailableLocales();
+        for (Locale l4 : l3) {
+            System.out.println(l4);
+            System.out.println(l4.getDisplayCountry() + "....." + l4.getDisplayLanguage());
+        }
+    }
+}`
+        },
+        {
+          heading: 'Locale — Important Methods',
+          content: [
+            'Common <code>Locale</code> class methods:'
+          ],
+          code: `import java.util.*;
+class LocaleMethods {
+    public static void main(String[] args) {
+        Locale l = new Locale("pa", "IN");
+        // 1) Default locale
+        Locale def = Locale.getDefault();
+        System.out.println(def.getCountry() + " " + def.getLanguage());
+
+        // 2) Set default
+        Locale.setDefault(l);
+
+        // 3) Get country / display country
+        System.out.println(l.getCountry());           // IN
+        System.out.println(l.getDisplayCountry());    // India
+
+        // 4) Get language / display language
+        System.out.println(l.getLanguage());          // pa
+        System.out.println(l.getDisplayLanguage());   // Punjabi
+
+        // 5) ISO countries / languages
+        String[] countries = Locale.getISOCountries();
+        for (String c : countries) System.out.println(c);
+        String[] langs = Locale.getISOLanguages();
+        for (String s : langs) System.out.println(s);
+
+        // 6) Available locales
+        for (Locale avail : Locale.getAvailableLocales()) {
+            System.out.println(avail);
+        }
+    }
+}`
+        },
+        {
+          heading: 'NumberFormat — Formatting Numbers by Locale',
+          content: [
+            '<code>NumberFormat</code> can be used for formatting numbers according to a particular locale. It is available in <code>java.text</code> package.',
+            '<strong>Factory methods:</strong>',
+            '<ul><li><code>getInstance()</code> / <code>getNumberInstance()</code></li><li><code>getCurrencyInstance()</code></li><li><code>getPercentInstance()</code></li><li>Same methods overloaded with <code>Locale l</code> for a specific locale, e.g. <code>getCurrencyInstance(Locale l)</code></li></ul>',
+            '<strong>Conversion methods:</strong> <code>String format(long l)</code>, <code>String format(double d)</code> (Java number → locale-specific form), and <code>Number parse(String s)</code> throws <code>ParseException</code> (locale-specific form → Java number).',
+            '<strong>Min/Max digits methods:</strong> <code>setMaximumIntegerDigits(int n)</code>, <code>setMinimumIntegerDigits(int n)</code>, <code>setMaximumFractionDigits(int n)</code>, <code>setMinimumFractionDigits(int n)</code>.'
+          ],
+          code: `import java.text.*;
+import java.util.*;
+class NumberFormatDemo {
+    public static void main(String[] args) {
+        double d1 = 123456.789;
+
+        Locale india = new Locale("pa", "IN");
+        NumberFormat nf = NumberFormat.getCurrencyInstance(india);
+        System.out.println("India Notation: " + nf.format(d1));
+
+        NumberFormat nf1 = NumberFormat.getCurrencyInstance(Locale.ITALY);
+        System.out.println("Italy Notation: " + nf1.format(d1));
+
+        NumberFormat nf2 = NumberFormat.getCurrencyInstance(Locale.CHINA);
+        System.out.println("China Notation: " + nf2.format(d1));
+
+        NumberFormat nf3 = NumberFormat.getCurrencyInstance(Locale.US);
+        System.out.println("US Notation: " + nf3.format(d1));
+    }
+}
+
+// Min/Max digit cases
+class DigitsDemo {
+    public static void main(String[] args) {
+        NumberFormat nf = NumberFormat.getInstance();
+        // Case 1
+        nf.setMaximumIntegerDigits(4);
+        System.out.println(nf.format(123456.789));   // 3,456.789
+
+        // Case 2
+        nf.setMinimumIntegerDigits(4);
+        System.out.println(nf.format(12.456));       // 0012.456
+
+        // Case 3
+        nf.setMaximumFractionDigits(2);
+        System.out.println(nf.format(123456.789));   // 123,456.79
+
+        // Case 4
+        nf.setMinimumFractionDigits(3);
+        System.out.println(nf.format(123.4));        // 123.400
+    }
+}`
+        },
+        {
+          heading: 'DateFormat — Formatting Dates by Locale',
+          content: [
+            '<code>DateFormat</code> can be used for formatting dates according to a particular locale. It is available in <code>java.text</code> and is an <strong>abstract class</strong> — you cannot create an object using the constructor: <code>new DateFormat()</code> is a compile-time error.',
+            '<strong>Factory methods (default locale):</strong>',
+            '<ul><li><code>public static DateFormat getDateInstance();</code></li><li><code>public static DateFormat getDateInstance(int style);</code></li></ul>',
+            '<strong>Styles:</strong> <code>FULL = 0</code>, <code>LONG = 1</code>, <code>MEDIUM = 2</code>, <code>SHORT = 3</code>.',
+            '<strong>For a specific locale:</strong> <code>public static DateFormat getDateInstance(int style, Locale l)</code>.',
+            '<strong>Conversion methods:</strong> <code>String format(Date d)</code> (Java Date → locale form) and <code>Date parse(String s) throws ParseException</code> (locale form → Java Date).',
+            '<strong>Date + Time methods:</strong> <code>getDateTimeInstance()</code>, <code>getDateTimeInstance(int dateStyle, int timeStyle)</code>, <code>getDateTimeInstance(int dateStyle, int timeStyle, Locale l)</code>.'
+          ],
+          code: `import java.text.*;
+import java.util.*;
+class DateFormatDemo {
+    public static void main(String[] args) {
+        // Default locale — all 4 styles
+        System.out.println("Full form is    --" + DateFormat.getDateInstance(0).format(new Date()));
+        System.out.println("Long form is    --" + DateFormat.getDateInstance(1).format(new Date()));
+        System.out.println("Medium form is  --" + DateFormat.getDateInstance(2).format(new Date()));
+        System.out.println("Short form is   --" + DateFormat.getDateInstance(3).format(new Date()));
+    }
+}
+
+// Specific locales for FULL date style
+class DateFormatLocaleDemo {
+    public static void main(String[] args) {
+        DateFormat UK    = DateFormat.getDateInstance(0, Locale.UK);
+        DateFormat US    = DateFormat.getDateInstance(0, Locale.US);
+        DateFormat ITALY = DateFormat.getDateInstance(0, Locale.ITALY);
+
+        System.out.println("UK Style is    --" + UK.format(new Date()));
+        System.out.println("US Style is    --" + US.format(new Date()));
+        System.out.println("ITALY Style is --" + ITALY.format(new Date()));
+    }
+}
+
+// Both date and time
+class DateTimeFormatDemo {
+    public static void main(String[] args) {
+        DateFormat ITALY = DateFormat.getDateTimeInstance(0, 0, Locale.ITALY);
+        System.out.println("ITALY Style is --" + ITALY.format(new Date()));
+    }
+}`
+        }
+      ]
+    },
+};
+
+const javaModule4Content = {
+  'collections-deep-dive': {
+      title: 'Collections Deep Dive (Java 1.5+)',
+      sections: [
+        {
+          heading: 'Limitations of Object Arrays',
+          content: [
+            'An <strong>array</strong> is an indexed collection of a <strong>fixed number of homogeneous data elements</strong>.',
+            '<strong>Main limitations of object arrays:</strong>',
+            '<ol><li>Arrays are <strong>fixed in size</strong> — once created, size cannot be increased or decreased.</li><li>Arrays can hold <strong>only homogeneous</strong> data elements (with type-specific arrays). Object arrays allow heterogeneous data but you still need casting.</li><li>For arrays there is <strong>no underlying data structure</strong> — no default support for sorting, searching, or duplicate prevention.</li></ol>',
+            'To resolve these problems, the <code>Collection</code> concept was introduced. Collections are <strong>growable</strong>, can hold <strong>heterogeneous</strong> data, and every collection class is built on a data structure with ready-made methods for sorting, searching, etc.'
+          ]
+        },
+        {
+          heading: 'Collections vs Arrays',
+          content: [
+            'A side-by-side comparison:'
+          ],
+          table: {
+            headers: [
+              'Property',
+              'Collections',
+              'Arrays'
+            ],
+            rows: [
+              [
+                'Size',
+                'Not fixed in size (growable)',
+                'Fixed in size'
+              ],
+              [
+                'Memory',
+                'Better (growable)',
+                'Not as good (over-allocated or wasted)'
+              ],
+              [
+                'Performance',
+                'Worst (overhead for structure maintenance)',
+                'Recommended for performance'
+              ],
+              [
+                'Data elements',
+                'Can hold heterogeneous data',
+                'Arrays can hold only homogeneous (typed) or Object[]'
+              ],
+              [
+                'Data structure',
+                'Every class is built on a data structure',
+                'No underlying data structure'
+              ],
+              [
+                'Primitives vs Objects',
+                'Can hold <strong>only Objects</strong> (not primitives)',
+                'Can hold both Objects and primitives'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'The 7 Key Interfaces of the Collection Framework',
+          content: [
+            'The Collection Framework is the group of classes and interfaces that can be used to represent a <strong>collection of objects as a single entity</strong>. (In C++ this is the STL or <em>container</em>.)',
+            'The 7 key interfaces are:',
+            '<ol><li><code>Collection</code> — root interface for the entire framework (java.util). Represents a group of objects as a single entity. No concrete class implements <code>Collection</code> directly.</li><li><code>List</code> — child of <code>Collection</code>. Preserves <strong>insertion order</strong> and <strong>allows duplicates</strong>. Implemented by <code>ArrayList</code>, <code>LinkedList</code>, <code>Vector</code>, <code>Stack</code>.</li><li><code>Set</code> — child of <code>Collection</code>. <strong>Duplicates not allowed</strong>; insertion order <strong>not preserved</strong>. Implemented by <code>HashSet</code> and <code>LinkedHashSet</code>.</li><li><code>SortedSet</code> — child of <code>Set</code>. Elements inserted in some <strong>sorting order</strong>. Implemented by <code>TreeSet</code>.</li><li><code>Queue</code> (1.5+) — child of <code>Collection</code>. Represents a group of objects <strong>prior to processing</strong>. Implemented by <code>PriorityQueue</code> and indirectly by <code>LinkedList</code>.</li><li><code>Map</code> — <strong>not</strong> a child of <code>Collection</code>. Represents a group of objects as <strong>key-value pairs</strong>. Both key and value are objects.</li><li><code>SortedMap</code> — child of <code>Map</code>. Entries arranged in <strong>sorting order of keys</strong>. Implemented by <code>TreeMap</code>.</li></ol>',
+            '<strong>Legacy classes</strong> in the framework (re-engineered in 1.2 to fit in): <code>Vector</code>, <code>Stack</code>, <code>Hashtable</code>, <code>Properties</code>, <code>Dictionary</code> (abstract), <code>Enumeration</code> (interface).'
+          ]
+        },
+        {
+          heading: 'Collection vs Collections',
+          content: [
+            '<code>Collection</code> is an <strong>interface</strong> in <code>java.util</code> for representing a group of objects as a single entity.',
+            '<code>Collections</code> is a <strong>utility class</strong> in <code>java.util</code> that defines several utility methods for collection-implemented class objects (sorting, searching, synchronized wrappers, etc.).',
+            '<strong>Common utility methods on Collections:</strong>',
+            '<ul><li><code>Collections.synchronizedList(List)</code> — returns a synchronized (thread-safe) view of the given list. Used to make <code>ArrayList</code> thread-safe.</li><li><code>Collections.synchronizedSet(Set)</code></li><li><code>Collections.synchronizedMap(Map)</code></li><li><code>Collections.sort(List)</code>, <code>Collections.min</code>, <code>Collections.max</code>, <code>Collections.shuffle</code>, etc.</li></ul>'
+          ]
+        },
+        {
+          heading: 'Collection Interface Methods',
+          content: [
+            'The <code>Collection</code> interface defines the most common general methods applicable to any collection object:',
+            '<ul><li><code>boolean add(Object obj)</code> — adds an object to the collection</li><li><code>boolean addAll(Collection c)</code> — adds all elements of <code>c</code></li><li><code>boolean remove(Object obj)</code></li><li><code>boolean removeAll(Collection c)</code> — removes a particular group of objects</li><li><code>boolean retainAll(Collection c)</code> — removes all elements <strong>except</strong> those present in <code>c</code></li><li><code>void clear()</code> — removes all objects</li><li><code>boolean contains(Object obj)</code> — checks whether the object is present</li><li><code>boolean containsAll(Collection c)</code></li><li><code>boolean isEmpty()</code></li><li><code>int size()</code></li><li><code>Object[] toArray()</code> — converts collection to an array</li><li><code>Iterator iterator()</code> — to retrieve objects one by one</li></ul>'
+          ]
+        },
+        {
+          heading: 'ArrayList — The Most Common List',
+          content: [
+            '<strong>Underlying data structure:</strong> resizable (growable) array.',
+            '<strong>Properties:</strong> duplicates allowed, insertion order preserved, heterogeneous objects allowed, <code>null</code> insertion is possible.',
+            'Three constructors:',
+            '<ul><li><code>new ArrayList()</code> — default initial capacity 10. When full, new capacity = <code>(current * 3/2) + 1</code></li><li><code>new ArrayList(int initialCapacity)</code> — custom initial capacity</li><li><code>new ArrayList(Collection c)</code> — for inter-conversion between collection objects</li></ul>',
+            'Implements <code>Serializable</code>, <code>Cloneable</code>, and <code>RandomAccess</code>. Random access means any element can be accessed with the same speed, so <code>ArrayList</code> is the <strong>best choice for retrieval</strong> operations.',
+            '<strong>Worst choice</strong> for frequent insertion or deletion in the middle (requires shifting elements).'
+          ],
+          code: `import java.util.*;
+class ArrayListDemo {
+    public static void main(String[] args) {
+        ArrayList a = new ArrayList();
+        a.add("A");
+        a.add(new Integer(10));
+        a.add("A");
+        a.add(null);
+        System.out.println(a);           // [A, 10, A, null]
+        a.remove(2);
+        System.out.println(a);           // [A, 10, null]
+        a.add(2, "M");
+        a.add("N");
+        System.out.println(a);           // [A, 10, M, null, N]
+    }
+}`
+        },
+        {
+          heading: 'LinkedList — Best for Insertion/Deletion in the Middle',
+          content: [
+            '<strong>Underlying data structure:</strong> doubly-linked list.',
+            '<strong>Properties:</strong> duplicates allowed, insertion order preserved, heterogeneous objects allowed, <code>null</code> insertion is possible.',
+            'Implements <code>List</code>, <code>Queue</code>, <code>Serializable</code>, <code>Cloneable</code>. Does <strong>not</strong> implement <code>RandomAccess</code>.',
+            '<strong>Best choice</strong> for frequent insertion or deletion in the middle (no shift operations required). <strong>Worst choice</strong> for retrieval operations.',
+            '<strong>Specific methods</strong> (used for implementing stacks and queues): <code>addFirst</code>, <code>addLast</code>, <code>removeFirst</code>, <code>removeLast</code>, <code>getFirst</code>, <code>getLast</code>.',
+            'Constructors: <code>new LinkedList()</code> and <code>new LinkedList(Collection c)</code>.'
+          ],
+          code: `import java.util.*;
+class LinkedListDemo {
+    public static void main(String[] args) {
+        LinkedList l = new LinkedList();
+        l.add("raju");
+        l.add(new Integer(10));
+        l.add(null);
+        l.add("raju");
+        l.set(0, "chinna");
+        l.add(0, "Kiran");
+        l.addFirst("AAAA");
+        l.addLast("ZZZZ");
+        System.out.println(l);   // [AAAA, Kiran, chinna, 10, null, raju, ZZZZ]
+    }
+}`
+        },
+        {
+          heading: 'Inter-Conversion Between Collection Objects',
+          content: [
+            'Collection objects can be converted from one type to another by passing the source collection to the constructor of the target type. This is useful when you need different performance characteristics for different operations.'
+          ],
+          code: `import java.util.*;
+class InterConvert {
+    public static void main(String[] args) {
+        ArrayList l1 = new ArrayList();
+        l1.add(10); l1.add(20); l1.add(30);
+        System.out.println("l1--->" + l1);   // [10, 20, 30]
+
+        LinkedList l2 = new LinkedList(l1);
+        l2.add(1, 5);
+        l2.add(3, 5);
+        l2.add(5, 15);
+        System.out.println("l2--->" + l2);   // [10, 5, 20, 5, 30, 15]
+
+        ArrayList l3 = new ArrayList(l2);
+        System.out.println("l3--->" + l3);   // [10, 5, 20, 5, 30, 15]
+    }
+}`
+        },
+        {
+          heading: 'Vector and Stack (Legacy Classes)',
+          content: [
+            '<strong>Vector</strong> is a legacy class (1.0) re-engineered in 1.2 to fit the collection framework. Underlying data structure is a <strong>resizable array</strong>.',
+            '<strong>Properties:</strong> insertion order preserved, duplicates allowed, <code>null</code> allowed, heterogeneous allowed, best for retrieval, worst for middle insertion/deletion. Implements <code>Serializable</code>, <code>Cloneable</code>, <code>RandomAccess</code>.',
+            '<strong>Vector vs ArrayList:</strong>',
+            '<ul><li>All <code>Vector</code> methods are <code>synchronized</code> (thread-safe) but slower. <code>ArrayList</code> methods are not synchronized (faster).</li><li><code>Vector</code> is 1.0 (legacy); <code>ArrayList</code> is 1.2.</li></ul>',
+            '<strong>Vector constructors and capacity rule:</strong> default initial capacity 10, new capacity = <code>2 * currentCapacity</code>.',
+            '<strong>Stack</strong> is the child class of <code>Vector</code>. Methods: <code>push(Object)</code>, <code>pop()</code> (removes and returns top), <code>peek()</code> (returns top without removal), <code>search(Object)</code> (returns offset from top, or <code>-1</code> if not found), <code>empty()</code> (returns true if empty).'
+          ],
+          code: `import java.util.*;
+class VectorDemo {
+    public static void main(String[] args) {
+        Vector v = new Vector();
+        System.out.println(v.capacity());   // 10
+        for (int i = 0; i < 10; i++) v.addElement(i);
+        System.out.println(v.capacity());   // 10
+        v.addElement("Aa");
+        System.out.println(v.capacity());   // 20 (doubled)
+        System.out.println(v);
+    }
+}
+
+class StackDemo {
+    public static void main(String[] args) {
+        Stack s = new Stack();
+        s.push("A"); s.push("B"); s.push("C");
+        System.out.println(s);              // [A, B, C]
+        System.out.println(s.search("A"));  // 3 (offset from top)
+        System.out.println(s.search("Z"));  // -1
+    }
+}`
+        },
+        {
+          heading: 'Cursors: Enumeration, Iterator, ListIterator',
+          content: [
+            'A <strong>cursor</strong> is used to retrieve objects one by one from a collection. There are <strong>3 cursors</strong> in the collection framework: <code>Enumeration</code>, <code>Iterator</code>, and <code>ListIterator</code>.'
+          ],
+          table: {
+            headers: [
+              'Property',
+              'Enumeration',
+              'Iterator',
+              'ListIterator'
+            ],
+            rows: [
+              [
+                'Legacy?',
+                'Yes (1.0)',
+                'No (1.2)',
+                'No (1.2, child of Iterator)'
+              ],
+              [
+                'Applicable for',
+                'Only legacy classes (Vector, Stack, Hashtable)',
+                'Any collection (universal cursor)',
+                'Only list-implemented classes (ArrayList, LinkedList, Vector, Stack)'
+              ],
+              [
+                'How to get',
+                'elements() method',
+                'iterator() method',
+                'listIterator() method'
+              ],
+              [
+                'Operations',
+                'Read only',
+                'Read + remove',
+                'Read + remove + replace + add'
+              ],
+              [
+                'Movement',
+                'Single direction (forward)',
+                'Single direction (forward)',
+                'Bidirectional (forward + backward)'
+              ],
+              [
+                'Methods',
+                'hasMoreElements(), nextElement()',
+                'hasNext(), next(), remove()',
+                'hasNext(), hasPrevious(), next(), previous(), nextIndex(), previousIndex(), remove(), set(Object), add(Object)'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Enumeration and Iterator — Examples',
+          content: [
+            '<strong>Enumeration limitations:</strong>',
+            '<ol><li>Applicable only for legacy classes; not a universal cursor.</li><li>Read-only — cannot modify or remove elements.</li></ol>',
+            '<strong>Iterator advantages:</strong> universal cursor (1.2+), can perform <code>remove</code> in addition to read. <strong>Single-direction only</strong> — cannot replace or add new objects.',
+            '<strong>ListIterator</strong> advantages: <strong>bidirectional</strong> cursor (1.2+, child of <code>Iterator</code>). Can move forward and backward. Can also perform <code>replace</code> and <code>add</code> operations in addition to read and remove.',
+            '<code>ListIterator.nextIndex()</code> returns the size of the list if there is no next element. <code>previousIndex()</code> returns <code>-1</code> if there is no previous element.',
+            'The most powerful cursor is <code>ListIterator</code>, but its main limitation is that it applies only to list-implemented classes.'
+          ],
+          code: `import java.util.*;
+
+// Enumeration: only read, only legacy
+class EnumerationDemo {
+    public static void main(String[] args) {
+        Vector v = new Vector();
+        for (int i = 0; i <= 10; i++) v.addElement(i);
+        System.out.println(v);
+        Enumeration e = v.elements();
+        while (e.hasMoreElements()) {
+            Integer i = (Integer) e.nextElement();
+            if ((i % 2) == 0) System.out.println(i);
+        }
+    }
+}
+
+// Iterator: read + remove, universal
+class IteratorDemo {
+    public static void main(String[] args) {
+        ArrayList al = new ArrayList();
+        for (int i = 0; i <= 10; i++) al.add(i);
+        System.out.println(al);
+        Iterator itr = al.iterator();
+        while (itr.hasNext()) {
+            Integer i = (Integer) itr.next();
+            if ((i % 2) == 0) System.out.println(i);
+            else itr.remove();
+        }
+        System.out.println(al);   // only even numbers remain
+    }
+}
+
+// ListIterator: bidirectional + add
+class ListIteratorDemo {
+    public static void main(String[] args) {
+        LinkedList l = new LinkedList();
+        l.add("balakrishna"); l.add("chiru"); l.add("venky"); l.add("nag");
+        ListIterator ltr = l.listIterator();
+        while (ltr.hasNext()) {
+            String s = (String) ltr.next();
+            if (s.equals("nag")) ltr.add("chaitanya");
+        }
+        System.out.println(l);  // [balakrishna, chiru, venky, nag, chaitanya]
+    }
+}`
+        },
+        {
+          heading: 'Set Interface and HashSet',
+          content: [
+            "<code>Set</code> is a child of <code>Collection</code>. Represents a group of <strong>individual objects where duplicates are not allowed</strong> and <strong>insertion order is not preserved</strong>. The interface defines <strong>no new methods</strong> beyond <code>Collection</code>'s.",
+            '<strong>HashSet</strong> properties:',
+            '<ul><li>Underlying data structure: <strong>Hashtable</strong>.</li><li>Insertion order not preserved; based on hash code of the object.</li><li><strong>Duplicates not allowed</strong> — adding a duplicate returns <code>false</code> (no compile-time or runtime error).</li><li><code>null</code> insertion is possible (only one).</li><li>Heterogeneous objects allowed.</li><li><strong>Best choice for search operations.</strong></li></ul>',
+            'Constructors: <code>new HashSet()</code> (default initial capacity 16, default fill ratio 0.75), <code>new HashSet(int initialCapacity)</code>, <code>new HashSet(int initialCapacity, float fillRatio)</code>, <code>new HashSet(Collection c)</code>.'
+          ],
+          code: `import java.util.*;
+class HashSetDemo {
+    public static void main(String[] args) {
+        HashSet h = new HashSet();
+        h.add("B"); h.add("C"); h.add("D"); h.add("Z"); h.add(null);
+        h.add(new Integer(10));
+        System.out.println(h.add("Z"));   // false (duplicate)
+        System.out.println(h);            // [null, B, C, D, Z, 10] (order not preserved)
+    }
+}`
+        },
+        {
+          heading: 'LinkedHashSet — Insertion Order Preserved',
+          content: [
+            '<code>LinkedHashSet</code> is the <strong>child class of <code>HashSet</code></strong>. It is exactly similar to <code>HashSet</code> except:',
+            '<ul><li>Underlying data structures: <strong>Hashtable + LinkedList</strong></li><li><strong>Insertion order is preserved</strong></li><li>Introduced in <strong>1.4</strong> (HashSet was 1.2)</li></ul>',
+            'For <strong>caching applications</strong>, the best data structure is <code>LinkedHashSet</code> (or <code>LinkedHashMap</code>) where duplicate objects are not allowed but insertion order must be preserved.'
+          ]
+        },
+        {
+          heading: 'SortedSet and TreeSet',
+          content: [
+            '<code>SortedSet</code> is the <strong>child of <code>Set</code></strong>. Duplicates are not allowed. Insertion order is not preserved, but elements are inserted according to some <strong>sorting order</strong> (default natural order or customized).',
+            '<strong>Specific methods:</strong>',
+            '<ul><li><code>Object first()</code> — returns the first element</li><li><code>Object last()</code> — returns the last element</li><li><code>SortedSet headSet(Object obj)</code> — returns SortedSet of elements <strong>less than</strong> <code>obj</code></li><li><code>SortedSet tailSet(Object obj)</code> — returns SortedSet of elements <strong>greater than or equal to</strong> <code>obj</code></li><li><code>SortedSet subSet(Object obj1, Object obj2)</code> — returns SortedSet of elements <code>&gt;= obj1</code> but <code>&lt; obj2</code></li><li><code>Comparator comparator()</code> — returns the comparator object describing the underlying sorting technique. Returns <code>null</code> for default (ascending natural) order.</li></ul>',
+            '<strong>TreeSet</strong> properties:',
+            '<ul><li>Underlying data structure: <strong>Balanced Tree</strong></li><li>Duplicates not allowed (adding duplicate returns <code>false</code>)</li><li>Insertion order not preserved; elements sorted by natural or custom order</li><li><strong>Heterogeneous objects are NOT allowed</strong> — violation throws <code>ClassCastException</code> at runtime</li></ul>',
+            '<strong>Constructors:</strong> <code>new TreeSet()</code> (natural sorting), <code>new TreeSet(Comparator c)</code> (custom sorting), <code>new TreeSet(Collection c)</code>, <code>new TreeSet(SortedSet s)</code>.'
+          ],
+          code: `import java.util.*;
+class TreeSetDemo {
+    public static void main(String[] args) {
+        TreeSet t = new TreeSet();
+        t.add("A"); t.add("B"); t.add("Z"); t.add("L");
+        // t.add(new Integer(10));   // RE: ClassCastException
+        // t.add(null);              // RE: NullPointerException
+        t.add("A");   // returns false (duplicate)
+        System.out.println(t);  // [A, B, L, Z]
+    }
+}
+
+// StringBuffer does not implement Comparable -> ClassCastException
+class TreeSetStringBuffer {
+    public static void main(String[] args) {
+        TreeSet t = new TreeSet();
+        t.add(new StringBuffer("A"));
+        t.add(new StringBuffer("B"));
+        t.add(new StringBuffer("T"));
+        t.add(new StringBuffer("Z"));
+        System.out.println(t);  // RE: ClassCastException
+    }
+}`
+        },
+        {
+          heading: 'Comparable Interface — Natural Sorting',
+          content: [
+            '<code>Comparable</code> is in <code>java.lang</code> and contains a single method: <code>public int compareTo(Object obj)</code>.',
+            'For <code>obj1.compareTo(obj2)</code>:',
+            '<ul><li>Returns <strong>negative</strong> if <code>obj1</code> has to come <strong>before</strong> <code>obj2</code></li><li>Returns <strong>positive</strong> if <code>obj1</code> has to come <strong>after</strong> <code>obj2</code></li><li>Returns <strong>zero</strong> if <code>obj1</code> and <code>obj2</code> are equal (duplicates)</li></ul>',
+            'An object is said to be <strong>comparable</strong> iff the corresponding class implements <code>Comparable</code>. All wrapper classes and <code>String</code> already implement <code>Comparable</code>, but <code>StringBuffer</code> does <strong>not</strong> — hence <code>TreeSet</code> with <code>StringBuffer</code> throws <code>ClassCastException</code>.',
+            'While inserting into a <code>TreeSet</code> with natural sorting, the JVM internally calls <code>compareTo()</code>.',
+            `<code>"A".compareTo(null)</code> throws <code>NullPointerException</code>. <code>"A".compareTo(new Integer(10))</code> throws <code>ClassCastException</code>.`
+          ],
+          code: `System.out.println("A".compareTo("Z"));   // negative
+System.out.println("K".compareTo("A"));   // positive
+System.out.println("K".compareTo("K"));   // 0
+System.out.println("a".compareTo("A"));   // positive (lowercase > uppercase)`
+        },
+        {
+          heading: 'Comparator Interface — Customized Sorting',
+          content: [
+            'For custom sorting, use the <code>Comparator</code> interface in <code>java.util</code>. It defines two methods: <code>compare(Object, Object)</code> and <code>equals(Object)</code>. Implementing <code>equals</code> is optional (it is inherited from <code>Object</code>).',
+            '<strong>Sorting with custom Comparator (descending order of Integers):</strong>'
+          ],
+          code: `import java.util.*;
+class TreeSetDemo {
+    public static void main(String[] args) {
+        TreeSet t = new TreeSet(new MyComparator());
+        t.add(10); t.add(5); t.add(15); t.add(20); t.add(0);
+        System.out.println(t);   // [20, 15, 10, 5, 0]
+    }
+}
+class MyComparator implements Comparator {
+    public int compare(Object obj1, Object obj2) {
+        Integer I1 = (Integer) obj1;
+        Integer I2 = (Integer) obj2;
+        if (I1 < I2)       return +1;
+        else if (I1 > I2)  return -1;
+        else               return 0;
+    }
+}`
+        },
+        {
+          heading: 'Comparator Return Values and Behavior',
+          content: [
+            'Different return values from <code>compare</code> produce different sort orders:'
+          ],
+          code: `// Case 1: compare returns various expressions
+public int compare(Object obj1, Object obj2) {
+    Integer I1 = (Integer) obj1;
+    Integer I2 = (Integer) obj2;
+    return I1.compareTo(I2);    // [0, 5, 10, 15, 20] (natural ascending)
+    // return I2.compareTo(I1);  // [20, 15, 10, 5, 0] (descending)
+    // return -I1.compareTo(I2); // [20, 15, 10, 5, 0]
+    // return -I2.compareTo(I1); // [0, 5, 10, 15, 20]
+    // return I2 - I1;           // [20, 15, 10, 5, 0]
+    // return I1 - I2;           // [0, 5, 10, 15, 20]
+}
+
+// Case 2: constant return values
+public int compare(Object obj1, Object obj2) {
+    // return -1;  // [0, 20, 15, 5, 10] (reverse of insertion order)
+    // return  1;  // [10, 5, 15, 20, 0] (insertion order)
+    return  0;  // [10] - all other elements are considered duplicates
+}
+
+// Reverse alphabetical order of Strings
+class MyComparator implements Comparator {
+    public int compare(Object obj1, Object obj2) {
+        String s1 = (String) obj1;
+        String s2 = (String) obj2;
+        return s2.compareTo(s1);
+    }
+}`
+        },
+        {
+          heading: 'Map Interface',
+          content: [
+            'The <code>Map</code> interface is <strong>not</strong> a child of <code>Collection</code>. It represents a group of objects as <strong>key-value pairs</strong> (both key and value are objects). Real-world examples: <code>StudentName &rarr; StudentRollNo</code>, <code>phoneNumber &rarr; contactDetails</code>, <code>word &rarr; meaning</code>, <code>IP Address &rarr; Domain-name</code>.',
+            '<strong>Sub-interfaces:</strong>',
+            '<ul><li><code>Map.Entry</code> — describes a single key-value pair (key is unique)</li><li><code>SortedMap</code> — entries arranged in sorting order of keys</li><li><code>NavigableMap</code> (1.6+) — provides navigation methods like lower, floor, ceiling, higher</li></ul>',
+            '<strong>Implementing classes:</strong> <code>HashMap</code>, <code>LinkedHashMap</code>, <code>WeakHashMap</code>, <code>IdentityHashMap</code>, <code>Hashtable</code>, <code>Properties</code>, <code>TreeMap</code>.'
+          ]
+        },
+        {
+          heading: 'Map Interface Methods',
+          content: [
+            '<strong>Adding key-value pairs:</strong>',
+            '<ul><li><code>put(key, val)</code> — returns the previous value associated with the key (or <code>null</code>)</li><li><code>putAll(map2)</code> — adds all entries from another map</li></ul>',
+            '<strong>Removing key-value pairs:</strong>',
+            '<ul><li><code>remove(key)</code> — returns previous value (or <code>null</code>)</li><li><code>clear()</code> — removes all elements</li></ul>',
+            '<strong>Querying:</strong>',
+            '<ul><li><code>get(key)</code> — returns value corresponding to key, or <code>null</code>. Use <code>containsKey</code> to disambiguate if <code>null</code> is a valid value.</li><li><code>containsKey(key)</code>, <code>containsValue(val)</code></li><li><code>isEmpty()</code>, <code>size()</code></li></ul>',
+            '<strong>Views (for iteration):</strong>',
+            '<ul><li><code>Set keySet()</code> — Set view of all keys</li><li><code>Collection values()</code> — Collection view of all values</li><li><code>Set entrySet()</code> — Set of <code>Map.Entry</code> objects (key-value pairs)</li></ul>',
+            'Both key and value can be <code>null</code>, but you should not add a Map to itself as a key or value.'
+          ]
+        },
+        {
+          heading: 'Map.Entry Interface',
+          content: [
+            'Each key-value pair in a map is saved as a <code>java.util.Map.Entry</code> object. A set of entries is obtained via <code>map.entrySet()</code>, and iterating over the map is done by iterating over this set.',
+            '<strong>Methods:</strong>',
+            '<ul><li><code>getKey()</code> — returns the key</li><li><code>getValue()</code> — returns the value</li><li><code>setValue(val)</code> — optional operation; sets a new value and returns the original. Modifies the underlying map.</li></ul>'
+          ]
+        },
+        {
+          heading: 'HashMap vs LinkedHashMap vs TreeMap vs Hashtable',
+          content: [
+            '<strong>HashMap</strong> (1.2) — implemented with a hash table. <strong>Access time O(1)</strong>. Entries are <strong>unsorted</strong>. Values can be <code>null</code>; only one <code>null</code> key is allowed.',
+            '<strong>LinkedHashMap</strong> (1.4) — hash table + linked list. <strong>Access time O(1)</strong>. Entries are sorted in <strong>insertion order</strong> (or order of last access, useful for LRU caching). Slower than HashMap for add/remove, faster for iteration.',
+            '<strong>TreeMap</strong> (1.2) — implemented as a balanced binary tree. <strong>Access time O(log N)</strong>. Entries sorted by <strong>key</strong> (natural order or custom comparator).',
+            '<strong>Hashtable</strong> (1.0, legacy) — same as HashMap but: (1) does <strong>not</strong> allow <code>null</code> for key or value; (2) all key methods are <code>synchronized</code> (slower).',
+            '<strong>WeakHashMap</strong> — map of weak keys. If no other references hold a particular key, it can be garbage collected. Designed to solve specific problems.',
+            '<strong>IdentityHashMap</strong> (1.4) — uses <code>==</code> instead of <code>equals()</code> to compare keys. Only for special problems, not general use.',
+            '<strong>HashMap constructors:</strong>',
+            '<ul><li><code>new HashMap()</code> — default initial capacity 16, load factor 0.75</li><li><code>new HashMap(int initialCapacity)</code></li><li><code>new HashMap(int initialCapacity, float loadFactor)</code></li><li><code>new HashMap(Map mp)</code> — for inter-conversion</li></ul>',
+            '<strong>TreeMap constructors:</strong>',
+            '<ul><li><code>new TreeMap()</code> — keys sorted by natural order</li><li><code>new TreeMap(Comparator comp)</code> — custom sort</li><li><code>new TreeMap(Map mp)</code> — from a Map (natural ordering)</li><li><code>new TreeMap(SortedMap smp)</code> — from a SortedMap (key ordering preserved)</li></ul>'
+          ]
+        },
+        {
+          heading: 'SortedMap Interface Methods',
+          content: [
+            '<code>SortedMap</code> is used by <code>TreeMap</code> and adds methods reflecting that a TreeMap is sorted:',
+            '<ul><li><code>comparator()</code> — returns the Comparator used to compare keys; <code>null</code> for natural ordering.</li><li><code>firstKey()</code> — key of the first (in sorted order) element</li><li><code>lastKey()</code> — key of the last (in sorted order) element</li><li><code>headMap(toKey)</code> — returns SortedMap of all elements with key <strong>less than</strong> <code>toKey</code></li><li><code>tailMap(fromKey)</code> — returns SortedMap of all elements with key <strong>greater than or equal to</strong> <code>fromKey</code></li><li><code>subMap(fromKey, toKey)</code> — returns SortedMap of all elements <code>&gt;= fromKey</code> and <code>&lt; toKey</code></li></ul>'
+          ]
+        }
+      ]
+    },
+  'collections': {
+      title: 'Java Collections Framework',
+      sections: [
+        {
+          heading: 'What are Collections?',
+          content: [
+            'The Java Collections Framework is a set of classes and interfaces that help you store and manage groups of objects.',
+            'Think of collections like different types of containers — some are like lists (ordered), some are like sets (no duplicates), and some are like maps (key-value pairs).',
+            '<strong>Why use collections?</strong>',
+            '<ul><li>They grow and shrink automatically</li><li>They provide ready-made methods for sorting, searching, and filtering</li><li>They are more flexible than regular arrays</li></ul>',
+            '<strong>Main types:</strong>',
+            '<ul><li><code>List</code> — ordered, allows duplicates</li><li><code>Set</code> — no duplicates, no guaranteed order</li><li><code>Map</code> — key-value pairs</li><li><code>Queue</code> — first-in, first-out (FIFO)</li></ul>'
+          ]
+        },
+        {
+          heading: 'ArrayList',
+          content: [
+            '<code>ArrayList</code> is the most commonly used List. It is like an array that can grow in size.',
+            'You can add, remove, and access elements by index.',
+            'Unlike arrays, you do not need to specify the size when you create it.'
+          ],
+          code: `import java.util.ArrayList;
+
+public class ArrayListExample {
+    public static void main(String[] args) {
+        ArrayList<String> fruits = new ArrayList<>();
+
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Cherry");
+
+        System.out.println(fruits);           // [Apple, Banana, Cherry]
+        System.out.println(fruits.get(0));    // Apple
+
+        fruits.remove("Banana");
+        System.out.println(fruits);           // [Apple, Cherry]
+        System.out.println(fruits.size());    // 2
+    }
+}`
+        },
+        {
+          heading: 'HashSet',
+          content: [
+            '<code>HashSet</code> stores unique elements only — no duplicates allowed.',
+            'It does not keep elements in any specific order.',
+            'Great for when you need to check if something exists quickly.'
+          ],
+          code: `import java.util.HashSet;
+
+public class HashSetExample {
+    public static void main(String[] args) {
+        HashSet<Integer> numbers = new HashSet<>();
+
+        numbers.add(10);
+        numbers.add(20);
+        numbers.add(10);  // duplicate, ignored
+
+        System.out.println(numbers);          // [20, 10] (order may vary)
+        System.out.println(numbers.contains(20)); // true
+        System.out.println(numbers.contains(30)); // false
+    }
+}`
+        },
+        {
+          heading: 'HashMap',
+          content: [
+            '<code>HashMap</code> stores data as key-value pairs.',
+            'Each key is unique. You use the key to look up the value.',
+            'It is like a dictionary or a phone book.'
+          ],
+          code: `import java.util.HashMap;
+
+public class HashMapExample {
+    public static void main(String[] args) {
+        HashMap<String, Integer> ages = new HashMap<>();
+
+        ages.put("Alice", 25);
+        ages.put("Bob", 30);
+        ages.put("Charlie", 22);
+
+        System.out.println(ages.get("Bob"));      // 30
+        System.out.println(ages.containsKey("Alice")); // true
+
+        // Loop through all entries
+        for (String name : ages.keySet()) {
+            System.out.println(name + " is " + ages.get(name) + " years old");
+        }
+    }
+}`
+        },
+        {
+          heading: 'Iterating Over Collections',
+          content: [
+            'You can loop through collections using a for-each loop.',
+            'This works for all Collection types: List, Set, Queue, and Map keys/values.'
+          ],
+          code: `import java.util.ArrayList;
+import java.util.HashMap;
+
+public class IterateExample {
+    public static void main(String[] args) {
+        ArrayList<String> colors = new ArrayList<>();
+        colors.add("Red");
+        colors.add("Green");
+        colors.add("Blue");
+
+        // Loop through a List
+        for (String color : colors) {
+            System.out.println(color);
+        }
+
+        // Loop through a Map
+        HashMap<String, String> capitals = new HashMap<>();
+        capitals.put("India", "New Delhi");
+        capitals.put("USA", "Washington D.C.");
+
+        for (String country : capitals.keySet()) {
+            System.out.println(country + ": " + capitals.get(country));
+        }
+    }
+}`
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create an <code>ArrayList</code> of your favorite movies.',
+            'Add 3 movies, print the list, then remove one and print again.',
+            'Create a <code>HashMap</code> with student names as keys and scores as values. Print each student and their score.'
+          ],
+          code: `import java.util.ArrayList;
+import java.util.HashMap;
+
+public class TryCollections {
+    public static void main(String[] args) {
+        ArrayList<String> movies = new ArrayList<>();
+        movies.add("Inception");
+        movies.add("The Matrix");
+        movies.add("Interstellar");
+        System.out.println(movies);
+        movies.remove(1);
+        System.out.println(movies);
+
+        HashMap<String, Integer> scores = new HashMap<>();
+        scores.put("Alice", 85);
+        scores.put("Bob", 92);
+        for (String name : scores.keySet()) {
+            System.out.println(name + ": " + scores.get(name));
+        }
+    }
+}`
+        }
+      ]
+    },
   'generics': {
-    title: 'Java Generics',
-    sections: [
-      {
-        heading: 'What are Generics?',
-        content: [
-          'Generics let you create classes, interfaces, and methods that work with any data type.',
-          'Instead of writing separate code for Strings, Integers, etc., you write it once with a type placeholder.',
-          'Think of it like a template — you define the shape, and Java fills in the actual type later.',
-          '<strong>Benefits:</strong>',
-          '<ul><li>Type safety — catch errors at compile time</li><li>No casting needed — get the right type automatically</li><li>Reusable code — one class works with many types</li></ul>'
-        ]
-      },
-      {
-        heading: 'Generic Classes',
-        content: [
-          'A generic class uses a type parameter inside angle brackets <code>&lt;T&gt;</code>.',
-          'T is a placeholder — it can stand for any reference type (String, Integer, etc.).'
-        ],
-        code: `class Box<T> {
+      title: 'Java Generics',
+      sections: [
+        {
+          heading: 'What are Generics?',
+          content: [
+            'Generics let you create classes, interfaces, and methods that work with any data type.',
+            'Instead of writing separate code for Strings, Integers, etc., you write it once with a type placeholder.',
+            'Think of it like a template — you define the shape, and Java fills in the actual type later.',
+            '<strong>Benefits:</strong>',
+            '<ul><li>Type safety — catch errors at compile time</li><li>No casting needed — get the right type automatically</li><li>Reusable code — one class works with many types</li></ul>'
+          ]
+        },
+        {
+          heading: 'Generic Classes',
+          content: [
+            'A generic class uses a type parameter inside angle brackets <code>&lt;T&gt;</code>.',
+            'T is a placeholder — it can stand for any reference type (String, Integer, etc.).'
+          ],
+          code: `class Box<T> {
     private T value;
 
     public void set(T value) {
@@ -3289,14 +8466,14 @@ public class GenericClassExample {
         System.out.println(intBox.get());     // 42
     }
 }`
-      },
-      {
-        heading: 'Generic Methods',
-        content: [
-          'Methods can also be generic. The type parameter goes before the return type.',
-          'This is useful when you want a method to accept any type of parameter.'
-        ],
-        code: `public class GenericMethodExample {
+        },
+        {
+          heading: 'Generic Methods',
+          content: [
+            'Methods can also be generic. The type parameter goes before the return type.',
+            'This is useful when you want a method to accept any type of parameter.'
+          ],
+          code: `public class GenericMethodExample {
     static <T> void printArray(T[] array) {
         for (T item : array) {
             System.out.println(item);
@@ -3311,15 +8488,15 @@ public class GenericClassExample {
         printArray(numbers); // works with Integers
     }
 }`
-      },
-      {
-        heading: 'Bounded Type Parameters',
-        content: [
-          'Sometimes you want to restrict the types that can be used.',
-          '<code>&lt;T extends Number&gt;</code> means T must be a Number or its subclass (Integer, Double, etc.).',
-          'This lets you safely call Number methods on T.'
-        ],
-        code: `class NumberBox<T extends Number> {
+        },
+        {
+          heading: 'Bounded Type Parameters',
+          content: [
+            'Sometimes you want to restrict the types that can be used.',
+            '<code>&lt;T extends Number&gt;</code> means T must be a Number or its subclass (Integer, Double, etc.).',
+            'This lets you safely call Number methods on T.'
+          ],
+          code: `class NumberBox<T extends Number> {
     private T value;
 
     public NumberBox(T value) {
@@ -3340,15 +8517,15 @@ public class BoundedExample {
         System.out.println(doubleBox.getDoubleValue()); // 3.14
     }
 }`
-      },
-      {
-        heading: 'Generics with Collections',
-        content: [
-          'You already use generics when you create an ArrayList, HashMap, or HashSet.',
-          'The angle brackets tell Java what type of objects the collection will hold.',
-          'This prevents you from adding the wrong type by mistake.'
-        ],
-        code: `import java.util.ArrayList;
+        },
+        {
+          heading: 'Generics with Collections',
+          content: [
+            'You already use generics when you create an ArrayList, HashMap, or HashSet.',
+            'The angle brackets tell Java what type of objects the collection will hold.',
+            'This prevents you from adding the wrong type by mistake.'
+          ],
+          code: `import java.util.ArrayList;
 
 public class GenericsCollectionExample {
     public static void main(String[] args) {
@@ -3365,14 +8542,14 @@ public class GenericsCollectionExample {
         }
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a generic <code>Pair&lt;K, V&gt;</code> class with two fields: key and value.',
-          'Create instances with different types and print them.'
-        ],
-        code: `class Pair<K, V> {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a generic <code>Pair&lt;K, V&gt;</code> class with two fields: key and value.',
+            'Create instances with different types and print them.'
+          ],
+          code: `class Pair<K, V> {
     private K key;
     private V value;
 
@@ -3394,30 +8571,222 @@ public class TryGenerics {
         System.out.println("ID " + idName.getKey() + " belongs to " + idName.getValue());
     }
 }`
-      }
-    ]
-  },
+        },
+        {
+          heading: 'Why Generics? Type Safety and No Casting',
+          content: [
+            '<strong>Array objects are type-safe by default</strong>: if you declare a <code>String[]</code>, you can insert only <code>String</code> objects — any other type is a <em>compile-time error</em>.',
+            '<strong>Collection objects are NOT type-safe by default (pre-1.5)</strong>: an <code>ArrayList</code> accepts any object. By mistake, you can insert an <code>Integer</code> into a list of intended <code>String</code>s and the compiler will not complain.',
+            'While retrieving, you must perform <em>typecasting</em>. Forgetting the cast is a <em>compile-time error</em>.',
+            'Generics (introduced in 1.5) solve both problems — type safety and the need for typecasting — at compile time.'
+          ],
+          code: `// Arrays: type-safe, no casting
+String[] s = new String[100];
+s[0] = "raju";
+// s[1] = 10;   // CE
+
+// Collections (pre-generics): NOT type-safe, casting required
+ArrayList l = new ArrayList();
+l.add("raju");
+l.add(new Integer(10));   // No CE - problem!
+
+String name = (String) l.get(0);   // casting required
+// String bad = l.get(0);           // CE: cannot convert Object to String
+
+// With generics: type-safe, no casting
+ArrayList<String> l2 = new ArrayList<String>();
+l2.add("raju");
+// l2.add(new Integer(10));   // CE: cannot find symbol add(Integer)
+String name2 = l2.get(0);   // no casting required`
+        },
+        {
+          heading: 'Polymorphism and Type Parameters',
+          content: [
+            '<strong>Polymorphism is NOT applicable for the parameter type</strong> — the type argument on both sides must be exactly the same.',
+            'The <strong>type parameter must be an object type</strong> (any class or interface). Generics cannot be applied to primitive data types — use the wrapper class instead.',
+            '<code>List&lt;Object&gt; l = new ArrayList&lt;String&gt;();</code> ❌ <em>CE: incompatible types, found ArrayList&lt;String&gt;, required List&lt;Object&gt;</em>'
+          ],
+          code: `// Valid declarations
+ArrayList<Integer> l1 = new ArrayList<Integer>();      // OK
+ArrayList<Runnable> l2 = new ArrayList<Runnable>();    // OK
+
+// Invalid declarations
+ArrayList<Number> l3 = new ArrayList<Integer>();       // CE: not polymorphic on parameter
+// ArrayList<long> l4 = new ArrayList<Long>();          // CE: primitive type parameter
+ArrayList<Object> l5 = new ArrayList<StringBuffer>();  // CE: not polymorphic
+
+// Use Integer instead of int
+ArrayList<Integer> l6 = new ArrayList<Integer>();      // OK
+// ArrayList<int> l7 = new ArrayList<int>();            // CE: unexpected type, found int, required Integer`
+        },
+        {
+          heading: 'Generic Class Internals — Pre-1.5 vs 1.5+',
+          content: [
+            'In Java 1.4, the <code>ArrayList</code> class was defined as:',
+            '<code>class ArrayList { void add(Object o); Object get(int index); }</code>',
+            'This allowed adding any object and required typecasting on retrieval.',
+            'In Java 1.5+, the generic <code>ArrayList</code> is defined as:',
+            '<code>class ArrayList&lt;T&gt; { void add(T t); T get(int index); }</code>',
+            'Based on the runtime requirement, the corresponding version of <code>ArrayList</code> is loaded. For <code>new ArrayList&lt;String&gt;()</code>, the loaded class is logically:',
+            '<code>class ArrayList&lt;String&gt; { void add(String s); String get(int index); }</code>',
+            'This provides type safety and removes the need for typecasting.'
+          ]
+        },
+        {
+          heading: 'Bounded Types',
+          content: [
+            'We can bound the type parameter to a particular range using the <code>extends</code> keyword. <strong>In generics, only <code>extends</code> is used (no <code>implements</code> keyword)</strong> — even for interface bounds.',
+            '<strong>Class bound:</strong> if <code>X</code> is a class, any child class of <code>X</code> is allowed as the type parameter.',
+            '<strong>Interface bound:</strong> if <code>X</code> is an interface, any implementation class of <code>X</code> is allowed as the type parameter.'
+          ],
+          code: `// No bound - any type allowed
+class Gen<T> {}
+Gen<String> g1 = new Gen<String>();     // OK
+Gen<Integer> g2 = new Gen<Integer>();   // OK
+
+// Bound by class Number
+class Gen<T extends Number> {}
+Gen<Integer> g1 = new Gen<Integer>();   // OK (Integer extends Number)
+Gen<Double> g2 = new Gen<Double>();     // OK
+// Gen<String> g3 = new Gen<String>();  // CE: String not within bound
+
+// Bound by interface Runnable
+class Gen<T extends Runnable> {}
+Gen<Thread> t1 = new Gen<Thread>();     // OK (Thread implements Runnable)
+// Gen<String> t2 = new Gen<String>();  // CE: String does not implement Runnable
+
+// Bounded type example using Number methods
+class Gen<T extends Number> {
+    T ob;
+    Gen(T ob) { this.ob = ob; }
+    void show() {
+        System.out.println("The int value is: " + ob.intValue());
+    }
+}
+class GenDemo {
+    public static void main(String[] args) {
+        Gen<Integer> t1 = new Gen<Integer>(new Integer(10));
+        t1.show();   // The int value is: 10
+        Gen<Double> t2 = new Gen<Double>(10.5);
+        t2.show();   // The int value is: 10
+        // Gen<String> t3 = new Gen<String>("raju");  // CE: not within bound
+        // t3.show();
+    }
+}`
+        },
+        {
+          heading: 'Generic Methods and Wildcard Patterns',
+          content: [
+            'Wildcard <code>?</code> patterns are used in method declarations:',
+            '<ul><li><code>m1(ArrayList&lt;String&gt;)</code> — accepts only <code>ArrayList</code> of <code>String</code>.</li><li><code>m1(ArrayList&lt;? extends X&gt;)</code> — accepts <code>ArrayList</code> of <code>X</code> or its <strong>child classes</strong> (or implementation classes of <code>X</code> if <code>X</code> is an interface).</li><li><code>m1(ArrayList&lt;? super X&gt;)</code> — accepts <code>ArrayList</code> of <code>X</code> or its <strong>super classes</strong> (or super classes of implementation classes of <code>X</code> if <code>X</code> is an interface).</li><li><code>m1(ArrayList&lt;?&gt;)</code> — accepts <code>ArrayList</code> of <strong>any type</strong>.</li></ul>',
+            '<strong>Important rule</strong>: in a method that uses <code>?</code>, you <strong>cannot insert any element except <code>null</code></strong>, because the exact type of the list is unknown.',
+            '<strong>Unicode <code>?</code></strong> can be used in the <strong>declaration part</strong> (left side) but <strong>not in the construction part</strong> (right side).'
+          ],
+          code: `import java.util.*;
+class Test {
+    public static void main(String[] args) {
+        ArrayList<String> l1 = new ArrayList<String>();
+        l1.add("A"); l1.add("B"); l1.add("C"); l1.add("D");
+        m1(l1);
+
+        ArrayList<Integer> l2 = new ArrayList<Integer>();
+        l2.add(10); l2.add(20); l2.add(30); l2.add(40);
+        m1(l2);
+    }
+
+    public static void m1(ArrayList<?> l) {
+        // l.add("D");   // CE: cannot expect what type of value will come
+        l.remove(1);
+        l.add(null);    // only null is allowed
+        System.out.println(l);
+    }
+}
+// Output:
+// [A, C, D, null]
+// [10, 30, 40, null]`
+        },
+        {
+          heading: 'Valid and Invalid Wildcard Declarations',
+          content: [
+            'A quick reference for valid and invalid wildcard declarations:'
+          ],
+          code: `// VALID
+ArrayList<String> l1 = new ArrayList<String>();                       // OK
+ArrayList<? extends Object> l2 = new ArrayList<String>();             // OK (String extends Object)
+ArrayList<? extends String> l3 = new ArrayList<String>();             // OK
+ArrayList<? super Runnable> l4 = new ArrayList<Object>();             // OK (Object is super of Runnable)
+ArrayList<? super Runnable> l5 = new ArrayList<Thread>();             // OK (Thread implements Runnable, super classes include Object)
+ArrayList<?> l6 = new ArrayList<Integer>();                           // OK (unbounded wildcard)
+
+// INVALID
+// ArrayList<Object> l7 = new ArrayList<String>();                     // CE: not polymorphic on parameter
+// ArrayList<?> l8 = new ArrayList<? extends Number>();                // CE: wildcard not allowed in construction part
+// ArrayList<?> l9 = new ArrayList<? super Number>();                  // CE
+// ArrayList<?> l10 = new ArrayList<?>();                              // CE: wildcard not allowed in construction part`
+        },
+        {
+          heading: 'Communication with Legacy Non-Generic Code',
+          content: [
+            'To maintain compatibility with old non-generic code, generics were relaxed in some places.',
+            'Generics is a <strong>compile-time concept only</strong> — at runtime there is no generic concept (type erasure). Hence a non-generic method can still add objects to a generic collection, and the compiler will not complain.'
+          ],
+          code: `import java.util.*;
+class Test {
+    public static void main(String[] args) {
+        ArrayList<String> l = new ArrayList<String>();
+        l.add("A"); l.add("B"); l.add("C");
+        // l.add(10);   // CE if added here
+        m1(l);
+        System.out.println(l);   // [A, B, C, 10, raju]
+    }
+    // Non-generic method - can add any type
+    public static void m1(ArrayList l) {
+        l.add(new Integer(10));
+        l.add(new StringBuffer("raju"));
+    }
+}
+
+// Erasure at runtime
+class TestErasure {
+    public static void main(String[] args) {
+        // Same runtime type regardless of generic parameter
+        ArrayList l1 = new ArrayList<String>();
+        l1.add("A");
+        l1.add(new Integer(10));
+        l1.add(new StringBuffer("raju"));
+
+        ArrayList<String> l2 = new ArrayList();
+        l2.add("A");
+        // l2.add(10);    // CE: typesafety at compile time
+        l2.add("B");
+        l2.add(null);
+        // l2.add(20);    // CE
+    }
+}`
+        }
+      ]
+    },
   'lambda-expressions': {
-    title: 'Lambda Expressions',
-    sections: [
-      {
-        heading: 'What are Lambda Expressions?',
-        content: [
-          'Lambda expressions are a short way to write anonymous methods (methods without a name).',
-          'They were introduced in Java 8 to make code more compact and readable.',
-          'Think of them like quick, throw-away functions you can pass around.',
-          '<strong>Syntax:</strong>',
-          '<code>(parameters) -&gt; { body }</code>',
-          '<ul><li><code>(a, b) -&gt; a + b</code> — adds two numbers</li><li><code>x -&gt; x * x</code> — squares a number</li><li><code>() -&gt; System.out.println("Hi")</code> — no parameters</li></ul>'
-        ]
-      },
-      {
-        heading: 'Using Lambdas with Collections',
-        content: [
-          'Lambdas work great with collections. You can sort, filter, and process lists with less code.',
-          'The <code>forEach</code> method lets you run code for every item in a list.'
-        ],
-        code: `import java.util.ArrayList;
+      title: 'Lambda Expressions',
+      sections: [
+        {
+          heading: 'What are Lambda Expressions?',
+          content: [
+            'Lambda expressions are a short way to write anonymous methods (methods without a name).',
+            'They were introduced in Java 8 to make code more compact and readable.',
+            'Think of them like quick, throw-away functions you can pass around.',
+            '<strong>Syntax:</strong>',
+            '<code>(parameters) -&gt; { body }</code>',
+            `<ul><li><code>(a, b) -&gt; a + b</code> — adds two numbers</li><li><code>x -&gt; x * x</code> — squares a number</li><li><code>() -&gt; System.out.println("Hi")</code> — no parameters</li></ul>`
+          ]
+        },
+        {
+          heading: 'Using Lambdas with Collections',
+          content: [
+            'Lambdas work great with collections. You can sort, filter, and process lists with less code.',
+            'The <code>forEach</code> method lets you run code for every item in a list.'
+          ],
+          code: `import java.util.ArrayList;
 
 public class LambdaCollectionExample {
     public static void main(String[] args) {
@@ -3434,16 +8803,16 @@ public class LambdaCollectionExample {
         System.out.println(names);  // [Bob, Alice, Charlie]
     }
 }`
-      },
-      {
-        heading: 'Functional Interfaces',
-        content: [
-          'A functional interface has exactly one abstract method.',
-          'Lambda expressions can only be assigned to functional interfaces.',
-          '<strong>Common ones:</strong>',
-          '<ul><li><code>Runnable</code> — run() with no args, no return</li><li><code>Comparator&lt;T&gt;</code> — compare(T, T) returns int</li><li><code>Predicate&lt;T&gt;</code> — test(T) returns boolean</li><li><code>Function&lt;T, R&gt;</code> — apply(T) returns R</li><li><code>Consumer&lt;T&gt;</code> — accept(T) returns void</li></ul>'
-        ],
-        code: `import java.util.function.Predicate;
+        },
+        {
+          heading: 'Functional Interfaces',
+          content: [
+            'A functional interface has exactly one abstract method.',
+            'Lambda expressions can only be assigned to functional interfaces.',
+            '<strong>Common ones:</strong>',
+            '<ul><li><code>Runnable</code> — run() with no args, no return</li><li><code>Comparator&lt;T&gt;</code> — compare(T, T) returns int</li><li><code>Predicate&lt;T&gt;</code> — test(T) returns boolean</li><li><code>Function&lt;T, R&gt;</code> — apply(T) returns R</li><li><code>Consumer&lt;T&gt;</code> — accept(T) returns void</li></ul>'
+          ],
+          code: `import java.util.function.Predicate;
 
 public class PredicateExample {
     public static void main(String[] args) {
@@ -3453,16 +8822,16 @@ public class PredicateExample {
         System.out.println(isEven.test(7));  // false
     }
 }`
-      },
-      {
-        heading: 'Method References',
-        content: [
-          'When a lambda only calls an existing method, you can use a method reference instead.',
-          'It is even shorter and often cleaner.',
-          '<strong>Types:</strong>',
-          '<ul><li><code>ClassName::staticMethod</code></li><li><code>objectName::instanceMethod</code></li><li><code>ClassName::instanceMethod</code></li></ul>'
-        ],
-        code: `import java.util.ArrayList;
+        },
+        {
+          heading: 'Method References',
+          content: [
+            'When a lambda only calls an existing method, you can use a method reference instead.',
+            'It is even shorter and often cleaner.',
+            '<strong>Types:</strong>',
+            '<ul><li><code>ClassName::staticMethod</code></li><li><code>objectName::instanceMethod</code></li><li><code>ClassName::instanceMethod</code></li></ul>'
+          ],
+          code: `import java.util.ArrayList;
 
 public class MethodReferenceExample {
     public static void main(String[] args) {
@@ -3478,14 +8847,14 @@ public class MethodReferenceExample {
         names.forEach(System.out::println);
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create an ArrayList of integers. Use a lambda to print only even numbers.',
-          'Write a lambda that takes a string and returns its uppercase version.'
-        ],
-        code: `import java.util.ArrayList;
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create an ArrayList of integers. Use a lambda to print only even numbers.',
+            'Write a lambda that takes a string and returns its uppercase version.'
+          ],
+          code: `import java.util.ArrayList;
 import java.util.function.Function;
 
 public class TryLambdas {
@@ -3506,29 +8875,29 @@ public class TryLambdas {
         System.out.println(toUpper.apply("hello"));  // HELLO
     }
 }`
-      }
-    ]
-  },
+        }
+      ]
+    },
   'streams': {
-    title: 'Java Streams API',
-    sections: [
-      {
-        heading: 'What are Streams?',
-        content: [
-          'Streams are a way to process sequences of elements in a functional style.',
-          'They were added in Java 8 and work great with collections.',
-          'Think of a stream like a pipeline: data flows in, gets transformed, and results come out.',
-          '<strong>Key features:</strong>',
-          '<ul><li>Declarative — say <em>what</em> you want, not <em>how</em></li><li>Chain operations — filter, map, sort, collect</li><li>Lazy — only compute when needed</li><li>Can be parallel for better performance</li></ul>'
-        ]
-      },
-      {
-        heading: 'Creating Streams',
-        content: [
-          'You can create a stream from a collection, an array, or generate values on the fly.',
-          'Most often, you will call <code>.stream()</code> on a List or Set.'
-        ],
-        code: `import java.util.ArrayList;
+      title: 'Java Streams API',
+      sections: [
+        {
+          heading: 'What are Streams?',
+          content: [
+            'Streams are a way to process sequences of elements in a functional style.',
+            'They were added in Java 8 and work great with collections.',
+            'Think of a stream like a pipeline: data flows in, gets transformed, and results come out.',
+            '<strong>Key features:</strong>',
+            '<ul><li>Declarative — say <em>what</em> you want, not <em>how</em></li><li>Chain operations — filter, map, sort, collect</li><li>Lazy — only compute when needed</li><li>Can be parallel for better performance</li></ul>'
+          ]
+        },
+        {
+          heading: 'Creating Streams',
+          content: [
+            'You can create a stream from a collection, an array, or generate values on the fly.',
+            'Most often, you will call <code>.stream()</code> on a List or Set.'
+          ],
+          code: `import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -3548,14 +8917,14 @@ public class CreateStreamExample {
         Stream.of("One", "Two", "Three").forEach(System.out::println);
     }
 }`
-      },
-      {
-        heading: 'Common Stream Operations',
-        content: [
-          'Streams provide many built-in operations. Here are the most common ones:',
-          '<ul><li><code>filter</code> — keep only elements that match a condition</li><li><code>map</code> — transform each element</li><li><code>sorted</code> — sort the elements</li><li><code>collect</code> — turn the stream back into a list or other collection</li><li><code>count</code> — count the elements</li><li><code>reduce</code> — combine all elements into one value</li></ul>'
-        ],
-        code: `import java.util.ArrayList;
+        },
+        {
+          heading: 'Common Stream Operations',
+          content: [
+            'Streams provide many built-in operations. Here are the most common ones:',
+            '<ul><li><code>filter</code> — keep only elements that match a condition</li><li><code>map</code> — transform each element</li><li><code>sorted</code> — sort the elements</li><li><code>collect</code> — turn the stream back into a list or other collection</li><li><code>count</code> — count the elements</li><li><code>reduce</code> — combine all elements into one value</li></ul>'
+          ],
+          code: `import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -3593,14 +8962,14 @@ public class StreamOperationsExample {
         System.out.println(count);  // 3
     }
 }`
-      },
-      {
-        heading: 'map and filter Together',
-        content: [
-          'You can chain multiple operations to build powerful pipelines.',
-          'Each operation returns a new stream, so you can keep adding steps.'
-        ],
-        code: `import java.util.ArrayList;
+        },
+        {
+          heading: 'map and filter Together',
+          content: [
+            'You can chain multiple operations to build powerful pipelines.',
+            'Each operation returns a new stream, so you can keep adding steps.'
+          ],
+          code: `import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -3623,15 +8992,15 @@ public class StreamChainExample {
         System.out.println(result);  // [ALEX, ALICE, ANNA]
     }
 }`
-      },
-      {
-        heading: 'reduce — Combining Values',
-        content: [
-          '<code>reduce</code> takes all elements and combines them into a single result.',
-          'You provide a starting value and a function that merges two values.',
-          'It is great for sums, products, or building strings.'
-        ],
-        code: `import java.util.ArrayList;
+        },
+        {
+          heading: 'reduce — Combining Values',
+          content: [
+            '<code>reduce</code> takes all elements and combines them into a single result.',
+            'You provide a starting value and a function that merges two values.',
+            'It is great for sums, products, or building strings.'
+          ],
+          code: `import java.util.ArrayList;
 
 public class ReduceExample {
     public static void main(String[] args) {
@@ -3652,15 +9021,15 @@ public class ReduceExample {
         System.out.println("Product: " + product);  // 24
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a list of integers from 1 to 10.',
-          'Use streams to: find all numbers greater than 5, square them, and collect into a new list.',
-          'Calculate the sum of all even numbers in the list using a stream.'
-        ],
-        code: `import java.util.ArrayList;
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a list of integers from 1 to 10.',
+            'Use streams to: find all numbers greater than 5, square them, and collect into a new list.',
+            'Calculate the sum of all even numbers in the list using a stream.'
+          ],
+          code: `import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -3685,34 +9054,1481 @@ public class TryStreams {
         System.out.println("Sum of evens: " + evenSum);  // 30
     }
 }`
-      }
-    ]
-  }
+        }
+      ]
+    },
+  'multithreading': {
+      title: 'Multithreading',
+      sections: [
+        {
+          heading: 'What is Multithreading?',
+          content: [
+            '<strong>Multithreading</strong> allows a program to run multiple tasks at the same time.',
+            'In Java, a <strong>thread</strong> is a separate path of execution within a program.',
+            'Think of threads like workers in a factory: instead of one worker doing everything, multiple workers handle different tasks simultaneously.',
+            '<strong>Why use multithreading?</strong>',
+            '<ul><li>Keep the user interface responsive while doing heavy work</li><li>Perform multiple downloads or uploads at once</li><li>Use multiple CPU cores for faster processing</li><li>Handle many client connections in a server</li></ul>',
+            'Every Java program starts with at least one thread: the <strong>main thread</strong>.'
+          ]
+        },
+        {
+          heading: 'Creating Threads: Extending Thread',
+          content: [
+            'There are two main ways to create a thread in Java:',
+            '<ol><li>Extend the <code>Thread</code> class and override <code>run()</code></li><li>Implement the <code>Runnable</code> interface and pass it to a <code>Thread</code></li></ol>',
+            'The <code>run()</code> method contains the code that will execute in the new thread.',
+            'Call <code>start()</code> (not <code>run()</code>) to launch the thread — <code>start()</code> tells the JVM to create a new thread and call <code>run()</code> inside it.'
+          ],
+          code: `// Method 1: Extend Thread class
+class MyThread extends Thread {
+    @Override
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("MyThread: " + i);
+            try {
+                Thread.sleep(500);  // pause for 500 milliseconds
+            } catch (InterruptedException e) {
+                System.out.println("Thread interrupted");
+            }
+        }
+    }
+}
+
+public class ThreadDemo {
+    public static void main(String[] args) {
+        MyThread t1 = new MyThread();
+        t1.start();  // starts the new thread
+        
+        // Main thread continues running
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("Main: " + i);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}`
+        },
+        {
+          heading: 'Creating Threads: Implementing Runnable',
+          content: [
+            'The <code>Runnable</code> approach is preferred because Java does not support multiple inheritance.',
+            'If your class extends <code>Thread</code>, it cannot extend any other class.',
+            'With <code>Runnable</code>, your class can still extend another class while being runnable as a thread.',
+            'You can also use <strong>lambda expressions</strong> for a concise Runnable definition.'
+          ],
+          code: `// Method 2: Implement Runnable
+class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("Runnable Thread: " + i);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+public class RunnableDemo {
+    public static void main(String[] args) {
+        // Create thread from Runnable
+        Thread t1 = new Thread(new MyRunnable());
+        t1.start();
+        
+        // Using lambda for a quick thread
+        Thread t2 = new Thread(() -> {
+            for (int i = 1; i <= 5; i++) {
+                System.out.println("Lambda Thread: " + i);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t2.start();
+        
+        System.out.println("Main thread continues...");
+    }
+}`
+        },
+        {
+          heading: 'Thread Synchronization',
+          content: [
+            'When multiple threads access shared data, problems can occur.',
+            'For example, two threads might try to modify the same variable at the same time, leading to inconsistent results.',
+            '<strong>Synchronization</strong> ensures that only one thread can access a critical section of code at a time.',
+            'Use the <code>synchronized</code> keyword on a method or a block to prevent concurrent access.'
+          ],
+          code: `class BankAccount {
+    private double balance = 0;
+    
+    // Synchronized method — only one thread can enter at a time
+    public synchronized void deposit(double amount) {
+        double newBalance = balance + amount;
+        // Simulate some processing time
+        try { Thread.sleep(10); } catch (InterruptedException e) {}
+        balance = newBalance;
+    }
+    
+    public synchronized double getBalance() {
+        return balance;
+    }
+}
+
+public class SynchronizationDemo {
+    public static void main(String[] args) throws InterruptedException {
+        BankAccount account = new BankAccount();
+        
+        // Two threads depositing money
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                account.deposit(1);
+            }
+        });
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                account.deposit(1);
+            }
+        });
+        
+        t1.start();
+        t2.start();
+        t1.join();  // wait for t1 to finish
+        t2.join();  // wait for t2 to finish
+        
+        System.out.println("Final balance: " + account.getBalance());
+        // Without synchronized, this might be less than 2000!
+    }
+}`
+        },
+        {
+          heading: 'Thread States and Lifecycle',
+          content: [
+            'A thread goes through several states during its life:',
+            '<ul><li><strong>NEW</strong> — thread created, not yet started</li><li><strong>RUNNABLE</strong> — thread is ready to run or running</li><li><strong>BLOCKED</strong> — thread waiting to acquire a lock</li><li><strong>WAITING</strong> — thread waiting indefinitely for another thread</li><li><strong>TIMED_WAITING</strong> — thread waiting for a specific time (e.g., <code>sleep()</code>)</li><li><strong>TERMINATED</strong> — thread has finished execution</li></ul>',
+            "You can check a thread's state with <code>thread.getState()</code>."
+          ],
+          code: `public class ThreadLifecycleDemo {
+    public static void main(String[] args) throws InterruptedException {
+        Thread t = new Thread(() -> {
+            try {
+                System.out.println("Thread running...");
+                Thread.sleep(1000);
+                System.out.println("Thread finishing...");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        
+        System.out.println("State after creation: " + t.getState());  // NEW
+        
+        t.start();
+        System.out.println("State after start: " + t.getState());     // RUNNABLE
+        
+        Thread.sleep(100);  // let the thread enter sleep
+        System.out.println("State while sleeping: " + t.getState());  // TIMED_WAITING
+        
+        t.join();  // wait for thread to complete
+        System.out.println("State after completion: " + t.getState()); // TERMINATED
+    }
+}`
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a program that simulates a simple ticket booking system.',
+            'Multiple threads (customers) try to book tickets from a shared pool.',
+            'Use <code>synchronized</code> to prevent overbooking.'
+          ],
+          code: `class TicketPool {
+    private int ticketsAvailable;
+    
+    public TicketPool(int tickets) {
+        this.ticketsAvailable = tickets;
+    }
+    
+    public synchronized boolean bookTicket(String customer) {
+        if (ticketsAvailable > 0) {
+            ticketsAvailable--;
+            System.out.println(customer + " booked a ticket! Remaining: " + ticketsAvailable);
+            return true;
+        } else {
+            System.out.println(customer + " failed — no tickets left.");
+            return false;
+        }
+    }
+    
+    public synchronized int getAvailable() {
+        return ticketsAvailable;
+    }
+}
+
+public class TicketBooking {
+    public static void main(String[] args) {
+        TicketPool pool = new TicketPool(5);
+        
+        // Create 10 customers trying to book
+        for (int i = 1; i <= 10; i++) {
+            String customer = "Customer-" + i;
+            new Thread(() -> {
+                pool.bookTicket(customer);
+            }).start();
+        }
+    }
+}`
+        },
+        {
+          heading: 'Multitasking: Process-based vs Thread-based',
+          content: [
+            '<strong>Multitasking</strong> means executing several tasks simultaneously. There are 2 types:',
+            '<ul><li><strong>Process-based multitasking:</strong> each task is a separate independent process (e.g., writing Java in editor while running MP3 player and downloading a file). Best suited at the OS level.</li><li><strong>Thread-based multitasking:</strong> each task is a separate independent part of the same program. Best suited at the programmatic level. Java provides built-in support via <code>Thread</code>, <code>ThreadGroup</code>, <code>Runnable</code>.</li></ul>',
+            'The <strong>main objective</strong> of multitasking (process or thread) is to <strong>reduce response time</strong> and <strong>improve performance</strong>.',
+            '<strong>Main application areas of multithreading:</strong> video games, multimedia graphics, animation, and any program needing concurrent operations.'
+          ]
+        },
+        {
+          heading: 'Two Ways to Define a Thread',
+          content: [
+            'Java provides <strong>two ways</strong> to define, instantiate, and start a thread:',
+            '<ol><li><strong>By extending the <code>Thread</code> class</strong></li><li><strong>By implementing the <code>Runnable</code> interface</strong> (recommended)</li></ol>',
+            '<strong>Why Runnable is recommended:</strong> if you extend <code>Thread</code>, you cannot extend any other class — you miss the OOP benefit of inheritance (reusability). Implementing <code>Runnable</code> leaves your class free to extend another class.'
+          ]
+        },
+        {
+          heading: 'Approach 1: Defining a Thread by Extending Thread Class',
+          content: [
+            'Override the <code>run()</code> method in your subclass. <code>run()</code> is the entry point for the new thread — the code inside <code>run()</code> is what executes in that thread.'
+          ],
+          code: `class MyThread extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Child Thread");
+        }
+    }
+}
+
+public class MultiThreadDemo {
+    public static void main(String[] args) throws InterruptedException {
+        MyThread t = new MyThread();
+        t.start();    // creates a NEW thread that calls run()
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Main Thread");
+        }
+    }
+}
+// The output interleaves "Child Thread" and "Main Thread" lines in some order.`
+        },
+        {
+          heading: 'Thread Scheduler and the difference between start() and run()',
+          content: [
+            'When multiple threads are waiting, the <strong>Thread Scheduler</strong> decides which thread runs first. It is part of the JVM and its behavior is <strong>vendor-dependent</strong> — so the exact output cannot be predicted.',
+            '<strong>Difference between <code>t.start()</code> and <code>t.run()</code>:</strong>',
+            `<ul><li><code>t.start()</code> — a <strong>NEW thread</strong> is created, and that new thread is responsible for executing <code>run()</code>.</li><li><code>t.run()</code> — <strong>NO new thread</strong> is created; <code>run()</code> is executed like a normal method by the <code>main</code> thread. Output: all "Child Thread" lines first, then all "Main Thread" lines.</li></ul>`,
+            '<strong>Importance of <code>start()</code>:</strong> <code>start()</code> internally (a) registers the thread with the Thread Scheduler, and (b) invokes <code>run()</code>. Without calling <code>start()</code>, <strong>no new thread will be started</strong>.',
+            '<strong>Case 1: Not overriding <code>run()</code></strong> — the empty <code>Thread.run()</code> is executed; the program produces no output.',
+            '<strong>Case 2: Overriding <code>start()</code></strong> — if you override <code>start()</code>, it is executed like a normal method (no new thread). Inside, you can call <code>super.start()</code> to actually start a new thread.'
+          ],
+          code: `// Case A: Overriding start() — no new thread
+class MyThread extends Thread {
+    @Override
+    public void start() {
+        System.out.println("start() method");
+    }
+    @Override
+    public void run() {
+        System.out.println("run method");
+    }
+}
+// Output: "start() method" (run is never called)
+
+// Case B: Calling super.start() inside overridden start() — new thread
+class MyThread2 extends Thread {
+    @Override
+    public void start() {
+        super.start();   // actually start a new thread
+        System.out.println("start() method");
+    }
+    @Override
+    public void run() {
+        System.out.println("run method");
+    }
+}`
+        },
+        {
+          heading: 'Life Cycle of a Thread',
+          content: [
+            'A thread passes through these states:',
+            '<ol><li><strong>New / Born:</strong> <code>new MyThread()</code> creates a thread object. The thread is not yet alive.</li><li><strong>Ready / Runnable:</strong> after <code>start()</code>, the thread is registered with the Thread Scheduler and waits for CPU allocation.</li><li><strong>Running:</strong> the Scheduler allocates CPU to the thread, and <code>run()</code> starts executing.</li><li><strong>Dead:</strong> <code>run()</code> completes normally; the thread is terminated and cannot be restarted.</li></ol>',
+            '<strong>Once a thread is started, it cannot be restarted</strong> — calling <code>start()</code> again throws <code>IllegalThreadStateException</code> at runtime.',
+            '<strong>Note:</strong> you cannot explicitly stop a running thread. The old <code>stop()</code>, <code>suspend()</code>, and <code>resume()</code> methods (deprecated since 1.2) should not be used.'
+          ],
+          code: `MyThread t = new MyThread();
+t.start();
+t.start();   // RE: IllegalThreadStateException`
+        },
+        {
+          heading: 'Approach 2: Defining a Thread by Implementing Runnable',
+          content: [
+            'The <code>Runnable</code> interface is in <code>java.lang</code> and contains only one method: <code>public void run();</code>.',
+            'Create an instance of your <code>Runnable</code>, pass it to the <code>Thread</code> constructor, then call <code>start()</code> on the <code>Thread</code>.'
+          ],
+          code: `class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i <= 10; i++) {
+            System.out.println("Child Thread");
+        }
+    }
+}
+
+public class ThreadDemo {
+    public static void main(String[] args) {
+        MyRunnable r = new MyRunnable();
+        Thread t = new Thread(r);
+        t.start();
+        for (int i = 0; i <= 10; i++) {
+            System.out.println("Main Thread");
+        }
+    }
+}`
+        },
+        {
+          heading: 'Which Calls Start a New Thread?',
+          content: [
+            'Given: <code>MyRunnable r = new MyRunnable(); Thread t1 = new Thread(); Thread t2 = new Thread(r);</code>',
+            '<ul><li><code>t1.start()</code> — a new thread is created and runs the <strong>empty</strong> <code>Thread.run()</code> (because <code>t1</code> has no <code>Runnable</code>).</li><li><code>t1.run()</code> — <strong>no new thread</strong>; runs as a normal method on the calling thread.</li><li><code>t2.start()</code> — a new thread is created and runs <code>MyRunnable.run()</code>.</li><li><code>t2.run()</code> — <strong>no new thread</strong>; runs as a normal method.</li><li><code>r.run()</code> — <strong>no new thread</strong>; runs as a normal method.</li><li><code>r.start()</code> — <strong>CE</strong>: <code>MyRunnable</code> does not contain a <code>start</code> method.</li></ul>'
+          ]
+        },
+        {
+          heading: 'Hybrid Mechanism (Not Recommended)',
+          content: [
+            'A class that extends <code>Thread</code> can still be passed to another <code>Thread</code> constructor. This is allowed but pointless and not recommended.'
+          ],
+          code: `class MyThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Child Thread");
+    }
+}
+
+public class HybridThreadDemo {
+    public static void main(String[] args) {
+        MyThread t1 = new MyThread();
+        Thread t = new Thread(t1);   // passing Thread as Runnable
+        t.start();
+        System.out.println("Main Thread");
+    }
+}`
+        },
+        {
+          heading: 'Thread Class Constructors',
+          content: [
+            'The <code>Thread</code> class provides 8 constructors:',
+            '<ol><li><code>Thread()</code></li><li><code>Thread(Runnable r)</code></li><li><code>Thread(String name)</code></li><li><code>Thread(Runnable r, String name)</code></li><li><code>Thread(ThreadGroup g, String name)</code></li><li><code>Thread(ThreadGroup g, Runnable r)</code></li><li><code>Thread(ThreadGroup g, Runnable r, String name)</code></li><li><code>Thread(ThreadGroup g, Runnable r, String name, long stackSize)</code></li></ol>'
+          ]
+        },
+        {
+          heading: 'Setting and Getting the Name of a Thread',
+          content: [
+            'Use <code>setName(String)</code> to set the name and <code>getName()</code> to retrieve it. The current thread is obtained via <code>Thread.currentThread()</code>.'
+          ],
+          code: `public class Test {
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getName());   // "main"
+        Thread.currentThread().setName("New Thread");
+        System.out.println(Thread.currentThread().getName());   // "New Thread"
+    }
+}`
+        },
+        {
+          heading: 'Thread Priorities',
+          content: [
+            'Every thread has a priority. Valid priorities range from <strong>1 to 10</strong>:',
+            '<ul><li><code>Thread.MIN_PRIORITY</code> = 1</li><li><code>Thread.NORM_PRIORITY</code> = 5</li><li><code>Thread.MAX_PRIORITY</code> = 10</li></ul>',
+            'The Scheduler uses priorities to decide which thread to run. A higher-priority thread gets a chance first. When two threads have the same priority, the Scheduler decides — behavior is <strong>vendor-dependent</strong>.',
+            'The <strong>default priority of the main thread is 5</strong>. For all other threads, the priority is <strong>inherited from the parent thread</strong>.',
+            'Methods: <code>public final void setPriority(int priority)</code> — must be 1-10, else <code>IllegalArgumentException</code>. <code>public final int getPriority()</code>.',
+            '<strong>Note:</strong> some operating systems may not support thread priorities.'
+          ],
+          code: `class MyThread extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Child Thread");
+        }
+    }
+}
+
+public class ThreadPriorityDemo {
+    public static void main(String[] args) {
+        MyThread t = new MyThread();
+        System.out.println(t.getPriority());   // 5 (inherited from main)
+        t.setPriority(10);
+        t.start();
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Main Thread");
+        }
+    }
+}`
+        },
+        {
+          heading: 'Preventing Thread Execution: yield()',
+          content: [
+            'Methods that can prevent a thread from execution: <code>yield()</code>, <code>join()</code>, <code>sleep()</code>.',
+            '<strong>yield():</strong> the calling thread <strong>temporarily pauses</strong> its execution to give a chance to threads of the <strong>same priority</strong>. If no thread of the same priority is waiting, the same thread continues immediately. <code>public static native void yield();</code>',
+            'Yielding causes the thread to move from Running back to Ready/Runnable.'
+          ],
+          code: `class MyThread extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Child Thread");
+            Thread.yield();   // hint to scheduler: give others a chance
+        }
+    }
+}`
+        },
+        {
+          heading: 'Preventing Thread Execution: join()',
+          content: [
+            'If a thread wants to wait for the completion of another thread, use <code>join()</code>. Example: if <code>t1</code> executes <code>t2.join()</code>, then <code>t1</code> enters the waiting state until <code>t2</code> completes (or the timeout expires, or <code>t1</code> is interrupted).',
+            'Three forms: <code>join()</code>, <code>join(long ms)</code>, <code>join(long ms, int ns)</code> — all throw <code>InterruptedException</code>.',
+            'After <code>join()</code>, the waiting thread moves to Ready/Runnable.'
+          ],
+          code: `class MyThread extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Child Thread");
+            try { Thread.sleep(1000); } catch (InterruptedException e) { }
+        }
+    }
+}
+
+public class JoinDemo {
+    public static void main(String[] args) throws InterruptedException {
+        MyThread t = new MyThread();
+        t.start();
+        t.join();     // main waits for t to complete
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Main Thread");
+        }
+    }
+}`
+        },
+        {
+          heading: 'Preventing Thread Execution: sleep()',
+          content: [
+            'If a thread needs to pause for a fixed amount of time, use <code>sleep()</code>. Two forms: <code>sleep(long ms)</code> and <code>sleep(long ms, int ns)</code> — both throw <code>InterruptedException</code>.',
+            'The thread goes to the Sleeping state. When the time expires (or the thread is interrupted), it returns to Ready/Runnable.'
+          ],
+          code: `class MyThread extends Thread {
+    @Override
+    public void run() {
+        try {
+            for (int i = 0; i < 10; i++) {
+                System.out.println("This is Lazy Method");
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+    }
+}`
+        },
+        {
+          heading: 'Interrupting a Thread',
+          content: [
+            'A sleeping or waiting thread can be interrupted by calling <code>interrupt()</code> on it. The call may not have an immediate effect — if the target thread is not currently sleeping or waiting, the interrupt waits until the target enters one of those states. Then <code>InterruptedException</code> is thrown.'
+          ],
+          code: `class MyThread extends Thread {
+    @Override
+    public void run() {
+        try {
+            for (int i = 0; i < 10; i++) {
+                System.out.println("This is Lazy Method");
+            }
+            Thread.sleep(3000);   // sleep OUTSIDE the loop
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+    }
+}
+
+public class InterruptDemo {
+    public static void main(String[] args) throws InterruptedException {
+        MyThread t = new MyThread();
+        t.start();
+        t.interrupt();
+        System.out.println("Main Thread");
+    }
+}`
+        },
+        {
+          heading: 'yield() vs join() vs sleep() — Comparison',
+          content: [
+            'Comparison of the three thread-prevention methods:'
+          ],
+          table: {
+            headers: [
+              'Property',
+              'yield()',
+              'join()',
+              'sleep()'
+            ],
+            rows: [
+              [
+                'Overloaded?',
+                'No',
+                'Yes',
+                'Yes'
+              ],
+              [
+                'Static?',
+                'Yes',
+                'No',
+                'Yes'
+              ],
+              [
+                'Final?',
+                'No',
+                'Yes',
+                'No'
+              ],
+              [
+                'Throws InterruptedException?',
+                'No',
+                'Yes',
+                'Yes'
+              ],
+              [
+                'Native?',
+                'Yes',
+                'No',
+                'sleep(long) yes; sleep(long, int) no'
+              ],
+              [
+                'Releases lock?',
+                'No',
+                'No',
+                'No'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Synchronization',
+          content: [
+            '<code>synchronized</code> is a keyword applicable to <strong>methods and blocks</strong> only (not to variables or classes).',
+            'When a method is <code>synchronized</code>, at a time <strong>only one thread</strong> is allowed to execute that method on the <strong>given object</strong>.',
+            '<strong>Advantages:</strong> overcomes data inconsistency. <strong>Limitations:</strong> may create performance problems. Use only when required.',
+            "<strong>Object-level lock:</strong> every Java object has a unique lock. To execute any <code>synchronized</code> method on an object, a thread must first acquire that object's lock. While one thread holds the lock on an object, other threads cannot execute <strong>any</strong> <code>synchronized</code> method on the same object — but they <strong>can</strong> execute non-synchronized methods.",
+            'A thread can hold more than one lock at a time.',
+            '<strong>Class-level lock:</strong> for static synchronized methods, a thread must acquire the <strong>class-level lock</strong>. While a thread holds the class-level lock, other threads cannot execute any static synchronized method of the same class, but they <strong>can</strong> execute non-static synchronized methods, non-synchronized static methods, etc.',
+            '<strong>Note:</strong> synchronized methods on <strong>different objects</strong> do NOT block each other — they have different object-level locks.'
+          ],
+          code: `class Display {
+    public synchronized void wish(String name) {
+        for (int i = 0; i < 10; i++) {
+            System.out.print("Hai.......!");
+            try { Thread.sleep(2000); } catch (InterruptedException e) { }
+            System.out.println(name);
+        }
+    }
+}
+
+class MyThread extends Thread {
+    Display d;
+    String name;
+    MyThread(Display d, String name) { this.d = d; this.name = name; }
+    @Override
+    public void run() { d.wish(name); }
+}
+
+public class SynchronizedDemo {
+    public static void main(String[] args) {
+        Display d = new Display();
+        MyThread t1 = new MyThread(d, "YS");
+        MyThread t2 = new MyThread(d, "Babu");
+        t1.start();
+        t2.start();
+        // Output: regular (interleaved per wish() call), not irregular
+    }
+}`
+        },
+        {
+          heading: 'Synchronized Blocks',
+          content: [
+            'Declaring an entire method <code>synchronized</code> is not always efficient. If only a few lines of code cause the problem, wrap <strong>just those lines</strong> in a synchronized block to improve performance.',
+            'Syntax: <code>synchronized(b) { /* critical section */ }</code>, where <code>b</code> is an object reference.',
+            'To get the lock for the <strong>current object</strong>: <code>synchronized(this) { ... }</code>',
+            'To get the <strong>class-level lock</strong>: <code>synchronized(Display.class) { ... }</code>',
+            `<strong>Important:</strong> the argument must be an <strong>object reference</strong>. Using a primitive (like <code>int</code>) is a CE: <em>"unexpected type: int, required: reference"</em>.`
+          ],
+          code: `class Display {
+    public void print(String name) {
+        // non-critical code runs without the lock
+        System.out.print("Hai.......!");
+        synchronized(this) {    // acquire object-level lock
+            try { Thread.sleep(2000); } catch (InterruptedException e) { }
+            System.out.println(name);
+        }
+    }
+}
+
+// CE: synchronized on a primitive
+int i = 10;
+synchronized(i) { }   // CE: unexpected type`
+        },
+        {
+          heading: 'Inter-Thread Communication: wait(), notify(), notifyAll()',
+          content: [
+            'Two threads can communicate via <code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code>.',
+            'These methods are in <strong>Object class</strong> (not Thread) because a thread calls them on the shared object it is synchronizing on.',
+            '<strong>Rules:</strong>',
+            '<ul><li>These methods must be called <strong>only from synchronized area</strong> (synchronized method or block), otherwise <code>IllegalMonitorStateException</code> is thrown at runtime.</li><li>When a thread calls <code>wait()</code>, it <strong>immediately releases the lock</strong> on the object and enters the waiting state.</li><li>After giving a notification, the thread <strong>releases the lock</strong> (but may not be immediately).</li></ul>',
+            'Methods: <code>public final void wait() throws InterruptedException</code>, <code>wait(long ms)</code>, <code>wait(long ms, int ns)</code>, <code>public final void notify()</code>, <code>public final void notifyAll()</code>.',
+            '<strong>Lock-release comparison:</strong> <code>yield()</code>, <code>join()</code>, and <code>sleep()</code> do <strong>NOT</strong> release the lock. <code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code> <strong>DO</strong> release the lock.'
+          ],
+          code: `class ThreadB extends Thread {
+    int total = 0;
+    @Override
+    public void run() {
+        synchronized (this) {
+            System.out.println("Child Starting calculation");
+            for (int i = 1; i <= 100; i++) {
+                total = total + i;
+            }
+            System.out.println("Child giving notification");
+            this.notify();
+        }
+    }
+}
+
+public class ThreadA {
+    public static void main(String[] args) throws InterruptedException {
+        ThreadB b = new ThreadB();
+        b.start();
+        synchronized (b) {
+            System.out.println("Main Method calling wait method");
+            b.wait();   // releases the lock on b
+            System.out.println("Main Got Notification");
+            System.out.println(b.total);   // 5050
+        }
+    }
+}`
+        },
+        {
+          heading: 'Deadlock',
+          content: [
+            '<strong>Deadlock</strong> occurs when two threads are waiting for each other forever — each holds a lock the other needs.',
+            "Java has <strong>no deadlock resolution mechanism</strong> — only prevention techniques (one example is the Banker's algorithm).",
+            'The classic deadlock example uses two classes each with a synchronized method that calls a synchronized method on the other class.'
+          ],
+          code: `class A {
+    synchronized void foo(B b) {
+        System.out.println("Thread 1 entered foo() method");
+        try { Thread.sleep(600); } catch (InterruptedException e) { }
+        System.out.println("Thread 1 is trying to call b.last()");
+        b.last();
+    }
+    synchronized void last() {
+        System.out.println("Inside A, This is last() method");
+    }
+}
+
+class B {
+    synchronized void bar(A a) {
+        System.out.println("Thread 2 entered bar() method");
+        try { Thread.sleep(600); } catch (InterruptedException e) { }
+        System.out.println("Thread 2 is trying to call a.last()");
+        a.last();
+    }
+    synchronized void last() {
+        System.out.println("Inside B, This is last() method");
+    }
+}
+
+public class DeadLock implements Runnable {
+    A a = new A();
+    B b = new B();
+    DeadLock() {
+        Thread t = new Thread(this);
+        t.start();
+        b.bar(a);   // main thread holds b's lock, tries to call a.last()
+    }
+    @Override
+    public void run() {
+        a.foo(b);   // new thread holds a's lock, tries to call b.last()
+    }
+    public static void main(String[] args) {
+        new DeadLock();
+    }
+}`
+        },
+        {
+          heading: 'Daemon Threads',
+          content: [
+            '<strong>Daemon threads</strong> are threads that run in the background to provide support for user-defined threads (examples: finalizer thread, main thread itself). They usually have low priority but it can be increased.',
+            'Methods: <code>public boolean isDaemon()</code> and <code>public void setDaemon(boolean b)</code>.',
+            'The <strong>daemon nature is inherited from the parent</strong>: if the parent is a daemon, the child is a daemon; otherwise, the child is not.',
+            "<strong>After starting a thread, you cannot change its daemon nature</strong> — violation is a runtime <code>IllegalThreadStateException</code>. The main thread's daemon nature cannot be changed because it is already started before <code>main()</code> executes.",
+            'All daemon threads are <strong>terminated automatically</strong> when the last non-daemon thread terminates. Hence daemon threads are best for background support work that should not block program exit.'
+          ],
+          code: `public class Test {
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().isDaemon());   // false
+        MyThread t = new MyThread();
+        System.out.println(t.isDaemon());   // false (inherits from main)
+        t.setDaemon(true);
+        System.out.println(t.isDaemon());   // true
+        t.start();
+        // t.setDaemon(false);   // RE: IllegalThreadStateException
+    }
+}
+
+class MyThread extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Child Thread");
+            try { Thread.sleep(1000); } catch (InterruptedException e) { }
+        }
+    }
+}`
+        }
+      ]
+    },
 };
 
-const javaModule4Content = {
+const javaModule5Content = {
+  'java-1-5-features': {
+      title: 'Java 1.5 New Features',
+      sections: [
+        {
+          heading: 'Overview of Java 1.5 (Tiger) Features',
+          content: [
+            `Java 1.5, also known as "Tiger," introduced major enhancements:`,
+            '<ul><li><strong>Enums</strong> — user-defined data types with a fixed set of constants</li><li><strong>For-Each loop</strong> — enhanced for loop for arrays and collections</li><li><strong>Var-Arg methods</strong> — methods that accept variable number of arguments</li><li><strong>Autoboxing and Unboxing</strong> — automatic conversion between primitives and wrappers</li><li><strong>Static Imports</strong> — import static members of a class directly</li><li><strong>Generics</strong> — type-safe collections (covered separately)</li><li><strong>Annotations</strong> — metadata for code (@Override, @Deprecated, etc.)</li><li><strong>Concurrency utilities</strong> — java.util.concurrent package</li></ul>'
+          ]
+        },
+        {
+          heading: 'Enum Type',
+          content: [
+            'An <code>enum</code> defines a fixed set of named constants.',
+            'Enums are classes implicitly extending <code>java.lang.Enum</code>.',
+            'They can have constructors, methods, and fields.',
+            'Use enums when a variable can only take one of a small set of predefined values.'
+          ],
+          code: `enum Day {
+    SUNDAY, MONDAY, TUESDAY, WEDNESDAY, 
+    THURSDAY, FRIDAY, SATURDAY
+}
+
+enum Status {
+    ACTIVE("active"), INACTIVE("inactive"), PENDING("pending");
+    
+    private final String value;
+    
+    Status(String value) {
+        this.value = value;
+    }
+    
+    public String getValue() {
+        return value;
+    }
+}
+
+public class EnumDemo {
+    public static void main(String[] args) {
+        Day today = Day.MONDAY;
+        System.out.println("Today: " + today);
+        System.out.println("Ordinal: " + today.ordinal());  // position in enum
+        System.out.println("Name: " + today.name());
+        
+        // Enum with methods
+        Status s = Status.ACTIVE;
+        System.out.println("Status value: " + s.getValue());
+        
+        // Iterate all values
+        for (Day d : Day.values()) {
+            System.out.println(d);
+        }
+    }
+}`
+        },
+        {
+          heading: 'For-Each Loop (Enhanced for)',
+          content: [
+            'The enhanced for loop provides a cleaner way to iterate arrays and collections.',
+            '<strong>Syntax:</strong> <code>for (Type variable : collection) { ... }</code>',
+            'You cannot modify the collection during iteration (ConcurrentModificationException).'
+          ],
+          code: `public class ForEachDemo {
+    public static void main(String[] args) {
+        int[] numbers = {10, 20, 30, 40, 50};
+        
+        // For-each over array
+        for (int num : numbers) {
+            System.out.println(num);
+        }
+        
+        // For-each over string array
+        String[] names = {"Alice", "Bob", "Charlie"};
+        for (String name : names) {
+            System.out.println("Hello, " + name);
+        }
+        
+        // For-each over enum
+        for (Day d : Day.values()) {
+            System.out.println(d.name().toLowerCase());
+        }
+    }
+}`
+        },
+        {
+          heading: 'Static Imports',
+          content: [
+            'Static imports allow you to import static members (methods, variables) of a class directly.',
+            'This avoids repeatedly typing the class name.',
+            '<strong>Two forms:</strong>',
+            '<ul><li><code>import static package.ClassName.member;</code> — import specific member</li><li><code>import static package.ClassName.*;</code> — import all static members</li></ul>'
+          ],
+          code: `import static java.lang.Math.*;
+import static java.lang.System.out;
+
+public class StaticImportDemo {
+    public static void main(String[] args) {
+        // No need for Math. prefix
+        out.println("PI: " + PI);
+        out.println("sqrt(16): " + sqrt(16));
+        out.println("max(5, 10): " + max(5, 10));
+        out.println("random: " + random());
+    }
+}`
+        },
+        {
+          heading: 'Enum — Deep Dive',
+          content: [
+            'An <strong>enum</strong> is a group of named constants. It can be used for defining user-defined data types.',
+            "Enums were introduced in Java 1.5. Compared with old languages' enums, Java enums are <strong>more powerful</strong> because in Java enums you are allowed to have instance members, constructors, etc.",
+            '<strong>Every constant inside an enum is implicitly <code>public static final</code> by default.</strong> You can access enum constants by using the enum name.',
+            `You can declare an enum either <strong>outside the class</strong> or <strong>within the class</strong>, but <strong>not inside a method</strong>. A violation leads to a compile-time error: <em>"enum types must not be local"</em>.`,
+            '<strong>Allowed modifiers for an enum declared outside a class:</strong> <code>public</code>, default, and <code>strictfp</code>.',
+            '<strong>Allowed modifiers for an enum declared inside a class:</strong> <code>public</code>, <code>private</code>, default, <code>strictfp</code>, and <code>static</code>.',
+            '<strong>Enum vs Inheritance:</strong> Every enum in Java must be the direct child of <code>java.lang.Enum</code>. Since every enum already extends <code>java.lang.Enum</code>, there is no chance of extending any other enum. Hence <code>abstract</code> and <code>final</code> modifiers are not applicable for an enum.'
+          ]
+        },
+        {
+          heading: 'Enum Internals — java.lang.Enum',
+          content: [
+            '<code>java.lang.Enum</code> is an abstract class. It is a direct child of <code>Object</code>. It implements <code>Comparable</code> and <code>Serializable</code> interfaces. All required functionality for Java enums is defined in this class.',
+            'In Java, an enum is internally implemented as a class. We are allowed to declare a <code>main()</code> method in an enum and run it directly from the command prompt.'
+          ],
+          code: `enum Month {
+    JAN, FEB, MAR;
+    public static void main(String[] args) {
+        System.out.println("Hai This is enum class method");
+    }
+}
+// E:\\> javac Month.java
+// E:\\> java Month
+// Output: Hai This is enum class method`
+        },
+        {
+          heading: 'values() and ordinal() Methods',
+          content: [
+            'Every enum implicitly contains a <code>values()</code> method to list all its constants.',
+            'The position of an enum constant is described with <code>ordinalValue()</code> — you can find the ordinal of an enum constant by calling <code>ordinal()</code>. <strong>Ordinal values are 0-based.</strong>'
+          ],
+          code: `enum Months { JAN, FEB, MAR, APR; }
+
+class Test {
+    public static void main(String[] args) {
+        Months[] m = Months.values();
+        for (Months m1 : m) {
+            System.out.println(m1 + "....." + m1.ordinal());
+        }
+    }
+}
+// Output:
+// JAN.....0
+// FEB.....1
+// MAR.....2
+// APR.....3`
+        },
+        {
+          heading: 'Enum with Constructors and Members',
+          content: [
+            'A Java enum can contain constructors, instance members, and static members — in addition to constants. An enum can contain constructors, and they will execute at the time of enum class loading. The programmer is <strong>not</strong> responsible for calling these constructors explicitly.',
+            '<strong>Rules:</strong>',
+            '<ul><li>You cannot take abstract methods inside an enum.</li><li>If the enum contains anything other than constants, the list of constants should end with a <strong>semicolon</strong>.</li><li>The list of constants must be the <strong>first line</strong> in the enum if the enum contains other members.</li></ul>',
+            'Between enum constants, you can apply <strong>equality operators</strong> (<code>==</code> and <code>!=</code>) but <strong>not relational operators</strong>.'
+          ],
+          code: `enum Beer {
+    kf(100), ko(120), rc(150), fo;
+    int price;
+
+    Beer(int price) {
+        this.price = price;
+        System.out.println("constructor");
+    }
+    Beer() {
+        this.price = 130;
+        System.out.println("No Argument constructor");
+    }
+    public int getPrice() { return price; }
+}
+
+class Test {
+    public static void main(String[] args) {
+        Beer[] b = Beer.values();
+        for (Beer b1 : b) {
+            System.out.println(b1 + "......" + b1.getPrice());
+        }
+        // Equality is allowed:
+        System.out.println(Color.RED == Color.GREEN);   // false
+        // System.out.println(Color.RED > Color.GREEN); // CE: relational not allowed
+    }
+}`
+        },
+        {
+          heading: 'Enum with switch Statement',
+          content: [
+            'You can pass an enum type as an argument to a switch statement. From 1.5 onwards, the following are valid arguments: <code>byte, short, int, char</code> + their <code>Byte, Short, Integer, Character</code> wrappers + <code>enum</code>.',
+            'If you pass enum constants as the switch argument, all case labels should be valid enum constants — otherwise a compile-time error occurs.'
+          ],
+          code: `enum Beer { kf, ko, fo; }
+
+class Test {
+    public static void main(String[] args) {
+        Beer b1 = Beer.fo;
+        switch (b1) {
+            case kf: System.out.println("kf is not found"); break;
+            case ko: System.out.println("ko is childrens brand"); break;
+            case fo: System.out.println("Buy one get one free"); break;
+            default: System.out.println("The Other Brands are not good");
+        }
+    }
+}
+// Output: Buy one get one free`
+        },
+        {
+          heading: 'Enum Constant-Specific Class Bodies',
+          content: [
+            "Each enum constant can override the enum's method by providing its own class body. The body becomes a <strong>constant-specific class</strong> with its own implementation."
+          ],
+          code: `enum Color {
+    RED, GREEN, BLUE {
+        public void m1() {
+            System.out.println("Too Good");
+        }
+    };
+    public void m1() {
+        System.out.println("Too Danger");
+    }
+}
+
+class Test {
+    public static void main(String[] args) {
+        Color.RED.m1();     // Too Danger
+        Color.BLUE.m1();    // Too Good
+        Color.GREEN.m1();   // Too Danger
+    }
+}
+// If semicolon is missing after BLUE and the instance block starts immediately,
+// BLUE executes the instance block (its own m1).`
+        },
+        {
+          heading: 'Accessing an Enum from a Different Package',
+          content: [
+            'When accessing an enum from outside its package, you need to import it normally. With <code>static import</code>, you can access its constants directly. Without proper import, the compiler cannot resolve the enum.'
+          ],
+          code: `// File: pack1/color.java
+package pack1;
+public enum color { RED, GREEN, BLUE; }
+
+// File: Test.java (in a different package)
+import pack1.color;            // valid (no static needed)
+import static pack1.color.*;   // also valid (static import for constants)
+// import pack1.color.*;       // invalid (regular import with wildcard on an enum is not allowed)
+import static pack1.color;     // invalid (no .* and not a static member)
+
+class Test {
+    public static void main(String[] args) {
+        color c = color.RED;
+        System.out.println(c);
+    }
+}`
+        },
+        {
+          heading: 'AutoBoxing and AutoUnBoxing — Deep Dive',
+          content: [
+            'Until 1.4 version, you were not allowed to pass primitives where wrapper objects were required, nor wrapper objects where primitives were required. From 1.5 onwards, you can pass primitives in place of objects and wrapper objects in place of primitives. The required conversion is taken care of by the compiler <strong>automatically</strong>. This is <strong>AutoBoxing</strong> and <strong>AutoUnBoxing</strong>.',
+            '<strong>AutoBoxing</strong>: Automatic conversion from primitive to wrapper object by the compiler. Example: <code>Integer I = 10;</code> — the compiler converts the int to an Integer object.',
+            '<strong>AutoUnBoxing</strong>: Automatic conversion from wrapper object to primitive by the compiler. Example: <code>int i = new Integer(10);</code> — the compiler converts the Integer object to an int primitive.',
+            'Because of AutoBoxing and AutoUnBoxing, the importance of wrapper classes is a bit lower from 1.5 onwards.'
+          ],
+          code: `// Pre-1.4: required manual conversion
+ArrayList l = new ArrayList();
+l.add(10);   // CE in 1.4 — required Integer object
+Integer I = new Integer(10);
+l.add(I);    // OK
+
+Boolean B = new Boolean("true");
+if (B) { }   // CE: required boolean primitive
+boolean b = B.booleanValue();
+if (b) { }   // OK
+
+// 1.5+ — automatic conversion
+ArrayList l2 = new ArrayList();
+l2.add(10);     // AutoBoxing
+Integer I2 = 10; // AutoBoxing
+if (B) { }       // AutoUnBoxing
+int i = I2;      // AutoUnBoxing`
+        },
+        {
+          heading: 'AutoBoxing and NullPointerException',
+          content: [
+            'When the compiler converts a wrapper to a primitive (unboxing), and the wrapper reference is <code>null</code>, a <code>NullPointerException</code> is thrown at runtime. Be careful when a wrapper is declared but not assigned.'
+          ],
+          code: `class Test {
+    public static Integer I;   // null by default
+    public static void main(String[] args) {
+        int i = I;             // NPE at runtime (unboxing null)
+        System.out.println(i);
+    }
+}
+
+// Pre-1.5 vs 1.5+ with static field
+class Test2 {
+    public static Integer I = 0;   // initialized
+    public static void main(String[] args) {
+        int i = I;                  // OK
+        System.out.println(i);
+    }
+}`
+        },
+        {
+          heading: 'Wrapper Object Immutability and Reuse',
+          content: [
+            `Wrapper objects are <strong>immutable</strong> — once a wrapper object is constructed, you cannot change its content. Any "change" creates a new object.`,
+            'By autoboxing, when the compiler needs to create an object, it does not create it immediately. It first checks whether any object with the same content has already been created by autoboxing. If so, the existing object is reused.',
+            'This rule is applicable only within the following ranges:'
+          ],
+          table: {
+            headers: [
+              'Wrapper Type',
+              'Cache Range / Behavior'
+            ],
+            rows: [
+              [
+                'Byte',
+                'Always (entire range)'
+              ],
+              [
+                'Short',
+                '-128 to 127'
+              ],
+              [
+                'Integer',
+                '-128 to 127'
+              ],
+              [
+                'Long',
+                '-128 to 127'
+              ],
+              [
+                'Character',
+                '0 to 127'
+              ],
+              [
+                'Boolean',
+                'Always (true / false)'
+              ],
+              [
+                'Float, Double',
+                'Never (always new object)'
+              ]
+            ]
+          },
+          code: `// Case 1: separate constructor calls
+Integer I1 = new Integer(10);
+Integer I2 = new Integer(10);
+System.out.println(I1 == I2);   // false (new objects)
+
+// Case 2: constructor + autoboxing
+Integer I1 = new Integer(10);
+Integer I2 = 10;
+System.out.println(I1 == I2);   // false (one is normal, one is autoboxed)
+
+// Case 3: both autoboxed - within cache range
+Integer I1 = 10;
+Integer I2 = 10;
+System.out.println(I1 == I2);   // true (cache hit)
+
+// Case 4: both autoboxed - within cache range
+Integer I1 = 100;
+Integer I2 = 100;
+System.out.println(I1 == I2);   // true (cache hit)
+
+// Case 5: both autoboxed - outside cache range
+Integer I1 = 1000;
+Integer I2 = 1000;
+System.out.println(I1 == I2);   // false (different objects)
+
+// Out-of-range primitives — always new object
+Long l1 = 126L; Long l2 = 126L; System.out.println(l1 == l2);   // true (in range)
+Float f1 = 10.5f; Float f2 = 10.5f; System.out.println(f1 == f2); // false (always new)`
+        },
+        {
+          heading: 'Overloading — Widening vs AutoBoxing vs Var-Args',
+          content: [
+            'When overloaded methods match, the compiler follows a strict priority order:',
+            '<ol><li><strong>Widening</strong> (primitive widening) — highest priority</li><li><strong>AutoBoxing</strong> (primitive to wrapper)</li><li><strong>Var-Args</strong> — lowest priority</li></ol>',
+            'If the chain widening → autoboxing is required, the compiler <strong>does not</strong> perform it. For example, <code>Long l = 10;</code> is invalid because <code>int</code> cannot widen to <code>long</code> and then autobox to <code>Long</code> in a single step.',
+            'However, <code>Object o = 10;</code> is valid because the chain is: <code>int</code> → autobox to <code>Integer</code> → widen to <code>Object</code> (Integer is a child of Object).'
+          ],
+          code: `// Widening vs AutoBoxing — widening wins
+class Test1 {
+    public void m1(Integer I) { System.out.println("Integer"); }
+    public void m1(long l)    { System.out.println("long"); }
+    public static void main(String[] args) {
+        Test1 t = new Test1();
+        int i = 10;
+        t.m1(i);   // Output: long
+    }
+}
+
+// AutoBoxing vs Var-args — autoboxing wins
+class Test2 {
+    public void m1(Integer I) { System.out.println("Integer"); }
+    public void m1(int... i)  { System.out.println("int"); }
+    public static void main(String[] args) {
+        Test2 t = new Test2();
+        int i = 10;
+        t.m1(i);   // Output: Integer
+    }
+}
+
+// Widening vs Var-args — widening wins
+class Test3 {
+    public void m1(long l)    { System.out.println("long"); }
+    public void m1(int... i)  { System.out.println("int"); }
+    public static void main(String[] args) {
+        Test3 t = new Test3();
+        int i = 10;
+        t.m1(i);   // Output: long
+    }
+}
+
+// Widening followed by autoboxing — CE
+class Test4 {
+    public void m1(Long l) { System.out.println("Long"); }
+    public static void main(String[] args) {
+        Test4 t = new Test4();
+        int i = 10;
+        t.m1(i);   // CE: int -> long -> Long is not allowed
+    }
+}
+
+// Autoboxing followed by widening — OK
+class Test5 {
+    public void m1(Object o) { System.out.println("Object"); }
+    public static void main(String[] args) {
+        Test5 t = new Test5();
+        int i = 10;
+        t.m1(i);   // Output: Object (Integer is a child of Object)
+    }
+}`
+        },
+        {
+          heading: 'Static Imports — Resolution Order and Caveats',
+          content: [
+            'According to Sun, static imports <em>improve</em> readability. But most Java experts say static imports <em>increase</em> confusion. Hence it is <strong>not recommended</strong> unless there is a specific requirement.',
+            'The main objective of static imports is to import static members of a particular class, so that you can access them directly without using the class name.',
+            'The compiler resolves static members in the following priority order:',
+            '<ol><li><strong>Current class</strong> static member (highest priority)</li><li><strong>Explicit static import</strong></li><li><strong>Implicit static import</strong> (lowest priority)</li></ol>',
+            'If two static imports define the same member, the reference becomes <strong>ambiguous</strong> and a compile-time error is raised.'
+          ],
+          code: `// Without static import
+class Test1 {
+    public static void main(String[] args) {
+        System.out.println(Math.sqrt(4));
+        System.out.println(Math.random());
+        System.out.println(Math.max(10, 20));
+    }
+}
+
+// With static import
+import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
+class Test2 {
+    public static void main(String[] args) {
+        System.out.println(sqrt(4));
+        System.out.println(random());
+        System.out.println(max(10, 20));
+    }
+}
+
+// Ambiguity example
+import static java.lang.Integer.*;
+import static java.lang.Byte.*;
+class Test3 {
+    public static void main(String[] args) {
+        System.out.println(MAX_VALUE);   // CE: ambiguous
+    }
+}
+
+// Priority example
+import static java.lang.Integer.MAX_VALUE;   // 2) explicit
+import static java.lang.Byte.*;              // 3) implicit
+class Test4 {
+    static int MAX_VALUE = 999;              // 1) current class
+    public static void main(String[] args) {
+        System.out.println(MAX_VALUE);   // 999
+    }
+}
+
+// Valid vs invalid imports
+// import java.lang.Math.*;        // valid (regular wildcard)
+// import static java.lang.Math.*; // valid (static wildcard)
+// import java.lang.Math;          // valid (regular single)
+// import static java.lang.Math;   // invalid (no member specified)`
+        }
+      ]
+    },
+  'var-arg-methods': {
+      title: 'Var-Arg Methods',
+      sections: [
+        {
+          heading: 'Variable Arguments (Var-Args)',
+          content: [
+            'Var-args allow a method to accept a <strong>variable number of arguments</strong> of the same type.',
+            'Introduced in Java 1.5.',
+            'Internally, var-args are treated as an array of the specified type.',
+            'A method can have only <strong>one var-arg parameter</strong>, and it must be the <strong>last parameter</strong>.'
+          ],
+          code: `public class VarArgsDemo {
+    // Method with var-args
+    static int sum(int... numbers) {
+        int total = 0;
+        for (int num : numbers) {
+            total += num;
+        }
+        return total;
+    }
+    
+    // Var-arg must be last parameter
+    static void greet(String greeting, String... names) {
+        for (String name : names) {
+            System.out.println(greeting + ", " + name + "!");
+        }
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("sum(1,2): " + sum(1, 2));        // 3
+        System.out.println("sum(1,2,3,4,5): " + sum(1, 2, 3, 4, 5)); // 15
+        System.out.println("sum(): " + sum());              // 0 (empty array)
+        
+        greet("Hello", "Alice", "Bob", "Charlie");
+    }
+}`
+        },
+        {
+          heading: 'Var-Args vs Overloading',
+          content: [
+            'Var-args and method overloading can interact in tricky ways.',
+            'When matching a method call, Java prefers:',
+            '<ol><li>Exact match (no widening, no var-args)</li><li>Widening (e.g., int → long)</li><li>Autoboxing (e.g., int → Integer)</li><li>Var-args (last resort)</li></ol>'
+          ]
+        },
+        {
+          heading: 'Var-Arg Methods — Deep Dive',
+          content: [
+            'From 1.5 version onwards, you are allowed to declare a method with a variable number of arguments — such methods are called <strong>var-arg methods</strong>.',
+            'A var-arg method is declared as <code>m1(int... i)</code>. This method is applicable for any number of int arguments, <strong>including zero</strong> arguments.',
+            'Var-arg methods are <strong>internally implemented using single-dimensional arrays</strong>. Hence you can differentiate arguments by using index.'
+          ],
+          code: `class Test {
+    public static void m1(int... i) {
+        System.out.println("var-arg method");
+    }
+    public static void main(String[] args) {
+        m1();           // var-arg method
+        m1(10);         // var-arg method
+        m1(10, 20);     // var-arg method
+        m1(10, 20, 30); // var-arg method
+    }
+}
+
+// Summing variable number of arguments
+class Test2 {
+    public static void main(String[] args) {
+        sum(10, 20);
+        sum(10, 20, 30, 40);
+        sum(10);
+        sum();
+    }
+    public static void sum(int... a) {
+        int total = 0;
+        for (int i = 0; i < a.length; i++) {
+            total = total + a[i];
+        }
+        System.out.println("The sum is: " + total);
+    }
+}`
+        },
+        {
+          heading: 'Mixing Var-Args with General Parameters — Rules',
+          content: [
+            'You can mix general parameters with a var-arg parameter. The <strong>var-arg parameter must be the last parameter</strong>, otherwise a compile-time error.',
+            'You <strong>cannot</strong> take more than one var-arg parameter in a single var-arg method — otherwise a compile-time error.',
+            'Valid vs invalid declarations:'
+          ],
+          table: {
+            headers: [
+              'Declaration',
+              'Valid?'
+            ],
+            rows: [
+              [
+                'm1(int... a)',
+                'Valid'
+              ],
+              [
+                'm1(int. ..a)',
+                'Invalid — malformed function'
+              ],
+              [
+                'm1(char ch, int... a)',
+                'Valid — var-arg last'
+              ],
+              [
+                'm1(int... a, char ch)',
+                'Invalid — var-arg not last'
+              ],
+              [
+                'm1(int...a, boolean... b)',
+                'Invalid — more than one var-arg'
+              ],
+              [
+                'm1(int... a, double... d)',
+                'Invalid — more than one var-arg'
+              ]
+            ]
+          }
+        },
+        {
+          heading: 'Var-Arg Method Has Least Priority',
+          content: [
+            'When overloaded methods match a call, the <strong>var-arg method gets the least priority</strong>. If a non-var-arg method matches, that one is chosen. The var-arg method is chosen only if no other method matches.'
+          ],
+          code: `class Test {
+    public static void m1(int i) {
+        System.out.println("General method");
+    }
+    public static void m1(int... i) {
+        System.out.println("var-arg method");
+    }
+    public static void main(String[] args) {
+        m1();        // var-arg method (no exact match)
+        m1(10, 20);  // var-arg method (only var-arg matches)
+        m1(10);      // General method (exact match wins)
+    }
+}`
+        }
+      ]
+    },
+  'command-line-args': {
+      title: 'Command-Line Arguments & main',
+      sections: [
+        {
+          heading: 'Command-Line Arguments',
+          content: [
+            'Command-line arguments are values passed to a Java program when you run it.',
+            'They are received in the <code>main</code> method as a <code>String[] args</code> array.',
+            'Each argument is separated by a space. Arguments with spaces should be quoted.',
+            'All arguments are strings — convert them to other types if needed.'
+          ],
+          code: `public class CommandLineDemo {
+    public static void main(String[] args) {
+        System.out.println("Number of arguments: " + args.length);
+        
+        for (int i = 0; i < args.length; i++) {
+            System.out.println("Arg " + i + ": " + args[i]);
+        }
+        
+        // Convert to numbers
+        if (args.length >= 2) {
+            int a = Integer.parseInt(args[0]);
+            int b = Integer.parseInt(args[1]);
+            System.out.println("Sum: " + (a + b));
+        }
+    }
+}
+
+// Run: java CommandLineDemo 10 20
+// Output:
+// Number of arguments: 2
+// Arg 0: 10
+// Arg 1: 20
+// Sum: 30`
+        },
+        {
+          heading: 'The main() Method',
+          content: [
+            'The <code>main</code> method is the entry point of every Java application.',
+            'Its signature must be exactly: <code>public static void main(String[] args)</code>',
+            'Why this specific signature?',
+            '<ul><li><code>public</code> — JVM must be able to call it from outside the class</li><li><code>static</code> — JVM can call it without creating an object first</li><li><code>void</code> — the method does not return any value</li><li><code>main</code> — the name the JVM looks for</li><li><code>String[] args</code> — to receive command-line arguments</li></ul>',
+            'You can also use <code>String... args</code> (var-args) instead of <code>String[] args</code>.'
+          ]
+        },
+        {
+          heading: 'Valid main() Method Signatures',
+          content: [
+            'The JVM accepts these variations:',
+            '<ul><li><code>public static void main(String[] args)</code></li><li><code>public static void main(String args[])</code> — array syntax variant</li><li><code>public static void main(String... args)</code> — var-args</li><li><code>public static void main(String[] someName)</code> — any parameter name</li></ul>',
+            'Invalid main methods:',
+            '<ul><li>Missing <code>public</code> or <code>static</code> or <code>void</code></li><li>Wrong return type (e.g., int)</li><li>Different parameter type (e.g., int[] args)</li></ul>'
+          ]
+        }
+      ]
+    },
+};
+
+const javaModule6Content = {
   'jvm-basics': {
-    title: 'JVM Basics',
-    sections: [
-      {
-        heading: 'What is the JVM?',
-        content: [
-          'The <strong>JVM (Java Virtual Machine)</strong> is the engine that runs Java programs.',
-          'When you write Java code, it is compiled into <strong>bytecode</strong> — a special format that the JVM understands.',
-          'The JVM then reads this bytecode and translates it into machine code that your computer can execute.',
-          'Think of the JVM like a universal translator: you write Java once, and the JVM runs it on any operating system — Windows, Mac, or Linux.',
-          '<strong>Key features:</strong>',
-          '<ul><li><strong>Write Once, Run Anywhere</strong> — bytecode runs on any platform with a JVM</li><li><strong>Automatic Memory Management</strong> — the JVM handles memory allocation and cleanup</li><li><strong>Security</strong> — bytecode runs in a controlled environment</li><li><strong>Performance</strong> — the JIT compiler optimizes code at runtime</li></ul>'
-        ]
-      },
-      {
-        heading: 'The Java Execution Process',
-        content: [
-          'Java code goes through three main stages before it runs:',
-          '<ol><li><strong>Write</strong> — you write <code>.java</code> source files</li><li><strong>Compile</strong> — the <code>javac</code> compiler turns <code>.java</code> into <code>.class</code> bytecode files</li><li><strong>Run</strong> — the <code>java</code> command launches the JVM to execute the bytecode</li></ol>',
-          'This process separates Java from languages like C or C++, which compile directly to machine code for a specific system.'
-        ],
-        code: `// Hello.java — source file
+      title: 'JVM Basics',
+      sections: [
+        {
+          heading: 'What is the JVM?',
+          content: [
+            'The <strong>JVM (Java Virtual Machine)</strong> is the engine that runs Java programs.',
+            'When you write Java code, it is compiled into <strong>bytecode</strong> — a special format that the JVM understands.',
+            'The JVM then reads this bytecode and translates it into machine code that your computer can execute.',
+            'Think of the JVM like a universal translator: you write Java once, and the JVM runs it on any operating system — Windows, Mac, or Linux.',
+            '<strong>Key features:</strong>',
+            '<ul><li><strong>Write Once, Run Anywhere</strong> — bytecode runs on any platform with a JVM</li><li><strong>Automatic Memory Management</strong> — the JVM handles memory allocation and cleanup</li><li><strong>Security</strong> — bytecode runs in a controlled environment</li><li><strong>Performance</strong> — the JIT compiler optimizes code at runtime</li></ul>'
+          ]
+        },
+        {
+          heading: 'The Java Execution Process',
+          content: [
+            'Java code goes through three main stages before it runs:',
+            '<ol><li><strong>Write</strong> — you write <code>.java</code> source files</li><li><strong>Compile</strong> — the <code>javac</code> compiler turns <code>.java</code> into <code>.class</code> bytecode files</li><li><strong>Run</strong> — the <code>java</code> command launches the JVM to execute the bytecode</li></ol>',
+            'This process separates Java from languages like C or C++, which compile directly to machine code for a specific system.'
+          ],
+          code: `// Hello.java — source file
 public class Hello {
     public static void main(String[] args) {
         System.out.println("Hello, JVM!");
@@ -3724,15 +10540,15 @@ public class Hello {
 
 // Run: java Hello
 // The JVM reads Hello.class and executes it`
-      },
-      {
-        heading: 'JVM Architecture Overview',
-        content: [
-          'The JVM is made up of several key components:',
-          '<ul><li><strong>Class Loader</strong> — loads <code>.class</code> files into memory when needed</li><li><strong>Bytecode Verifier</strong> — checks that the bytecode is safe and valid before execution</li><li><strong>Execution Engine</strong> — runs the bytecode, using either an interpreter or a JIT compiler</li><li><strong>Garbage Collector</strong> — automatically frees memory that is no longer in use</li><li><strong>Runtime Data Areas</strong> — memory regions like the heap (objects), stack (method calls), and method area (class info)</li></ul>',
-          'You do not need to manage memory manually in Java — the Garbage Collector does it for you.'
-        ],
-        code: `public class JVMExample {
+        },
+        {
+          heading: 'JVM Architecture Overview',
+          content: [
+            'The JVM is made up of several key components:',
+            '<ul><li><strong>Class Loader</strong> — loads <code>.class</code> files into memory when needed</li><li><strong>Bytecode Verifier</strong> — checks that the bytecode is safe and valid before execution</li><li><strong>Execution Engine</strong> — runs the bytecode, using either an interpreter or a JIT compiler</li><li><strong>Garbage Collector</strong> — automatically frees memory that is no longer in use</li><li><strong>Runtime Data Areas</strong> — memory regions like the heap (objects), stack (method calls), and method area (class info)</li></ul>',
+            'You do not need to manage memory manually in Java — the Garbage Collector does it for you.'
+          ],
+          code: `public class JVMExample {
     public static void main(String[] args) {
         // Objects are created on the heap
         String greeting = new String("Hello, Heap!");
@@ -3747,15 +10563,15 @@ public class Hello {
         // will eventually clean up the String object automatically
     }
 }`
-      },
-      {
-        heading: 'Memory Areas in the JVM',
-        content: [
-          'The JVM divides memory into different regions:',
-          '<table border="1"><tr><th>Area</th><th>Purpose</th></tr><tr><td><strong>Heap</strong></td><td>Stores all objects and arrays. Shared by all threads.</td></tr><tr><td><strong>Stack</strong></td><td>Stores local variables and method call frames. Each thread has its own stack.</td></tr><tr><td><strong>Method Area</strong></td><td>Stores class definitions, static variables, and method code.</td></tr><tr><td><strong>PC Register</strong></td><td>Tracks the current instruction for each thread.</td></tr></table>',
-          'Understanding these areas helps you write more efficient Java code and diagnose memory issues.'
-        ],
-        code: `public class MemoryDemo {
+        },
+        {
+          heading: 'Memory Areas in the JVM',
+          content: [
+            'The JVM divides memory into different regions:',
+            `<table border="1"><tr><th>Area</th><th>Purpose</th></tr><tr><td><strong>Heap</strong></td><td>Stores all objects and arrays. Shared by all threads.</td></tr><tr><td><strong>Stack</strong></td><td>Stores local variables and method call frames. Each thread has its own stack.</td></tr><tr><td><strong>Method Area</strong></td><td>Stores class definitions, static variables, and method code.</td></tr><tr><td><strong>PC Register</strong></td><td>Tracks the current instruction for each thread.</td></tr></table>`,
+            'Understanding these areas helps you write more efficient Java code and diagnose memory issues.'
+          ],
+          code: `public class MemoryDemo {
     // Static variable — stored in Method Area
     static int classCounter = 0;
     
@@ -3776,14 +10592,14 @@ public class Hello {
         System.out.println("Class counter: " + classCounter);
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a Java file, compile it, and run it.',
-          'Experiment: add more variables and see how the program behaves.'
-        ],
-        code: `public class MyFirstJVMProgram {
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a Java file, compile it, and run it.',
+            'Experiment: add more variables and see how the program behaves.'
+          ],
+          code: `public class MyFirstJVMProgram {
     public static void main(String[] args) {
         System.out.println("Running inside the JVM!");
         
@@ -3797,188 +10613,288 @@ public class Hello {
 
 // Compile: javac MyFirstJVMProgram.java
 // Run: java MyFirstJVMProgram`
-      }
-    ]
-  },
-
-  'packages': {
-    title: 'Packages',
-    sections: [
-      {
-        heading: 'What is a Package?',
-        content: [
-          'A <strong>package</strong> in Java is a way to group related classes and interfaces together.',
-          'Think of a package like a folder on your computer — it helps you organize files so they are easier to find and manage.',
-          'Packages also prevent naming conflicts. Two classes can have the same name if they are in different packages.',
-          '<strong>Benefits of packages:</strong>',
-          '<ul><li><strong>Organization</strong> — group related classes logically</li><li><strong>Avoid Conflicts</strong> — same class name can exist in different packages</li><li><strong>Access Control</strong> — default access means package-private visibility</li><li><strong>Reusability</strong> — packages can be imported and reused across projects</li></ul>'
-        ]
-      },
-      {
-        heading: 'Declaring a Package',
-        content: [
-          'The <code>package</code> keyword is used at the very top of a Java file to declare which package the class belongs to.',
-          'Package names are usually written in lowercase and follow a reverse domain name convention.',
-          'For example, if your website is <code>example.com</code>, your package might be <code>com.example.myapp</code>.'
-        ],
-        code: `// File: com/example/myapp/Utils.java
-package com.example.myapp;
-
-public class Utils {
-    public static void greet(String name) {
-        System.out.println("Hello, " + name + "!");
-    }
-}`
-      },
-      {
-        heading: 'Importing Packages',
-        content: [
-          'To use a class from another package, you need to <strong>import</strong> it.',
-          'The <code>import</code> statement comes after the <code>package</code> declaration and before the class definition.',
-          'You can import a single class or use a wildcard <code>*</code> to import all classes from a package.'
-        ],
-        code: `// Import a single class
-import java.util.Scanner;
-
-// Import all classes from a package
-import java.util.*;
-
-public class ImportDemo {
+        }
+      ]
+    },
+  'garbage-collection': {
+      title: 'Garbage Collection',
+      sections: [
+        {
+          heading: 'What is Garbage Collection?',
+          content: [
+            'In Java, you do not manually destroy objects.',
+            'The <strong>Garbage Collector (GC)</strong> is a JVM component that automatically reclaims memory from objects that are no longer reachable (no references pointing to them).',
+            "This eliminates memory leaks caused by forgetting to free memory — one of Java's key selling points."
+          ]
+        },
+        {
+          heading: 'How Garbage Collection Works',
+          content: [
+            'The GC uses a root-tracing algorithm:',
+            `<ol><li>It starts from "root" references (local variables, static fields, active threads).</li><li>It traces all objects reachable from roots — these are <strong>live</strong>.</li><li>Any object <strong>not reachable</strong> from any root is eligible for garbage collection.</li><li>The GC reclaims memory from unreachable objects.</li></ol>`,
+            'You cannot force garbage collection, but you can <strong>suggest</strong> it:',
+            '<code>System.gc();</code> — requests GC (JVM may or may not honor it).',
+            '<strong>Key terms:</strong>',
+            '<ul><li><strong>Eligible for GC:</strong> object has no references to it</li><li><strong>finalize():</strong> called by GC before destroying an object (deprecated since Java 9, avoid using it)</li><li><strong>Island of isolation:</strong> group of objects referencing each other but not reachable from roots — still eligible for GC</li></ul>'
+          ],
+          code: `public class GCDemo {
     public static void main(String[] args) {
-        // Using Scanner from java.util package
-        Scanner scanner = new Scanner(System.in);
+        // Create objects
+        GCDemo obj1 = new GCDemo();
+        GCDemo obj2 = new GCDemo();
         
-        System.out.print("Enter your name: ");
-        String name = scanner.nextLine();
+        // Make obj1 unreachable
+        obj1 = null;
+        // Now the first object is eligible for GC
         
-        System.out.println("Welcome, " + name + "!");
-        scanner.close();
-    }
-}`
-      },
-      {
-        heading: 'The java.lang Package',
-        content: [
-          'The <code>java.lang</code> package is special — it is <strong>automatically imported</strong> in every Java program.',
-          'It contains fundamental classes that Java programs use all the time:',
-          '<ul><li><code>String</code> — for text</li><li><code>System</code> — for input/output (e.g., <code>System.out.println</code>)</li><li><code>Math</code> — for mathematical operations</li><li><code>Object</code> — the root class of all Java classes</li><li><code>Integer</code>, <code>Double</code>, <code>Boolean</code> — wrapper classes</li></ul>',
-          'You never need to write <code>import java.lang.*;</code> — Java does it for you.'
-        ],
-        code: `public class LangPackageDemo {
-    public static void main(String[] args) {
-        // String is from java.lang — no import needed
-        String message = "Hello from java.lang!";
+        // Request GC (JVM may ignore this)
+        System.gc();
         
-        // Math is from java.lang
-        double result = Math.sqrt(25);
-        
-        // System is from java.lang
-        System.out.println(message);
-        System.out.println("Square root of 25: " + result);
-        
-        // Integer wrapper class is from java.lang
-        Integer num = 100;
-        System.out.println("Integer value: " + num);
-    }
-}`
-      },
-      {
-        heading: 'Creating Your Own Package',
-        content: [
-          'Let us create a simple package with two classes and use them in another program.',
-          'The directory structure must match the package name. For package <code>com.myapp.tools</code>, the path should be <code>com/myapp/tools/</code>.'
-        ],
-        code: `// File: com/myapp/tools/Calculator.java
-package com.myapp.tools;
-
-public class Calculator {
-    public int add(int a, int b) {
-        return a + b;
+        System.out.println("End of main");
     }
     
-    public int multiply(int a, int b) {
-        return a * b;
-    }
-}
-
-// File: com/myapp/tools/Printer.java
-package com.myapp.tools;
-
-public class Printer {
-    public static void printLine(String text) {
-        System.out.println("==> " + text);
-    }
-}
-
-// File: MainApp.java (in the root directory)
-import com.myapp.tools.Calculator;
-import com.myapp.tools.Printer;
-
-public class MainApp {
-    public static void main(String[] args) {
-        Calculator calc = new Calculator();
-        int sum = calc.add(5, 3);
-        int product = calc.multiply(4, 7);
-        
-        Printer.printLine("Sum: " + sum);
-        Printer.printLine("Product: " + product);
+    @Override
+    protected void finalize() {
+        // Called by GC before destruction
+        System.out.println("Object is being garbage collected");
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a package called <code>myPackage</code> with a class named <code>Greeter</code> that has a method <code>sayHello()</code>.',
-          'Then create a main class outside the package that imports and uses it.'
-        ],
-        code: `// myPackage/Greeter.java
-package myPackage;
+        },
+        {
+          heading: 'Object Reachability',
+          content: [
+            '<strong>Ways an object becomes eligible for GC:</strong>',
+            '<ul><li>The reference is set to <code>null</code>: <code>obj = null;</code></li><li>The reference is reassigned: <code>obj = new Object();</code> (old object lost)</li><li>The reference goes out of scope (local variable in a method)</li><li>Island of isolation: objects only reference each other, no external references</li></ul>'
+          ]
+        },
+        {
+          heading: 'Introduction to Garbage Collection',
+          content: [
+            'In C++, the programmer is responsible for <strong>both creation and destruction</strong> of objects, but most programmers focus on creation and ignore destruction. This can cause memory shortages and program failures. In Java, the programmer is only responsible for creating objects — the JVM runs an <strong>assistant in the background</strong> that handles object destruction. This assistant is the <strong>Garbage Collector</strong>.',
+            'GC makes memory failures due to leaks extremely rare in well-behaved programs.'
+          ]
+        },
+        {
+          heading: 'How to Make an Object Eligible for GC',
+          content: [
+            'Even though the programmer is not responsible for destruction, it is good practice to make an object eligible for GC when it is no longer required.'
+          ],
+          code: `// 1) Nullifying the reference variable
+Student s1 = new Student();
+Student s2 = new Student();
+// At this point, no object is eligible for GC
+s1 = null;
+// Now ONE object is eligible for GC
+s2 = null;
+// Now BOTH objects are eligible for GC
 
-public class Greeter {
-    public void sayHello(String name) {
-        System.out.println("Hello, " + name + "!");
-    }
-}
+// 2) Reassigning the reference variable
+Student s1 = new Student();
+Student s2 = new Student();
+s1 = s2;   // the first object is now eligible for GC
 
-// Main.java (outside the package)
-import myPackage.Greeter;
+// 3) Objects created inside a method
+// These are by default eligible for GC once the method completes.
+public static void m1() {
+    Student s1 = new Student();
+    Student s2 = new Student();
+}   // both objects eligible for GC after m1() returns
 
-public class Main {
+// 4) Island of Isolation
+// Group of objects referencing each other but not reachable from any live reference.
+class Test {
+    Test i;
     public static void main(String[] args) {
-        Greeter g = new Greeter();
-        g.sayHello("Student");
+        Test t1 = new Test();
+        Test t2 = new Test();
+        Test t3 = new Test();
+        t1.i = t2;
+        t2.i = t3;
+        t3.i = t1;
+        // None eligible yet — all reachable
+        t1 = null;
+        // Still none eligible
+        t2 = null;
+        // Still none eligible
+        t3 = null;
+        // Now ALL three are eligible — the island of isolation is collectable
+    }
+}`
+        },
+        {
+          heading: 'Methods to Request JVM to Run GC',
+          content: [
+            'You can <strong>request</strong> the JVM to run the GC, but there is <strong>no guarantee</strong> it will honor the request. There are two ways:'
+          ],
+          code: `// 1) Using System class — static method
+System.gc();
+
+// 2) Using Runtime class — instance method
+Runtime r = Runtime.getRuntime();
+r.gc();
+r.freeMemory();    // free memory in the heap
+r.totalMemory();   // total heap size
+
+// Note: gc() in System is static, but gc() in Runtime is an instance method.
+// Hence Runtime.gc() is invalid (gc is not static in Runtime).
+
+import java.util.*;
+class RuntimeDemo {
+    public static void main(String[] args) {
+        Runtime r = Runtime.getRuntime();
+        System.out.println(r.totalMemory());   // e.g., 2031616
+        System.out.println(r.freeMemory());    // e.g., 1870416
+        for (int i = 0; i <= 10000; i++) {
+            Date d = new Date();
+            d = null;
+        }
+        System.out.println(r.freeMemory());    // less (memory used)
+        r.gc();
+        System.out.println(r.freeMemory());    // more (memory reclaimed)
+    }
+}`
+        },
+        {
+          heading: 'finalize() Method — Cleanup Before Destruction',
+          content: [
+            'Just before destroying any object, the Garbage Collector always calls <code>finalize()</code> to perform clean-up activities.',
+            '<code>finalize()</code> is declared in <code>java.lang.Object</code> as <code>protected void finalize() throws Throwable</code>.'
+          ],
+          code: `// Case 1: GC calls finalize() on the object that is eligible.
+class Test {
+    public static void main(String[] args) {
+        String s = new String("raju");
+        s = null;
+        System.gc();
+        System.out.println("end of main method");
+    }
+    public void finalize() {
+        System.out.println("finalize method called");
     }
 }
+// Output: "end of main method"
+// String object is eligible — so String class' finalize() runs (not Test's).
+// If you replace String with Test, then Test's finalize() will run instead.
 
-// Compile: javac myPackage/Greeter.java Main.java
-// Run: java Main`
-      }
-    ]
-  },
-
+// Case 2: Calling finalize() explicitly — it executes like a normal method,
+//         and the object is NOT destroyed.
+// If an uncaught exception occurs while GC is calling finalize(), JVM ignores it.
+// If the exception occurs during an explicit call, the program terminates abnormally.
+class Test2 {
+    public static void main(String[] args) {
+        Test2 s = new Test2();
+        s = null;
+        System.gc();
+        System.out.println("End of main method");
+    }
+    public void finalize() {
+        System.out.println("finalize method");
+        System.out.println(10 / 0);   // uncaught exception
+    }
+}
+// Output: "finalize method" then "End of main method" (exception is ignored by GC)`
+        },
+        {
+          heading: 'Three Important Cases of finalize()',
+          content: [
+            "<strong>Case 1:</strong> GC calls <code>finalize()</code> only on the object that is eligible. The corresponding class's <code>finalize</code> method is executed.",
+            '<strong>Case 2:</strong> You can call <code>finalize()</code> explicitly. In that case it executes like a normal method, and the object is <strong>not</strong> destroyed. While GC is executing <code>finalize()</code>, any uncaught exception is <strong>ignored by the JVM</strong>. If you call <code>finalize()</code> explicitly and an exception is uncaught, the program terminates abnormally.',
+            '<strong>Case 3:</strong>',
+            '<ol><li>GC calls <code>finalize()</code> only <strong>once</strong> on any object — it will not call it more than once.</li><li>While executing <code>finalize()</code>, if the object regains a reference, the GC will <strong>not</strong> destroy the object after <code>finalize()</code> completes.</li><li>If the same object is eligible for GC a second time without <code>finalize()</code> executing again, the GC will destroy it without calling <code>finalize()</code>.</li></ol>'
+          ],
+          code: `class FinalizeDemo {
+    static FinalizeDemo s;
+    public static void main(String[] args) throws Exception {
+        FinalizeDemo f = new FinalizeDemo();
+        System.out.println(f.hashCode());
+        f = null;
+        System.gc();
+        Thread.sleep(5000);
+        System.out.println(s.hashCode());   // regains reference inside finalize
+        s = null;
+        System.gc();
+        Thread.sleep(5000);
+        System.out.println("End of main method");
+    }
+    public void finalize() {
+        System.out.println("finalize method called");
+        s = this;   // object regains a reference — will NOT be destroyed this time
+    }
+}`
+        },
+        {
+          heading: 'GC Behavior is Vendor-Dependent',
+          content: [
+            'The behavior of the GC is <strong>vendor-dependent</strong>. There is no guarantee for any of the following:',
+            '<ul><li>Whether the GC follows the <em>mark and sweep</em> algorithm or not.</li><li>What exact algorithm the GC follows.</li><li>In which order the GC destroys objects.</li><li>Whether the GC destroys all eligible objects.</li><li>At what exact time the GC will run.</li></ul>',
+            'Because of this, programs should <strong>not</strong> rely on GC timing or order. Use <code>System.gc()</code> only as a hint.'
+          ]
+        },
+        {
+          heading: 'GC Summary Diagram — Common Eligibility Scenarios',
+          content: [
+            'Reference for the most common patterns of object eligibility:'
+          ],
+          table: {
+            headers: [
+              'Scenario',
+              'Action',
+              'Eligible Objects'
+            ],
+            rows: [
+              [
+                'Nullifying reference',
+                's1 = null; s2 = null;',
+                'Both objects'
+              ],
+              [
+                'Reassigning reference',
+                's1 = s2;',
+                'First object (lost)'
+              ],
+              [
+                'Objects inside method',
+                'm1() returns',
+                'All objects created in m1'
+              ],
+              [
+                'Method returns object',
+                'Student s = m1();',
+                'Internal object not returned'
+              ],
+              [
+                'Island of Isolation',
+                't1=t2=t3=null after cycle',
+                'All three objects'
+              ]
+            ]
+          }
+        }
+      ]
+    },
   'build-tools': {
-    title: 'Build Tools',
-    sections: [
-      {
-        heading: 'What are Build Tools?',
-        content: [
-          'A <strong>build tool</strong> automates the process of compiling, testing, and packaging your Java code.',
-          'As your project grows, manually compiling files with <code>javac</code> becomes impractical.',
-          'Build tools handle dependencies (external libraries), run tests, and create deployable files like <code>.jar</code> or <code>.war</code>.',
-          '<strong>Popular Java build tools:</strong>',
-          '<ul><li><strong>Maven</strong> — uses XML configuration (<code>pom.xml</code>), convention over configuration</li><li><strong>Gradle</strong> — uses Groovy or Kotlin DSL scripts, very flexible and fast</li></ul>'
-        ]
-      },
-      {
-        heading: 'Introduction to Maven',
-        content: [
-          '<strong>Maven</strong> is a widely-used build tool that simplifies Java project management.',
-          'Maven uses a <code>pom.xml</code> file (Project Object Model) to define your project structure, dependencies, and build steps.',
-          'It follows the principle of <strong>convention over configuration</strong> — it assumes standard folder layouts so you do not have to specify everything manually.',
-          '<strong>Standard Maven directory structure:</strong>',
-          '<ul><li><code>src/main/java</code> — Java source code</li><li><code>src/main/resources</code> — configuration files</li><li><code>src/test/java</code> — test code</li><li><code>target/</code> — compiled output and packaged files</li></ul>'
-        ],
-        code: `<!-- pom.xml — Maven project configuration -->
+      title: 'Build Tools',
+      sections: [
+        {
+          heading: 'What are Build Tools?',
+          content: [
+            'A <strong>build tool</strong> automates the process of compiling, testing, and packaging your Java code.',
+            'As your project grows, manually compiling files with <code>javac</code> becomes impractical.',
+            'Build tools handle dependencies (external libraries), run tests, and create deployable files like <code>.jar</code> or <code>.war</code>.',
+            '<strong>Popular Java build tools:</strong>',
+            '<ul><li><strong>Maven</strong> — uses XML configuration (<code>pom.xml</code>), convention over configuration</li><li><strong>Gradle</strong> — uses Groovy or Kotlin DSL scripts, very flexible and fast</li></ul>'
+          ]
+        },
+        {
+          heading: 'Introduction to Maven',
+          content: [
+            '<strong>Maven</strong> is a widely-used build tool that simplifies Java project management.',
+            'Maven uses a <code>pom.xml</code> file (Project Object Model) to define your project structure, dependencies, and build steps.',
+            'It follows the principle of <strong>convention over configuration</strong> — it assumes standard folder layouts so you do not have to specify everything manually.',
+            '<strong>Standard Maven directory structure:</strong>',
+            '<ul><li><code>src/main/java</code> — Java source code</li><li><code>src/main/resources</code> — configuration files</li><li><code>src/test/java</code> — test code</li><li><code>target/</code> — compiled output and packaged files</li></ul>'
+          ],
+          code: `<!-- pom.xml — Maven project configuration -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -3998,15 +10914,15 @@ public class Main {
         </dependency>
     </dependencies>
 </project>`
-      },
-      {
-        heading: 'Common Maven Commands',
-        content: [
-          'Maven provides simple commands to perform common tasks:',
-          '<table border="1"><tr><th>Command</th><th>What it does</th></tr><tr><td><code>mvn compile</code></td><td>Compiles the source code</td></tr><tr><td><code>mvn test</code></td><td>Runs all tests in the project</td></tr><tr><td><code>mvn package</code></td><td>Compiles and packages into a JAR/WAR file</td></tr><tr><td><code>mvn clean</code></td><td>Deletes the <code>target/</code> directory</td></tr><tr><td><code>mvn install</code></td><td>Packages and installs the JAR to local repository</td></tr></table>',
-          'You can chain commands: <code>mvn clean package</code> cleans and then rebuilds everything.'
-        ],
-        code: `// Example Java class at src/main/java/com/example/App.java
+        },
+        {
+          heading: 'Common Maven Commands',
+          content: [
+            'Maven provides simple commands to perform common tasks:',
+            `<table border="1"><tr><th>Command</th><th>What it does</th></tr><tr><td><code>mvn compile</code></td><td>Compiles the source code</td></tr><tr><td><code>mvn test</code></td><td>Runs all tests in the project</td></tr><tr><td><code>mvn package</code></td><td>Compiles and packages into a JAR/WAR file</td></tr><tr><td><code>mvn clean</code></td><td>Deletes the <code>target/</code> directory</td></tr><tr><td><code>mvn install</code></td><td>Packages and installs the JAR to local repository</td></tr></table>`,
+            'You can chain commands: <code>mvn clean package</code> cleans and then rebuilds everything.'
+          ],
+          code: `// Example Java class at src/main/java/com/example/App.java
 package com.example;
 
 public class App {
@@ -4024,16 +10940,16 @@ public class App {
 // mvn compile   → compiles the code
 // mvn package   → creates my-first-app-1.0.0.jar in target/
 // java -jar target/my-first-app-1.0.0.jar`
-      },
-      {
-        heading: 'Introduction to Gradle',
-        content: [
-          '<strong>Gradle</strong> is another powerful build tool that uses a script-based approach instead of XML.',
-          'Gradle scripts are written in <strong>Groovy</strong> or <strong>Kotlin</strong> and are more concise than Maven XML.',
-          'Gradle is known for being fast thanks to <strong>incremental builds</strong> — it only recompiles what changed.',
-          'Gradle also uses a standard directory layout similar to Maven.'
-        ],
-        code: `// build.gradle — Gradle project configuration
+        },
+        {
+          heading: 'Introduction to Gradle',
+          content: [
+            '<strong>Gradle</strong> is another powerful build tool that uses a script-based approach instead of XML.',
+            'Gradle scripts are written in <strong>Groovy</strong> or <strong>Kotlin</strong> and are more concise than Maven XML.',
+            'Gradle is known for being fast thanks to <strong>incremental builds</strong> — it only recompiles what changed.',
+            'Gradle also uses a standard directory layout similar to Maven.'
+          ],
+          code: `// build.gradle — Gradle project configuration
 plugins {
     id 'java'
     id 'application'
@@ -4068,15 +10984,15 @@ application {
 test {
     useJUnitPlatform()
 }`
-      },
-      {
-        heading: 'Common Gradle Commands',
-        content: [
-          'Gradle commands are similar to Maven but use the <code>gradle</code> or <code>./gradlew</code> command:',
-          '<table border="1"><tr><th>Command</th><th>What it does</th></tr><tr><td><code>gradle compileJava</code></td><td>Compiles the source code</td></tr><tr><td><code>gradle test</code></td><td>Runs all tests</td></tr><tr><td><code>gradle build</code></td><td>Compiles, tests, and packages the project</td></tr><tr><td><code>gradle clean</code></td><td>Deletes the <code>build/</code> directory</td></tr><tr><td><code>gradle run</code></td><td>Compiles and runs the main application</td></tr></table>',
-          'Gradle wrapper (<code>gradlew</code>) lets you run Gradle without installing it globally.'
-        ],
-        code: `// Example Java class at src/main/java/com/example/App.java
+        },
+        {
+          heading: 'Common Gradle Commands',
+          content: [
+            'Gradle commands are similar to Maven but use the <code>gradle</code> or <code>./gradlew</code> command:',
+            `<table border="1"><tr><th>Command</th><th>What it does</th></tr><tr><td><code>gradle compileJava</code></td><td>Compiles the source code</td></tr><tr><td><code>gradle test</code></td><td>Runs all tests</td></tr><tr><td><code>gradle build</code></td><td>Compiles, tests, and packages the project</td></tr><tr><td><code>gradle clean</code></td><td>Deletes the <code>build/</code> directory</td></tr><tr><td><code>gradle run</code></td><td>Compiles and runs the main application</td></tr></table>`,
+            'Gradle wrapper (<code>gradlew</code>) lets you run Gradle without installing it globally.'
+          ],
+          code: `// Example Java class at src/main/java/com/example/App.java
 package com.example;
 
 public class App {
@@ -4089,14 +11005,14 @@ public class App {
 // ./gradlew build    → full build
 // ./gradlew run      → compile and run the app
 // ./gradlew clean    → remove build directory`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a simple Maven or Gradle project with one dependency.',
-          'Write a small program that uses the dependency, then compile and run it.'
-        ],
-        code: `// Create a Maven project with this pom.xml:
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a simple Maven or Gradle project with one dependency.',
+            'Write a small program that uses the dependency, then compile and run it.'
+          ],
+          code: `// Create a Maven project with this pom.xml:
 // Add JUnit dependency for testing
 
 /*
@@ -4132,31 +11048,30 @@ public class CalculatorTest {
 }
 
 // Run: mvn test`
-      }
-    ]
-  },
-
+        }
+      ]
+    },
   'unit-testing-junit': {
-    title: 'Unit Testing with JUnit',
-    sections: [
-      {
-        heading: 'What is Unit Testing?',
-        content: [
-          '<strong>Unit testing</strong> is the practice of testing small, individual parts (units) of your code in isolation.',
-          'A unit is typically a single method or function. The goal is to verify that each unit behaves correctly.',
-          '<strong>Why unit testing matters:</strong>',
-          '<ul><li>Catches bugs early — before they reach production</li><li>Makes code easier to refactor — tests verify nothing broke</li><li>Acts as documentation — tests show how code is meant to work</li><li>Encourages better design — testable code is usually cleaner code</li></ul>',
-          '<strong>JUnit</strong> is the most popular testing framework for Java. JUnit 5 is the current version.'
-        ]
-      },
-      {
-        heading: 'JUnit 5 Basics',
-        content: [
-          'JUnit 5 (also called JUnit Jupiter) uses <strong>annotations</strong> to mark test methods and configure behavior.',
-          '<strong>Common annotations:</strong>',
-          '<ul><li><code>@Test</code> — marks a method as a test case</li><li><code>@BeforeEach</code> — runs before every test method</li><li><code>@AfterEach</code> — runs after every test method</li><li><code>@BeforeAll</code> — runs once before all tests (must be static)</li><li><code>@AfterAll</code> — runs once after all tests (must be static)</li><li><code>@DisplayName</code> — gives a human-readable name to the test</li></ul>'
-        ],
-        code: `import org.junit.jupiter.api.Test;
+      title: 'Unit Testing with JUnit',
+      sections: [
+        {
+          heading: 'What is Unit Testing?',
+          content: [
+            '<strong>Unit testing</strong> is the practice of testing small, individual parts (units) of your code in isolation.',
+            'A unit is typically a single method or function. The goal is to verify that each unit behaves correctly.',
+            '<strong>Why unit testing matters:</strong>',
+            '<ul><li>Catches bugs early — before they reach production</li><li>Makes code easier to refactor — tests verify nothing broke</li><li>Acts as documentation — tests show how code is meant to work</li><li>Encourages better design — testable code is usually cleaner code</li></ul>',
+            '<strong>JUnit</strong> is the most popular testing framework for Java. JUnit 5 is the current version.'
+          ]
+        },
+        {
+          heading: 'JUnit 5 Basics',
+          content: [
+            'JUnit 5 (also called JUnit Jupiter) uses <strong>annotations</strong> to mark test methods and configure behavior.',
+            '<strong>Common annotations:</strong>',
+            '<ul><li><code>@Test</code> — marks a method as a test case</li><li><code>@BeforeEach</code> — runs before every test method</li><li><code>@AfterEach</code> — runs after every test method</li><li><code>@BeforeAll</code> — runs once before all tests (must be static)</li><li><code>@AfterAll</code> — runs once after all tests (must be static)</li><li><code>@DisplayName</code> — gives a human-readable name to the test</li></ul>'
+          ],
+          code: `import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -4192,16 +11107,16 @@ public class SimpleTest {
         assertEquals(-5, result);
     }
 }`
-      },
-      {
-        heading: 'Assertions in JUnit',
-        content: [
-          '<strong>Assertions</strong> check that your code produces the expected result.',
-          'If an assertion fails, the test fails and JUnit reports the mismatch.',
-          '<strong>Common assertion methods:</strong>',
-          '<ul><li><code>assertEquals(expected, actual)</code> — checks two values are equal</li><li><code>assertTrue(condition)</code> — checks condition is true</li><li><code>assertFalse(condition)</code> — checks condition is false</li><li><code>assertNull(object)</code> — checks object is null</li><li><code>assertNotNull(object)</code> — checks object is not null</li><li><code>assertThrows(Exception.class, () -> code)</code> — checks code throws expected exception</li></ul>'
-        ],
-        code: `import org.junit.jupiter.api.Test;
+        },
+        {
+          heading: 'Assertions in JUnit',
+          content: [
+            '<strong>Assertions</strong> check that your code produces the expected result.',
+            'If an assertion fails, the test fails and JUnit reports the mismatch.',
+            '<strong>Common assertion methods:</strong>',
+            '<ul><li><code>assertEquals(expected, actual)</code> — checks two values are equal</li><li><code>assertTrue(condition)</code> — checks condition is true</li><li><code>assertFalse(condition)</code> — checks condition is false</li><li><code>assertNull(object)</code> — checks object is null</li><li><code>assertNotNull(object)</code> — checks object is not null</li><li><code>assertThrows(Exception.class, () -> code)</code> — checks code throws expected exception</li></ul>'
+          ],
+          code: `import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AssertionDemo {
@@ -4231,15 +11146,15 @@ public class AssertionDemo {
         assertEquals("/ by zero", exception.getMessage());
     }
 }`
-      },
-      {
-        heading: 'Writing a Testable Class',
-        content: [
-          'Good tests start with code that is easy to test.',
-          'Let us create a simple <code>BankAccount</code> class and write tests for it.',
-          'We will test deposit, withdrawal, and balance checking.'
-        ],
-        code: `// The class we want to test
+        },
+        {
+          heading: 'Writing a Testable Class',
+          content: [
+            'Good tests start with code that is easy to test.',
+            'Let us create a simple <code>BankAccount</code> class and write tests for it.',
+            'We will test deposit, withdrawal, and balance checking.'
+          ],
+          code: `// The class we want to test
 public class BankAccount {
     private double balance;
     
@@ -4295,16 +11210,16 @@ public class BankAccountTest {
         assertEquals(100.0, account.getBalance(), 0.001);
     }
 }`
-      },
-      {
-        heading: 'Running Tests',
-        content: [
-          'There are several ways to run JUnit tests:',
-          '<ul><li><strong>IDE (IntelliJ, Eclipse, VS Code)</strong> — right-click the test file and select "Run Tests"</li><li><strong>Maven</strong> — run <code>mvn test</code> from the terminal</li><li><strong>Gradle</strong> — run <code>gradle test</code> from the terminal</li></ul>',
-          'Test results show green for passed tests and red for failures.',
-          'IDEs also display a tree view of all tests with their pass/fail status.'
-        ],
-        code: `// Running from terminal with Maven:
+        },
+        {
+          heading: 'Running Tests',
+          content: [
+            'There are several ways to run JUnit tests:',
+            `<ul><li><strong>IDE (IntelliJ, Eclipse, VS Code)</strong> — right-click the test file and select "Run Tests"</li><li><strong>Maven</strong> — run <code>mvn test</code> from the terminal</li><li><strong>Gradle</strong> — run <code>gradle test</code> from the terminal</li></ul>`,
+            'Test results show green for passed tests and red for failures.',
+            'IDEs also display a tree view of all tests with their pass/fail status.'
+          ],
+          code: `// Running from terminal with Maven:
 // $ mvn test
 //
 // Output:
@@ -4319,14 +11234,14 @@ public class BankAccountTest {
 // $ ./gradlew test
 //
 // Output shows test results in build/reports/tests/test/index.html`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a <code>Rectangle</code> class with <code>width</code>, <code>height</code>, and methods for <code>getArea()</code> and <code>getPerimeter()</code>.',
-          'Write JUnit tests to verify that the area and perimeter calculations are correct.'
-        ],
-        code: `// Rectangle.java
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Create a <code>Rectangle</code> class with <code>width</code>, <code>height</code>, and methods for <code>getArea()</code> and <code>getPerimeter()</code>.',
+            'Write JUnit tests to verify that the area and perimeter calculations are correct.'
+          ],
+          code: `// Rectangle.java
 public class Rectangle {
     private double width;
     private double height;
@@ -4364,32 +11279,31 @@ public class RectangleTest {
 }
 
 // Run: mvn test`
-      }
-    ]
-  },
-
+        }
+      ]
+    },
   'jdbc': {
-    title: 'JDBC (Java Database Connectivity)',
-    sections: [
-      {
-        heading: 'What is JDBC?',
-        content: [
-          '<strong>JDBC (Java Database Connectivity)</strong> is Java\'s standard API for connecting to databases.',
-          'It provides a set of classes and interfaces that let Java programs interact with relational databases like MySQL, PostgreSQL, Oracle, and SQL Server.',
-          'With JDBC, you can:',
-          '<ul><li>Connect to a database</li><li>Execute SQL queries</li><li>Insert, update, and delete data</li><li>Retrieve and process results</li></ul>',
-          'JDBC uses <strong>drivers</strong> — database-specific libraries that handle the communication between Java and the database.'
-        ]
-      },
-      {
-        heading: 'JDBC Setup: Connecting to a Database',
-        content: [
-          'Before using JDBC, you need:',
-          '<ol><li>A database server running (e.g., MySQL, PostgreSQL)</li><li>The JDBC driver JAR file for your database</li><li>The database URL, username, and password</li></ol>',
-          'The <code>Connection</code> object represents a session with the database.',
-          'You obtain a connection using <code>DriverManager.getConnection()</code>.'
-        ],
-        code: `import java.sql.Connection;
+      title: 'JDBC (Java Database Connectivity)',
+      sections: [
+        {
+          heading: 'What is JDBC?',
+          content: [
+            "<strong>JDBC (Java Database Connectivity)</strong> is Java's standard API for connecting to databases.",
+            'It provides a set of classes and interfaces that let Java programs interact with relational databases like MySQL, PostgreSQL, Oracle, and SQL Server.',
+            'With JDBC, you can:',
+            '<ul><li>Connect to a database</li><li>Execute SQL queries</li><li>Insert, update, and delete data</li><li>Retrieve and process results</li></ul>',
+            'JDBC uses <strong>drivers</strong> — database-specific libraries that handle the communication between Java and the database.'
+          ]
+        },
+        {
+          heading: 'JDBC Setup: Connecting to a Database',
+          content: [
+            'Before using JDBC, you need:',
+            '<ol><li>A database server running (e.g., MySQL, PostgreSQL)</li><li>The JDBC driver JAR file for your database</li><li>The database URL, username, and password</li></ol>',
+            'The <code>Connection</code> object represents a session with the database.',
+            'You obtain a connection using <code>DriverManager.getConnection()</code>.'
+          ],
+          code: `import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -4412,16 +11326,16 @@ public class JDBCDemo {
         }
     }
 }`
-      },
-      {
-        heading: 'Executing SQL Queries',
-        content: [
-          'Once connected, you use a <code>Statement</code> or <code>PreparedStatement</code> to execute SQL.',
-          '<ul><li><code>Statement</code> — for simple, static SQL queries</li><li><code>PreparedStatement</code> — for queries with parameters (safer, prevents SQL injection)</li></ul>',
-          'For SELECT queries, use <code>executeQuery()</code> which returns a <code>ResultSet</code>.',
-          'For INSERT, UPDATE, DELETE, use <code>executeUpdate()</code> which returns the number of rows affected.'
-        ],
-        code: `import java.sql.*;
+        },
+        {
+          heading: 'Executing SQL Queries',
+          content: [
+            'Once connected, you use a <code>Statement</code> or <code>PreparedStatement</code> to execute SQL.',
+            '<ul><li><code>Statement</code> — for simple, static SQL queries</li><li><code>PreparedStatement</code> — for queries with parameters (safer, prevents SQL injection)</li></ul>',
+            'For SELECT queries, use <code>executeQuery()</code> which returns a <code>ResultSet</code>.',
+            'For INSERT, UPDATE, DELETE, use <code>executeUpdate()</code> which returns the number of rows affected.'
+          ],
+          code: `import java.sql.*;
 
 public class QueryDemo {
     public static void main(String[] args) {
@@ -4453,15 +11367,15 @@ public class QueryDemo {
         }
     }
 }`
-      },
-      {
-        heading: 'Using PreparedStatement',
-        content: [
-          '<code>PreparedStatement</code> is the recommended way to execute SQL with dynamic values.',
-          'It protects against <strong>SQL injection</strong> — a security attack where malicious input alters your SQL.',
-          'You write the SQL with <code>?</code> placeholders, then set values using <code>setInt()</code>, <code>setString()</code>, etc.'
-        ],
-        code: `import java.sql.*;
+        },
+        {
+          heading: 'Using PreparedStatement',
+          content: [
+            '<code>PreparedStatement</code> is the recommended way to execute SQL with dynamic values.',
+            'It protects against <strong>SQL injection</strong> — a security attack where malicious input alters your SQL.',
+            'You write the SQL with <code>?</code> placeholders, then set values using <code>setInt()</code>, <code>setString()</code>, etc.'
+          ],
+          code: `import java.sql.*;
 
 public class PreparedStatementDemo {
     public static void main(String[] args) {
@@ -4498,15 +11412,15 @@ public class PreparedStatementDemo {
         }
     }
 }`
-      },
-      {
-        heading: 'Try-with-Resources for JDBC',
-        content: [
-          'Database resources like <code>Connection</code>, <code>Statement</code>, and <code>ResultSet</code> must be closed after use.',
-          'Java\'s <strong>try-with-resources</strong> statement automatically closes these objects.',
-          'Any object that implements <code>AutoCloseable</code> can be used in try-with-resources.'
-        ],
-        code: `import java.sql.*;
+        },
+        {
+          heading: 'Try-with-Resources for JDBC',
+          content: [
+            'Database resources like <code>Connection</code>, <code>Statement</code>, and <code>ResultSet</code> must be closed after use.',
+            "Java's <strong>try-with-resources</strong> statement automatically closes these objects.",
+            'Any object that implements <code>AutoCloseable</code> can be used in try-with-resources.'
+          ],
+          code: `import java.sql.*;
 
 public class TryWithResourcesDemo {
     public static void main(String[] args) {
@@ -4531,15 +11445,15 @@ public class TryWithResourcesDemo {
         // conn, stmt, and rs are all closed automatically here!
     }
 }`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Write a program that connects to a database and performs these operations:',
-          '<ol><li>Create a table called <code>students</code> with <code>id</code>, <code>name</code>, and <code>grade</code></li><li>Insert at least 3 students</li><li>Query and print all students with grade above 80</li></ol>',
-          'Use <code>PreparedStatement</code> for all parameterized queries.'
-        ],
-        code: `import java.sql.*;
+        },
+        {
+          heading: 'Try it Yourself',
+          content: [
+            'Write a program that connects to a database and performs these operations:',
+            '<ol><li>Create a table called <code>students</code> with <code>id</code>, <code>name</code>, and <code>grade</code></li><li>Insert at least 3 students</li><li>Query and print all students with grade above 80</li></ol>',
+            'Use <code>PreparedStatement</code> for all parameterized queries.'
+          ],
+          code: `import java.sql.*;
 
 public class StudentDatabase {
     public static void main(String[] args) {
@@ -4584,244 +11498,16 @@ public class StudentDatabase {
         }
     }
 }`
-      }
-    ]
-  },
-
-  'multithreading': {
-    title: 'Multithreading',
-    sections: [
-      {
-        heading: 'What is Multithreading?',
-        content: [
-          '<strong>Multithreading</strong> allows a program to run multiple tasks at the same time.',
-          'In Java, a <strong>thread</strong> is a separate path of execution within a program.',
-          'Think of threads like workers in a factory: instead of one worker doing everything, multiple workers handle different tasks simultaneously.',
-          '<strong>Why use multithreading?</strong>',
-          '<ul><li>Keep the user interface responsive while doing heavy work</li><li>Perform multiple downloads or uploads at once</li><li>Use multiple CPU cores for faster processing</li><li>Handle many client connections in a server</li></ul>',
-          'Every Java program starts with at least one thread: the <strong>main thread</strong>.'
-        ]
-      },
-      {
-        heading: 'Creating Threads: Extending Thread',
-        content: [
-          'There are two main ways to create a thread in Java:',
-          '<ol><li>Extend the <code>Thread</code> class and override <code>run()</code></li><li>Implement the <code>Runnable</code> interface and pass it to a <code>Thread</code></li></ol>',
-          'The <code>run()</code> method contains the code that will execute in the new thread.',
-          'Call <code>start()</code> (not <code>run()</code>) to launch the thread — <code>start()</code> tells the JVM to create a new thread and call <code>run()</code> inside it.'
-        ],
-        code: `// Method 1: Extend Thread class
-class MyThread extends Thread {
-    @Override
-    public void run() {
-        for (int i = 1; i <= 5; i++) {
-            System.out.println("MyThread: " + i);
-            try {
-                Thread.sleep(500);  // pause for 500 milliseconds
-            } catch (InterruptedException e) {
-                System.out.println("Thread interrupted");
-            }
         }
-    }
-}
-
-public class ThreadDemo {
-    public static void main(String[] args) {
-        MyThread t1 = new MyThread();
-        t1.start();  // starts the new thread
-        
-        // Main thread continues running
-        for (int i = 1; i <= 5; i++) {
-            System.out.println("Main: " + i);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}`
-      },
-      {
-        heading: 'Creating Threads: Implementing Runnable',
-        content: [
-          'The <code>Runnable</code> approach is preferred because Java does not support multiple inheritance.',
-          'If your class extends <code>Thread</code>, it cannot extend any other class.',
-          'With <code>Runnable</code>, your class can still extend another class while being runnable as a thread.',
-          'You can also use <strong>lambda expressions</strong> for a concise Runnable definition.'
-        ],
-        code: `// Method 2: Implement Runnable
-class MyRunnable implements Runnable {
-    @Override
-    public void run() {
-        for (int i = 1; i <= 5; i++) {
-            System.out.println("Runnable Thread: " + i);
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-
-public class RunnableDemo {
-    public static void main(String[] args) {
-        // Create thread from Runnable
-        Thread t1 = new Thread(new MyRunnable());
-        t1.start();
-        
-        // Using lambda for a quick thread
-        Thread t2 = new Thread(() -> {
-            for (int i = 1; i <= 5; i++) {
-                System.out.println("Lambda Thread: " + i);
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        t2.start();
-        
-        System.out.println("Main thread continues...");
-    }
-}`
-      },
-      {
-        heading: 'Thread Synchronization',
-        content: [
-          'When multiple threads access shared data, problems can occur.',
-          'For example, two threads might try to modify the same variable at the same time, leading to inconsistent results.',
-          '<strong>Synchronization</strong> ensures that only one thread can access a critical section of code at a time.',
-          'Use the <code>synchronized</code> keyword on a method or a block to prevent concurrent access.'
-        ],
-        code: `class BankAccount {
-    private double balance = 0;
-    
-    // Synchronized method — only one thread can enter at a time
-    public synchronized void deposit(double amount) {
-        double newBalance = balance + amount;
-        // Simulate some processing time
-        try { Thread.sleep(10); } catch (InterruptedException e) {}
-        balance = newBalance;
-    }
-    
-    public synchronized double getBalance() {
-        return balance;
-    }
-}
-
-public class SynchronizationDemo {
-    public static void main(String[] args) throws InterruptedException {
-        BankAccount account = new BankAccount();
-        
-        // Two threads depositing money
-        Thread t1 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                account.deposit(1);
-            }
-        });
-        
-        Thread t2 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
-                account.deposit(1);
-            }
-        });
-        
-        t1.start();
-        t2.start();
-        t1.join();  // wait for t1 to finish
-        t2.join();  // wait for t2 to finish
-        
-        System.out.println("Final balance: " + account.getBalance());
-        // Without synchronized, this might be less than 2000!
-    }
-}`
-      },
-      {
-        heading: 'Thread States and Lifecycle',
-        content: [
-          'A thread goes through several states during its life:',
-          '<ul><li><strong>NEW</strong> — thread created, not yet started</li><li><strong>RUNNABLE</strong> — thread is ready to run or running</li><li><strong>BLOCKED</strong> — thread waiting to acquire a lock</li><li><strong>WAITING</strong> — thread waiting indefinitely for another thread</li><li><strong>TIMED_WAITING</strong> — thread waiting for a specific time (e.g., <code>sleep()</code>)</li><li><strong>TERMINATED</strong> — thread has finished execution</li></ul>',
-          'You can check a thread\'s state with <code>thread.getState()</code>.'
-        ],
-        code: `public class ThreadLifecycleDemo {
-    public static void main(String[] args) throws InterruptedException {
-        Thread t = new Thread(() -> {
-            try {
-                System.out.println("Thread running...");
-                Thread.sleep(1000);
-                System.out.println("Thread finishing...");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        
-        System.out.println("State after creation: " + t.getState());  // NEW
-        
-        t.start();
-        System.out.println("State after start: " + t.getState());     // RUNNABLE
-        
-        Thread.sleep(100);  // let the thread enter sleep
-        System.out.println("State while sleeping: " + t.getState());  // TIMED_WAITING
-        
-        t.join();  // wait for thread to complete
-        System.out.println("State after completion: " + t.getState()); // TERMINATED
-    }
-}`
-      },
-      {
-        heading: 'Try it Yourself',
-        content: [
-          'Create a program that simulates a simple ticket booking system.',
-          'Multiple threads (customers) try to book tickets from a shared pool.',
-          'Use <code>synchronized</code> to prevent overbooking.'
-        ],
-        code: `class TicketPool {
-    private int ticketsAvailable;
-    
-    public TicketPool(int tickets) {
-        this.ticketsAvailable = tickets;
-    }
-    
-    public synchronized boolean bookTicket(String customer) {
-        if (ticketsAvailable > 0) {
-            ticketsAvailable--;
-            System.out.println(customer + " booked a ticket! Remaining: " + ticketsAvailable);
-            return true;
-        } else {
-            System.out.println(customer + " failed — no tickets left.");
-            return false;
-        }
-    }
-    
-    public synchronized int getAvailable() {
-        return ticketsAvailable;
-    }
-}
-
-public class TicketBooking {
-    public static void main(String[] args) {
-        TicketPool pool = new TicketPool(5);
-        
-        // Create 10 customers trying to book
-        for (int i = 1; i <= 10; i++) {
-            String customer = "Customer-" + i;
-            new Thread(() -> {
-                pool.bookTicket(customer);
-            }).start();
-        }
-    }
-}`
-      }
-    ]
-  }
+      ]
+    },
 };
 
 export const javaContent = {
   module1: javaModule1Content,
   module2: javaModule2Content,
   module3: javaModule3Content,
-  module4: javaModule4Content
+  module4: javaModule4Content,
+  module5: javaModule5Content,
+  module6: javaModule6Content,
 };
