@@ -164,7 +164,6 @@ export const javaStructure = {
       { id: "jvm-basics", title: "JVM Basics" },
       { id: "garbage-collection", title: "Garbage Collection" },
       { id: "build-tools", title: "Build Tools (Maven, Gradle)" },
-      { id: "unit-testing-junit", title: "Unit Testing with JUnit" },
     ],
   },
   module7: {
@@ -177,6 +176,19 @@ export const javaStructure = {
       { id: "java-jdbc-transactions", title: "Transactions & Isolation Levels" },
       { id: "java-jdbc-dao-pattern", title: "DAO Pattern & Best Practices" },
       { id: "java-jdbc-connection-pooling", title: "Connection Pooling & Performance" },
+    ],
+  },
+  module8: {
+    title: "Module 8: Unit Testing & TDD",
+    topics: [
+      { id: "unit-testing-fundamentals", title: "Unit Testing Fundamentals" },
+      { id: "junit5-basics", title: "JUnit 5 (Jupiter) Basics" },
+      { id: "junit5-advanced", title: "JUnit 5 Advanced Features" },
+      { id: "assertj-hamcrest", title: "Assertions with AssertJ and Hamcrest" },
+      { id: "parameterized-tests", title: "Parameterized Tests" },
+      { id: "mockito", title: "Mockito - Mocking and Stubbing" },
+      { id: "tdd", title: "Test-Driven Development (TDD)" },
+      { id: "test-coverage-quality", title: "Code Coverage and Test Quality" },
     ],
   },
 };

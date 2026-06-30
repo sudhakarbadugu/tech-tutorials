@@ -12546,237 +12546,7 @@ public class CalculatorTest {
         }
       ]
     },
-  'unit-testing-junit': {
-      title: 'Unit Testing with JUnit',
-      sections: [
-        {
-          heading: 'What is Unit Testing?',
-          content: [
-            '<strong>Unit testing</strong> is the practice of testing small, individual parts (units) of your code in isolation.',
-            'A unit is typically a single method or function. The goal is to verify that each unit behaves correctly.',
-            '<strong>Why unit testing matters:</strong>',
-            '<ul><li>Catches bugs early — before they reach production</li><li>Makes code easier to refactor — tests verify nothing broke</li><li>Acts as documentation — tests show how code is meant to work</li><li>Encourages better design — testable code is usually cleaner code</li></ul>',
-            '<strong>JUnit</strong> is the most popular testing framework for Java. JUnit 5 is the current version.'
-          ]
-        },
-        {
-          heading: 'JUnit 5 Basics',
-          content: [
-            'JUnit 5 (also called JUnit Jupiter) uses <strong>annotations</strong> to mark test methods and configure behavior.',
-            '<strong>Common annotations:</strong>',
-            '<ul><li><code>@Test</code> — marks a method as a test case</li><li><code>@BeforeEach</code> — runs before every test method</li><li><code>@AfterEach</code> — runs after every test method</li><li><code>@BeforeAll</code> — runs once before all tests (must be static)</li><li><code>@AfterAll</code> — runs once after all tests (must be static)</li><li><code>@DisplayName</code> — gives a human-readable name to the test</li></ul>'
-          ],
-          code: `import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class SimpleTest {
-    
-    private Calculator calc;
-    
-    @BeforeEach
-    public void setUp() {
-        // Runs before each test
-        calc = new Calculator();
-        System.out.println("Setting up...");
-    }
-    
-    @AfterEach
-    public void tearDown() {
-        // Runs after each test
-        System.out.println("Cleaning up...");
-    }
-    
-    @Test
-    @DisplayName("Adding two positive numbers")
-    public void testAddPositiveNumbers() {
-        int result = calc.add(2, 3);
-        assertEquals(5, result);
-    }
-    
-    @Test
-    public void testAddNegativeNumbers() {
-        int result = calc.add(-2, -3);
-        assertEquals(-5, result);
-    }
-}`
-        },
-        {
-          heading: 'Assertions in JUnit',
-          content: [
-            '<strong>Assertions</strong> check that your code produces the expected result.',
-            'If an assertion fails, the test fails and JUnit reports the mismatch.',
-            '<strong>Common assertion methods:</strong>',
-            '<ul><li><code>assertEquals(expected, actual)</code> — checks two values are equal</li><li><code>assertTrue(condition)</code> — checks condition is true</li><li><code>assertFalse(condition)</code> — checks condition is false</li><li><code>assertNull(object)</code> — checks object is null</li><li><code>assertNotNull(object)</code> — checks object is not null</li><li><code>assertThrows(Exception.class, () -> code)</code> — checks code throws expected exception</li></ul>'
-          ],
-          code: `import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-public class AssertionDemo {
-    
-    @Test
-    public void testAssertions() {
-        // assertEquals
-        assertEquals(10, 5 + 5);
-        
-        // assertTrue / assertFalse
-        assertTrue(10 > 5);
-        assertFalse(3 > 10);
-        
-        // assertNull / assertNotNull
-        String empty = null;
-        String greeting = "Hello";
-        assertNull(empty);
-        assertNotNull(greeting);
-        
-        // assertThrows — checks that an exception is thrown
-        Exception exception = assertThrows(
-            ArithmeticException.class,
-            () -> {
-                int result = 10 / 0;
-            }
-        );
-        assertEquals("/ by zero", exception.getMessage());
-    }
-}`
-        },
-        {
-          heading: 'Writing a Testable Class',
-          content: [
-            'Good tests start with code that is easy to test.',
-            'Let us create a simple <code>BankAccount</code> class and write tests for it.',
-            'We will test deposit, withdrawal, and balance checking.'
-          ],
-          code: `// The class we want to test
-public class BankAccount {
-    private double balance;
-    
-    public BankAccount(double initialBalance) {
-        this.balance = initialBalance;
-    }
-    
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-        }
-    }
-    
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-        }
-    }
-    
-    public double getBalance() {
-        return balance;
-    }
-}
-
-// The test class
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
-
-public class BankAccountTest {
-    private BankAccount account;
-    
-    @BeforeEach
-    public void setUp() {
-        account = new BankAccount(100.0);
-    }
-    
-    @Test
-    public void testDeposit() {
-        account.deposit(50.0);
-        assertEquals(150.0, account.getBalance(), 0.001);
-    }
-    
-    @Test
-    public void testWithdraw() {
-        account.withdraw(30.0);
-        assertEquals(70.0, account.getBalance(), 0.001);
-    }
-    
-    @Test
-    public void testWithdrawTooMuch() {
-        account.withdraw(200.0);  // should not be allowed
-        assertEquals(100.0, account.getBalance(), 0.001);
-    }
-}`
-        },
-        {
-          heading: 'Running Tests',
-          content: [
-            'There are several ways to run JUnit tests:',
-            `<ul><li><strong>IDE (IntelliJ, Eclipse, VS Code)</strong> — right-click the test file and select "Run Tests"</li><li><strong>Maven</strong> — run <code>mvn test</code> from the terminal</li><li><strong>Gradle</strong> — run <code>gradle test</code> from the terminal</li></ul>`,
-            'Test results show green for passed tests and red for failures.',
-            'IDEs also display a tree view of all tests with their pass/fail status.'
-          ],
-          code: `// Running from terminal with Maven:
-// $ mvn test
-//
-// Output:
-// [INFO] -------------------------------------------------------
-// [INFO]  T E S T S
-// [INFO] -------------------------------------------------------
-// [INFO] Running BankAccountTest
-// [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
-// [INFO] BUILD SUCCESS
-
-// Running from terminal with Gradle:
-// $ ./gradlew test
-//
-// Output shows test results in build/reports/tests/test/index.html`
-        },
-        {
-          heading: 'Try it Yourself',
-          content: [
-            'Create a <code>Rectangle</code> class with <code>width</code>, <code>height</code>, and methods for <code>getArea()</code> and <code>getPerimeter()</code>.',
-            'Write JUnit tests to verify that the area and perimeter calculations are correct.'
-          ],
-          code: `// Rectangle.java
-public class Rectangle {
-    private double width;
-    private double height;
-    
-    public Rectangle(double width, double height) {
-        this.width = width;
-        this.height = height;
-    }
-    
-    public double getArea() {
-        return width * height;
-    }
-    
-    public double getPerimeter() {
-        return 2 * (width + height);
-    }
-}
-
-// RectangleTest.java
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-public class RectangleTest {
-    @Test
-    public void testArea() {
-        Rectangle r = new Rectangle(5, 10);
-        assertEquals(50.0, r.getArea(), 0.001);
-    }
-    
-    @Test
-    public void testPerimeter() {
-        Rectangle r = new Rectangle(5, 10);
-        assertEquals(30.0, r.getPerimeter(), 0.001);
-    }
-}
-
-// Run: mvn test`
-        }
-      ]
-    },
 
 };
 const javaModule7Content = {
@@ -14600,8 +14370,795 @@ pool.getActiveConnections();  // current check
 };
 
 
+
+const javaModule8Content = {
+  "unit-testing-fundamentals": {
+    "title": "Unit Testing Fundamentals",
+    "sections": [
+      {
+        "heading": "What is Unit Testing?",
+        "content": [
+          "A <strong>unit test</strong> verifies the behavior of the smallest testable unit of code — typically a single method or class — in isolation from the rest of the system.",
+          "Unit tests are the foundation of any automated testing strategy. They are the fastest tests to run, the cheapest to write, and the most targeted in their feedback.",
+          "The goal is to verify that each unit does what it is supposed to do, and to detect regressions when the code is changed later."
+        ]
+      },
+      {
+        "heading": "The Test Pyramid",
+        "content": [
+          "Mike Cohn's <strong>Test Pyramid</strong> is a useful model for thinking about how to balance your test suite:",
+          "<ul><li><strong>Unit tests (base)</strong> — many, fast, isolated, test individual classes/methods</li><li><strong>Integration tests (middle)</strong> — fewer, test interactions between modules or with external systems (DB, web services)</li><li><strong>End-to-end / UI tests (top)</strong> — few, slow, expensive, test the entire system from the user's perspective</li></ul>",
+          "A healthy test suite has a wide base of unit tests, fewer integration tests, and only a handful of end-to-end tests."
+        ]
+      },
+      {
+        "heading": "FIRST Principles",
+        "content": [
+          "A good unit test follows the <strong>FIRST</strong> principles:",
+          "<ul>",
+          "<li><strong>Fast</strong> — tests should run in milliseconds. Slow tests discourage frequent running.</li>",
+          "<li><strong>Independent</strong> — tests should not depend on each other or on shared mutable state. Order should not matter.</li>",
+          "<li><strong>Repeatable</strong> — running the same test in any environment should produce the same result. No reliance on time, randomness, or external state.</li>",
+          "<li><strong>Self-validating</strong> — tests should automatically detect pass/fail with assertions. No manual inspection of output.</li>",
+          "<li><strong>Timely</strong> — write tests close to when the production code is written (ideally first, as in TDD).</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "Arrange-Act-Assert (AAA) Pattern",
+        "content": [
+          "The most widely used structure for a single test is the <strong>Arrange-Act-Assert</strong> pattern (or Given-When-Then in BDD):",
+          "<ul>",
+          "<li><strong>Arrange</strong> — set up the objects, mocks, and preconditions the test needs</li>",
+          "<li><strong>Act</strong> — invoke the method or behavior being tested</li>",
+          "<li><strong>Assert</strong> — verify the expected outcome</li>",
+          "</ul>",
+          "Keep each section short and clear. A test with no clear AAA structure is hard to read and maintain."
+        ],
+        "code": "import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass CalculatorTest {\n\n    @Test\n    void add_twoPositiveNumbers_returnsSum() {\n        // Arrange\n        Calculator calc = new Calculator();\n\n        // Act\n        int result = calc.add(2, 3);\n\n        // Assert\n        assertEquals(5, result);\n    }\n}"
+      },
+      {
+        "heading": "Test Naming Conventions",
+        "content": [
+          "Good test names document what the system does. Recommended patterns:",
+          "<ul>",
+          "<li><code>methodName_stateUnderTest_expectedBehavior</code> — e.g., <code>withdraw_insufficientFunds_throwsException</code></li>",
+          "<li><code>givenX_whenY_thenZ</code> — BDD style</li>",
+          "<li><code>should_doSomething_whenCondition</code> — common in TypeScript/JS</li>",
+          "</ul>",
+          "In JUnit 5, use the <code>@DisplayName</code> annotation to add a human-readable description that the test report will show."
+        ],
+        "code": "@Test\n@DisplayName(\"withdraw throws InsufficientFundsException when balance is below requested amount\")\nvoid withdraw_throwsException_whenInsufficientFunds() {\n    // ...\n}\n\n@Test\n@DisplayName(\"🐛 Should handle edge case of empty input\")\nvoid should_handleEmptyInput() {\n    // ...\n}"
+      },
+      {
+        "heading": "Test Organization and Structure",
+        "content": [
+          "Common organizational patterns:",
+          "<ul>",
+          "<li><strong>Mirror the production package structure</strong> — <code>com.example.service.UserService</code> → <code>com.example.service.UserServiceTest</code></li>",
+          "<li><strong>One test class per production class</strong> — keeps tests close to the code they test</li>",
+          "<li><strong>Group related tests</strong> with JUnit 5's <code>@Nested</code> inner classes</li>",
+          "<li><strong>Use descriptive test method names</strong> rather than comments</li>",
+          "<li><strong>Place tests in <code>src/test/java</code></code> (Maven) or <code>src/test</code> (Gradle) so the build system can find them</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "Common Test Smells",
+        "content": [
+          "Watch out for these test smells:",
+          "<ul>",
+          "<li><strong>Long tests</strong> — if a test has dozens of lines, it probably tests too many things</li>",
+          "<li><strong>Multiple unrelated assertions</strong> — split into separate tests so failures are precise</li>",
+          "<li><strong>Test interdependence</strong> — tests that depend on other tests' side effects (use <code>@BeforeEach</code> to reset state)</li>",
+          "<li><strong>Testing implementation details</strong> — test behavior, not private methods or internal state</li>",
+          "<li><strong>Excessive mocking</strong> — if you mock everything, the test is decoupled from reality</li>",
+          "<li><strong>Flaky tests</strong> — tests that pass sometimes and fail sometimes (often time-based or order-dependent)</li>",
+          "<li><strong>Commented-out tests</strong> — delete them; version control remembers</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Write a <code>StringCalculator</code> class with an <code>add(String numbers)</code> method, then write 5 unit tests for it (empty string, single number, two numbers, etc.).</li>",
+          "<li>Identify test smells in a sample test class: long methods, multiple asserts, shared state, etc.</li>",
+          "<li>Refactor a poorly-named test (<code>test1</code>) into a descriptive AAA-structured test with <code>@DisplayName</code>.</li>",
+          "<li>Verify your tests are independent: run them in a random order (JUnit 5 supports this) and confirm they all pass.</li>",
+          "<li>Write a test that is NOT self-validating (requires manual inspection) and refactor it to be self-validating.</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  },
+  "junit5-basics": {
+    "title": "JUnit 5 (Jupiter) Basics",
+    "sections": [
+      {
+        "heading": "What is JUnit 5?",
+        "content": [
+          "<strong>JUnit 5</strong> (also known as <strong>Jupiter</strong>) is the current generation of the JUnit testing framework for Java. It was released in 2017 and is the de-facto standard for unit testing in Java.",
+          "JUnit 5 is a complete rewrite of JUnit 4 with a modern, modular architecture, a new extension model, and powerful new features like nested tests, parameterized tests, and dynamic tests."
+        ]
+      },
+      {
+        "heading": "JUnit 5 Architecture",
+        "content": [
+          "JUnit 5 is split into three sub-projects:",
+          "<ul>",
+          "<li><strong>JUnit Platform</strong> — the foundation; provides the test engine API, console launcher, IDE integration, and build tool integration (Maven Surefire, Gradle)</li>",
+          "<li><strong>JUnit Jupiter</strong> — the new programming and extension model; this is what you write tests with</li>",
+          "<li><strong>JUnit Vintage</strong> — a compatibility layer for running old JUnit 3 and JUnit 4 tests on the JUnit 5 platform</li>",
+          "</ul>",
+          "You typically depend on <code>junit-jupiter</code> (which aggregates Jupiter API + engine) and let your IDE/build tool pick up the platform."
+        ]
+      },
+      {
+        "heading": "Setting Up JUnit 5",
+        "content": [
+          "Add the JUnit Jupiter dependency to your build file. The version is the same for all artifacts in a given release."
+        ],
+        "code": "<!-- Maven: pom.xml -->\n<dependency>\n    <groupId>org.junit.jupiter</groupId>\n    <artifactId>junit-jupiter</artifactId>\n    <version>5.10.2</version>\n    <scope>test</scope>\n</dependency>\n\n<plugin>\n    <groupId>org.apache.maven.plugins</groupId>\n    <artifactId>maven-surefire-plugin</artifactId>\n    <version>3.2.5</version>\n</plugin>\n\n<!-- Gradle: build.gradle -->\ndependencies {\n    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'\n    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'\n}\n\ntasks.named('test') {\n    useJUnitPlatform()\n}"
+      },
+      {
+        "heading": "The @Test Annotation",
+        "content": [
+          "Mark a method with <code>@Test</code> to make it a test. The method should be <code>void</code>, package-private (no access modifier in JUnit 5 — no need for <code>public</code>), and should not return a value.",
+          "Test methods can throw <code>Exception</code> directly — no need to catch checked exceptions inside the test."
+        ],
+        "code": "import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass CalculatorTest {\n\n    @Test\n    void add_returnsSumOfTwoNumbers() {\n        Calculator calc = new Calculator();\n        assertEquals(5, calc.add(2, 3));\n    }\n\n    @Test\n    void divide_byZero_throwsArithmeticException() {\n        Calculator calc = new Calculator();\n        assertThrows(ArithmeticException.class, () -> calc.divide(10, 0));\n    }\n}"
+      },
+      {
+        "heading": "Core Assertions",
+        "content": [
+          "JUnit 5 provides a rich set of assertion methods in <code>org.junit.jupiter.api.Assertions</code>:"
+        ],
+        "code": "import static org.junit.jupiter.api.Assertions.*;\n\n@Test\nvoid assertionsDemo() {\n    // Equality\n    assertEquals(5, calc.add(2, 3));\n    assertEquals(5, calc.add(2, 3), \"Optional message shown on failure\");\n    assertEquals(5.0, calc.add(2.0, 3.0), 0.001, \"Delta for double comparison\");\n\n    // Boolean\n    assertTrue(result > 0);\n    assertFalse(result < 0);\n\n    // Nullability\n    assertNull(maybeNull);\n    assertNotNull(definitelyNotNull);\n\n    // References\n    assertSame(obj1, obj2);    // same object (==)\n    assertNotSame(obj1, obj2);\n\n    // Arrays\n    assertArrayEquals(new int[]{1, 2, 3}, result);\n\n    // Exceptions\n    assertThrows(IllegalArgumentException.class, () -> parseInt(\"not a number\"));\n    assertDoesNotThrow(() -> parseInt(\"42\"));\n\n    // Grouped assertions — all run, even if some fail\n    User u = userService.findById(1L);\n    assertAll(\"user\",\n        () -> assertEquals(\"Sudhakar\", u.getName()),\n        () -> assertEquals(30, u.getAge()),\n        () -> assertEquals(\"hyd@example.com\", u.getEmail())\n    );\n}"
+      },
+      {
+        "heading": "Lifecycle Annotations",
+        "content": [
+          "JUnit 5 provides annotations to run setup/teardown code around tests:"
+        ],
+        "code": "import org.junit.jupiter.api.*;\n\nclass DatabaseTest {\n    private Database db;\n\n    @BeforeAll\n    static void initDatabase() {\n        // Runs ONCE before all tests in this class\n        // Must be static (or use @TestInstance(Lifecycle.PER_CLASS))\n        System.out.println(\"Connecting to test database\");\n    }\n\n    @BeforeEach\n    void setUp() {\n        // Runs BEFORE EACH test method\n        // Use for fresh per-test state\n        db = new Database();\n        db.connect();\n    }\n\n    @Test\n    void queryReturnsResults() {\n        // use db\n    }\n\n    @AfterEach\n    void tearDown() {\n        // Runs AFTER EACH test method\n        // Clean up resources\n        db.disconnect();\n    }\n\n    @AfterAll\n    static void cleanupDatabase() {\n        // Runs ONCE after all tests\n        System.out.println(\"Dropping test database\");\n    }\n}"
+      },
+      {
+        "heading": "Running Tests",
+        "content": [
+          "Tests can be run from the command line, IDE, or build tool:"
+        ],
+        "code": "// Maven — runs all tests in src/test/java\n$ mvn test\n\n// Maven — run a specific test class\n$ mvn test -Dtest=CalculatorTest\n\n// Maven — run a specific test method\n$ mvn test -Dtest=CalculatorTest#add_returnsSumOfTwoNumbers\n\n// Gradle\n$ gradle test\n$ gradle test --tests CalculatorTest\n$ gradle test --tests CalculatorTest.add_returnsSumOfTwoNumbers\n\n// JUnit Platform Console Launcher (run JUnit tests from a JAR)\n$ java -jar junit-platform-console-launcher.jar --class-path target/test-classes --scan-class-path\n\n// IDE: Right-click class/method → Run As → JUnit Test\n// IntelliJ: Ctrl+Shift+F10 (Windows/Linux) or Cmd+Shift+R (macOS)\n// Eclipse: Alt+Shift+X, T"
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Set up a new Maven/Gradle project with JUnit 5 and write a \"Hello World\" test that always passes.</li>",
+          "<li>Write tests for a <code>StringUtils</code> class with methods like <code>isEmpty</code>, <code>reverse</code>, and <code>truncate</code>.</li>",
+          "<li>Use <code>assertAll</code> to group related assertions about a complex object (e.g., a User record).</li>",
+          "<li>Use <code>@BeforeEach</code> to set up test fixtures and <code>@AfterEach</code> to clean up.</li>",
+          "<li>Use <code>assertThrows</code> to verify an exception is thrown under the right condition.</li>",
+          "<li>Run a specific test method from the command line and observe the output.</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  },
+  "junit5-advanced": {
+    "title": "JUnit 5 Advanced Features",
+    "sections": [
+      {
+        "heading": "@Nested — Grouping Related Tests",
+        "content": [
+          "<code>@Nested</code> lets you group related tests into inner classes. The nested class must be non-static and can have its own <code>@BeforeEach</code> / <code>@AfterEach</code> methods.",
+          "The test report shows the nesting hierarchy, which makes complex test classes much easier to read."
+        ],
+        "code": "import org.junit.jupiter.api.*;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass StackTest {\n    private Stack<Integer> stack;\n\n    @BeforeEach\n    void setUp() {\n        stack = new Stack<>();\n    }\n\n    @Nested\n    class WhenEmpty {\n        @Test\n        void isEmpty_returnsTrue() {\n            assertTrue(stack.isEmpty());\n        }\n\n        @Test\n        void pop_throwsException() {\n            assertThrows(EmptyStackException.class, stack::pop);\n        }\n    }\n\n    @Nested\n    class AfterPushing {\n        @BeforeEach\n        void pushOne() {\n            stack.push(42);\n        }\n\n        @Test\n        void isEmpty_returnsFalse() {\n            assertFalse(stack.isEmpty());\n        }\n\n        @Test\n        void pop_returnsThePushedValue() {\n            assertEquals(42, stack.pop());\n        }\n    }\n}"
+      },
+      {
+        "heading": "@DisplayName — Readable Test Names",
+        "content": [
+          "<code>@DisplayName</code> lets you specify a human-readable name for a test class or method. The name is shown in the test report and IDE test runner.",
+          "It supports spaces, punctuation, and even emoji."
+        ],
+        "code": "@DisplayName(\"Calculator operations\")\nclass CalculatorTest {\n\n    @Test\n    @DisplayName(\"Addition of two positive integers\")\n    void add() {\n        // ...\n    }\n\n    @Test\n    @DisplayName(\"🐛 Division by zero throws ArithmeticException\")\n    void divideByZero() {\n        // ...\n    }\n\n    @Test\n    @DisplayName(\"⚠ Edge case: very large numbers\")\n    void largeNumbers() {\n        // ...\n    }\n}"
+      },
+      {
+        "heading": "@Disabled, @EnabledOnOs, @EnabledIf",
+        "content": [
+          "JUnit 5 supports conditional test execution — skip tests on certain conditions instead of failing them."
+        ],
+        "code": "import org.junit.jupiter.api.*;\nimport org.junit.jupiter.api.condition.*;\n\n@Disabled(\"Under construction — see ticket #123\")\nclass FeatureNotYetImplementedTest {\n    // All tests in this class are skipped\n}\n\nclass ConditionalTests {\n\n    @Test\n    @DisabledOnOs(OS.WINDOWS)\n    void onlyRunOnUnix() {\n        // Skipped on Windows\n    }\n\n    @Test\n    @EnabledOnOs({OS.LINUX, OS.MAC})\n    void onlyRunOnLinuxOrMac() {\n        // Skipped on Windows\n    }\n\n    @Test\n    @EnabledIfEnvironmentVariable(named = \"CI\", matches = \"true\")\n    void onlyRunInCI() {\n        // Only runs when CI=true env var is set\n    }\n\n    @Test\n    @EnabledIfSystemProperty(named = \"os.arch\", matches = \"amd64\")\n    void onlyRunOnAmd64() {\n        // ...\n    }\n\n    @Test\n    @DisabledIf(\"someStaticMethod\")\n    void skipIfCondition() {\n        // Skipped if someStaticMethod() returns true\n    }\n}"
+      },
+      {
+        "heading": "@Tag — Categorizing Tests",
+        "content": [
+          "<code>@Tag</code> lets you label tests with categories. You can then run only certain tags from the command line or build configuration.",
+          "Common uses: <code>\"fast\"</code> vs <code>\"slow\"</code>, <code>\"unit\"</code> vs <code>\"integration\"</code>, <code>\"smoke\"</code> for quick sanity checks."
+        ],
+        "code": "import org.junit.jupiter.api.Tag;\n\n@Tag(\"unit\")\nclass FastUnitTests {\n    @Test\n    @Tag(\"smoke\")\n    void basicSanity() { /* ... */ }\n\n    @Test\n    void normalTest() { /* ... */ }\n}\n\n@Tag(\"integration\")\nclass SlowIntegrationTests {\n    @Test\n    void connectsToDatabase() { /* ... */ }\n}\n\n// Maven — run only \"unit\" tests by default\n<plugin>\n    <artifactId>maven-surefire-plugin</artifactId>\n    <configuration>\n        <groups>unit</groups>\n        <excludedGroups>integration</excludedGroups>\n    </configuration>\n</plugin>\n\n// Run only smoke tests\n// mvn test -Dgroups=smoke"
+      },
+      {
+        "heading": "@Order and Test Instance Lifecycle",
+        "content": [
+          "By default, JUnit 5 runs tests in a deterministic but unspecified order. You can control the order with <code>@TestMethodOrder</code> and <code>@Order</code>.",
+          "Test instance lifecycle: by default, JUnit creates a new instance of the test class for each test method (<code>PER_METHOD</code>). Switch to <code>PER_CLASS</code> to share instance state across tests."
+        ],
+        "code": "import org.junit.jupiter.api.*;\n\n@TestMethodOrder(MethodOrderer.OrderAnnotation.class)\nclass OrderedTests {\n    @Test\n    @Order(1)\n    void first() { /* runs first */ }\n\n    @Test\n    @Order(2)\n    void second() { /* runs second */ }\n}\n\n@TestMethodOrder(MethodOrderer.DisplayName.class)  // alphabetical by display name\n@TestMethodOrder(MethodOrderer.Random.class)       // random\nclass OtherOrderings { /* ... */ }\n\n@TestInstance(TestInstance.Lifecycle.PER_CLASS)\nclass SharedInstanceTest {\n    private final List<String> events = new ArrayList<>();\n\n    @Test\n    void test1() { events.add(\"test1\"); }\n\n    @Test\n    void test2() {\n        // events contains \"test1\" from previous test\n        assertEquals(List.of(\"test1\"), events);\n    }\n\n    @BeforeAll\n    void setUpAll() { /* can be non-static now */ }\n}"
+      },
+      {
+        "heading": "Assumptions — Conditional Test Execution",
+        "content": [
+          "Assumptions let you skip a test at runtime if a precondition is not met, without marking the test as failed.",
+          "Use them when a test only makes sense under certain conditions (a specific environment, a particular file present, etc.)."
+        ],
+        "code": "import static org.junit.jupiter.api.Assumptions.*;\n\n@Test\nvoid testOnlyOnCiServer() {\n    assumeTrue(System.getenv(\"CI\") != null, \"Skipping: not on CI\");\n    // This code only runs if CI env var is set\n    // Otherwise, the test is marked as \"skipped\" (aborted), not failed\n}\n\n@Test\nvoid conditionalLogic() {\n    assumingThat(System.getProperty(\"os.name\").startsWith(\"Mac\"),\n        () -> {\n            // Mac-specific assertions\n        });\n\n    // These assertions run regardless\n    assertEquals(2, 1 + 1);\n}"
+      },
+      {
+        "heading": "Timeouts",
+        "content": [
+          "JUnit 5 has multiple ways to assert that code runs within a time limit:"
+        ],
+        "code": "import org.junit.jupiter.api.Test;\nimport org.junit.jupiter.api.Timeout;\nimport java.time.Duration;\nimport java.util.concurrent.TimeUnit;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass TimeoutTests {\n\n    // 1. Annotation — fail if test takes longer than 500ms\n    @Test\n    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)\n    void fastOperation() {\n        // ...\n    }\n\n    // 2. Using Duration\n    @Test\n    @Timeout(value = 2, unit = TimeUnit.SECONDS)\n    void mediumOperation() {\n        // ...\n    }\n\n    // 3. assertTimeout — runs the operation, fails if it exceeds the timeout\n    //    Returns the operation's result\n    @Test\n    void assertionWithTimeout() {\n        String result = assertTimeout(Duration.ofSeconds(1), () -> {\n            return slowService.compute();\n        });\n        assertEquals(\"expected\", result);\n    }\n\n    // 4. assertTimeoutPreemptively — interrupts the thread if timeout exceeded\n    //    Use carefully: can leave resources in an inconsistent state\n    @Test\n    void preemptiveTimeout() {\n        assertTimeoutPreemptively(Duration.ofMillis(100), () -> {\n            // Long operation that will be interrupted\n        });\n    }\n}"
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Refactor a flat test class with many similar tests into a <code>@Nested</code> hierarchy organized by state (empty vs. populated, valid vs. invalid input).</li>",
+          "<li>Add <code>@DisplayName</code> with emoji to a few tests and run them in your IDE to see the report.</li>",
+          "<li>Tag your tests with <code>@Tag(\"fast\")</code> and <code>@Tag(\"slow\")</code>, then run only the fast tests via Maven Surefire configuration.</li>",
+          "<li>Use <code>@DisabledOnOs(OS.WINDOWS)</code> on a test that has platform-specific behavior, and verify it skips on Windows.</li>",
+          "<li>Add a <code>@Timeout</code> to a test that calls a slow external system, and verify the timeout works.</li>",
+          "<li>Use <code>assertAll</code> to group assertions about a complex object so all failures show up in the report at once.</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  },
+  "assertj-hamcrest": {
+    "title": "Assertions with AssertJ and Hamcrest",
+    "sections": [
+      {
+        "heading": "Why Fluent Assertions?",
+        "content": [
+          "JUnit's built-in assertions (e.g., <code>assertEquals(expected, actual)</code>) work but can be hard to read for complex conditions. They also have a confusing argument order (expected, actual) that is easy to get backwards.",
+          "<strong>Fluent assertion libraries</strong> like AssertJ and Hamcrest let you chain calls in a natural, readable way: <code>assertThat(result).isNotNull().isEqualTo(expected).extracting(...)</code>."
+        ]
+      },
+      {
+        "heading": "AssertJ Setup",
+        "content": [
+          "AssertJ is a separate library that you add to your project. It provides a fluent, type-safe assertion API."
+        ],
+        "code": "<!-- Maven -->\n<dependency>\n    <groupId>org.assertj</groupId>\n    <artifactId>assertj-core</artifactId>\n    <version>3.25.3</version>\n    <scope>test</scope>\n</dependency>\n\n<!-- Gradle -->\ntestImplementation 'org.assertj:assertj-core:3.25.3'"
+      },
+      {
+        "heading": "AssertJ Basic Assertions",
+        "content": [
+          "The <code>assertThat(...)</code> entry point returns a type-specific assertion object whose methods can be chained."
+        ],
+        "code": "import static org.assertj.core.api.Assertions.*;\n\nclass AssertJDemo {\n\n    @Test\n    void basicAssertions() {\n        String name = \"Sudhakar\";\n\n        // String assertions\n        assertThat(name)\n            .isNotNull()\n            .isNotEmpty()\n            .startsWith(\"Su\")\n            .endsWith(\"kar\")\n            .hasSize(8)\n            .contains(\"dha\")\n            .matches(\"[A-Z][a-z]+\");\n\n        // Number assertions\n        assertThat(42)\n            .isPositive()\n            .isGreaterThan(40)\n            .isBetween(0, 100)\n            .isCloseTo(42.0, within(0.001));\n\n        // Boolean\n        assertThat(true).isTrue();\n        assertThat(list).isNotEmpty().hasSize(3);\n    }\n}"
+      },
+      {
+        "heading": "AssertJ Collection Assertions",
+        "content": [
+          "AssertJ has powerful collection assertions:"
+        ],
+        "code": "import static org.assertj.core.api.Assertions.*;\nimport java.util.List;\n\n@Test\nvoid collectionAssertions() {\n    List<String> names = List.of(\"Alice\", \"Bob\", \"Carol\");\n\n    // Size and content\n    assertThat(names)\n        .hasSize(3)\n        .contains(\"Alice\", \"Carol\")\n        .containsExactly(\"Alice\", \"Bob\", \"Carol\")\n        .containsExactlyInAnyOrder(\"Bob\", \"Alice\", \"Carol\")\n        .doesNotContain(\"Dave\")\n        .startsWith(\"Alice\")\n        .endsWith(\"Carol\");\n\n    // Single element\n    assertThat(names)\n        .first().isEqualTo(\"Alice\")\n        .last().isEqualTo(\"Carol\")\n        .element(1).isEqualTo(\"Bob\");\n\n    // Filtering and extraction\n    assertThat(names)\n        .filteredOn(s -> s.startsWith(\"A\"))\n        .hasSize(1)\n        .containsExactly(\"Alice\");\n\n    assertThat(names)\n        .extracting(String::length)\n        .containsExactly(5, 3, 5);\n}"
+      },
+      {
+        "heading": "Soft Assertions",
+        "content": [
+          "Soft assertions collect all failures instead of stopping at the first one. Useful for assertions about a single complex object."
+        ],
+        "code": "import org.assertj.core.api.SoftAssertions;\n\n@Test\nvoid softAssertions() {\n    User user = userService.findById(1L);\n\n    // All assertions run; all failures are reported together\n    SoftAssertions soft = new SoftAssertions();\n    soft.assertThat(user.getName()).isEqualTo(\"Sudhakar\");\n    soft.assertThat(user.getAge()).isGreaterThanOrEqualTo(18);\n    soft.assertThat(user.getEmail()).contains(\"@\");\n    soft.assertThat(user.isActive()).isTrue();\n    soft.assertAll();  // throws if any failed\n}\n\n// Or use auto-close for inline style\n@Test\nvoid autoCloseSoftAssertions() {\n    try (SoftAssertions soft = new SoftAssertions()) {\n        soft.assertThat(user.getName()).isEqualTo(\"Sudhakar\");\n        soft.assertThat(user.getAge()).isGreaterThanOrEqualTo(18);\n        // No need for explicit assertAll() — auto-closes and reports\n    }\n}"
+      },
+      {
+        "heading": "Exception Assertions with AssertJ",
+        "content": [
+          "AssertJ has a dedicated BDD-style API for testing exceptions:"
+        ],
+        "code": "import static org.assertj.core.api.Assertions.*;\n\n@Test\nvoid exceptionAssertions() {\n    // Verify exception type\n    assertThatThrownBy(() -> parser.parse(\"not a number\"))\n        .isInstanceOf(IllegalArgumentException.class)\n        .hasMessageContaining(\"not a number\")\n        .hasMessageStartingWith(\"Could not parse\")\n        .hasCauseInstanceOf(NumberFormatException.class);\n\n    // Test that no exception is thrown\n    assertThatCode(() -> calculator.add(1, 2))\n        .doesNotThrowAnyException();\n\n    // Verify exception is thrown\n    assertThatExceptionOfType(IllegalStateException.class)\n        .isThrownBy(() -> service.start())\n        .withMessage(\"Service is already running\")\n        .withNoCause();\n}"
+      },
+      {
+        "heading": "Hamcrest Matchers",
+        "content": [
+          "<strong>Hamcrest</strong> is an older matcher library that was popular before AssertJ. JUnit 5 itself uses Hamcrest internally for some assertions. You can still use it, but AssertJ is generally preferred for new projects."
+        ],
+        "code": "import static org.hamcrest.MatcherAssert.*;\nimport static org.hamcrest.Matchers.*;\n\nclass HamcrestDemo {\n    @Test\n    void hamcrestExample() {\n        String name = \"Sudhakar\";\n        List<String> names = List.of(\"Alice\", \"Bob\", \"Carol\");\n\n        // Basic matchers\n        assertThat(name, is(\"Sudhakar\"));\n        assertThat(name, not(\"Alice\"));\n        assertThat(name, containsString(\"dha\"));\n        assertThat(name, startsWith(\"Su\"));\n\n        // Collections\n        assertThat(names, hasSize(3));\n        assertThat(names, hasItem(\"Alice\"));\n        assertThat(names, contains(\"Alice\", \"Bob\", \"Carol\"));\n        assertThat(names, containsInAnyOrder(\"Bob\", \"Alice\", \"Carol\"));\n        assertThat(names, everyItem(matchesPattern(\"[A-Z][a-z]+\")));\n\n        // Combined\n        assertThat(name, allOf(startsWith(\"Su\"), endsWith(\"kar\")));\n        assertThat(name, anyOf(is(\"Bob\"), is(\"Sudhakar\")));\n    }\n}"
+      },
+      {
+        "heading": "AssertJ vs Hamcrest — When to Use Each",
+        "content": [
+          "Comparison:",
+          "<ul>",
+          "<li><strong>AssertJ</strong> — modern, fluent, type-safe, better error messages, easy to extend with custom assertions. <strong>Recommended for new projects.</strong></li>",
+          "<li><strong>Hamcrest</strong> — older, composable matchers, more functional style. Good if you already use it or work with code that does.</li>",
+          "<li><strong>JUnit 5 assertions</strong> — built-in, no extra dependency, basic but sufficient for many tests.</li>",
+          "</ul>",
+          "You can use all three in the same project — they are not mutually exclusive. Many teams use JUnit for lifecycle and AssertJ for assertions."
+        ]
+      },
+      {
+        "heading": "Custom Assertions in AssertJ",
+        "content": [
+          "AssertJ makes it easy to create custom assertion classes for your domain objects. This gives you a fluent, type-safe API for your own types."
+        ],
+        "code": "import org.assertj.core.api.AbstractAssert;\n\npublic class UserAssert extends AbstractAssert<UserAssert, User> {\n\n    public UserAssert(User user) {\n        super(user, UserAssert.class);\n    }\n\n    public static UserAssert assertThat(User actual) {\n        return new UserAssert(actual);\n    }\n\n    public UserAssert hasName(String expected) {\n        isNotNull();\n        if (!actual.getName().equals(expected)) {\n            failWithMessage(\"Expected name to be <%s> but was <%s>\", expected, actual.getName());\n        }\n        return this;\n    }\n\n    public UserAssert isAdult() {\n        isNotNull();\n        if (actual.getAge() < 18) {\n            failWithMessage(\"Expected user to be adult but age was <%d>\", actual.getAge());\n        }\n        return this;\n    }\n\n    public UserAssert hasEmail(String expected) {\n        isNotNull();\n        if (!actual.getEmail().equals(expected)) {\n            failWithMessage(\"Expected email <%s> but was <%s>\", expected, actual.getEmail());\n        }\n        return this;\n    }\n}\n\n// Usage in a test\n@Test\nvoid customAssertionExample() {\n    User user = userService.findById(1L);\n\n    UserAssert.assertThat(user)\n        .hasName(\"Sudhakar\")\n        .isAdult()\n        .hasEmail(\"sudhakar@example.com\");\n}"
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Add AssertJ to a project and convert a few JUnit assertions to AssertJ fluent style.</li>",
+          "<li>Use AssertJ's collection assertions (<code>containsExactly</code>, <code>extracting</code>, <code>filteredOn</code>) on a list of domain objects.</li>",
+          "<li>Use <code>SoftAssertions</code> to verify multiple properties of a single object in one test.</li>",
+          "<li>Use <code>assertThatThrownBy</code> to verify an exception's message, cause, and type.</li>",
+          "<li>Create a custom AssertJ assertion for a domain class (e.g., <code>OrderAssert</code>, <code>ProductAssert</code>).</li>",
+          "<li>Compare the error messages of a JUnit assertion vs an AssertJ assertion when the test fails.</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  },
+  "parameterized-tests": {
+    "title": "Parameterized Tests",
+    "sections": [
+      {
+        "heading": "What Are Parameterized Tests?",
+        "content": [
+          "A <strong>parameterized test</strong> runs the same test logic with different inputs. This is useful for:",
+          "<ul>",
+          "<li>Testing boundary conditions (empty, one, many, max, min)</li>",
+          "<li>Verifying behavior across a range of valid inputs</li>",
+          "<li>Reducing test code duplication</li>",
+          "</ul>",
+          "In JUnit 5, parameterized tests are part of the <code>junit-jupiter-params</code> artifact (included in the umbrella <code>junit-jupiter</code> dependency)."
+        ]
+      },
+      {
+        "heading": "@ParameterizedTest with @ValueSource",
+        "content": [
+          "The simplest way to provide parameters is <code>@ValueSource</code>. It takes an array of literals."
+        ],
+        "code": "import org.junit.jupiter.params.ParameterizedTest;\nimport org.junit.jupiter.params.provider.ValueSource;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ValueSourceExample {\n\n    @ParameterizedTest\n    @ValueSource(strings = {\"racecar\", \"level\", \"radar\", \"madam\"})\n    void palindrome(String candidate) {\n        assertTrue(isPalindrome(candidate));\n    }\n\n    @ParameterizedTest\n    @ValueSource(ints = {1, 3, 5, 7, 9, 11, 99})\n    void oddNumbers(int n) {\n        assertTrue(n % 2 == 1, n + \" should be odd\");\n    }\n\n    @ParameterizedTest\n    @ValueSource(doubles = {0.0, 1.0, 2.5, 99.99})\n    void positiveDoubles(double d) {\n        assertTrue(d >= 0);\n    }\n\n    // Available: ints, longs, doubles, floats, shorts, bytes,\n    //           strings, classes, chars\n}"
+      },
+      {
+        "heading": "@MethodSource — Dynamic Test Data",
+        "content": [
+          "For more complex test data, use <code>@MethodSource</code> to provide parameters from a static method.",
+          "The method must return a <code>Stream</code>, <code>Iterable</code>, or array of <code>Arguments</code> or any type."
+        ],
+        "code": "import org.junit.jupiter.params.provider.Arguments;\nimport org.junit.jupiter.params.provider.MethodSource;\nimport java.util.stream.Stream;\nimport static org.junit.jupiter.params.provider.Arguments.of;\n\nclass MethodSourceExample {\n\n    // Stream of single values\n    static Stream<String> validNames() {\n        return Stream.of(\"Alice\", \"Bob\", \"Carol\", \"Dave\");\n    }\n\n    @ParameterizedTest\n    @MethodSource(\"validNames\")\n    void testValidNames(String name) {\n        assertNotNull(UserService.validateName(name));\n    }\n\n    // Stream of Arguments (multiple parameters)\n    static Stream<Arguments> additionCases() {\n        return Stream.of(\n            of(2, 3, 5),\n            of(0, 0, 0),\n            of(-1, 1, 0),\n            of(100, 200, 300),\n            of(Integer.MAX_VALUE, 1, Integer.MIN_VALUE)  // overflow test\n        );\n    }\n\n    @ParameterizedTest\n    @MethodSource(\"additionCases\")\n    void additionWorks(int a, int b, int expected) {\n        assertEquals(expected, new Calculator().add(a, b));\n    }\n\n    // Default method name is the test method name + \"Stream\"\n    static Stream<Arguments> palindromeTestStream() { /* ... */ }\n\n    @ParameterizedTest\n    @MethodSource  // No name — uses default\n    void palindromeTest(String s, boolean expected) { /* ... */ }\n}"
+      },
+      {
+        "heading": "@CsvSource and @CsvFileSource",
+        "content": [
+          "For data in tabular form, <code>@CsvSource</code> lets you embed CSV directly in the annotation. <code>@CsvFileSource</code> reads from a CSV file in your test resources."
+        ],
+        "code": "@ParameterizedTest\n@CsvSource({\n    \"apple,          1.50\",\n    \"banana,         0.50\",\n    \"cherry,         3.00\",\n    \"'ice cream',    5.00\"        // quote strings with commas\n})\nvoid productPrice(String name, double price) {\n    Product p = catalog.findByName(name);\n    assertEquals(price, p.getPrice(), 0.001);\n}\n\n// With headers\n@ParameterizedTest\n@CsvSource({\n    \"username, password, expected\",\n    \"alice,     secret,   true\",\n    \"bob,       wrong,    false\",\n    \"'',        secret,   false\",\n    \"alice,     '',       false\"\n})\nvoid loginTest(String username, String password, boolean expected) {\n    assertEquals(expected, authService.login(username, password).isSuccess());\n}\n\n// From a CSV file\n@ParameterizedTest\n@CsvFileSource(resources = \"/test-data/orders.csv\", numLinesToSkip = 1)\nvoid orderProcessing(int orderId, String customer, double amount) {\n    Order order = orderService.process(orderId);\n    assertEquals(customer, order.getCustomer());\n    assertEquals(amount, order.getAmount(), 0.01);\n}"
+      },
+      {
+        "heading": "@EnumSource — Iterate Over Enum Values",
+        "content": [
+          "Iterate over all values of an enum, or a subset:"
+        ],
+        "code": "import org.junit.jupiter.params.provider.EnumSource;\nimport org.junit.jupiter.params.provider.EnumSource.Mode;\n\nenum Status { ACTIVE, INACTIVE, PENDING, DELETED }\n\nclass EnumSourceExample {\n\n    @ParameterizedTest\n    @EnumSource(Status.class)\n    void allStatusesAreHandled(Status status) {\n        // Runs 4 times — once for each enum value\n        assertDoesNotThrow(() -> userService.handleStatus(status));\n    }\n\n    @ParameterizedTest\n    @EnumSource(value = Status.class, names = {\"ACTIVE\", \"INACTIVE\"})\n    void onlyActiveAndInactive(Status status) {\n        // Runs 2 times\n    }\n\n    @ParameterizedTest\n    @EnumSource(value = Status.class, mode = EnumSource.Mode.EXCLUDE, names = {\"DELETED\"})\n    void allExceptDeleted(Status status) {\n        // Runs 3 times\n    }\n\n    @ParameterizedTest\n    @EnumSource(value = Status.class, mode = EnumSource.Mode.MATCH_ALL,\n                names = \"^(ACTIVE|PENDING)$\")  // regex\n    void matchedByRegex(Status status) {\n        // Runs 2 times\n    }\n}"
+      },
+      {
+        "heading": "@NullSource, @EmptySource, @NullAndEmptySource",
+        "content": [
+          "Specialized sources for null and empty values — common edge cases for input validation:"
+        ],
+        "code": "import org.junit.jupiter.params.provider.*;\n\nclass NullAndEmptySourceExample {\n\n    @ParameterizedTest\n    @NullSource\n    @ValueSource(strings = {\"\", \"  \", \"\t\", \"\n\"})\n    void invalidInputs_throwException(String input) {\n        assertThrows(IllegalArgumentException.class,\n                     () -> validator.validate(input));\n    }\n\n    @ParameterizedTest\n    @NullAndEmptySource\n    @ValueSource(ints = {-1, 0})\n    void invalidNumbers_throwException(int n) {\n        assertThrows(IllegalArgumentException.class,\n                     () -> calculator.factorial(n));\n    }\n}"
+      },
+      {
+        "heading": "Custom Argument Providers",
+        "content": [
+          "For complete control, implement the <code>ArgumentsProvider</code> interface:"
+        ],
+        "code": "import org.junit.jupiter.api.extension.ExtensionContext;\nimport org.junit.jupiter.params.provider.Arguments;\nimport org.junit.jupiter.params.provider.ArgumentsProvider;\nimport java.util.stream.Stream;\n\npublic class ValidUserProvider implements ArgumentsProvider {\n    @Override\n    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {\n        return Stream.of(\n            Arguments.of(new User(\"alice\", \"alice@example.com\", 25)),\n            Arguments.of(new User(\"bob\", \"bob@example.com\", 30)),\n            Arguments.of(new User(\"carol\", \"carol@example.com\", 17))  // minor\n        );\n    }\n}\n\n// Use it\n@ParameterizedTest\n@ArgumentsSource(ValidUserProvider.class)\nvoid testValidUsers(User user) {\n    assertNotNull(userService.save(user));\n}\n\n// Combine multiple sources\n@ParameterizedTest\n@MethodSource(\"getUserAges\")\nvoid ageBasedTests(int age, boolean isAdult) {\n    User user = new User(\"Test\", \"test@example.com\", age);\n    assertEquals(isAdult, user.isAdult());\n}\n\nstatic Stream<Arguments> getUserAges() {\n    return Stream.of(\n        Arguments.of(0, false),\n        Arguments.of(17, false),\n        Arguments.of(18, true),\n        Arguments.of(99, true)\n    );\n}"
+      },
+      {
+        "heading": "Custom Test Names",
+        "content": [
+          "By default, parameterized tests are named <code>[1] foo</code>, <code>[2] foo</code>, etc. You can customize the name with placeholders."
+        ],
+        "code": "@ParameterizedTest(name = \"[{index}] {0} + {1} = {2}\")\n@MethodSource(\"additionCases\")\nvoid additionWithCustomName(int a, int b, int expected) {\n    assertEquals(expected, a + b);\n}\n// Names: \"[1] 2 + 3 = 5\", \"[2] 0 + 0 = 0\", etc.\n\n@ParameterizedTest(name = \"{0} should be valid email\")\n@ValueSource(strings = {\"a@b.c\", \"user@domain.com\", \"x.y.z@example.org\"})\nvoid validEmails(String email) {\n    assertTrue(EmailValidator.isValid(email));\n}\n\n@ParameterizedTest(name = \"[{index}] age {0} → {1}\")\n@CsvSource({\n    \"0,   infant\",\n    \"5,   child\",\n    \"13,  teenager\",\n    \"20,  adult\",\n    \"70,  senior\"\n})\nvoid ageCategories(int age, String expectedCategory) {\n    assertEquals(expectedCategory, classifier.categorize(age));\n}"
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Write a <code>palindrome</code> test using <code>@ValueSource(strings = {...})</code> with at least 5 test cases.</li>",
+          "<li>Use <code>@CsvSource</code> to test an email validator with 5 different email addresses and expected results.</li>",
+          "<li>Use <code>@MethodSource</code> to test an addition function with edge cases (large numbers, negatives, zero, overflow).</li>",
+          "<li>Use <code>@EnumSource</code> to test that a method handles every value of an enum without throwing.</li>",
+          "<li>Use <code>@NullAndEmptySource</code> + <code>@ValueSource</code> to test that a string parser handles invalid inputs.</li>",
+          "<li>Create a custom <code>ArgumentsProvider</code> that reads test data from a JSON file.</li>",
+          "<li>Customize the test names with the <code>name</code> attribute and verify they appear in the test report.</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  },
+  "mockito": {
+    "title": "Mockito - Mocking and Stubbing",
+    "sections": [
+      {
+        "heading": "What is Mocking?",
+        "content": [
+          "A <strong>mock</strong> is a test double that replaces a real object with a controlled substitute. You can:",
+          "<ul>",
+          "<li><strong>Stub</strong> methods to return specific values or throw exceptions</li>",
+          "<li><strong>Verify</strong> that methods were called with specific arguments</li>",
+          "<li><strong>Isolate</strong> the code under test from its dependencies</li>",
+          "<li><strong>Speed up</strong> tests by avoiding slow real operations (DB, HTTP)</li>",
+          "<li><strong>Make tests deterministic</strong> by controlling time, randomness, and external state</li>",
+          "</ul>",
+          "<strong>Mockito</strong> is the most popular mocking framework for Java."
+        ]
+      },
+      {
+        "heading": "Setting Up Mockito",
+        "content": [
+          "Add Mockito to your project. Mockito 5.x supports Java 11+ and integrates with JUnit 5."
+        ],
+        "code": "<!-- Maven -->\n<dependency>\n    <groupId>org.mockito</groupId>\n    <artifactId>mockito-core</artifactId>\n    <version>5.11.0</version>\n    <scope>test</scope>\n</dependency>\n<dependency>\n    <groupId>org.mockito</groupId>\n    <artifactId>mockito-junit-jupiter</artifactId>\n    <version>5.11.0</version>\n    <scope>test</scope>\n</dependency>\n\n<!-- Gradle -->\ntestImplementation 'org.mockito:mockito-core:5.11.0'\ntestImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'"
+      },
+      {
+        "heading": "Creating Mocks",
+        "content": [
+          "Use the <code>@ExtendWith(MockitoExtension.class)</code> annotation to enable Mockito's JUnit 5 integration. Then use <code>@Mock</code> on fields to create mocks automatically."
+        ],
+        "code": "import org.junit.jupiter.api.Test;\nimport org.junit.jupiter.api.extension.ExtendWith;\nimport org.mockito.Mock;\nimport org.mockito.junit.jupiter.MockitoExtension;\nimport java.util.List;\n\n@ExtendWith(MockitoExtension.class)\nclass MockExample {\n\n    @Mock\n    List<String> mockedList;\n\n    @Test\n    void usingMock() {\n        // Stub behavior\n        when(mockedList.get(0)).thenReturn(\"first\");\n        when(mockedList.size()).thenReturn(42);\n\n        // Use the mock\n        assertEquals(\"first\", mockedList.get(0));\n        assertEquals(42, mockedList.size());\n        assertNull(mockedList.get(99));  // not stubbed → null\n    }\n\n    // Programmatic creation (without @Mock)\n    @Test\n    void programmaticMock() {\n        List<String> mock = mock(List.class);\n        when(mock.size()).thenReturn(10);\n        assertEquals(10, mock.size());\n    }\n}"
+      },
+      {
+        "heading": "Stubbing Methods",
+        "content": [
+          "Stubbing controls what a mock returns when its methods are called. Mockito provides a fluent DSL for this."
+        ],
+        "code": "import static org.mockito.Mockito.*;\n\n@Test\nvoid stubbingExamples() {\n    List<String> mock = mock(List.class);\n\n    // Return value\n    when(mock.get(0)).thenReturn(\"first\");\n    when(mock.get(1)).thenReturn(\"second\");\n\n    // Multiple return values — returned in order on subsequent calls\n    when(mock.size()).thenReturn(1).thenReturn(2).thenReturn(3);\n    assertEquals(1, mock.size());\n    assertEquals(2, mock.size());\n    assertEquals(3, mock.size());\n    assertEquals(3, mock.size());  // last value is repeated\n\n    // Throw exception\n    when(mock.get(99)).thenThrow(new IndexOutOfBoundsException());\n    assertThrows(IndexOutOfBoundsException.class, () -> mock.get(99));\n\n    // Throw based on input\n    when(mock.get(anyInt())).thenAnswer(invocation -> {\n        int idx = invocation.getArgument(0);\n        return \"value-\" + idx;\n    });\n    assertEquals(\"value-5\", mock.get(5));\n\n    // void methods — use doThrow / doNothing / doReturn\n    doNothing().when(mock).clear();  // mock.clear() does nothing\n    doThrow(new RuntimeException()).when(mock).add(\"bad\");\n\n    // BDD style\n    given(mock.size()).willReturn(10);\n    willThrow(new RuntimeException()).given(mock).clear();\n}"
+      },
+      {
+        "heading": "Verifying Interactions",
+        "content": [
+          "Verification confirms that certain methods were called on the mock with specific arguments."
+        ],
+        "code": "@Test\nvoid verificationExamples() {\n    List<String> mock = mock(List.class);\n\n    mock.add(\"one\");\n    mock.add(\"two\");\n    mock.clear();\n\n    // Verify a method was called\n    verify(mock).add(\"one\");\n    verify(mock).add(\"two\");\n    verify(mock).clear();\n\n    // Verify call count\n    verify(mock, times(2)).add(anyString());\n    verify(mock, atLeastOnce()).clear();\n    verify(mock, atMost(3)).add(anyString());\n    verify(mock, never()).remove(anyString());\n\n    // Verify no more interactions\n    verifyNoMoreInteractions(mock);\n\n    // Verify no interactions at all\n    List<String> otherMock = mock(List.class);\n    verifyNoInteractions(otherMock);\n\n    // Argument matchers\n    verify(mock).add(eq(\"one\"));           // exact match\n    verify(mock).add(anyString());         // any string\n    verify(mock).add(argThat(s -> s.startsWith(\"o\")));  // custom matcher\n}"
+      },
+      {
+        "heading": "@InjectMocks — Automatic Dependency Injection",
+        "content": [
+          "<code>@InjectMocks</code> creates an instance of the class and injects all <code>@Mock</code> fields into it (via constructor, setter, or field injection).",
+          "This is the most common pattern for unit-testing a service that depends on a repository or other collaborator."
+        ],
+        "code": "import org.mockito.InjectMocks;\nimport org.mockito.Mock;\nimport org.mockito.junit.jupiter.MockitoExtension;\nimport org.junit.jupiter.api.extension.ExtendWith;\n\n@ExtendWith(MockitoExtension.class)\nclass UserServiceTest {\n\n    @Mock\n    UserRepository userRepository;  // mock\n\n    @Mock\n    EmailService emailService;      // mock\n\n    @InjectMocks\n    UserService userService;        // gets the mocks injected\n\n    @Test\n    void registerUser_savesAndSendsEmail() {\n        // Arrange\n        when(userRepository.save(any(User.class))).thenAnswer(inv -> {\n            User u = inv.getArgument(0);\n            u.setId(1L);\n            return u;\n        });\n\n        // Act\n        User result = userService.register(\"alice\", \"alice@example.com\");\n\n        // Assert\n        assertEquals(1L, result.getId());\n        verify(userRepository).save(any(User.class));\n        verify(emailService).sendWelcomeEmail(\"alice@example.com\");\n    }\n}\n\n// Service under test\nclass UserService {\n    private final UserRepository userRepository;\n    private final EmailService emailService;\n\n    // Constructor injection\n    public UserService(UserRepository userRepository, EmailService emailService) {\n        this.userRepository = userRepository;\n        this.emailService = emailService;\n    }\n\n    public User register(String username, String email) {\n        User user = new User(username, email);\n        userRepository.save(user);\n        emailService.sendWelcomeEmail(email);\n        return user;\n    }\n}"
+      },
+      {
+        "heading": "@Spy — Partial Mocks",
+        "content": [
+          "A <strong>spy</strong> wraps a real object. By default, all methods use the real implementation. You can stub specific methods to override behavior.",
+          "Use sparingly — overusing spies usually indicates a design issue."
+        ],
+        "code": "@ExtendWith(MockitoExtension.class)\nclass SpyExample {\n\n    @Spy\n    List<String> spyList = new ArrayList<>();\n\n    @Test\n    void spyBehavior() {\n        // Real method is called\n        spyList.add(\"one\");\n        spyList.add(\"two\");\n        assertEquals(2, spyList.size());  // real size method\n\n        // Stub a specific method\n        doReturn(100).when(spyList).size();\n        assertEquals(100, spyList.size());  // stubbed\n        assertEquals(2, spyList.size());    // wait — that fails!\n\n        // After stubbing, size() always returns 100\n        // Real add still works\n        spyList.add(\"three\");\n        assertEquals(100, spyList.size());\n    }\n}"
+      },
+      {
+        "heading": "Argument Matchers",
+        "content": [
+          "Argument matchers let you verify or stub calls with flexible matching. The most common are <code>any()</code>, <code>eq()</code>, and <code>argThat()</code>.",
+          "Important: when using matchers, all arguments must be matchers (or all must be raw values)."
+        ],
+        "code": "@Test\nvoid argumentMatchers() {\n    Map<String, Integer> mock = mock(Map.class);\n\n    when(mock.get(anyString())).thenReturn(0);\n    when(mock.get(eq(\"known\"))).thenReturn(42);\n    when(mock.get(argThat(s -> s.length() > 5))).thenReturn(99);\n\n    assertEquals(0, mock.get(\"anything\"));\n    assertEquals(42, mock.get(\"known\"));\n    assertEquals(99, mock.get(\"longkey\"));\n\n    // Capture arguments for later inspection\n    ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);\n    mock.put(\"captured\", 100);\n    verify(mock).put(captor.capture(), eq(100));\n    assertEquals(\"captured\", captor.getValue());\n\n    // Capture multiple values\n    mock.put(\"a\", 1);\n    mock.put(\"b\", 2);\n    verify(mock, times(2)).put(captor.capture(), anyInt());\n    assertEquals(List.of(\"a\", \"b\"), captor.getAllValues());\n}"
+      },
+      {
+        "heading": "Strict Stubbing and Best Practices",
+        "content": [
+          "Mockito 5 enables strict stubbing by default — unused stubs throw <code>UnnecessaryStubbingException</code> to alert you to dead test code.",
+          "Other best practices:"
+        ],
+        "code": "// Best practices\n@Test\nvoid bestPractices() {\n    // 1. Don't mock value objects — use the real ones\n    // BAD:  when(mockMoney.getAmount()).thenReturn(100);\n    // GOOD: Use new Money(100, \"USD\")\n\n    // 2. Don't mock types you don't own (or system types)\n    // Use them directly or wrap them\n\n    // 3. One mock per test (mostly) — keeps tests focused\n    // 4. Use ArgumentCaptor when you need to inspect call args\n    // 5. Use @InjectMocks over manual instantiation\n    // 6. Reset mocks when reusing them\n    // 7. Verify behavior, not implementation details\n\n    // Use lenient stubs when needed (e.g., for parameter to all tests)\n    lenient().when(mock.get(any())).thenReturn(\"value\");\n}\n\n// Disable strict stubbing per-test if you need it\n@MockitoSettings(strictness = Strictness.LENIENT)\nclass LenientTest {\n    // ...\n}"
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Mock a <code>UserRepository</code> interface and test a <code>UserService.register</code> method that uses it.</li>",
+          "<li>Use <code>@InjectMocks</code> to wire multiple dependencies into a service and test a method that uses all of them.</li>",
+          "<li>Stub a method to return different values on successive calls using <code>thenReturn(a).thenReturn(b)</code>.</li>",
+          "<li>Verify that a method was called exactly <code>times(3)</code> using <code>verify(mock, times(3))</code>.</li>",
+          "<li>Use <code>ArgumentCaptor</code> to capture the argument passed to a mocked method and assert on it.</li>",
+          "<li>Use <code>argThat()</code> to match arguments based on a custom predicate.</li>",
+          "<li>Use <code>@Spy</code> to partially mock a real list and verify a custom method is called while keeping real list behavior.</li>",
+          "<li>Write a test that fails with <code>UnnecessaryStubbingException</code> by adding an unused stub, then fix it.</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  },
+  "tdd": {
+    "title": "Test-Driven Development (TDD)",
+    "sections": [
+      {
+        "heading": "What is TDD?",
+        "content": [
+          "<strong>Test-Driven Development (TDD)</strong> is a software development practice where you write automated tests <em>before</em> writing the production code. The workflow is:",
+          "<ol>",
+          "<li><strong>Red</strong> — write a failing test for the next small piece of behavior</li>",
+          "<li><strong>Green</strong> — write the simplest production code that makes the test pass</li>",
+          "<li><strong>Refactor</strong> — clean up both the test and the production code while keeping tests green</li>",
+          "</ol>",
+          "The cycle is short — typically 1-10 minutes per cycle. The result is a comprehensive test suite that grew organically alongside the production code."
+        ]
+      },
+      {
+        "heading": "The Red-Green-Refactor Cycle",
+        "content": [
+          "The cycle in detail:",
+          "<ul>",
+          "<li><strong>Red</strong> — write a test that describes the next behavior. It will fail because the code does not exist or does not do that yet. The failure should be for the <em>expected reason</em> (the assertion fails), not for a typo or compile error.</li>",
+          "<li><strong>Green</strong> — write the <em>simplest</em> code that makes the test pass. Even hard-coded values are OK at this stage — you can refine in the refactor phase. The goal is to get to a green test as fast as possible.</li>",
+          "<li><strong>Refactor</strong> — now improve the design. Eliminate duplication, extract methods, rename for clarity, simplify. Tests should stay green throughout. If they fail, undo and try again.</li>",
+          "</ul>",
+          "Repeat. After many cycles, you have a working feature and a comprehensive test suite."
+        ]
+      },
+      {
+        "heading": "A TDD Example: FizzBuzz",
+        "content": [
+          "Let's build FizzBuzz using TDD. The rules: print numbers 1 to 100, but for multiples of 3 print \"Fizz\", for multiples of 5 print \"Buzz\", and for multiples of both print \"FizzBuzz\"."
+        ],
+        "code": "// STEP 1: Red — write the first failing test\nclass FizzBuzzTest {\n    @Test\n    void returns1For1() {\n        assertEquals(\"1\", new FizzBuzz().compute(1));\n    }\n}\n\n// Test fails: FizzBuzz class does not exist\n\n// STEP 2: Green — write the simplest code that passes\nclass FizzBuzz {\n    public String compute(int n) {\n        return \"1\";  // Hard-coded to pass this test only\n    }\n}\n\n// STEP 3: Red — next test\n@Test\nvoid returns2For2() {\n    assertEquals(\"2\", new FizzBuzz().compute(2));\n}\n\n// STEP 4: Green — generalize\nclass FizzBuzz {\n    public String compute(int n) {\n        return String.valueOf(n);\n    }\n}\n\n// STEP 5: Red — test for Fizz\n@Test\nvoid returnsFizzFor3() {\n    assertEquals(\"Fizz\", new FizzBuzz().compute(3));\n}\n\n// STEP 6: Green — add the Fizz logic\nclass FizzBuzz {\n    public String compute(int n) {\n        if (n % 3 == 0) return \"Fizz\";\n        return String.valueOf(n);\n    }\n}\n\n// STEP 7: Continue with Buzz and FizzBuzz\n@Test\nvoid returnsBuzzFor5() { assertEquals(\"Buzz\", new FizzBuzz().compute(5)); }\n@Test\nvoid returnsFizzBuzzFor15() { assertEquals(\"FizzBuzz\", new FizzBuzz().compute(15)); }\n\n// Final\nclass FizzBuzz {\n    public String compute(int n) {\n        if (n % 15 == 0) return \"FizzBuzz\";\n        if (n % 3 == 0) return \"Fizz\";\n        if (n % 5 == 0) return \"Buzz\";\n        return String.valueOf(n);\n    }\n}"
+      },
+      {
+        "heading": "TDD Patterns and Techniques",
+        "content": [
+          "Common TDD patterns:",
+          "<ul>",
+          "<li><strong>Fake it till you make it</strong> — return a hard-coded value to pass the first test, then generalize when the next test forces it.</li>",
+          "<li><strong>Triangulation</strong> — when you are not sure of the implementation, write multiple tests that \"force\" the code to be more general.</li>",
+          "<li><strong>Obvious implementation</strong> — if the implementation is obvious, just write it directly (skip the fake-it step). The test confirms it works.</li>",
+          "<li><strong>One to many</strong> — write a test for a single element, then change it to test multiple elements (e.g., one item → a list of items).</li>",
+          "<li><strong>Break first</strong> — before writing the production code, deliberately break the test to verify it actually catches the bug.</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "How TDD Changes Design",
+        "content": [
+          "One of the biggest benefits of TDD is that it changes the design of your code:",
+          "<ul>",
+          "<li><strong>Testability becomes a first-class concern</strong> — code is easier to test when it has clear boundaries, single responsibilities, and dependency injection.</li>",
+          "<li><strong>No untested code</strong> — every line of production code exists because a test demanded it.</li>",
+          "<li><strong>Small, focused units</strong> — long methods and god classes are hard to test, so TDD pushes you toward smaller units.</li>",
+          "<li><strong>Loose coupling</strong> — to test a unit in isolation, you need to be able to inject its dependencies. This naturally leads to DI and clean boundaries.</li>",
+          "<li><strong>Better naming</strong> — when you write the test first, you have to think about how the API will be used, which leads to better names and cleaner interfaces.</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "TDD for Legacy Code",
+        "content": [
+          "For new code, TDD is straightforward. For legacy code, the workflow is different:",
+          "<ul>",
+          "<li><strong>Characterization tests</strong> — write tests that document the <em>current</em> behavior, not the desired behavior. They pin down the existing semantics so you can refactor safely.</li>",
+          "<li><strong>Seam identification</strong> — find \"seams\" where you can break dependencies (subclass-and-override, parameterize constructor, etc.). Michael Feathers' book \"Working Effectively with Legacy Code\" is the classic reference.</li>",
+          "<li><strong>Sprout / wrap method</strong> — add new functionality in a new method (sprout) or wrap a call to a legacy method (wrap) so you can write tests for the new code without touching the legacy.</li>",
+          "<li><strong>Strangler fig</strong> — gradually replace legacy code piece by piece, each time with TDD, until the legacy code is fully replaced.</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "TDD vs BDD vs ATDD",
+        "content": [
+          "Comparison of related practices:",
+          "<ul>",
+          "<li><strong>TDD</strong> — write unit tests first. Focused on implementation. Tests are technical and may use class/method names.</li>",
+          "<li><strong>BDD (Behavior-Driven Development)</strong> — write scenarios in a domain language (Given-When-Then). Often uses tools like Cucumber or JBehave. Tests are readable by non-developers.</li>",
+          "<li><strong>ATDD (Acceptance Test-Driven Development)</strong> — write acceptance tests first (from the user's perspective). The team collaborates to define the tests, then implements.</li>",
+          "<li><strong>Example Mapping</strong> — a discovery practice often used before ATDD/BDD. Capture rules with examples on cards before writing tests.</li>",
+          "</ul>",
+          "All three use the same red-green-refactor cycle — they differ in <em>what</em> is tested and <em>how</em> the tests are written."
+        ]
+      },
+      {
+        "heading": "Common TDD Objections and Responses",
+        "content": [
+          "Frequent concerns about TDD:",
+          "<ul>",
+          "<li><strong>\"It slows me down.\"</strong> — Short-term: yes, the first feature takes longer. Long-term: faster because you spend less time debugging and fixing regressions. The breakeven point is usually 2-4 weeks in.</li>",
+          "<li><strong>\"I have to test trivial code.\"</strong> — Yes, TDD forces you to test getters/setters and simple methods. The cost is tiny because each test is small. The benefit is that you never have to wonder if it works.</li>",
+          "<li><strong>\"My code is too hard to test.\"</strong> — That usually means the design is too coupled. Use TDD to drive toward a more testable design.</li>",
+          "<li><strong>\"The tests become outdated.\"</strong> — Tests are part of the code. When the design changes, you change the tests as you change the code. If tests are not being updated, the team is not really doing TDD.</li>",
+          "<li><strong>\"We have a UI / framework / external dependency that is hard to test.\"</strong> — Separate the testable business logic from the hard-to-test UI. Test the business logic with TDD; test the UI separately with end-to-end tools.</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "TDD in Real Teams",
+        "content": [
+          "Where TDD shines:",
+          "<ul>",
+          "<li>Domain logic, business rules, algorithms</li>",
+          "<li>Bug fixes (write a test that reproduces the bug, then fix)</li>",
+          "<li>Refactoring (the test suite is your safety net)</li>",
+          "<li>APIs and libraries</li>",
+          "<li>Any code that can be unit tested in isolation</li>",
+          "</ul>",
+          "Where TDD is harder:",
+          "<ul>",
+          "<li>UI work (the view layer is hard to unit test — use a different testing strategy)</li>",
+          "<li>Highly exploratory or throwaway code (spikes, prototypes)</li>",
+          "<li>Code tightly coupled to a framework</li>",
+          "<li>Performance-critical inner loops (use benchmarks instead)</li>",
+          "</ul>",
+          "Many teams use TDD as a default for the testable 80% of their code, and use other techniques for the rest."
+        ]
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Use TDD to build a <code>StringCalculator</code> with an <code>add(String numbers)</code> method (see kata description by Roy Osherove).</li>",
+          "<li>Use TDD to build a <code>BankAccount</code> class with deposit, withdraw, and balance tracking (including overdraft rules).</li>",
+          "<li>Use TDD to build a <code>WordWrap</code> function (kata by Robert Martin) — given a column width, wrap text at word boundaries.</li>",
+          "<li>Practice the \"fake it\" approach: implement FizzBuzz using only the simplest possible code at each step.</li>",
+          "<li>Take a feature in your codebase and apply TDD: write the test first, then the code, then refactor.</li>",
+          "<li>Apply characterization tests to a legacy method: write tests that pin down its current behavior (right or wrong), then refactor with confidence.</li>",
+          "<li>Track your TDD cycle times for a day — how long are your red-green-refactor loops? Aim for under 10 minutes.</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  },
+  "test-coverage-quality": {
+    "title": "Code Coverage and Test Quality",
+    "sections": [
+      {
+        "heading": "What is Code Coverage?",
+        "content": [
+          "<strong>Code coverage</strong> measures which lines, branches, or paths of your production code are executed by your tests.",
+          "It is a useful signal but NOT a measure of test quality — 100% coverage can still hide buggy tests."
+        ]
+      },
+      {
+        "heading": "Types of Coverage",
+        "content": [
+          "Common coverage metrics:",
+          "<ul>",
+          "<li><strong>Line coverage</strong> — percentage of lines executed at least once. The most basic and most commonly reported metric.</li>",
+          "<li><strong>Branch coverage</strong> — percentage of branches (if/else, switch, ternary) where both paths were taken. Stronger than line coverage.</li>",
+          "<li><strong>Method coverage</strong> — percentage of methods called at least once.</li>",
+          "<li><strong>Class coverage</strong> — percentage of classes with at least one method called.</li>",
+          "<li><strong>Path coverage</strong> — percentage of unique execution paths through a method. Very expensive to measure, rarely used.</li>",
+          "<li><strong>Condition coverage</strong> — percentage of boolean sub-expressions that were both true and false.</li>",
+          "<li><strong>Cyclomatic complexity</strong> — number of independent paths through a method. High complexity = harder to cover completely.</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "JaCoCo — Java Code Coverage",
+        "content": [
+          "<strong>JaCoCo</strong> is the de-facto code coverage library for Java. It works with Maven, Gradle, Ant, and standalone, and integrates with most CI tools and IDEs."
+        ],
+        "code": "<!-- Maven: pom.xml -->\n<plugin>\n    <groupId>org.jacoco</groupId>\n    <artifactId>jacoco-maven-plugin</artifactId>\n    <version>0.8.11</version>\n    <executions>\n        <execution>\n            <goals>\n                <goal>prepare-agent</goal>\n            </goals>\n        </execution>\n        <execution>\n            <id>report</id>\n            <phase>test</phase>\n            <goals>\n                <goal>report</goal>\n            </goals>\n        </execution>\n        <!-- Optional: fail the build if coverage is too low -->\n        <execution>\n            <id>check-coverage</id>\n            <phase>verify</phase>\n            <goals>\n                <goal>check</goal>\n            </goals>\n            <configuration>\n                <rules>\n                    <rule>\n                        <element>BUNDLE</element>\n                        <limits>\n                            <limit>\n                                <counter>LINE</counter>\n                                <value>COVEREDRATIO</value>\n                                <minimum>0.80</minimum>\n                            </limit>\n                            <limit>\n                                <counter>BRANCH</counter>\n                                <value>COVEREDRATIO</value>\n                                <minimum>0.70</minimum>\n                            </limit>\n                        </limits>\n                    </rule>\n                </rules>\n            </configuration>\n        </execution>\n    </executions>\n</plugin>\n\n// Run: mvn test    (generates target/site/jacoco/index.html)\n// Run: mvn verify  (also enforces coverage limits)\n\n// Gradle: build.gradle\nplugins {\n    id 'jacoco'\n}\n\njacoco {\n    toolVersion = '0.8.11'\n}\n\njacocoTestReport {\n    reports {\n        html.required = true\n        xml.required = true\n    }\n}"
+      },
+      {
+        "heading": "Reading JaCoCo Reports",
+        "content": [
+          "JaCoCo produces an HTML report at <code>target/site/jacoco/index.html</code>. Open it in a browser to see:",
+          "<ul>",
+          "<li>Package-level summary (color-coded by coverage percentage)</li>",
+          "<li>Class-level coverage</li>",
+          "<li>Method-level coverage</li>",
+          "<li>Line-by-line coverage with missed lines highlighted in red</li>",
+          "<li>Branch coverage showing which branches were not taken</li>",
+          "</ul>",
+          "In IDEs like IntelliJ, the coverage view is integrated: run with coverage, then see coverage overlays directly in the editor (green = covered, red = missed)."
+        ]
+      },
+      {
+        "heading": "Coverage Targets — What is \"Good Enough\"?",
+        "content": [
+          "There is no universal \"right\" coverage number, but common guidelines:",
+          "<ul>",
+          "<li><strong>50-60%</strong> — bare minimum, lots of untested code</li>",
+          "<li><strong>70-80%</strong> — healthy for most projects</li>",
+          "<li><strong>80-90%</strong> — strong coverage, well-tested codebase</li>",
+          "<li><strong>90%+</strong> — excellent, but watch for diminishing returns</li>",
+          "<li><strong>100%</strong> — often counter-productive (you spend time testing trivial getters)</li>",
+          "</ul>",
+          "More important than the number:",
+          "<ul>",
+          "<li>Critical paths (payments, security, data integrity) should have very high coverage</li>",
+          "<li>Stable utility code can have lower coverage</li>",
+          "<li>Generated code (DTOs, builders) is often excluded from coverage targets</li>",
+          "<li>New code should generally have higher coverage than legacy code</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "Mutation Testing with PIT",
+        "content": [
+          "<strong>Mutation testing</strong> measures test <em>quality</em>, not just coverage. It works by:",
+          "<ol>",
+          "<li>Make small changes (\"mutations\") to the production code (e.g., flip a <code>&gt;</code> to <code>&lt;</code>, change a constant, remove a method call)</li>",
+          "<li>Run the tests against each mutation</li>",
+          "<li>If the tests still pass, the mutation \"survived\" — meaning the tests do not check that behavior</li>",
+          "<li>If the tests fail, the mutation was \"killed\" — meaning the tests do check that behavior</li>",
+          "</ol>",
+          "A test suite with 100% line coverage but weak assertions may kill only 40% of mutations. A well-written test suite typically kills 70-90%."
+        ],
+        "code": "<!-- Maven: pom.xml -->\n<plugin>\n    <groupId>org.pitest</groupId>\n    <artifactId>pitest-maven</artifactId>\n    <version>1.16.0</version>\n    <configuration>\n        <targetClasses>\n            <param>com.example.service.*</param>\n        </targetClasses>\n        <targetTests>\n            <param>com.example.service.*Test</param>\n        </targetTests>\n        <mutationThreshold>75</mutationThreshold>  <!-- fail if < 75% mutations killed -->\n    </configuration>\n</plugin>\n\n// Run: mvn pitest:mutationCoverage\n// Report: target/pit-reports/index.html"
+      },
+      {
+        "heading": "Test Smells to Watch For",
+        "content": [
+          "Common test smells and how to refactor:",
+          "<ul>",
+          "<li><strong>Long tests</strong> — split into multiple smaller tests, each with a single AAA</li>",
+          "<li><strong>Magic numbers</strong> — extract into named constants</li>",
+          "<li><strong>Duplicated setup</strong> — extract into <code>@BeforeEach</code></li>",
+          "<li><strong>Testing implementation details</strong> — test the public API, not private methods</li>",
+          "<li><strong>Excessive mocking</strong> — if you mock everything, consider whether you are testing a real behavior</li>",
+          "<li><strong>Sleep in tests</strong> — replace with deterministic waiting (CountDownLatch, Awaitility)</li>",
+          "<li><strong>Order-dependent tests</strong> — reset state in <code>@BeforeEach</code>, don't rely on test order</li>",
+          "<li><strong>Flaky tests</strong> — investigate root cause (time, network, shared state) instead of retrying</li>",
+          "<li><strong>No assertions</strong> — every test should have at least one assertion</li>",
+          "</ul>"
+        ]
+      },
+      {
+        "heading": "Integration Testing vs Unit Testing",
+        "content": [
+          "A balanced test strategy includes both:",
+          "<ul>",
+          "<li><strong>Unit tests (many, fast)</strong> — test individual classes in isolation. Catch bugs early. Cheap to maintain. Run in milliseconds.</li>",
+          "<li><strong>Integration tests (few, slow)</strong> — test how components work together, often with real databases, real HTTP, etc. Catch wiring/contract bugs. Slower and more fragile.</li>",
+          "<li><strong>Contract tests</strong> — verify that a service and its consumers agree on the API contract (e.g., using Pact, Spring Cloud Contract)</li>",
+          "<li><strong>End-to-end tests (very few, very slow)</strong> — test the full system from the user's perspective</li>",
+          "</ul>",
+          "A good rule of thumb: 70% unit, 20% integration, 10% end-to-end."
+        ]
+      },
+      {
+        "heading": "Testcontainers for Integration Tests",
+        "content": [
+          "<strong>Testcontainers</strong> is a library that lets you spin up real services (PostgreSQL, MySQL, Kafka, Redis, etc.) in Docker containers for integration tests.",
+          "It is the modern best practice for integration tests — far better than embedded databases or in-memory mocks."
+        ],
+        "code": "// Add: testcontainers-junit-jupiter, testcontainers-postgresql\n\nimport org.testcontainers.containers.PostgreSQLContainer;\nimport org.testcontainers.junit.jupiter.Container;\nimport org.testcontainers.junit.jupiter.Testcontainers;\n\n@Testcontainers\nclass UserRepositoryIT {\n\n    @Container\n    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(\"postgres:15\")\n        .withDatabaseName(\"testdb\")\n        .withUsername(\"test\")\n        .withPassword(\"test\");\n\n    @Test\n    void savesAndRetrievesUser() {\n        // Real PostgreSQL is running in Docker\n        // Use the real JDBC URL from the container\n        String jdbcUrl = postgres.getJdbcUrl();\n        // ... connect, save, retrieve, assert ...\n    }\n}"
+      },
+      {
+        "heading": "Try it Yourself",
+        "content": [
+          "Exercises:",
+          "<ol>",
+          "<li>Set up JaCoCo in a project, run tests, and open the HTML coverage report.</li>",
+          "<li>Find the methods with the lowest coverage and add tests to bring them up.</li>",
+          "<li>Set a coverage threshold in JaCoCo (<code>verify</code> goal) and watch the build fail when you skip a test.</li>",
+          "<li>Run mutation testing with PIT and look at the \"surviving mutants\" — those are real gaps in your tests.</li>",
+          "<li>Find a test smell in your codebase (long test, magic numbers, order dependence) and refactor it.</li>",
+          "<li>Write an integration test using Testcontainers with a real PostgreSQL or MySQL container.</li>",
+          "<li>Calculate the test pyramid ratio for your project — what percentage of tests are unit, integration, and e2e?</li>",
+          "</ol>"
+        ]
+      }
+    ]
+  }
+};
 export const javaContent = {
   module7: javaModule7Content,
+  module8: javaModule8Content,
   module1: javaModule1Content,
   module2: javaModule2Content,
   module3: javaModule3Content,
