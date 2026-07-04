@@ -1825,6 +1825,340 @@ Final sampling distribution (renormalized):
         "Fix order: lower temp → stronger grounding prompt → improve retrieval → chunking → citation → verification step",
         "Strong system prompt ('answer ONLY from context') is often the highest-leverage fix after temperature"
       ]
+    },
+    {
+      question: "What causes hallucinations in LLMs, and how do you reduce them?",
+      answer: `<p>An LLM <strong>hallucinates</strong> when it generates text that is fluent and confident but factually wrong, fabricated, or ungrounded. Hallucinations are not bugs — they are a natural consequence of how LLMs work.</p>
+<h4>Root Causes</h4>
+<ul>
+<li><strong>Next-token prediction objective:</strong> The model is trained to produce a <em>plausible</em> next token, not a <em>truthful</em> one. Plausibility and truth are different signals.</li>
+<li><strong>No memory of what it knows:</strong> The model has no internal flag for "I don't know this." If it has seen similar patterns during training, it will complete them — even if the specific fact was never there.</li>
+<li><strong>Training data noise:</strong> The web contains misinformation, contradictions, and outdated facts. The model absorbs all of it.</li>
+<li><strong>Decoding randomness:</strong> Sampling (top-p, temperature) can pick less-likely tokens that drift the answer.</li>
+<li><strong>Long, open-ended prompts:</strong> The further the model has to extrapolate, the more it has to "fill in" — and the higher the chance of fabrication.</li>
+</ul>
+<h4>Reduction Techniques (in order of impact)</h4>
+<ol>
+<li><strong>Grounding via RAG:</strong> Force the model to answer only from retrieved documents. "Answer ONLY using the context below; if not present, say 'I don't know.'"</li>
+<li><strong>Lower temperature (0.0–0.3):</strong> Reduces sampling randomness, makes outputs more deterministic and conservative.</li>
+<li><strong>Cite sources:</strong> Force the model to attribute every claim to a retrieved chunk — makes fabrication easy to detect.</li>
+<li><strong>Self-verification / chain-of-thought:</strong> Ask the model to reason step-by-step and check its own work. "First list the facts, then write the answer."</li>
+<li><strong>Constrained decoding / JSON mode / tool use:</strong> Restrict the output to a known schema — the model cannot fabricate free-form text.</li>
+<li><strong>Fine-tune on domain data:</strong> Reduces reliance on the model's broad (and often wrong) prior knowledge.</li>
+<li><strong>Add a verification step:</strong> A second LLM call checks if the first answer is supported by the context. Reject or rewrite if not.</li>
+</ol>
+<h4>What does NOT work well</h4>
+<ul>
+<li><strong>"Just don't hallucinate" in the prompt:</strong> The model has no mechanism to obey this — it cannot introspect on its own confidence.</li>
+<li><strong>Lowering temperature alone:</strong> Reduces variance but not factual error. A model can confidently hallucinate at temperature 0.</li>
+</ul>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "LLMs", "RAG", "Evaluation"],
+      keyPoints: [
+        "Hallucination = fluent, confident, but factually wrong output — caused by next-token objective, not a bug",
+        "Root causes: plausible ≠ truthful training, no self-knowledge of limits, noisy web data, sampling randomness, long prompts",
+        "Best fixes: RAG grounding (highest impact), lower temperature, source citations, self-verification, constrained decoding",
+        "'Don't hallucinate' prompts do not work — the model cannot introspect on its own confidence"
+      ]
+    },
+    {
+      question: "Why isn't RAG enough for enterprise AI?",
+      answer: `<p>RAG solves the "knowledge cutoff" and "private data" problems — but a production enterprise AI system needs much more than just retrieval. RAG is the <em>floor</em>, not the ceiling.</p>
+<h4>What RAG Does Well</h4>
+<ul>
+<li>Grounds answers in up-to-date, private, or proprietary documents.</li>
+<li>Reduces hallucinations by providing source material.</li>
+<li>Cheap to update (re-index a document, no retraining).</li>
+<li>Transparent — you can show which documents the answer came from.</li>
+</ul>
+<h4>What RAG Alone Cannot Solve</h4>
+<ol>
+<li><strong>Reasoning across documents:</strong> Enterprise questions often require combining info from 5+ documents. A single retrieved chunk is rarely enough.</li>
+<li><strong>Authorization and access control:</strong> Not every user should see every document. RAG retrieval needs to respect role-based permissions.</li>
+<li><strong>Structured data queries:</strong> "What were Q3 sales by region?" lives in a database, not in documents. You need SQL or tool use, not RAG.</li>
+<li><strong>Multi-step workflows:</strong> "Onboard this new employee" is a workflow — not a single Q&A. RAG cannot execute steps or call systems.</li>
+<li><strong>Auditability and compliance:</strong> Regulated industries (finance, healthcare) need to log every decision, citation, and tool call.</li>
+<li><strong>Latency and cost at scale:</strong> 10M users × 5 retrievals each = expensive vector DB + LLM calls. RAG alone does not address serving economics.</li>
+<li><strong>Knowledge conflicts:</strong> When retrieved docs contradict each other (old policy vs. new policy), RAG cannot resolve the conflict — the LLM picks one.</li>
+<li><strong>Evaluation and monitoring:</strong> You need a feedback loop — did this answer actually help the user? RAG has no built-in observability.</li>
+</ol>
+<h4>What Enterprise AI Actually Needs</h4>
+<ul>
+<li><strong>RAG</strong> for knowledge grounding</li>
+<li><strong>Fine-tuning</strong> for tone, format, domain style</li>
+<li><strong>Agents + tool use</strong> for actions and multi-step workflows</li>
+<li><strong>Guardrails</strong> for safety, PII, prompt injection</li>
+<li><strong>Observability</strong> for evaluation, drift detection, feedback loops</li>
+<li><strong>Access control</strong> at the retrieval layer, not just at the UI</li>
+</ul>
+<p>The insight: <strong>RAG is a building block, not a complete system.</strong> Enterprise AI is the orchestration of RAG + tools + guardrails + eval + auth.</p>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "RAG", "Enterprise AI", "Architecture"],
+      keyPoints: [
+        "RAG is the floor, not the ceiling — it grounds answers in documents but does not solve the full enterprise problem",
+        "RAG alone cannot handle: cross-doc reasoning, RBAC, structured data, workflows, audit, scale, conflict resolution, eval",
+        "Enterprise AI = RAG + fine-tuning + agents/tools + guardrails + observability + access control",
+        "RAG's strength: cheap updates, transparency, grounding. Its limits: reasoning, auth, latency at scale, conflict resolution"
+      ]
+    },
+    {
+      question: "How do you evaluate an LLM beyond accuracy?",
+      answer: `<p>Accuracy is necessary but not sufficient. Real LLM evaluation is multi-dimensional — and "did it get the right answer" often hides deeper failures.</p>
+<h4>The Evaluation Pyramid</h4>
+<ol>
+<li><strong>Correctness (top):</strong> Is the final answer factually right?</li>
+<li><strong>Groundedness:</strong> Is every claim supported by the retrieved context or a reliable source?</li>
+<li><strong>Faithfulness:</strong> Does the answer stick to the context, or does it inject outside knowledge?</li>
+<li><strong>Relevance:</strong> Did the answer address the user's actual question, or a related-but-different one?</li>
+<li><strong>Completeness:</strong> Did the answer cover all parts of a multi-part question?</li>
+<li><strong>Safety:</strong> Did it refuse harmful, biased, or PII-leaking requests?</li>
+<li><strong>Format / structure:</strong> Did it follow the required JSON schema, length, tone, language?</li>
+<li><strong>Latency, cost, throughput (bottom):</strong> Engineering metrics that determine if the system is even usable at scale.</li>
+</ol>
+<h4>Evaluation Methods</h4>
+<table style='border-collapse:collapse;margin:10px 0;'>
+<tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Method</th><th style='padding:8px;border:1px solid #ddd;'>What it measures</th></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Exact match / F1</td><td style='padding:8px;border:1px solid #ddd;'>Surface-level correctness (good for Q&amp;A, classification)</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>BLEU / ROUGE</td><td style='padding:8px;border:1px solid #ddd;'>N-gram overlap with reference (translation, summarization)</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>LLM-as-judge</td><td style='padding:8px;border:1px solid #ddd;'>A second LLM scores the first on rubrics (faithfulness, tone)</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Human evaluation</td><td style='padding:8px;border:1px solid #ddd;'>Gold standard for quality, tone, nuance — slow and expensive</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Retrieval recall@k</td><td style='padding:8px;border:1px solid #ddd;'>Did the retriever surface the right documents? (RAG)</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>A/B testing</td><td style='padding:8px;border:1px solid #ddd;'>User-facing metrics: CTR, task success, satisfaction</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Red team / adversarial</td><td style='padding:8px;border:1px solid #ddd;'>Probes for jailbreaks, bias, PII leakage</td></tr>
+</table>
+<h4>Common Mistakes</h4>
+<ul>
+<li><strong>Optimizing only accuracy:</strong> A model can be "accurate" but unsafe, slow, or off-tone.</li>
+<li><strong>Trusting offline metrics blindly:</strong> LLM-judge correlation with humans is ~70–80%, not 100%.</li>
+<li><strong>No production eval:</strong> Offline benchmarks are not your users. You need live feedback loops.</li>
+</ul>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "LLMs", "Evaluation", "Production"],
+      keyPoints: [
+        "Accuracy is just one of 8+ dimensions: correctness, groundedness, faithfulness, relevance, completeness, safety, format, latency/cost",
+        "Methods: exact match, BLEU/ROUGE, LLM-as-judge, human eval, retrieval recall@k, A/B testing, red team",
+        "LLM-as-judge correlates ~70-80% with humans — not a replacement for human eval on quality",
+        "Production needs live feedback loops, not just offline benchmarks — your users are the real evaluation set"
+      ]
+    },
+    {
+      question: "Explain precision, recall, faithfulness, and groundedness in LLM evaluation.",
+      answer: `<p>These four metrics are often confused but measure very different things. They are foundational for any RAG or QA system.</p>
+<h4>Precision (Retrieval Quality)</h4>
+<ul>
+<li><strong>Definition:</strong> Of the documents retrieved, how many were actually relevant?</li>
+<li><strong>Formula:</strong> precision = relevant_retrieved / total_retrieved</li>
+<li><strong>Example:</strong> You retrieved 10 documents, 7 were relevant. Precision = 7/10 = 0.7.</li>
+<li><strong>High precision = no noise in the context window.</strong> Important because irrelevant docs waste tokens and can confuse the LLM.</li>
+</ul>
+<h4>Recall (Retrieval Coverage)</h4>
+<ul>
+<li><strong>Definition:</strong> Of all the relevant documents that exist, how many did you retrieve?</li>
+<li><strong>Formula:</strong> recall = relevant_retrieved / total_relevant</li>
+<li><strong>Example:</strong> 20 relevant documents exist, you retrieved 7. Recall = 7/20 = 0.35.</li>
+<li><strong>High recall = no missed information.</strong> Important for questions that need the full picture (compliance, legal, medical).</li>
+</ul>
+<h4>Faithfulness (Generation Quality)</h4>
+<ul>
+<li><strong>Definition:</strong> Does the answer stick to the retrieved context, or does it inject outside knowledge?</li>
+<li><strong>How to measure:</strong> Split the answer into claims; for each claim, check if it is supported by the context. faithfulness = supported_claims / total_claims.</li>
+<li><strong>Low faithfulness = the LLM is "making stuff up" beyond the context.</strong> Even if the answer is correct, it may not be grounded in your data.</li>
+</ul>
+<h4>Groundedness (Truthfulness to Sources)</h4>
+<ul>
+<li><strong>Definition:</strong> Is each claim in the answer actually supported by a specific, citable source?</li>
+<li><strong>How to measure:</strong> For each claim, identify which retrieved document it came from and verify the document says that.</li>
+<li><strong>Low groundedness = hallucinations that look authoritative.</strong> The answer may be fluent but invented.</li>
+</ul>
+<h4>How They Relate</h4>
+<table style='border-collapse:collapse;margin:10px 0;'>
+<tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Metric</th><th style='padding:8px;border:1px solid #ddd;'>Question answered</th></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Precision</td><td style='padding:8px;border:1px solid #ddd;'>Did we retrieve the right documents?</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Recall</td><td style='padding:8px;border:1px solid #ddd;'>Did we miss anything important?</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Faithfulness</td><td style='padding:8px;border:1px solid #ddd;'>Did the model stick to the context?</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Groundedness</td><td style='padding:8px;border:1px solid #ddd;'>Is every claim backed by a real source?</td></tr>
+</table>
+<p>Precision and recall measure <strong>retrieval</strong>. Faithfulness and groundedness measure <strong>generation</strong>. You need both layers to find and fix bugs in a RAG system.</p>`,
+      difficulty: "Intermediate",
+      tags: ["AI Engineer", "LLMs", "RAG", "Evaluation"],
+      keyPoints: [
+        "Precision: of retrieved docs, how many are relevant? (retrieval quality)",
+        "Recall: of all relevant docs, how many did we retrieve? (retrieval coverage)",
+        "Faithfulness: does the answer stick to context, or inject outside knowledge? (generation)",
+        "Groundedness: is every claim actually supported by a citable source? (generation, anti-hallucination)"
+      ]
+    },
+    {
+      question: "What happens internally when an LLM receives a prompt?",
+      answer: `<p>From the moment a prompt arrives to the moment a token comes out, an LLM goes through a precise pipeline of transformations.</p>
+<h4>The Pipeline</h4>
+<ol>
+<li><strong>Tokenization:</strong> The raw text is split into tokens (subword units) via BPE, WordPiece, or SentencePiece. Each token maps to an integer ID from the vocabulary. "Hello world" → [15496, 995].</li>
+<li><strong>Embedding lookup:</strong> Each token ID is converted to a dense vector (e.g., 4096 dimensions) by looking up a row in the embedding matrix. Tokens now have meaning.</li>
+<li><strong>Positional encoding:</strong> A position vector is added to each token embedding so the model knows the order. Without this, attention would be permutation-invariant.</li>
+<li><strong>Transformer blocks (N layers):</strong> The sequence passes through N stacked blocks. Each block does:
+  <ul>
+    <li>Multi-head self-attention: every token attends to every other.</li>
+    <li>Feed-forward network: position-wise non-linear transformation.</li>
+    <li>Residual connections + layer normalization: stabilize training and depth.</li>
+  </ul>
+</li>
+<li><strong>Final layer norm:</strong> Normalizes the last hidden states.</li>
+<li><strong>LM head (unembedding):</strong> The final hidden state of the last token is projected back to vocabulary size, producing a logit for every possible next token.</li>
+<li><strong>Softmax (or sampled):</strong> Logits → probabilities. The next token is sampled (greedy, top-k, top-p, temperature).</li>
+<li><strong>Append and repeat:</strong> The chosen token is appended to the sequence and fed back in. This loops until &lt;EOS&gt; or max length.</li>
+</ol>
+<h4>What the Model Is Actually Doing</h4>
+<ul>
+<li>At every step, the model computes P(next_token | all_previous_tokens).</li>
+<li>It is not "thinking" or "searching" — it is doing a single forward pass through a fixed graph of matrix multiplications.</li>
+<li>The "intelligence" is in the weights, learned during training. Inference is just lookup + matrix multiplies + sampling.</li>
+</ul>
+<h4>Key Internal State</h4>
+<ul>
+<li><strong>KV cache:</strong> To avoid recomputing attention for past tokens at every step, the model caches the Key and Value tensors. This is why inference is faster than the naive O(n²) cost suggests.</li>
+<li><strong>Hidden states:</strong> The intermediate representations after each layer — useful for probing, classification heads, or interpretability research.</li>
+</ul>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "LLMs", "Architecture", "Inference"],
+      keyPoints: [
+        "Pipeline: tokenize → embed → add positions → N transformer blocks → final norm → LM head → softmax → sample → repeat",
+        "At every step, the model computes P(next_token | all_previous_tokens) — a single forward pass, not search or reasoning",
+        "Intelligence lives in the weights (learned during training); inference is just lookup + matrix multiplies + sampling",
+        "KV cache avoids recomputing attention for past tokens — makes autoregressive generation tractable"
+      ]
+    },
+    {
+      question: "How do tokens, embeddings, and attention work together?",
+      answer: `<p>Tokens, embeddings, and attention are the three layers of meaning in a Transformer. They are deeply interconnected.</p>
+<h4>Layer 1: Tokens (Discrete Symbols)</h4>
+<ul>
+<li>Text is split into tokens via subword tokenization (BPE, WordPiece).</li>
+<li>Each token is an integer ID from a fixed vocabulary (e.g., 50,000–100,000 tokens).</li>
+<li>Tokens are discrete — there is no notion of similarity between token 15496 and 995.</li>
+</ul>
+<h4>Layer 2: Embeddings (Dense Meaning)</h4>
+<ul>
+<li>Each token ID is looked up in a learned embedding matrix (V × d, where d is typically 2048–12,288).</li>
+<li>The result is a dense vector that captures the token's meaning in context.</li>
+<li>Two tokens that mean similar things (e.g., "cat" and "kitten") end up close in embedding space — even though their IDs are different.</li>
+</ul>
+<h4>Layer 3: Attention (Context Mixing)</h4>
+<ul>
+<li>Self-attention lets each token's embedding be <strong>updated</strong> based on every other token in the sequence.</li>
+<li>The updated embedding (the "contextualized" embedding) reflects the meaning of the token <em>in this specific context</em>.</li>
+<li>Example: the word "bank" gets a different contextual embedding in "river bank" vs. "bank account" — even though the static embedding is the same.</li>
+</ul>
+<h4>How They Work Together</h4>
+<pre><code class="language-text">Input text: "The cat sat on the mat"
+  ↓
+Tokenize: [The, cat, sat, on, the, mat] → [1234, 5678, 9012, ...]
+  ↓
+Embed: each ID → 4096-dim vector (V × d lookup)
+  ↓
+Self-attention: each token's vector mixes with every other, weighted by relevance
+  → "sat" attends strongly to "cat" (subject-verb), weakly to "mat"
+  ↓
+Output: contextualized embeddings that the LM head reads to predict the next token</code></pre>
+<h4>Why This Architecture Works</h4>
+<ul>
+<li><strong>Tokens</strong> give the model a discrete, finite vocabulary to work with — no infinite ambiguity.</li>
+<li><strong>Embeddings</strong> turn discrete symbols into continuous space where math (dot products, distances) becomes meaningful.</li>
+<li><strong>Attention</strong> lets embeddings be <em>context-dependent</em> — the same word means different things in different sentences.</li>
+</ul>
+<p>Without embeddings, attention would have nothing to compute. Without attention, embeddings would be static and miss context. Without tokens, there would be no discrete units to embed. All three are required.</p>`,
+      difficulty: "Intermediate",
+      tags: ["AI Engineer", "LLMs", "Architecture"],
+      keyPoints: [
+        "Tokens = discrete IDs (finite vocabulary); Embeddings = dense vectors (continuous meaning); Attention = contextualizes embeddings",
+        "Static embedding is the same for a word in any sentence; attention updates it based on context (bank: river vs money)",
+        "Tokens without embeddings = no math; Embeddings without attention = no context; Attention without tokens = nothing to mix",
+        "Pipeline: text → tokens → embeddings → self-attention updates embeddings → LM head reads contextual embeddings"
+      ]
+    },
+    {
+      question: "When should you fine-tune instead of using prompt engineering?",
+      answer: `<p>Fine-tuning and prompt engineering solve different problems. Choosing the wrong one wastes time, money, and quality.</p>
+<h4>Use Prompt Engineering When</h4>
+<ul>
+<li>You need the model to follow a new <strong>instruction format</strong> or template.</li>
+<li>You need <strong>better reasoning</strong> on a problem the model already understands (chain-of-thought, few-shot examples).</li>
+<li>You want a <strong>fast iteration cycle</strong> — change a string, not a training run.</li>
+<li>The task is <strong>general</strong> and the base model is already capable.</li>
+<li>You have <strong>no labeled data</strong> or very little.</li>
+<li>Budget or infrastructure for training is limited.</li>
+</ul>
+<h4>Use Fine-Tuning When</h4>
+<ul>
+<li>You need the model to learn a <strong>consistent style, tone, or format</strong> (e.g., always respond in a specific JSON schema, or in a specific brand voice).</li>
+<li>You need to inject <strong>domain knowledge</strong> that the base model lacks or gets wrong (legal, medical, internal jargon).</li>
+<li>You want to <strong>reduce token cost</strong> — a fine-tuned 7B model can often replace a GPT-4 prompt for narrow tasks.</li>
+<li>You need <strong>lower latency</strong> — smaller fine-tuned models are faster than large prompted models.</li>
+<li>You have a <strong>large, clean labeled dataset</strong> (thousands of examples).</li>
+<li>Prompt engineering has plateaued and you need a quality step-change.</li>
+</ul>
+<h4>The Decision Framework</h4>
+<ol>
+<li><strong>Start with prompt engineering.</strong> It is cheap, fast, and surprisingly effective. Try few-shot, chain-of-thought, system prompts.</li>
+<li><strong>If prompts plateau, try RAG.</strong> For knowledge-grounded tasks, RAG often beats both prompting and fine-tuning.</li>
+<li><strong>If RAG + prompts still fall short, fine-tune.</strong> Especially when you need style, format, or domain-specific behavior that cannot be expressed in a prompt.</li>
+<li><strong>Consider LoRA / QLoRA</strong> for cost-efficient fine-tuning — you do not always need a full fine-tune.</li>
+</ol>
+<h4>Common Mistakes</h4>
+<ul>
+<li><strong>Fine-tuning too early:</strong> Without exhausting prompt engineering, you spend days on training to discover a 3-line prompt would have worked.</li>
+<li><strong>Fine-tuning for knowledge:</strong> Use RAG instead. Fine-tuning a model to "know" facts is brittle (the model forgets, and updates require retraining).</li>
+<li><strong>Fine-tuning without enough data:</strong> Under ~1,000 examples, fine-tuning often overfits or underperforms prompting.</li>
+</ul>`,
+      difficulty: "Intermediate",
+      tags: ["AI Engineer", "LLMs", "Fine-tuning", "Prompt Engineering"],
+      keyPoints: [
+        "Prompt engineering: instruction format, reasoning tricks, fast iteration, no labeled data needed",
+        "Fine-tuning: consistent style/format, domain knowledge, lower cost/latency (smaller model), need 1k+ labeled examples",
+        "Decision order: prompt first → RAG for knowledge → fine-tune for style/format/cost",
+        "Common mistake: fine-tuning for knowledge (use RAG), or fine-tuning without enough data (<1k examples usually fails)"
+      ]
+    },
+    {
+      question: "Why do most fine-tuning projects fail?",
+      answer: `<p>Industry estimates suggest 60–80% of LLM fine-tuning projects do not ship to production. The reasons are almost always process, not technical.</p>
+<h4>Why Fine-Tuning Projects Fail</h4>
+<ol>
+<li><strong>No clear success metric:</strong> "Better" is not a metric. Without a concrete eval (e.g., "faithfulness > 0.9 on a held-out test set"), you cannot tell if the fine-tune helped or hurt.</li>
+<li><strong>Bad or insufficient data:</strong> The #1 reason. Garbage in, garbage out. Common issues:
+  <ul>
+    <li>Too few examples (&lt;1,000 for most tasks).</li>
+    <li>Noisy or inconsistent labels.</li>
+    <li>Train/test contamination (test examples leak into training).</li>
+    <li>Mismatched distribution (training on formal text, deploying on chat).</li>
+  </ul>
+</li>
+<li><strong>Skipping the baseline:</strong> Fine-tuning without first measuring the prompted base model. You do not know if you are improving anything.</li>
+<li><strong>Overfitting to a small set:</strong> The model memorizes training examples but performs worse on real users. Eval set is critical.</li>
+<li><strong>Full fine-tuning when LoRA would do:</strong> Full fine-tunes are expensive, slow, and risky (catastrophic forgetting). LoRA / QLoRA is usually enough.</li>
+<li><strong>Wrong hyperparameters:</strong> Learning rate, epochs, warmup, scheduler — all matter. A bad config can destroy a base model's capabilities.</li>
+<li><strong>No eval set, only vibes:</strong> "It looks better" is not a deployment signal. Need a reproducible, automated test set.</li>
+<li><strong>Forgetting catastrophic forgetting:</strong> Fine-tuning can degrade the model's general capabilities (reasoning, instruction-following on unrelated tasks). Test for this.</li>
+<li><strong>Underestimating data pipeline work:</strong> Curating, cleaning, deduplicating, and labeling data takes 80% of the effort. Most teams underestimate this.</li>
+</ol>
+<h4>How to Make Fine-Tuning Succeed</h4>
+<ul>
+<li><strong>Start with a clear eval:</strong> 200+ labeled test examples that reflect real production traffic.</li>
+<li><strong>Measure the base model first:</strong> Establish a baseline on the eval set before any training.</li>
+<li><strong>Invest in data quality:</strong> Even 500 clean, diverse, well-labeled examples beat 50,000 noisy ones.</li>
+<li><strong>Use LoRA / QLoRA by default:</strong> Cheaper, faster, less catastrophic forgetting, easier to A/B test.</li>
+<li><strong>Track regression on general capabilities:</strong> Test on a held-out benchmark (MMLU, etc.) to make sure you did not break the model.</li>
+<li><strong>Treat it as iterative:</strong> Train → eval → diagnose → fix data or hyperparams → retrain. Expect 5-10 cycles.</li>
+</ul>
+<p>The TL;DR: <strong>data quality and evaluation discipline</strong> matter 10x more than the choice of base model or fine-tuning method.</p>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "LLMs", "Fine-tuning", "Production"],
+      keyPoints: [
+        "60-80% of fine-tuning projects do not ship — failures are usually process, not technical",
+        "Top reasons: no success metric, bad data, no baseline, overfitting, full fine-tune when LoRA suffices, no eval set",
+        "Success recipe: clear eval set, measure base model first, invest in data quality, use LoRA/QLoRA, watch for regression",
+        "Data quality and eval discipline matter 10x more than the choice of base model or fine-tuning method"
+      ]
     }
   ]
 };

@@ -333,6 +333,108 @@ export const ragQuestions = {
         "Metadata filter BEFORE retrieval (company/year/statement); ground + numeric verify in answer",
         "Evaluate on recall@k AND faithfulness — missed figure is as bad as wrong figure in finance"
       ]
+    },
+    {
+      question: "How do you build enterprise-grade RAG pipelines?",
+      answer: `<p>Enterprise RAG is not a single retrieval call — it is a multi-stage pipeline with access control, evaluation, and observability baked in.</p>
+<h4>Reference Architecture</h4>
+<ol>
+<li><strong>Ingestion pipeline:</strong>
+  <ul>
+    <li>Document loaders: PDF, DOCX, HTML, code, structured data (SQL, Notion, Confluence).</li>
+    <li>Cleaners: strip headers, footers, boilerplate; normalize unicode; extract tables.</li>
+    <li>Chunkers: semantic-aware (sentence boundaries, section-aware), not fixed-size. 256–1024 tokens with overlap.</li>
+    <li>Metadata enrichment: source, author, date, version, permissions, document type.</li>
+  </ul>
+</li>
+<li><strong>Indexing pipeline:</strong>
+  <ul>
+    <li>Embeddings: domain-tuned when possible (e.g., legal embeddings for legal docs).</li>
+    <li>Vector DB: Pinecone, Weaviate, Milvus, Qdrant, pgvector — pick by scale, cost, ops complexity.</li>
+    <li>Hybrid search: BM25 + vector, fused via RRF or learned reranker. Pure vector misses keyword matches.</li>
+    <li>Metadata filters: enable filtered retrieval by tenant, role, date, document type.</li>
+  </ul>
+</li>
+<li><strong>Query pipeline (per request):</strong>
+  <ul>
+    <li>Query rewriting: rephrase vague user queries; decompose multi-part questions.</li>
+    <li>Retrieval: hybrid + filtered by access control.</li>
+    <li>Reranking: cross-encoder rerank (Cohere, bge-reranker) for top-k precision.</li>
+    <li>Context construction: format retrieved chunks with metadata; respect token limits.</li>
+    <li>Generation: grounded prompt with citations; low temperature.</li>
+    <li>Post-processing: extract citations, verify faithfulness, log everything.</li>
+  </ul>
+</li>
+<li><strong>Cross-cutting concerns:</strong>
+  <ul>
+    <li>Access control at retrieval layer (filter by user role/tenant before sending to LLM).</li>
+    <li>Citations: every claim linked to a source document and chunk ID.</li>
+    <li>Observability: log queries, retrievals, generations, faithfulness scores, user feedback.</li>
+    <li>Evaluation: regression tests, golden datasets, online A/B tests.</li>
+    <li>Cost control: caching, query classification, cascade to smaller models.</li>
+  </ul>
+</li>
+</ol>
+<h4>Anti-Patterns to Avoid</h4>
+<ul>
+<li><strong>Fixed-size 500-token chunks with no overlap</strong> — splits mid-sentence; misses cross-chunk context.</li>
+<li><strong>Single embedding model for all domains</strong> — medical, legal, and code need different models.</li>
+<li><strong>No access control</strong> — RAG leaks data across tenants if filters are not enforced.</li>
+<li><strong>No evaluation</strong> — you cannot improve what you cannot measure.</li>
+</ul>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "RAG", "Enterprise AI", "Architecture"],
+      keyPoints: [
+        "Enterprise RAG = ingestion (load, clean, chunk, enrich metadata) + indexing (embed, hybrid, filters) + query (rewrite, retrieve, rerank, generate)",
+        "Cross-cutting: access control at retrieval layer, citations, observability, evaluation, cost control",
+        "Use hybrid search (BM25 + vector) — pure vector misses keyword matches; use rerankers for top-k precision",
+        "Anti-patterns: fixed-size chunks, single embedding model, no access control, no evaluation"
+      ]
+    },
+    {
+      question: "Why do chunking and retrieval strategies matter?",
+      answer: `<p>Chunking and retrieval are the two levers that determine <em>what</em> the LLM sees. Get them wrong, and the LLM hallucinates — no matter how good the model is.</p>
+<h4>Why Chunking Matters</h4>
+<p>The LLM only sees what you put in its context window. If the relevant fact is split across two chunks and the chunks are returned separately, the LLM never sees the complete answer.</p>
+<table style='border-collapse:collapse;margin:10px 0;'>
+<tr style='background:#f5f5f5;'><th style='padding:8px;border:1px solid #ddd;'>Strategy</th><th style='padding:8px;border:1px solid #ddd;'>Pros</th><th style='padding:8px;border:1px solid #ddd;'>Cons</th></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Fixed-size (e.g., 500 tokens)</td><td style='padding:8px;border:1px solid #ddd;'>Simple, predictable</td><td style='padding:8px;border:1px solid #ddd;'>Splits mid-sentence; loses context</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Sentence-aware</td><td style='padding:8px;border:1px solid #ddd;'>Respects boundaries</td><td style='padding:8px;border:1px solid #ddd;'>Variable chunk size; can be very long</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Section-aware (markdown headers)</td><td style='padding:8px;border:1px solid #ddd;'>Preserves document structure</td><td style='padding:8px;border:1px solid #ddd;'>Needs structured input</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Semantic (cluster similar sentences)</td><td style='padding:8px;border:1px solid #ddd;'>Coherent chunks</td><td style='padding:8px;border:1px solid #ddd;'>Slower, more complex</td></tr>
+<tr><td style='padding:8px;border:1px solid #ddd;'>Sliding window with overlap</td><td style='padding:8px;border:1px solid #ddd;'>Captures cross-chunk context</td><td style='padding:8px;border:1px solid #ddd;'>Doubles storage cost</td></tr>
+</table>
+<h4>Why Retrieval Strategy Matters</h4>
+<p>Even with perfect chunks, bad retrieval returns the wrong ones. The LLM cannot reason about information it does not have.</p>
+<ul>
+<li><strong>Top-k is a tradeoff:</strong> k=3 is fast and focused but may miss context. k=20 is comprehensive but wastes tokens and confuses the LLM.</li>
+<li><strong>Dense vs sparse vs hybrid:</strong>
+  <ul>
+    <li><strong>Dense (vector):</strong> great for semantic similarity ("how to handle errors" matches "exception management").</li>
+    <li><strong>Sparse (BM25):</strong> great for exact keywords, product names, error codes.</li>
+    <li><strong>Hybrid:</strong> combines both — usually wins. Fuse with RRF or a learned reranker.</li>
+  </ul>
+</li>
+<li><strong>Reranking:</strong> A first-stage retriever (fast, recall-oriented) gets top-100, then a cross-encoder reranker (slow, precision-oriented) re-scores them. Standard production pattern.</li>
+<li><strong>Query rewriting:</strong> User queries are often vague or have implicit context. Rewrite them ("What was Q3 revenue?" → "What was the company's revenue in Q3 2024?") to improve recall.</li>
+<li><strong>Multi-query / HyDE:</strong> Generate multiple variations of the query, retrieve for each, merge results. Improves recall for ambiguous queries.</li>
+</ul>
+<h4>The Interaction</h4>
+<p>Smaller chunks = better granularity but more chances to lose cross-chunk context. Larger chunks = better context but more noise and wasted tokens. The "right" answer depends on the task:</p>
+<ul>
+<li><strong>Q&amp;A over FAQs:</strong> small chunks (256 tokens), top-k=3, dense retrieval.</li>
+<li><strong>Legal / compliance:</strong> larger chunks (1024+ tokens), high recall, hybrid + reranking, citation required.</li>
+<li><strong>Code search:</strong> function-level chunks, hybrid (text + AST), low top-k.</li>
+</ul>
+<p>The lesson: <strong>chunking and retrieval are not afterthoughts — they set the upper bound on answer quality.</strong> A frontier model with bad retrieval will lose to a small model with great retrieval.</p>`,
+      difficulty: "Advanced",
+      tags: ["AI Engineer", "RAG", "Retrieval", "Architecture"],
+      keyPoints: [
+        "Chunking sets the upper bound on answer quality — bad chunks = LLM never sees the right fact",
+        "Chunking strategies: fixed (simple, breaks context), sentence-aware, section-aware, semantic, sliding window with overlap",
+        "Retrieval strategies: dense (semantic), sparse/BM25 (keywords), hybrid (usually wins), reranking (precision), query rewriting (recall)",
+        "Smaller chunks = better granularity, more context loss; larger chunks = better context, more noise — pick by task"
+      ]
     }
   ]
 };
