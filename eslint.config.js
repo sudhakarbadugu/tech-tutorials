@@ -36,10 +36,13 @@ export default defineConfig([
   // Data/content files contain user-facing strings (regex snippets, code
   // examples, paths) where backslash handling is intentional display content,
   // so the blanket no-useless-escape rule creates false positives there.
+  // Likewise, no-irregular-whitespace flags intentional Unicode whitespace
+  // characters used in code examples to demo Java's strip() vs trim().
   {
     files: ['src/data/**/*.js'],
     rules: {
       'no-useless-escape': 'off',
+      'no-irregular-whitespace': 'off',
     },
   },
 ])

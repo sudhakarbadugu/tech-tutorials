@@ -10,12 +10,6 @@ const ALL_SUBJECTS = Object.keys(subjectMeta)
 const SUBJECTS_WITH_FIVE_MODULES = ALL_SUBJECTS.filter(
   (subject) => !['css', 'java'].includes(subject)
 )
-const SUBJECTS_WITH_SIX_MODULES = ALL_SUBJECTS.filter(
-  (subject) => ['css'].includes(subject)
-)
-const SUBJECTS_WITH_EIGHT_MODULES = ALL_SUBJECTS.filter(
-  (subject) => ['java'].includes(subject)
-)
 
 const SIX_MODULE_SUBJECTS = ['css']
 
