@@ -2640,7 +2640,7 @@
 }
 
 .prepInner {
-  max-width: 820px;
+  max-width: 1320px;
   margin: 0 auto;
 }
 
@@ -2790,7 +2790,7 @@
 .mockTimerBar[data-low="true"] { background: #dc2626; }
 
 .mockCard {
-  padding: 1.5rem;
+  padding: 1.75rem 2rem;
   border: 1px solid var(--border-color);
   border-radius: 14px;
   background: var(--bg-primary);
@@ -2841,27 +2841,39 @@
 }
 
 .prepStatsRow {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin: 1.5rem 0;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  max-width: 720px;
+  margin: 1.75rem auto;
 }
 
 .prepStat {
   text-align: center;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow);
 }
 
 .prepStatValue {
   display: block;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: var(--accent-color);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
 }
 
 .prepStatLabel {
-  font-size: 0.75rem;
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
+  font-weight: 600;
 }
 
 .revisionList {

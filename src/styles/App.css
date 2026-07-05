@@ -1663,6 +1663,62 @@ a:focus-visible {
   color: var(--text-primary);
 }
 
+/* ===== Language Tabs (Python / Java Implementation merged) ===== */
+.language-tabs-section {
+  margin: 16px 0 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-secondary, var(--card-bg, transparent));
+  overflow: hidden;
+}
+
+.language-tabs-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 12px 14px 0;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-primary, transparent);
+}
+
+.language-tab-chip {
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary, transparent);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.language-tab-chip:hover {
+  border-color: var(--accent-color, #3b82f6);
+  color: var(--text-primary);
+}
+
+.language-tab-chip-active {
+  background: var(--accent-color, #3b82f6);
+  border-color: var(--accent-color, #3b82f6);
+  color: #fff;
+}
+
+.language-tab-chip-active:hover {
+  color: #fff;
+}
+
+.language-tab-panel {
+  padding: 14px;
+}
+
+.language-tab-panel .example-box {
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
 /* ===== Tables ===== */
 .table-wrapper {
   overflow-x: auto;
