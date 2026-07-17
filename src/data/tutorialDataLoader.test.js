@@ -8,7 +8,7 @@ import {
 const ALL_SUBJECTS = Object.keys(subjectMeta)
 
 const SUBJECTS_WITH_FIVE_MODULES = ALL_SUBJECTS.filter(
-  (subject) => !['css', 'java'].includes(subject)
+  (subject) => !['css', 'java', 'system-design'].includes(subject)
 )
 
 const SIX_MODULE_SUBJECTS = ['css']
@@ -49,8 +49,8 @@ function assertValidTopicContent(topicContent, label) {
 
 describe('tutorialDataLoader', () => {
   describe('subjectMeta', () => {
-    it('registers all 20 tutorial subjects', () => {
-      expect(ALL_SUBJECTS).toHaveLength(20)
+    it('registers all 21 tutorial subjects', () => {
+      expect(ALL_SUBJECTS).toHaveLength(21)
       expect(ALL_SUBJECTS).toEqual(
         expect.arrayContaining([
           'ai',

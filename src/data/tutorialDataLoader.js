@@ -21,6 +21,7 @@ import { cssStructure } from "./cssStructure.js";
 import { reactStructure } from "./reactStructure.js";
 import { angularStructure } from "./angularStructure.js";
 import { reactNativeStructure } from "./reactNativeStructure.js";
+import { systemDesignStructure } from "./systemDesignStructure.js";
 
 // Hand-maintained structures for programming subjects
 
@@ -293,6 +294,7 @@ export const subjectMeta = {
   rl: { title: "Reinforcement Learning Algorithms" },
   stats: { title: "Inferential Statistics" },
   timeseries: { title: "Time Series Analysis" },
+  "system-design": { title: "System Design Patterns" },
 };
 
 // Cache for loaded content
@@ -367,6 +369,9 @@ export async function loadSubjectContent(subject) {
       case "timeseries":
         content = (await import("./tutorialData.js")).timeseriesContent;
         break;
+      case "system-design":
+        content = (await import("./systemDesignContent.js")).systemDesignContent;
+        break;
       default:
         content = {};
     }
@@ -422,6 +427,8 @@ export function getSubjectStructure(subject) {
       return statsStructure;
     case "timeseries":
       return timeseriesStructure;
+    case "system-design":
+      return systemDesignStructure;
     default:
       return {};
   }
