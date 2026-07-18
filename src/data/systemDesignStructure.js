@@ -186,6 +186,58 @@ export const systemDesignStructure = {
       { id: "read-heavy-vs-write-heavy", title: "Read-Heavy vs Write-Heavy Systems" },
     ],
   },
+  module15: {
+    title: "Module 15: Networking & Distributed Systems Core",
+    topics: [
+      { id: "module-intro", title: "Chapter Overview" },
+      { id: "dns", title: "DNS & Name Resolution" },
+      { id: "consensus-raft-paxos", title: "Consensus Algorithms (Raft & Paxos)" },
+      { id: "distributed-id-generation", title: "Distributed ID Generation" },
+      { id: "distributed-locking", title: "Distributed Locking" },
+      { id: "service-discovery", title: "Service Discovery" },
+      { id: "vector-clocks", title: "Vector Clocks & Conflict Resolution" },
+    ],
+  },
+  module16: {
+    title: "Module 16: Search & Location Systems",
+    topics: [
+      { id: "module-intro", title: "Chapter Overview" },
+      { id: "inverted-index", title: "Inverted Index & Elasticsearch" },
+      { id: "typeahead-autocomplete", title: "Typeahead & Autocomplete" },
+      { id: "geohash-quadtree", title: "Geohash & Quadtree (Spatial Indexing)" },
+    ],
+  },
+  module17: {
+    title: "Module 17: Capstone — News Feed System",
+    topics: [
+      { id: "module-intro", title: "Chapter Overview" },
+      { id: "news-feed-overview", title: "News Feed: Requirements & Scale" },
+      { id: "news-feed-data-model", title: "News Feed: Data Model & Storage" },
+      { id: "news-feed-fanout", title: "News Feed: Fan-out (Push vs Pull)" },
+      { id: "news-feed-ranking", title: "News Feed: Ranking & ML Signals" },
+      { id: "news-feed-scaling", title: "News Feed: Scaling to 100M+ Users" },
+    ],
+  },
+  module18: {
+    title: "Module 18: Capstone — Web Crawler",
+    topics: [
+      { id: "module-intro", title: "Chapter Overview" },
+      { id: "crawler-overview", title: "Web Crawler: Requirements & Scale" },
+      { id: "crawler-frontier", title: "Web Crawler: URL Frontier & Scheduling" },
+      { id: "crawler-politeness-dedup", title: "Web Crawler: Politeness & Deduplication" },
+      { id: "crawler-scaling", title: "Web Crawler: Scaling to Billions of Pages" },
+    ],
+  },
+  module19: {
+    title: "Module 19: Capstone — Video Streaming (YouTube/Netflix)",
+    topics: [
+      { id: "module-intro", title: "Chapter Overview" },
+      { id: "video-overview", title: "Video Streaming: Requirements & Scale" },
+      { id: "video-transcoding", title: "Video Streaming: Upload & Transcoding" },
+      { id: "video-delivery", title: "Video Streaming: Adaptive Delivery (HLS/DASH)" },
+      { id: "video-scaling", title: "Video Streaming: Scaling & CDN Strategy" },
+    ],
+  },
   module0: {
     title: "Module 0: Interview Fundamentals",
     topics: [

@@ -66,7 +66,7 @@ export const capstones = {
           heading: 'Architecture',
           diagram: `graph TB
     Client --> Router[Consistent Hash Router]
-    Router -->|hash(key) % ring| N1[Node 1<br/>Primary]
+    Router -->|"hash(key) % ring"| N1[Node 1<br/>Primary]
     Router --> N2[Node 2<br/>Primary]
     Router --> N3[Node 3<br/>Primary]
     

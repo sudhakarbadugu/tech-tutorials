@@ -1004,10 +1004,10 @@ print(f"Read from replica: {replica.read('user:1')}")  # Alice (after lag)`,
           diagram: {
             chart: `flowchart TB
     A[App Server] --> R[Router/Proxy]
-    R --> |hash(user_id) % 4 = 0| S0[(Shard 0)]
-    R --> |hash(user_id) % 4 = 1| S1[(Shard 1)]
-    R --> |hash(user_id) % 4 = 2| S2[(Shard 2)]
-    R --> |hash(user_id) % 4 = 3| S3[(Shard 3)]
+    R --> |"hash(user_id) % 4 = 0"| S0[(Shard 0)]
+    R --> |"hash(user_id) % 4 = 1"| S1[(Shard 1)]
+    R --> |"hash(user_id) % 4 = 2"| S2[(Shard 2)]
+    R --> |"hash(user_id) % 4 = 3"| S3[(Shard 3)]
     S0 --> |Replication| R0[(Replica 0)]
     S1 --> |Replication| R1[(Replica 1)]
     style R fill:#f39c12,color:#fff
@@ -2250,7 +2250,7 @@ print(get_user_l1('user:42'))`,
     A->>A: 5s elapsed — timeout!
     A-->>A: Return error / fallback
     B-->>A: Response (too late, ignored)
-    Note over A,B: Without timeout, A would wait forever\nThread pool exhausted → cascading failure`,
+    Note over A,B: Without timeout, A waits forever. Thread pool exhaustion cascades`,
             caption: 'Timeout prevents indefinite waiting. After timeout, the thread is freed for other requests.'
           }
         },
@@ -2650,7 +2650,7 @@ for i in range(10):
     style S1 fill:#e74c3c,color:#fff
     style S2 fill:#2ecc71,color:#fff
     style S3 fill:#2ecc71,color:#fff
-    Note: "Payment pool exhausted?\nOther services unaffected!"`,
+    N1["Payment pool exhausted — other services unaffected"]`,
             caption: 'Each service gets its own thread pool. If Payment exhausts its pool, Inventory and Notification are unaffected.'
           }
         },
@@ -3375,9 +3375,10 @@ print('Payment replicas (CPU=40%, queue=150):', get_recommended_replicas('paymen
         LB --> S3[Server 1]
         LB --> S4[Server 2]
         LB --> S5[Server 3]
-        S3 --> Redis["(Redis<br/>Session Store)"]
+        S3 --> Redis["Redis Session Store"]
         S4 --> Redis
-        S5 --> Redis`,
+        S5 --> Redis
+    end`,
         text: 'Stateful servers require sticky sessions and lose state on failure. Stateless servers share a session store (Redis), so any instance can serve any client.'
       },
       {
@@ -4763,14 +4764,14 @@ print(delhi.get('image_1.jpg'))`,
     Gateway -->|Compose| OrderSub[Order Subgraph]
     Gateway -->|Compose| ReviewSub[Review Subgraph]
     
-    UserSub -->|type User @key(id)| UserDB["(User DB)"]
-    OrderSub -->|type Order @key(id)| OrderDB["(Order DB)"]
-    ReviewSub -->|type Review| ReviewDB["(Review DB)"]
+    UserSub -->|"type User key(id)"| UserDB["User DB"]
+    OrderSub -->|"type Order key(id)"| OrderDB["Order DB"]
+    ReviewSub -->|"type Review"| ReviewDB["Review DB"]
     
     OrderSub -.->|extend User| UserSub
     ReviewSub -.->|extend User| UserSub
     
-    Client -->|Single query| Query["query { user(id:1) { name orders { total reviews { rating } } } }"]
+    Client -->|"Single query"| Query["query user orders reviews"]
     Query --> Gateway`,
         text: 'The gateway composes subgraphs into a supergraph. Each subgraph owns its types. Entities (@key) can be extended by other subgraphs. Clients query one endpoint and get data from all subgraphs.'
       },
@@ -5501,7 +5502,7 @@ print(f'Readiness (after startup): {hc.readiness()}')`,
         heading: 'Chaos Engineering Process',
         diagram: `graph TB
     subgraph "Chaos Experiment Cycle"
-        H[Form Hypothesis<br/>"Service A can survive losing 1 instance"] --> B[Define Blast Radius<br/>1 instance in staging]
+        H["Form Hypothesis: Service A can survive losing 1 instance"] --> B["Define Blast Radius: 1 instance in staging"]
         B --> I[Inject Failure<br/>Kill instance]
         I --> O[Observe<br/>Metrics, logs, user impact]
         O --> A{System stable?}
@@ -7568,7 +7569,7 @@ print("Range:", rg.next_code(), rg.next_code())`,
         User[Click] --> Redis["(Redis Cache)"]
         Redis -->|95% Hit| Redirect[301 Redirect]
         Redis -->|5% Miss| LB[Shard Router]
-        LB -->|hash(code) % 3| R1
+        LB -->|"hash(code) % 3"| R1
         LB --> R2
         LB --> R3
     end

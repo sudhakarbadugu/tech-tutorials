@@ -622,16 +622,16 @@ export const systemDesignModule14 = {
           diagram: {
             chart: `flowchart TB
     subgraph REST["REST API"]
-      C1[Client] -->|GET /users/42| LB1[Load Balancer]
+      C1[Client] -->|"GET /users/42"| LB1[Load Balancer]
       LB1 --> S1[App Server]
       S1 --> DB1[(Database)]
-      S1 -->|200 {user}| C1
+      S1 -->|"200 user"| C1
     end
     subgraph RPC["RPC Service"]
-      C2[Client] -->|GetUser(42)| LB2[Load Balancer]
+      C2[Client] -->|"GetUser(42)"| LB2[Load Balancer]
       LB2 --> S2[gRPC Server]
       S2 --> DB2[(Database)]
-      S2 -->|User proto| C2
+      S2 -->|"User proto"| C2
     end`,
             caption: 'REST exposes resources via HTTP. RPC exposes remote procedures via generated stubs.'
           }
