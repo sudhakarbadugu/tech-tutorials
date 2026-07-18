@@ -52,7 +52,7 @@ export const systemDesignContent = {
         {
           heading: 'Chapter Roadmap',
           diagram: `graph LR
-    T1[Message Queues] -->     T2[Publish-Subscribe] -->     T3[Request-Response] -->     T4[Webhooks] -->     T5[Streaming (WebSocket & SSE)] -->     T6[Event-Driven Architecture]`,
+    T1[Message Queues] -->     T2[Publish-Subscribe] -->     T3[Request-Response] -->     T4[Webhooks] -->     T5["Streaming (WebSocket & SSE)"] -->     T6[Event-Driven Architecture]`,
           text: 'Recommended reading order — each topic builds on the previous one.'
         }
       ]
@@ -330,7 +330,86 @@ t.start()`,
           }
         },
         {
-          heading: 'REST vs gRPC vs GraphQL',
+          heading: 'What is REST?',
+          text: 'REST (Representational State Transfer) is an architectural style for designing APIs over HTTP. It treats server resources as URLs (e.g. /users/42) and uses standard HTTP verbs — GET to fetch, POST to create, PUT/PATCH to update, DELETE to remove. Responses are typically JSON. REST is stateless (each request carries everything it needs), cacheable, and human-readable. It is the most widely used API style for public web services and mobile apps.',
+          list: [
+            'Resources are identified by URLs: GET /orders/1001',
+            'Uses HTTP verbs: GET (read), POST (create), PUT/PATCH (update), DELETE (remove)',
+            'Stateless — no server-side session between requests',
+            'Cacheable — HTTP caching headers (ETag, Cache-Control) work natively',
+            'Typically JSON over HTTP/1.1 or HTTP/2',
+            'Best for: public APIs, web apps, third-party integrations'
+          ]
+        },
+        {
+          heading: 'REST in the Real World — Industry Usage',
+          text: 'REST powers the majority of public web APIs today. Companies like Stripe, GitHub, Twitter, and Shopify expose REST APIs that millions of developers rely on. Here is how REST is used across different industries:',
+          list: [
+            'Stripe — Payment processing API: /v1/charges, /v1/customers, /v1/refunds. Versioned via URL path, uses idempotency keys for safe retries',
+            'GitHub — Repository API: /repos/{owner}/{repo}/issues, /repos/{owner}/{repo}/pulls. Uses ETag-based conditional requests and rate limiting',
+            'Twitter/X — Timeline API: /2/tweets, /2/users/{id}/tweets. OAuth 2.0 bearer tokens, pagination cursors',
+            'Shopify — E-commerce API: /admin/api/2024-01/orders.json, /admin/api/2024-01/products.json. Versioned by date in URL path',
+            'Amazon S3 — Storage API: PUT /bucket/key, GET /bucket/key. Uses HTTP verbs directly on resource paths, signed headers for auth',
+            'Twilio — SMS API: /2010-04-01/Accounts/{Sid}/Messages.json. Versioned by date, uses POST for actions'
+          ]
+        },
+        {
+          heading: 'REST API Design — Industry Best Practices',
+          text: 'Building a production-grade REST API involves more than just CRUD endpoints. Follow these best practices used by top engineering teams:',
+          list: [
+            'Use nouns for resources, not verbs: /users/{id} NOT /getUser?id=42 — the HTTP verb already describes the action',
+            'Version your API from day one: /v1/users, /v2/users — never break existing clients silently',
+            'Use plural nouns for collections: /orders, /products, /users — consistent and predictable',
+            'Filtering and pagination: /orders?status=paid&page=2&limit=50 — use query params, not URL segments',
+            'Return proper HTTP status codes: 200 OK, 201 Created, 204 No Content, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 409 Conflict, 422 Unprocessable Entity, 429 Too Many Requests, 500 Internal Error',
+            'Use idempotency keys for POST/PUT: send Idempotency-Key header so retries do not create duplicate resources (critical for payments)',
+            'Rate limiting: return 429 with Retry-After header and X-RateLimit-Remaining — protect your API from abuse',
+            'Pagination: use cursor-based pagination (next_token) for large datasets — offset pagination gets slow at scale',
+            'HATEOAS (optional): include hypermedia links in responses so clients can discover related resources without hardcoding URLs',
+            'Always validate input: reject malformed payloads with 400 + detailed error message — never let bad data reach your DB',
+            'Consistent error format: {"error": {"code": "INVALID_EMAIL", "message": "Email format is invalid", "field": "email"}} — helps clients debug',
+            'Use ETags for optimistic concurrency: If-Match: "etag123" — prevents lost updates when two clients edit the same resource',
+            'Cache-Control headers: set Cache-Control: public, max-age=300 for cacheable responses, no-store for sensitive data',
+            'CORS: configure Access-Control-Allow-Origin properly — do not use * for authenticated APIs'
+          ]
+        },
+        {
+          heading: 'REST API — Example with Best Practices',
+          example: {
+            title: 'Production-grade REST API response with best practices',
+            code: 'GET /v1/orders/1001 HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer eyJhbGciOi...\nAccept: application/json\nIf-None-Match: "etag-abc123"\n\n--- Response ---\nHTTP/1.1 200 OK\nContent-Type: application/json\nETag: "etag-def456"\nCache-Control: private, max-age=60\nX-RateLimit-Remaining: 98\nX-RateLimit-Reset: 1721234567\n\n{\n  "id": "ord_1001",\n  "status": "paid",\n  "total": 149.99,\n  "items": [\n    {"sku": "WIDGET-01", "qty": 2, "price": 49.99},\n    {"sku": "CABLE-USB", "qty": 1, "price": 50.01}\n  ],\n  "customer": {"id": "cus_42", "email": "alice@example.com"},\n  "_links": {\n    "self": {"href": "/v1/orders/1001"},\n    "customer": {"href": "/v1/customers/cus_42"},\n    "refund": {"href": "/v1/orders/1001/refund", "method": "POST"}\n  }\n}',
+            output: 'Proper REST response with ETag for caching, rate limit headers, HATEOAS links, and consistent JSON structure.',
+            language: 'http',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'What is gRPC?',
+          text: 'gRPC is a high-performance RPC (Remote Procedure Call) framework built by Google. It uses HTTP/2 for transport and Protocol Buffers (Protobuf) as the binary serialization format. Instead of resources and verbs, you define service methods in a .proto file and generate client/server stubs for 10+ languages. gRPC supports unary (request-response), server streaming, client streaming, and bidirectional streaming. It is ideal for low-latency internal microservice communication.',
+          list: [
+            'Define services in .proto files: rpc GetUser(UserRequest) returns (UserResponse)',
+            'Binary format (Protobuf) — smaller payloads, faster parsing than JSON',
+            'HTTP/2 multiplexing — multiple concurrent calls over one TCP connection',
+            'Native streaming: server-streaming, client-streaming, bidirectional',
+            'Auto-generated stubs for Go, Java, Python, Node, Rust, C++, etc.',
+            'Best for: internal microservices, low-latency inter-service calls, polyglot systems'
+          ]
+        },
+        {
+          heading: 'What is GraphQL?',
+          text: 'GraphQL is a query language for APIs developed by Facebook. Instead of multiple endpoints, a single POST /graphql endpoint accepts a query that specifies exactly which fields the client needs. The server resolves the query and returns a single JSON response. This solves over-fetching (getting too much data) and under-fetching (needing multiple round-trips). GraphQL uses a strongly-typed schema (SDL) and supports real-time updates via subscriptions.',
+          list: [
+            'Single endpoint: POST /graphql with a query body',
+            'Client specifies fields: { user(id:1) { name email orders { total } } }',
+            'Solves over-fetching — only requested fields are returned',
+            'Solves under-fetching — nested data in one request, no N+1 calls',
+            'Strongly-typed schema (SDL) with auto-generated docs',
+            'Subscriptions for real-time updates over WebSocket',
+            'Best for: flexible client queries, mobile apps (save bandwidth), aggregating multiple services'
+          ]
+        },
+        {
+          heading: 'REST vs gRPC vs GraphQL — Comparison',
           table: {
             headers: ['Aspect', 'REST', 'gRPC', 'GraphQL'],
             rows: [
@@ -342,6 +421,16 @@ t.start()`,
               ['Use Case', 'Public APIs, web', 'Internal microservices', 'Flexible client queries']
             ]
           }
+        },
+        {
+          heading: 'When to Use Which?',
+          text: 'There is no single winner — each protocol fits different scenarios. Many systems use a hybrid: gRPC between internal microservices, REST for public-facing APIs, and GraphQL for clients that need flexible queries (mobile apps, dashboards).',
+          list: [
+            'REST → public APIs, third-party integrations, simple CRUD, browser apps',
+            'gRPC → internal microservice-to-microservice calls, low-latency systems, polyglot teams',
+            'GraphQL → mobile apps (save bandwidth), complex UIs needing nested data, aggregating multiple backend services',
+            'Hybrid example: Mobile app uses GraphQL → gateway resolves via gRPC calls to internal services → external partners use REST webhooks'
+          ]
         },
         {
           heading: 'Python Example — FastAPI REST Endpoint',
@@ -424,7 +513,7 @@ async def create_user(user: User):
     participant W as Webhook Endpoint
     participant DB as Your Database
     S->>S: Payment succeeds
-    S->>W: POST /webhooks/stripe\n{event: "payment.succeeded", id: "evt_123"}
+    S->>W: POST /webhooks/stripe {event: payment.succeeded, id: evt_123}
     W->>W: Verify HMAC signature
     W->>DB: Check idempotency (evt_123)
     DB-->>W: Not processed yet
@@ -538,8 +627,8 @@ def stripe_webhook():
     S->>C: Push another update
     Note over C,S: SSE (server → client)
     C->>S: GET /events (Accept: text/event-stream)
-    S-->>C: data: {"price": 150}\n\n
-    S-->>C: data: {"price": 152}\n\n`,
+    S-->>C: data: {"price": 150}
+    S-->>C: data: {"price": 152}`,
             caption: 'WebSocket = bidirectional. SSE = server-to-client only. Both keep connection open.'
           }
         },
@@ -770,7 +859,7 @@ bus.publish({'type': 'OrderPlaced', 'order_id': 12345, 'amount': 99.99})`,
         {
           heading: 'Chapter Roadmap',
           diagram: `graph LR
-    T1[Replication] -->     T2[Sharding & Partitioning] -->     T3[Consistent Hashing] -->     T4[Event Sourcing] -->     T5[CQRS] -->     T6[Write-Ahead Log (WAL)]`,
+    T1[Replication] -->     T2["Sharding & Partitioning"] -->     T3[Consistent Hashing] -->     T4[Event Sourcing] -->     T5[CQRS] -->     T6["Write-Ahead Log (WAL)"]`,
           text: 'Recommended reading order — each topic builds on the previous one.'
         }
       ]
@@ -1141,7 +1230,7 @@ print(ch.get_node('user:42'))   # Same key → same node always`,
     E2 --> ES
     E3 --> ES
     ES --> P[Projection:\nCurrent State]
-    P --> R[Read Model:\nOrder {id, items, status}]
+    P --> R["Read Model: Order {id, items, status}"]
     style ES fill:#9b59b6,color:#fff
     style P fill:#2ecc71,color:#fff`,
             caption: 'Commands produce events. Events are appended to the store. Projections build current state by replaying events.'
@@ -1516,7 +1605,7 @@ print(store.get('user:1'))  # Alice
         {
           heading: 'Chapter Roadmap',
           diagram: `graph LR
-    T1[Cache-Aside (Lazy Loading)] -->     T2[Write-Through Cache] -->     T3[Write-Behind (Write-Back)] -->     T4[Cache Eviction Policies] -->     T5[CDN Caching] -->     T6[Multi-Tier Caching]`,
+    T1["Cache-Aside (Lazy Loading)"] -->     T2[Write-Through Cache] -->     T3["Write-Behind (Write-Back)"] -->     T4[Cache Eviction Policies] -->     T5[CDN Caching] -->     T6[Multi-Tier Caching]`,
           text: 'Recommended reading order — each topic builds on the previous one.'
         }
       ]
@@ -2132,7 +2221,7 @@ print(get_user_l1('user:42'))`,
         {
           heading: 'Chapter Roadmap',
           diagram: `graph LR
-    T1[Timeouts] -->     T2[Retries & Backoff] -->     T3[Idempotency] -->     T4[Circuit Breaker] -->     T5[Bulkhead Pattern] -->     T6[Rate Limiting]`,
+    T1[Timeouts] -->     T2["Retries & Backoff"] -->     T3[Idempotency] -->     T4[Circuit Breaker] -->     T5[Bulkhead Pattern] -->     T6[Rate Limiting]`,
           text: 'Recommended reading order — each topic builds on the previous one.'
         }
       ]
@@ -2344,14 +2433,14 @@ print(call_api())`,
     participant C as Client
     participant S as Server
     participant DB as Idempotency Store
-    C->>S: POST /charge\nIdempotency-Key: abc-123
+    C->>S: POST /charge (Idempotency-Key: abc-123)
     S->>DB: Check key "abc-123"
     DB-->>S: Not found
     S->>S: Process charge ($100)
     S->>DB: Store (abc-123 → {status: "charged", amount: 100})
     S-->>C: 200 {status: "charged", amount: 100}
     Note over C: Network error — retry
-    C->>S: POST /charge\nIdempotency-Key: abc-123
+    C->>S: POST /charge (Idempotency-Key: abc-123)
     S->>DB: Check key "abc-123"
     DB-->>S: Found: {status: "charged", amount: 100}
     S-->>C: 200 {status: "charged", amount: 100}
@@ -3177,9 +3266,9 @@ for user_id in ['user_1001', 'user_1002', 'user_1003', 'user_1004']:
     Gateway --> OrderService[Order Service<br/>5 replicas]
     Gateway --> PaymentService[Payment Service<br/>10 replicas]
     
-    UserService --> UserDB[(User DB)]
-    OrderService --> OrderDB[(Order DB)]
-    PaymentService --> PaymentDB[(Payment DB)]
+    UserService --> UserDB["(User DB)"]
+    OrderService --> OrderDB["(Order DB)"]
+    PaymentService --> PaymentDB["(Payment DB)"]
     
     subgraph "Service Mesh"
         sidecar1[Sidecar Proxy] -.-> UserService
@@ -3286,7 +3375,7 @@ print('Payment replicas (CPU=40%, queue=150):', get_recommended_replicas('paymen
         LB --> S3[Server 1]
         LB --> S4[Server 2]
         LB --> S5[Server 3]
-        S3 --> Redis[(Redis<br/>Session Store)]
+        S3 --> Redis["(Redis<br/>Session Store)"]
         S4 --> Redis
         S5 --> Redis`,
         text: 'Stateful servers require sticky sessions and lose state on failure. Stateless servers share a session store (Redis), so any instance can serve any client.'
@@ -3750,8 +3839,8 @@ store2.read('user')
     end
     
     subgraph "Outbox Pattern"
-        App[Application] -->|1. Write + Event| DB[(Database)]
-        App -->|2. Read outbox| Outbox[(Outbox Table)]
+        App[Application] -->|1. Write + Event| DB["(Database)"]
+        App -->|2. Read outbox| Outbox["(Outbox Table)"]
         Outbox -->|3. Publish| MQ[Message Queue]
         MQ -->|4. Consume| Other[Other Services]
     end`,
@@ -4093,7 +4182,7 @@ print(f'  Read: {cp_node.read("user")}')  # Rejected`,
     T1[API Gateway] --> T2[BFF]
     T2 --> T3[API Versioning]
     T3 --> T4[Edge Rate Limiting]
-    T4 --> T5[CDN & Edge]
+    T4 --> T5["CDN & Edge"]
     T5 --> T6[GraphQL Federation]`,
           text: 'Recommended reading order \u2014 each topic builds on the previous one.'
         }
@@ -4429,7 +4518,7 @@ print('v3:', api.serve('/users', 3))`,
         heading: 'Edge Rate Limiting Architecture',
         diagram: `graph TB
     Client --> Edge[Edge / API Gateway]
-    Edge -->|Check| Redis[(Redis<br/>Rate Limit Store)]
+    Edge -->|Check| Redis["(Redis<br/>Rate Limit Store)"]
     
     Edge -->|Under limit| Backend[Backend Service]
     Edge -->|Over limit| Reject[429 Too Many Requests]
@@ -4674,9 +4763,9 @@ print(delhi.get('image_1.jpg'))`,
     Gateway -->|Compose| OrderSub[Order Subgraph]
     Gateway -->|Compose| ReviewSub[Review Subgraph]
     
-    UserSub -->|type User @key(id)| UserDB[(User DB)]
-    OrderSub -->|type Order @key(id)| OrderDB[(Order DB)]
-    ReviewSub -->|type Review| ReviewDB[(Review DB)]
+    UserSub -->|type User @key(id)| UserDB["(User DB)"]
+    OrderSub -->|type Order @key(id)| OrderDB["(Order DB)"]
+    ReviewSub -->|type Review| ReviewDB["(Review DB)"]
     
     OrderSub -.->|extend User| UserSub
     ReviewSub -.->|extend User| UserSub
@@ -5058,7 +5147,7 @@ bg.rollback()`,
     Rules -->|Environment| Env[Prod vs Staging]
     Rules -->|Kill switch| Kill[Instant off]
     
-    FFService --> Store[(Flag Config Store)]
+    FFService --> Store["(Flag Config Store)"]
     Admin[Admin Dashboard] -->|Toggle| Store
     
     App -->|flag=on| FeatureA[New Feature]
@@ -5696,7 +5785,7 @@ for key, val, ts in events:
         heading: 'CDC Architecture',
         diagram: `graph LR
     subgraph "Source Database"
-        DB[(PostgreSQL)] --> WAL[WAL Log]
+        DB["(PostgreSQL)"] --> WAL[WAL Log]
         WAL -->|Debezium Connector| Connector[Debezium Source Connector]
     end
     
@@ -5845,7 +5934,7 @@ print(f'\\nStats: {dict(processor.stats)}')`,
     subgraph "Exactly-Once"
         A3[Producer] -->|transactional send| B3[Broker]
         B3 -->|deliver| C3[Consumer]
-        C3 -->|process + commit offset<br/>in same transaction| DB[(DB + Offset Store)]
+        C3 -->|process + commit offset<br/>in same transaction| DB["(DB + Offset Store)"]
         C3 -.->|crash| Replay[Replay from last committed offset]
         Note3[No loss, no duplicates]
     end`,
@@ -6094,7 +6183,7 @@ print('Spark:', spark_word_count(docs))`,
       {
         heading: 'Lambda Architecture',
         diagram: `graph TB
-    Data[New Data] -->|Append| BatchStore[(Immutable Raw Data Store)]
+    Data[New Data] -->|Append| BatchStore["(Immutable Raw Data Store)"]
     Data -->|Stream| Speed[Speed Layer<br/>Storm/Flink]
     
     BatchStore -->|Batch Process| BatchViews[Batch Views<br/>Hadoop/Spark]
@@ -6229,12 +6318,12 @@ print(serving.query('about'))   # batch=2 + realtime=2 = 4`,
       {
         heading: 'Kappa Architecture',
         diagram: `graph TB
-    Data[New Data] -->|Append| Kafka[(Kafka Log<br/>Retains all events)]
+    Data[New Data] -->|Append| Kafka["(Kafka Log<br/>Retains all events)"]
     
     Kafka -->|Real-time| Processor1[Stream Processor v2<br/>Real-time view]
     Kafka -->|Replay from offset 0| Processor2[Stream Processor v2<br/>Reprocessing view]
     
-    Processor1 -->|Current views| ServingDB[(Serving DB)]
+    Processor1 -->|Current views| ServingDB["(Serving DB)"]
     Processor2 -->|Updated views| ServingDB
     
     Query[Client Query] --> ServingDB
@@ -6391,8 +6480,8 @@ print('After reprocessing:', system.processor.get_views())
     App[Application] --> GW[LLM Gateway]
     
     GW -->|Auth & Quota| Auth[Auth Service]
-    GW -->|Check cache| Cache[(Semantic Cache<br/>Vector DB)]
-    GW -->|Track usage| Metrics[Cost & Token Metrics]
+    GW -->|Check cache| Cache["(Semantic Cache<br/>Vector DB)"]
+    GW -->|Track usage| Metrics["Cost & Token Metrics"]
     GW -->|Rate limit| RL[Token Rate Limiter]
     
     GW -->|Route| OpenAI[OpenAI GPT-4]
@@ -6510,7 +6599,7 @@ print(gw.call('Explain microservices', user_id='user_1', tier='pro'))`,
     Prompt[User Prompt] --> Embed[Embedding Model<br/>text-embedding-3-small]
     Embed --> Vector[Prompt Vector 1536d]
     
-    Vector -->|Similarity search| VDB[(Vector Database<br/>Pinecone/Weaviate)]
+    Vector -->|Similarity search| VDB["(Vector Database<br/>Pinecone/Weaviate)"]
     VDB -->|Similarity > 0.95| Hit[Cache HIT<br/>Return cached response]
     VDB -->|Similarity < 0.95| Miss[Cache MISS]
     
@@ -6639,7 +6728,7 @@ print(f'\\nStats: {cache.stats}')`,
     subgraph "Ingestion Pipeline"
         Docs[Documents<br/>PDF, HTML, DB] --> Chunk[Chunker<br/>500-1000 tokens]
         Chunk --> Embed1[Embedding Model]
-        Embed1 --> VDB[(Vector Database<br/>Pinecone/pgvector)]
+        Embed1 --> VDB["(Vector Database<br/>Pinecone/pgvector)"]
     end
     
     subgraph "Query Pipeline"
@@ -6908,7 +6997,7 @@ for sim, item in results:
     end
     
     Queue -->|Batch of 4| GPU[GPU<br/>Forward Pass]
-    GPU -->|KV Cache| Cache[(KV Cache<br/>Paged Attention)]
+    GPU -->|KV Cache| Cache["(KV Cache<br/>Paged Attention)"]
     GPU -->|Output| Results[Parse Results]
     Results --> R1r[Response 1]
     Results --> R2r[Response 2]
@@ -7184,8 +7273,8 @@ print(f'\\nRouting stats: {dict(router.routing_stats)}')`,
           heading: 'Chapter Roadmap',
           diagram: `graph LR
     T1[Requirements] --> T2[Encoding]
-    T2 --> T3[Storage & Sharding]
-    T3 --> T4[Caching & CDN]
+    T2 --> T3["Storage & Sharding"]
+    T3 --> T4["Caching & CDN"]
     T4 --> T5[Analytics]`,
           text: 'Recommended reading order \u2014 each topic builds on the previous one.'
         }
@@ -7210,10 +7299,10 @@ print(f'\\nRouting stats: {dict(router.routing_stats)}')`,
         diagram: `graph TB
     User[User] -->|Shorten URL| API[API Server]
     API -->|Generate code| Encoder[Encoding Service]
-    Encoder --> DB[(Database<br/>short_code → long_url)]
+    Encoder --> DB["(Database<br/>short_code → long_url)"]
     
     User2[User] -->|Click short URL| LB[Load Balancer]
-    LB --> Cache[(Redis Cache)]
+    LB --> Cache["(Redis Cache)"]
     Cache -->|Hit| Redirect[301 Redirect]
     Cache -->|Miss| DB
     DB --> Redirect
@@ -7469,14 +7558,14 @@ print("Range:", rg.next_code(), rg.next_code())`,
         heading: 'Storage Architecture',
         diagram: `graph TB
     subgraph "Write Path"
-        API[API Server] --> Primary[(DB Primary<br/>Writes)]
+        API[API Server] --> Primary["(DB Primary<br/>Writes)"]
         Primary -->|Replicate| R1[Read Replica 1]
         Primary -->|Replicate| R2[Read Replica 2]
         Primary -->|Replicate| R3[Read Replica 3]
     end
     
     subgraph "Read Path"
-        User[Click] --> Redis[(Redis Cache)]
+        User[Click] --> Redis["(Redis Cache)"]
         Redis -->|95% Hit| Redirect[301 Redirect]
         Redis -->|5% Miss| LB[Shard Router]
         LB -->|hash(code) % 3| R1
@@ -7619,9 +7708,9 @@ print(f'\\nStats: {store.stats_report()}')`,
     CDN -->|Cache hit: 301 redirect| Browser[Browser Redirects<br/>< 10ms]
     CDN -->|Cache miss| Origin[Origin Server]
     
-    Origin --> Redis[(Redis Cluster<br/>Top 10M URLs)]
+    Origin --> Redis["(Redis Cluster<br/>Top 10M URLs)"]
     Redis -->|Hit: 95%| Redirect[301 Redirect<br/>< 1ms]
-    Redis -->|Miss: 5%| DB[(Cassandra<br/>All URLs)]
+    Redis -->|Miss: 5%| DB["(Cassandra<br/>All URLs)"]
     DB --> Redirect
     
     Redirect -->|Populate| Redis
@@ -7767,11 +7856,11 @@ print(f'Redis stats: {mlc.redis.stats}')`,
     API -->|2. Redirect immediately| User[301 Redirect<br/>No delay]
     
     Kafka -->|Stream| Flink[Apache Flink<br/>Real-time Aggregation]
-    Kafka -->|Batch| S3[(S3<br/>Raw Events)]
+    Kafka -->|Batch| S3["(S3<br/>Raw Events)"]
     
-    Flink --> ClickHouse[(ClickHouse<br/>Real-time Dashboard)]
+    Flink --> ClickHouse["(ClickHouse<br/>Real-time Dashboard)"]
     S3 --> Spark[Spark Batch<br/>Daily/Monthly Reports]
-    Spark --> Warehouse[(Data Warehouse)]
+    Spark --> Warehouse["(Data Warehouse)"]
     
     Dashboard[Analytics Dashboard] --> ClickHouse
     Dashboard --> Warehouse
@@ -7929,7 +8018,7 @@ print(f'By device: {dict(stats.get("by_device", {}))}')`,
     T1[Requirements] --> T2[WebSocket Protocol]
     T2 --> T3[Message Storage]
     T3 --> T4[Presence]
-    T4 --> T5[Scaling & Fan-Out]`,
+    T4 --> T5["Scaling & Fan-Out"]`,
           text: 'Recommended reading order \u2014 each topic builds on the previous one.'
         }
       ]
@@ -7963,15 +8052,15 @@ print(f'By device: {dict(stats.get("by_device", {}))}')`,
     LB --> CS2[Chat Server 2]
     LB --> CS3[Chat Server 3]
     
-    CS1 --> Redis[(Redis Pub/Sub<br/>Message Routing)]
+    CS1 --> Redis["(Redis Pub/Sub<br/>Message Routing)"]
     CS2 --> Redis
     CS3 --> Redis
     
-    CS1 --> DB[(Cassandra<br/>Message Storage)]
+    CS1 --> DB["(Cassandra<br/>Message Storage)"]
     CS2 --> DB
     CS3 --> DB
     
-    Redis --> Presence[(Redis<br/>Presence Store)]
+    Redis --> Presence["(Redis<br/>Presence Store)"]
     
     style LB fill:#bbf,stroke:#333
     style Redis fill:#bfb,stroke:#333`,
@@ -8270,8 +8359,8 @@ alice.receive(json.dumps({'type': 'heartbeat'}))`,
         heading: 'Message Storage Architecture',
         diagram: `graph TB
     subgraph "Write Path"
-        ChatServer[Chat Server] -->|Write| Cassandra[(Cassandra<br/>Partition: conversation_id<br/>Cluster: timestamp)]
-        ChatServer -->|Cache recent| Redis[(Redis<br/>Last 50 msgs per conv)]
+        ChatServer[Chat Server] -->|Write| Cassandra["(Cassandra<br/>Partition: conversation_id<br/>Cluster: timestamp)"]
+        ChatServer -->|Cache recent| Redis["(Redis<br/>Last 50 msgs per conv)"]
     end
     
     subgraph "Read Path"
@@ -8287,7 +8376,7 @@ alice.receive(json.dumps({'type': 'heartbeat'}))`,
     end
     
     subgraph "Schema"
-        Table[messages table<br/>conversation_id (PK)<br/>message_id (clustering)<br/>sender_id, content, type<br/>timestamp]
+        Table["messages table<br/>conversation_id (PK)<br/>message_id (clustering)<br/>sender_id, content, type<br/>timestamp"]
     end`,
         text: 'Cassandra partitions by conversation_id and clusters by timestamp. All messages in a conversation are on the same partition, sorted by time. Redis caches the last 50 messages per conversation for fast initial load.'
       },
@@ -8407,7 +8496,7 @@ print(f'Oldest in page: {older[0]["content"]}')`,
         heading: 'Presence Detection Architecture',
         diagram: `graph TB
     Client[Client] -->|Heartbeat every 30s| ChatServer[Chat Server]
-    ChatServer -->|Update last_seen| Redis[(Redis<br/>presence: user_id -> timestamp)]
+    ChatServer -->|Update last_seen| Redis["(Redis<br/>presence: user_id -> timestamp)"]
     
     subgraph "Presence Check (every 10s)"
         Scanner[Presence Scanner] -->|Check all| Redis

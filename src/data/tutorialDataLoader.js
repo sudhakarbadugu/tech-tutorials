@@ -22,6 +22,14 @@ import { reactStructure } from "./reactStructure.js";
 import { angularStructure } from "./angularStructure.js";
 import { reactNativeStructure } from "./reactNativeStructure.js";
 import { systemDesignStructure } from "./systemDesignStructure.js";
+import { capstones } from "./capstones.js";
+import { systemDesignModule0 } from "./systemDesignModule0.js";
+import { systemDesignModule13 } from "./systemDesignModule13.js";
+import { systemDesignModule14 } from "./systemDesignModule14.js";
+import { enhancements_m1_m3 } from "./enhancements_m1_m3.js";
+import { enhancements_m4_m6 } from "./enhancements_m4_m6.js";
+import { enhancements_m7_m9 } from "./enhancements_m7_m9.js";
+import { enhancements_m10_m12 } from "./enhancements_m10_m12.js";
 
 // Hand-maintained structures for programming subjects
 
@@ -371,6 +379,34 @@ export async function loadSubjectContent(subject) {
         break;
       case "system-design":
         content = (await import("./systemDesignContent.js")).systemDesignContent;
+        // Merge new modules (0, 13, 14) into system design content
+        Object.assign(content, systemDesignModule0, systemDesignModule13, systemDesignModule14);
+        // Merge capstone projects into modules 1-10
+        for (const [modKey, capData] of Object.entries(capstones)) {
+          if (content[modKey] && capData["capstone-project"]) {
+            content[modKey]["capstone-project"] = capData["capstone-project"];
+          }
+        }
+        // Merge enhancements (new sections) into all module topics
+        const allEnhancements = [
+          ...Object.entries(enhancements_m1_m3),
+          ...Object.entries(enhancements_m4_m6),
+          ...Object.entries(enhancements_m7_m9),
+          ...Object.entries(enhancements_m10_m12),
+        ];
+        for (const [modKey, topics] of allEnhancements) {
+          if (!content[modKey]) continue;
+          for (const [topicId, newSections] of Object.entries(topics)) {
+            if (!content[modKey][topicId]) continue;
+            const existing = content[modKey][topicId];
+            const recapIdx = existing.sections.findIndex(s => s.heading && s.heading.includes("Quick Recap"));
+            if (recapIdx >= 0) {
+              existing.sections.splice(recapIdx, 0, ...newSections);
+            } else {
+              existing.sections.push(...newSections);
+            }
+          }
+        }
         break;
       default:
         content = {};

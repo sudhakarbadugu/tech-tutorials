@@ -419,8 +419,8 @@ function Content({ subject, unit, topic, onNavigate, version, onOnePageView, sub
       
       {section.diagram && (
         <MermaidDiagram
-          chart={section.diagram.chart}
-          caption={section.diagram.caption}
+          chart={typeof section.diagram === 'string' ? section.diagram : section.diagram.chart}
+          caption={typeof section.diagram === 'string' ? undefined : section.diagram.caption}
         />
       )}
 

@@ -29,6 +29,11 @@ function MermaidDiagram({ chart, caption }) {
     let cancelled = false
 
     async function render() {
+      if (!chart || typeof chart !== 'string') {
+        setError('Diagram chart is empty or invalid')
+        setLoading(false)
+        return
+      }
       try {
         setLoading(true)
         setError(null)
