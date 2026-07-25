@@ -342,6 +342,333 @@ t.start()`,
           ]
         },
         {
+          heading: 'REST HTTP Methods with Examples',
+          text: 'REST APIs use standard HTTP verbs to operate on resources. Each verb has a specific meaning, standard success status codes, and important properties such as safety and idempotency. Safety means the operation does not change server state. Idempotency means repeating the same request multiple times produces the same result as doing it once. The examples below use an <strong>orders</strong> resource.'
+        },
+        {
+          heading: 'GET — Read a Resource',
+          text: 'Use <code>GET</code> to retrieve data from the server. It is <strong>safe</strong> because it does not modify server state, and it is <strong>idempotent</strong> because calling it multiple times returns the same result. Use <code>GET /orders</code> to retrieve a list and <code>GET /orders/ORD-1001</code> to retrieve a single order.'
+        },
+        {
+          heading: 'GET Properties',
+          list: [
+            '<strong>Purpose:</strong> Read one resource or a collection of resources.',
+            '<strong>Safe:</strong> Yes — it does not change server data.',
+            '<strong>Idempotent:</strong> Yes — repeated requests return the same data unless the underlying data changes.',
+            '<strong>Request body:</strong> Usually empty. Parameters go in the URL or query string.',
+            '<strong>Common status codes:</strong> 200 OK, 404 Not Found, 400 Bad Request, 401 Unauthorized.'
+          ]
+        },
+        {
+          heading: 'GET /orders — Summary List (Recommended)',
+          text: 'A list endpoint should return only summary/overview information. It must not include deeply nested details such as every line item, full customer profile, or payment history. The frontend can fetch full details later using the resource <code>id</code>.',
+          code: {
+            language: 'json',
+            snippet: `// Request
+GET /orders HTTP/1.1
+Accept: application/json
+
+// Response — 200 OK
+{
+  "data": [
+    {
+      "id": "ORD-1001",
+      "customerName": "Alice Johnson",
+      "status": "shipped",
+      "totalAmount": 249.99,
+      "orderDate": "2026-07-18",
+      "itemCount": 3
+    },
+    {
+      "id": "ORD-1002",
+      "customerName": "Bob Smith",
+      "status": "pending",
+      "totalAmount": 89.50,
+      "orderDate": "2026-07-19",
+      "itemCount": 1
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "pageSize": 20,
+    "total": 145
+  }
+}`
+          }
+        },
+        {
+          heading: 'GET /orders/ORD-1001 — Full Detail',
+          text: 'When the user selects one item from the list, call the detail endpoint to load complete information. This keeps list payloads small while still supporting rich detail views.',
+          code: {
+            language: 'json',
+            snippet: `// Request
+GET /orders/ORD-1001 HTTP/1.1
+Accept: application/json
+
+// Response — 200 OK
+{
+  "id": "ORD-1001",
+  "customer": {
+    "id": "CUST-42",
+    "name": "Alice Johnson",
+    "email": "alice@example.com",
+    "phone": "+1-555-0100"
+  },
+  "status": "shipped",
+  "totalAmount": 249.99,
+  "orderDate": "2026-07-18",
+  "shippingAddress": {
+    "street": "123 Maple Ave",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78701"
+  },
+  "lineItems": [
+    { "productId": "PROD-11", "name": "Wireless Mouse", "qty": 2, "price": 29.99 },
+    { "productId": "PROD-24", "name": "USB-C Hub", "qty": 1, "price": 190.01 }
+  ],
+  "payments": [
+    { "method": "credit_card", "last4": "4242", "amount": 249.99 }
+  ],
+  "tracking": {
+    "carrier": "FastShip",
+    "number": "FS-123456789"
+  }
+}`
+          }
+        },
+        {
+          heading: 'Why the List Should Stay Minimal',
+          list: [
+            '<strong>Lambda 6MB response limit:</strong> If you deploy the API on AWS Lambda, the response body is capped at about 6MB. Returning full nested objects for every row in a list can quickly exceed that limit and cause 502 errors. Decide the list shape early in the design.',
+            '<strong>Smaller payloads:</strong> Summary fields reduce bandwidth and parse time, especially on slow mobile networks.',
+            '<strong>Faster rendering:</strong> The frontend can display a table immediately without waiting for huge nested objects to deserialize.',
+            '<strong>Clearer contracts:</strong> A list DTO (data transfer object) separate from a detail DTO makes versioning and testing easier.'
+          ]
+        },
+        {
+          heading: 'POST — Create a Resource',
+          text: 'Use <code>POST</code> to create a new resource. The server assigns the <code>id</code> and returns the created object along with its new location. <code>POST</code> is <strong>not idempotent</strong> by default — sending the same request twice usually creates two resources.'
+        },
+        {
+          heading: 'POST Properties',
+          list: [
+            '<strong>Purpose:</strong> Create a new resource under a collection.',
+            '<strong>Safe:</strong> No — it changes server state.',
+            '<strong>Idempotent:</strong> No — duplicate requests may create duplicate resources unless you use an idempotency key.',
+            '<strong>Request body:</strong> Contains the resource data to create.',
+            '<strong>Common status codes:</strong> 201 Created, 400 Bad Request, 401 Unauthorized, 409 Conflict.'
+          ]
+        },
+        {
+          heading: 'POST /orders — Create Example',
+          code: {
+            language: 'json',
+            snippet: `// Request
+POST /orders HTTP/1.1
+Content-Type: application/json
+
+{
+  "customerId": "CUST-42",
+  "shippingAddress": {
+    "street": "123 Maple Ave",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78701"
+  },
+  "lineItems": [
+    { "productId": "PROD-11", "qty": 2 }
+  ]
+}
+
+// Response — 201 Created
+{
+  "id": "ORD-1003",
+  "customerId": "CUST-42",
+  "status": "pending",
+  "totalAmount": 59.98,
+  "orderDate": "2026-07-20",
+  "lineItems": [
+    { "productId": "PROD-11", "name": "Wireless Mouse", "qty": 2, "price": 29.99 }
+  ]
+}`
+          }
+        },
+        {
+          heading: 'PUT — Replace a Resource',
+          text: 'Use <code>PUT</code> to replace an entire resource with the data in the request body. If the resource does not exist, the server may create it. <code>PUT</code> is <strong>idempotent</strong> — sending the same request multiple times leaves the resource in the same final state.'
+        },
+        {
+          heading: 'PUT Properties',
+          list: [
+            '<strong>Purpose:</strong> Full update or replacement of a resource.',
+            '<strong>Safe:</strong> No — it changes server state.',
+            '<strong>Idempotent:</strong> Yes — repeating the same update produces the same result.',
+            '<strong>Request body:</strong> Contains the complete new state of the resource.',
+            '<strong>Common status codes:</strong> 200 OK, 201 Created, 400 Bad Request, 404 Not Found.'
+          ]
+        },
+        {
+          heading: 'PUT /orders/ORD-1001 — Update Example',
+          code: {
+            language: 'json',
+            snippet: `// Request
+PUT /orders/ORD-1001 HTTP/1.1
+Content-Type: application/json
+
+{
+  "status": "delivered",
+  "shippingAddress": {
+    "street": "456 Oak St",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78702"
+  }
+}
+
+// Response — 200 OK
+{
+  "id": "ORD-1001",
+  "status": "delivered",
+  "shippingAddress": {
+    "street": "456 Oak St",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78702"
+  },
+  "updatedAt": "2026-07-20T10:30:00Z"
+}`
+          }
+        },
+        {
+          heading: 'PATCH — Partial Update',
+          text: 'Use <code>PATCH</code> to apply a partial change to a resource. Unlike <code>PUT</code>, which replaces the whole resource, <code>PATCH</code> only modifies the fields you send. It is useful for small updates such as changing an order status. <code>PATCH</code> is generally <strong>idempotent</strong> when the patch data is deterministic.'
+        },
+        {
+          heading: 'PATCH Properties',
+          list: [
+            '<strong>Purpose:</strong> Apply a partial update to an existing resource.',
+            '<strong>Safe:</strong> No — it changes server state.',
+            '<strong>Idempotent:</strong> Usually yes, depending on the patch format.',
+            '<strong>Request body:</strong> Contains only the fields to update, or a patch document such as JSON Patch.',
+            '<strong>Common status codes:</strong> 200 OK, 204 No Content, 400 Bad Request, 404 Not Found, 409 Conflict.'
+          ]
+        },
+        {
+          heading: 'PATCH /orders/ORD-1001 — Partial Update Example',
+          code: {
+            language: 'json',
+            snippet: `// Request
+PATCH /orders/ORD-1001 HTTP/1.1
+Content-Type: application/json
+
+{
+  "status": "delivered"
+}
+
+// Response — 200 OK
+{
+  "id": "ORD-1001",
+  "status": "delivered",
+  "updatedAt": "2026-07-20T10:30:00Z"
+}`
+          }
+        },
+        {
+          heading: 'PUT vs PATCH',
+          text: 'Choose <code>PUT</code> when the client provides the complete new state of the resource. Choose <code>PATCH</code> when the client only needs to change a few fields. Using <code>PATCH</code> reduces payload size and avoids accidental overwrites of unchanged fields.'
+        },
+        {
+          heading: 'DELETE — Remove a Resource',
+          text: 'Use <code>DELETE</code> to remove a resource. A successful deletion usually returns <code>204 No Content</code>. <code>DELETE</code> is <strong>idempotent</strong> — after the first deletion, repeated requests leave the resource deleted.'
+        },
+        {
+          heading: 'DELETE Properties',
+          list: [
+            '<strong>Purpose:</strong> Remove a resource.',
+            '<strong>Safe:</strong> No — it changes server state.',
+            '<strong>Idempotent:</strong> Yes — after the first delete, the resource remains gone.',
+            '<strong>Request body:</strong> Usually empty.',
+            '<strong>Common status codes:</strong> 204 No Content, 200 OK, 404 Not Found, 401 Unauthorized.'
+          ]
+        },
+        {
+          heading: 'DELETE /orders/ORD-1001 — Delete Example',
+          code: {
+            language: 'json',
+            snippet: `// Request
+DELETE /orders/ORD-1001 HTTP/1.1
+
+// Response — 204 No Content
+// (empty body)`
+          }
+        },
+        {
+          heading: 'HTTP Method Summary Table',
+          table: {
+            headers: ['Method', 'Action', 'Safe', 'Idempotent', 'Typical Status'],
+            rows: [
+              ['GET', 'Read', 'Yes', 'Yes', '200 OK'],
+              ['POST', 'Create', 'No', 'No', '201 Created'],
+              ['PUT', 'Full update / replace', 'No', 'Yes', '200 OK / 201 Created'],
+              ['PATCH', 'Partial update', 'No', 'Usually yes', '200 OK / 204 No Content'],
+              ['DELETE', 'Remove', 'No', 'Yes', '204 No Content / 200 OK']
+            ]
+          }
+        },
+        {
+          heading: 'Trim Null and Empty Values',
+          text: 'Before sending a response to the frontend, remove <code>null</code>, empty arrays, empty strings, and empty objects. This reduces payload size, improves serialization performance, and keeps the API contract clean. Only include fields that carry real information.'
+        },
+        {
+          heading: 'Trimmed Response Example',
+          code: {
+            language: 'json',
+            snippet: `// BEFORE — bloated, includes null/empty noise
+{
+  "id": "ORD-1001",
+  "customer": {
+    "id": "CUST-42",
+    "name": "Alice Johnson",
+    "email": null,
+    "phone": ""
+  },
+  "status": "shipped",
+  "totalAmount": 249.99,
+  "discount": null,
+  "couponCode": null,
+  "tags": [],
+  "notes": "",
+  "lineItems": [
+    { "productId": "PROD-11", "name": "Wireless Mouse", "qty": 2, "price": 29.99 }
+  ],
+  "payments": [],
+  "tracking": {
+    "carrier": "FastShip",
+    "number": "FS-123456789"
+  }
+}
+
+// AFTER — trimmed, smaller payload
+{
+  "id": "ORD-1001",
+  "customer": {
+    "id": "CUST-42",
+    "name": "Alice Johnson"
+  },
+  "status": "shipped",
+  "totalAmount": 249.99,
+  "lineItems": [
+    { "productId": "PROD-11", "name": "Wireless Mouse", "qty": 2, "price": 29.99 }
+  ],
+  "tracking": {
+    "carrier": "FastShip",
+    "number": "FS-123456789"
+  }
+}`
+          }
+        },
+        {
           heading: 'REST in the Real World — Industry Usage',
           text: 'REST powers the majority of public web APIs today. Companies like Stripe, GitHub, Twitter, and Shopify expose REST APIs that millions of developers rely on. Here is how REST is used across different industries:',
           list: [
