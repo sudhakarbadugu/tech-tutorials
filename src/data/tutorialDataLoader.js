@@ -23,7 +23,7 @@ import { angularStructure } from "./angularStructure.js";
 import { reactNativeStructure } from "./reactNativeStructure.js";
 import { systemDesignStructure } from "./systemDesignStructure.js";
 import { capstones } from "./capstones.js";
-import { systemDesignModule0 } from "./systemDesignModule0.js";
+import { systemDesignModule21 } from "./systemDesignModule21.js";
 import { systemDesignModule13 } from "./systemDesignModule13.js";
 import { systemDesignModule14 } from "./systemDesignModule14.js";
 import { systemDesignModule15 } from "./systemDesignModule15.js";
@@ -36,7 +36,7 @@ import { enhancements_m10_m12 } from "./enhancements_m10_m12.js";
 import { deepDive_m1_m3 } from "./deepDive_m1_m3.js";
 import { deepDive_m4_m6 } from "./deepDive_m4_m6.js";
 import { deepDive_m7_m9 } from "./deepDive_m7_m9.js";
-import { deepDive_m0_m14 } from "./deepDive_m0_m14.js";
+import { deepDive_m21_m14 } from "./deepDive_m21_m14.js";
 import { deepDive_m15_m19 } from "./deepDive_m15_m19.js";
 
 // Hand-maintained structures for programming subjects
@@ -388,7 +388,7 @@ export async function loadSubjectContent(subject) {
       case "system-design":
         content = (await import("./systemDesignContent.js")).systemDesignContent;
         // Merge new modules (0, 13, 14) into system design content
-        Object.assign(content, systemDesignModule0, systemDesignModule13, systemDesignModule14, systemDesignModule15, systemDesignModule16, systemDesignModule17_19);
+        Object.assign(content, systemDesignModule21, systemDesignModule13, systemDesignModule14, systemDesignModule15, systemDesignModule16, systemDesignModule17_19);
         // Merge capstone projects into modules 1-10
         for (const [modKey, capData] of Object.entries(capstones)) {
           if (content[modKey] && capData["capstone-project"]) {
@@ -421,7 +421,7 @@ export async function loadSubjectContent(subject) {
           ...Object.entries(deepDive_m1_m3),
           ...Object.entries(deepDive_m4_m6),
           ...Object.entries(deepDive_m7_m9),
-          ...Object.entries(deepDive_m0_m14),
+          ...Object.entries(deepDive_m21_m14),
           ...Object.entries(deepDive_m15_m19),
         ];
         for (const [modKey, topics] of allDeepDives) {

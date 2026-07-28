@@ -1,5 +1,5 @@
 // Auto-generated from rewritten modules — do not edit manually
-// Generated: 2026-07-25T16:01:19.905Z
+// Generated: 2026-07-28T16:31:56.372Z
 
 export const aiStructure = {
   module1: {

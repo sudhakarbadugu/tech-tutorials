@@ -1,7 +1,7 @@
-// Module 0: Interview Fundamentals
+// Module 21: Interview Fundamentals
 
-export const systemDesignModule0 = {
-  module0: {
+export const systemDesignModule21 = {
+  module21: {
     'module-intro': {
       title: 'Chapter Overview',
       sections: [

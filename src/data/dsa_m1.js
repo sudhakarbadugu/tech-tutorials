@@ -574,319 +574,400 @@ def build_right(chars):
     // ─────────────────────────────────────────────────────────────────────────
     // TOPIC 3 — Linked Lists
     // ─────────────────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
+    // TOPIC 3 — LinkedList
+    // ─────────────────────────────────────────────────────────────────────────
     'linked-lists': {
-      title: 'Linked Lists (Singly & Doubly)',
-      subtitle: 'Pointer mastery for interview success',
+      title: 'LinkedList',
+      subtitle: 'A linear collection of nodes connected by pointers',
       sections: [
-        // A
+        // A — What is a Linked List?
         {
-          heading: 'Linked List Fundamentals',
-          text: 'A linked list is a dynamic data structure where elements (nodes) are stored at arbitrary memory locations and connected by pointers. Unlike arrays, there is no random access — traversal always begins from the head.',
+          heading: 'What is a Linked List?',
+          text: 'A Linked List is a linear data structure where elements are not stored at contiguous memory locations. Instead, each element (called a node) contains its own data and a reference (pointer) to the next node in the sequence. Unlike arrays, linked lists do not require pre-allocation of memory and can grow or shrink dynamically at runtime.',
           list: [
-            '<strong>Node structure:</strong> Each node holds a value (data) and one or more pointers. Singly linked: one next pointer. Doubly linked: next and prev pointers.',
-            '<strong>Singly Linked List:</strong> Each node points only to the next node. Traversal is one-directional (head to tail). Less memory — one pointer overhead per node.',
-            '<strong>Doubly Linked List:</strong> Each node has both next and prev pointers, enabling O(1) deletion when you hold a reference to the node and backward traversal. Used by Python\'s deque, Java\'s LinkedList, and LRU Cache.',
-            '<strong>Advantages over arrays:</strong> O(1) insertion and deletion at the head (no shifting). Dynamic size without pre-allocation. Efficient list merging.',
-            '<strong>Disadvantages over arrays:</strong> O(n) access to the element at index i. Poor cache performance due to non-contiguous memory. Extra memory for pointer storage.',
-            '<strong>Classic patterns:</strong> Reverse the list, detect a cycle with Floyd\'s algorithm, find the middle with fast/slow pointers, merge two sorted lists, remove the nth node from the end.'
+            '<strong>Dynamic size:</strong> Nodes are allocated as needed; no fixed capacity like arrays.',
+            '<strong>No random access:</strong> You cannot access the i-th element directly; you must traverse from the head.',
+            '<strong>Pointer-based linking:</strong> Each node stores at least one pointer/reference to maintain order.',
+            '<strong>Head pointer:</strong> A special reference that points to the first node; if head is null, the list is empty.',
+            '<strong>Terminated by null:</strong> The last node points to null (None), marking the end of the list.'
           ]
         },
-        // B
+        // B — Components of a Linked List
         {
-          heading: 'Concept Explanation',
-          content: [
-            '<p>The <strong>dummy node technique</strong> simplifies edge cases where the head itself might be removed or replaced. Prepend a dummy node with value -1 before the real head. Your operations always start from dummy.next, so you never need to special-case "what if the head changes?" Return dummy.next as the result. This pattern is used in merge sorted lists, remove duplicates, and partition list problems.</p>',
-            '<p><strong>Floyd\'s Cycle Detection</strong> (the tortoise and hare algorithm) uses two pointers: slow moves one step at a time, fast moves two. If there is a cycle, fast will eventually lap slow and they will meet inside the cycle. If fast reaches None/null, there is no cycle. To find the cycle entry point, reset one pointer to head after the meeting point is found, then advance both one step at a time — they meet exactly at the cycle entry.</p>',
-            '<p>The <strong>fast/slow pointer trick for finding the middle</strong> works because when fast (2 steps per iteration) reaches the end, slow (1 step) is at the midpoint. For odd-length lists, slow lands exactly on the middle node. For even-length lists, slow lands on the first of the two middle nodes. This is O(n) time and O(1) space — crucial for merge sort on linked lists.</p>'
-          ],
-          note: 'Key rule: before every pointer move, verify that the current node and its next pointer are not None/null. Null pointer dereference is the #1 linked list interview bug.'
+          heading: 'Components of a Linked List',
+          text: 'Every linked list is made up of nodes. A node is the fundamental building block. In a singly linked list each node has two parts: data and next. In a doubly linked list a node also has a prev pointer.',
+          list: [
+            '<strong>Data:</strong> Holds the actual value or payload stored in the node.',
+            '<strong>Next:</strong> A reference to the next node in the sequence.',
+            '<strong>Prev:</strong> A reference to the previous node (used in doubly linked lists).',
+            '<strong>Head:</strong> The starting reference of the list; points to the first node.',
+            '<strong>Tail:</strong> The last node in the list; its next reference is null.'
+          ]
         },
-        // C
+        // C — Node and its Properties (Mermaid)
         {
-          heading: 'Visual Diagram',
-          code: `Singly Linked List (Horizontal Layout):
-  Head
-   |
-   v
- [1|*]--->[2|*]--->[3|*]--->[4|*]--->[None]
-  val next   val next   val next   val next
-
-Doubly Linked List (Horizontal Layout):
-  Head                                                          Tail
-   |                                                             |
-   v                                                             v
- [None|1|*]<===>
-
-[*|2|*]<===>
-
-[*|3|*]<===>
-
-[*|4|None]
-  prev val next   prev val next   prev val next   prev val next
-
-Floyd's Cycle Detection:
-   [1]---->[2]---->[3]---->[4]---->[5]
-                    ^                 |
-                    |                 v
-                   [8]<--------------[6]---->[7]
-                    ^
-                    |
-               cycle entry (node 3)
-
-  slow moves 1 step, fast moves 2 steps:
-  slow: 1->2->3->4->5->6->7->8->3...
-  fast: 1->3->5->7->3->5->7->3...
-  They meet at some node inside the cycle.
-  Reset slow to head, advance both 1 step:
-  slow: 1->2->3   fast: meetPoint->...->3
-  They converge at node 3 = cycle entry.
-
-Find Middle (fast/slow pointers):
-   [1]---->[2]---->[3]---->[4]---->[5]---->None
-
-   slow:  1  ->  2  ->  3       <- stops at middle
-   fast:  1  ->  3  ->  5->None <- reaches end
-   Middle = node(3)`,
-          language: 'text'
-        },
-        {
-          heading: 'Linked List Operations — Visual Walkthrough',
-          text: 'These are the core operations every interview expects you to implement from scratch. Study the diagrams, then code them without looking.',
+          heading: 'Node and Its Properties',
+          text: 'A single node bundles data together with the links that hold the list together. Properties vary slightly by type, but the core idea is the same.',
           diagram: {
-            caption: 'Print / Traverse — visit every node from head',
+            caption: 'Structure of a Singly Linked List Node',
             chart: `flowchart LR
-    H[Head] --> N1[1]
-    N1 --> N2[2]
-    N2 --> N3[3]
-    N3 --> NULL[None]
-    style H fill:#4a90e2,color:#fff
+    subgraph Node[Node Object]
+      D[Data Field<br/>stores value]
+      N[Next Pointer<br/>address of next node]
+    end
+    D -.-> N
+    style D fill:#3498db,color:#fff
+    style N fill:#2ecc71,color:#fff`
+          }
+        },
+        {
+          diagram: {
+            caption: 'Structure of a Doubly Linked List Node',
+            chart: `flowchart LR
+    subgraph DNode[Doubly Linked List Node]
+      P[Prev Pointer<br/>address of previous node]
+      DD[Data Field<br/>stores value]
+      NN[Next Pointer<br/>address of next node]
+    end
+    P -.-> DD
+    DD -.-> NN
+    style P fill:#e74c3c,color:#fff
+    style DD fill:#3498db,color:#fff
+    style NN fill:#2ecc71,color:#fff`
+          }
+        },
+        {
+          text: 'For a typical singly linked list, the node class looks like this in Python and Java.',
+          example: {
+            title: 'Singly Linked List Node',
+            code: `# Python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val      # data property
+        self.next = next    # pointer to next node
+
+# Java
+class ListNode {
+    int val;            // data property
+    ListNode next;      // reference to next node
+    ListNode(int val) { this.val = val; }
+}`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        // D — Example Linked List Visualization
+        {
+          heading: 'Example Linked List',
+          text: 'Below is a visual of a simple singly linked list containing values 10, 20, 30 and 40.',
+          diagram: {
+            caption: 'Singly Linked List: 10 → 20 → 30 → 40 → None',
+            chart: `flowchart LR
+    H[Head] --> N1[10]
+    N1 --> N2[20]
+    N2 --> N3[30]
+    N3 --> N4[40]
+    N4 --> NULL[None]
+    style H fill:#9b59b6,color:#fff
+    style NULL fill:#e74c3c,color:#fff`
+          }
+        },
+        // E — Types of Linked Lists
+        {
+          heading: 'Types of Linked Lists',
+          text: 'Linked lists come in several variations. The right choice depends on whether you need backward traversal, circular traversal, or memory efficiency.'
+        },
+        {
+          heading: 'Singly Linked List',
+          text: 'Each node points only to the next node. Traversal is one-directional (head to tail). It uses the least memory because each node stores only one pointer.',
+          diagram: {
+            caption: 'Singly Linked List',
+            chart: `flowchart LR
+    H[Head] --> A[10] --> B[20] --> C[30] --> NULL[None]`
+          }
+        },
+        {
+          heading: 'Doubly Linked List',
+          text: 'Each node stores both next and prev pointers. This enables O(1) deletion when you already have a reference to the node, and allows backward traversal.',
+          diagram: {
+            caption: 'Doubly Linked List',
+            chart: `flowchart LR
+    H[Head] --> A[10]
+    A <--> B[20]
+    B <--> C[30]
+    C --> T[Tail]`
+          }
+        },
+        {
+          heading: 'Circular Linked List',
+          text: 'The last node points back to the first node instead of null. Useful for round-robin scheduling and cyclic traversal where every node is reachable from every other node.',
+          diagram: {
+            caption: 'Circular Linked List',
+            chart: `flowchart LR
+    H[Head] --> A[10] --> B[20] --> C[30]
+    C --> H`
+          }
+        },
+        {
+          heading: 'Circular Doubly Linked List',
+          text: 'Combines doubly linked and circular properties: the last node connects to the head and the head connects back to the tail, forming a bidirectional ring.',
+          diagram: {
+            caption: 'Circular Doubly Linked List',
+            chart: `flowchart LR
+    subgraph Ring[Circular Doubly Ring]
+      A[10] <--> B[20]
+      B <--> C[30]
+      C <--> A
+    end`
+          }
+        },
+        // F — Advantages
+        {
+          heading: 'Advantages',
+          text: 'Linked lists excel when you need frequent insertions and deletions, or when the total number of elements is unknown in advance.',
+          list: [
+            '<strong>Dynamic size:</strong> Memory is allocated node by node, so the list can grow or shrink without resizing an underlying buffer.',
+            '<strong>O(1) insertion at head:</strong> Adding a new first node only requires updating the head pointer.',
+            '<strong>O(1) deletion at head:</strong> Removing the first node only requires moving head to head.next.',
+            '<strong>Efficient insertions/deletions in the middle:</strong> Once you have a pointer to the relevant node, splicing in or unlinking a node is O(1).',
+            '<strong>No memory waste:</strong> Unlike arrays, you do not reserve unused capacity.',
+            '<strong>Easy to merge and split:</strong> You can combine two lists or break one list into two by simply rewiring a few pointers.',
+            '<strong>Foundation for other structures:</strong> Linked lists are used to implement stacks, queues, adjacency lists in graphs, and LRU caches.'
+          ]
+        },
+        // G — Disadvantages
+        {
+          heading: 'Disadvantages',
+          text: 'Linked lists trade random access and cache performance for flexibility.',
+          list: [
+            '<strong>O(n) access by index:</strong> To reach the i-th node you must walk from the head, unlike arrays which give O(1) random access.',
+            '<strong>Poor cache locality:</strong> Nodes are scattered in memory, so CPU cache prefetching is much less effective than with arrays.',
+            '<strong>Extra memory for pointers:</strong> Every node stores at least one pointer, which adds overhead compared to an array of raw values.',
+            '<strong>More complex code:</strong> Pointer manipulation is error-prone and requires careful handling of null references and edge cases.',
+            '<strong>No binary search:</strong> Because you cannot access the middle in O(1), binary search is not possible on a plain linked list.',
+            '<strong>Reverse traversal is expensive:</strong> In a singly linked list you must reverse the list or use recursion to go backward.',
+            '<strong>Debugging is harder:</strong> Memory layout is not visual; pointer bugs like cycles or lost references are easy to create and hard to trace.'
+          ]
+        },
+        // H — Linked List Operations
+        {
+          heading: 'Linked List Operations',
+          text: 'The table below summarizes the core operations. Each operation is then explained with its best efficient implementation, code, and a Mermaid visual.'
+        },
+        {
+          heading: 'Operation 1: Traverse / Print',
+          text: '<strong>What it does:</strong> Visit every node starting from the head and follow the next pointers until the end.<br/><strong>Best efficiency:</strong> Iterative traversal is O(n) time and O(1) space. Recursion is possible but uses O(n) stack space.',
+          diagram: {
+            caption: 'Traverse from head to tail',
+            chart: `flowchart LR
+    H[Head] --> N1[10] --> N2[20] --> N3[30] --> NULL[None]
+    style H fill:#9b59b6,color:#fff
     style NULL fill:#e74c3c,color:#fff`
           }
         },
         {
-          text: 'Print List: Start at head, follow next pointers until None. Time: O(n), Space: O(1).',
-          code: `def print_list(head):
-    # Traverse from head, following next pointers until the end
+          text: 'Code:',
+          code: `def traverse(head):
     cur = head
     while cur:
-        print(cur.val, end=" -> ")
+        print(cur.val)
         cur = cur.next
-    print("None")
 
-# Example: 1 -> 2 -> 3 -> None`,
+# Time: O(n), Space: O(1)`,
           language: 'python'
         },
         {
+          heading: 'Operation 2: Append (Insert at Tail)',
+          text: '<strong>What it does:</strong> Add a new node at the end of the list.<br/><strong>Best efficiency:</strong> Maintain a tail pointer for O(1) append. Without a tail pointer you must traverse to the end, making it O(n).',
           diagram: {
-            caption: 'Append — add node to tail',
+            caption: 'Append with tail pointer',
             chart: `flowchart LR
-    L1["Before:"] --> H1[Head] --> A[1] --> B[2] --> C[3] --> N1[None]
-    L2["After:"] --> H2[Head] --> D[1] --> E[2] --> F[3] --> G[4] --> N2[None]
-    style L1 fill:#fff,color:#333,stroke:#fff
-    style L2 fill:#fff,color:#333,stroke:#fff
-    style G fill:#2ecc71,color:#fff`
+    H[Head] --> A[10] --> B[20] --> T[30] --> NULL1[None]
+    NNEW[NEW 40] --> NULL2[None]
+    T -.-> NNEW
+    style T fill:#f1c40f,color:#000
+    style NNEW fill:#2ecc71,color:#fff`
           }
         },
         {
-          text: 'Append: Traverse to tail (or maintain tail pointer), then tail.next = new_node. Time: O(n) without tail pointer, O(1) with tail pointer.',
-          code: `def append(head, val):
+          text: 'Code:',
+          code: `def append(head, tail, val):
     new_node = ListNode(val)
     if not head:
-        return new_node   # Empty list — new node becomes head
-    # Walk to the last node
-    cur = head
-    while cur.next:
-        cur = cur.next
-    cur.next = new_node   # Link last node to new node
-    return head`,
+        return new_node, new_node
+    tail.next = new_node
+    return head, new_node
+
+# With tail pointer: Time O(1), Space O(1)`,
           language: 'python'
         },
         {
+          heading: 'Operation 3: Prepend (Insert at Head)',
+          text: '<strong>What it does:</strong> Add a new node before the current head.<br/><strong>Best efficiency:</strong> Always O(1) time and O(1) space because only the head pointer changes.',
           diagram: {
-            caption: 'Pop — remove last node',
+            caption: 'Prepend a new head',
             chart: `flowchart LR
-    L1["Before:"] --> H1[Head] --> A[1] --> B[2] --> C[3]
-    L2["After:"] --> H2[Head] --> D[1] --> E[2] --> N[None]
-    style L1 fill:#fff,color:#333,stroke:#fff
-    style L2 fill:#fff,color:#333,stroke:#fff
+    NEW[NEW 5] --> A[10] --> B[20] --> C[30] --> NULL[None]
+    H[Head] --> NEW
+    style NEW fill:#2ecc71,color:#fff
+    style H fill:#9b59b6,color:#fff`
+          }
+        },
+        {
+          text: 'Code:',
+          code: `def prepend(head, val):
+    new_node = ListNode(val)
+    new_node.next = head
+    return new_node
+
+# Time: O(1), Space: O(1)`,
+          language: 'python'
+        },
+        {
+          heading: 'Operation 4: Insert at Index',
+          text: '<strong>What it does:</strong> Insert a new node at a specific position.<br/><strong>Best efficiency:</strong> Walk to the node before the target index (O(n) traversal) and rewire pointers in O(1). Total time is O(n).',
+          diagram: {
+            caption: 'Insert at index 2',
+            chart: `flowchart LR
+    H[Head] --> A[10] --> B[20] --> C[30] --> NULL[None]
+    B --> NEW[NEW 25]
+    NEW --> C
+    style NEW fill:#2ecc71,color:#fff`
+          }
+        },
+        {
+          text: 'Code:',
+          code: `def insert(head, index, val):
+    if index == 0:
+        return prepend(head, val)
+    new_node = ListNode(val)
+    prev = get(head, index - 1)
+    if not prev:
+        return head
+    new_node.next = prev.next
+    prev.next = new_node
+    return head
+
+# Time: O(n), Space: O(1)`,
+          language: 'python'
+        },
+        {
+          heading: 'Operation 5: Delete at Index',
+          text: '<strong>What it does:</strong> Remove the node at a specific position.<br/><strong>Best efficiency:</strong> Walk to the node before the target (O(n)) and rewire its next pointer to skip the target in O(1).',
+          diagram: {
+            caption: 'Remove node at index 2',
+            chart: `flowchart LR
+    H[Head] --> A[10] --> B[20] --> C[30] --> NULL[None]
+    B --> NULL
     style C fill:#e74c3c,color:#fff`
           }
         },
         {
-          text: 'Pop: Traverse to second-to-last node, set its next to None, return the removed node. Time: O(n).',
-          code: `def pop(head):
-    if not head or not head.next:
-        return None, head   # Empty or single-node list
-    # Walk to the second-to-last node
+          text: 'Code:',
+          code: `def delete(head, index):
+    if index == 0:
+        return head.next if head else None
+    prev = get(head, index - 1)
+    if not prev or not prev.next:
+        return head
+    prev.next = prev.next.next
+    return head
+
+# Time: O(n), Space: O(1)`,
+          language: 'python'
+        },
+        {
+          heading: 'Operation 6: Search by Value',
+          text: '<strong>What it does:</strong> Find the first node that contains a given value.<br/><strong>Best efficiency:</strong> Linear scan from the head. You cannot do better on an unsorted linked list.',
+          diagram: {
+            caption: 'Search for value 20',
+            chart: `flowchart LR
+    H[Head] --> A[10] --> B[20] --> C[30] --> NULL[None]
+    style B fill:#f1c40f,color:#000`
+          }
+        },
+        {
+          text: 'Code:',
+          code: `def search(head, target):
     cur = head
-    while cur.next.next:
+    while cur:
+        if cur.val == target:
+            return True
         cur = cur.next
-    removed = cur.next    # Save the last node to return
-    cur.next = None       # Disconnect it
-    return removed, head`,
+    return False
+
+# Time: O(n), Space: O(1)`,
           language: 'python'
         },
         {
+          heading: 'Operation 7: Reverse',
+          text: '<strong>What it does:</strong> Flip every next pointer so the head becomes the tail and vice versa.<br/><strong>Best efficiency:</strong> Iterative three-pointer approach (prev, curr, next) in O(n) time and O(1) space.',
           diagram: {
-            caption: 'Pop First — remove head node',
+            caption: 'Reverse the list',
             chart: `flowchart LR
-    L1["Before:"] --> H1[Head] --> A[1] --> B[2] --> C[3] --> N1[None]
-    L2["After:"] --> H2[Head] --> B2[2] --> C2[3] --> N2[None]
-    style L1 fill:#fff,color:#333,stroke:#fff
-    style L2 fill:#fff,color:#333,stroke:#fff
-    style A fill:#e74c3c,color:#fff
-    style H2 fill:#2ecc71,color:#fff`
+    subgraph Before[Before]
+      H1[Head] --> A1[10] --> B1[20] --> C1[30] --> N1[None]
+    end
+    subgraph After[After]
+      H2[Head] --> C2[30] --> B2[20] --> A2[10] --> N2[None]
+    end`
           }
         },
         {
-          text: 'Pop First: Save head.next as new_head, disconnect old head, return new_head. Time: O(1).',
-          code: `def pop_first(head):
-    if not head:
-        return None, head   # Empty list
-    new_head = head.next   # Save second node as new head
-    head.next = None       # Disconnect old head
-    return head, new_head  # Return (removed, new_head)`,
+          text: 'Code:',
+          code: `def reverse(head):
+    prev, curr = None, head
+    while curr:
+        nxt = curr.next
+        curr.next = prev
+        prev = curr
+        curr = nxt
+    return prev
+
+# Time: O(n), Space: O(1)`,
           language: 'python'
         },
         {
+          heading: 'Operation 8: Get / Set by Index',
+          text: '<strong>What it does:</strong> Read or update the value at a specific index.<br/><strong>Best efficiency:</strong> Walk from the head exactly i steps. Both operations are O(n) because there is no random access.',
           diagram: {
-            caption: 'Get — access node at index i',
+            caption: 'Get value at index 2',
             chart: `flowchart LR
-    H[Head] --> N0[0:val=1] --> N1[1:val=2] --> N2[2:val=3] --> N3[3:val=4] --> NULL[None]
-    style N2 fill:#f1c40f,color:#000
-    style H fill:#4a90e2,color:#fff`
+    H[Head] --> N0[0:10] --> N1[1:20] --> N2[2:30] --> NULL[None]
+    style N2 fill:#f1c40f,color:#000`
           }
         },
         {
-          text: 'Get: Start at head, follow next exactly i times. If you hit None before reaching i, index is out of bounds. Time: O(n).',
+          text: 'Code:',
           code: `def get(head, index):
-    # Traverse from head, moving index steps forward
     cur = head
     i = 0
     while cur and i < index:
         cur = cur.next
         i += 1
-    return cur  # Returns None if index >= length`,
-          language: 'python'
-        },
-        {
-          diagram: {
-            caption: 'Set — update value at index i',
-            chart: `flowchart LR
-    H[Head] --> N0[0:val=1] --> N1[1:val=2] --> N2[2:val=10] --> N3[3:val=4] --> NULL[None]
-    style N2 fill:#2ecc71,color:#fff
-    style H fill:#4a90e2,color:#fff`
-          }
-        },
-        {
-          text: 'Set: Use Get to reach index i, then overwrite cur.val. Time: O(n).',
-          code: `def set_value(head, index, val):
-    # Use get() to find the node, then update its value
+    return cur
+
+def set_value(head, index, val):
     node = get(head, index)
     if node:
         node.val = val
-        return True   # Success
-    return False  # Index out of bounds`,
-          language: 'python'
-        },
-        {
-          diagram: {
-            caption: 'Insert — add node at arbitrary index',
-            chart: `flowchart LR
-    L1["Before:"] --> H1[Head] --> A[1] --> B[2] --> C[3]
-    L2["After:"] --> H2[Head] --> D[1] --> E[2] --> F[NEW] --> G[3]
-    style L1 fill:#fff,color:#333,stroke:#fff
-    style L2 fill:#fff,color:#333,stroke:#fff
-    style F fill:#2ecc71,color:#fff`
-          }
-        },
-        {
-          text: 'Insert: Traverse to node at index i-1. Set new_node.next = prev.next, then prev.next = new_node. Time: O(n) traversal + O(1) insertion.',
-          code: `def insert(head, index, val):
-    if index == 0:
-        # Insert at head — new node points to current head
-        new_node = ListNode(val)
-        new_node.next = head
-        return new_node   # New node is the new head
-    # Find the node before the insertion point
-    prev = get(head, index - 1)
-    if not prev:
-        return head   # Index out of bounds
-    new_node = ListNode(val)
-    new_node.next = prev.next   # New node points to what prev was pointing to
-    prev.next = new_node        # Prev now points to new node
-    return head`,
-          language: 'python'
-        },
-        {
-          diagram: {
-            caption: 'Remove — delete node at arbitrary index',
-            chart: `flowchart LR
-    L1["Before:"] --> H1[Head] --> A[1] --> B[2] --> C[3] --> D[4]
-    L2["After:"] --> H2[Head] --> E[1] --> F[3] --> G[4]
-    style L1 fill:#fff,color:#333,stroke:#fff
-    style L2 fill:#fff,color:#333,stroke:#fff
-    style B fill:#e74c3c,color:#fff`
-          }
-        },
-        {
-          text: 'Remove: Traverse to node at index i-1. Set prev.next = prev.next.next to skip target. Time: O(n).',
-          code: `def remove(head, index):
-    if index == 0:
-        return head.next if head else None  # Remove head — just return second node
-    # Find the node before the one to remove
-    prev = get(head, index - 1)
-    if not prev or not prev.next:
-        return head   # Index out of bounds
-    prev.next = prev.next.next  # Skip over the removed node
-    return head`,
-          language: 'python'
-        },
-        {
-          diagram: {
-            caption: 'Reverse — flip all next pointers',
-            chart: `flowchart LR
-    L1["Before:"] --> H1[Head] --> A[1] --> B[2] --> C[3] --> N1[None]
-    L2["After:"] --> H2[Head] --> C2[3] --> B2[2] --> A2[1] --> N2[None]
-    style L1 fill:#fff,color:#333,stroke:#fff
-    style L2 fill:#fff,color:#333,stroke:#fff`
-          }
-        },
-        {
-          text: 'Reverse: Three pointers — prev, curr, nxt. For each node: save next, point to prev, advance. Time: O(n), Space: O(1).',
-          code: `def reverse(head):
-    # Step 1: Initialize two pointers
-    # prev = None  → nothing before the head (will become the new tail's next)
-    # curr = head  → start processing from the first node
-    prev, curr = None, head
+        return True
+    return False
 
-    while curr:
-        nxt = curr.next    # Step 2: Save next node before we overwrite it
-        curr.next = prev   # Step 3: Reverse the pointer — point current node backward
-        prev = curr        # Step 4: Move prev forward to current node
-        curr = nxt         # Step 5: Move curr forward to the saved next node
-
-    return prev   # prev is now the new head (old tail)`,
+# Time: O(n), Space: O(1)`,
           language: 'python'
         },
+        // I — Complete Linked List Class (single, clean)
         {
-          heading: 'Complete Linked List Class',
-          text: 'Here is a full LinkedList class implementing all the above methods in both Python and Java:',
+          heading: 'Complete LinkedList Class',
+          text: 'Below is a clean, full implementation in Python and Java. It includes the core operations discussed above and a driver program that demonstrates usage.',
           example: {
             title: 'Complete LinkedList Class in Python',
-            code: `from typing import Optional
-
-class ListNode:
-    def __init__(self, val: int = 0, nxt: "Optional[ListNode]" = None):
-        self.val  = val
-        self.next = nxt
-
-    def __repr__(self):
-        nodes, cur = [], self
-        while cur:
-            nodes.append(str(cur.val))
-            cur = cur.next
-        return " -> ".join(nodes)
+            code: `class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
 class LinkedList:
     def __init__(self):
@@ -894,145 +975,92 @@ class LinkedList:
         self.tail = None
         self.length = 0
 
+    def append(self, val):
+        new = ListNode(val)
+        if not self.head:
+            self.head = self.tail = new
+        else:
+            self.tail.next = new
+            self.tail = new
+        self.length += 1
+
+    def prepend(self, val):
+        new = ListNode(val)
+        new.next = self.head
+        self.head = new
+        if not self.tail:
+            self.tail = new
+        self.length += 1
+
+    def get(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        cur = self.head
+        for _ in range(index):
+            cur = cur.next
+        return cur
+
+    def insert(self, index, val):
+        if index < 0 or index > self.length:
+            return False
+        if index == 0:
+            self.prepend(val)
+            return True
+        prev = self.get(index - 1)
+        if not prev:
+            return False
+        new = ListNode(val)
+        new.next = prev.next
+        prev.next = new
+        if not new.next:
+            self.tail = new
+        self.length += 1
+        return True
+
+    def remove(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        if index == 0:
+            removed = self.head
+            self.head = self.head.next
+            if not self.head:
+                self.tail = None
+            self.length -= 1
+            return removed
+        prev = self.get(index - 1)
+        removed = prev.next
+        prev.next = removed.next
+        if not prev.next:
+            self.tail = prev
+        self.length -= 1
+        return removed
+
+    def reverse(self):
+        prev, curr = None, self.head
+        self.tail = self.head
+        while curr:
+            nxt = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nxt
+        self.head = prev
+
     def print_list(self):
-        # Traverse from head to tail, printing each value
         cur = self.head
         while cur:
             print(cur.val, end=" -> ")
             cur = cur.next
         print("None")
 
-    def append(self, val):
-        # Add a new node at the tail. O(1) with tail pointer
-        new = ListNode(val)
-        if not self.head:
-            # Empty list — new node becomes both head and tail
-            self.head = self.tail = new
-        else:
-            # Link current tail to new node, then update tail pointer
-            self.tail.next = new
-            self.tail = new
-        self.length += 1
-
-    def pop(self):
-        # Remove and return the last node. O(n) — must find node before tail
-        if not self.head:
-            return None  # Empty list
-        if self.head == self.tail:
-            # Only one node — clear everything
-            removed = self.head
-            self.head = self.tail = None
-            self.length = 0
-            return removed
-        # Walk to the second-to-last node
-        cur = self.head
-        while cur.next != self.tail:
-            cur = cur.next
-        removed = self.tail   # Save the node to return
-        cur.next = None       # Disconnect the old tail
-        self.tail = cur        # Update tail to new last node
-        self.length -= 1
-        return removed
-
-    def pop_first(self):
-        # Remove and return the head node. O(1)
-        if not self.head:
-            return None  # Empty list
-        removed = self.head          # Save the node to return
-        self.head = self.head.next   # Move head to second node
-        if not self.head:
-            self.tail = None  # List is now empty — clear tail too
-        self.length -= 1
-        return removed
-
-    def get(self, index):
-        # Return node at given index. O(n) — must traverse from head
-        if index < 0 or index >= self.length:
-            return None  # Out of bounds
-        cur = self.head
-        for _ in range(index):
-            cur = cur.next
-        return cur
-
-    def set_value(self, index, val):
-        # Update the value at given index. O(n) — uses get()
-        node = self.get(index)
-        if node:
-            node.val = val
-            return True
-        return False  # Index out of bounds
-
-    def insert(self, index, val):
-        # Insert a new node at given index. O(n) — traversal to index-1
-        if index < 0 or index > self.length:
-            return False  # Out of bounds
-        if index == 0:
-            # Insert at head — new node points to current head
-            new = ListNode(val)
-            new.next = self.head
-            self.head = new
-            if not self.tail:
-                self.tail = new  # First node in empty list
-            self.length += 1
-            return True
-        # Find the node before the insertion point
-        prev = self.get(index - 1)
-        new = ListNode(val)
-        new.next = prev.next   # New node points to what prev was pointing to
-        prev.next = new        # Prev now points to new node
-        if not new.next:
-            self.tail = new     # Inserted at the end — update tail
-        self.length += 1
-        return True
-
-    def remove(self, index):
-        # Remove and return node at given index. O(n) — traversal to index-1
-        if index < 0 or index >= self.length:
-            return None  # Out of bounds
-        if index == 0:
-            return self.pop_first()  # Delegate to pop_first for head removal
-        # Find the node before the one to remove
-        prev = self.get(index - 1)
-        removed = prev.next          # Save the node to return
-        prev.next = removed.next     # Skip over the removed node
-        if not prev.next:
-            self.tail = prev  # Removed the tail — update tail pointer
-        self.length -= 1
-        return removed
-
-    def reverse(self):
-        # Reverse all next pointers in place. O(n) time, O(1) space
-        prev, curr = None, self.head
-        self.tail = self.head      # Old head becomes new tail
-        while curr:
-            nxt = curr.next         # Save next node before overwriting
-            curr.next = prev       # Point current node backward to prev
-            prev = curr            # Advance prev to current
-            curr = nxt             # Advance curr to saved next
-        self.head = prev           # Old tail is now the new head
-
+# Driver
 ll = LinkedList()
-for v in [1, 2, 3, 4]:
+for v in [10, 20, 30]:
     ll.append(v)
-print("Initial    :", end=" "); ll.print_list()
-
-ll.insert(2, 99)
-print("After insert(2, 99):", end=" "); ll.print_list()
-
-ll.remove(2)
-print("After remove(2) :", end=" "); ll.print_list()
-
+ll.print_list()          # 10 -> 20 -> 30 -> None
+ll.insert(1, 15)
+ll.print_list()          # 10 -> 15 -> 20 -> 30 -> None
 ll.reverse()
-print("After reverse   :", end=" "); ll.print_list()
-
-print(f"Get(1)  : {ll.get(1).val}")
-print(f"Set(1,77): {ll.set_value(1, 77)}", end=" "); ll.print_list()`,
-            output: `Initial    : 1 -> 2 -> 3 -> 4 -> None
-After insert(2, 99): 1 -> 2 -> 99 -> 3 -> 4 -> None
-After remove(2) : 1 -> 2 -> 3 -> 4 -> None
-After reverse   : 4 -> 3 -> 2 -> 1 -> None
-Get(1)  : 3
-Set(1,77): True 4 -> 77 -> 2 -> 1 -> None`,
+ll.print_list()          # 30 -> 20 -> 15 -> 10 -> None`,
             language: 'python',
             type: 'code'
           }
@@ -1052,10 +1080,80 @@ Set(1,77): True 4 -> 77 -> 2 -> 1 -> None`,
     private ListNode tail;
     private int length;
 
-    public LinkedList() { head = tail = null; length = 0; }
+    public LinkedList() {
+        head = tail = null;
+        length = 0;
+    }
+
+    public void append(int val) {
+        ListNode newNode = new ListNode(val);
+        if (head == null) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+        }
+        length++;
+    }
+
+    public void prepend(int val) {
+        ListNode newNode = new ListNode(val);
+        newNode.next = head;
+        head = newNode;
+        if (tail == null) tail = newNode;
+        length++;
+    }
+
+    public ListNode get(int index) {
+        if (index < 0 || index >= length) return null;
+        ListNode cur = head;
+        for (int i = 0; i < index; i++) cur = cur.next;
+        return cur;
+    }
+
+    public boolean insert(int index, int val) {
+        if (index < 0 || index > length) return false;
+        if (index == 0) { prepend(val); return true; }
+        ListNode prev = get(index - 1);
+        if (prev == null) return false;
+        ListNode newNode = new ListNode(val);
+        newNode.next = prev.next;
+        prev.next = newNode;
+        if (newNode.next == null) tail = newNode;
+        length++;
+        return true;
+    }
+
+    public ListNode remove(int index) {
+        if (index < 0 || index >= length) return null;
+        if (index == 0) {
+            ListNode removed = head;
+            head = head.next;
+            if (head == null) tail = null;
+            length--;
+            return removed;
+        }
+        ListNode prev = get(index - 1);
+        ListNode removed = prev.next;
+        prev.next = removed.next;
+        if (prev.next == null) tail = prev;
+        length--;
+        return removed;
+    }
+
+    public void reverse() {
+        ListNode prev = null, curr = head;
+        tail = head;
+        while (curr != null) {
+            ListNode nxt = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nxt;
+        }
+        head = prev;
+    }
 
     public void printList() {
-        // Traverse from head to tail, printing each value
         ListNode cur = head;
         while (cur != null) {
             System.out.print(cur.val + " -> ");
@@ -1064,451 +1162,54 @@ Set(1,77): True 4 -> 77 -> 2 -> 1 -> None`,
         System.out.println("null");
     }
 
-    public void append(int val) {
-        // Add a new node at the tail. O(1) with tail pointer
-        ListNode newNode = new ListNode(val);
-        if (head == null) {
-            // Empty list — new node becomes both head and tail
-            head = tail = newNode;
-        } else {
-            // Link current tail to new node, then update tail pointer
-            tail.next = newNode;
-            tail = newNode;
-        }
-        length++;
-    }
-
-    public ListNode pop() {
-        // Remove and return the last node. O(n) — must find node before tail
-        if (head == null) return null;  // Empty list
-        if (head == tail) {
-            // Only one node — clear everything
-            ListNode removed = head;
-            head = tail = null;
-            length = 0;
-            return removed;
-        }
-        // Walk to the second-to-last node
-        ListNode cur = head;
-        while (cur.next != tail) cur = cur.next;
-        ListNode removed = tail;  // Save the node to return
-        cur.next = null;          // Disconnect the old tail
-        tail = cur;               // Update tail to new last node
-        length--;
-        return removed;
-    }
-
-    public ListNode popFirst() {
-        // Remove and return the head node. O(1)
-        if (head == null) return null;  // Empty list
-        ListNode removed = head;         // Save the node to return
-        head = head.next;                // Move head to second node
-        if (head == null) tail = null;   // List is now empty — clear tail too
-        length--;
-        return removed;
-    }
-
-    public ListNode get(int index) {
-        // Return node at given index. O(n) — must traverse from head
-        if (index < 0 || index >= length) return null;  // Out of bounds
-        ListNode cur = head;
-        for (int i = 0; i < index; i++) cur = cur.next;
-        return cur;
-    }
-
-    public boolean setValue(int index, int val) {
-        // Update the value at given index. O(n) — uses get()
-        ListNode node = get(index);
-        if (node != null) { node.val = val; return true; }
-        return false;  // Index out of bounds
-    }
-
-    public boolean insert(int index, int val) {
-        // Insert a new node at given index. O(n) — traversal to index-1
-        if (index < 0 || index > length) return false;  // Out of bounds
-        if (index == 0) {
-            // Insert at head — new node points to current head
-            ListNode newNode = new ListNode(val);
-            newNode.next = head;
-            head = newNode;
-            if (tail == null) tail = newNode;  // First node in empty list
-            length++;
-            return true;
-        }
-        // Find the node before the insertion point
-        ListNode prev = get(index - 1);
-        ListNode newNode = new ListNode(val);
-        newNode.next = prev.next;  // New node points to what prev was pointing to
-        prev.next = newNode;        // Prev now points to new node
-        if (newNode.next == null) tail = newNode;  // Inserted at end — update tail
-        length++;
-        return true;
-    }
-
-    public ListNode remove(int index) {
-        // Remove and return node at given index. O(n) — traversal to index-1
-        if (index < 0 || index >= length) return null;  // Out of bounds
-        if (index == 0) return popFirst();  // Delegate to popFirst for head removal
-        // Find the node before the one to remove
-        ListNode prev = get(index - 1);
-        ListNode removed = prev.next;       // Save the node to return
-        prev.next = removed.next;           // Skip over the removed node
-        if (prev.next == null) tail = prev;  // Removed the tail — update tail pointer
-        length--;
-        return removed;
-    }
-
-    public void reverse() {
-        // Reverse all next pointers in place. O(n) time, O(1) space
-        ListNode prev = null, curr = head;
-        tail = head;                  // Old head becomes new tail
-        while (curr != null) {
-            ListNode nxt = curr.next;  // Save next node before overwriting
-            curr.next = prev;          // Point current node backward to prev
-            prev = curr;               // Advance prev to current
-            curr = nxt;                // Advance curr to saved next
-        }
-        head = prev;  // Old tail is now the new head
-    }
-
     public static void main(String[] args) {
         LinkedList ll = new LinkedList();
-        for (int v : new int[]{1, 2, 3, 4}) ll.append(v);
-        System.out.print("Initial     : "); ll.printList();
-
-        ll.insert(2, 99);
-        System.out.print("After insert: "); ll.printList();
-
-        ll.remove(2);
-        System.out.print("After remove: "); ll.printList();
-
+        for (int v : new int[]{10, 20, 30}) ll.append(v);
+        ll.printList();
+        ll.insert(1, 15);
+        ll.printList();
         ll.reverse();
-        System.out.print("After reverse: "); ll.printList();
-
-        System.out.println("Get(1): " + ll.get(1).val);
-        ll.setValue(1, 77);
-        System.out.print("After set   : "); ll.printList();
+        ll.printList();
     }
 }`,
-            output: `Initial     : 1 -> 2 -> 3 -> 4 -> null
-After insert: 1 -> 2 -> 99 -> 3 -> 4 -> null
-After remove: 1 -> 2 -> 3 -> 4 -> null
-After reverse: 4 -> 3 -> 2 -> 1 -> null
-Get(1): 3
-After set   : 4 -> 77 -> 2 -> 1 -> null`,
             language: 'java',
             type: 'code'
           }
         },
-        {
-          heading: 'Time & Space Complexity — Operations',
-          text: 'Complexity summary for all linked list operations with and without tail pointer:',
-          table: {
-            headers: ['Operation', 'Singly LL (no tail)', 'Singly LL (with tail)', 'Notes'],
-            rows: [
-              ['Print / Traverse', 'O(n)', 'O(n)', 'Must visit every node'],
-              ['Append', 'O(n)', 'O(1)', 'Traverse to tail vs direct access'],
-              ['Pop (tail)', 'O(n)', 'O(n)', 'Need node before tail'],
-              ['Pop First', 'O(1)', 'O(1)', 'Just move head'],
-              ['Get by index', 'O(n)', 'O(n)', 'No random access'],
-              ['Set by index', 'O(n)', 'O(n)', 'Get then update'],
-              ['Insert at index', 'O(n)', 'O(n)', 'Traversal dominates'],
-              ['Remove at index', 'O(n)', 'O(n)', 'Traversal dominates'],
-              ['Reverse', 'O(n)', 'O(n)', 'Single pass with 3 pointers'],
-              ['Search by value', 'O(n)', 'O(n)', 'Linear scan']
-            ]
-          }
-        },
-        {
-          heading: 'Python Implementation',
-          example: {
-            title: 'Linked List in Python',
-            code: `from typing import Optional, List
-
-class ListNode:
-    def __init__(self, val: int = 0, nxt: "Optional[ListNode]" = None):
-        self.val  = val
-        self.next = nxt
-
-    def __repr__(self):
-        nodes, cur = [], self
-        while cur:
-            nodes.append(str(cur.val))
-            cur = cur.next
-        return " -> ".join(nodes)
-
-# ── Build a linked list from a Python list ───────────────────────
-def build(values: List[int]) -> Optional[ListNode]:
-    dummy = ListNode(-1)
-    cur = dummy
-    for v in values:
-        cur.next = ListNode(v)
-        cur = cur.next
-    return dummy.next
-
-# ── Reverse: O(n) time, O(1) space ───────────────────────────────
-def reverse_list(head: Optional[ListNode]) -> Optional[ListNode]:
-    prev, curr = None, head
-    while curr:
-        nxt       = curr.next   # save next before overwriting
-        curr.next = prev        # reverse the pointer
-        prev      = curr        # advance prev
-        curr      = nxt         # advance curr
-    return prev                 # prev is the new head
-
-# ── Detect cycle: Floyd's — O(n) time, O(1) space ────────────────
-def has_cycle(head: Optional[ListNode]) -> bool:
-    slow = fast = head
-    while fast and fast.next:
-        slow = slow.next
-        fast = fast.next.next
-        if slow is fast:        # identity check, not equality
-            return True
-    return False
-
-# ── Find middle: fast/slow — O(n) time, O(1) space ───────────────
-def find_middle(head: Optional[ListNode]) -> Optional[ListNode]:
-    slow = fast = head
-    while fast and fast.next:
-        slow = slow.next
-        fast = fast.next.next
-    return slow
-
-# ── Demo ──────────────────────────────────────────────────────────
-ll = build([1, 2, 3, 4, 5])
-print("Original:", ll)
-print("Reversed:", reverse_list(ll))
-
-ll2 = build([1, 2, 3, 4, 5])
-print("Middle  :", find_middle(ll2).val)
-
-# Inject a cycle: node 5 -> node at index 2 (value 3)
-ll3 = build([1, 2, 3, 4, 5])
-cur, nodes = ll3, []
-while cur:
-    nodes.append(cur)
-    cur = cur.next
-nodes[-1].next = nodes[2]   # 5 -> 3 creates a cycle
-print("Has cycle:", has_cycle(ll3))
-print("Has cycle:", has_cycle(build([1, 2, 3])))`,
-            output: `Original: 1 -> 2 -> 3 -> 4 -> 5
-Reversed: 5 -> 4 -> 3 -> 2 -> 1
-Middle  : 3
-Has cycle: True
-Has cycle: False`,
-            language: 'python',
-            type: 'code'
-          }
-        },
-        // E
-        {
-          heading: 'Java Implementation',
-          example: {
-            title: 'Linked List in Java',
-            code: `public class LinkedListDemo {
-
-    static class ListNode {
-        int val;
-        ListNode next;
-        ListNode(int val) { this.val = val; }
-    }
-
-    // ── Build list from int array ─────────────────────────────────
-    static ListNode build(int[] values) {
-        ListNode dummy = new ListNode(-1);
-        ListNode cur   = dummy;
-        for (int v : values) {
-            cur.next = new ListNode(v);
-            cur = cur.next;
-        }
-        return dummy.next;
-    }
-
-    static String toString(ListNode head) {
-        StringBuilder sb = new StringBuilder();
-        while (head != null) {
-            sb.append(head.val);
-            if (head.next != null) sb.append(" -> ");
-            head = head.next;
-        }
-        return sb.toString();
-    }
-
-    // ── Reverse: O(n) time, O(1) space ───────────────────────────
-    static ListNode reverseList(ListNode head) {
-        ListNode prev = null, curr = head;
-        while (curr != null) {
-            ListNode nxt = curr.next;
-            curr.next    = prev;
-            prev         = curr;
-            curr         = nxt;
-        }
-        return prev;
-    }
-
-    // ── Detect cycle: Floyd's — O(n) time, O(1) space ─────────────
-    static boolean hasCycle(ListNode head) {
-        ListNode slow = head, fast = head;
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-            if (slow == fast) return true;   // reference equality
-        }
-        return false;
-    }
-
-    // ── Find middle: fast/slow — O(n) time, O(1) space ───────────
-    static ListNode findMiddle(ListNode head) {
-        ListNode slow = head, fast = head;
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-        return slow;
-    }
-
-    public static void main(String[] args) {
-        ListNode ll = build(new int[]{1, 2, 3, 4, 5});
-        System.out.println("Original: " + toString(ll));
-        System.out.println("Reversed: " + toString(reverseList(ll)));
-
-        ListNode ll2 = build(new int[]{1, 2, 3, 4, 5});
-        System.out.println("Middle  : " + findMiddle(ll2).val);
-
-        ListNode ll3 = build(new int[]{1, 2, 3, 4, 5});
-        ListNode[] nodes = new ListNode[5];
-        ListNode cur = ll3;
-        for (int i = 0; i < 5; i++) { nodes[i] = cur; cur = cur.next; }
-        nodes[4].next = nodes[2];   // 5 -> 3: inject cycle
-        System.out.println("Has cycle: " + hasCycle(ll3));
-        System.out.println("Has cycle: " + hasCycle(build(new int[]{1, 2, 3})));
-    }
-}`,
-            output: `Original: 1 -> 2 -> 3 -> 4 -> 5
-Reversed: 5 -> 4 -> 3 -> 2 -> 1
-Middle  : 3
-Has cycle: true
-Has cycle: false`,
-            language: 'java',
-            type: 'code'
-          }
-        },
-        // F
-        {
-          heading: 'Step-by-Step Walkthrough',
-          list: [
-            '<strong>Step 1 (Reverse):</strong> Initialize prev = None and curr = head. We will rewire one pointer per iteration, moving left to right through the list.',
-            '<strong>Step 2 (Reverse):</strong> Each iteration: save curr.next as nxt (critical — otherwise you lose the rest of the list), set curr.next = prev (reverse the link), advance prev = curr, advance curr = nxt.',
-            '<strong>Step 3 (Reverse):</strong> When curr becomes None, prev points to the old tail which is now the new head. Return prev.',
-            '<strong>Step 4 (Cycle Detection):</strong> Start both slow and fast at head. Each iteration: slow moves one step, fast moves two. If fast or fast.next is None, the list is finite — no cycle.',
-            '<strong>Step 5 (Cycle Detection):</strong> If slow == fast (same object reference), they have met inside the cycle — return True. For the cycle entry point: reset one pointer to head, advance both one step at a time; they meet at the entry node.',
-            '<strong>Step 6 (Find Middle):</strong> Start slow and fast at head. Each iteration: slow moves one step, fast moves two. When fast is None or fast.next is None, slow is positioned at the middle.',
-            '<strong>Step 7 (Dummy Node):</strong> For problems where the head might be removed or changed (remove head, merge lists), prepend dummy = ListNode(-1); dummy.next = head. Operate on dummy.next; always return dummy.next as the final result.'
-          ]
-        },
-        // G
+        // J — Complexity Summary
         {
           heading: 'Time & Space Complexity',
-          text: 'Linked list operation complexities — n is the number of nodes; array costs shown for comparison:',
+          text: 'Summary of linked list operation complexities. Costs assume a singly linked list unless noted otherwise.',
           table: {
-            headers: ['Operation', 'Singly LL', 'Doubly LL', 'Array', 'Notes'],
+            headers: ['Operation', 'Time', 'Space', 'Notes'],
             rows: [
-              ['Access by index', 'O(n)', 'O(n)', 'O(1)', 'LL has no random access'],
-              ['Search by value', 'O(n)', 'O(n)', 'O(n)', 'Must traverse from head'],
-              ['Insert at head', 'O(1)', 'O(1)', 'O(n)', 'Array must shift all elements'],
-              ['Insert at tail', 'O(n) / O(1)*', 'O(1)**', 'O(1) amort', '*O(1) if tail pointer maintained'],
-              ['Insert at index i', 'O(n)', 'O(n)', 'O(n)', 'Traversal to position i'],
-              ['Delete at head', 'O(1)', 'O(1)', 'O(n)', 'Move head pointer forward'],
-              ['Delete given node ref', 'O(n)', 'O(1)', 'O(n)', 'Doubly LL: use prev.next directly'],
-              ['Reverse entire list', 'O(n)', 'O(n)', 'O(n)', 'Must visit every node'],
-              ['Memory per element', 'val + 1 ptr', 'val + 2 ptrs', 'val only', 'LL has pointer overhead']
+              ['Traverse / Print', 'O(n)', 'O(1)', 'Visit every node once'],
+              ['Append (with tail)', 'O(1)', 'O(1)', 'O(n) without tail pointer'],
+              ['Prepend', 'O(1)', 'O(1)', 'Only head pointer changes'],
+              ['Insert at index', 'O(n)', 'O(1)', 'Traversal dominates'],
+              ['Delete at index', 'O(n)', 'O(1)', 'Traversal dominates'],
+              ['Search by value', 'O(n)', 'O(1)', 'Linear scan'],
+              ['Reverse', 'O(n)', 'O(1)', 'Three-pointer iteration'],
+              ['Get / Set by index', 'O(n)', 'O(1)', 'No random access']
             ]
           }
         },
-        // H
-        {
-          heading: 'Common Mistakes & Pitfalls',
-          list: [
-            '<strong>Mistake: Losing the head reference.</strong> Assigning head = head.next before saving it loses the original head and corrupts the result — <em>Fix:</em> Always store the result in a separate variable (prev or dummy.next); never overwrite head mid-operation.',
-            '<strong>Mistake: Not checking None/null before dereferencing next.</strong> Accessing node.next when node is None causes AttributeError (Python) or NullPointerException (Java) — <em>Fix:</em> Always check while cur and cur.next: before accessing cur.next.next.',
-            '<strong>Mistake: Using == instead of is for cycle detection in Python.</strong> slow == fast compares values; slow is fast checks object identity (same node in memory). Two different nodes can have the same value — <em>Fix:</em> Use is for pointer comparison.',
-            '<strong>Mistake: Off-by-one when removing the nth node from end.</strong> Moving fast n steps (instead of n+1) ahead does not leave room for slow to stop at the node before the target — <em>Fix:</em> Advance fast exactly n+1 steps so slow stops at the predecessor, enabling slow.next = slow.next.next.'
-          ],
-          code: `# WRONG: Losing head reference during reversal
-def reverse_wrong(head):
-    while head and head.next:
-        head = head.next   # original head is lost!
-    return head   # returns tail, not a reversed list
-
-# CORRECT: Three-pointer technique
-def reverse_correct(head):
-    prev, curr = None, head
-    while curr:
-        nxt       = curr.next   # 1. save next
-        curr.next = prev        # 2. reverse pointer
-        prev, curr = curr, nxt  # 3. advance both
-    return prev   # prev is the new head
-
-# WRONG: Not checking fast.next before accessing fast.next.next
-def has_cycle_wrong(head):
-    slow, fast = head, head
-    while fast:                    # missing fast.next check!
-        slow = slow.next
-        fast = fast.next.next      # crashes if fast.next is None
-    return False
-
-# CORRECT: Check both fast and fast.next
-def has_cycle_correct(head):
-    slow, fast = head, head
-    while fast and fast.next:      # guard both
-        slow = slow.next
-        fast = fast.next.next
-        if slow is fast:           # identity, not equality
-            return True
-    return False`,
-          language: 'python'
-        },
-        // I
+        // K — Applications
         {
           heading: 'Real-World Applications',
-          text: 'Linked lists and pointer-based structures underpin many critical systems you interact with every day:',
+          text: 'Linked lists are hidden inside many systems you use every day.',
           list: [
-            '<strong>LRU Cache:</strong> Python\'s functools.lru_cache and Java\'s LinkedHashMap use a doubly linked list combined with a hash map for O(1) get and O(1) put — the most common system design interview topic.',
-            '<strong>Browser history:</strong> Back and forward navigation is a doubly linked list — each visited page is a node, and prev/next pointers enable O(1) navigation.',
-            '<strong>Undo/Redo in text editors:</strong> Each edit action is a node in a doubly linked list. Undo traverses backward (prev); redo traverses forward (next); a new action truncates everything after the current node.',
-            '<strong>OS memory management:</strong> Free memory blocks are tracked as a linked list (free list). malloc traverses it to find a block of sufficient size; free reinserts the released block.',
-            '<strong>Music and video playlists:</strong> Doubly linked list enables O(1) previous/next track navigation without knowing the index.',
-            '<strong>Blockchain:</strong> Each block contains a cryptographic hash of the previous block — forming an immutable singly linked chain where tampering with any block invalidates all subsequent hashes.'
-          ]
-        },
-        // J
-        {
-          heading: 'Interview Tips',
-          list: [
-            'Draw the linked list on the whiteboard before writing any code — visualizing pointer states at each step prevents errors and demonstrates methodical thinking.',
-            'Always use a dummy node when the head might change (remove head node, merge two lists) — it eliminates an entire category of edge-case bugs.',
-            'The fast/slow pointer pattern solves three families of problems: detect cycle, find cycle entry, and find middle. Recognizing these patterns saves you from reinventing solutions under pressure.',
-            'When reversing a linked list in an interview, narrate each step aloud: "I save nxt, reverse curr.next to point to prev, then advance both pointers." This shows your reasoning.',
-            'For "remove nth node from end", use two pointers separated by n+1 steps — advance leader to the end, then slow is at the predecessor and you can do slow.next = slow.next.next.',
-            'If the problem requires O(1) space, recursion is off limits (O(n) stack frames). Think iterative with explicit pointer manipulation.',
-            'For merge sorted lists, always use a dummy head. Compare list heads, attach the smaller node, advance that pointer — repeat until one list is exhausted, then append the remaining tail.'
-          ]
-        },
-        // K
-        {
-          heading: 'Practice Problems',
-          list: [
-            'Q1: How do you merge two sorted linked lists into one sorted linked list in O(n + m) time and O(1) space?\nAns: Use a dummy node. Compare heads of both lists and attach the smaller node to the result. Advance that list\'s pointer. When one list is exhausted, attach the remaining tail of the other. Return dummy.next. No extra memory is used because you reuse the existing nodes.',
-            'Q2: How do you find the entry point of a cycle in a linked list after detecting it with Floyd\'s algorithm?\nAns: Phase 1 — run Floyd\'s until slow and fast meet (meeting point is inside the cycle). Phase 2 — reset slow to head, keep fast at the meeting point, advance both one step at a time. They meet exactly at the cycle entry node. Mathematical proof: the distance from head to entry equals the distance from the meeting point to entry modulo cycle length.',
-            'Q3 (Hard): Given a linked list, reverse every k nodes in-place. What is the time and space complexity?\nAns: O(n) time, O(1) space. For each group of k nodes: apply the three-pointer reverse technique, track the tail of the reversed group, connect it to the head of the next group. Repeat until fewer than k nodes remain (leave them in their original order per the standard variant). Each node is visited a constant number of times.'
+            '<strong>LRU Cache:</strong> Doubly linked list + hash map gives O(1) get and put.',
+            '<strong>Browser history:</strong> Back/forward navigation uses a doubly linked list of pages.',
+            '<strong>Undo / Redo:</strong> Text editors store edit actions as nodes in a linked list.',
+            '<strong>Music playlists:</strong> Next/previous track navigation is naturally a linked list.',
+            '<strong>Operating systems:</strong> Free memory blocks are tracked in a free list.',
+            '<strong>Blockchain:</strong> Each block stores a hash of the previous block, forming a chain.'
           ]
         }
       ]
     },
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // TOPIC 4 — Stacks & Queues
-    // ─────────────────────────────────────────────────────────────────────────
     'stacks-queues': {
       title: 'Stacks & Queues',
       subtitle: 'LIFO and FIFO — the engines of traversal',

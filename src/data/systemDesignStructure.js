@@ -1,252 +1,750 @@
 // System Design Patterns — Structure
-// Based on DesignGurus.io System Design Patterns course (12 modules, 60+ patterns)
+// Based on DesignGurus.io System Design Patterns course (13 modules, 70+ patterns)
 
 export const systemDesignStructure = {
-  module1: {
-    title: "Module 1: Communication Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "message-queues", title: "Message Queues" },
-      { id: "pub-sub", title: "Publish-Subscribe" },
-      { id: "request-response", title: "Request-Response" },
-      { id: "webhooks", title: "Webhooks" },
-      { id: "streaming", title: "Streaming (WebSocket & SSE)" },
-      { id: "event-driven", title: "Event-Driven Architecture" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module1": {
+    "title": "Module 1: Communication Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "message-queues",
+        "title": "Message Queues"
+      },
+      {
+        "id": "pub-sub",
+        "title": "Publish-Subscribe"
+      },
+      {
+        "id": "request-response",
+        "title": "Request-Response"
+      },
+      {
+        "id": "webhooks",
+        "title": "Webhooks"
+      },
+      {
+        "id": "streaming",
+        "title": "Streaming (WebSocket & SSE)"
+      },
+      {
+        "id": "event-driven",
+        "title": "Event-Driven Architecture"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module2: {
-    title: "Module 2: Storage Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "replication", title: "Replication (Primary-Replica)" },
-      { id: "sharding", title: "Sharding & Partitioning" },
-      { id: "consistent-hashing", title: "Consistent Hashing" },
-      { id: "event-sourcing", title: "Event Sourcing" },
-      { id: "cqrs", title: "CQRS (Command Query Responsibility Segregation)" },
-      { id: "wal", title: "Write-Ahead Log (WAL)" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module2": {
+    "title": "Module 2: REST API Design",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "resources-and-urls",
+        "title": "Resources & URL Design"
+      },
+      {
+        "id": "http-methods-and-semantics",
+        "title": "HTTP Methods & Semantics"
+      },
+      {
+        "id": "status-codes-and-errors",
+        "title": "Status Codes & Error Handling"
+      },
+      {
+        "id": "request-response-design",
+        "title": "Request & Response Design"
+      },
+      {
+        "id": "pagination-and-filtering",
+        "title": "Pagination & Filtering"
+      },
+      {
+        "id": "caching-and-performance",
+        "title": "Caching & Performance"
+      },
+      {
+        "id": "security-and-authentication",
+        "title": "Security & Authentication"
+      },
+      {
+        "id": "versioning-and-evolution",
+        "title": "Versioning & Evolution"
+      },
+      {
+        "id": "api-contracts-and-docs",
+        "title": "API Contracts & Documentation"
+      },
+      {
+        "id": "advanced-rest-patterns",
+        "title": "Advanced REST Patterns"
+      },
+      {
+        "id": "industry-examples",
+        "title": "Real-World Examples"
+      },
+      {
+        "id": "recap-and-practice",
+        "title": "Recap & Practice"
+      }
+    ]
   },
-  module3: {
-    title: "Module 3: Caching Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "cache-aside", title: "Cache-Aside (Lazy Loading)" },
-      { id: "write-through", title: "Write-Through Cache" },
-      { id: "write-behind", title: "Write-Behind (Write-Back)" },
-      { id: "eviction-policies", title: "Cache Eviction Policies (LRU, LFU, TTL)" },
-      { id: "cdn-caching", title: "CDN Caching" },
-      { id: "multi-tier-cache", title: "Multi-Tier Caching" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module3": {
+    "title": "Module 3: Storage Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "replication",
+        "title": "Replication (Primary-Replica)"
+      },
+      {
+        "id": "sharding",
+        "title": "Sharding & Partitioning"
+      },
+      {
+        "id": "consistent-hashing",
+        "title": "Consistent Hashing"
+      },
+      {
+        "id": "event-sourcing",
+        "title": "Event Sourcing"
+      },
+      {
+        "id": "cqrs",
+        "title": "CQRS (Command Query Responsibility Segregation)"
+      },
+      {
+        "id": "wal",
+        "title": "Write-Ahead Log (WAL)"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module4: {
-    title: "Module 4: Reliability Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "timeouts", title: "Timeouts" },
-      { id: "retries", title: "Retries & Backoff" },
-      { id: "idempotency", title: "Idempotency" },
-      { id: "circuit-breaker", title: "Circuit Breaker" },
-      { id: "bulkhead", title: "Bulkhead Pattern" },
-      { id: "rate-limiting", title: "Rate Limiting (Token Bucket, Leaky Bucket)" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module4": {
+    "title": "Module 4: Caching Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "cache-aside",
+        "title": "Cache-Aside (Lazy Loading)"
+      },
+      {
+        "id": "write-through",
+        "title": "Write-Through Cache"
+      },
+      {
+        "id": "write-behind",
+        "title": "Write-Behind (Write-Back)"
+      },
+      {
+        "id": "eviction-policies",
+        "title": "Cache Eviction Policies (LRU, LFU, TTL)"
+      },
+      {
+        "id": "cdn-caching",
+        "title": "CDN Caching"
+      },
+      {
+        "id": "multi-tier-cache",
+        "title": "Multi-Tier Caching"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module5: {
-    title: "Module 5: Scaling Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "horizontal-vertical", title: "Horizontal vs Vertical Scaling" },
-      { id: "load-balancing", title: "Load Balancing Algorithms" },
-      { id: "auto-scaling", title: "Auto-Scaling" },
-      { id: "database-scaling", title: "Database Scaling (Read Replicas, Sharding)" },
-      { id: "microservices-scaling", title: "Microservices Scaling" },
-      { id: "stateless-services", title: "Stateless Services" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module5": {
+    "title": "Module 5: Reliability Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "timeouts",
+        "title": "Timeouts"
+      },
+      {
+        "id": "retries",
+        "title": "Retries & Backoff"
+      },
+      {
+        "id": "idempotency",
+        "title": "Idempotency"
+      },
+      {
+        "id": "circuit-breaker",
+        "title": "Circuit Breaker"
+      },
+      {
+        "id": "bulkhead",
+        "title": "Bulkhead Pattern"
+      },
+      {
+        "id": "rate-limiting",
+        "title": "Rate Limiting (Token Bucket, Leaky Bucket)"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module6: {
-    title: "Module 6: Distributed Consistency Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "sagas", title: "Saga Pattern" },
-      { id: "two-phase-commit", title: "Two-Phase Commit (2PC)" },
-      { id: "quorum-consistency", title: "Quorum-Based Consistency" },
-      { id: "distributed-transactions", title: "Distributed Transactions" },
-      { id: "eventual-consistency", title: "Eventual Consistency" },
-      { id: "cap-theorem", title: "CAP Theorem & PACELC" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module6": {
+    "title": "Module 6: Scaling Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "horizontal-vertical",
+        "title": "Horizontal vs Vertical Scaling"
+      },
+      {
+        "id": "load-balancing",
+        "title": "Load Balancing Algorithms"
+      },
+      {
+        "id": "auto-scaling",
+        "title": "Auto-Scaling"
+      },
+      {
+        "id": "database-scaling",
+        "title": "Database Scaling (Read Replicas, Sharding)"
+      },
+      {
+        "id": "microservices-scaling",
+        "title": "Microservices Scaling"
+      },
+      {
+        "id": "stateless-services",
+        "title": "Stateless Services"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module7: {
-    title: "Module 7: API & Edge Design Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "api-gateway", title: "API Gateway" },
-      { id: "bff-pattern", title: "Backend for Frontend (BFF)" },
-      { id: "api-versioning", title: "API Versioning" },
-      { id: "api-rate-limiting", title: "API Rate Limiting at Edge" },
-      { id: "cdn-edge", title: "CDN & Edge Computing" },
-      { id: "graphql-federation", title: "GraphQL Federation" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module7": {
+    "title": "Module 7: Distributed Consistency Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "sagas",
+        "title": "Saga Pattern"
+      },
+      {
+        "id": "two-phase-commit",
+        "title": "Two-Phase Commit (2PC)"
+      },
+      {
+        "id": "quorum-consistency",
+        "title": "Quorum-Based Consistency"
+      },
+      {
+        "id": "distributed-transactions",
+        "title": "Distributed Transactions"
+      },
+      {
+        "id": "eventual-consistency",
+        "title": "Eventual Consistency"
+      },
+      {
+        "id": "cap-theorem",
+        "title": "CAP Theorem & PACELC"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module8: {
-    title: "Module 8: Production Operations Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "canary-deployment", title: "Canary Deployment" },
-      { id: "blue-green", title: "Blue-Green Deployment" },
-      { id: "feature-flags", title: "Feature Flags" },
-      { id: "observability", title: "Observability (Logging, Metrics, Tracing)" },
-      { id: "health-checks", title: "Health Checks & Readiness Probes" },
-      { id: "chaos-engineering", title: "Chaos Engineering" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module8": {
+    "title": "Module 8: API & Edge Design Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "api-gateway",
+        "title": "API Gateway"
+      },
+      {
+        "id": "bff-pattern",
+        "title": "Backend for Frontend (BFF)"
+      },
+      {
+        "id": "api-versioning",
+        "title": "API Versioning"
+      },
+      {
+        "id": "api-rate-limiting",
+        "title": "API Rate Limiting at Edge"
+      },
+      {
+        "id": "cdn-edge",
+        "title": "CDN & Edge Computing"
+      },
+      {
+        "id": "graphql-federation",
+        "title": "GraphQL Federation"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module9: {
-    title: "Module 9: Data-Intensive System Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "stream-processing", title: "Stream Processing" },
-      { id: "cdc", title: "Change Data Capture (CDC)" },
-      { id: "exactly-once", title: "Exactly-Once Processing" },
-      { id: "batch-processing", title: "Batch Processing (MapReduce, Spark)" },
-      { id: "lambda-architecture", title: "Lambda Architecture" },
-      { id: "kappa-architecture", title: "Kappa Architecture" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module9": {
+    "title": "Module 9: Production Operations Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "canary-deployment",
+        "title": "Canary Deployment"
+      },
+      {
+        "id": "blue-green",
+        "title": "Blue-Green Deployment"
+      },
+      {
+        "id": "feature-flags",
+        "title": "Feature Flags"
+      },
+      {
+        "id": "observability",
+        "title": "Observability (Logging, Metrics, Tracing)"
+      },
+      {
+        "id": "health-checks",
+        "title": "Health Checks & Readiness Probes"
+      },
+      {
+        "id": "chaos-engineering",
+        "title": "Chaos Engineering"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module10: {
-    title: "Module 10: AI-Era Infrastructure Patterns",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "llm-gateway", title: "LLM Gateway" },
-      { id: "semantic-caching", title: "Semantic Caching" },
-      { id: "rag-pipeline", title: "RAG Pipeline Architecture" },
-      { id: "vector-db-sharding", title: "Vector Database Sharding" },
-      { id: "gpu-serving", title: "GPU Serving & Batching" },
-      { id: "model-routing", title: "Model Routing & Fallback" },
-      { id: "capstone-project", title: "Capstone Project" },
-        ],
+  "module10": {
+    "title": "Module 10: Data-Intensive System Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "stream-processing",
+        "title": "Stream Processing"
+      },
+      {
+        "id": "cdc",
+        "title": "Change Data Capture (CDC)"
+      },
+      {
+        "id": "exactly-once",
+        "title": "Exactly-Once Processing"
+      },
+      {
+        "id": "batch-processing",
+        "title": "Batch Processing (MapReduce, Spark)"
+      },
+      {
+        "id": "lambda-architecture",
+        "title": "Lambda Architecture"
+      },
+      {
+        "id": "kappa-architecture",
+        "title": "Kappa Architecture"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module11: {
-    title: "Module 11: Capstone — URL Shortener",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "url-shortener-overview", title: "URL Shortener: Requirements & Scale" },
-      { id: "url-shortener-encoding", title: "URL Shortener: Encoding & Generation" },
-      { id: "url-shortener-storage", title: "URL Shortener: Storage & Sharding" },
-      { id: "url-shortener-cache", title: "URL Shortener: Caching & CDN" },
-      { id: "url-shortener-analytics", title: "URL Shortener: Analytics & Redirection" },
-    ],
+  "module11": {
+    "title": "Module 11: AI-Era Infrastructure Patterns",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "llm-gateway",
+        "title": "LLM Gateway"
+      },
+      {
+        "id": "semantic-caching",
+        "title": "Semantic Caching"
+      },
+      {
+        "id": "rag-pipeline",
+        "title": "RAG Pipeline Architecture"
+      },
+      {
+        "id": "vector-db-sharding",
+        "title": "Vector Database Sharding"
+      },
+      {
+        "id": "gpu-serving",
+        "title": "GPU Serving & Batching"
+      },
+      {
+        "id": "model-routing",
+        "title": "Model Routing & Fallback"
+      },
+      {
+        "id": "capstone-project",
+        "title": "Capstone Project"
+      }
+    ]
   },
-  module12: {
-    title: "Module 12: Capstone — Real-Time Chat System",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "chat-overview", title: "Chat System: Requirements & Scale" },
-      { id: "chat-protocol", title: "Chat System: WebSocket Protocol" },
-      { id: "chat-message-storage", title: "Chat System: Message Storage" },
-      { id: "chat-presence", title: "Chat System: Presence & Online Status" },
-      { id: "chat-scaling", title: "Chat System: Scaling & Fan-Out" },
-    ],
+  "module12": {
+    "title": "Module 12: Capstone — URL Shortener",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "url-shortener-overview",
+        "title": "URL Shortener: Requirements & Scale"
+      },
+      {
+        "id": "url-shortener-encoding",
+        "title": "URL Shortener: Encoding & Generation"
+      },
+      {
+        "id": "url-shortener-storage",
+        "title": "URL Shortener: Storage & Sharding"
+      },
+      {
+        "id": "url-shortener-cache",
+        "title": "URL Shortener: Caching & CDN"
+      },
+      {
+        "id": "url-shortener-analytics",
+        "title": "URL Shortener: Analytics & Redirection"
+      }
+    ]
   },
-  module13: {
-    title: "Module 13: Building Blocks",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "proxies", title: "Proxies (Forward vs Reverse)" },
-      { id: "database-indexes", title: "Database Indexes" },
-      { id: "bloom-filters", title: "Bloom Filters" },
-      { id: "heartbeat", title: "Heartbeat & Failure Detection" },
-      { id: "checksum", title: "Checksums & Data Integrity" },
-      { id: "leader-follower", title: "Leader & Follower Pattern" },
-    ],
+  "module13": {
+    "title": "Module 13: Capstone — Real-Time Chat System",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "chat-overview",
+        "title": "Chat System: Requirements & Scale"
+      },
+      {
+        "id": "chat-protocol",
+        "title": "Chat System: WebSocket Protocol"
+      },
+      {
+        "id": "chat-message-storage",
+        "title": "Chat System: Message Storage"
+      },
+      {
+        "id": "chat-presence",
+        "title": "Chat System: Presence & Online Status"
+      },
+      {
+        "id": "chat-scaling",
+        "title": "Chat System: Scaling & Fan-Out"
+      }
+    ]
   },
-  module14: {
-    title: "Module 14: Trade-offs",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "strong-vs-eventual-consistency", title: "Strong vs Eventual Consistency" },
-      { id: "latency-vs-throughput", title: "Latency vs Throughput" },
-      { id: "acid-vs-base", title: "ACID vs BASE Properties" },
-      { id: "load-balancer-vs-api-gateway", title: "Load Balancer vs API Gateway" },
-      { id: "api-gateway-vs-reverse-proxy", title: "API Gateway vs Reverse Proxy" },
-      { id: "primary-replica-vs-peer-to-peer", title: "Primary-Replica vs Peer-to-Peer Replication" },
-      { id: "server-vs-client-caching", title: "Server-Side vs Client-Side Caching" },
-      { id: "rest-vs-rpc", title: "REST vs RPC" },
-      { id: "polling-vs-websocket-vs-webhook", title: "Polling vs Long-Polling vs WebSockets vs Webhooks" },
-      { id: "cdn-vs-direct-server", title: "CDN vs Direct Server Serving" },
-      { id: "serverless-vs-traditional", title: "Serverless vs Traditional Server-Based" },
-      { id: "stateful-vs-stateless", title: "Stateful vs Stateless Architecture" },
-      { id: "token-bucket-vs-leaky-bucket", title: "Token Bucket vs Leaky Bucket" },
-      { id: "read-heavy-vs-write-heavy", title: "Read-Heavy vs Write-Heavy Systems" },
-    ],
+  "module14": {
+    "title": "Module 14: Building Blocks",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "proxies",
+        "title": "Proxies (Forward vs Reverse)"
+      },
+      {
+        "id": "database-indexes",
+        "title": "Database Indexes"
+      },
+      {
+        "id": "bloom-filters",
+        "title": "Bloom Filters"
+      },
+      {
+        "id": "heartbeat",
+        "title": "Heartbeat & Failure Detection"
+      },
+      {
+        "id": "checksum",
+        "title": "Checksums & Data Integrity"
+      },
+      {
+        "id": "leader-follower",
+        "title": "Leader & Follower Pattern"
+      }
+    ]
   },
-  module15: {
-    title: "Module 15: Networking & Distributed Systems Core",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "dns", title: "DNS & Name Resolution" },
-      { id: "consensus-raft-paxos", title: "Consensus Algorithms (Raft & Paxos)" },
-      { id: "distributed-id-generation", title: "Distributed ID Generation" },
-      { id: "distributed-locking", title: "Distributed Locking" },
-      { id: "service-discovery", title: "Service Discovery" },
-      { id: "vector-clocks", title: "Vector Clocks & Conflict Resolution" },
-    ],
+  "module15": {
+    "title": "Module 15: Trade-offs",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "strong-vs-eventual-consistency",
+        "title": "Strong vs Eventual Consistency"
+      },
+      {
+        "id": "latency-vs-throughput",
+        "title": "Latency vs Throughput"
+      },
+      {
+        "id": "acid-vs-base",
+        "title": "ACID vs BASE Properties"
+      },
+      {
+        "id": "load-balancer-vs-api-gateway",
+        "title": "Load Balancer vs API Gateway"
+      },
+      {
+        "id": "api-gateway-vs-reverse-proxy",
+        "title": "API Gateway vs Reverse Proxy"
+      },
+      {
+        "id": "primary-replica-vs-peer-to-peer",
+        "title": "Primary-Replica vs Peer-to-Peer Replication"
+      },
+      {
+        "id": "server-vs-client-caching",
+        "title": "Server-Side vs Client-Side Caching"
+      },
+      {
+        "id": "rest-vs-rpc",
+        "title": "REST vs RPC"
+      },
+      {
+        "id": "polling-vs-websocket-vs-webhook",
+        "title": "Polling vs Long-Polling vs WebSockets vs Webhooks"
+      },
+      {
+        "id": "cdn-vs-direct-server",
+        "title": "CDN vs Direct Server Serving"
+      },
+      {
+        "id": "serverless-vs-traditional",
+        "title": "Serverless vs Traditional Server-Based"
+      },
+      {
+        "id": "stateful-vs-stateless",
+        "title": "Stateful vs Stateless Architecture"
+      },
+      {
+        "id": "token-bucket-vs-leaky-bucket",
+        "title": "Token Bucket vs Leaky Bucket"
+      },
+      {
+        "id": "read-heavy-vs-write-heavy",
+        "title": "Read-Heavy vs Write-Heavy Systems"
+      }
+    ]
   },
-  module16: {
-    title: "Module 16: Search & Location Systems",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "inverted-index", title: "Inverted Index & Elasticsearch" },
-      { id: "typeahead-autocomplete", title: "Typeahead & Autocomplete" },
-      { id: "geohash-quadtree", title: "Geohash & Quadtree (Spatial Indexing)" },
-    ],
+  "module16": {
+    "title": "Module 16: Networking & Distributed Systems Core",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "dns",
+        "title": "DNS & Name Resolution"
+      },
+      {
+        "id": "consensus-raft-paxos",
+        "title": "Consensus Algorithms (Raft & Paxos)"
+      },
+      {
+        "id": "distributed-id-generation",
+        "title": "Distributed ID Generation"
+      },
+      {
+        "id": "distributed-locking",
+        "title": "Distributed Locking"
+      },
+      {
+        "id": "service-discovery",
+        "title": "Service Discovery"
+      },
+      {
+        "id": "vector-clocks",
+        "title": "Vector Clocks & Conflict Resolution"
+      }
+    ]
   },
-  module17: {
-    title: "Module 17: Capstone — News Feed System",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "news-feed-overview", title: "News Feed: Requirements & Scale" },
-      { id: "news-feed-data-model", title: "News Feed: Data Model & Storage" },
-      { id: "news-feed-fanout", title: "News Feed: Fan-out (Push vs Pull)" },
-      { id: "news-feed-ranking", title: "News Feed: Ranking & ML Signals" },
-      { id: "news-feed-scaling", title: "News Feed: Scaling to 100M+ Users" },
-    ],
+  "module17": {
+    "title": "Module 17: Search & Location Systems",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "inverted-index",
+        "title": "Inverted Index & Elasticsearch"
+      },
+      {
+        "id": "typeahead-autocomplete",
+        "title": "Typeahead & Autocomplete"
+      },
+      {
+        "id": "geohash-quadtree",
+        "title": "Geohash & Quadtree (Spatial Indexing)"
+      }
+    ]
   },
-  module18: {
-    title: "Module 18: Capstone — Web Crawler",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "crawler-overview", title: "Web Crawler: Requirements & Scale" },
-      { id: "crawler-frontier", title: "Web Crawler: URL Frontier & Scheduling" },
-      { id: "crawler-politeness-dedup", title: "Web Crawler: Politeness & Deduplication" },
-      { id: "crawler-scaling", title: "Web Crawler: Scaling to Billions of Pages" },
-    ],
+  "module18": {
+    "title": "Module 18: Capstone — News Feed System",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "news-feed-overview",
+        "title": "News Feed: Requirements & Scale"
+      },
+      {
+        "id": "news-feed-data-model",
+        "title": "News Feed: Data Model & Storage"
+      },
+      {
+        "id": "news-feed-fanout",
+        "title": "News Feed: Fan-out (Push vs Pull)"
+      },
+      {
+        "id": "news-feed-ranking",
+        "title": "News Feed: Ranking & ML Signals"
+      },
+      {
+        "id": "news-feed-scaling",
+        "title": "News Feed: Scaling to 100M+ Users"
+      }
+    ]
   },
-  module19: {
-    title: "Module 19: Capstone — Video Streaming (YouTube/Netflix)",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "video-overview", title: "Video Streaming: Requirements & Scale" },
-      { id: "video-transcoding", title: "Video Streaming: Upload & Transcoding" },
-      { id: "video-delivery", title: "Video Streaming: Adaptive Delivery (HLS/DASH)" },
-      { id: "video-scaling", title: "Video Streaming: Scaling & CDN Strategy" },
-    ],
+  "module19": {
+    "title": "Module 19: Capstone — Web Crawler",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "crawler-overview",
+        "title": "Web Crawler: Requirements & Scale"
+      },
+      {
+        "id": "crawler-frontier",
+        "title": "Web Crawler: URL Frontier & Scheduling"
+      },
+      {
+        "id": "crawler-politeness-dedup",
+        "title": "Web Crawler: Politeness & Deduplication"
+      },
+      {
+        "id": "crawler-scaling",
+        "title": "Web Crawler: Scaling to Billions of Pages"
+      }
+    ]
   },
-  module0: {
-    title: "Module 0: Interview Fundamentals",
-    topics: [
-      { id: "module-intro", title: "Chapter Overview" },
-      { id: "what-is-system-design-interview", title: "What is a System Design Interview?" },
-      { id: "functional-vs-nonfunctional-requirements", title: "Functional vs Non-Functional Requirements" },
-      { id: "back-of-the-envelope-estimation", title: "Back-of-the-Envelope Estimation" },
-      { id: "interview-framework", title: "The 4S Interview Framework" },
-      { id: "common-interview-mistakes", title: "Common Interview Mistakes" },
-    ],
+  "module20": {
+    "title": "Module 20: Capstone — Video Streaming (YouTube/Netflix)",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "video-overview",
+        "title": "Video Streaming: Requirements & Scale"
+      },
+      {
+        "id": "video-transcoding",
+        "title": "Video Streaming: Upload & Transcoding"
+      },
+      {
+        "id": "video-delivery",
+        "title": "Video Streaming: Adaptive Delivery (HLS/DASH)"
+      },
+      {
+        "id": "video-scaling",
+        "title": "Video Streaming: Scaling & CDN Strategy"
+      }
+    ]
   },
+  "module21": {
+    "title": "Module 21: Interview Fundamentals",
+    "topics": [
+      {
+        "id": "module-intro",
+        "title": "Chapter Overview"
+      },
+      {
+        "id": "what-is-system-design-interview",
+        "title": "What is a System Design Interview?"
+      },
+      {
+        "id": "functional-vs-nonfunctional-requirements",
+        "title": "Functional vs Non-Functional Requirements"
+      },
+      {
+        "id": "back-of-the-envelope-estimation",
+        "title": "Back-of-the-Envelope Estimation"
+      },
+      {
+        "id": "interview-framework",
+        "title": "The 4S Interview Framework"
+      },
+      {
+        "id": "common-interview-mistakes",
+        "title": "Common Interview Mistakes"
+      }
+    ]
+  }
 };
