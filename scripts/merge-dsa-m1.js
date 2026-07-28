@@ -23,10 +23,13 @@ const structure = {
     title: "Module 1: Core Linear Structures",
     topics: [
       { id: "big-o", title: "Big-O Notation & Complexity Analysis" },
-      { id: "arrays-strings", title: "Arrays & Strings" },
+      { id: "arrays", title: "Arrays" },
+      { id: "strings", title: "Strings" },
       { id: "linked-lists", title: "Linked Lists (Singly & Doubly)" },
-      { id: "stacks-queues", title: "Stacks & Queues" },
-      { id: "hashmaps-sets", title: "HashMaps & Sets" },
+      { id: "stacks", title: "Stacks" },
+      { id: "queues", title: "Queues" },
+      { id: "hashmaps", title: "Hash Maps" },
+      { id: "sets", title: "Sets" },
     ],
   },
 };

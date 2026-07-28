@@ -1,6 +1,13 @@
 // DSA Module 1: Core Linear Structures
 // Target: Job seekers, AI Engineers, Data Scientists
 
+import { arraysTopic } from './dsa_m1_arrays.js'
+import { stringsTopic } from './dsa_m1_strings.js'
+import { stacksTopic } from './dsa_m1_stacks.js'
+import { queuesTopic } from './dsa_m1_queues.js'
+import { hashmapsTopic } from './dsa_m1_hashmaps.js'
+import { setsTopic } from './dsa_m1_sets.js'
+
 export const dsaM1 = {
   module1: {
 
@@ -273,309 +280,17 @@ def factorial(n):
     },
 
     // ─────────────────────────────────────────────────────────────────────────
-    // TOPIC 2 — Arrays & Strings
+    // TOPIC 2 — Arrays
     // ─────────────────────────────────────────────────────────────────────────
-    'arrays-strings': {
-      title: 'Arrays & Strings',
-      subtitle: 'The backbone of every coding interview',
-      sections: [
-        // A
-        {
-          heading: 'Core Concepts: Arrays & Strings',
-          text: 'Arrays and strings are the most frequently tested data structures in coding interviews. Mastering their internals and the classic patterns built on top of them covers roughly 40% of all interview problems.',
-          list: [
-            '<strong>Static Array:</strong> Fixed-size contiguous block of memory. Random access is O(1) because the address of element i is: base_address + i × element_size.',
-            '<strong>Dynamic Array (Python list / Java ArrayList):</strong> Backed by a static array that is resized (typically doubled) when full. Append is O(1) amortized; insert at arbitrary index is O(n) due to shifting.',
-            '<strong>String Immutability:</strong> In Python and Java, strings are immutable — every concatenation creates a new object. Concatenating n strings in a loop is O(n²). Use list.join() in Python or StringBuilder in Java.',
-            '<strong>Sliding Window:</strong> Maintain a window [left, right] over the array, expanding right and shrinking left based on a constraint. Converts many O(n²) brute-force substring/subarray problems to O(n).',
-            '<strong>Two Pointers:</strong> Use left and right pointers moving toward each other (sorted pair-sum) or both moving right at different speeds (fast/slow). Avoids nested loops.',
-            '<strong>Two-Sum Pattern:</strong> Store complements in a hash map as you scan. Converts O(n²) brute-force pair search to O(n) time with O(n) space.'
-          ]
-        },
-        // B
-        {
-          heading: 'Concept Explanation',
-          content: [
-            '<p>Python lists are <em>dynamic arrays</em> under the hood. They store a contiguous block of pointers (8 bytes each on 64-bit systems) to the actual Python objects. When you do <code>lst[i]</code>, Python computes the pointer address in O(1). When you do <code>lst.insert(0, x)</code>, every existing pointer must shift one position right — O(n) work proportional to the list length.</p>',
-            '<p>String immutability matters more than most beginners realize. The pattern <code>s = s + c</code> inside a loop allocates a brand-new string of length len(s)+1 every iteration. For n iterations, total characters allocated is 1 + 2 + ... + n = O(n²). The fix is collecting characters in a list and calling <code>"".join(chars)</code> at the end — one O(n) allocation instead of O(n²).</p>',
-            '<p>The <strong>sliding window</strong> technique works by maintaining invariants about the window contents. Expand the right pointer to include new elements; when the window violates a constraint (has a duplicate, sum exceeds target), shrink from the left. Because each element enters and leaves the window at most once, total work across all pointer movements is O(n) — even though there are two nested-looking loops.</p>'
-          ],
-          note: 'Key rule: for subarray or substring problems with a constraint, reach for sliding window. For pair-sum problems, use two pointers on a sorted array or a hash map on an unsorted array.'
-        },
-        // C
-        {
-          heading: 'Visual Diagram',
-          code: `Static Array — contiguous memory layout:
-  Index: [  0  ][  1  ][  2  ][  3  ][  4  ]
-  Value: [ 10  ][ 20  ][ 30  ][ 40  ][ 50  ]
-  Addr:  [1000 ][1008 ][1016 ][1024 ][1032 ]   (8 bytes each)
-  Access arr[3]: base(1000) + 3*8 = 1024 -> O(1)
-
-Dynamic Array (Python list) — amortized resize:
-  Capacity: 4   Used: 4   Append E triggers resize:
-  [ A ][ B ][ C ][ D ]   <- full!
-  Allocate new buffer of capacity 8, copy all, append E:
-  [ A ][ B ][ C ][ D ][ E ][   ][   ][   ]
-
-Sliding Window — max sum subarray of size k=3:
-  arr = [2, 1, 5, 1, 3, 2],  k = 3
-
-  Window 1: [2, 1, 5]   sum = 8
-             L-----R
-  Window 2:  [1, 5, 1]  sum = 7   subtract arr[0]=2, add arr[3]=1
-              L-----R
-  Window 3:     [5, 1, 3]  sum = 9  <- maximum
-                 L-----R
-  Window 4:        [1, 3, 2]  sum = 6
-                    L-----R
-  Answer: 9`,
-          language: 'text'
-        },
-        // D
-        {
-          heading: 'Python Implementation',
-          example: {
-            title: 'Arrays & Strings in Python',
-            code: `from typing import List, Dict
-
-# ── Two Sum: O(n) time, O(n) space ──────────────────────────────
-def two_sum(nums: List[int], target: int) -> List[int]:
-    """Return indices of the two numbers that add up to target."""
-    seen: Dict[int, int] = {}   # maps value -> index
-    for i, num in enumerate(nums):
-        complement = target - num
-        if complement in seen:
-            return [seen[complement], i]
-        seen[num] = i
-    return []
-
-# ── Kadane's Algorithm: max subarray sum — O(n) time, O(1) space ─
-def max_subarray(nums: List[int]) -> int:
-    """Largest sum of any contiguous subarray."""
-    max_sum = current = nums[0]
-    for num in nums[1:]:
-        current = max(num, current + num)   # extend or restart
-        max_sum = max(max_sum, current)
-    return max_sum
-
-# ── Sliding Window: longest substring without repeating chars ─────
-def length_of_longest_substring(s: str) -> int:
-    """O(n) time, O(min(n, alphabet_size)) space."""
-    char_index: Dict[str, int] = {}
-    left = max_len = 0
-    for right, ch in enumerate(s):
-        if ch in char_index and char_index[ch] >= left:
-            left = char_index[ch] + 1   # shrink window past duplicate
-        char_index[ch] = right
-        max_len = max(max_len, right - left + 1)
-    return max_len
-
-# ── String building: O(n) join vs O(n^2) concatenation ───────────
-def build_string_wrong(n: int) -> str:
-    s = ""
-    for i in range(n):
-        s += str(i)      # creates a new string each iteration — O(n^2) total
-    return s
-
-def build_string_right(n: int) -> str:
-    parts = []
-    for i in range(n):
-        parts.append(str(i))    # O(1) amortized per append
-    return "".join(parts)       # single O(n) allocation
-
-# ── Demo ──────────────────────────────────────────────────────────
-print(two_sum([2, 7, 11, 15], 9))
-print(two_sum([3, 2, 4], 6))
-print(max_subarray([-2, 1, -3, 4, -1, 2, 1, -5, 4]))
-print(length_of_longest_substring("abcabcbb"))
-print(length_of_longest_substring("pwwkew"))`,
-            output: `[0, 1]
-[1, 2]
-6
-3
-3`,
-            language: 'python',
-            type: 'code'
-          }
-        },
-        // E
-        {
-          heading: 'Java Implementation',
-          example: {
-            title: 'Arrays & Strings in Java',
-            code: `import java.util.*;
-
-public class ArraysStrings {
-
-    // ── Two Sum: O(n) time, O(n) space ───────────────────────────
-    public static int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> seen = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            int complement = target - nums[i];
-            if (seen.containsKey(complement)) {
-                return new int[]{seen.get(complement), i};
-            }
-            seen.put(nums[i], i);
-        }
-        return new int[]{};
-    }
-
-    // ── Kadane's Algorithm: O(n) time, O(1) space ─────────────────
-    public static int maxSubarray(int[] nums) {
-        int maxSum = nums[0], current = nums[0];
-        for (int i = 1; i < nums.length; i++) {
-            current = Math.max(nums[i], current + nums[i]);
-            maxSum  = Math.max(maxSum, current);
-        }
-        return maxSum;
-    }
-
-    // ── String Reversal using char array — O(n) time, O(n) space ─
-    public static String reverseString(String s) {
-        char[] chars = s.toCharArray();
-        int left = 0, right = chars.length - 1;
-        while (left < right) {
-            char tmp    = chars[left];
-            chars[left] = chars[right];
-            chars[right] = tmp;
-            left++;
-            right--;
-        }
-        return new String(chars);
-    }
-
-    // ── StringBuilder: O(n) vs string + in loop: O(n^2) ──────────
-    public static String buildStringRight(int n) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            sb.append(i);   // O(1) amortized — avoid String + in loop
-        }
-        return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(Arrays.toString(twoSum(new int[]{2, 7, 11, 15}, 9)));
-        System.out.println(Arrays.toString(twoSum(new int[]{3, 2, 4}, 6)));
-        System.out.println(maxSubarray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
-        System.out.println(reverseString("hello"));
-    }
-}`,
-            output: `[0, 1]
-[1, 2]
-6
-olleh`,
-            language: 'java',
-            type: 'code'
-          }
-        },
-        // F
-        {
-          heading: 'Step-by-Step Walkthrough',
-          list: [
-            '<strong>Step 1 (Two Sum):</strong> Initialize an empty hash map. The key insight: for each element x, the value we need to pair with it is target - x. Check if that complement already exists in the map.',
-            '<strong>Step 2 (Two Sum):</strong> If the complement is not in the map, store { x: current_index } and continue. If it is found, return [seen[complement], i]. One pass, O(n) time, O(n) space.',
-            '<strong>Step 3 (Kadane\'s):</strong> At each position, decide: is it better to extend the existing subarray (current + num) or start a fresh one from the current element (just num)? Take the max of the two options.',
-            '<strong>Step 4 (Kadane\'s):</strong> Maintain a global max updated at every step. When the loop finishes, global max holds the answer. Handle all-negative arrays by initializing both current and max_sum to nums[0].',
-            '<strong>Step 5 (Sliding Window):</strong> Maintain a dictionary of last-seen character indices and two pointers: left and right. Advance right to expand; when a duplicate is found inside [left, right], advance left past the previous occurrence.',
-            '<strong>Step 6 (Sliding Window):</strong> Update the answer (right - left + 1) after each right move. The window invariant: at every step, [left, right] contains no duplicate characters.',
-            '<strong>Step 7 (String Building):</strong> Collect parts in a list (Python) or StringBuilder (Java), then join/toString at the end. Never use + concatenation inside a loop for strings — it is O(n²) and a common interview pitfall.'
-          ]
-        },
-        // G
-        {
-          heading: 'Time & Space Complexity',
-          text: 'Array and string operation complexities — n is the array or string length:',
-          table: {
-            headers: ['Operation', 'Time', 'Space', 'Notes'],
-            rows: [
-              ['Access by index', 'O(1)', 'O(1)', 'Direct memory address computation'],
-              ['Search (unsorted)', 'O(n)', 'O(1)', 'Must check every element'],
-              ['Search (sorted, binary)', 'O(log n)', 'O(1)', 'Halve search space each step'],
-              ['Insert at end (dynamic array)', 'O(1) amortized', 'O(1)', 'Occasional O(n) resize'],
-              ['Insert at index i', 'O(n)', 'O(1)', 'Shifts n - i elements rightward'],
-              ['Delete at index i', 'O(n)', 'O(1)', 'Shifts n - i - 1 elements left'],
-              ['Two Sum (hash map)', 'O(n)', 'O(n)', 'Single pass + map storage'],
-              ['Sliding Window', 'O(n)', 'O(k)', 'k = window or alphabet size'],
-              ['String concat in loop', 'O(n²)', 'O(n²)', 'Each + allocates a new string'],
-              ['"".join() / StringBuilder', 'O(n)', 'O(n)', 'Single allocation at the end']
-            ]
-          }
-        },
-        // H
-        {
-          heading: 'Common Mistakes & Pitfalls',
-          list: [
-            '<strong>Mistake: Modifying a list while iterating over it.</strong> Removing elements mid-loop skips items and produces incorrect results — <em>Fix:</em> Iterate over a copy, use a list comprehension, or build a new list instead.',
-            '<strong>Mistake: Off-by-one errors in sliding window.</strong> Using < vs <= in window boundary checks produces windows that are one element too small or large — <em>Fix:</em> Remember window size = right - left + 1; test with 1-element and 2-element inputs.',
-            '<strong>Mistake: String concatenation in a loop.</strong> s = s + c inside a loop is O(n²) total in both Python and Java — <em>Fix:</em> Use "".join(parts) in Python or StringBuilder.append() in Java.',
-            '<strong>Mistake: Not handling empty array or single-element edge cases.</strong> Kadane\'s and two-pointer solutions often crash on empty input — <em>Fix:</em> Add a guard clause at the top of every function.'
-          ],
-          code: `# WRONG: Modifying list while iterating over it
-nums = [1, 2, 3, 4, 5]
-for n in nums:
-    if n % 2 == 0:
-        nums.remove(n)   # skips elements — [2,4] leaves 4 unremoved!
-print(nums)   # [1, 3, 5] seems right but breaks on edge cases
-
-# CORRECT: List comprehension creates a new list safely
-nums = [1, 2, 3, 4, 5]
-nums = [n for n in nums if n % 2 != 0]
-print(nums)   # [1, 3, 5] — always correct
-
-# WRONG: String concatenation in loop — O(n^2) total allocations
-def build_wrong(chars):
-    s = ""
-    for c in chars:
-        s += c       # new string allocated every iteration
-    return s
-
-# CORRECT: collect then join — O(n) single allocation
-def build_right(chars):
-    return "".join(chars)`,
-          language: 'python'
-        },
-        // I
-        {
-          heading: 'Real-World Applications',
-          text: 'Array and string algorithms are the foundation of nearly every software system — from OS kernels to large language models:',
-          list: [
-            '<strong>Search autocomplete:</strong> Sliding window over a character stream detects repeated or rare substrings for query suggestion ranking.',
-            '<strong>Log analysis:</strong> Two-pointer scan finds overlapping time intervals in server logs to detect cascading failures across microservices.',
-            '<strong>DNA sequence analysis:</strong> Sliding window finds longest repeated subsequences and gene motifs in genomic data — critical for bioinformatics pipelines.',
-            '<strong>Spam detection (NLP):</strong> Token frequency arrays built with Two-Sum-style hash maps identify duplicate or near-duplicate email content in O(n).',
-            '<strong>Video streaming:</strong> Dynamic arrays back the frame buffer; O(1) amortized append keeps encoding latency predictable at high frame rates.',
-            '<strong>LLM tokenization:</strong> Byte-Pair Encoding (BPE) iterates over character arrays with sliding window merge operations to build vocabulary — used in GPT, LLaMA, and BERT tokenizers.'
-          ]
-        },
-        // J
-        {
-          heading: 'Interview Tips',
-          list: [
-            'Before coding, ask: "Is the array sorted?" — a sorted array enables binary search (O(log n)) and two-pointer (O(n)) solutions that are far more impressive than brute force.',
-            'For any problem asking "does pair X exist?" or "find element X", reach for a hash map first — it turns O(n) search into O(1) lookup.',
-            'For substring or subarray problems with a constraint (length, sum, unique chars), draw the sliding window on the board before coding — it clarifies left/right pointer semantics.',
-            'Always mention string immutability and use StringBuilder or join() — it signals deep language knowledge to interviewers.',
-            'For character frequency problems, a fixed-size int array of 26 (for lowercase a-z) can replace a hash map with zero collision overhead.',
-            'Two pointers on a sorted array — one at each end, moving inward — solves: two-sum sorted, three-sum, container with most water, and valid palindrome.'
-          ]
-        },
-        // K
-        {
-          heading: 'Practice Problems',
-          list: [
-            'Q1: Given an array of integers, find the maximum sum of any contiguous subarray. What algorithm applies and what is its complexity?\nAns: Kadane\'s algorithm — O(n) time, O(1) space. Track current_sum = max(num, current_sum + num) and global_max at each step. Key insight: if current subarray sum goes negative, it is always better to start fresh from the current element.',
-            'Q2: Given two strings s and t, determine if t is an anagram of s in O(n) time and O(1) space.\nAns: Build a frequency array of size 26. Increment for each character in s; decrement for each character in t. If all 26 counts are zero at the end, t is an anagram. O(n) time; O(1) space because the array size is fixed at 26 regardless of input length.',
-            'Q3 (Hard): Find the length of the longest substring containing at most k distinct characters.\nAns: Sliding window with a hash map counting character frequencies in the current window. Expand right always; when the map has more than k distinct keys, advance left and decrement counts (delete key when count hits 0). Track the maximum window size seen. O(n) time, O(k) space.'
-          ]
-        }
-      ]
-    },
+    'arrays': arraysTopic,
 
     // ─────────────────────────────────────────────────────────────────────────
-    // TOPIC 3 — Linked Lists
+    // TOPIC 3 — Strings
     // ─────────────────────────────────────────────────────────────────────────
+    'strings': stringsTopic,
+
     // ─────────────────────────────────────────────────────────────────────────
-    // TOPIC 3 — LinkedList
+    // TOPIC 4 — LinkedList
     // ─────────────────────────────────────────────────────────────────────────
     'linked-lists': {
       title: 'LinkedList',
@@ -613,6 +328,7 @@ def build_right(chars):
             caption: 'Structure of a Singly Linked List Node',
             chart: `flowchart LR
     subgraph Node[Node Object]
+      direction LR
       D[Data Field<br/>stores value]
       N[Next Pointer<br/>address of next node]
     end
@@ -626,6 +342,7 @@ def build_right(chars):
             caption: 'Structure of a Doubly Linked List Node',
             chart: `flowchart LR
     subgraph DNode[Doubly Linked List Node]
+      direction LR
       P[Prev Pointer<br/>address of previous node]
       DD[Data Field<br/>stores value]
       NN[Next Pointer<br/>address of next node]
@@ -716,6 +433,7 @@ class ListNode {
             caption: 'Circular Doubly Linked List',
             chart: `flowchart LR
     subgraph Ring[Circular Doubly Ring]
+      direction LR
       A[10] <--> B[20]
       B <--> C[30]
       C <--> A
@@ -907,12 +625,19 @@ class ListNode {
             caption: 'Reverse the list',
             chart: `flowchart LR
     subgraph Before[Before]
+      direction LR
       H1[Head] --> A1[10] --> B1[20] --> C1[30] --> N1[None]
     end
     subgraph After[After]
+      direction LR
       H2[Head] --> C2[30] --> B2[20] --> A2[10] --> N2[None]
-    end`
+    end
+    Before ~~~ After`
           }
+        },
+        {
+          heading: 'How the three-pointer reverse works',
+          text: '<p>We walk the list once, keeping three variables: <strong>prev</strong> (the node we just reversed), <strong>curr</strong> (the node we are reversing now), and <strong>nxt</strong> (the node we will reverse next).</p><p><strong>Core idea:</strong> each node currently points forward. We rewire its <code>.next</code> to point <em>backward</em>, to the node we came from (<code>prev</code>). Before we overwrite <code>curr.next</code>, we save the rest of the list in <code>nxt</code> so we do not lose it.</p><ol><li><strong>Start:</strong> <code>prev = None</code>, <code>curr = head</code>. Nothing has been reversed yet, so the first node will point to None (which makes it the new tail).</li><li><strong>Each iteration:</strong><br/>• <code>nxt = curr.next</code> — remember the rest of the list.<br/>• <code>curr.next = prev</code> — flip this node’s pointer backward.<br/>• <code>prev = curr</code> — move prev forward.<br/>• <code>curr = nxt</code> — move curr forward.</li><li><strong>End:</strong> when <code>curr</code> becomes <code>None</code>, every pointer is flipped. <code>prev</code> now points to the last node, which is the new head.</li></ol><p><strong>Trace on [10 → 20 → 30]:</strong><br/>• Iteration 1: 10.next becomes None. List so far: <code>10 → None</code>.<br/>• Iteration 2: 20.next becomes 10. List so far: <code>20 → 10 → None</code>.<br/>• Iteration 3: 30.next becomes 20. List so far: <code>30 → 20 → 10 → None</code>.<br/>Return prev = 30 (the new head).</p>'
         },
         {
           text: 'Code:',
@@ -960,8 +685,7 @@ def set_value(head, index, val):
         },
         // I — Complete Linked List Class (single, clean)
         {
-          heading: 'Complete LinkedList Class',
-          text: 'Below is a clean, full implementation in Python and Java. It includes the core operations discussed above and a driver program that demonstrates usage.',
+          heading: 'Python Implementation',
           example: {
             title: 'Complete LinkedList Class in Python',
             code: `class ListNode:
@@ -1066,6 +790,7 @@ ll.print_list()          # 30 -> 20 -> 15 -> 10 -> None`,
           }
         },
         {
+          heading: 'Java Implementation',
           example: {
             title: 'Complete LinkedList Class in Java',
             code: `public class LinkedList {
@@ -1179,729 +904,451 @@ ll.print_list()          # 30 -> 20 -> 15 -> 10 -> None`,
         // J — Complexity Summary
         {
           heading: 'Time & Space Complexity',
-          text: 'Summary of linked list operation complexities. Costs assume a singly linked list unless noted otherwise.',
+          text: 'Summary of linked list operation complexities. Costs assume a singly linked list unless noted otherwise. The single most important rule: <strong>anything that requires reaching a position by index costs O(n)</strong>, because the only way to move through a linked list is to follow one <code>next</code> pointer at a time from the head.',
           table: {
             headers: ['Operation', 'Time', 'Space', 'Notes'],
             rows: [
-              ['Traverse / Print', 'O(n)', 'O(1)', 'Visit every node once'],
-              ['Append (with tail)', 'O(1)', 'O(1)', 'O(n) without tail pointer'],
-              ['Prepend', 'O(1)', 'O(1)', 'Only head pointer changes'],
-              ['Insert at index', 'O(n)', 'O(1)', 'Traversal dominates'],
-              ['Delete at index', 'O(n)', 'O(1)', 'Traversal dominates'],
-              ['Search by value', 'O(n)', 'O(1)', 'Linear scan'],
-              ['Reverse', 'O(n)', 'O(1)', 'Three-pointer iteration'],
-              ['Get / Set by index', 'O(n)', 'O(1)', 'No random access']
+              ['Traverse / Print', 'O(n)', 'O(1)', 'Visit every node once; the iterative version uses O(1) space, but a recursive traverse costs O(n) stack space.'],
+              ['Append (with tail)', 'O(1)', 'O(1)', 'O(1) only because a tail pointer lets you rewire tail.next directly; without a tail pointer you must walk the whole list first, making it O(n).'],
+              ['Prepend', 'O(1)', 'O(1)', 'Only the head pointer changes — no traversal needed. This is the linked list\'s biggest advantage over arrays, where inserting at the front shifts every element (O(n)).'],
+              ['Insert at index', 'O(n)', 'O(1)', 'The splice itself is O(1) once you hold the node before the target; the O(n) is the price of walking there from the head.'],
+              ['Delete at index', 'O(n)', 'O(1)', 'Same split as insert: O(n) to find the node before the target, O(1) to unlink it. Unlike arrays, no shifting of remaining elements is needed.'],
+              ['Search by value', 'O(n)', 'O(1)', 'Linear scan is the best possible — nodes are scattered in memory with no random access, so binary search is impossible on a plain linked list.'],
+              ['Reverse', 'O(n)', 'O(1)', 'Single pass with three pointers (prev, curr, nxt); only a few variables regardless of list size. A recursive reverse costs O(n) stack space.'],
+              ['Get / Set by index', 'O(n)', 'O(1)', 'Arrays map arr[i] to a memory address via offset arithmetic (O(1)); here the i-th node is only reachable by following i pointers from the head.']
             ]
-          }
+          },
+          note: 'Interview tip: when asked for the cost of a linked list operation, always separate "cost to reach the position" (O(n) by pointer walking) from "cost to rewire the pointers" (O(1)). Stating both shows you understand where the time actually goes. Also remember the list itself uses O(n) space with per-node pointer overhead — one extra pointer per node for singly linked, two for doubly linked.'
         },
         // K — Applications
         {
           heading: 'Real-World Applications',
-          text: 'Linked lists are hidden inside many systems you use every day.',
+          text: 'Linked lists are hidden inside many systems you use every day. Each example below shows the same pattern: the linked list is chosen because the workload is dominated by <strong>frequent insertions, deletions, or reordering</strong> — exactly the operations a linked list does in O(1) — while random access by index is rarely or never needed.',
           list: [
-            '<strong>LRU Cache:</strong> Doubly linked list + hash map gives O(1) get and put.',
-            '<strong>Browser history:</strong> Back/forward navigation uses a doubly linked list of pages.',
-            '<strong>Undo / Redo:</strong> Text editors store edit actions as nodes in a linked list.',
-            '<strong>Music playlists:</strong> Next/previous track navigation is naturally a linked list.',
-            '<strong>Operating systems:</strong> Free memory blocks are tracked in a free list.',
-            '<strong>Blockchain:</strong> Each block stores a hash of the previous block, forming a chain.'
-          ]
-        }
-      ]
-    },
-
-    'stacks-queues': {
-      title: 'Stacks & Queues',
-      subtitle: 'LIFO and FIFO — the engines of traversal',
-      sections: [
-        // A
-        {
-          heading: 'Stacks & Queues Fundamentals',
-          text: 'Stacks (LIFO) and queues (FIFO) are restricted-access linear structures. Their constraints are precisely what make them powerful — they enforce a specific traversal order that models DFS, BFS, expression evaluation, undo systems, and scheduling.',
-          list: [
-            '<strong>Stack (LIFO — Last In, First Out):</strong> Like a stack of plates — add and remove only from the top. Operations: push (add), pop (remove top), peek (read top without removing). Used in DFS, undo/redo, expression parsing, and the call stack itself.',
-            '<strong>Queue (FIFO — First In, First Out):</strong> Like a ticket line — the first arrival is the first served. Operations: enqueue (add to back), dequeue (remove from front), peek (read front). Used in BFS, task scheduling, and producer-consumer systems.',
-            '<strong>Deque (Double-Ended Queue):</strong> Supports O(1) push and pop at both ends. Python\'s collections.deque and Java\'s ArrayDeque implement this. Use deque when you need both stack and queue behavior, or for sliding window maximum.',
-            '<strong>Monotonic Stack:</strong> A stack that maintains elements in strictly increasing or decreasing order. When a new element would violate the invariant, pop until it is restored. Solves "next greater element", "largest rectangle in histogram", and related problems in O(n).',
-            '<strong>BFS uses a Queue:</strong> Level-by-level traversal — enqueue the start node, then for each node dequeued enqueue its unvisited neighbors. Guarantees shortest path in unweighted graphs.',
-            '<strong>DFS uses a Stack:</strong> Depth-first traversal — push the start node, then for each node popped push its unvisited neighbors. Recursive DFS uses the call stack implicitly.'
-          ]
-        },
-        // B
-        {
-          heading: 'Concept Explanation',
-          content: [
-            '<p>The <strong>monotonic stack</strong> pattern is one of the most powerful interview techniques. The invariant: elements on the stack are always in increasing (or decreasing) order of value. When you push a new element that is larger than the current top (for a decreasing stack), pop all smaller elements — and at the moment of each pop, you know the new element is that popped element\'s "next greater element". This converts an O(n²) brute-force search to O(n) because each element is pushed and popped at most once.</p>',
-            '<p>In Python, <strong>never use a plain list as a queue</strong>. <code>list.pop(0)</code> is O(n) because Python must shift all remaining elements leftward. Instead, always use <code>collections.deque</code> — its <code>popleft()</code> is O(1) because a deque is implemented as a doubly-linked list of fixed-size blocks. For a stack, a plain Python list is perfectly fine because <code>list.append()</code> and <code>list.pop()</code> from the end are both O(1).</p>',
-            '<p>In Java, prefer <strong>ArrayDeque over the legacy Stack class and over LinkedList</strong>. The legacy <code>java.util.Stack</code> extends Vector and is synchronized — unnecessary overhead for single-threaded code. <code>ArrayDeque</code> is faster, not synchronized, and implements the full Deque interface — use <code>push</code>/<code>pop</code> for stack semantics and <code>offer</code>/<code>poll</code> for queue semantics.</p>'
+            '<strong>LRU Cache (e.g. Redis, browser caches, OS page caches):</strong> An LRU cache keeps the most recently used items and evicts the least recently used one when full. It combines a <em>hash map</em> (key → node) with a <em>doubly linked list</em> ordered from most to least recently used. Every read or write moves that node to the front; eviction simply unlinks the tail node. Moving and unlinking nodes is O(1) with a doubly linked list — this exact structure is a classic interview question (LeetCode 146).',
+            '<strong>Browser history (Back / Forward buttons):</strong> Each page you visit is a node with <code>prev</code> and <code>next</code> pointers. Clicking Back moves a cursor one node toward the past; clicking Forward moves it toward the present. Visiting a new page after going Back discards the "forward" nodes and appends a new one — natural pointer surgery that an array would handle awkwardly.',
+            '<strong>Undo / Redo in text editors:</strong> Every edit (typing, deleting, pasting) is stored as a node in a chain of document states. Undo walks the chain one step back; Redo walks it forward. Because new edits can branch off after an undo, a linked structure lets the editor grow or trim the history cheaply without copying large arrays of snapshots.',
+            '<strong>Music / video playlists:</strong> A playlist node holds the current track plus pointers to the next and previous tracks. The "next" and "previous" buttons are just pointer hops (O(1)), and reordering your queue — dragging a song to a new position — is rewiring two or three pointers instead of shifting a big array.',
+            '<strong>Operating system memory management:</strong> The OS tracks free blocks of heap memory in a <em>free list</em> — a linked list where each free block points to the next free block. When a program requests memory (e.g. <code>malloc</code>), the allocator walks the list to find a big enough block; when memory is freed, the block is spliced back into the list. Blocks are scattered in memory, so a linked list is the natural way to chain them.',
+            '<strong>Process / task scheduling (round-robin):</strong> When an OS or a load balancer gives every task a fixed time slice in turn, a <em>circular</em> linked list is a perfect fit: after the last task runs, its <code>next</code> pointer wraps back to the first, so the scheduler keeps cycling without ever checking "am I at the end?"',
+            '<strong>Blockchain:</strong> Each block stores the cryptographic hash of the previous block — essentially a <code>prev</code> pointer. The blocks form a chain back to the very first block (the genesis block). If anyone alters an old block, its hash changes and every later block\'s stored <code>prev</code> hash no longer matches — that is how the chain detects tampering.',
+            '<strong>Image viewers and photo galleries:</strong> The "next photo" / "previous photo" navigation in gallery apps is a doubly linked list of images: each photo knows its neighbors, so stepping in either direction is O(1) no matter how large the album is.'
           ],
-          note: 'Key rule: if your solution needs to remember elements in reverse order (undo, backtrack, nested structure), that is a stack. If it must process elements in arrival order (shortest path, level traversal), that is a queue.'
+          note: 'Notice the common thread: none of these systems ever ask "give me the element at index 500". They all navigate from a current position to a neighbor, or insert/remove at a known spot. When that is the access pattern, a linked list beats an array.'
         },
-        // C
+        // L — Interview Practice Questions (each an accordion, default closed)
         {
-          heading: 'Visual Diagram',
-          code: `Stack — LIFO (all operations at the top):
-  push(1) -> push(2) -> push(3) -> pop() -> peek()
-
-  push(1):  [ 1 ]                    TOP = 1
-  push(2):  [ 1 | 2 ]                TOP = 2
-  push(3):  [ 1 | 2 | 3 ]            TOP = 3
-  pop():    [ 1 | 2 ]    returns 3   TOP = 2
-  peek():   [ 1 | 2 ]    returns 2 (no removal)
-             BOTTOM ---> TOP
-
-Queue — FIFO (enqueue at back, dequeue from front):
-  enqueue(A) -> enqueue(B) -> enqueue(C) -> dequeue() -> peek()
-
-  enqueue(A): FRONT [ A ] BACK
-  enqueue(B): FRONT [ A  B ] BACK
-  enqueue(C): FRONT [ A  B  C ] BACK
-  dequeue():  FRONT [ B  C ] BACK     returns A
-  peek():     FRONT [ B  C ] BACK     returns B (no removal)
-
-Monotonic Decreasing Stack — Next Greater Element for [2, 1, 5, 3, 6]:
-  (stack stores indices; NGE[i] = next element greater than arr[i])
-
-  i=0, val=2: stack empty  -> push 0          stack=[0]
-  i=1, val=1: 1 < arr[0]=2 -> push 1          stack=[0,1]
-  i=2, val=5: 5 > arr[1]=1 -> pop 1, NGE[1]=5
-              5 > arr[0]=2 -> pop 0, NGE[0]=5
-              push 2                           stack=[2]
-  i=3, val=3: 3 < arr[2]=5 -> push 3          stack=[2,3]
-  i=4, val=6: 6 > arr[3]=3 -> pop 3, NGE[3]=6
-              6 > arr[2]=5 -> pop 2, NGE[2]=6
-              push 4                           stack=[4]
-  End: index 4 remains -> NGE[4] = -1 (default)
-
-  Result NGE = [5, 5, 6, 6, -1]`,
-          language: 'text'
+          heading: 'Top Interview Questions on Linked Lists',
+          text: 'The eighteen most frequently asked linked list interview questions are below — each in its own collapsible card with the key idea, a solved answer, and its complexity. Questions 1–13 use a singly linked list; Questions 14–18 are the doubly linked list variants. Master the three recurring patterns — <strong>fast/slow pointers</strong>, <strong>dummy nodes</strong>, and <strong>in-place reversal</strong> — and nearly every linked list problem becomes a variation of these.',
+          note: 'Pattern cheat sheet: fast/slow pointers solve "find the middle", "detect a cycle", and "k-th from the end"; a dummy node solves any problem that might modify the head; in-place reversal solves "process the second half in reverse" problems. Interviewers rarely ask brand-new linked list questions — they ask these eighteen in disguise.'
         },
-        // D
         {
-          heading: 'Python Implementation',
+          heading: 'Practice Question 1: Reverse a Linked List (LeetCode 206, Easy)',
+          text: '<strong>Problem:</strong> Given the head of a singly linked list, reverse it and return the new head.<br/><strong>Key idea:</strong> Walk once with three pointers. Save <code>curr.next</code> in <code>nxt</code> before flipping <code>curr.next</code> backward to <code>prev</code>, then advance both pointers. When <code>curr</code> falls off the end, <code>prev</code> is the new head. This is exactly Operation 7 from this page.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
           example: {
-            title: 'Stacks & Queues in Python',
-            code: `from collections import deque
-from typing import List
-
-# ── Stack using Python list — O(1) push/pop at end ────────────────
-class Stack:
-    def __init__(self):
-        self._data = []
-
-    def push(self, val):    self._data.append(val)
-    def pop(self):          return self._data.pop()
-    def peek(self):         return self._data[-1]
-    def is_empty(self):     return len(self._data) == 0
-    def __len__(self):      return len(self._data)
-
-# ── Queue using deque — O(1) enqueue and dequeue ──────────────────
-class Queue:
-    def __init__(self):
-        self._data = deque()
-
-    def enqueue(self, val): self._data.append(val)
-    def dequeue(self):      return self._data.popleft()   # O(1)!
-    def peek(self):         return self._data[0]
-    def is_empty(self):     return len(self._data) == 0
-
-# ── Monotonic Stack: Next Greater Element — O(n) ──────────────────
-def next_greater_element(nums: List[int]) -> List[int]:
-    n = len(nums)
-    result = [-1] * n               # default: no greater element
-    stack  = []                     # stores indices, not values
-
-    for i in range(n):
-        # Pop all indices whose values are smaller than nums[i]
-        while stack and nums[i] > nums[stack[-1]]:
-            idx = stack.pop()
-            result[idx] = nums[i]   # nums[i] is the NGE for that index
-        stack.append(i)
-    return result   # remaining indices in stack have no NGE -> -1
-
-# ── Valid Parentheses — classic stack problem — O(n) ─────────────
-def is_valid(s: str) -> bool:
-    stack   = []
-    mapping = {")": "(", "}": "{", "]": "["}
-    for ch in s:
-        if ch in mapping:
-            top = stack.pop() if stack else "#"
-            if mapping[ch] != top:
-                return False
+            title: 'Python Solution',
+            code: `def reverse_list(head):
+    prev, curr = None, head
+    while curr:
+        nxt = curr.next         # save the rest of the list
+        curr.next = prev        # flip the pointer backward
+        prev, curr = curr, nxt  # advance both pointers
+    return prev                 # prev is the new head`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 2: Linked List Cycle (LeetCode 141, Easy)',
+          text: '<strong>Problem:</strong> Return true if the list contains a cycle (some node can be reached again by following next pointers).<br/><strong>Key idea:</strong> Floyd\'s tortoise and hare. Move <code>slow</code> one step and <code>fast</code> two steps. If there is no cycle, <code>fast</code> reaches the end. If there is one, both pointers eventually enter the loop, and <code>fast</code> closes the gap to <code>slow</code> by exactly one node per step — it can never skip past forever, so they must meet. A hash set of visited nodes also works but costs O(n) space.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def has_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 3: Middle of the Linked List (LeetCode 876, Easy)',
+          text: '<strong>Problem:</strong> Return the middle node of the list. For even lengths, return the second middle node.<br/><strong>Key idea:</strong> The same fast/slow pattern as Question 2. <code>fast</code> moves twice as fast as <code>slow</code>, so when <code>fast</code> reaches the end, <code>slow</code> has covered exactly half the list. No need to count the length first — this finds the middle in a single pass.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def middle_node(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 4: Merge Two Sorted Lists (LeetCode 21, Easy)',
+          text: '<strong>Problem:</strong> Merge two sorted linked lists into one sorted list and return its head.<br/><strong>Key idea:</strong> Use a <strong>dummy node</strong> as a fake head so you never special-case the first node. Keep a <code>tail</code> pointer at the end of the merged list, repeatedly attach whichever input head is smaller, and advance that input. When one list runs out, attach the remainder of the other — it is already sorted.<br/><strong>Complexity:</strong> Time O(n + m), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def merge_two_lists(l1, l2):
+    dummy = ListNode(0)
+    tail = dummy
+    while l1 and l2:
+        if l1.val <= l2.val:
+            tail.next, l1 = l1, l1.next
         else:
-            stack.append(ch)
-    return not stack   # valid only if all openers were matched
-
-# ── Demo ──────────────────────────────────────────────────────────
-st = Stack()
-for v in [1, 2, 3]:
-    st.push(v)
-print("peek:", st.peek(), "| pop:", st.pop(), "| size:", len(st))
-
-q = Queue()
-for v in ["A", "B", "C"]:
-    q.enqueue(v)
-print("dequeue:", q.dequeue(), "| peek:", q.peek())
-
-print("NGE:", next_greater_element([2, 1, 5, 3, 6]))
-print("Valid '()[]{}':", is_valid("()[]{}"))
-print("Valid '([)]' :", is_valid("([)]"))`,
-            output: `peek: 3 | pop: 3 | size: 2
-dequeue: A | peek: B
-NGE: [5, 5, 6, 6, -1]
-Valid '()[]{}': True
-Valid '([)]' : False`,
+            tail.next, l2 = l2, l2.next
+        tail = tail.next
+    tail.next = l1 or l2    # attach the non-empty remainder
+    return dummy.next`,
             language: 'python',
             type: 'code'
           }
         },
-        // E
         {
-          heading: 'Java Implementation',
+          heading: 'Practice Question 5: Remove Nth Node From End of List (LeetCode 19, Medium)',
+          text: '<strong>Problem:</strong> Remove the n-th node counting from the end of the list, in one pass.<br/><strong>Key idea:</strong> Two pointers with a fixed gap. Start both at a dummy node, move <code>fast</code> n + 1 steps ahead, then advance both until <code>fast</code> is None. The +1 makes <code>slow</code> stop at the node <em>before</em> the target, so you can unlink it with <code>slow.next = slow.next.next</code>. The dummy node also handles deleting the head cleanly.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
           example: {
-            title: 'Stacks & Queues in Java',
-            code: `import java.util.*;
-
-public class StacksQueues {
-
-    // ── Next Greater Element — O(n) monotonic stack ───────────────
-    static int[] nextGreaterElement(int[] nums) {
-        int n = nums.length;
-        int[] result = new int[n];
-        Arrays.fill(result, -1);
-        Deque<Integer> stack = new ArrayDeque<>();   // stores indices
-
-        for (int i = 0; i < n; i++) {
-            while (!stack.isEmpty() && nums[i] > nums[stack.peek()]) {
-                int idx    = stack.pop();
-                result[idx] = nums[i];
-            }
-            stack.push(i);
-        }
-        return result;
-    }
-
-    // ── Valid Parentheses — O(n) ──────────────────────────────────
-    static boolean isValid(String s) {
-        Deque<Character> stack = new ArrayDeque<>();
-        for (char ch : s.toCharArray()) {
-            if (ch == '(' || ch == '[' || ch == '{') {
-                stack.push(ch);
-            } else {
-                if (stack.isEmpty()) return false;
-                char top = stack.pop();
-                if (ch == ')' && top != '(') return false;
-                if (ch == ']' && top != '[') return false;
-                if (ch == '}' && top != '{') return false;
-            }
-        }
-        return stack.isEmpty();
-    }
-
-    // ── BFS with Queue: shortest path in unweighted graph — O(V+E) ─
-    static int bfsShortestPath(int[][] adj, int src, int dst) {
-        if (src == dst) return 0;
-        boolean[] visited = new boolean[adj.length];
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(src);
-        visited[src] = true;
-        int level = 0;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            level++;
-            for (int i = 0; i < size; i++) {
-                int node = queue.poll();
-                for (int neighbor : adj[node]) {
-                    if (neighbor == dst) return level;
-                    if (!visited[neighbor]) {
-                        visited[neighbor] = true;
-                        queue.offer(neighbor);
-                    }
-                }
-            }
-        }
-        return -1;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(Arrays.toString(nextGreaterElement(new int[]{2,1,5,3,6})));
-        System.out.println(isValid("()[]{}"));
-        System.out.println(isValid("([)]"));
-
-        // Graph: 0->[1,2], 1->[3], 2->[3], 3->[4]
-        int[][] adj = {{1, 2}, {3}, {3}, {4}, {}};
-        System.out.println("Shortest path 0->4: " + bfsShortestPath(adj, 0, 4));
-    }
-}`,
-            output: `[5, 5, 6, 6, -1]
-true
-false
-Shortest path 0->4: 2`,
-            language: 'java',
+            title: 'Python Solution',
+            code: `def remove_nth_from_end(head, n):
+    dummy = ListNode(0, head)
+    slow = fast = dummy
+    for _ in range(n + 1):
+        fast = fast.next
+    while fast:
+        slow, fast = slow.next, fast.next
+    slow.next = slow.next.next   # unlink the target
+    return dummy.next`,
+            language: 'python',
             type: 'code'
           }
         },
-        // F
         {
-          heading: 'Step-by-Step Walkthrough',
-          list: [
-            '<strong>Step 1 (Monotonic Stack Setup):</strong> Initialize result = [-1] * n (default for "no greater element") and an empty stack that stores indices, not values — storing indices lets you compute both the answer position and the answer value.',
-            '<strong>Step 2 (Process each element):</strong> For index i, check nums[i] against the value at the stack\'s top index. If nums[i] is greater, the current element is the "next greater" answer for the top index.',
-            '<strong>Step 3 (Pop loop):</strong> Keep popping from the stack while it is non-empty and nums[i] > nums[stack[-1]]. For each popped index idx, record result[idx] = nums[i].',
-            '<strong>Step 4 (Push):</strong> After all pops, push index i. This maintains the decreasing-value invariant. Elements remaining at the end have no next greater element and keep their default of -1.',
-            '<strong>Step 5 (Valid Parentheses):</strong> Push opening brackets onto the stack. When a closing bracket is seen, pop the top and verify it is the matching opener. Empty stack on close = invalid.',
-            '<strong>Step 6 (BFS — Level Order):</strong> Enqueue the start node and mark it visited. Snapshot the queue size; process exactly that many nodes at the current level. Enqueue their unvisited neighbors; increment the level counter.',
-            '<strong>Step 7 (BFS — Termination):</strong> Return the level counter the moment the destination is dequeued or found among a node\'s neighbors. If the queue empties without finding the destination, return -1 (unreachable).'
-          ]
-        },
-        // G
-        {
-          heading: 'Time & Space Complexity',
-          text: 'Stack, Queue, and Deque operation complexities across Python and Java implementations:',
-          table: {
-            headers: ['Operation', 'Stack (list)', 'Queue (deque)', 'Deque', 'Notes'],
-            rows: [
-              ['Push / Enqueue', 'O(1) amortized', 'O(1)', 'O(1)', 'Append to one end'],
-              ['Pop (top) / Dequeue (front)', 'O(1)', 'O(1) popleft', 'O(1)', 'deque O(1) at both ends'],
-              ['Peek', 'O(1)', 'O(1)', 'O(1)', 'Read without removal'],
-              ['list.pop(0) as queue', 'O(n)', '—', '—', 'AVOID: shifts all elements'],
-              ['Search', 'O(n)', 'O(n)', 'O(n)', 'No random access'],
-              ['Monotonic stack full pass', 'O(n)', '—', '—', 'Each element pushed/popped once'],
-              ['Python class', 'list', 'collections.deque', 'collections.deque', ''],
-              ['Java class', 'ArrayDeque (preferred)', 'LinkedList or ArrayDeque', 'ArrayDeque', 'Avoid legacy Stack']
-            ]
+          heading: 'Practice Question 6: Intersection of Two Linked Lists (LeetCode 160, Easy)',
+          text: '<strong>Problem:</strong> Find the node where two singly linked lists merge into one shared tail, or return None if they never intersect.<br/><strong>Key idea:</strong> The pointer-switching trick. Walk pointer <code>a</code> through list A, and when it reaches the end send it to the head of list B; do the mirror for <code>b</code>. Both then travel exactly lenA + lenB steps, so any length difference cancels out — they arrive at the intersection node at the same time, or both reach None together if there is no intersection.<br/><strong>Complexity:</strong> Time O(n + m), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def get_intersection_node(headA, headB):
+    a, b = headA, headB
+    while a is not b:
+        a = a.next if a else headB
+        b = b.next if b else headA
+    return a    # intersection node, or None`,
+            language: 'python',
+            type: 'code'
           }
         },
-        // H
         {
-          heading: 'Common Mistakes & Pitfalls',
-          list: [
-            '<strong>Mistake: Using Python list as a queue with pop(0).</strong> list.pop(0) is O(n) because Python shifts all remaining elements — <em>Fix:</em> Always import and use collections.deque; call popleft() for O(1) front removal.',
-            '<strong>Mistake: Using Java\'s legacy Stack class.</strong> java.util.Stack extends Vector (synchronized overhead) and is considered obsolete — <em>Fix:</em> Use ArrayDeque as a stack with push() and pop(), or Deque<Integer> stack = new ArrayDeque<>().',
-            '<strong>Mistake: Not checking isEmpty() before pop() or peek().</strong> Popping from an empty stack raises IndexError in Python or NoSuchElementException in Java — <em>Fix:</em> Guard every pop/peek with an emptiness check, or use conditional expressions.',
-            '<strong>Mistake: Forgetting to initialize result with -1 in monotonic stack.</strong> Indices remaining in the stack after the loop have no next greater element. If result is not pre-filled with -1, you must handle them manually after the loop — <em>Fix:</em> Always pre-fill result = [-1] * n before the loop.'
-          ],
-          code: `# WRONG: Using list as queue — O(n) per dequeue
-from collections import deque
-
-bad_queue = []
-bad_queue.append("A")
-bad_queue.append("B")
-front = bad_queue.pop(0)    # O(n): shifts all elements left!
-
-# CORRECT: deque — O(1) at both ends
-good_queue = deque()
-good_queue.append("A")
-good_queue.append("B")
-front = good_queue.popleft()  # O(1)
-print(front)   # "A"
-
-# WRONG: Popping from empty stack without a guard
-stack = []
-val = stack.pop()   # IndexError: pop from empty list
-
-# CORRECT: Check before popping
-stack = []
-val = stack.pop() if stack else None
-print(val)   # None (safe)
-
-# WRONG: Not pre-filling result — must handle remaining stack manually
-def nge_messy(nums):
-    stack, result = [], [None] * len(nums)
-    for i, num in enumerate(nums):
-        while stack and num > nums[stack[-1]]:
-            result[stack.pop()] = num
-        stack.append(i)
-    for idx in stack:
-        result[idx] = -1    # manual cleanup — easy to forget!
-    return result
-
-# CORRECT: Pre-fill with -1 and skip the cleanup
-def nge_clean(nums):
-    result = [-1] * len(nums)   # default answer already set
-    stack  = []
-    for i, num in enumerate(nums):
-        while stack and num > nums[stack[-1]]:
-            result[stack.pop()] = num
-        stack.append(i)
-    return result`,
-          language: 'python'
+          heading: 'Practice Question 7: Palindrome Linked List (LeetCode 234, Easy)',
+          text: '<strong>Problem:</strong> Return true if the list reads the same forward and backward.<br/><strong>Key idea:</strong> Combine three patterns you already know: (1) find the middle with fast/slow pointers (Question 3), (2) reverse the second half in place (Question 1), (3) walk both halves comparing values. Any mismatch means it is not a palindrome. This avoids copying values into an array, which would cost O(n) extra space.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def is_palindrome(head):
+    slow = fast = head
+    while fast and fast.next:    # step 1: find middle
+        slow, fast = slow.next, fast.next.next
+    second = reverse_list(slow)  # step 2: reverse second half
+    first = head
+    while second:                # step 3: compare both halves
+        if first.val != second.val:
+            return False
+        first, second = first.next, second.next
+    return True`,
+            language: 'python',
+            type: 'code'
+          }
         },
-        // I
         {
-          heading: 'Real-World Applications',
-          text: 'Stacks and queues are invisible workhorses in every layer of the software stack — from your browser to distributed systems:',
-          list: [
-            '<strong>Function call stack:</strong> Every function call pushes a stack frame; return pops it. Stack overflow errors occur when recursion is too deep — the OS-level call stack is exhausted.',
-            '<strong>Browser navigation:</strong> Browser back and forward buttons are implemented with two stacks. Each page visit pushes onto the back stack; clicking Back pops it and pushes onto the forward stack.',
-            '<strong>Expression evaluation and parsing:</strong> Compilers and calculators use stacks to evaluate infix/postfix expressions and match nested structures (HTML tag matching, JSON parsing, code bracket validation).',
-            '<strong>BFS in AI pathfinding:</strong> Dijkstra and BFS use a queue (or priority queue for weighted graphs) to guarantee shortest-path exploration level by level — fundamental to GPS routing and game AI.',
-            '<strong>Task scheduling and message queues:</strong> Kafka, RabbitMQ, Celery, and AWS SQS are all FIFO queues at their core — ensuring tasks are processed in the order they arrive without data loss.',
-            '<strong>Undo/Redo in IDEs and design tools:</strong> Undo stack holds past states; redo stack holds future states. Each edit pushes onto undo and clears redo. Figma, VS Code, and Photoshop all use this pattern.'
-          ]
+          heading: 'Practice Question 8: Find Kth Node From End (Classic Interview Question)',
+          text: '<strong>Problem:</strong> Return the k-th node counting from the end of the list (k = 1 means the last node), or None if k is larger than the list length.<br/><strong>Key idea:</strong> The same two-pointer gap trick as Question 5. Move <code>fast</code> exactly k steps ahead; if it runs off the end during those k steps, k is out of range. Then advance both pointers together — when <code>fast</code> reaches None, <code>slow</code> is exactly k nodes behind it, i.e. the k-th from the end. One pass, no length counting.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def find_kth_from_end(head, k):
+    slow = fast = head
+    for _ in range(k):
+        if not fast:
+            return None       # k is larger than the list length
+        fast = fast.next
+    while fast:
+        slow, fast = slow.next, fast.next
+    return slow               # k-th node from the end`,
+            language: 'python',
+            type: 'code'
+          }
         },
-        // J
         {
-          heading: 'Interview Tips',
-          list: [
-            'When you see "next greater/smaller element", "largest rectangle in histogram", or "trapping rain water", immediately think monotonic stack — it reduces O(n²) brute force to O(n).',
-            'When you see "level-order traversal", "shortest path in unweighted graph", or "minimum steps to reach X", immediately think BFS with a queue.',
-            'When you see "DFS", "backtracking", "all paths", or "recursive", you are implicitly using a stack — either the call stack (recursive) or an explicit stack (iterative).',
-            'Always use collections.deque in Python for any queue. If asked why, explain: list.pop(0) is O(n) while deque.popleft() is O(1).',
-            'In Java, always say "I will use ArrayDeque as my stack or queue" — it signals modern idiomatic Java knowledge and avoids the legacy Stack class.',
-            'The monotonic stack O(n) insight: even though there is a while loop inside the for loop, each element is pushed exactly once and popped at most once — so the total number of operations across all iterations is 2n, not n².'
-          ]
+          heading: 'Practice Question 9: Remove Duplicates (Classic Interview Question)',
+          text: '<strong>Problem:</strong> Remove all duplicate values from an <em>unsorted</em> linked list, keeping the first occurrence of each value.<br/><strong>Key idea:</strong> Walk once with a <code>prev</code> pointer and a hash set of values seen so far. If the next node\'s value is already in the set, unlink it; otherwise record the value and advance. The set gives O(1) lookup, so the whole pass is linear. (Follow-up: without extra space, compare each node against the rest of the list — O(n²) time, O(1) space. If the list were <em>sorted</em>, duplicates are adjacent and no set is needed at all.)<br/><strong>Complexity:</strong> Time O(n), Space O(n).',
+          example: {
+            title: 'Python Solution',
+            code: `def remove_duplicates(head):
+    seen = set()
+    dummy = ListNode(0, head)
+    prev = dummy
+    while prev.next:
+        if prev.next.val in seen:
+            prev.next = prev.next.next   # unlink the duplicate
+        else:
+            seen.add(prev.next.val)
+            prev = prev.next
+    return dummy.next`,
+            language: 'python',
+            type: 'code'
+          }
         },
-        // K
         {
-          heading: 'Practice Problems',
-          list: [
-            'Q1: Given a string of parentheses containing (, ), [, ], {, }, determine if it is valid. Every opener must have a matching closer in the correct order. What data structure and complexity?\nAns: Stack. Push each opening bracket. When a closing bracket is seen, pop the stack and verify the match. Return true if the stack is empty at the end. O(n) time, O(n) space in the worst case (all openers).',
-            'Q2: Given an array, find the next greater element for each position. How does a monotonic stack achieve O(n) when brute force is O(n²)?\nAns: Each element is pushed exactly once and popped at most once across the entire loop — giving a total of at most 2n operations. The while loop inside the for loop does NOT make it O(n²) because the total pop count across all iterations is bounded by n. This is an amortized O(1) argument.',
-            'Q3 (Hard): Design a queue that supports enqueue, dequeue, and getMin in O(1) amortized time.\nAns: Use two stacks (main and auxiliary). Enqueue pushes to main. Dequeue pops from auxiliary; if auxiliary is empty, pour all of main into auxiliary (this reverses the order, giving FIFO). For getMin, maintain a parallel "min stack" alongside each stack that tracks the running minimum at each depth level. Each element is moved at most twice, giving O(1) amortized dequeue.'
-          ]
+          heading: 'Practice Question 10: Binary to Decimal (LeetCode 1290, Easy)',
+          text: '<strong>Problem:</strong> The list stores a binary number with the most significant bit at the head. Convert it to its decimal value.<br/><strong>Key idea:</strong> Horner\'s rule. Walking left to right, each new bit is the least significant bit of the result so far — so double the accumulated value and add the current bit. No powers, no exponentiation, no string conversion.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def binary_to_decimal(head):
+    value = 0
+    while head:
+        value = value * 2 + head.val   # shift left, add current bit
+        head = head.next
+    return value`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 11: Partition List (LeetCode 86, Medium)',
+          text: '<strong>Problem:</strong> Given a value x, rearrange the list so all nodes less than x come before all nodes greater than or equal to x, preserving the original relative order within each group.<br/><strong>Key idea:</strong> Build two new chains with dummy heads — one for nodes <code>&lt; x</code>, one for nodes <code>&gt;= x</code> — appending each node as you scan (which preserves relative order automatically). Then connect the tail of the "before" chain to the head of the "after" chain, and <strong>null-terminate the after chain</strong> — forgetting that last step leaves a stale <code>next</code> pointer and creates a cycle.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def partition(head, x):
+    before = ListNode(0)
+    after = ListNode(0)
+    b_tail, a_tail = before, after
+    while head:
+        if head.val < x:
+            b_tail.next = head
+            b_tail = head
+        else:
+            a_tail.next = head
+            a_tail = head
+        head = head.next
+    a_tail.next = None        # terminate the combined list
+    b_tail.next = after.next  # join: before-list then after-list
+    return before.next`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 12: Reverse Between (LeetCode 92, Medium)',
+          text: '<strong>Problem:</strong> Reverse only the nodes between positions <code>left</code> and <code>right</code> (1-indexed) in a single pass, leaving the rest of the list untouched.<br/><strong>Key idea:</strong> Walk <code>prev</code> to the node just before the segment. Then repeat <code>right - left</code> times: pull the node after <code>curr</code> out of the segment and re-insert it right after <code>prev</code> (the segment front). Each insertion pushes the reversed prefix one node longer while <code>curr</code> stays anchored as the segment\'s tail. The dummy node keeps the <code>left = 1</code> case identical to every other.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def reverse_between(head, left, right):
+    dummy = ListNode(0, head)
+    prev = dummy
+    for _ in range(left - 1):
+        prev = prev.next          # node before the segment
+    curr = prev.next              # first node of the segment
+    for _ in range(right - left):
+        nxt = curr.next
+        curr.next = nxt.next      # pull nxt out of the segment
+        nxt.next = prev.next      # insert nxt at the front
+        prev.next = nxt
+    return dummy.next`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 13: Swap Nodes in Pairs (LeetCode 24, Medium)',
+          text: '<strong>Problem:</strong> Swap every two adjacent nodes and return the head — swap the nodes themselves, not just their values.<br/><strong>Key idea:</strong> With a dummy node, keep a <code>prev</code> pointer before each pair. For nodes <code>first</code> and <code>second</code>, do a three-step rewiring: <code>first.next</code> skips to after the pair, <code>second.next</code> points back to <code>first</code>, and <code>prev.next</code> adopts <code>second</code> as the new front. Then advance <code>prev</code> to <code>first</code> (now the second node of the swapped pair) and repeat. An odd leftover node is left in place automatically.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def swap_pairs(head):
+    dummy = ListNode(0, head)
+    prev = dummy
+    while prev.next and prev.next.next:
+        first = prev.next
+        second = first.next
+        first.next = second.next
+        second.next = first
+        prev.next = second
+        prev = first              # advance to the next pair
+    return dummy.next`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 14: Palindrome Checker — Doubly Linked List (Classic Interview Question)',
+          text: '<strong>Problem:</strong> Given the head of a doubly linked list, return true if the values read the same forward and backward.<br/><strong>Key idea:</strong> Much simpler than the singly linked version (Question 7) — the <code>prev</code> pointers do the backward walking for you, so no reversal is needed. Walk one pointer to the tail, then move the head pointer forward and the tail pointer backward, comparing values until they meet or cross. The loop condition <code>head is not tail and head.prev is not tail</code> handles both odd and even lengths.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def is_palindrome_dll(head):
+    if not head:
+        return True
+    tail = head
+    while tail.next:           # find the tail using next pointers
+        tail = tail.next
+    while head is not tail and head.prev is not tail:
+        if head.val != tail.val:
+            return False
+        head = head.next
+        tail = tail.prev       # walk backward with prev pointers
+    return True`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 15: Reverse — Doubly Linked List (Classic Interview Question)',
+          text: '<strong>Problem:</strong> Reverse a doubly linked list in place and return the new head.<br/><strong>Key idea:</strong> Easier than the singly linked reverse: because every node carries both pointers, you do not need <code>prev</code>/<code>nxt</code> helper variables at all. Walk once and <strong>swap each node\'s own <code>prev</code> and <code>next</code></strong>. After the swap, the node you should visit next is reachable through the node\'s (new) <code>prev</code>. The last node you process becomes the new head.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def reverse_dll(head):
+    curr = head
+    new_head = None
+    while curr:
+        curr.prev, curr.next = curr.next, curr.prev
+        new_head = curr
+        curr = curr.prev       # after the swap, prev holds the old next
+    return new_head`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 16: Partition List — Doubly Linked List (LeetCode 86 style, Medium)',
+          text: '<strong>Problem:</strong> Given a value x, rearrange a doubly linked list so all nodes less than x come before all nodes greater than or equal to x, preserving the original relative order within each group.<br/><strong>Key idea:</strong> Same two-dummy-chain strategy as the singly linked Question 11, but every time you attach a node you must set <strong>both</strong> its <code>prev</code> and <code>next</code> — detach the node fully first, then wire it into its chain. After joining the chains, fix the join point\'s <code>prev</code> and null out the new head\'s <code>prev</code>. Forgetting any one of these leaves a dangling pointer that corrupts backward traversal.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def partition_dll(head, x):
+    before = DLNode(0)
+    after = DLNode(0)
+    b_tail, a_tail = before, after
+    curr = head
+    while curr:
+        nxt = curr.next
+        curr.prev = curr.next = None   # fully detach the node
+        if curr.val < x:
+            b_tail.next = curr
+            curr.prev = b_tail
+            b_tail = curr
+        else:
+            a_tail.next = curr
+            curr.prev = a_tail
+            a_tail = curr
+        curr = nxt
+    b_tail.next = after.next
+    if after.next:
+        after.next.prev = b_tail
+    new_head = before.next
+    if new_head:
+        new_head.prev = None
+    return new_head`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 17: Reverse Between — Doubly Linked List (LeetCode 92 style, Medium)',
+          text: '<strong>Problem:</strong> Reverse only the nodes between positions <code>left</code> and <code>right</code> (1-indexed) of a doubly linked list, leaving the rest untouched.<br/><strong>Key idea:</strong> Break the problem into three clean steps: (1) locate the segment and <strong>detach</strong> it from the list (null its boundary <code>prev</code>/<code>next</code> pointers), (2) reverse the detached segment using the swap-pointers technique from Question 15, (3) reconnect it between <code>before</code> and <code>after</code>, wiring all four boundary pointers (two <code>next</code>, two <code>prev</code>). Detaching first keeps the reversal logic identical to a full-list reverse.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def reverse_between_dll(head, left, right):
+    if not head or left == right:
+        return head
+    dummy = DLNode(0)
+    dummy.next = head
+    head.prev = dummy
+    before = dummy
+    for _ in range(left - 1):
+        before = before.next
+    seg_start = before.next
+    seg_end = seg_start
+    for _ in range(right - left):
+        seg_end = seg_end.next
+    after = seg_end.next
+    # detach the segment
+    seg_start.prev = None
+    seg_end.next = None
+    if after:
+        after.prev = None
+    # reverse the segment in place (swap prev/next per node)
+    curr = seg_start
+    new_start = None
+    while curr:
+        curr.prev, curr.next = curr.next, curr.prev
+        new_start = curr
+        curr = curr.prev
+    # reconnect: before <-> reversed segment <-> after
+    before.next = new_start
+    new_start.prev = before
+    seg_start.next = after
+    if after:
+        after.prev = seg_start
+    new_head = dummy.next
+    new_head.prev = None
+    return new_head`,
+            language: 'python',
+            type: 'code'
+          }
+        },
+        {
+          heading: 'Practice Question 18: Swap Nodes in Pairs — Doubly Linked List (LeetCode 24 style, Medium)',
+          text: '<strong>Problem:</strong> Swap every two adjacent nodes of a doubly linked list — swap the nodes themselves, not their values.<br/><strong>Key idea:</strong> Same skeleton as the singly linked Question 13, but each pair swap now touches <strong>six pointers</strong>: the pair\'s two <code>next</code>, their two <code>prev</code>, the link from the node before the pair, and the <code>prev</code> of the node after the pair. Write it as a fixed six-line rewiring ritual and the pointer soup disappears — <code>nxt.prev = first</code> is the line people most often forget.<br/><strong>Complexity:</strong> Time O(n), Space O(1).',
+          example: {
+            title: 'Python Solution',
+            code: `def swap_pairs_dll(head):
+    dummy = DLNode(0)
+    dummy.next = head
+    if head:
+        head.prev = dummy
+    prev = dummy
+    while prev.next and prev.next.next:
+        first = prev.next
+        second = first.next
+        nxt = second.next
+        second.prev = prev
+        second.next = first
+        first.prev = second
+        first.next = nxt
+        if nxt:
+            nxt.prev = first     # the most-forgotten pointer
+        prev.next = second
+        prev = first             # first is now the pair\'s second node
+    new_head = dummy.next
+    if new_head:
+        new_head.prev = None
+    return new_head`,
+            language: 'python',
+            type: 'code'
+          }
         }
       ]
     },
 
     // ─────────────────────────────────────────────────────────────────────────
-    // TOPIC 5 — Hash Maps & Sets
+    // TOPIC 5 — Stacks
     // ─────────────────────────────────────────────────────────────────────────
-    'hashmaps-sets': {
-      title: 'Hash Maps & Sets',
-      subtitle: 'O(1) lookup — the interviewer\'s favorite trick',
-      sections: [
-        // A
-        {
-          heading: 'Hash Maps & Sets Fundamentals',
-          text: 'Hash maps and sets provide O(1) average-time lookup, insertion, and deletion. They are the single most effective tool for optimizing interview solutions — when you see an O(n²) brute-force loop, a hash map almost always reduces it to O(n).',
-          list: [
-            '<strong>Hash Function:</strong> Maps a key of any type to an integer bucket index. A good hash function distributes keys uniformly to minimize collisions. Python uses the built-in hash(); Java uses the hashCode() method on each object.',
-            '<strong>Collision Resolution:</strong> Two keys that hash to the same bucket collide. Python dicts use open addressing (probe for an empty slot); Java HashMaps use separate chaining (linked list or tree at each bucket since Java 8).',
-            '<strong>Python dict:</strong> Maintains insertion order (Python 3.7+). O(1) average for get, set, and delete. O(n) worst case on adversarial hash collisions. The go-to for key-value mapping.',
-            '<strong>Python Counter:</strong> dict subclass for frequency counting. Counter(iterable) builds the frequency map in O(n). Supports arithmetic: c1 + c2, c1 - c2, and most_common(k) for top-k elements.',
-            '<strong>Python defaultdict:</strong> dict subclass that returns a factory-defined default instead of raising KeyError on missing keys. defaultdict(list) auto-creates empty lists; defaultdict(int) auto-creates 0. Eliminates repetitive key-existence checks.',
-            '<strong>Java HashMap vs TreeMap vs LinkedHashMap:</strong> HashMap gives O(1) average with no key ordering. TreeMap (Red-Black tree) gives O(log n) but maintains sorted key order for range queries. LinkedHashMap preserves insertion order — the foundation of Java LRU Cache implementations.'
-          ]
-        },
-        // B
-        {
-          heading: 'Concept Explanation',
-          content: [
-            '<p>The <strong>frequency counting pattern</strong> is the foundation of most string and array interview problems. Build a Counter or dict of element frequencies in one O(n) pass, then answer queries in O(1). This powers anagram detection, top-k elements, ransom note, first unique character, and many more. Recognize it whenever the problem involves counting occurrences or comparing element distributions.</p>',
-            '<p><strong>Anagram detection</strong> exploits the fact that two strings are anagrams if and only if they share identical character frequency distributions. Instead of sorting both strings in O(n log n), build and compare frequency counters in O(n). A generalization: group anagrams by using the sorted string (or a frequency tuple) as the hash map key — all anagrams share the same canonical key and are collected into the same group in O(n × k) where k is average word length.</p>',
-            '<p>The <strong>Two-Sum pattern with a hash map</strong> is the canonical space-for-time trade-off. Brute force checks every pair: O(n²) time, O(1) space. The hash map approach stores complements as you scan: O(n) time, O(n) space. This exact pattern — one extra hash map pass eliminates a nested loop — recurs in subarray sum equals k, four-sum, and dozens of other problems. Recognizing it is one of the highest-leverage interview skills you can develop.</p>'
-          ],
-          note: 'Key rule: when you see O(n²) from a nested loop searching for a matching element, ask "can I store what I am looking for in a hash map during the outer loop?" The answer is almost always yes.'
-        },
-        // C
-        {
-          heading: 'Visual Diagram',
-          code: `Hash Function -> Bucket Array -> Chained Entries:
+    'stacks': stacksTopic,
 
-  key = "apple"
-      |
-  hash("apple") % 8 = 3
-      |
-      v
-  Bucket Array (size 8):
-  [0]: empty
-  [1]: empty
-  [2]: ("banana", 2) -> null
-  [3]: ("apple", 5) -> ("cherry", 1) -> null   <- collision, chained
-  [4]: empty
-  [5]: ("date", 3) -> null
-  [6]: empty
-  [7]: ("elderberry", 7) -> null
+    // ─────────────────────────────────────────────────────────────────────────
+    // TOPIC 6 — Queues
+    // ─────────────────────────────────────────────────────────────────────────
+    'queues': queuesTopic,
 
-Python defaultdict(list) — grouping anagrams:
-  words = ["eat", "tea", "tan", "ate", "nat", "bat"]
+    // ─────────────────────────────────────────────────────────────────────────
+    // TOPIC 7 — Hash Maps
+    // ─────────────────────────────────────────────────────────────────────────
+    'hashmaps': hashmapsTopic,
 
-  word -> sorted key -> groups map:
-  "eat" -> "aet"  =>  {"aet": ["eat"]}
-  "tea" -> "aet"  =>  {"aet": ["eat", "tea"]}
-  "tan" -> "ant"  =>  {"aet": [...], "ant": ["tan"]}
-  "ate" -> "aet"  =>  {"aet": ["eat", "tea", "ate"], ...}
-  "nat" -> "ant"  =>  {"aet": [...], "ant": ["tan", "nat"]}
-  "bat" -> "abt"  =>  {"aet": [...], "ant": [...], "abt": ["bat"]}
+    // ─────────────────────────────────────────────────────────────────────────
+    // TOPIC 8 — Sets
+    // ─────────────────────────────────────────────────────────────────────────
+    'sets': setsTopic,
 
-  Result: [["eat","tea","ate"], ["tan","nat"], ["bat"]]
-
-Counter arithmetic:
-  c1 = Counter("aab")   -> {a:2, b:1}
-  c2 = Counter("ab")    -> {a:1, b:1}
-  c1 - c2               -> {a:1}       (subtract, keep positives)
-  c1 + c2               -> {a:3, b:2}
-  c1.most_common(1)     -> [("a", 2)]`,
-          language: 'text'
-        },
-        // D
-        {
-          heading: 'Python Implementation',
-          example: {
-            title: 'Hash Maps & Sets in Python',
-            code: `from collections import Counter, defaultdict, OrderedDict
-from typing import List
-
-# ── Word frequency with Counter — O(n) ───────────────────────────
-def word_frequency(text: str):
-    freq = Counter(text.lower().split())
-    print("Top 3:", freq.most_common(3))
-    return freq
-
-# ── Group Anagrams with defaultdict — O(n * k log k) ─────────────
-def group_anagrams(words: List[str]) -> List[List[str]]:
-    groups = defaultdict(list)
-    for word in words:
-        key = "".join(sorted(word))   # all anagrams share this key
-        groups[key].append(word)
-    return list(groups.values())
-
-# ── Two Sum — O(n) time, O(n) space ──────────────────────────────
-def two_sum(nums: List[int], target: int) -> List[int]:
-    seen = {}
-    for i, num in enumerate(nums):
-        complement = target - num
-        if complement in seen:
-            return [seen[complement], i]
-        seen[num] = i
-    return []
-
-# ── Subarray sum equals k — O(n), prefix sum + hash map ──────────
-def subarray_sum(nums: List[int], k: int) -> int:
-    count = 0
-    prefix_sum = 0
-    prefix_counts = defaultdict(int)
-    prefix_counts[0] = 1   # empty prefix has sum 0
-
-    for num in nums:
-        prefix_sum += num
-        # How many previous prefixes equal prefix_sum - k?
-        count += prefix_counts[prefix_sum - k]
-        prefix_counts[prefix_sum] += 1
-    return count
-
-# ── LRU Cache using OrderedDict — O(1) get and put ────────────────
-class LRUCache:
-    def __init__(self, capacity: int):
-        self.cap   = capacity
-        self.cache = OrderedDict()
-
-    def get(self, key: int) -> int:
-        if key not in self.cache:
-            return -1
-        self.cache.move_to_end(key)   # mark as recently used
-        return self.cache[key]
-
-    def put(self, key: int, value: int) -> None:
-        if key in self.cache:
-            self.cache.move_to_end(key)
-        self.cache[key] = value
-        if len(self.cache) > self.cap:
-            self.cache.popitem(last=False)   # evict least recently used
-
-# ── Demo ──────────────────────────────────────────────────────────
-word_frequency("the quick brown fox the fox")
-print(group_anagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
-print(two_sum([2, 7, 11, 15], 9))
-print("Subarrays with sum 2:", subarray_sum([1, 1, 1], 2))
-
-lru = LRUCache(2)
-lru.put(1, 10)
-lru.put(2, 20)
-print(lru.get(1))       # returns 10, marks key 1 as recently used
-lru.put(3, 30)          # evicts key 2 (least recently used)
-print(lru.get(2))       # returns -1 (evicted)`,
-            output: `Top 3: [('the', 2), ('fox', 2), ('quick', 1)]
-[['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]
-[0, 1]
-Subarrays with sum 2: 2
-10
--1`,
-            language: 'python',
-            type: 'code'
-          }
-        },
-        // E
-        {
-          heading: 'Java Implementation',
-          example: {
-            title: 'Hash Maps & Sets in Java',
-            code: `import java.util.*;
-
-public class HashMapsDemo {
-
-    // ── Word frequency — O(n) ────────────────────────────────────
-    static Map<String, Integer> wordFrequency(String text) {
-        Map<String, Integer> freq = new HashMap<>();
-        for (String word : text.toLowerCase().split("\\s+")) {
-            freq.merge(word, 1, Integer::sum);
-            // Equivalent to: freq.put(w, freq.getOrDefault(w, 0) + 1)
-        }
-        return freq;
-    }
-
-    // ── Group Anagrams — O(n * k log k) ──────────────────────────
-    static List<List<String>> groupAnagrams(String[] words) {
-        Map<String, List<String>> groups = new HashMap<>();
-        for (String word : words) {
-            char[] chars = word.toCharArray();
-            Arrays.sort(chars);
-            String key = new String(chars);
-            groups.computeIfAbsent(key, k -> new ArrayList<>()).add(word);
-        }
-        return new ArrayList<>(groups.values());
-    }
-
-    // ── Two Sum — O(n) ───────────────────────────────────────────
-    static int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> seen = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            int complement = target - nums[i];
-            if (seen.containsKey(complement)) {
-                return new int[]{seen.get(complement), i};
-            }
-            seen.put(nums[i], i);
-        }
-        return new int[]{};
-    }
-
-    // ── Subarray sum equals k — O(n) prefix sum ───────────────────
-    static int subarraySum(int[] nums, int k) {
-        int count = 0, prefixSum = 0;
-        Map<Integer, Integer> prefixCounts = new HashMap<>();
-        prefixCounts.put(0, 1);   // base case: empty prefix
-        for (int num : nums) {
-            prefixSum += num;
-            count += prefixCounts.getOrDefault(prefixSum - k, 0);
-            prefixCounts.merge(prefixSum, 1, Integer::sum);
-        }
-        return count;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(wordFrequency("the quick brown fox the fox"));
-        System.out.println(groupAnagrams(new String[]{"eat","tea","tan","ate","nat","bat"}));
-        System.out.println(Arrays.toString(twoSum(new int[]{2,7,11,15}, 9)));
-        System.out.println("Subarrays with sum 2: " + subarraySum(new int[]{1,1,1}, 2));
-    }
-}`,
-            output: `{the=2, quick=1, brown=1, fox=2}
-[[eat, tea, ate], [tan, nat], [bat]]
-[0, 1]
-Subarrays with sum 2: 2`,
-            language: 'java',
-            type: 'code'
-          }
-        },
-        // F
-        {
-          heading: 'Step-by-Step Walkthrough',
-          list: [
-            '<strong>Step 1 (Frequency Counter):</strong> Initialize an empty dict or Counter. Iterate through the input once. For each element, increment its count by 1. defaultdict(int) handles the missing-key case automatically with a default of 0.',
-            '<strong>Step 2 (Group Anagrams — canonical key):</strong> For each word, compute a form that all anagrams share. Sorting characters is the simplest: "eat", "tea", and "ate" all sort to "aet". Use this as the hash map key.',
-            '<strong>Step 3 (Group Anagrams — build groups):</strong> Append the original word to groups[sorted_key]. In Java, computeIfAbsent(key, k -> new ArrayList<>()) elegantly handles both the "key missing" and "key exists" cases in one line.',
-            '<strong>Step 4 (Prefix Sum Map — subarray sum):</strong> Maintain a running prefix_sum. At each index, check if (prefix_sum - k) has been seen before — if yes, there are that many subarrays ending at the current index with sum exactly k.',
-            '<strong>Step 5 (Prefix Sum Map — base case):</strong> Initialize prefixCounts[0] = 1. This handles subarrays that start at index 0: if prefix_sum == k at index i, then prefix_sum - k == 0 is in the map with count 1.',
-            '<strong>Step 6 (LRU Cache — get):</strong> If the key is not in the cache, return -1. Otherwise, move the entry to the end of the OrderedDict (marking it most recently used) and return its value.',
-            '<strong>Step 7 (LRU Cache — put):</strong> If the key exists, move it to the end. Set cache[key] = value. If the cache exceeds capacity, remove the first entry (popitem(last=False) in Python, or the eldest in LinkedHashMap in Java) — this is the least recently used entry.'
-          ]
-        },
-        // G
-        {
-          heading: 'Time & Space Complexity',
-          text: 'Comparison of Python and Java map types for choosing the right tool in interviews:',
-          table: {
-            headers: ['Map Type', 'Key Order', 'Get / Put / Delete avg', 'Worst Case', 'Best Use Case'],
-            rows: [
-              ['Python dict', 'Insertion order (3.7+)', 'O(1)', 'O(n) hash collision', 'General key-value mapping'],
-              ['Python Counter', 'Insertion order', 'O(1)', 'O(n)', 'Frequency counting, most_common()'],
-              ['Python defaultdict', 'Insertion order', 'O(1)', 'O(n)', 'Grouping, adjacency lists'],
-              ['Python set', 'No order', 'O(1)', 'O(n)', 'Membership test, deduplication'],
-              ['Java HashMap', 'No order', 'O(1)', 'O(log n) Java 8+ tree bins', 'General key-value mapping'],
-              ['Java TreeMap', 'Sorted by key', 'O(log n)', 'O(log n)', 'Range queries, sorted iteration'],
-              ['Java LinkedHashMap', 'Insertion or access order', 'O(1)', 'O(n)', 'LRU Cache, ordered output'],
-              ['Java HashSet', 'No order', 'O(1)', 'O(log n) Java 8+', 'Membership test, deduplication']
-            ]
-          }
-        },
-        // H
-        {
-          heading: 'Common Mistakes & Pitfalls',
-          list: [
-            '<strong>Mistake: Using a mutable object (list or array) as a dict or HashMap key.</strong> Mutable objects are unhashable in Python (TypeError) and use identity-based hashing in Java — two logically equal lists will not match as keys — <em>Fix:</em> Convert lists to tuples in Python or sort and join to a String in Java before using as a key.',
-            '<strong>Mistake: Forgetting that Java HashMap allows one null key.</strong> map.get(null) is valid and can return an unexpected value if null was stored earlier — <em>Fix:</em> Be explicit in your intent; avoid null keys in application logic and use getOrDefault to handle absence.',
-            '<strong>Mistake: Not using getOrDefault or defaultdict.</strong> Writing if key not in d: d[key] = 0; d[key] += 1 is verbose and error-prone in interviews under time pressure — <em>Fix:</em> Use defaultdict(int) in Python or map.getOrDefault(key, 0) / map.merge(key, 1, Integer::sum) in Java.',
-            '<strong>Mistake: Assuming hash map is always O(1).</strong> Under adversarial inputs all keys can collide, degrading to O(n) per operation — <em>Fix:</em> Mention this caveat in interviews when discussing worst-case complexity; Java 8+ mitigates this with tree bins after 8 collisions per bucket.'
-          ],
-          code: `# WRONG: Using a list as a dict key — unhashable type
-def group_by_freq_wrong(words):
-    groups = {}
-    for word in words:
-        key = sorted(word)       # returns a list — not hashable!
-        groups[key].append(word) # TypeError: unhashable type 'list'
-
-# CORRECT: Convert to tuple (hashable) or join to string
-def group_by_freq_correct(words):
-    groups = {}
-    for word in words:
-        key = tuple(sorted(word))    # tuple is hashable
-        if key not in groups:
-            groups[key] = []
-        groups[key].append(word)
-    return list(groups.values())
-
-# WRONG: Manual existence check — verbose and forgettable
-freq = {}
-for ch in "hello":
-    if ch not in freq:
-        freq[ch] = 0
-    freq[ch] += 1
-
-# CORRECT: defaultdict(int) auto-initializes missing keys to 0
-from collections import defaultdict
-freq = defaultdict(int)
-for ch in "hello":
-    freq[ch] += 1   # no KeyError, no boilerplate check
-print(dict(freq))   # {'h': 1, 'e': 1, 'l': 2, 'o': 1}`,
-          language: 'python'
-        },
-        // I
-        {
-          heading: 'Real-World Applications',
-          text: 'Hash maps are the foundational data structure of modern software — from database engines to neural network training pipelines:',
-          list: [
-            '<strong>Database hash indexes:</strong> Hash indexes in PostgreSQL and MySQL map column values to row pointers for O(1) equality lookups — the engine behind WHERE id = 42 on indexed columns.',
-            '<strong>Distributed caching (Redis / Memcached):</strong> Both are essentially distributed hash maps with expiration policies. Every cache get and set is a hash lookup. Redis adds sorted sets (ZSet = hash map + skip list) for leaderboards.',
-            '<strong>Language runtime internals:</strong> Python\'s attribute lookup (object.__dict__), Java\'s class constant pool, and JavaScript\'s object property access are all hash map operations under the hood.',
-            '<strong>NLP tokenization (BPE):</strong> Byte-Pair Encoding stores merge rules in a hash map for O(1) lookup during encoding. Hugging Face tokenizers process millions of tokens per second using this approach.',
-            '<strong>Approximate nearest neighbor search:</strong> Locality-Sensitive Hashing (LSH) uses specially designed hash functions to bucket similar vectors — enabling approximate nearest-neighbor search in O(1) per query instead of O(n) exhaustive scan.',
-            '<strong>Deduplication in data pipelines:</strong> Apache Spark and Flink use hash-based groupBy and distinct operations to deduplicate terabytes of streaming data — hash partitioning assigns records to workers by key hash for parallel processing.'
-          ]
-        },
-        // J
-        {
-          heading: 'Interview Tips',
-          list: [
-            'The single most powerful interview heuristic: "I see a nested loop — can I replace the inner O(n) search with an O(1) hash map lookup?" This alone solves Two Sum, Subarray Sum Equals K, Longest Consecutive Sequence, and dozens more.',
-            'Use Counter for any problem involving character or element frequencies — it is faster to write and clearer to read than a manual dict, and most_common() saves even more time.',
-            'For grouping problems (anagrams, equal frequency groups), find a canonical key that all members share. Sorted string, frequency tuple, and prime product are common canonical forms.',
-            'Always explicitly state the space trade-off: "I am using O(n) extra space for the hash map to achieve O(n) time instead of O(n²) time with O(1) space." Interviewers reward explicit trade-off reasoning.',
-            'For Java, know computeIfAbsent() — it is far cleaner than the three-line get/null-check/put pattern for building grouped structures, and it signals modern Java fluency.',
-            'Hash collisions are a valid worst-case concern. Acknowledge that O(1) is average case and O(n) is worst case. Java 8+ mitigates this with tree bins (O(log n) worst case) after 8 collisions per bucket.',
-            'Sets are simplified hash maps that store only keys. Reach for a set when you only need membership testing — "have I seen this element before?" — rather than key-value storage.'
-          ]
-        },
-        // K
-        {
-          heading: 'Practice Problems',
-          list: [
-            'Q1: Given an array of integers, find the length of the longest consecutive sequence in O(n) time without sorting.\nAns: Add all numbers to a hash set. For each number n where n-1 is NOT in the set (n is a sequence start), count n+1, n+2, ... until the next number is not in the set. Track the running maximum. Each number is visited at most twice total, so the overall time is O(n).',
-            'Q2: Determine if two strings are anagrams of each other without sorting them. What is the time and space complexity?\nAns: Build a frequency counter for string s (increment counts) then process string t (decrement counts). If any count goes negative during t, or if any count is non-zero at the end, they are not anagrams. O(n) time; O(1) space because the counter holds at most 26 entries (fixed alphabet) — it does not grow with n.',
-            'Q3 (Hard): Given an integer array and a target k, count the number of contiguous subarrays whose sum equals k. Achieve O(n) time.\nAns: Use prefix sums with a hash map. Maintain a running prefix_sum. At each index, the number of subarrays ending here with sum k equals the number of times (prefix_sum - k) has appeared previously — look it up in the map. Store prefix sum frequencies in a map initialized with {0: 1} (base case for subarrays starting at index 0). O(n) time, O(n) space.'
-          ]
-        }
-      ]
-    }
   }
 };

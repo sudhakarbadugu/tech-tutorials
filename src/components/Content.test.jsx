@@ -139,8 +139,8 @@ describe('Content', () => {
     const user = userEvent.setup()
     const dsaLikeContent = {
       module1: {
-        'arrays-strings': {
-          title: 'Arrays & Strings',
+        'arrays': {
+          title: 'Arrays',
           sections: [
             { heading: 'Overview', text: 'Arrays are contiguous blocks of memory.' },
             {
@@ -170,7 +170,7 @@ describe('Content', () => {
     }
 
     renderWithRouter(
-      <Content {...defaultProps} topic="arrays-strings" subjectContent={dsaLikeContent} />
+      <Content {...defaultProps} topic="arrays" subjectContent={dsaLikeContent} />
     )
 
     // The Python heading is no longer rendered as a standalone section heading.
@@ -236,8 +236,8 @@ describe('Content', () => {
     const user = userEvent.setup()
     const dsaLikeContent = {
       module1: {
-        'arrays-strings': {
-          title: 'Arrays & Strings',
+        'arrays': {
+          title: 'Arrays',
           sections: [
             { heading: 'Overview', text: 'Arrays are contiguous blocks of memory.' },
             {
@@ -253,13 +253,13 @@ describe('Content', () => {
       },
     }
 
-    const expectedKey = 'tt:langTab:python:module1:arrays-strings'
+    const expectedKey = 'tt:langTab:python:module1:arrays'
 
     const { unmount } = renderWithRouter(
       <Content
         {...defaultProps}
         subject="python"
-        topic="arrays-strings"
+        topic="arrays"
         subjectContent={dsaLikeContent}
       />
     )
@@ -274,7 +274,7 @@ describe('Content', () => {
       <Content
         {...defaultProps}
         subject="python"
-        topic="arrays-strings"
+        topic="arrays"
         subjectContent={dsaLikeContent}
       />
     )
@@ -295,8 +295,8 @@ describe('Content', () => {
     const user = userEvent.setup()
     const dsaLikeContent = {
       module1: {
-        'arrays-strings': {
-          title: 'Arrays & Strings',
+        'arrays': {
+          title: 'Arrays',
           sections: [
             { heading: 'Overview', text: 'Arrays are contiguous blocks of memory.' },
             {
@@ -316,7 +316,7 @@ describe('Content', () => {
       <Content
         {...defaultProps}
         subject="python"
-        topic="arrays-strings"
+        topic="arrays"
         subjectContent={dsaLikeContent}
       />
     )
@@ -348,7 +348,7 @@ describe('Content', () => {
     expect(document.activeElement).toBe(pythonTab)
 
     // Clean up so other tests don't observe a stale tab choice.
-    window.localStorage.removeItem('tt:langTab:python:module1:arrays-strings')
+    window.localStorage.removeItem('tt:langTab:python:module1:arrays')
   })
 
   it('works generically for any subject with Implementation sections', async () => {
@@ -393,7 +393,7 @@ describe('Content', () => {
     expect(window.localStorage.getItem(expectedKey)).toBe('Java')
 
     // Per-subject storage keys don't collide.
-    expect(window.localStorage.getItem('tt:langTab:python:module1:arrays-strings')).toBeNull()
+    expect(window.localStorage.getItem('tt:langTab:python:module1:arrays')).toBeNull()
 
     // Clean up the storage value.
     window.localStorage.removeItem(expectedKey)
