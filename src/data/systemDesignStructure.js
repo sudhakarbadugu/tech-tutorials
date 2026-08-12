@@ -34,6 +34,14 @@ export const systemDesignStructure = {
         "title": "Event-Driven Architecture"
       },
       {
+        "id": "backpressure",
+        "title": "Backpressure"
+      },
+      {
+        "id": "dead-letter-queue",
+        "title": "Dead Letter Queue"
+      },
+      {
         "id": "capstone-project",
         "title": "Capstone Project"
       }
@@ -104,6 +112,10 @@ export const systemDesignStructure = {
         "title": "Chapter Overview"
       },
       {
+        "id": "sql-vs-nosql",
+        "title": "SQL vs NoSQL Databases"
+      },
+      {
         "id": "replication",
         "title": "Replication (Primary-Replica)"
       },
@@ -126,6 +138,14 @@ export const systemDesignStructure = {
       {
         "id": "wal",
         "title": "Write-Ahead Log (WAL)"
+      },
+      {
+        "id": "object-storage",
+        "title": "Object Storage (S3)"
+      },
+      {
+        "id": "data-partitioning",
+        "title": "Data Partitioning"
       },
       {
         "id": "capstone-project",
@@ -202,6 +222,14 @@ export const systemDesignStructure = {
         "title": "Rate Limiting (Token Bucket, Leaky Bucket)"
       },
       {
+        "id": "idempotency-keys",
+        "title": "Idempotency Keys"
+      },
+      {
+        "id": "load-shedding",
+        "title": "Load Shedding"
+      },
+      {
         "id": "capstone-project",
         "title": "Capstone Project"
       }
@@ -213,6 +241,10 @@ export const systemDesignStructure = {
       {
         "id": "module-intro",
         "title": "Chapter Overview"
+      },
+      {
+        "id": "scalability-fundamentals",
+        "title": "Scalability Fundamentals"
       },
       {
         "id": "horizontal-vertical",
@@ -424,6 +456,10 @@ export const systemDesignStructure = {
         "title": "Model Routing & Fallback"
       },
       {
+        "id": "embeddings",
+        "title": "Embeddings"
+      },
+      {
         "id": "capstone-project",
         "title": "Capstone Project"
       }
@@ -611,6 +647,18 @@ export const systemDesignStructure = {
       {
         "id": "service-discovery",
         "title": "Service Discovery"
+      },
+      {
+        "id": "distributed-systems-intro",
+        "title": "Distributed Systems Overview"
+      },
+      {
+        "id": "leader-election",
+        "title": "Leader Election"
+      },
+      {
+        "id": "clock-skew",
+        "title": "Clock Skew"
       },
       {
         "id": "vector-clocks",

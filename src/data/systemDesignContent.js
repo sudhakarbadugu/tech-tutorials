@@ -821,6 +821,119 @@ bus.publish({'type': 'OrderPlaced', 'order_id': 12345, 'amount': 99.99})`,
           ]
         }
       ]
+    },
+    "backpressure": {
+      title: "Backpressure",
+      sections: [
+        {
+          heading: "What is Backpressure?",
+          text: "Backpressure is a mechanism where a slow consumer signals a fast producer to slow down. Without it, an unbounded queue grows until it exhausts memory and crashes the system.",
+          list: [
+            "<strong>Flow control:</strong> Consumer tells producer its current capacity",
+            "<strong>Bounded queues:</strong> Reject or block new messages when full",
+            "<strong>Alternative to buffering:</strong> Prevents silent overload",
+            "<strong>Common in:</strong> Stream processing, message queues, gRPC, reactive systems"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `flowchart LR
+    P[Fast Producer] --> Q[Bounded Queue\nmax=1000]
+    Q --> C[Slow Consumer]
+    Q -->|full| P
+    style Q fill:#e74c3c,color:#fff`,
+            caption: "When the bounded queue fills up, the producer receives a backpressure signal and slows down."
+          }
+        },
+        {
+          heading: "Backpressure Strategies",
+          list: [
+            "<strong>Drop:</strong> Discard overflow when quality of service allows (e.g., metrics)",
+            "<strong>Block:</strong> Pause the producer until the consumer catches up",
+            "<strong>Buffer with limits:</strong> Allow short bursts, then apply pressure",
+            "<strong>Shed load:</strong> Reject low-priority work to preserve critical path"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Apache Kafka — consumer backpressure.</strong> Kafka consumers pull records at their own pace using offsets. If a consumer lags, Kafka does not push more data; the consumer simply reads less. Operators monitor consumer lag and scale consumers horizontally when it grows too large."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Backpressure = slow consumer tells fast producer to slow down",
+            "Prevents unbounded queues and memory exhaustion",
+            "Implemented via bounded buffers, blocking, dropping, or load shedding",
+            "Essential for stream processing and reactive systems"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: What happens without backpressure? → Queue grows until the process runs out of memory or latency spikes indefinitely.",
+            "Q2: How does gRPC implement backpressure? → HTTP/2 flow control windows limit in-flight data per stream.",
+            "Q3: Is dropping messages a valid backpressure strategy? → Yes, for telemetry or logs where some loss is acceptable, but not for financial events."
+          ]
+        }
+      ]
+    },
+    "dead-letter-queue": {
+      title: "Dead Letter Queue",
+      sections: [
+        {
+          heading: "What is a Dead Letter Queue?",
+          text: "A dead letter queue (DLQ) holds messages that failed processing after a set number of retries. It isolates bad messages so the rest of the queue keeps flowing.",
+          list: [
+            "<strong>Poison messages:</strong> Malformed or unprocessable events",
+            "<strong>Retry limits:</strong> Move a message to the DLQ after N failures",
+            "<strong>Inspection:</strong> Operators analyze DLQ messages to find bugs",
+            "<strong>Replay:</strong> Fix the issue, then reprocess DLQ messages"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `flowchart LR
+    P[Producer] --> MQ[(Main Queue)]
+    MQ --> C[Consumer]
+    C -->|retry 3x fails| DLQ[(Dead Letter Queue)]
+    DLQ -->|manual replay| C
+    style DLQ fill:#e67e22,color:#fff`,
+            caption: "Failed messages are moved to the DLQ after retries are exhausted, preventing queue blockage."
+          }
+        },
+        {
+          heading: "When to Use a DLQ",
+          list: [
+            "<strong>Required:</strong> Any production message-driven system",
+            "<strong>Alerting:</strong> Page on DLQ depth or age",
+            "<strong>Ordering:</strong> Be careful with FIFO queues — a poison message can block ordered messages behind it",
+            "<strong>Expiry:</strong> Set a TTL on DLQ messages so old failures don't accumulate forever"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>AWS SQS — dead-letter queues.</strong> SQS lets you designate a DLQ for a source queue. After a message fails processing the configured maxReceiveCount times, SQS automatically moves it to the DLQ. CloudWatch alarms on DLQ depth alert operators to investigate."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "DLQ = parking lot for messages that fail repeated processing",
+            "Prevents one bad message from stalling the entire queue",
+            "Monitor DLQ depth and age; replay after fixing the root cause",
+            "Standard practice for any production messaging system"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why is a DLQ better than infinite retries? → Infinite retries block processing of messages behind the failing one.",
+            "Q2: What should you do when a message enters the DLQ? → Alert, investigate, fix the bug, then replay or discard manually.",
+            "Q3: How does a DLQ affect ordering guarantees? → In FIFO queues, a poison message can block subsequent messages until moved."
+          ]
+        }
+      ]
     }
   },
 
@@ -849,6 +962,60 @@ bus.publish({'type': 'OrderPlaced', 'order_id': 12345, 'amount': 99.99})`,
           diagram: `graph LR
     T1[Replication] -->     T2["Sharding & Partitioning"] -->     T3[Consistent Hashing] -->     T4[Event Sourcing] -->     T5[CQRS] -->     T6["Write-Ahead Log (WAL)"]`,
           text: "Recommended reading order — each topic builds on the previous one."
+        }
+      ]
+    },
+    "sql-vs-nosql": {
+      title: "SQL vs NoSQL Databases",
+      sections: [
+        {
+          heading: "What are SQL and NoSQL Databases?",
+          text: "A database persists data beyond a single request. SQL (relational) databases store structured data in tables with rows, columns, and relationships enforced by foreign keys. NoSQL databases trade the rigid table model for flexibility, scale, or access-pattern optimization.",
+          list: [
+            "<strong>SQL:</strong> Tables, rows, columns, foreign keys, ACID transactions, flexible queries",
+            "<strong>NoSQL categories:</strong> key-value, document, wide-column, graph, time-series",
+            "<strong>SQL strengths:</strong> Complex relationships, strong consistency, ad-hoc queries",
+            "<strong>NoSQL strengths:</strong> Horizontal scaling, schema flexibility, high write throughput"
+          ]
+        },
+        {
+          heading: "SQL vs NoSQL",
+          table: {
+            headers: ["Aspect", "SQL", "NoSQL"],
+            rows: [
+              ["Data model", "Tables with fixed schema", "Documents, key-value, graphs, wide-column"],
+              ["Schema", "Rigid; migrations required", "Flexible; schema-on-read"],
+              ["Transactions", "ACID across rows", "Often BASE / single-document ACID"],
+              ["Scaling writes", "Vertical or sharding (complex)", "Horizontal sharding built-in"],
+              ["Query flexibility", "Powerful JOINs and aggregations", "Optimized for known access patterns"],
+              ["Best for", "Financial data, inventory, ERP", "Feeds, sessions, catalogs, analytics"]
+            ]
+          }
+        },
+        {
+          heading: "Choosing by Access Pattern",
+          text: "The most common mistake is choosing NoSQL because it sounds modern. The access patterns determine the right choice. If you need multi-row transactions and complex joins, start with SQL. If you need massive write throughput and can model around simple key-based access, NoSQL fits better."
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Netflix — polyglot persistence.</strong> Netflix uses MySQL for billing and account data (strong consistency), Cassandra for viewing history and bookmarks (massive writes, eventual consistency), and Elasticsearch for search (inverted index). They pick the database based on what each workload actually needs."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "SQL = structured relational data with ACID guarantees",
+            "NoSQL = flexible models optimized for scale and specific access patterns",
+            "Choose SQL for complex relationships and transactions",
+            "Choose NoSQL for high write throughput and simple access patterns"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: When is a SQL database the wrong choice? → When write throughput exceeds single-node capacity and complex joins are not needed.",
+            "Q2: Can you use both SQL and NoSQL in one system? → Yes — polyglot persistence uses the best database for each workload.",
+            "Q3: What is the main scaling challenge for SQL? → Scaling writes beyond one server usually requires sharding, which adds significant complexity."
+          ]
         }
       ]
     },
@@ -1716,6 +1883,115 @@ print(store.get('user:1'))  # Alice
             "Q1: Why write to WAL first instead of directly to the data store? → WAL writes are sequential (fast); data store writes are random (slow). WAL ensures durability.",
             "Q2: What happens if WAL grows too large? → Checkpointing flushes to data store and truncates WAL. Without checkpointing, recovery time increases.",
             "Q3: How does WAL enable replication? → Replicas stream WAL records from the primary and apply them, staying in sync."
+          ]
+        }
+      ]
+    },
+    "object-storage": {
+      title: "Object Storage (S3)",
+      sections: [
+        {
+          heading: "What is Object Storage?",
+          text: "Object storage stores large unstructured files as objects identified by a key. It is highly durable, virtually limitless, and cheap per gigabyte. Each object includes data, metadata, and a globally unique key.",
+          list: [
+            "<strong>Object key:</strong> Unique identifier like a file path (e.g., user-uploads/abc123.jpg)",
+            "<strong>Metadata:</strong> Tags, content-type, lifecycle rules attached to the object",
+            "<strong>High durability:</strong> 99.999999999% (eleven nines) via cross-region replication",
+            "<strong>Not a database:</strong> No transactions, joins, or low-latency random access"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `flowchart LR
+    App[Application] -->|PUT user/123/photo.jpg| S3[(Object Storage)]
+    App -->|GET pre-signed URL| CDN[CDN / Edge]
+    CDN -->|fetch| S3
+    S3 -->|lifecycle| Archive[(Glacier / Archive)]
+    style S3 fill:#f39c12,color:#fff`,
+            caption: "Applications upload objects by key; CDNs serve frequently accessed objects from the edge."
+          }
+        },
+        {
+          heading: "Best Use Cases",
+          list: [
+            "User-generated content: images, videos, documents",
+            "Backups and archives",
+            "Static website assets",
+            "Large files and logs"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Instagram — photo storage.</strong> Instagram stores billions of photos in object storage (S3). When a user uploads a photo, multiple resized versions are created and stored under predictable keys. CDN edge nodes cache popular photos, reducing origin load and latency."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Object storage = key-addressed, durable, cheap storage for unstructured data",
+            "Ideal for images, videos, backups, and static assets",
+            "Not a database — avoid transactions, joins, or random small reads",
+            "Pair with CDN for low-latency delivery"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why use object storage instead of a database for images? → Databases are expensive and inefficient for large binary blobs; object storage is cheap and durable.",
+            "Q2: How do you keep object storage data private? → Use pre-signed URLs with expiration and IAM policies.",
+            "Q3: What is lifecycle management? → Automatically move old objects to cheaper archive tiers or delete them after a retention period."
+          ]
+        }
+      ]
+    },
+    "data-partitioning": {
+      title: "Data Partitioning",
+      sections: [
+        {
+          heading: "What is Data Partitioning?",
+          text: "Data partitioning divides data into separate parts for storage or processing. Sharding is one form of partitioning; others include time-based partitioning and range partitioning. The goal is to improve query performance, manage data lifecycle, and distribute load.",
+          list: [
+            "<strong>Horizontal partitioning (sharding):</strong> Split rows across nodes",
+            "<strong>Vertical partitioning:</strong> Split columns across tables",
+            "<strong>Time-based partitioning:</strong> One partition per month/year (common for logs)",
+            "<strong>Range/hash/list partitioning:</strong> Choose based on dominant query pattern"
+          ]
+        },
+        {
+          heading: "Partitioning Strategies",
+          table: {
+            headers: ["Strategy", "How it works", "Best for"],
+            rows: [
+              ["Range", "Partition by value range (e.g., dates)", "Time-series data, logs"],
+              ["Hash", "Partition by hash of a key", "Even distribution, no hot spots"],
+              ["List", "Partition by discrete categories", "Multi-tenant data by region"],
+              ["Composite", "Range + hash", "Time-series with even distribution"]
+            ]
+          }
+        },
+        {
+          heading: "Lifecycle and Query Benefits",
+          text: "Partitioning lets queries scan less data by pruning irrelevant partitions. It also enables cheap data lifecycle management: drop or archive old partitions instead of deleting rows one by one. The partition key must match the dominant query filter."
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>PostgreSQL — declarative table partitioning.</strong> PostgreSQL supports range, list, and hash partitioning. A common pattern is monthly partitions for event tables: queries filtered by date scan only the relevant partitions, and old partitions are detached/archived without locking the table."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Partitioning = dividing data into independent parts",
+            "Improves query performance via partition pruning",
+            "Simplifies archiving and deletion of old data",
+            "Partition key must match the dominant query pattern"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: What's the difference between sharding and partitioning? → Sharding distributes partitions across nodes; partitioning splits data within or across nodes.",
+            "Q2: Why partition by time for logs? → Queries usually filter by date; old partitions can be dropped or archived cheaply.",
+            "Q3: What causes partition skew? → A poor partition key concentrates data in a few partitions."
           ]
         }
       ]
@@ -3114,6 +3390,122 @@ for i in range(25):
           ]
         }
       ]
+    },
+    "idempotency-keys": {
+      title: "Idempotency Keys",
+      sections: [
+        {
+          heading: "What is an Idempotency Key?",
+          text: "An idempotency key is a unique identifier a client attaches to a request so the server can detect and ignore duplicates. The server stores which keys it has processed and returns the original result if the same key arrives again without re-executing the operation.",
+          list: [
+            "<strong>Client-generated:</strong> The client creates the key before the first attempt and sends it with every retry",
+            "<strong>Server stores:</strong> A fast lookup table maps key → response",
+            "<strong>Time-bound:</strong> Keys expire after a window (e.g., 24 hours)",
+            "<strong>Scope:</strong> Usually scoped to a user or API credential"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `flowchart LR
+    C[Client] -->|POST /charge<br/>Idempotency-Key: abc-123| S[Server]
+    S -->|lookup| KV[(Key-Value Store)]
+    KV -->|miss| Proc[Process Payment]
+    Proc -->|store response| KV
+    KV -->|hit| Return[Return Stored Response]
+    S --> Return
+    style KV fill:#3498db,color:#fff`,
+            caption: "First request is processed and the response is stored. Retries with the same key return the stored response."
+          }
+        },
+        {
+          heading: "Key Design Choices",
+          list: [
+            "<strong>Key generation:</strong> UUID v4 or deterministic hash of request payload + client + timestamp",
+            "<strong>Storage:</strong> Redis or the application's primary database",
+            "<strong>Atomicity:</strong> Store the key and process the operation in one transaction to avoid races",
+            "<strong>Response replay:</strong> Return the exact original response, including status code and body"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Stripe — idempotency keys.</strong> Stripe's payment API accepts an Idempotency-Key header. If a network failure occurs after a charge request, the client retries with the same key. Stripe returns the original charge instead of creating a duplicate, preventing double charges."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Idempotency key = unique token that makes retries safe",
+            "Server stores key → response mapping",
+            "Essential for payment APIs and any non-idempotent operation",
+            "Keys must be generated by the client before the first attempt"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why must the client generate the idempotency key? → So the same key can be sent with every retry, even if the first response was lost.",
+            "Q2: What happens if the key expires before a retry? → The server treats it as a new request and may execute the operation again.",
+            "Q3: How do you handle concurrent requests with the same key? → Lock on the key or use a database unique constraint + atomic insert."
+          ]
+        }
+      ]
+    },
+    "load-shedding": {
+      title: "Load Shedding",
+      sections: [
+        {
+          heading: "What is Load Shedding?",
+          text: "Load shedding is the deliberate rejection of excess requests when a system is overloaded. Rather than trying to serve all requests poorly and collapsing, the system serves what it can handle well and declines the rest with a clear signal to retry later.",
+          list: [
+            "<strong>Graceful degradation:</strong> Preserve critical operations by dropping lower-priority work",
+            "<strong>Better than total failure:</strong> Partial availability is more useful than no availability",
+            "<strong>Signals clients:</strong> Return 503 or 429 with Retry-After",
+            "<strong>Triggered by:</strong> High latency, queue depth, CPU/memory thresholds"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `flowchart LR
+    Traffic[Incoming Traffic] --> LB[Load Balancer]
+    LB -->|critical| App[Application]
+    LB -->|low-priority| Shed[Rejected<br/>503 Retry-After]
+    App --> DB[(Database)]
+    style Shed fill:#e74c3c,color:#fff`,
+            caption: "Critical traffic is admitted; low-priority or excess traffic is shed to protect the core system."
+          }
+        },
+        {
+          heading: "Prioritization Strategies",
+          list: [
+            "<strong>User tier:</strong> Premium users over free users",
+            "<strong>Request type:</strong> Reads over writes, or checkout over recommendations",
+            "<strong>Geography:</strong> Protect primary region during a regional outage",
+            "<strong>Rate-based:</strong> Shed once requests exceed a safe threshold"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Amazon — load shedding during Prime Day.</strong> During traffic spikes, Amazon's retail systems shed lower-priority requests (recommendations, browsing history) to ensure checkout and payment paths remain available. This tradeoff protects revenue-critical flows."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Load shedding = intentionally reject excess load to stay healthy",
+            "Drop low-priority work first to protect critical paths",
+            "Return clear retry signals (503/429 + Retry-After)",
+            "Partial availability is better than total failure"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: What's the difference between load shedding and rate limiting? → Rate limiting enforces quotas; load shedding reacts to real-time overload.",
+            "Q2: Which requests should be shed first? → Lower-priority, non-revenue, or background work.",
+            "Q3: How do you avoid shedding during a normal burst? → Use hysteresis and warm-up thresholds, not single-request triggers."
+          ]
+        }
+      ]
     }
   },
 
@@ -3144,6 +3536,79 @@ for i in range(25):
     T4 --> T5[Microservices Scaling]
     T5 --> T6[Stateless Services]`,
           text: "Recommended reading order — each topic builds on the previous one."
+        }
+      ]
+    },
+    "scalability-fundamentals": {
+      title: "Scalability Fundamentals",
+      sections: [
+        {
+          heading: "What is Scalability?",
+          text: "Scalability is the ability of a system to handle growth without breaking. Growth can mean more users, more data, more requests, or more geographic reach. A scalable system expands its capacity to meet that growth while keeping performance acceptable.",
+          list: [
+            "<strong>Not a single component property:</strong> A system is only as scalable as its least scalable part",
+            "<strong>Vertical scaling:</strong> Make one machine more powerful — simple but has a ceiling",
+            "<strong>Horizontal scaling:</strong> Add more machines — no ceiling, requires stateless design",
+            "<strong>Dimensions:</strong> Load, data, users, geography"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `graph TB
+    subgraph "Small Scale"
+        U1[Users] --> S1[Single Server]
+        S1 --> DB1[(Database)]
+    end
+    subgraph "Scaled Out"
+        U2[Users] --> LB[Load Balancer]
+        LB --> S2a[Server 1]
+        LB --> S2b[Server 2]
+        LB --> S2c[Server N]
+        S2a --> DB2[(Database Cluster)]
+        S2b --> DB2
+        S2c --> DB2
+    end`,
+            caption: "Scaling out moves from a single server to a load-balanced fleet; the database often becomes the next bottleneck."
+          }
+        },
+        {
+          heading: "Vertical vs Horizontal Scaling",
+          table: {
+            headers: ["Aspect", "Vertical Scaling", "Horizontal Scaling"],
+            rows: [
+              ["How", "Upgrade CPU/RAM/disk on one machine", "Add more commodity machines"],
+              ["Limit", "Hardware ceiling; single point of failure", "Nearly unlimited; adds redundancy"],
+              ["Code changes", "Usually none", "Requires stateless services"],
+              ["Cost", "Cheaper at small scale", "Cheaper at large scale"],
+              ["Examples", "Single PostgreSQL server upgrade", "Web server fleet behind a load balancer"]
+            ]
+          }
+        },
+        {
+          heading: "The Bottleneck Moves",
+          text: "When you scale your application servers to handle ten times the traffic, the bottleneck simply moves to the database. True scalability requires every layer to be able to grow: application servers, databases, caches, queues, and external dependencies."
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Amazon — from monolith to scalable services.</strong> Amazon's retail platform scaled by breaking a monolithic application into smaller, stateless services and adding load-balanced fleets. They scaled databases through sharding and read replicas. The lesson: scalability is a system-wide concern, not a single-server upgrade."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Scalability = handle growth while keeping performance acceptable",
+            "It is a property of the whole system, not one component",
+            "Vertical scaling is simpler but hits a ceiling and creates a single point of failure",
+            "Horizontal scaling requires stateless services and adds redundancy"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why does scaling app servers sometimes not solve performance problems? → The bottleneck moves to the database or another downstream dependency.",
+            "Q2: What makes horizontal scaling possible? → Stateless services that can handle any request independently.",
+            "Q3: When is vertical scaling the right choice? → For stateful systems like single-node databases when horizontal scaling is complex and load is within hardware limits."
+          ]
         }
       ]
     },
@@ -7542,6 +8007,64 @@ print(f'\nRouting stats: {dict(router.routing_stats)}')`,
           ]
         }
       ]
+    },
+    "embeddings": {
+      title: "Embeddings",
+      sections: [
+        {
+          heading: "What is an Embedding?",
+          text: "An embedding is a numerical representation of data—typically text or images—as a vector of floating-point numbers that captures semantic meaning. Items with similar meaning have vectors that are close together in the high-dimensional space.",
+          list: [
+            "<strong>Vector:</strong> A fixed-length array of floats (e.g., 384, 768, or 1536 dimensions)",
+            "<strong>Semantic similarity:</strong> Cosine distance or Euclidean distance measures how close two vectors are",
+            "<strong>Produced by:</strong> Transformer models like BERT, OpenAI text-embedding-ada, or vision encoders",
+            "<strong>Foundation of:</strong> Semantic search, recommendations, RAG, clustering"
+          ]
+        },
+        {
+          heading: "How Embeddings Enable Search",
+          diagram: {
+            chart: `flowchart LR
+    Doc[Documents] --> Embed[Embedding Model]
+    Embed --> Vectors[(Vector Database)]
+    Query[User Query] --> Embed
+    Embed -->|similarity search| Vectors
+    Vectors --> TopK[Top-K Results]
+    style Vectors fill:#9b59b6,color:#fff`,
+            caption: "Documents and queries are converted to vectors; nearest-neighbor search finds semantically similar content."
+          }
+        },
+        {
+          heading: "Key Properties",
+          list: [
+            "<strong>Same model, same space:</strong> Queries and documents must use the same embedding model to be comparable",
+            "<strong>Approximate nearest neighbors:</strong> HNSW and IVF indexes trade a little recall for massive speed gains",
+            "<strong>Chunking:</strong> Long documents are split into chunks before embedding to preserve local meaning",
+            "<strong>Distance metric:</strong> Cosine for normalized vectors, Euclidean for unnormalized"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>OpenAI — text embeddings for support search.</strong> OpenAI's support portal embeds both help articles and user questions using the same model. A user's question retrieves the top-5 most semantically similar articles, even if the words don't match exactly. This powers their retrieval-augmented generation (RAG) pipeline."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Embedding = dense vector that captures semantic meaning",
+            "Similar items cluster close together in vector space",
+            "Power semantic search, recommendations, and RAG",
+            "Use the same model for indexing and querying"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why can't you mix embeddings from two different models? → Different models produce vectors in incompatible spaces.",
+            "Q2: What's the difference between keyword search and embedding search? → Keyword search matches words; embedding search matches meaning.",
+            "Q3: Why chunk documents before embedding? → Long documents dilute meaning; chunks preserve local context and improve retrieval precision."
+          ]
+        }
+      ]
     }
   },
 
@@ -9071,5 +9594,658 @@ s2.send_group('bob', 'team', 'Team meeting at 5pm!')`,
       ]
     }
   },
+  module16: {
+    "module-intro": {
+      title: "Chapter Overview",
+      sections: [
+        {
+          heading: "What is this chapter about?",
+          text: "Distributed systems are the foundation of modern scalable infrastructure. This module covers the core concepts that make multi-machine systems work: what distributed systems are and why they fail differently, how nodes agree on a leader, and why clock skew makes timestamp-based ordering unreliable.",
+          list: [
+            "<strong>Topics covered:</strong> Distributed Systems Overview, Leader Election, Clock Skew",
+            "<strong>Prerequisites:</strong> Basic networking, message queues, and consistency concepts",
+            "<strong>Time to complete:</strong> ~1-2 hours",
+            "<strong>Best for:</strong> System design interviews and production debugging"
+          ]
+        },
+        {
+          heading: "Why does this matter?",
+          text: "Every large system eventually becomes distributed. Understanding the fundamental challenges — partial failures, leader coordination, and time — lets you design systems that are resilient rather than surprised when the network misbehaves."
+        }
+      ]
+    },
+    "distributed-systems-intro": {
+      title: "Distributed Systems Overview",
+      sections: [
+        {
+          heading: "What is a Distributed System?",
+          text: "A distributed system is a system where components run on multiple machines that communicate over a network to achieve a common goal. Distributed systems are more capable than single-machine systems but introduce problems that do not exist on one machine: network failures, partial failures, and the challenge of keeping multiple copies of data consistent.",
+          list: [
+            "<strong>Multiple independent machines:</strong> Each has its own CPU, memory, disk, and clock",
+            "<strong>Network communication:</strong> Components talk over unreliable links",
+            "<strong>Partial failure:</strong> One node or link can fail while the rest keeps running",
+            "<strong>No global clock:</strong> Different machines disagree on exact time"
+          ]
+        },
+        {
+          heading: "Why Build Distributed Systems?",
+          list: [
+            "<strong>Scalability:</strong> Add more nodes to handle load",
+            "<strong>Availability:</strong> Survive individual node failures",
+            "<strong>Latency:</strong> Place data and compute closer to users",
+            "<strong>Fault isolation:</strong> A failure in one region or service need not take down the whole system"
+          ]
+        },
+        {
+          heading: "The Fallacies of Distributed Computing",
+          list: [
+            "The network is reliable",
+            "Latency is zero",
+            "Bandwidth is infinite",
+            "The network is secure",
+            "Topology doesn't change",
+            "There is one administrator",
+            "Transport cost is zero",
+            "The network is homogeneous"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `graph TB
+    subgraph "Single Machine"
+        A[App] --> B[(DB)]
+    end
+    subgraph "Distributed System"
+        C1[Client] --> LB[Load Balancer]
+        LB --> S1[Service A]
+        LB --> S2[Service B]
+        S1 --> DB1[(Primary DB)]
+        S2 --> DB2[(Replica DB)]
+        S1 --> Q[(Message Queue)]
+        S2 --> Q
+        DB1 -.->|Replication| DB2
+    end`,
+            caption: "A single machine avoids network problems; a distributed system gains scale and resilience at the cost of new failure modes."
+          }
+        },
+        {
+          heading: "Core Challenges",
+          list: [
+            "<strong>Failure detection:</strong> Cannot distinguish a slow node from a failed one",
+            "<strong>Consensus:</strong> Nodes must agree despite failures",
+            "<strong>Consistency:</strong> Multiple copies of data must stay synchronized",
+            "<strong>Clocks:</strong> Wall-clock time cannot establish event ordering across machines"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Netflix — designing for failure.</strong> Netflix assumes any component can fail at any time. They run services across multiple AWS regions, replicate data asynchronously, and use chaos engineering (Chaos Monkey) to randomly terminate instances. The result is a system that continues operating even when large parts of the infrastructure fail."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Distributed systems = multiple machines + network + shared goal",
+            "They add scale, availability, and geographic reach",
+            "New failure modes: partial failures, network partitions, clock drift",
+            "Design for failure detection, consensus, consistency, and unreliable clocks"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: What is a partial failure? → Some components fail while others continue running, making it hard to know the system's true state.",
+            "Q2: Why can't distributed systems rely on wall-clock time? → Clocks on different machines drift and can disagree on event ordering.",
+            "Q3: What is the most important mindset shift when moving from single-machine to distributed systems? → Accept that the network is unreliable and design for failure rather than assuming it."
+          ]
+        }
+      ]
+    },
+    "leader-election": {
+      title: "Leader Election",
+      sections: [
+        {
+          heading: "What is Leader Election?",
+          text: "Leader election is the process by which distributed nodes agree on which one is responsible for coordinating work. The leader handles writes, coordinates distributed operations, or manages resources that should not be duplicated. Leader election requires consensus to prevent two nodes from both believing they are the leader and accepting conflicting writes.",
+          list: [
+            "<strong>Single coordinator:</strong> One node makes decisions for a task or partition",
+            "<strong>Consensus required:</strong> A majority of nodes must agree on the leader",
+            "<strong>Failover:</strong> When the leader fails, remaining nodes elect a new one",
+            "<strong>Reduced capability window:</strong> During failover, leader-dependent operations may pause"
+          ]
+        },
+        {
+          heading: "Why is it Needed?",
+          text: "Many operations must happen exactly once across a cluster: accepting writes, allocating IDs, scheduling jobs, or updating global state. Without a leader, multiple nodes might perform the same work concurrently, causing conflicts or duplicates. A leader serializes these operations."
+        },
+        {
+          heading: "How It Works",
+          list: [
+            "<strong>1. Campaign:</strong> Each candidate proposes itself with a monotonically increasing term/epoch ID",
+            "<strong>2. Vote:</strong> Nodes vote for the first valid candidate they see in a term",
+            "<strong>3. Majority wins:</strong> A candidate receiving votes from more than half the nodes becomes leader",
+            "<strong>4. Heartbeats:</strong> The leader sends periodic heartbeats to prove it is alive",
+            "<strong>5. New election:</strong> If heartbeats stop, a new election begins"
+          ]
+        },
+        {
+          heading: "Leader Election Architecture",
+          diagram: {
+            chart: `graph TB
+    subgraph "Cluster"
+        N1[Node 1<br/>Follower]
+        N2[Node 2<br/>Candidate]
+        N3[Node 3<br/>Follower]
+        N4[Node 4<br/>Leader]
+        N5[Node 5<br/>Follower]
+    end
+    N4 -.->|Heartbeats| N1
+    N4 -.->|Heartbeats| N2
+    N4 -.->|Heartbeats| N3
+    N4 -.->|Heartbeats| N5
+    N2 -->|Vote Request| N1
+    N1 -->|Vote| N2`,
+            caption: "The leader sends heartbeats to followers. If the leader fails, a candidate starts a new election and asks for votes."
+          }
+        },
+        {
+          heading: "Split-Brain Prevention",
+          text: "If the network partitions, two nodes might both claim to be leader. Consensus algorithms prevent this by requiring a majority. With five nodes, a leader needs at least three votes. A partition with two nodes cannot elect a leader, so it stops accepting writes rather than creating conflicting state."
+        },
+        {
+          heading: "Common Algorithms",
+          list: [
+            "<strong>Raft:</strong> Easy-to-understand consensus algorithm used by etcd, Consul, and TiKV",
+            "<strong>Paxos:</strong> Older, proven algorithm; harder to implement correctly",
+            "<strong>ZooKeeper ZAB:</strong> Atomic broadcast protocol used by ZooKeeper",
+            "<strong>Bully algorithm:</strong> Simpler but assumes reliable failure detection"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Redis Sentinel — leader election for failover.</strong> Redis Sentinel monitors Redis master-replica setups. When the master fails, Sentinels run a leader election among themselves to decide which sentinel will promote a replica to master. This avoids multiple sentinels making conflicting promotions."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Leader election picks one coordinator from a group of nodes",
+            "Requires consensus and majority votes to prevent split-brain",
+            "Leader sends heartbeats; missing heartbeats trigger a new election",
+            "Failover creates a brief window where leader-dependent operations pause"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why is consensus required for leader election? → Without consensus, two nodes could both believe they are leader and accept conflicting writes.",
+            "Q2: How does a majority prevent split-brain? → A minority partition cannot reach a majority of votes, so it cannot elect a leader.",
+            "Q3: What happens to clients during leader failover? → Writes may be unavailable briefly until a new leader is elected and acknowledged."
+          ]
+        }
+      ]
+    },
+    "clock-skew": {
+      title: "Clock Skew",
+      sections: [
+        {
+          heading: "What is Clock Skew?",
+          text: "Clock skew is the difference in time between clocks on different machines. Even with time synchronization protocols like NTP, clocks on different machines drift apart over time and can differ by milliseconds or more. Clock skew breaks any logic that relies on timestamps from different machines to establish event ordering.",
+          list: [
+            "<strong>Clocks drift:</strong> Physical clocks do not stay perfectly synchronized",
+            "<strong>Ordering is unreliable:</strong> A later timestamp does not guarantee a later event",
+            "<strong>Common in distributed systems:</strong> Any system with multiple machines",
+            "<strong>Can cause bugs:</strong> Caching, conflict resolution, and timeouts can misbehave"
+          ]
+        },
+        {
+          heading: "Why Clocks Disagree",
+          list: [
+            "<strong>Quartz oscillator variance:</strong> Each CPU clock runs at a slightly different rate",
+            "<strong>NTP corrections:</strong> Step adjustments can move a clock backward",
+            "<strong>Leap seconds:</strong> Special adjustments that add or remove seconds",
+            "<strong>Virtual machines:</strong> Clock behavior can be erratic when VMs pause or migrate"
+          ]
+        },
+        {
+          heading: "The Danger of Timestamp Ordering",
+          text: "Two events with timestamps five milliseconds apart on different machines might have actually occurred in the opposite order. If Node A writes a value with timestamp 1000 and Node B writes a value with timestamp 1005, you cannot safely conclude that B's write happened after A's."
+        },
+        {
+          heading: "Solutions",
+          list: [
+            "<strong>Logical clocks:</strong> Increment counters on each node to track 'happens-before' relationships",
+            "<strong>Vector clocks:</strong> Maintain a vector of counters per node to determine causality",
+            "<strong>Version vectors:</strong> Simplified vector clocks for conflict detection",
+            "<strong>Clock-bound protocols:</strong> Spanner uses TrueTime API with bounded uncertainty intervals"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `graph LR
+    subgraph "Node A"
+        E1[Event 1<br/>timestamp: 10:00:00.100]
+        E2[Event 2<br/>timestamp: 10:00:00.200]
+    end
+    subgraph "Node B"
+        E3[Event 3<br/>timestamp: 10:00:00.150]
+    end
+    E1 --> E2
+    E1 -.->|Network| E3
+    style E1 fill:#3498db,color:#fff
+    style E2 fill:#3498db,color:#fff
+    style E3 fill:#e74c3c,color:#fff`,
+            caption: "Node B's event at 150ms may have happened before or after Node A's event at 200ms; timestamps alone cannot decide."
+          }
+        },
+        {
+          heading: "When to Use What",
+          list: [
+            "<strong>Single machine:</strong> Monotonic clocks (e.g., CLOCK_MONOTONIC) are reliable",
+            "<strong>Same datacenter:</strong> NTP + bounded skew assumptions may be acceptable",
+            "<strong>Global distributed:</strong> Use logical/vector clocks or consensus-based ordering",
+            "<strong>Financial systems:</strong> Use hardware clocks or atomic clocks with uncertainty bounds"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Spanner — TrueTime API.</strong> Google's Spanner avoids clock-skew problems by using GPS and atomic clocks to provide bounded uncertainty. Every timestamp is actually an interval [earliest, latest]. Spanner waits out the uncertainty before committing, ensuring global consistency without vector clocks."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Clock skew = different machines disagree on time",
+            "Never use wall-clock timestamps alone to order events across machines",
+            "Use logical clocks, vector clocks, or bounded-uncertainty time APIs",
+            "Clock issues are a common source of subtle distributed-systems bugs"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why is NTP not enough for distributed event ordering? → NTP can step clocks backward and only keeps time loosely synchronized; it does not establish causality.",
+            "Q2: What is a 'happens-before' relationship? → Event A happens before B if A could have influenced B, either on the same node or via a message.",
+            "Q3: When is it safe to use timestamps across machines? → When you can bound the maximum clock skew and account for the uncertainty, as Spanner's TrueTime does."
+          ]
+        }
+      ]
+    },
+
+    "dns": {
+      title: "DNS & Name Resolution",
+      sections: [
+        {
+          heading: "What is DNS?",
+          text: "The Domain Name System (DNS) translates human-readable domain names like `example.com` into IP addresses that machines use to route traffic. DNS is a distributed, hierarchical lookup service that makes the internet usable without memorizing numeric addresses.",
+          list: [
+            "<strong>Hierarchical:</strong> Root → TLD (.com, .org) → authoritative name servers",
+            "<strong>Distributed:</strong> No single server stores all records; queries cascade down the hierarchy",
+            "<strong>Cached:</strong> Resolvers and OS caches reduce latency and load",
+            "<strong>Critical path:</strong> Almost every user request starts with a DNS lookup"
+          ]
+        },
+        {
+          heading: "DNS Lookup Flow",
+          diagram: {
+            chart: `sequenceDiagram
+    participant C as Client
+    participant R as Recursive Resolver
+    participant Root as Root Server
+    participant TLD as TLD Server
+    participant Auth as Authoritative Server
+    C->>R: query example.com
+    R->>Root: .com?
+    Root->>R: TLD server
+    R->>TLD: example.com?
+    TLD->>R: Auth server
+    R->>Auth: example.com IP?
+    Auth->>R: 93.184.216.34
+    R->>C: 93.184.216.34`,
+            caption: "Recursive resolver walks the DNS hierarchy until it gets the authoritative answer."
+          }
+        },
+        {
+          heading: "Common Record Types",
+          list: [
+            "<strong>A / AAAA:</strong> IPv4 / IPv6 address for a hostname",
+            "<strong>CNAME:</strong> Alias from one hostname to another",
+            "<strong>MX:</strong> Mail exchange server for a domain",
+            "<strong>NS:</strong> Authoritative name server for the domain",
+            "<strong>TXT:</strong> Arbitrary text, often used for SPF, DKIM, verification"
+          ]
+        },
+        {
+          heading: "TTL and Caching",
+          text: "Every DNS record has a Time-To-Live (TTL) that tells resolvers how long to cache it. Short TTLs allow quick failover but increase query load. Long TTLs improve performance but slow down changes. For system design, TTL choice affects how fast traffic can be redirected during an outage."
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Cloudflare — global DNS resolver.</strong> Cloudflare operates 1.1.1.1, one of the fastest public DNS resolvers. They use anycast routing to direct queries to the nearest datacenter, dramatically reducing DNS latency. For hosted zones, Cloudflare DNS propagates changes globally within seconds by combining short TTLs with a large edge network."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "DNS translates domain names to IP addresses",
+            "Hierarchical and distributed by design",
+            "Caching via TTL reduces latency but delays updates",
+            "A, CNAME, MX, NS, TXT are the most common record types"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why is DNS hierarchical instead of centralized? → Scale and resilience: no single point of failure, each organization manages its own records.",
+            "Q2: What is the tradeoff of a low DNS TTL? → Faster failover but more resolver queries and higher load on authoritative servers.",
+            "Q3: How does anycast DNS improve performance? → Queries are routed to the nearest available DNS server, reducing round-trip time."
+          ]
+        }
+      ]
+    },
+    "consensus-raft-paxos": {
+      title: "Consensus Algorithms (Raft & Paxos)",
+      sections: [
+        {
+          heading: "What is Consensus?",
+          text: "Consensus is the problem of getting multiple nodes to agree on a single value or sequence of values, even when some nodes fail or messages are lost. It is the foundation of leader election, distributed transactions, and replicated state machines.",
+          list: [
+            "<strong>Agreement:</strong> All correct nodes decide the same value",
+            "<strong>Validity:</strong> The chosen value was proposed by some node",
+            "<strong>Termination:</strong> All correct nodes eventually decide",
+            "<strong>Fault tolerance:</strong> Works as long as a majority of nodes are reachable"
+          ]
+        },
+        {
+          heading: "Raft vs Paxos",
+          table: {
+            headers: ["Property", "Paxos", "Raft"],
+            rows: [
+              ["Understandability", "Hard — many subtle variants", "Easier — separated leader election, log replication, safety"],
+              ["Leader", "Implicit proposer", "Explicit leader per term"],
+              ["Use in production", "Chubby, ZooKeeper (ZAB)", "etcd, Consul, TiKV, Kafka KRaft"],
+              ["Term/epoch", "Ballot numbers", "Terms with monotonic IDs"]
+            ]
+          }
+        },
+        {
+          heading: "How Raft Works",
+          list: [
+            "<strong>Leader election:</strong> Nodes vote for a candidate; majority wins",
+            "<strong>Log replication:</strong> Leader appends entries; followers acknowledge",
+            "<strong>Safety:</strong> Only entries replicated on a majority are committed",
+            "<strong>Membership changes:</strong> Joint consensus handles adding/removing nodes safely"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `graph LR
+    C[Client] -->|write| L[Leader]
+    L -->|append entry| F1[Follower 1]
+    L -->|append entry| F2[Follower 2]
+    F1 -->|ack| L
+    F2 -->|ack| L
+    L -->|committed| C
+    style L fill:#f1c40f,color:#000`,
+            caption: "The leader replicates log entries to followers and commits once a majority acknowledges."
+          }
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>etcd — Raft for Kubernetes.</strong> etcd stores all Kubernetes cluster state and uses Raft to replicate it across control-plane nodes. Because Raft requires a majority, etcd remains available as long as half or more control-plane nodes are healthy. This is why Kubernetes recommends 3 or 5 control-plane nodes for production."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Consensus = agreement among distributed nodes despite failures",
+            "Raft is easier to understand and widely used in modern systems",
+            "Paxos is older, proven, but harder to implement correctly",
+            "Majority quorum is the key to fault tolerance"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why must a majority agree in Raft? → A majority guarantees that any two quorums overlap, preventing conflicting committed entries.",
+            "Q2: What happens to writes when the leader fails? → Writes pause until a new leader is elected and acknowledged by a majority.",
+            "Q3: Is Paxos the same as Raft? → No; both solve consensus but Raft is more structured and easier to implement in full."
+          ]
+        }
+      ]
+    },
+    "distributed-id-generation": {
+      title: "Distributed ID Generation",
+      sections: [
+        {
+          heading: "Why Distributed IDs?",
+          text: "In a distributed system, many services may need to create unique identifiers concurrently. A single database auto-increment column becomes a bottleneck and a single point of failure. Distributed ID generators produce globally unique, ordered IDs without central coordination.",
+          list: [
+            "<strong>Uniqueness:</strong> No collisions across services and regions",
+            "<strong>Ordering:</strong> Rough time-ordering helps with indexing and debugging",
+            "<strong>Scalability:</strong> Generate millions of IDs per second without a single coordinator",
+            "<strong>Availability:</strong> Continue working even if one node fails"
+          ]
+        },
+        {
+          heading: "Common Strategies",
+          table: {
+            headers: ["Strategy", "Pros", "Cons", "Use in"],
+            rows: [
+              ["UUID v4", "Simple, no coordination", "Random, poor DB index locality", "Logs, filenames"],
+              ["Snowflake / Twitter", "Time-ordered, fast, distributed", "Requires unique machine IDs", "Twitter, Discord, X (Twitter)"],
+              ["Database sequence", "Strict ordering, simple", "Bottleneck, single point of failure", "Small apps"],
+              ["Leaf (segment)", "High throughput, low DB load", "Can waste IDs on failure", "Meituan"]
+            ]
+          }
+        },
+        {
+          heading: "Snowflake ID Layout",
+          text: "A typical Snowflake ID is a 64-bit integer: 1 bit sign, 41 bits timestamp (millis since epoch), 10 bits machine ID, 12 bits sequence number. This gives ~4096 IDs per millisecond per machine and IDs that are roughly sortable by time."
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Discord — snowflake IDs.</strong> Discord generates billions of message IDs daily using a Snowflake-like scheme. Their IDs encode timestamp, datacenter, worker, and sequence, allowing them to sort messages by time without a central database sequence. This supports their massive chat scale while keeping primary keys small and index-friendly."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Distributed IDs avoid single-node bottlenecks",
+            "UUIDs are easy but random; Snowflake-style IDs are time-ordered",
+            "Unique worker IDs are required to prevent collisions",
+            "Choose based on whether ordering and index locality matter"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why are random UUIDs bad for database primary keys? → Random inserts cause page splits and poor cache locality in B-trees.",
+            "Q2: How does Snowflake guarantee uniqueness without a central server? → Each worker has a unique machine ID; sequence counter resets each millisecond.",
+            "Q3: What is k-sortable? → IDs are roughly ordered by generation time, helpful for time-range queries but not strictly monotonic."
+          ]
+        }
+      ]
+    },
+    "distributed-locking": {
+      title: "Distributed Locking",
+      sections: [
+        {
+          heading: "What is Distributed Locking?",
+          text: "A distributed lock ensures that only one process or node can access a shared resource at a time, even when processes run on different machines. It is used for leader election, preventing duplicate background jobs, and coordinating writes to shared storage.",
+          list: [
+            "<strong>Mutual exclusion:</strong> Only one holder at a time",
+            "<strong>Fault tolerance:</strong> Lock should expire if holder crashes",
+            "<strong>Atomicity:</strong> Acquire and release must be atomic operations",
+            "<strong>Scalability:</strong> Avoid centralized lock managers when possible"
+          ]
+        },
+        {
+          heading: "Redis Redlock Pattern",
+          diagram: {
+            chart: `flowchart LR
+    S1[Service 1] -->|SET lock:resource nx ex 10| R1[Redis 1]
+    S1 -->|SET| R2[Redis 2]
+    S1 -->|SET| R3[Redis 3]
+    S2[Service 2] -->|SET fails| R1
+    style S1 fill:#2ecc71,color:#fff`,
+            caption: "A lock is acquired by writing a key with NX (only if not exists) and an expiry. Majority success means the lock is held."
+          }
+        },
+        {
+          heading: "Key Design Choices",
+          list: [
+            "<strong>Expiry / lease:</strong> Prevent indefinite locks if the holder dies",
+            "<strong>Fencing token:</strong> Monotonic token prevents delayed processes from releasing a newer lock",
+            "<strong>Renewal:</strong> Holder extends lease while work continues",
+            "<strong>Unlock safely:</strong> Only release if the value matches the token you set"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Netflix — distributed locks with Dynomite.</strong> Netflix uses distributed locking backed by Redis/Dynomite to ensure scheduled tasks run exactly once across a cluster. If the node holding the lock crashes, the lease expires and another node acquires the lock. Fencing tokens prevent race conditions during failover."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Distributed locks coordinate access across nodes",
+            "Always use leases with expiry to avoid deadlocks",
+            "Fencing tokens prevent stale holders from releasing a new lock",
+            "Prefer design patterns that don't need locks when possible"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: What happens if a lock holder crashes before releasing? → The lease expires automatically and another node can acquire the lock.",
+            "Q2: What is a fencing token? → A monotonic number associated with a lock; operations are rejected if they present an old token.",
+            "Q3: Why not use a central lock manager? → It becomes a single point of failure and contention bottleneck."
+          ]
+        }
+      ]
+    },
+    "service-discovery": {
+      title: "Service Discovery",
+      sections: [
+        {
+          heading: "What is Service Discovery?",
+          text: "Service discovery is how services find and communicate with each other in a dynamic environment. In microservices, instances come and go due to scaling and failures, so hard-coded IP addresses do not work. A service registry tracks available instances and lets clients look them up by service name.",
+          list: [
+            "<strong>Registry:</strong> Central database of service instances and their locations",
+            "<strong>Registration:</strong> Services register themselves on startup and deregister on shutdown",
+            "<strong>Heartbeat:</strong> Periodic health checks keep the registry accurate",
+            "<strong>Lookup:</strong> Clients query the registry to get healthy endpoints"
+          ]
+        },
+        {
+          heading: "Service Discovery Architecture",
+          diagram: {
+            chart: `flowchart LR
+    S[Service A] -->|register| R[(Registry)]
+    C[Service B] -->|lookup service-a| R
+    R -->|healthy instances| C
+    C -->|call| A1[Service A-1]
+    C -->|call| A2[Service A-2]
+    style R fill:#9b59b6,color:#fff`,
+            caption: "Services register with a registry; clients look up healthy instances before making calls."
+          }
+        },
+        {
+          heading: "Client-Side vs Server-Side Discovery",
+          table: {
+            headers: ["Pattern", "Who chooses instance?", "Pros", "Cons"],
+            rows: [
+              ["Client-side", "Client via registry", "No extra hop", "Client needs registry logic"],
+              ["Server-side", "Load balancer", "Simpler clients", "Extra hop, LB is a bottleneck"]
+            ]
+          }
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Netflix Eureka — client-side discovery.</strong> Eureka is Netflix's service registry. Microservices register themselves on startup and send heartbeats every 30 seconds. Clients cache the registry locally and refresh it periodically. If an instance stops heartbeating, Eureka removes it so clients stop routing traffic there."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Service discovery tracks healthy instances for dynamic services",
+            "Client-side discovery is faster; server-side is simpler for clients",
+            "Registries rely on heartbeats and health checks",
+            "DNS can be used for coarse discovery; service registries for fine-grained instance lookup"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: What happens if the service registry goes down? → With client-side caching, services can still use stale instance lists until the registry recovers.",
+            "Q2: How do you handle unhealthy instances? → Heartbeats and active health checks; remove instances that fail repeatedly.",
+            "Q3: When is DNS enough for service discovery? → For stable, long-lived endpoints where instance-level changes are rare."
+          ]
+        }
+      ]
+    },
+    "vector-clocks": {
+      title: "Vector Clocks & Conflict Resolution",
+      sections: [
+        {
+          heading: "What are Vector Clocks?",
+          text: "A vector clock is a data structure that tracks the happens-before relationship between events in a distributed system. It assigns a counter to each node, incrementing it when that node processes or sends an event. By comparing vectors, a system can detect whether events are causally ordered or concurrent.",
+          list: [
+            "<strong>Per-node counter:</strong> One integer per node in the cluster",
+            "<strong>Increment on send/receive:</strong> Sender increments its own counter; receiver merges vectors",
+            "<strong>Partial order:</strong> Vectors compare as before, after, or concurrent",
+            "<strong>Conflict detection:</strong> Concurrent updates need application-level reconciliation"
+          ]
+        },
+        {
+          heading: "Vector Clock Comparison",
+          diagram: {
+            chart: `graph LR
+    A1[Node A<br/>V=[2,1,0]] --> C{Compare}
+    B1[Node B<br/>V=[1,3,0]] --> C
+    C -->|concurrent| Conflict[Conflict]
+    style Conflict fill:#e74c3c,color:#fff`,
+            caption: "When neither vector dominates the other, the events are concurrent and potentially conflicting."
+          }
+        },
+        {
+          heading: "How It Works",
+          list: [
+            "<strong>Send:</strong> Increment own counter, attach full vector to message",
+            "<strong>Receive:</strong> Merge incoming vector with local vector (take max per node), then increment own counter",
+            "<strong>Compare:</strong> A ≤ B if every counter in A is ≤ the corresponding counter in B",
+            "<strong>Conflict:</strong> If A ≠ B and neither A ≤ B nor B ≤ A, events are concurrent"
+          ]
+        },
+        {
+          heading: "When to Use",
+          list: [
+            "<strong>Distributed databases:</strong> DynamoDB, Riak, Cassandra (version vectors)",
+            "<strong>Event sourcing:</strong> Track causality across aggregates",
+            "<strong>CRDTs:</strong> Conflict-free replicated data types use vector clocks",
+            "<strong>Debugging:</strong> Reconstruct event ordering after failures"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Amazon Dynamo — vector clocks for causality.</strong> Dynamo (the paper behind DynamoDB) uses vector clocks to determine whether two versions of an object are causally related or in conflict. When a read returns multiple versions, the application resolves the conflict (last-write-wins or merge). This design lets Dynamo offer high availability during network partitions."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Vector clocks track causality across distributed events",
+            "Each node maintains its own counter; messages carry the full vector",
+            "Concurrent events require reconciliation or conflict resolution",
+            "Used in Dynamo, Riak, and conflict-aware data structures"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: What does it mean when two vector clocks are concurrent? → Neither event can be said to happen before the other; they may conflict.",
+            "Q2: How do vector clocks differ from Lamport timestamps? → Vector clocks can detect concurrency; Lamport timestamps only establish a partial order and cannot distinguish concurrency.",
+            "Q3: Why must the application resolve conflicts? → The database cannot know business semantics; only the app can merge divergent versions correctly."
+          ]
+        }
+      ]
+    },
+  },
+
   module21: systemDesignModule21,
 };

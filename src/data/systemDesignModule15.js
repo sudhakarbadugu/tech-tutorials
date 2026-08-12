@@ -29,7 +29,7 @@ export const systemDesignModule15 = {
     T5 --> T6[Vector Clocks]`,
           text: "Recommended reading order — each topic builds on the previous one."
         }
-      ]
+      ],
     },
     dns: {
       title: "DNS & Name Resolution",
@@ -1041,6 +1041,263 @@ print(merged.clock)  # {'A': 2, 'B': 2, 'C': 0}`,
           ]
         }
       ]
-    }
+    },
+
+    "distributed-systems-intro": {
+      title: "Distributed Systems Overview",
+      sections: [
+        {
+          heading: "What is a Distributed System?",
+          text: "A distributed system is a system where components run on multiple machines that communicate over a network to achieve a common goal. Distributed systems are more capable than single-machine systems but introduce problems that do not exist on one machine: network failures, partial failures, and the challenge of keeping multiple copies of data consistent.",
+          list: [
+            "<strong>Multiple independent machines:</strong> Each has its own CPU, memory, disk, and clock",
+            "<strong>Network communication:</strong> Components talk over unreliable links",
+            "<strong>Partial failure:</strong> One node or link can fail while the rest keeps running",
+            "<strong>No global clock:</strong> Different machines disagree on exact time"
+          ]
+        },
+        {
+          heading: "Why Build Distributed Systems?",
+          list: [
+            "<strong>Scalability:</strong> Add more nodes to handle load",
+            "<strong>Availability:</strong> Survive individual node failures",
+            "<strong>Latency:</strong> Place data and compute closer to users",
+            "<strong>Fault isolation:</strong> A failure in one region or service need not take down the whole system"
+          ]
+        },
+        {
+          heading: "The Fallacies of Distributed Computing",
+          list: [
+            "The network is reliable",
+            "Latency is zero",
+            "Bandwidth is infinite",
+            "The network is secure",
+            "Topology doesn't change",
+            "There is one administrator",
+            "Transport cost is zero",
+            "The network is homogeneous"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `graph TB
+    subgraph "Single Machine"
+        A[App] --> B[(DB)]
+    end
+    subgraph "Distributed System"
+        C1[Client] --> LB[Load Balancer]
+        LB --> S1[Service A]
+        LB --> S2[Service B]
+        S1 --> DB1[(Primary DB)]
+        S2 --> DB2[(Replica DB)]
+        S1 --> Q[(Message Queue)]
+        S2 --> Q
+        DB1 -.->|Replication| DB2
+    end`,
+            caption: "A single machine avoids network problems; a distributed system gains scale and resilience at the cost of new failure modes."
+          }
+        },
+        {
+          heading: "Core Challenges",
+          list: [
+            "<strong>Failure detection:</strong> Cannot distinguish a slow node from a failed one",
+            "<strong>Consensus:</strong> Nodes must agree despite failures",
+            "<strong>Consistency:</strong> Multiple copies of data must stay synchronized",
+            "<strong>Clocks:</strong> Wall-clock time cannot establish event ordering across machines"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Netflix — designing for failure.</strong> Netflix assumes any component can fail at any time. They run services across multiple AWS regions, replicate data asynchronously, and use chaos engineering (Chaos Monkey) to randomly terminate instances. The result is a system that continues operating even when large parts of the infrastructure fail."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Distributed systems = multiple machines + network + shared goal",
+            "They add scale, availability, and geographic reach",
+            "New failure modes: partial failures, network partitions, clock drift",
+            "Design for failure detection, consensus, consistency, and unreliable clocks"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: What is a partial failure? → Some components fail while others continue running, making it hard to know the system's true state.",
+            "Q2: Why can't distributed systems rely on wall-clock time? → Clocks on different machines drift and can disagree on event ordering.",
+            "Q3: What is the most important mindset shift when moving from single-machine to distributed systems? → Accept that the network is unreliable and design for failure rather than assuming it."
+          ]
+        }
+      ]
+    },
+    "leader-election": {
+      title: "Leader Election",
+      sections: [
+        {
+          heading: "What is Leader Election?",
+          text: "Leader election is the process by which distributed nodes agree on which one is responsible for coordinating work. The leader handles writes, coordinates distributed operations, or manages resources that should not be duplicated. Leader election requires consensus to prevent two nodes from both believing they are the leader and accepting conflicting writes.",
+          list: [
+            "<strong>Single coordinator:</strong> One node makes decisions for a task or partition",
+            "<strong>Consensus required:</strong> A majority of nodes must agree on the leader",
+            "<strong>Failover:</strong> When the leader fails, remaining nodes elect a new one",
+            "<strong>Reduced capability window:</strong> During failover, leader-dependent operations may pause"
+          ]
+        },
+        {
+          heading: "Why is it Needed?",
+          text: "Many operations must happen exactly once across a cluster: accepting writes, allocating IDs, scheduling jobs, or updating global state. Without a leader, multiple nodes might perform the same work concurrently, causing conflicts or duplicates. A leader serializes these operations."
+        },
+        {
+          heading: "How It Works",
+          list: [
+            "<strong>1. Campaign:</strong> Each candidate proposes itself with a monotonically increasing term/epoch ID",
+            "<strong>2. Vote:</strong> Nodes vote for the first valid candidate they see in a term",
+            "<strong>3. Majority wins:</strong> A candidate receiving votes from more than half the nodes becomes leader",
+            "<strong>4. Heartbeats:</strong> The leader sends periodic heartbeats to prove it is alive",
+            "<strong>5. New election:</strong> If heartbeats stop, a new election begins"
+          ]
+        },
+        {
+          heading: "Leader Election Architecture",
+          diagram: {
+            chart: `graph TB
+    subgraph "Cluster"
+        N1[Node 1<br/>Follower]
+        N2[Node 2<br/>Candidate]
+        N3[Node 3<br/>Follower]
+        N4[Node 4<br/>Leader]
+        N5[Node 5<br/>Follower]
+    end
+    N4 -.->|Heartbeats| N1
+    N4 -.->|Heartbeats| N2
+    N4 -.->|Heartbeats| N3
+    N4 -.->|Heartbeats| N5
+    N2 -->|Vote Request| N1
+    N1 -->|Vote| N2`,
+            caption: "The leader sends heartbeats to followers. If the leader fails, a candidate starts a new election and asks for votes."
+          }
+        },
+        {
+          heading: "Split-Brain Prevention",
+          text: "If the network partitions, two nodes might both claim to be leader. Consensus algorithms prevent this by requiring a majority. With five nodes, a leader needs at least three votes. A partition with two nodes cannot elect a leader, so it stops accepting writes rather than creating conflicting state."
+        },
+        {
+          heading: "Common Algorithms",
+          list: [
+            "<strong>Raft:</strong> Easy-to-understand consensus algorithm used by etcd, Consul, and TiKV",
+            "<strong>Paxos:</strong> Older, proven algorithm; harder to implement correctly",
+            "<strong>ZooKeeper ZAB:</strong> Atomic broadcast protocol used by ZooKeeper",
+            "<strong>Bully algorithm:</strong> Simpler but assumes reliable failure detection"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Redis Sentinel — leader election for failover.</strong> Redis Sentinel monitors Redis master-replica setups. When the master fails, Sentinels run a leader election among themselves to decide which sentinel will promote a replica to master. This avoids multiple sentinels making conflicting promotions."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Leader election picks one coordinator from a group of nodes",
+            "Requires consensus and majority votes to prevent split-brain",
+            "Leader sends heartbeats; missing heartbeats trigger a new election",
+            "Failover creates a brief window where leader-dependent operations pause"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why is consensus required for leader election? → Without consensus, two nodes could both believe they are leader and accept conflicting writes.",
+            "Q2: How does a majority prevent split-brain? → A minority partition cannot reach a majority of votes, so it cannot elect a leader.",
+            "Q3: What happens to clients during leader failover? → Writes may be unavailable briefly until a new leader is elected and acknowledged."
+          ]
+        }
+      ]
+    },
+    "clock-skew": {
+      title: "Clock Skew",
+      sections: [
+        {
+          heading: "What is Clock Skew?",
+          text: "Clock skew is the difference in time between clocks on different machines. Even with time synchronization protocols like NTP, clocks on different machines drift apart over time and can differ by milliseconds or more. Clock skew breaks any logic that relies on timestamps from different machines to establish event ordering.",
+          list: [
+            "<strong>Clocks drift:</strong> Physical clocks do not stay perfectly synchronized",
+            "<strong>Ordering is unreliable:</strong> A later timestamp does not guarantee a later event",
+            "<strong>Common in distributed systems:</strong> Any system with multiple machines",
+            "<strong>Can cause bugs:</strong> Caching, conflict resolution, and timeouts can misbehave"
+          ]
+        },
+        {
+          heading: "Why Clocks Disagree",
+          list: [
+            "<strong>Quartz oscillator variance:</strong> Each CPU clock runs at a slightly different rate",
+            "<strong>NTP corrections:</strong> Step adjustments can move a clock backward",
+            "<strong>Leap seconds:</strong> Special adjustments that add or remove seconds",
+            "<strong>Virtual machines:</strong> Clock behavior can be erratic when VMs pause or migrate"
+          ]
+        },
+        {
+          heading: "The Danger of Timestamp Ordering",
+          text: "Two events with timestamps five milliseconds apart on different machines might have actually occurred in the opposite order. If Node A writes a value with timestamp 1000 and Node B writes a value with timestamp 1005, you cannot safely conclude that B's write happened after A's."
+        },
+        {
+          heading: "Solutions",
+          list: [
+            "<strong>Logical clocks:</strong> Increment counters on each node to track 'happens-before' relationships",
+            "<strong>Vector clocks:</strong> Maintain a vector of counters per node to determine causality",
+            "<strong>Version vectors:</strong> Simplified vector clocks for conflict detection",
+            "<strong>Clock-bound protocols:</strong> Spanner uses TrueTime API with bounded uncertainty intervals"
+          ]
+        },
+        {
+          heading: "Architecture Diagram",
+          diagram: {
+            chart: `graph LR
+    subgraph "Node A"
+        E1[Event 1<br/>timestamp: 10:00:00.100]
+        E2[Event 2<br/>timestamp: 10:00:00.200]
+    end
+    subgraph "Node B"
+        E3[Event 3<br/>timestamp: 10:00:00.150]
+    end
+    E1 --> E2
+    E1 -.->|Network| E3
+    style E1 fill:#3498db,color:#fff
+    style E2 fill:#3498db,color:#fff
+    style E3 fill:#e74c3c,color:#fff`,
+            caption: "Node B's event at 150ms may have happened before or after Node A's event at 200ms; timestamps alone cannot decide."
+          }
+        },
+        {
+          heading: "When to Use What",
+          list: [
+            "<strong>Single machine:</strong> Monotonic clocks (e.g., CLOCK_MONOTONIC) are reliable",
+            "<strong>Same datacenter:</strong> NTP + bounded skew assumptions may be acceptable",
+            "<strong>Global distributed:</strong> Use logical/vector clocks or consensus-based ordering",
+            "<strong>Financial systems:</strong> Use hardware clocks or atomic clocks with uncertainty bounds"
+          ]
+        },
+        {
+          heading: "Real-World Case Study",
+          text: "<strong>Spanner — TrueTime API.</strong> Google's Spanner avoids clock-skew problems by using GPS and atomic clocks to provide bounded uncertainty. Every timestamp is actually an interval [earliest, latest]. Spanner waits out the uncertainty before committing, ensuring global consistency without vector clocks."
+        },
+        {
+          heading: "Quick Recap",
+          list: [
+            "Clock skew = different machines disagree on time",
+            "Never use wall-clock timestamps alone to order events across machines",
+            "Use logical clocks, vector clocks, or bounded-uncertainty time APIs",
+            "Clock issues are a common source of subtle distributed-systems bugs"
+          ]
+        },
+        {
+          heading: "Practice Questions",
+          list: [
+            "Q1: Why is NTP not enough for distributed event ordering? → NTP can step clocks backward and only keeps time loosely synchronized; it does not establish causality.",
+            "Q2: What is a 'happens-before' relationship? → Event A happens before B if A could have influenced B, either on the same node or via a message.",
+            "Q3: When is it safe to use timestamps across machines? → When you can bound the maximum clock skew and account for the uncertainty, as Spanner's TrueTime does."
+          ]
+        }
+      ]
+    },
   }
 };
