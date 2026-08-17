@@ -1,5 +1,5 @@
 // Auto-generated from rewritten modules — do not edit manually
-// Generated: 2026-07-30T21:12:48.317Z
+// Generated: 2026-07-28T19:02:07.281Z
 
 export const aiStructure = {
   module1: {
@@ -438,20 +438,32 @@ export const dsaStructure = {
         title: 'Big-O Notation & Complexity Analysis'
       },
       {
-        id: 'arrays-strings',
-        title: 'Arrays & Strings'
+        id: 'arrays',
+        title: 'Arrays'
+      },
+      {
+        id: 'strings',
+        title: 'Strings'
       },
       {
         id: 'linked-lists',
         title: 'Linked Lists (Singly & Doubly)'
       },
       {
-        id: 'stacks-queues',
-        title: 'Stacks & Queues'
+        id: 'stacks',
+        title: 'Stacks'
       },
       {
-        id: 'hashmaps-sets',
-        title: 'HashMaps & Sets'
+        id: 'queues',
+        title: 'Queues'
+      },
+      {
+        id: 'hashmaps',
+        title: 'Hash Maps'
+      },
+      {
+        id: 'sets',
+        title: 'Sets'
       }
     ]
   },

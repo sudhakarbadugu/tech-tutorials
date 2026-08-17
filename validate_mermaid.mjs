@@ -27,6 +27,7 @@ const files = [
   'deepDive_m4_m6.js',
   'deepDive_m7_m9.js',
   'deepDive_m0_m14.js',
+  'rewritten/dsa_module3.js',
 ];
 
 let total = 0;
@@ -58,7 +59,12 @@ function extractDiagrams(obj, path, out) {
 }
 
 for (const f of files) {
-  const mod = await import(`/root/Projects/tech-tutorials/src/data/${f}`);
+  let mod;
+  try {
+    mod = await import(`./src/data/${f}`);
+  } catch (e) {
+    continue;
+  }
   for (const [exportName, exportVal] of Object.entries(mod)) {
     const diagrams = [];
     extractDiagrams(exportVal, `${f}:${exportName}`, diagrams);
